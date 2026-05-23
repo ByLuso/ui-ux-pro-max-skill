@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roma, Italia — 5 días | VoyageAI</title>
+  <meta name="description" content="Itinerario completo de 5 días en Roma: Vaticano, Coliseo, gastronomía romana y los barrios más auténticos. Presupuesto, hoteles y consejos de VoyageAI."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Nav override ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,8,16,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav.scrolled { background: rgba(4,8,16,0.95); }
+
+    /* ── Aurora (warm Rome tones) ── */
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #3d1515 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #2a1a0e 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #1a0d06 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.4; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    /* ── Hero ── */
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #1a0a0a 0%, #3d1515 40%, #c0392b 70%, rgba(232,192,104,0.2) 100%);
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%);
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(4,8,16,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label {
+      font-size: 0.7rem; color: rgba(237,238,242,0.55);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .dest-sum-val {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.2rem; font-weight: 700; color: #c9a96e;
+    }
+
+    /* ── Layout ── */
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title {
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(237,238,242,0.55); margin-bottom: 12px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    /* ── Sections ── */
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    /* ── Day Card ── */
+    .day-card {
+      background: #0d1628;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; overflow: hidden; margin-bottom: 28px;
+    }
+    .day-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .day-num {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 2.2rem; font-weight: 700; color: #c9a96e;
+      line-height: 1; min-width: 60px;
+    }
+    .day-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px;
+    }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    /* ── Activity ── */
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time {
+      min-width: 55px; font-size: 0.78rem; color: #c9a96e;
+      font-weight: 600; padding-top: 3px; flex-shrink: 0;
+    }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #c9a96e; border: 2px solid #0d1628;
+      flex-shrink: 0; margin-top: 3px;
+    }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag {
+      display: inline-block; padding: 2px 8px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 100px; font-size: 0.67rem; color: #c9a96e;
+    }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .act-tag.warn { background: rgba(192,57,43,0.12); border-color: rgba(192,57,43,0.3); color: #e87060; }
+
+    /* ── Hotels ── */
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px; transition: border-color 0.2s;
+    }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600;
+      border-bottom: 1px solid rgba(201,169,110,0.3); padding-bottom: 1px;
+    }
+    .hotel-link:hover { border-color: #c9a96e; }
+
+    /* ── Budget table ── */
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th {
+      text-align: left; padding: 10px 14px; background: #0d1628;
+      color: #c9a96e; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(201,169,110,0.3);
+    }
+    .budget-table td {
+      padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: rgba(237,238,242,0.55); vertical-align: top;
+    }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    /* ── Transport ── */
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 18px;
+    }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    /* ── Tips ── */
+    .tip-item {
+      display: flex; gap: 12px; padding: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .tip-num {
+      min-width: 28px; height: 28px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700;
+      color: #c9a96e; flex-shrink: 0;
+    }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    /* ── Emergency ── */
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+
+    /* ── Checklist ── */
+    .check-section { margin-bottom: 20px; }
+    .check-section-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 10px; }
+    .check-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.86rem; color: rgba(237,238,242,0.55);
+    }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+
+    /* ── Top 10 ── */
+    .top10-item {
+      display: flex; gap: 16px; padding: 16px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .top10-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.8rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 36px; }
+    .top10-content h4 { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .top10-content p { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.55; }
+
+    /* ── Gastronomy ── */
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 16px;
+    }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    /* ── CTA banner ── */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%);
+      border: 1px solid rgba(201,169,110,0.3); border-radius: 20px;
+      padding: 32px; text-align: center; margin-bottom: 28px;
+    }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px;
+      background: linear-gradient(135deg, #c9a96e, #a07840);
+      color: #0a0a0a; font-weight: 600; font-size: 0.9rem;
+      border-radius: 10px; text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* ── Alert / tip box ── */
+    .alert-box {
+      font-size: 0.82rem; color: rgba(237,238,242,0.55);
+      padding: 14px; border-radius: 10px;
+      margin-top: 12px; line-height: 1.65;
+    }
+    .alert-box.warn { background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background: rgba(74,127,165,0.08); border: 1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color: #edeef2; }
+
+    /* ── Disclosure ── */
+    .disclosure {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 16px 18px;
+      font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65;
+      margin-top: 40px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .hotel-grid { grid-template-columns: repeat(2,1fr); }
+      .transport-grid { grid-template-columns: 1fr; }
+      .gastro-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .hotel-grid { grid-template-columns: 1fr; }
+      .emerg-grid { grid-template-columns: 1fr; }
+      .dest-summary-bar { flex-direction: column; }
+      nav { padding: 0 16px; }
+      nav ul { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Aurora background -->
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<!-- Navigation -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="VoyageAI — Inicio">
+    <div class="nav-logo-icon" style="width:36px;height:36px;background:linear-gradient(135deg,#c9a96e,#4a7fa5);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <span style="font-family:'Bodoni Moda',serif;font-size:1.35rem;font-weight:700;color:#edeef2;letter-spacing:-0.01em">Voyage<span style="color:#c9a96e">AI</span></span>
+  </a>
+  <ul style="display:flex;align-items:center;gap:4px;list-style:none" role="list">
+    <li><a href="../index.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Inicio</a></li>
+    <li><a href="../itinerarios.html" style="font-size:0.875rem;font-weight:500;color:#c9a96e;text-decoration:none;padding:8px 14px;border-radius:8px" aria-current="page">Itinerarios</a></li>
+    <li><a href="../mapa.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Mapa</a></li>
+    <li><a href="../index.html#cta" style="font-size:0.875rem;font-weight:600;color:#0a0a0a;background:linear-gradient(135deg,#c9a96e,#a07840);padding:9px 20px;border-radius:10px;text-decoration:none">Empezar gratis</a></li>
+  </ul>
+</nav>
+
+<!-- Skip to content -->
+<a href="#main-content" style="position:absolute;top:-100px;left:0;background:#c9a96e;color:#0a0a0a;padding:8px 16px;border-radius:0 0 8px 0;font-weight:600;z-index:999;transition:top 0.2s" onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Saltar al contenido</a>
+
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <!-- Decorative arches (Rome motif) -->
+  <div aria-hidden="true" style="position:absolute;top:110px;right:8%;width:200px;height:200px;border:1px solid rgba(201,169,110,0.1);border-radius:50%;animation:blob 20s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:150px;left:9%;width:120px;height:120px;border:1px solid rgba(201,169,110,0.07);border-radius:50%;animation:blob 16s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Roma</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Roma</h1>
+  <p class="dest-country">Italia</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      5 días / 4 noches
+    </span>
+    <span class="dest-badge" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Pareja
+    </span>
+    <span class="dest-badge gold" role="listitem">€1,800–2,400</span>
+    <span class="dest-badge" role="listitem">Europa · Italia</span>
+    <span class="dest-badge" role="listitem">Historia + Gastronomía + Arte</span>
+    <a href="https://www.skyscanner.net/transport/flights/MAD/ROM/260310/?associateId=AFF123" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      Buscar vuelos
+    </a>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">5 días</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Viajeros</div>
+      <div class="dest-sum-val">Pareja</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Presupuesto</div>
+      <div class="dest-sum-val">€1,800–2,400</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Región</div>
+      <div class="dest-sum-val">Europa</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Estilo</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Historia</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main content -->
+<main id="main-content">
+  <div class="itin-layout">
+
+    <!-- TOC Sidebar -->
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#dia1">Día 1</a></li>
+          <li><a href="#dia2">Día 2</a></li>
+          <li><a href="#dia3">Día 3</a></li>
+          <li><a href="#dia4">Día 4</a></li>
+          <li><a href="#dia5">Día 5</a></li>
+          <li><a href="#top10">Top 10</a></li>
+          <li><a href="#gastronomia">Gastronomía</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+          <li><a href="#emergencias">Emergencias</a></li>
+          <li><a href="#checklist">Checklist</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <article>
+
+      <!-- Resumen -->
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          Roma es la única ciudad del mundo donde puedes desayunar un capuchino en un bar de barrio, caminar 10 minutos y quedarte sin palabras ante el Panteón más perfecto de la historia. 2.000 años de civilización al alcance de tus pies. La Ciudad Eterna no se entiende en un día, ni en cinco: se empieza a entender con el primer plato de carbonara auténtica en Da Enzo al 29, con el silencio cargado de la Capilla Sixtina, con el dorado de los ángeles de Bernini en el puente sobre el Tíber.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>VoyageAI crea itinerarios personalizados según tu ritmo, presupuesto e intereses en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Empezar gratis
+          </a>
+        </div>
+      </section>
+
+      <!-- Presupuesto -->
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para Roma">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Estimado por persona</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>✈️ Vuelos MAD–ROM ida/vuelta</td>
+                <td>€150–350</td>
+                <td>Low cost con 2 meses de antelación</td>
+              </tr>
+              <tr>
+                <td>🏨 Alojamiento (4 noches)</td>
+                <td>€400–700</td>
+                <td>Zona Centro Storico recomendada</td>
+              </tr>
+              <tr>
+                <td>🍽️ Alimentación (5 días)</td>
+                <td>€250–400</td>
+                <td>Mix ristoranti y mercados</td>
+              </tr>
+              <tr>
+                <td>🚇 Transporte local</td>
+                <td>€30–50</td>
+                <td>Metro + caminar (Roma es peatonal)</td>
+              </tr>
+              <tr>
+                <td>🎫 Entradas y actividades</td>
+                <td>€120–180</td>
+                <td>Vaticano, Coliseo, Borghese</td>
+              </tr>
+              <tr>
+                <td>🛡️ Seguro de viaje</td>
+                <td>€20–35</td>
+                <td>
+                  <a href="https://www.iatiseguros.com/?r=voyageai" class="hotel-link" target="_blank" rel="noopener">IATI Europa</a>
+                </td>
+              </tr>
+              <tr>
+                <td>🎁 Extras / souvenirs</td>
+                <td>€150–200</td>
+                <td>Buffer y caprichos</td>
+              </tr>
+              <tr>
+                <td><strong>TOTAL</strong></td>
+                <td><strong>€1,120–1,915</strong></td>
+                <td>Por persona (vuelos incluidos)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos para viaje en temporada media 2026. Roma es mucho más asequible que Tokio o Nueva York con la misma calidad de experiencia.</p>
+      </section>
+
+      <!-- Transporte -->
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+              Desde Fiumicino al centro
+            </div>
+            <div class="transport-content">
+              <strong>Leonardo Express</strong> — 32 min a Termini — €14. La opción más cómoda y directa.<br><br>
+              <strong>Bus SIT</strong> — 45-60 min — €6. Más barato pero lento con tráfico.<br><br>
+              <span style="color:rgba(237,238,242,0.4)">Cuidado con taxis sin taxímetro: estafa frecuente en Fiumicino. Exigir siempre taxímetro encendido o precio acordado antes.</span>
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 6V4M16 6V4M2 10h20"/></svg>
+              Movilidad urbana
+            </div>
+            <div class="transport-content">
+              <strong>Roma es ideal para caminar.</strong> El Centro Storico, Trastevere, el Aventino y Campo de' Fiori son todos adyacentes.<br><br>
+              Metro: solo 2 líneas pero cubren Termini, Coliseo, Vaticano. Billete único €1.50 (90 min). Bono 24h €7 / 48h €12.50.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+              Apps esenciales
+            </div>
+            <div class="transport-content">
+              <strong>Google Maps</strong> — navegación peatonal perfecta por Roma.<br><br>
+              <strong>Moovit</strong> — transporte público en tiempo real (autobuses tienen mucha frecuencia).<br><br>
+              <strong>TheFork</strong> — reservas de restaurantes, imprescindible para los mejores locales.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Horario metro y nocturnos
+            </div>
+            <div class="transport-content">
+              Metro cierra a las <strong>23:30h</strong> (1:30h los viernes y sábados).<br><br>
+              Taxis nocturnos son seguros — usar taxi oficial blanco con taxímetro, o apps Itaxi / Free Now. Trastevere a Termini: ~€12-15 noche.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 1 -->
+      <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+        <h2 class="section-heading" id="h-dia1">Día 1</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Llegada + Trastevere</div>
+              <div class="day-subtitle">Primer contacto con la Ciudad Eterna</div>
+            </div>
+            <div class="day-meta">
+              <span>🏛️ Santa María in Trastevere</span>
+              <span>🍷 Aperitivo</span>
+              <span>🍝 Da Enzo al 29</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada y check-in en Trastevere</div>
+                <div class="act-desc">Trastevere es el barrio más auténtico y photogénico de Roma: calles medievales adoquinadas, ropa tendida entre ventanas con contraventanas de madera, gatos durmiendo en escalones de mármol antiguo, motos aparcadas en ángulos imposibles. El alma de Roma que los turistas no esperan encontrar.</div>
+                <div class="act-tags"><span class="act-tag info">Tarde de llegada</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Paseo por Trastevere</div>
+                <div class="act-desc">Basílica de Santa María in Trastevere: fundada en el siglo III d.C. (la primera iglesia de Roma dedicada a la Virgen), con mosaicos del siglo XII que relucen en oro. La Piazza di Santa María, con su fuente barroca, es la terraza de barrio más bonita de Roma.</div>
+                <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag info">Mosaicos: siglo XII</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">18:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Aperitivo italiano — La hora sagrada</div>
+                <div class="act-desc">Entre las 18 y las 20h, Roma entra en el modo aperitivo. Spritz Campari o Aperol con bruschette y olive in cualquier bar de la Piazza di Santa María. No es beber: es el ritual social que estructura el día romano. El equivalente italiano del té de las 5.</div>
+                <div class="act-tags"><span class="act-tag">~€8-12 por persona</span><span class="act-tag info">18-20h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">20:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena en Da Enzo al 29 — Carbonara auténtica</div>
+                <div class="act-desc">La carbonara más auténtica de Roma: huevo, guanciale (mejilla de cerdo curada), pecorino romano, pimienta negra. Sin nata, jamás. Da Enzo al 29 tiene cola habitual de 20-30 minutos (no aceptan reserva) pero vale cada segundo. La cacio e pepe es igualmente perfecta.</div>
+                <div class="act-tags">
+                  <span class="act-tag">~€25 por persona</span>
+                  <span class="act-tag warn">Sin reservas. Llegar pronto</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hoteles -->
+            <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;color:#c9a96e;margin:24px 0 4px">Dónde dormir — Noche 1</h3>
+            <div class="hotel-grid">
+              <div class="hotel-card">
+                <div class="hotel-tier">💎 Premium</div>
+                <div class="hotel-name">Portrait Roma</div>
+                <div class="hotel-zone">Via Condotti — frente a la Fontana di Trevi</div>
+                <div class="hotel-price">Desde €450/noche</div>
+                <ul class="hotel-features">
+                  <li>Suites con vistas a la ciudad</li>
+                  <li>Colección de arte original</li>
+                  <li>A pie de Via Condotti (Gucci, Bulgari)</li>
+                  <li>Restaurante de cocina romana alta</li>
+                </ul>
+                <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Portrait+Roma" class="hotel-link" target="_blank" rel="noopener">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Ver en Booking.com
+                </a>
+              </div>
+              <div class="hotel-card">
+                <div class="hotel-tier">⭐ Recomendado</div>
+                <div class="hotel-name">Hotel Artemide</div>
+                <div class="hotel-zone">Via Nazionale — 10 min del Coliseo</div>
+                <div class="hotel-price">Desde €140/noche</div>
+                <ul class="hotel-features">
+                  <li>Desayuno incluido (impresionante)</li>
+                  <li>Spa y piscina interior</li>
+                  <li>A pie de Termini (metro, bus)</li>
+                  <li>Decoración art déco refinada</li>
+                </ul>
+                <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Hotel+Artemide+Roma" class="hotel-link" target="_blank" rel="noopener">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Ver en Booking.com
+                </a>
+              </div>
+              <div class="hotel-card">
+                <div class="hotel-tier">💵 Económico</div>
+                <div class="hotel-name">Termini Inn</div>
+                <div class="hotel-zone">Cerca Estación Termini</div>
+                <div class="hotel-price">Desde €60/noche</div>
+                <ul class="hotel-features">
+                  <li>Limpio, moderno, céntrico</li>
+                  <li>Acceso directo metro y buses</li>
+                  <li>Wi-fi rápido en habitaciones</li>
+                  <li>Recepción 24 horas</li>
+                </ul>
+                <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Termini+Inn+Roma" class="hotel-link" target="_blank" rel="noopener">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Ver en Booking.com
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 2 -->
+      <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+        <h2 class="section-heading" id="h-dia2">Día 2</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">02</div>
+            <div>
+              <div class="day-title">El Vaticano</div>
+              <div class="day-subtitle">Dios, Arte y Arquitectura — El mejor día del viaje</div>
+            </div>
+            <div class="day-meta">
+              <span>🎨 Capilla Sixtina</span>
+              <span>⛪ San Pedro</span>
+              <span>🏰 Castel Sant'Angelo</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">07:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada a Museos Vaticanos — Primeros en entrar</div>
+                <div class="act-desc">Entrar en los primeros 30 minutos de apertura es la diferencia entre ver la Capilla Sixtina en paz o comprimido en una sardina humana. La reserva online con skip-the-line es OBLIGATORIA. Sin ella, la cola puede ser de 2-3 horas.</div>
+                <div class="act-tags">
+                  <span class="act-tag warn">Reserva previa obligatoria</span>
+                  <span class="act-tag">~€20-25 entrada</span>
+                </div>
+                <div style="margin-top:8px">
+                  <a href="https://www.getyourguide.com/s/?q=Vatican+Museums+skip+line&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Reservar entradas Museos Vaticanos
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">07:45</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Museos Vaticanos — 4 horas</div>
+                <div class="act-desc">Galería de los Mapas (frescos del siglo XVI en 120 metros de corredor — la cartografía convertida en arte), Estancias de Rafael (las habitaciones privadas del papa pintadas por Rafael cuando tenía 25 años), y el clímax absoluto: la Capilla Sixtina. El techo pintado por Miguel Ángel entre 1508-1512 —mientras colgaba boca abajo— es la mayor obra de arte individual de la historia. "El Juicio Final" en la pared. Silencio obligatorio y completamente justificado.</div>
+                <div class="act-tags"><span class="act-tag info">4 horas mínimo para hacer justicia</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Basílica de San Pedro — La más grande del mundo</div>
+                <div class="act-desc">La iglesia más grande del mundo, con capacidad para 60,000 personas. Entrada gratuita. Dentro: la Pietà de Miguel Ángel (23 años, mármol perfecto), el baldaquín de Bernini (29 metros de bronce), la tumba de Juan Pablo II. Subida a la cúpula de Miguel Ángel: €8 a pie (551 escalones) o €10 en ascensor + 320 escalones. Desde arriba, las mejores vistas de Roma.</div>
+                <div class="act-tags"><span class="act-tag green">Basílica: gratuita</span><span class="act-tag">Cúpula: €8-10</span><span class="act-tag info">Cubierto hombros/rodillas</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo: Il Sorpasso (barrio Prati)</div>
+                <div class="act-desc">Aperitivo más sustancial: provolone, salumi, bruschette, verduras asadas. Ambiente romano auténtico —periodistas, abogados, gente de barrio— en un local que funciona de mañana a noche. Cocina romana contemporánea a precios razonables.</div>
+                <div class="act-tags"><span class="act-tag">~€20 por persona</span><span class="act-tag info">Barrio Prati, junto al Vaticano</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Castel Sant'Angelo</div>
+                <div class="act-desc">El mausoleo del Emperador Adriano (siglo II d.C.) convertido en fortaleza papal. Los papas escapaban al castillo por el Passetto di Borgo —un pasaje secreto aéreo de 800 metros— en momentos de peligro. Vistas épicas del Tíber y la ciudad desde la terraza superior. Un lugar con más vidas que cualquier edificio en Roma.</div>
+                <div class="act-tags"><span class="act-tag">€14 entrada</span><span class="act-tag info">Vista del Tíber y San Pedro</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Puente Sant'Angelo al atardecer</div>
+                <div class="act-desc">Los diez ángeles de Bernini flanquean el puente sobre el Tíber con el dorado del atardecer. La foto más hermosa de Roma. Cada ángel porta uno de los instrumentos de la Pasión de Cristo, con expresiones de una emotividad que hace dudar que el mármol sea inerte.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">Mejor hora: 17:30-19:00h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">20:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena en Prati: Settimio all'Arancio</div>
+                <div class="act-desc">Cucina romana de barrio en su versión más honesta: cacio e pepe perfecta, saltimbocca alla romana (ternera con jamón y salvia, cocido en mantequilla), abbacchio alla romana. El barrio Prati —romano puro, sin turistas— da el contexto justo.</div>
+                <div class="act-tags"><span class="act-tag">~€30 por persona</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 3 -->
+      <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+        <h2 class="section-heading" id="h-dia3">Día 3</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">03</div>
+            <div>
+              <div class="day-title">Corazón Imperial</div>
+              <div class="day-subtitle">Foro Romano, Coliseo y Testaccio</div>
+            </div>
+            <div class="day-meta">
+              <span>🏟️ Coliseo</span>
+              <span>🏛️ Foro Romano</span>
+              <span>🍕 Testaccio</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Coliseo — En la apertura</div>
+                <div class="act-desc">El anfiteatro más grande jamás construido, inaugurado en 80 d.C. por el Emperador Tito. Capacidad: 50,000-80,000 espectadores. Los gladiadores luchaban aquí; también fieras traídas de África, y naumaquias (batallas navales inundando el anfiteatro) en los primeros años. Visitar con tour guiado que incluya acceso a la arena (el suelo de madera donde luchaban los gladiadores, no incluido en la entrada normal) para entender la ingeniería imperial desde adentro.</div>
+                <div class="act-tags">
+                  <span class="act-tag">Tour con arena: €45-65 pp</span>
+                  <span class="act-tag warn">Reserva obligatoria</span>
+                </div>
+                <div style="margin-top:8px">
+                  <a href="https://www.getyourguide.com/s/?q=Colosseum+arena+floor+guided+tour&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Tour Coliseo + Acceso Arena + Foro Romano
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Foro Romano y Palatino</div>
+                <div class="act-desc">El centro político del mundo durante 1,000 años. Caminar entre las columnas del Senado Romano, el Arco de Tito (79 d.C., conmemora la destrucción de Jerusalén), el Templo de Saturno —el dios de la economía y el tiempo— con sus ocho columnas todavía en pie. El Palatino, colina de los emperadores: las ruinas del Palacio de Domiciano son las más grandes de Roma. Desde la colina, la vista del Foro hacia el Coliseo es el frame histórico definitivo.</div>
+                <div class="act-tags"><span class="act-tag info">Incluido en entrada Coliseo</span><span class="act-tag">2-3 horas mínimo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Mercado de Testaccio — Almuerzo auténtico</div>
+                <div class="act-desc">El barrio más romano de Roma: sin turistas, con los mejores mercados y las mejores pizzas. En el Mercado de Testaccio: supplì al telefono (croqueta de arroz con mozzarella fundida que se estira "como un teléfono"), pizza al taglio con fiori di zucca, porchetta perfecta. Comer de pie, como los romanos.</div>
+                <div class="act-tags"><span class="act-tag">€10-15 por persona</span><span class="act-tag green">Auténtico, sin turistismo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Circo Máximo</div>
+                <div class="act-desc">Donde 300,000 romanos veían las carreras de cuadrigas. Ahora es un parque verde pero la escala —600 metros de longitud— impresiona. La imaginación hace el resto: las cuadrigas girando en la spina central, el rugido de la multitud, el polvo del arena. Gratis y sin colas.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">600m de longitud</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">El Aventino — El secreto de Roma</div>
+                <div class="act-desc">El barrio más tranquilo y aristocrático de Roma. Secreto mejor guardado: el ojo de cerradura del Priorato de Malta desde donde el jardín, perfectamente alineado, enmarca la cúpula de San Pedro al fondo a kilómetros de distancia. Probablemente la vista más sorprendente de la ciudad. Cola breve, experiencia única, gratuita.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">Ojo de cerradura del Priorato</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Bocca della Verità</div>
+                <div class="act-desc">La máscara de mármol del siglo IV a.C. con la leyenda de que muerde la mano si el que la toca miente. Famosa por "Vacaciones en Roma" (Hepburn y Gregory Peck, 1953). Cola de 5-10 minutos, sin coste de entrada a la iglesia.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">20:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena en Testaccio: Da Remo</div>
+                <div class="act-desc">La mejor pizza romana de la ciudad: fina, crujiente, con borde carbonizado justo. Nada que ver con la pizza napolitana esponjosa — la romana es otro plato. Cola de 30 minutos sin reserva, que se pasa bebiendo una cerveza fuera. Vale cada minuto.</div>
+                <div class="act-tags"><span class="act-tag">~€15 por persona</span><span class="act-tag warn">Sin reservas. Espera 30 min</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 4 -->
+      <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+        <h2 class="section-heading" id="h-dia4">Día 4</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">04</div>
+            <div>
+              <div class="day-title">Centro Storico</div>
+              <div class="day-subtitle">Fuentes, Plazas y los Secretos de Roma</div>
+            </div>
+            <div class="day-meta">
+              <span>⛲ Fontana di Trevi</span>
+              <span>🏛️ Pantheon</span>
+              <span>🌹 Campo de' Fiori</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Fontana di Trevi — Antes de la multitud</div>
+                <div class="act-desc">Llegar antes de las 9:30h para estar prácticamente solos. La fuente más famosa del mundo, diseñada por Nicola Salvi en 1762. Oceano (Neptuno) sobre una concha gigante tirada por caballos marinos y tritones. La tradición de lanzar una moneda con la mano derecha sobre el hombro izquierdo garantiza el regreso a Roma — se recaudan €1.5 millones al año que se donan a Caritas.</div>
+                <div class="act-tags"><span class="act-tag">Entrada gratuita</span><span class="act-tag info">Mejor antes de las 9:30h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Pantheon — El edificio más perfecto</div>
+                <div class="act-desc">El edificio más perfecto de la historia, construido en 125 d.C. por Adriano. La cúpula de 43,3 metros de diámetro —sin refuerzos metálicos, solo concreto romano— sigue siendo la cúpula sin refuerzo más grande del mundo, 19 siglos después. El óculo (agujero de 9m de diámetro en el techo) es la única fuente de luz. Cuando llueve, el agua entra y desaparece por desagües imperiales que siguen funcionando. Rafael, el pintor más admirado del Renacimiento, está enterrado aquí por su propia petición.</div>
+                <div class="act-tags"><span class="act-tag">€5 entrada (desde 2023)</span><span class="act-tag info">Construido 125 d.C.</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Campo de' Fiori — Mercado matinal</div>
+                <div class="act-desc">El mercado más fotogénico de Roma (mañanas hasta las 13h). Flores, especias, quesos de Pecorino, verduras de temporada, aceitunas en aceite. La estatua central es Giordano Bruno, quemado en esta misma plaza por la Inquisición en 1600 por proponer que el universo era infinito. Por la noche, se convierte en la zona de copas más concurrida de Roma.</div>
+                <div class="act-tags"><span class="act-tag">Mercado hasta 13h</span><span class="act-tag green">Gratuito pasear</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo callejero: Supplì Roma</div>
+                <div class="act-desc">En Via di San Francesco a Ripa: el mejor supplì de Roma. La croqueta de arroz frita con mozzarella que al morderla se estira como un hilo (de ahí "al telefono"). €3-5 la pieza. Comer de pie en la calle, como corresponde.</div>
+                <div class="act-tags"><span class="act-tag">€3-5 por supplì</span><span class="act-tag green">Callejero</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Piazza Navona</div>
+                <div class="act-desc">El salón de Roma, construido sobre el estadio de Domiciano (siglo I d.C.). Tres fuentes, incluyendo la "Fuente de los Cuatro Ríos" de Bernini (1651): los cuatro ríos del mundo conocido —Nilo, Ganges, Danubio, Río de la Plata— personificados en mármol con el obelisco egipcio al centro. Artistas callejeros, cafés con terraza, el Palazzo Pamphilj ocupando un lado entero.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">Bernini — Fuente Cuatro Ríos</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Palazzo Altemps — El museo secreto</div>
+                <div class="act-desc">Uno de los museos arqueológicos más importantes y menos conocidos de Roma: esculturas griegas y romanas de primera línea (el Ludovisi Ares, el Galata Suicida) en un palacio del siglo XV casi sin colas. El contraste entre las esculturas antiguas y los frescos renacentistas es extraordinario. €8, con la tranquilidad que el Vaticano nunca tendrá.</div>
+                <div class="act-tags"><span class="act-tag">€8 entrada</span><span class="act-tag green">Sin colas</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">18:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Aperitivo en Via della Pace</div>
+                <div class="act-desc">Las terrazas de Via della Pace o Piazza del Fico son el epicentro del aperitivo romano en el Centro Storico. Spritz, Negroni, bruschette, ambiente que mezcla turistas sofisticados con romanos de toda la vida. La hora dorada de Roma.</div>
+                <div class="act-tags"><span class="act-tag">~€10-15 aperitivo</span><span class="act-tag info">18:30-20:30h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">21:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena: Tonnarello (Trastevere) — Pasta fresca</div>
+                <div class="act-desc">Pasta fresca hecha a mano en el corazón de Trastevere. Fettuccine ai funghi porcini, rigatoni alla amatriciana (guanciale, tomate, pecorino — sin cebolla, sin nata, sin pimiento), cacio e pepe de referencia. Ambiente ruidoso, mesas apretadas, vino de la casa en jarras. Roma auténtica.</div>
+                <div class="act-tags"><span class="act-tag">~€30 por persona con vino</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 5 -->
+      <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+        <h2 class="section-heading" id="h-dia5">Día 5</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">05</div>
+            <div>
+              <div class="day-title">Villa Borghese + Vuelta a Casa</div>
+              <div class="day-subtitle">Bernini, jardines y el último almuerzo romano</div>
+            </div>
+            <div class="day-meta">
+              <span>🖼️ Galleria Borghese</span>
+              <span>🌿 Villa Borghese</span>
+              <span>✈️ Salida 18:00h</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Galleria Borghese — Reserva OBLIGATORIA</div>
+                <div class="act-desc">Solo 360 visitantes cada 2 horas. La colección más importante de escultura barroca del mundo en una villa del siglo XVII. Las esculturas de Bernini (Apolo y Dafne —el instante exacto en que la ninfa se convierte en laurel—, El Rapto de Proserpina —donde el mármol parece carne—, David con la honda en tensión) son de una perfección que resulta antinatural para la piedra. Caravaggio, Tiziano, Rafael, Rubens. Reserva con semanas de antelación.</div>
+                <div class="act-tags">
+                  <span class="act-tag warn">Reserva con semanas de antelación</span>
+                  <span class="act-tag">€15-20 entrada</span>
+                </div>
+                <div style="margin-top:8px">
+                  <a href="https://www.getyourguide.com/s/?q=Galleria+Borghese+ticket&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Reservar entradas Galleria Borghese
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Jardines de Villa Borghese</div>
+                <div class="act-desc">80 hectáreas de jardines a la inglesa con lago artificial, vistas espectaculares de Roma desde la terraza del Pincio (la mejor vista de la ciudad, con el Vaticano al fondo), esculturas, fuentes. Alquiler de bicis o barcas en el lago (~€5/h). La Roma verde que nadie busca pero todos necesitan.</div>
+                <div class="act-tags"><span class="act-tag green">Jardines gratuitos</span><span class="act-tag">Bici/barca: ~€5/h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Piazza del Popolo</div>
+                <div class="act-desc">La plaza del "pueblo" con dos iglesias gemelas perfectamente idénticas (Santa Maria dei Miracoli y Santa Maria in Montesanto) y un obelisco egipcio de 3,200 años traído por Augusto de Heliópolis. La entrada norte histórica a Roma para todos los viajeros que llegaban por la Vía Flaminia.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Último almuerzo: Dal Bolognese</div>
+                <div class="act-desc">El restaurante junto a Piazza del Popolo frecuentado por políticos, actores y periodistas romanos. Tagliatelle al ragù boloñese auténtico (hecho a fuego lento, nada que ver con el "espagueti a la bolognesa" de fuera de Italia), tortellini in brodo, gramigna con salsiccia. El almuerzo con el que se cierra Roma.</div>
+                <div class="act-tags"><span class="act-tag">~€35 por persona</span><span class="act-tag info">Reserva recomendada: TheFork</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Últimas compras</div>
+                <div class="act-desc">Via Condotti (Gucci, Bulgari, Valentino) para el último vistazo al lujo italiano. O San Lorenzo, barrio de artistas y estudiantes, para alternativas locales. Última gelatería artesanal del viaje.</div>
+                <div class="act-tags"><span class="act-tag info">Gelato: Giolitti o Gelateria dei Gracchi</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">18:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Traslado al aeropuerto — Leonardo Express</div>
+                <div class="act-desc">Leonardo Express desde Termini en 32 minutos. Salir al menos 2:30h antes del vuelo. Arrivederci, Roma.</div>
+                <div class="act-tags"><span class="act-tag info">2:30h antes del vuelo mínimo</span><span class="act-tag">€14 Leonardo Express</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Top 10 -->
+      <section id="top10" class="itin-section" aria-labelledby="h-top10">
+        <h2 class="section-heading" id="h-top10">Top 10 — Roma</h2>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">1</div>
+          <div class="top10-content">
+            <h4>Capilla Sixtina</h4>
+            <p>El techo más famoso del mundo. Ir a primera hora del día para no estar aplastado. El silencio que impone es de los pocos silenciosos colectivos que existen.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">2</div>
+          <div class="top10-content">
+            <h4>Coliseo</h4>
+            <p>2000 años de historia en cada piedra. Visitar con guía y acceso al suelo de la arena para entenderlo de verdad.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">3</div>
+          <div class="top10-content">
+            <h4>Foro Romano</h4>
+            <p>El centro del mundo durante 10 siglos. Más impresionante e íntimo que el Coliseo para quien quiere sentir la Roma real.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">4</div>
+          <div class="top10-content">
+            <h4>Galleria Borghese</h4>
+            <p>Las esculturas de Bernini dejan sin palabras. El mármol parece piel. Reserva obligatoria con anticipación — sin ella no entras.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">5</div>
+          <div class="top10-content">
+            <h4>Fontana di Trevi</h4>
+            <p>Ridícula a mediodía con 500 personas. Mágica a las 7am o a medianoche. La diferencia es completamente otra experiencia.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">6</div>
+          <div class="top10-content">
+            <h4>Pantheon</h4>
+            <p>El edificio con la cúpula sin refuerzos metálicos más grande del mundo. 1900 años después de construirse, sigue siendo técnicamente incomparable.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">7</div>
+          <div class="top10-content">
+            <h4>Trastevere</h4>
+            <p>El barrio más auténtico de Roma. El mejor paseo nocturno de la ciudad, lejos del circuito turístico oficial.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">8</div>
+          <div class="top10-content">
+            <h4>Castel Sant'Angelo</h4>
+            <p>2.000 años de historia: mausoleo, fortaleza, prisión, museo. El pasaje secreto de los Papas lo convierte en algo diferente a todo lo demás.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">9</div>
+          <div class="top10-content">
+            <h4>Campo de' Fiori</h4>
+            <p>El mercado de mañana (flores, especias, quesos) y el aperitivo de tarde (spritz, terrazas). Roma auténtica en un solo lugar.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">10</div>
+          <div class="top10-content">
+            <h4>Piazza Navona</h4>
+            <p>El salón de Roma con la fuente de Bernini, artistas callejeros y cafés con terraza. Perfecto al atardecer cuando la luz es dorada.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gastronomía -->
+      <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+        <h2 class="section-heading" id="h-gastro">Gastronomía romana</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:20px">La cocina romana es una de las más honestas del mundo: pocos ingredientes, técnica impecable, sin decoraciones. La carbonara tiene cuatro ingredientes. La cacio e pepe tiene dos. La amatriciana tiene tres. No hace falta más.</p>
+        <div class="gastro-grid">
+          <div class="gastro-card">
+            <div class="gastro-cat">Carbonara auténtica</div>
+            <div class="gastro-title">La regla de oro</div>
+            <div class="gastro-desc">Huevo + guanciale + pecorino romano + pimienta. <strong style="color:#e87060">NADA de nata, jamás.</strong> Los mejores: <strong style="color:#edeef2">Da Enzo al 29</strong>, <strong style="color:#edeef2">Roscioli</strong>, <strong style="color:#edeef2">Flavio al Velavevodetto</strong>. Si tiene nata en la carta, sal de ahí corriendo.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Cacio e pepe</div>
+            <div class="gastro-title">La simplicidad perfecta</div>
+            <div class="gastro-desc">Solo queso pecorino y pimienta negra. Sin aceite, sin mantequilla, sin nada más. La maestría está en la emulsión con el agua de cocción de la pasta. En <strong style="color:#edeef2">Tonnarello</strong> (Trastevere) para la versión más auténtica.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Amatriciana</div>
+            <div class="gastro-title">El plato del Lazio</div>
+            <div class="gastro-desc">Guanciale, tomate San Marzano, pecorino. Plato originario de Amatrice (destruido por el terremoto de 2016 — comerla es un acto de solidaridad). <strong style="color:#edeef2">Sin cebolla, sin pimiento, sin ajo.</strong> En cualquier osteria auténtica de Testaccio.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Saltimbocca alla romana</div>
+            <div class="gastro-title">El segundo plato romano</div>
+            <div class="gastro-desc">Escalope de ternera con jamón crudo y salvia, cocinado en mantequilla y vino blanco. El nombre significa "salta en la boca". <strong style="color:#edeef2">Settimio all'Arancio</strong> en Prati tiene la versión más honesta de Roma.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Supplì</div>
+            <div class="gastro-title">Street food de culto</div>
+            <div class="gastro-desc">Croqueta de arroz frita con mozzarella dentro que al morderla se estira ("al telefono"). Callejera, €3, perfecta. <strong style="color:#edeef2">Supplì Roma</strong> en Trastevere y <strong style="color:#edeef2">Fratelli Farucci</strong> en il Ghetto son las referencias absolutas.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Gelato artesanal</div>
+            <div class="gastro-title">La regla del buen gelato</div>
+            <div class="gastro-desc">El gelato auténtico se muestra en cubas tapadas con tapa metálica, no en torres de colores artificiales que desafían la física. <strong style="color:#edeef2">Giolitti</strong>, <strong style="color:#edeef2">Gelateria dei Gracchi</strong>, <strong style="color:#edeef2">Come il Latte</strong>. Pistacho de Sicilia, fior di latte, stracciatella.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Pizza al taglio</div>
+            <div class="gastro-title">Pizza por peso</div>
+            <div class="gastro-desc">Pizza rectangular vendida por gramaje, no por pieza. Fina, crujiente, con base romana. €3-5 la ración. <strong style="color:#edeef2">Fratelli Farucci</strong> en il Ghetto para la base más crujiente. Nada que ver con la pizza napolitana o la de masa gruesa.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Aperitivo</div>
+            <div class="gastro-title">El ritual indispensable</div>
+            <div class="gastro-desc">Spritz Campari o Aperol con bruschette, olive e frittini. Entre las 18 y las 20h en cualquier bar de Trastevere o Centro Storico. €8-12 por persona. La hora que hace a Roma diferente a cualquier otra ciudad de Europa.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Consejos -->
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">10 Consejos para Roma</h2>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">1</div>
+          <div class="tip-text"><strong>Reserva online para todo:</strong> Vaticano (skip-the-line obligatorio), Coliseo (con suelo de arena), Borghese (plazas muy limitadas). Sin reserva, perderás 2-3h en cola o directamente no entrarás.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">2</div>
+          <div class="tip-text"><strong>Llega temprano a la Fontana di Trevi:</strong> A las 7am estás prácticamente solo. A las 11am es una muralla humana de 600 personas. La diferencia es literalmente otra experiencia.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">3</div>
+          <div class="tip-text"><strong>Caminando se ve todo:</strong> El Centro Storico, Trastevere, el Aventino y Campo de' Fiori son todos adyacentes. Roma tiene los mejores paseos a pie de Europa, sin discusión.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">4</div>
+          <div class="tip-text"><strong>Las siestas son reales:</strong> Muchas tiendas cierran 13-16h. Planifica comidas largas para esas horas — es la excusa perfecta para una sobremesa con vino de la casa.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">5</div>
+          <div class="tip-text"><strong>No pidas cappuccino después de las 11h:</strong> Es de turistas y los camareros lo saben. Después del desayuno, solo espresso. El cappuccino es desayuno, no postre.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">6</div>
+          <div class="tip-text"><strong>Agua gratis en las nasoni:</strong> Las fuentes de agua potable gratuita (llamadas nasoni por su forma de nariz) están por toda Roma. Agua fría, fresca, potable. Lleva una botella reutilizable.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">7</div>
+          <div class="tip-text"><strong>Los mejores restaurantes no tienen menú en inglés:</strong> Si tienen menú en inglés y foto de los platos, es trampa turística. Los auténticos tienen lista de espera y menú solo en italiano — busca esos.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">8</div>
+          <div class="tip-text"><strong>Evita restaurantes junto al Coliseo:</strong> Un radio de 200 metros alrededor del Coliseo es territorio de trampas turísticas a €30 el plato de pasta mediocre. Camina 5 minutos hacia Testaccio y multiplica la calidad por 3.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">9</div>
+          <div class="tip-text"><strong>El metro cierra pronto:</strong> Última salida a las 23:30h (1:30h viernes y sábados). Los taxis nocturnos son seguros — usar taxi oficial blanco con taxímetro o apps Itaxi / Free Now.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">10</div>
+          <div class="tip-text"><strong>Visita el Vaticano el miércoles:</strong> Si hay Audiencia Papal pública, puedes asistir gratuitamente (reserva en la Prefectura de la Casa Pontificia). Ver al Papa en la Plaza de San Pedro es una experiencia independientemente de tu fe.</div>
+        </div>
+      </section>
+
+      <!-- Emergencias -->
+      <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+        <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+        <div class="emerg-grid">
+          <div class="emerg-card">
+            <div class="emerg-label">Emergencias (número único UE)</div>
+            <div class="emerg-value">112</div>
+            <div class="emerg-note">Funciona en toda la Unión Europea</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Policía / Carabinieri</div>
+            <div class="emerg-value">113 / 112</div>
+            <div class="emerg-note">Los Carabinieri tienen competencia nacional</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Ambulancia</div>
+            <div class="emerg-value">118</div>
+            <div class="emerg-note">Emergencias médicas</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Bomberos</div>
+            <div class="emerg-value">115</div>
+            <div class="emerg-note">Vigili del Fuoco</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Hospital Gemelli (inglés)</div>
+            <div class="emerg-value" style="font-size:0.85rem">+39 06 3015 1</div>
+            <div class="emerg-note">Hospital Universitario Agostino Gemelli — personal bilingüe</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Embajada de España en Roma</div>
+            <div class="emerg-value" style="font-size:0.85rem">+39 06 6840 401</div>
+            <div class="emerg-note">Largo Fontanella Borghese 19 — Emergencias consulares</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Checklist -->
+      <section id="checklist" class="itin-section" aria-labelledby="h-check">
+        <h2 class="section-heading" id="h-check">Checklist pre-viaje</h2>
+        <div style="background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px">
+          <div class="check-section">
+            <div class="check-section-title">2 semanas antes — imprescindible</div>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Reservar vuelos Madrid–Roma (low cost con antelación)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Reservar hotel en el Centro Storico o Trastevere
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Reservar entradas Museos Vaticanos (skip-the-line — imprescindible)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Reservar tour Coliseo con acceso a la arena
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Reservar Galleria Borghese (¡cupo muy limitado: 360 personas cada 2h!)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Contratar seguro de viaje IATI Europa
+            </label>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">1 semana antes</div>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Descargar Google Maps offline de Roma
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Instalar TheFork para reservas de restaurantes
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Avisar al banco de que viajas a Italia
+            </label>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">Día antes</div>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Check-in online del vuelo
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Confirmar todas las reservas de museos (revisar emails)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Preparar ropa sin descubiertos para entrar a iglesias (hombros y rodillas cubiertos)
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Disclosure -->
+      <div class="disclosure" role="note" aria-label="Aviso legal sobre enlaces de afiliados">
+        <strong style="color:#edeef2">Aviso sobre enlaces de afiliados:</strong> Algunos enlaces en esta página son de afiliados (Booking.com, GetYourGuide, Skyscanner, IATI Seguros). Si realizas una compra a través de ellos, VoyageAI recibe una pequeña comisión sin coste adicional para ti. Esto nos permite mantener el servicio gratuito. Los precios y disponibilidad son indicativos y pueden variar. Siempre verifica en los sitios oficiales antes de reservar. Los precios están expresados en euros (€) y son estimaciones para 2026.
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html" style="font-family:'Bodoni Moda',serif;font-size:1.2rem;font-weight:700;color:#edeef2;text-decoration:none" aria-label="VoyageAI — Inicio">Voyage<span style="color:#c9a96e">AI</span></a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+      <a href="../index.html#como-funciona" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Cómo funciona</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 VoyageAI</p>
+  </div>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Nav scroll effect ──
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // ── TOC active highlighting ──
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#', '');
+    const el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+
+  function updateTOC() {
+    const scrollY = window.scrollY;
+    const offset = 120;
+    let current = null;
+    sections.forEach(function(s) {
+      if (s.el.offsetTop - offset <= scrollY) {
+        current = s;
+      }
+    });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateTOC, { passive: true });
+  updateTOC();
+
+  // ── Smooth scroll for TOC links ──
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const id = this.getAttribute('href').replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 96;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ── Checkbox keyboard support ──
+  document.querySelectorAll('.check-box').forEach(function(box) {
+    box.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const checked = this.getAttribute('aria-checked') === 'true';
+        this.setAttribute('aria-checked', (!checked).toString());
+        this.style.background = !checked ? 'rgba(94,203,138,0.3)' : '';
+        this.style.borderColor = !checked ? '#5ecb8a' : '';
+      }
+    });
+    box.addEventListener('click', function() {
+      const checked = this.getAttribute('aria-checked') === 'true';
+      this.setAttribute('aria-checked', (!checked).toString());
+      this.style.background = !checked ? 'rgba(94,203,138,0.3)' : '';
+      this.style.borderColor = !checked ? '#5ecb8a' : '';
+    });
+  });
+
+  // ── Scroll reveal ──
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.day-card, .top10-item, .tip-item').forEach(function(el) {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }
+})();
+</script>
+</body>
+</html>

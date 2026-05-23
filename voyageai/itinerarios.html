@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Todos los Itinerarios — VoyageAI</title>
+  <meta name="description" content="Explora todos los itinerarios de viaje generados por IA. Más de 7 destinos en todo el mundo, planificados día a día."/>
+  <link rel="stylesheet" href="assets/shared.css"/>
+  <style>
+    .page-hero { position: relative; z-index: 1; padding: 140px 24px 80px; text-align: center; }
+    .page-hero-title { font-family: var(--font-head); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .page-hero-sub { font-size: 1.1rem; color: var(--fg-muted); line-height: 1.7; max-width: 500px; margin: 0 auto; }
+
+    /* Filter bar */
+    .filter-bar { position: relative; z-index: 1; padding: 0 24px 60px; }
+    .filter-inner { max-width: 1200px; margin: 0 auto; }
+    .filter-label { font-size: 0.78rem; color: var(--fg-muted); font-weight: 500; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .filter-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+    .chip {
+      padding: 8px 18px; border-radius: 100px;
+      border: 1px solid var(--border); background: var(--surface);
+      font-family: var(--font-body); font-size: 0.83rem; font-weight: 500;
+      color: var(--fg-muted); cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .chip:hover { background: var(--surface-hover); color: var(--fg); }
+    .chip.active { background: var(--gold-glow); border-color: var(--border-gold); color: var(--gold); }
+
+    /* Grid */
+    .itin-section { position: relative; z-index: 1; padding: 0 24px 120px; }
+    .itin-section-inner { max-width: 1200px; margin: 0 auto; }
+    .region-label { font-size: 0.78rem; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+    .region-label::before { content: ''; width: 20px; height: 1px; background: var(--gold); opacity: 0.6; }
+    .region-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .itin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 56px; }
+
+    /* Search */
+    .search-bar { position: relative; max-width: 400px; margin-bottom: 40px; }
+    .search-input { width: 100%; padding: 12px 16px 12px 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--fg); font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+    .search-input:focus { border-color: var(--border-gold); }
+    .search-input::placeholder { color: var(--fg-muted); }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--fg-muted); pointer-events: none; }
+
+    /* No results */
+    .no-results { text-align: center; padding: 80px 24px; display: none; }
+    .no-results-icon { font-size: 3rem; margin-bottom: 16px; }
+    .no-results p { color: var(--fg-muted); font-size: 1rem; }
+
+    /* Stats bar */
+    .stats-bar { display: flex; gap: 32px; align-items: center; margin-bottom: 40px; flex-wrap: wrap; }
+    .stats-bar-item { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--fg-muted); }
+    .stats-bar-num { font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; color: var(--gold); }
+
+    @media(max-width:1024px) { .itin-grid{grid-template-columns:repeat(2,1fr)} }
+    @media(max-width:640px) { .itin-grid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span></span></div>
+
+<!-- NAVBAR -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <span class="nav-logo-text">Voyage<span>AI</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="mapa.html">Mapa</a></li>
+    <li><a href="#cta-footer" class="nav-cta">Empezar gratis</a></li>
+  </ul>
+  <button class="nav-mobile-btn" onclick="toggleMenu()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+</nav>
+
+<!-- PAGE HERO -->
+<header class="page-hero">
+  <div class="section-label center">Generados por IA</div>
+  <h1 class="page-hero-title">Todos los<br/><span class="gold-text">itinerarios</span></h1>
+  <p class="page-hero-sub">Rutas completas, día a día, con horarios, restaurantes, actividades y consejos de Routlo, nuestro guía IA con 12 años de experiencia.</p>
+</header>
+
+<!-- FILTER + GRID -->
+<div class="filter-bar container">
+  <div class="filter-inner">
+    <!-- Search -->
+    <div class="search-bar">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" class="search-input" placeholder="Buscar destino..." oninput="filterCards()" id="searchInput" aria-label="Buscar destino"/>
+    </div>
+    <!-- Chips -->
+    <div class="filter-label">Filtrar por región</div>
+    <div class="filter-chips" role="group" aria-label="Filtrar por región">
+      <button class="chip active" onclick="setFilter('todos', this)" data-filter="todos">Todos (7)</button>
+      <button class="chip" onclick="setFilter('asia', this)" data-filter="asia">Asia (3)</button>
+      <button class="chip" onclick="setFilter('europa', this)" data-filter="europa">Europa (2)</button>
+      <button class="chip" onclick="setFilter('africa', this)" data-filter="africa">África (1)</button>
+      <button class="chip" onclick="setFilter('latinoamerica', this)" data-filter="latinoamerica">Latinoamérica (1)</button>
+    </div>
+  </div>
+</div>
+
+<main class="itin-section">
+  <div class="itin-section-inner">
+    <!-- Stats bar -->
+    <div class="stats-bar">
+      <div class="stats-bar-item"><div class="stats-bar-num" id="countVisible">7</div> itinerarios</div>
+      <div class="stats-bar-item"><div class="stats-bar-num">5</div> regiones</div>
+      <div class="stats-bar-item"><div class="stats-bar-num">4–8</div> días de media</div>
+      <div class="stats-bar-item"><div class="stats-bar-num">€1,200</div> desde</div>
+    </div>
+
+    <!-- ASIA -->
+    <div class="region-label" data-region-header="asia">Asia</div>
+    <div class="itin-grid" id="grid-asia">
+      <!-- Tokio -->
+      <a href="itinerarios/tokio.html" class="itin-card" data-region="asia" data-name="tokio japón">
+        <div class="itin-card-img">
+          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#0d1b2e 0%,#1a3a5c 40%,#2d5a8a 70%,#c9a96e44 100%);"></div>
+          <div class="itin-card-overlay"></div>
+          <span class="itin-card-tag">Asia · Japón</span>
+          <span class="itin-card-dias">5 días</span>
+        </div>
+        <div class="itin-card-body">
+          <div class="itin-card-title">Tokio, Japón</div>
+          <div class="itin-card-sub">Gastronomía Michelin, templos ancestrales, tecnología de vanguardia y la efervescencia única de la capital japonesa.</div>
+          <div class="itin-card-footer">
+            <div class="itin-card-price">Desde <strong>€2,400</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
+            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
+          </div>
+        </div>
+      </a>
+      <!-- Bali -->
+      <a href="itinerarios/bali.html" class="itin-card" data-region="asia" data-name="bali indonesia">
+        <div class="itin-card-img">
+          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#0d1a12 0%,#0d3a22 40%,#1a7a4a 70%,#34d89a44 100%);"></div>
+          <div class="itin-card-overlay"></div>
+          <span class="itin-card-tag">Asia · Indonesia</span>
+          <span class="itin-card-dias">7 días</span>
+        </div>
+        <div class="itin-card-body">
+          <div class="itin-card-title">Bali, Indonesia</div>
+          <div class="itin-card-sub">Terrazas de arroz, templos sagrados, acantilados al atardecer en Uluwatu y playas paradisíacas en Nusa Penida.</div>
+          <div class="itin-card-footer">
+            <div class="itin-card-price">Desde <strong>€1,800</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
+            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
+          </div>
+        </div>
+      </a>
+      <!-- Tailandia -->
+      <a href="itinerarios/tailandia.html" class="itin-card" data-region="asia" data-name="tailandia bangkok islas">
+        <div class="itin-card-img">
+          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#0d1a0d 0%,#1a3d1a 40%,#2a6e2a 70%,#f4d03f44 100%);"></div>
+          <div class="itin-card-overlay"></div>
+          <span class="itin-card-tag">Asia · Tailandia</span>
+          <span class="itin-card-dias">8 días</span>
+        </div>
+        <div class="itin-card-body">
+          <div class="itin-card-title">Tailandia</div>
+          <div class="itin-card-sub">Bangkok, Chiang Mai y las playas del sur: templos dorados, mercados flotantes, elefantes y el mejor street food de Asia.</div>
+          <div class="itin-card-footer">
+            <div class="itin-card-price">Desde <strong>€1,600</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
+            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- EUROPA -->
+    <div class="region-label" data-region-header="europa">Europa</div>
+    <div class="itin-grid" id="grid-europa">
+      <!-- Roma -->
+      <a href="itinerarios/roma.html" class="itin-card" data-region="europa" data-name="roma italia">
+        <div class="itin-card-img">
+          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#1a0a0a 0%,#3d1515 40%,#c0392b 70%,#e8c06844 100%);"></div>
+          <div class="itin-card-overlay"></div>
+          <span class="itin-card-tag">Europa · Italia</span>
+          <span class="itin-card-dias">5 días</span>
+        </div>
+        <div class="itin-card-body">
+          <div class="itin-card-title">Roma, Italia</div>
+          <div class="itin-card-sub">La Ciudad Eterna: Vaticano, Coliseo, Trastevere y la mejor pasta carbonara de tu vida en 5 días perfectos.</div>
+          <div class="itin-card-footer">
+            <div class="itin-card-price">Desde <strong>€1,800</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
+            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
+          </div>
+        </div>
+      </a>
+      <!-- París -->
+      <a href="itinerarios/paris.html" class="itin-card" data-region="europa" data-name="paris francia">
+        <div class="itin-card-img">
+          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#0d0a1e 0%,#1e1048 40%,#3a2090 70%,#7c6fd144 100%);"></div>
+          <div class="itin-card-overlay"></div>
+          <span class="itin-card-tag">Europa · Francia</span>
+          <span class="itin-card-dias">4 días</span>
+        </div>
+        <div class="itin-card-body">
+          <div class="itin-card-title">París, Francia</div>
+          <div class="itin-card-sub">Torre Eiffel, el Louvre, Montmartre y los mejores bistros: la Ciudad de la Luz en 4 días perfectamente optimizados.</div>
+          <div class="itin-card-footer">
+            <div class="itin-card-price">Desde <strong>€2,200</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
+            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- ÁFRICA -->
+    <div class="region-label" data-region-header="africa">África</div>
+    <div class="itin-grid" id="grid-africa">
+      <!-- Marrakech -->
+      <a href="itinerarios/marrakech.html" class="itin-card" data-region="africa" data-name="marrakech marruecos">
+        <div class="itin-card-img">
+          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#1a0d00 0%,#4a2200 40%,#c67c1a 70%,#e8b84b44 100%);"></div>
+          <div class="itin-card-overlay"></div>
+          <span class="itin-card-tag">África · Marruecos</span>
+          <span class="itin-card-dias">5 días</span>
+        </div>
+        <div class="itin-card-body">
+          <div class="itin-card-title">Marrakech, Marruecos</div>
+          <div class="itin-card-sub">Medina laberíntica, souks de especias, riad con piscina, hammam tradicional y puesta de sol sobre la Djemaa el-Fna.</div>
+          <div class="itin-card-footer">
+            <div class="itin-card-price">Desde <strong>€1,200</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
+            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- LATINOAMÉRICA -->
+    <div class="region-label" data-region-header="latinoamerica">Latinoamérica</div>
+    <div class="itin-grid" id="grid-latinoamerica">
+      <!-- Perú -->
+      <a href="itinerarios/peru.html" class="itin-card" data-region="latinoamerica" data-name="peru cusco machu picchu lima">
+        <div class="itin-card-img">
+          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#0d0a1e 0%,#1e1048 40%,#5c3a9e 70%,#a78bfa44 100%);"></div>
+          <div class="itin-card-overlay"></div>
+          <span class="itin-card-tag">Latinoamérica · Perú</span>
+          <span class="itin-card-dias">6 días</span>
+        </div>
+        <div class="itin-card-body">
+          <div class="itin-card-title">Perú</div>
+          <div class="itin-card-sub">Lima, Cusco y la ciudadela sagrada de Machu Picchu: historia inca, gastronomía mundial y paisajes que quitan el aliento.</div>
+          <div class="itin-card-footer">
+            <div class="itin-card-price">Desde <strong>€2,100</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
+            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="no-results" id="noResults">
+      <div class="no-results-icon">✈️</div>
+      <p>No se encontraron itinerarios para "<span id="searchTerm"></span>".<br/>Prueba con otro destino o región.</p>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer role="contentinfo" id="cta-footer">
+  <div class="footer-inner container">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:4px">
+        <div class="nav-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <span class="nav-logo-text" style="font-size:1.2rem">Voyage<span>AI</span></span>
+      </a>
+      <p>La primera agencia de viajes impulsada por IA. Itinerarios personalizados para cada viajero, en cada destino del mundo.</p>
+    </div>
+    <nav class="footer-col"><h4>Itinerarios Asia</h4><ul><li><a href="itinerarios/tokio.html">Tokio, Japón</a></li><li><a href="itinerarios/bali.html">Bali, Indonesia</a></li><li><a href="itinerarios/tailandia.html">Tailandia</a></li></ul></nav>
+    <nav class="footer-col"><h4>Itinerarios Europa</h4><ul><li><a href="itinerarios/roma.html">Roma, Italia</a></li><li><a href="itinerarios/paris.html">París, Francia</a></li></ul></nav>
+    <nav class="footer-col"><h4>Explora</h4><ul><li><a href="mapa.html">Mapa interactivo</a></li><li><a href="index.html#como-funciona">Cómo funciona</a></li><li><a href="#">Privacidad</a></li></ul></nav>
+  </div>
+  <div class="footer-bottom container">
+    <span>© 2026 VoyageAI. Todos los derechos reservados.</span>
+    <span>Hecho con IA · Para viajeros del mundo</span>
+  </div>
+</footer>
+
+<script>
+  let currentFilter = 'todos';
+
+  function setFilter(region, btn) {
+    currentFilter = region;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function filterCards() { applyFilters(); }
+
+  function applyFilters() {
+    const search = document.getElementById('searchInput').value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.itin-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const region = card.dataset.region;
+      const name = card.dataset.name;
+      const matchRegion = currentFilter === 'todos' || region === currentFilter;
+      const matchSearch = !search || name.includes(search);
+      const show = matchRegion && matchSearch;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    // Show/hide region headers and grids
+    ['asia','europa','africa','latinoamerica'].forEach(r => {
+      const header = document.querySelector(`[data-region-header="${r}"]`);
+      const grid = document.getElementById(`grid-${r}`);
+      const regionVisible = currentFilter === 'todos' || currentFilter === r;
+      const hasCards = regionVisible && [...document.querySelectorAll(`.itin-card[data-region="${r}"]`)].some(c => c.style.display !== 'none');
+      if (header) header.style.display = hasCards ? '' : 'none';
+      if (grid) grid.style.display = hasCards ? '' : 'none';
+    });
+
+    document.getElementById('countVisible').textContent = visible;
+    const noResults = document.getElementById('noResults');
+    const searchTerm = document.getElementById('searchTerm');
+    searchTerm.textContent = search;
+    noResults.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  // Scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => { nav.style.background = window.scrollY > 40 ? 'rgba(4,8,16,0.92)' : 'rgba(4,8,16,0.6)'; }, { passive: true });
+
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    links.style.cssText = links.style.display === 'flex' ? '' : 'display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:rgba(4,8,16,0.97);padding:16px;gap:4px;border-bottom:1px solid rgba(255,255,255,0.08);z-index:99;';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tokio, Japón — 5 días | VoyageAI</title>
+  <meta name="description" content="Itinerario completo de 5 días en Tokio: templos, gastronomía, tecnología y el Monte Fuji. Presupuesto detallado, hoteles y consejos exclusivos de VoyageAI."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Nav override ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,8,16,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav.scrolled { background: rgba(4,8,16,0.95); }
+
+    /* ── Aurora ── */
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #1a3a6e 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #2a1a5e 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #0a2d4a 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    /* ── Hero ── */
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #0d1b2e 0%, #1a3a5c 40%, #2d5a8a 70%, rgba(201,169,110,0.2) 100%);
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%);
+    }
+    /* Decorative city silhouette */
+    .dest-hero-deco {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+      background: linear-gradient(to top, #040810 0%, transparent 100%);
+      z-index: 0;
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(4,8,16,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label {
+      font-size: 0.7rem; color: rgba(237,238,242,0.55);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .dest-sum-val {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.2rem; font-weight: 700; color: #c9a96e;
+    }
+
+    /* ── Layout ── */
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title {
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(237,238,242,0.55); margin-bottom: 12px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    /* ── Sections ── */
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    /* ── Day Card ── */
+    .day-card {
+      background: #0d1628;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; overflow: hidden; margin-bottom: 28px;
+    }
+    .day-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .day-num {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 2.2rem; font-weight: 700; color: #c9a96e;
+      line-height: 1; min-width: 60px;
+    }
+    .day-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px;
+    }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    /* ── Activity ── */
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time {
+      min-width: 55px; font-size: 0.78rem; color: #c9a96e;
+      font-weight: 600; padding-top: 3px; flex-shrink: 0;
+    }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #c9a96e; border: 2px solid #0d1628;
+      flex-shrink: 0; margin-top: 3px;
+    }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag {
+      display: inline-block; padding: 2px 8px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 100px; font-size: 0.67rem; color: #c9a96e;
+    }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    /* ── Meals ── */
+    .meal-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 16px 0 22px; }
+    .meal-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px; transition: border-color 0.2s;
+    }
+    .meal-card:hover { border-color: rgba(201,169,110,0.3); }
+    .meal-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .meal-name { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 4px; }
+    .meal-info { font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.5; margin-bottom: 8px; }
+    .meal-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; }
+
+    /* ── Hotels ── */
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px; transition: border-color 0.2s;
+    }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600;
+      border-bottom: 1px solid rgba(201,169,110,0.3); padding-bottom: 1px;
+    }
+    .hotel-link:hover { border-color: #c9a96e; }
+
+    /* ── Budget table ── */
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th {
+      text-align: left; padding: 10px 14px; background: #0d1628;
+      color: #c9a96e; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(201,169,110,0.3);
+    }
+    .budget-table td {
+      padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: rgba(237,238,242,0.55); vertical-align: top;
+    }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    /* ── Transport ── */
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 18px;
+    }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    /* ── Tips ── */
+    .tip-item {
+      display: flex; gap: 12px; padding: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .tip-num {
+      min-width: 28px; height: 28px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700;
+      color: #c9a96e; flex-shrink: 0;
+    }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    /* ── Phrases ── */
+    .phrases-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .phrase-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .phrase-es { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 4px; }
+    .phrase-local { font-size: 0.88rem; font-weight: 600; color: #edeef2; margin-bottom: 2px; }
+    .phrase-pron { font-size: 0.74rem; color: #c9a96e; font-style: italic; }
+
+    /* ── Emergency ── */
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+
+    /* ── Checklist ── */
+    .check-section { margin-bottom: 20px; }
+    .check-section-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 10px; }
+    .check-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.86rem; color: rgba(237,238,242,0.55);
+    }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+
+    /* ── Top 10 ── */
+    .top10-item {
+      display: flex; gap: 16px; padding: 16px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .top10-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.8rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 36px; }
+    .top10-content h4 { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .top10-content p { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.55; }
+
+    /* ── Gastronomy ── */
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 16px;
+    }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    /* ── Disclosure ── */
+    .disclosure {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 16px 18px;
+      font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65;
+      margin-top: 40px;
+    }
+
+    /* ── CTA banner ── */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%);
+      border: 1px solid rgba(201,169,110,0.3); border-radius: 20px;
+      padding: 32px; text-align: center; margin-bottom: 28px;
+    }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px;
+      background: linear-gradient(135deg, #c9a96e, #a07840);
+      color: #0a0a0a; font-weight: 600; font-size: 0.9rem;
+      border-radius: 10px; text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .hotel-grid { grid-template-columns: repeat(2,1fr); }
+      .meal-options { grid-template-columns: 1fr; }
+      .transport-grid { grid-template-columns: 1fr; }
+      .gastro-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .hotel-grid { grid-template-columns: 1fr; }
+      .phrases-grid { grid-template-columns: 1fr; }
+      .emerg-grid { grid-template-columns: 1fr; }
+      .dest-summary-bar { flex-direction: column; }
+      nav { padding: 0 16px; }
+      nav ul { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Aurora background -->
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<!-- Navigation -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="VoyageAI — Inicio">
+    <div class="nav-logo-icon" style="width:36px;height:36px;background:linear-gradient(135deg,#c9a96e,#4a7fa5);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <span style="font-family:'Bodoni Moda',serif;font-size:1.35rem;font-weight:700;color:#edeef2;letter-spacing:-0.01em">Voyage<span style="color:#c9a96e">AI</span></span>
+  </a>
+  <ul style="display:flex;align-items:center;gap:4px;list-style:none" role="list">
+    <li><a href="../index.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Inicio</a></li>
+    <li><a href="../itinerarios.html" style="font-size:0.875rem;font-weight:500;color:#c9a96e;text-decoration:none;padding:8px 14px;border-radius:8px" aria-current="page">Itinerarios</a></li>
+    <li><a href="../mapa.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Mapa</a></li>
+    <li><a href="../index.html#cta" style="font-size:0.875rem;font-weight:600;color:#0a0a0a;background:linear-gradient(135deg,#c9a96e,#a07840);padding:9px 20px;border-radius:10px;text-decoration:none">Empezar gratis</a></li>
+  </ul>
+</nav>
+
+<!-- Skip to content -->
+<a href="#main-content" style="position:absolute;top:-100px;left:0;background:#c9a96e;color:#0a0a0a;padding:8px 16px;border-radius:0 0 8px 0;font-weight:600;z-index:999;transition:top 0.2s" onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Saltar al contenido</a>
+
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <!-- Decorative floating elements -->
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Tokio</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Tokio</h1>
+  <p class="dest-country">Japón</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      5 días / 4 noches
+    </span>
+    <span class="dest-badge" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Pareja
+    </span>
+    <span class="dest-badge gold" role="listitem">€2,400–3,200</span>
+    <span class="dest-badge" role="listitem">Asia · Japón</span>
+    <span class="dest-badge" role="listitem">Gastronomía + Cultura + Tecnología</span>
+    <a href="https://www.skyscanner.net/transport/flights/MAD/TYO/260310/?associateId=AFF123" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      Buscar vuelos
+    </a>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">5 días</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Viajeros</div>
+      <div class="dest-sum-val">Pareja</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Presupuesto</div>
+      <div class="dest-sum-val">€2,400–3,200</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Región</div>
+      <div class="dest-sum-val">Asia</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Estilo</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Cultura</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main content -->
+<main id="main-content">
+  <div class="itin-layout">
+
+    <!-- TOC Sidebar -->
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#dia1">Día 1</a></li>
+          <li><a href="#dia2">Día 2</a></li>
+          <li><a href="#dia3">Día 3</a></li>
+          <li><a href="#dia4">Día 4</a></li>
+          <li><a href="#dia5">Día 5</a></li>
+          <li><a href="#top10">Top 10</a></li>
+          <li><a href="#gastronomia">Gastronomía</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+          <li><a href="#frases">Frases</a></li>
+          <li><a href="#emergencias">Emergencias</a></li>
+          <li><a href="#checklist">Checklist</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <article>
+
+      <!-- Resumen -->
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          Tokio es la ciudad más densa y fascinante del mundo: 14 millones de personas, el metro más puntual del planeta, ramen servido en cabinas individuales, templos con 1.400 años de historia junto a edificios cubiertos de pantallas LED. Este itinerario de 5 días combina la cultura ancestral de Asakusa, el arte digital de teamLab, la gastronomía de Tsukiji, y una excursión imprescindible al Monte Fuji.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>VoyageAI personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Empezar gratis
+          </a>
+        </div>
+      </section>
+
+      <!-- Presupuesto -->
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para Tokio">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Estimado por persona</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>✈️ Vuelos Madrid–Tokio ida/vuelta</td>
+                <td>€700–1,000</td>
+                <td>Booking con 2 meses de antelación</td>
+              </tr>
+              <tr>
+                <td>🏨 Alojamiento (4 noches)</td>
+                <td>€500–800</td>
+                <td>Zona Shinjuku recomendada</td>
+              </tr>
+              <tr>
+                <td>🍽️ Alimentación (5 días)</td>
+                <td>€300–500</td>
+                <td>Mix restaurantes y konbini</td>
+              </tr>
+              <tr>
+                <td>🚇 Transporte local</td>
+                <td>€80–120</td>
+                <td>Suica card + JR Pass parcial</td>
+              </tr>
+              <tr>
+                <td>🎫 Entradas y actividades</td>
+                <td>€150–250</td>
+                <td>teamLab, templos, excursión Fuji</td>
+              </tr>
+              <tr>
+                <td>🛡️ Seguro de viaje</td>
+                <td>€40–60</td>
+                <td>
+                  <a href="https://www.iatiseguros.com/?r=voyageai" class="hotel-link" target="_blank" rel="noopener">IATI Mochilero Asiático</a>
+                </td>
+              </tr>
+              <tr>
+                <td>🎁 Extras / souvenirs</td>
+                <td>€200–300</td>
+                <td>Presupuesto buffer</td>
+              </tr>
+              <tr>
+                <td><strong>TOTAL</strong></td>
+                <td><strong>€1,970–3,030</strong></td>
+                <td>Por persona (vuelos incluidos)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos para viaje en temporada media 2026. Los vuelos son el componente más variable.</p>
+      </section>
+
+      <!-- Transporte -->
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+              Desde Narita al centro
+            </div>
+            <div class="transport-content">
+              <strong>Narita Express (N'EX)</strong> — 53 min a Shinjuku — ¥3,070 (~€19). Opción más rápida y cómoda.<br><br>
+              <strong>Bus Limousine</strong> — 85-105 min — ¥3,200 (~€20). Más barato pero más lento.<br><br>
+              <span style="color:rgba(237,238,242,0.4)">Evitar taxi: ¥30,000+ (~€190). No vale la pena salvo emergencia.</span>
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 6V4M16 6V4M2 10h20"/></svg>
+              Movilidad urbana
+            </div>
+            <div class="transport-content">
+              <strong>Suica / Pasmo card</strong> recargable — funciona en metro, autobús, y konbinis.<br><br>
+              Metro Tokio cubre todo (¥170-320/trayecto). <strong>JR Pass</strong> no compensa en ciudad pero sí para excursión al Fuji.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+              Apps esenciales
+            </div>
+            <div class="transport-content">
+              <strong>Google Maps</strong> — funciona perfecto en Tokio (descarga offline antes de salir del aeropuerto).<br><br>
+              <strong>Hyperdia</strong> — para horarios y rutas de trenes.<br><br>
+              <strong>Google Translate</strong> — con cámara para menús en japonés. Imprescindible.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Horarios y puntualidad
+            </div>
+            <div class="transport-content">
+              El metro tokiota es <strong>el más puntual del mundo</strong>. Si el letrero dice 14:32, a las 14:32 sale.<br><br>
+              Primera salida ~5:00h. Última salida ~0:00h. Planifica con exactitud.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 1 -->
+      <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+        <h2 class="section-heading" id="h-dia1">Día 1</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Llegada + Shinjuku</div>
+              <div class="day-subtitle">La puerta de entrada a Tokio</div>
+            </div>
+            <div class="day-meta">
+              <span>🚇 N'EX desde Narita</span>
+              <span>🌆 Shinjuku Gyoen</span>
+              <span>🌃 Golden Gai</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada Aeropuerto Narita</div>
+                <div class="act-desc">Compra Suica card en la máquina nada más llegar (depósito ¥500 + carga inicial ¥3,000 recomendada). Toma el N'EX a Shinjuku — 53 minutos, cómodo, con wifi gratuito a bordo.</div>
+                <div class="act-tags"><span class="act-tag info">Transporte</span><span class="act-tag green">Sin cola</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Check-in + Almuerzo en Ichiran Ramen</div>
+                <div class="act-desc">Guarda maletas en el hotel (o en consigna si es pronto). Almuerzo en Ichiran: el ramen de cabinas individuales donde comes solo frente a la pared, personalizando cada parámetro del caldo. Una experiencia única japonesa.</div>
+                <div class="act-tags"><span class="act-tag">~€7/plato</span><span class="act-tag green">Experiencia única</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Shinjuku Gyoen</div>
+                <div class="act-desc">Jardín imperial de 58 hectáreas con mezcla única de estilos japonés, francés e inglés. El mejor lugar de Tokio para entender la coexistencia de tradición y modernidad. En primavera, los cerezos son una aparición.</div>
+                <div class="act-tags"><span class="act-tag">€5 entrada</span><span class="act-tag info">Abierto hasta 16:30h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Kabukicho y Golden Gai</div>
+                <div class="act-desc">El barrio de entretenimiento más animado de Tokio. Golden Gai: 300 pequeños bares en 6 callejuelas medievales. Cada local cabe para 8-10 personas. Elige uno al azar, hay jazz, heavy metal, manga, whisky japonés. Esto es el Tokio auténtico de noche.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito explorar</span><span class="act-tag">~€8-15 en bares</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena en izakaya local</div>
+                <div class="act-desc">Yakitori en alguno de los locales de Golden Gai o una izakaya de Shinjuku con cortina de tela noren en la entrada. Pedir: yakitori variado, edamame, gyoza y una Sapporo fría. El ritual de la noche tokiota.</div>
+                <div class="act-tags"><span class="act-tag">~€25 por persona</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">21:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Mirador gratuito — Tokyo Metropolitan Government Building</div>
+                <div class="act-desc">Subida gratuita al mirador del edificio del gobierno metropolitano. Vistas 360° de Tokio de noche: el Tokyo Skytree encendido, las luces de Shinjuku, el horizonte infinito. Cero coste. Incomparable.</div>
+                <div class="act-tags"><span class="act-tag green">GRATIS</span><span class="act-tag info">Hasta 22:30h (sur) / 23:00h (norte)</span></div>
+              </div>
+            </div>
+
+            <!-- Hoteles -->
+            <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;color:#c9a96e;margin:24px 0 4px">Dónde dormir — Noche 1</h3>
+            <div class="hotel-grid">
+              <div class="hotel-card">
+                <div class="hotel-tier">💎 Premium</div>
+                <div class="hotel-name">Park Hyatt Tokyo</div>
+                <div class="hotel-zone">Shinjuku — Pisos 39-52</div>
+                <div class="hotel-price">Desde €350/noche</div>
+                <ul class="hotel-features">
+                  <li>Icónico de "Lost in Translation"</li>
+                  <li>Vista al Monte Fuji (hab. altas)</li>
+                  <li>Piscina y spa en piso 47</li>
+                  <li>Desayuno de autor incluido</li>
+                </ul>
+                <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Park+Hyatt+Tokyo" class="hotel-link" target="_blank" rel="noopener">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Ver en Booking.com
+                </a>
+              </div>
+              <div class="hotel-card">
+                <div class="hotel-tier">⭐ Recomendado</div>
+                <div class="hotel-name">Shinjuku Prince Hotel</div>
+                <div class="hotel-zone">Shinjuku — Centro exacto</div>
+                <div class="hotel-price">Desde €130/noche</div>
+                <ul class="hotel-features">
+                  <li>Ubicación excepcional</li>
+                  <li>Vistas a la ciudad</li>
+                  <li>A 2 min estación JR</li>
+                  <li>Restaurantes en el edificio</li>
+                </ul>
+                <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Shinjuku+Prince+Hotel+Tokyo" class="hotel-link" target="_blank" rel="noopener">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Ver en Booking.com
+                </a>
+              </div>
+              <div class="hotel-card">
+                <div class="hotel-tier">💵 Económico</div>
+                <div class="hotel-name">Khaosan Tokyo Kabuki</div>
+                <div class="hotel-zone">Asakusa — Barrio histórico</div>
+                <div class="hotel-price">Desde €35/noche</div>
+                <ul class="hotel-features">
+                  <li>Hostel boutique con ambiente</li>
+                  <li>Lounge social internacional</li>
+                  <li>A pie del Senso-ji</li>
+                  <li>Taquillas y wifi gratis</li>
+                </ul>
+                <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Khaosan+Tokyo+Kabuki" class="hotel-link" target="_blank" rel="noopener">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Ver en Booking.com
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 2 -->
+      <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+        <h2 class="section-heading" id="h-dia2">Día 2</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">02</div>
+            <div>
+              <div class="day-title">Cultura Ancestral</div>
+              <div class="day-subtitle">Asakusa, Ueno y Akihabara</div>
+            </div>
+            <div class="day-meta">
+              <span>🛕 Senso-ji</span>
+              <span>🎨 Museo Nacional</span>
+              <span>⚡ Akihabara</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Senso-ji al amanecer</div>
+                <div class="act-desc">El templo más antiguo y visitado de Tokio, fundado en 645 d.C. Llegar antes de las 9h para estar prácticamente solo. La Nakamise-dori (calle de tiendas que lleva al templo) es perfecta para souvenirs auténticos. El tori naranja, la pagoda, el humo del incienso: imagen icónica de Japón.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">Abre toda la noche</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Barrio de Asakusa</div>
+                <div class="act-desc">Rickshaws, kimono rentals, el canal con vistas a la Tokyo Skytree. El barrio más auténtico y tradicional de Tokio. Visita la Kappabashi-dori: "la calle de los utensilios de cocina" donde compran todos los restaurantes de la ciudad.</div>
+                <div class="act-tags"><span class="act-tag">Kimono rental ~€30</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en Kappabashi</div>
+                <div class="act-desc">Comer en alguno de los locales de soba o udon de la zona. La soba es el plato más honesto de Japón: solo alforfón, agua, maestría. Pedir zaru soba fría con tsuyu frío para mojar.</div>
+                <div class="act-tags"><span class="act-tag">~€10 por persona</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Tokyo National Museum — Ueno</div>
+                <div class="act-desc">La mayor colección de arte japonés del mundo: katanas medievales, cerámica Jomon de 10.000 años, armaduras de samurái, pinturas ukiyo-e de Hokusai. Si tienes tiempo solo para un museo en Tokio, este es el museo.</div>
+                <div class="act-tags">
+                  <span class="act-tag">€5 entrada</span>
+                  <span class="act-tag info">Cerrado lunes</span>
+                </div>
+                <div style="margin-top:8px">
+                  <a href="https://www.getyourguide.com/s/?q=Tokyo+National+Museum&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Ver entradas en GetYourGuide
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Akihabara — Barrio Eléctrico</div>
+                <div class="act-desc">Paraíso de electrónica y cultura otaku. Aunque no seas fan del anime, la energía del barrio es una experiencia en sí misma: pantallas gigantes, uniformes de maid cafés, retro gaming en 8 pisos. Visita Yodobashi Camera (electrónica 8 pisos) y las tiendas de retro gaming.</div>
+                <div class="act-tags"><span class="act-tag green">Exploración libre</span><span class="act-tag">Tiendas hasta 21-22h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena izakaya en Akihabara</div>
+                <div class="act-desc">Cena en izakaya local del barrio eléctrico. Pedir el pack completo: yakitori variado, edamame, gyoza crujientes, mentaiko onigiri y cerveza Kirin. La cena japonesa perfecta a €20 pp.</div>
+                <div class="act-tags"><span class="act-tag">~€20 por persona</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 3 -->
+      <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+        <h2 class="section-heading" id="h-dia3">Día 3</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">03</div>
+            <div>
+              <div class="day-title">Arte Moderno + Shibuya</div>
+              <div class="day-subtitle">teamLab, Harajuku y el cruce más concurrido del mundo</div>
+            </div>
+            <div class="day-meta">
+              <span>🎨 teamLab</span>
+              <span>⛩️ Meiji Jingu</span>
+              <span>🚦 Shibuya Crossing</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">10:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">teamLab Planets (Toyosu)</div>
+                <div class="act-desc">La experiencia de arte digital más impresionante del mundo. Instalaciones inmersivas donde los visitantes caminan descalzos por espejos infinitos, flores digitales que responden al movimiento, cascadas de luz. Reserva obligatoria online con semanas de antelación — se agota siempre.</div>
+                <div class="act-tags">
+                  <span class="act-tag">€20–28 entrada</span>
+                  <span class="act-tag info">Reserva anticipada esencial</span>
+                </div>
+                <div style="margin-top:8px">
+                  <a href="https://www.getyourguide.com/s/?q=teamLab+Tokyo&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Reservar en GetYourGuide
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en Harajuku</div>
+                <div class="act-desc">Zona de Omotesando (el Champs-Élysées tokiota). Crepes de Harajuku en Takeshita Street (~€5). La calle es un espejo de la cultura pop japonesa: fashion alternativo, cosplay, harajuku girls.</div>
+                <div class="act-tags"><span class="act-tag">~€8 almuerzo ligero</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Meiji Jingu</div>
+                <div class="act-desc">Santuario sintoísta dedicado al Emperador Meiji (1912), en el corazón de un bosque artificial de 70 hectáreas plantado en 1920. Paz absoluta a minutos del caos urbano. El contraste más hermoso de Tokio: de la pantalla LED al bosque sagrado en 5 minutos de metro.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">Bosque de 70 hectáreas</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Shibuya Crossing — Al atardecer</div>
+                <div class="act-desc">El cruce peatonal más concurrido del mundo: hasta 3,000 personas cada ciclo de semáforo. Ver desde abajo es caótico y emocionante. Ver desde arriba (terraza Scramble Square, €14) al atardecer es mágico: el frenesí de la ciudad más ordenada del mundo.</div>
+                <div class="act-tags"><span class="act-tag">Scramble Square: €14 mirador</span><span class="act-tag info">Mejor hora: 17-19h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Shibuya 109 y zona de compras</div>
+                <div class="act-desc">Shibuya 109 (moda joven japonesa), Takashimaya Times Square (lujo), Tower Records (7 pisos de música física, rareza en el mundo). La cultura del consumo tokiota elevada a categoría artística.</div>
+                <div class="act-tags"><span class="act-tag">Tiendas hasta 21-22h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena: Kaiten Sushi en Shibuya</div>
+                <div class="act-desc">Sushi en conveyor belt (kaiten sushi) — Genki Sushi o Sushi-ro: pides por tablet, el sushi llega en tren en miniatura a tu mesa. La evolución japonesa del sushi bar. Fresco, asequible, único.</div>
+                <div class="act-tags"><span class="act-tag">~€15 por persona</span><span class="act-tag green">Sin reserva necesaria</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 4 -->
+      <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+        <h2 class="section-heading" id="h-dia4">Día 4</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">04</div>
+            <div>
+              <div class="day-title">Monte Fuji</div>
+              <div class="day-subtitle">La excursión imprescindible desde Tokio</div>
+            </div>
+            <div class="day-meta">
+              <span>🗻 Fuji-san</span>
+              <span>🚂 JR desde Shinjuku</span>
+              <span>📍 Kawaguchiko</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">07:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Salida temprana desde Shinjuku</div>
+                <div class="act-desc">JR desde Shinjuku hasta Kawaguchiko: 2h, ~€15 con JR Pass o €25 sin él. También buses directos desde Shinjuku Bus Terminal, más económicos (€20 ida/vuelta). Llevar ropa de abrigo incluso en verano — hace frío en altitud.</div>
+                <div class="act-tags"><span class="act-tag info">Salida antes de las 7:30h para llegar con luz</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">09:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Lago Kawaguchiko</div>
+                <div class="act-desc">Con tiempo despejado, el reflejo del Fuji en el lago es la fotografía más icónica de Japón. Paseo en bicicleta alrededor del lago (alquiler ~€5/h) para encontrar el ángulo perfecto. Los jardines junto al lago son la postal definitiva del país.</div>
+                <div class="act-tags"><span class="act-tag">Bici ~€5/h</span><span class="act-tag info">Mejor con cielo despejado</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">5.ª Estación del Monte Fuji (2.305m)</div>
+                <div class="act-desc">Subida en autobús desde Kawaguchiko (€5). Si es temporada de escalada (julio-agosto), puedes continuar hasta la cima (8h de subida, se empieza de noche para ver el amanecer desde arriba — experiencia de vida). El resto del año: paseo y vistas espectaculares desde la 5.ª Estación.</div>
+                <div class="act-tags"><span class="act-tag">€5 autobús</span><span class="act-tag info">Escalada completa: julio-agosto</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en Kawaguchiko</div>
+                <div class="act-desc">Curry de miso caliente o udon en caldo dashi en los restaurantes junto al lago. En altitud y con frío, el udon caliente es la mejor comida del mundo. ~€15 pp.</div>
+                <div class="act-tags"><span class="act-tag">~€15 por persona</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cueva de los Hielos del Fuji (Fugaku Fuketsu)</div>
+                <div class="act-desc">Lava solidificada de una erupción volcánica con formaciones de hielo permanente. Temperatura constante de 0°C todo el año. Una experiencia radicalmente diferente al Fuji habitual y casi siempre sin colas.</div>
+                <div class="act-tags"><span class="act-tag">€5 entrada</span><span class="act-tag info">Llevar jersey/chaqueta</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso a Tokio + Cena konbini o ligera</div>
+                <div class="act-desc">Regreso a Shinjuku. Cena ligera en el hotel o en el konbini — el 7-Eleven japonés tiene mejor comida que muchos restaurantes de Europa: onigiri de salmón, nikuman caliente, oden, sándwiches de katsu. Sin broma: es de los mejores.</div>
+                <div class="act-tags"><span class="act-tag green">Konbini: ~€8 cena completa</span></div>
+              </div>
+            </div>
+            <p style="font-size:0.82rem;color:rgba(237,238,242,0.55);margin-top:12px;padding:14px;background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2);border-radius:10px">
+              <strong style="color:#4a7fa5">Alternativa:</strong> Si prefieres guía incluido y sin organización propia:
+              <a href="https://www.getyourguide.com/s/?q=Monte+Fuji+tour+Tokyo&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener" style="margin-left:6px">Tour organizado Monte Fuji desde Tokio (€85–120 pp)</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 5 -->
+      <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+        <h2 class="section-heading" id="h-dia5">Día 5</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">05</div>
+            <div>
+              <div class="day-title">Tsukiji + Ginza + Despedida</div>
+              <div class="day-subtitle">El mejor desayuno del mundo y el barrio más lujoso de Tokio</div>
+            </div>
+            <div class="day-meta">
+              <span>🐟 Tsukiji</span>
+              <span>💎 Ginza</span>
+              <span>✈️ Salida 17:00h</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">07:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Mercado Exterior de Tsukiji — Desayuno de Vida</div>
+                <div class="act-desc">El mejor lugar de Tokio para desayunar: sashimi fresco a las 7am, tamagoyaki (tortilla japonesa dulce) recién hecha, uni (erizo de mar) sobre arroz caliente, ostras del Pacífico. El mercado interior se trasladó a Toyosu pero el exterior sigue vivo y auténtico.</div>
+                <div class="act-tags"><span class="act-tag">~€20 desayuno completo</span><span class="act-tag green">Experiencia única</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">09:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Mercado Interior de Toyosu (opcional)</div>
+                <div class="act-desc">Ver la subasta del atún desde la galería acristalada. Espectacular: toneladas de atún rojo de aleta azul siendo pujadas en segundos por los compradores con paletas. Reserva con meses de antelación — hay cupo limitadísimo.</div>
+                <div class="act-tags"><span class="act-tag info">Reserva con meses de antelación</span><span class="act-tag">Gratuito con reserva</span></div>
+                <div style="margin-top:8px">
+                  <a href="https://www.getyourguide.com/s/?q=Toyosu+tuna+auction+Tokyo&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Reservar visita Toyosu
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Ginza — Barrio del Lujo</div>
+                <div class="act-desc">El barrio más lujoso de Tokio: Hermès diseñada por Renzo Piano, Louis Vuitton de Jun Aoki, Chanel de Peter Marino. La arquitectura como branding. Imprescindibles: Itoya (6 plantas de papelería de diseño japonés) y Dover Street Market Ginza (moda de vanguardia en 7 pisos).</div>
+                <div class="act-tags"><span class="act-tag">Itoya: entrada gratuita</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Último almuerzo: Sushi en Ginza</div>
+                <div class="act-desc">Sushi no Midori en Ginza: el mejor precio-calidad de sushi en Tokio. Lista de espera de 1-2h (sin reserva posible) pero vale cada minuto. Llegar pronto para apuntarse. Si tienes reserva en Sushi Saito (imposible de conseguir): enhorabuena.</div>
+                <div class="act-tags"><span class="act-tag">Midori: ~€40 por persona</span><span class="act-tag info">Sin reserva, llegar pronto</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Últimas compras + Recogida de maletas</div>
+                <div class="act-desc">Últimas compras en Ginza o vuelta al hotel. Tiempo para las compras pendientes: Kit Kats de té matcha (son únicamente japoneses), productos de konbini, sake en cualquier supermercado.</div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Salida hacia Narita — N'EX desde Shinjuku</div>
+                <div class="act-desc">Tomar el N'EX desde Shinjuku con suficiente antelación (al menos 3h antes del vuelo para Narita — el aeropuerto más congestionado de Japón). Arigato gozaimashita, Tokio.</div>
+                <div class="act-tags"><span class="act-tag info">Salir al menos 3h antes del vuelo</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Top 10 -->
+      <section id="top10" class="itin-section" aria-labelledby="h-top10">
+        <h2 class="section-heading" id="h-top10">Top 10 — Tokio</h2>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">1</div>
+          <div class="top10-content">
+            <h4>Senso-ji (Asakusa)</h4>
+            <p>El templo más visitado de Japón. Ir de madrugada para fotos sin masas — la experiencia cambia completamente antes de las 8h.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">2</div>
+          <div class="top10-content">
+            <h4>Shibuya Crossing</h4>
+            <p>El cruce peatonal más concurrido del mundo. Ver desde arriba (Scramble Square) al atardecer es obligatorio.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">3</div>
+          <div class="top10-content">
+            <h4>teamLab</h4>
+            <p>Arte digital interactivo que redefine lo que es una experiencia artística. Reserva con semanas de antelación — se agota siempre.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">4</div>
+          <div class="top10-content">
+            <h4>Shinjuku Gyoen</h4>
+            <p>El jardín más hermoso de la ciudad. En primavera con cerezos en flor, posiblemente el más bello de Asia.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">5</div>
+          <div class="top10-content">
+            <h4>Mercado de Tsukiji (Exterior)</h4>
+            <p>El mejor desayuno de sushi del mundo, con diferencia. Sashimi a las 7am junto al mar: no hay nada igual.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">6</div>
+          <div class="top10-content">
+            <h4>Meiji Jingu</h4>
+            <p>Santuario en pleno bosque. Paz total en el corazón de la megalópolis. El contraste más radical de Tokio.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">7</div>
+          <div class="top10-content">
+            <h4>Monte Fuji</h4>
+            <p>La excursión imprescindible. Con buen tiempo desde Kawaguchiko, la vista es el marco más icónico del Japón eterno.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">8</div>
+          <div class="top10-content">
+            <h4>Akihabara</h4>
+            <p>Aunque no seas friki, la energía eléctrica del barrio es una experiencia en sí misma. Una ciudad dentro de la ciudad.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">9</div>
+          <div class="top10-content">
+            <h4>Golden Gai (Shinjuku)</h4>
+            <p>300 bares diminutos en 6 callejuelas medievales. Cada uno su propio universo. El Tokio auténtico y secreto de noche.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">10</div>
+          <div class="top10-content">
+            <h4>Hamarikyu Gardens</h4>
+            <p>Los jardines junto a la bahía con el skyscraper de Shiodome al fondo. Los más subestimados de la ciudad. Gratuito con barca.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gastronomía -->
+      <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+        <h2 class="section-heading" id="h-gastro">Gastronomía</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:20px">Tokio tiene más estrellas Michelin que París, Roma y Nueva York juntos. Pero los mejores momentos gastronómicos de la ciudad no cuestan €300 — cuestan €7 en una cabina de ramen o €20 en el mercado de Tsukiji al amanecer.</p>
+        <div class="gastro-grid">
+          <div class="gastro-card">
+            <div class="gastro-cat">Ramen</div>
+            <div class="gastro-title">Las mejores opciones</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">Ichiran</strong> — cabinas individuales, único. <strong style="color:#edeef2">Fuunji</strong> — tsukemen dipping ramen, fila garantizada pero vale. <strong style="color:#edeef2">Nagi</strong> — en Golden Gai, íntimo y potente. Desde €7/plato.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Sushi</div>
+            <div class="gastro-title">De mercado a estrella Michelin</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">Tsukiji Outer Market</strong> — para el desayuno de tu vida. <strong style="color:#edeef2">Sushi no Midori</strong> — precio-calidad imbatible (~€40). <strong style="color:#edeef2">Sukiyabashi Jiro</strong> — solo si conseguiste reserva (€300+). Sin reserva: imposible.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Yakitori &amp; Izakaya</div>
+            <div class="gastro-title">El ritual nocturno</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">Torishiki</strong> — yakitori de nivel Michelin en Meguro. Cualquier izakaya de Shinjuku con noren (cortina) en la entrada. Pedir: yakitori, gyoza, edamame, karaage. ~€20-30 pp con bebidas.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Konbini Food</div>
+            <div class="gastro-title">Secreto mejor guardado de Tokio</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">7-Eleven, FamilyMart, Lawson</strong> — una institución. Onigiri (€1), sándwiches de katsu perfectos, oden caliente, nikuman, sashimi fresco. Mejor que muchos restaurantes europeos, en serio. 24h.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Tempura</div>
+            <div class="gastro-title">Arte en aceite</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">Kondo</strong> o <strong style="color:#edeef2">Tsunahachi</strong> (Shinjuku) — langostinos, verduras de temporada en tempura perfecta. La cobertura debe ser translúcida, crujiente y sin aceite visible. €40-80 pp para un menú completo.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Wagyu A5</div>
+            <div class="gastro-title">El almuerzo que lo cambia todo</div>
+            <div class="gastro-desc">Un almuerzo de ternera wagyu A5 en Ginza cuesta €60-120 pp. La grasa intramuscular (marmoleado) se deshace en la lengua a temperatura corporal. Vale cada céntimo al menos una vez en la vida.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Consejos -->
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">10 Consejos para Tokio</h2>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">1</div>
+          <div class="tip-text"><strong>Compra la Suica card</strong> nada más llegar en Narita — funciona en metro, autobuses, konbinis y muchos restaurantes. La devolución al salir te reembolsa el depósito.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">2</div>
+          <div class="tip-text"><strong>Descarga Google Maps offline</strong> antes de salir del aeropuerto. Japón tiene wifi casi en todas partes pero la cobertura en los túneles del metro es irregular.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">3</div>
+          <div class="tip-text"><strong>Las tiendas abren tarde y cierran tarde</strong> — la mayoría no abre hasta las 10-11h pero están abiertas hasta las 20-21h. Organiza las mañanas para templos y parques.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">4</div>
+          <div class="tip-text"><strong>El konbini es tu mejor amigo</strong> — desayunos, almuerzos rápidos, cargadores de móvil, paraguas, cualquier cosa que necesites está en el konbini 24h, a precios razonables y calidad sorprendente.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">5</div>
+          <div class="tip-text"><strong>No hagas esto:</strong> comer andando por la calle, hablar alto en el metro, no cubrir tatuajes en onsens, propinar (es ofensivo en Japón — el servicio es un orgullo, no una transacción).</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">6</div>
+          <div class="tip-text"><strong>teamLab: reserva con semanas de antelación.</strong> Se agota siempre. Sin reserva online, no entras. No hay venta en taquilla.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">7</div>
+          <div class="tip-text"><strong>Los mejores museos están en Ueno</strong> — el Tokyo National Museum, el Museo de Arte Occidental (Le Corbusier, Patrimonio UNESCO), el Museo de la Naturaleza. Pase de museos disponible.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">8</div>
+          <div class="tip-text"><strong>Ropa cómoda siempre</strong> — caminarás 15-20km diarios sin darte cuenta. Zapatillas buenas son la inversión más importante del viaje. Los zapatos elegantes esperan en casa.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">9</div>
+          <div class="tip-text"><strong>El metro tokiota es el más puntual del mundo.</strong> Si el letrero dice 14:32, a las 14:32 sale. La puntualidad es un valor cultural, no solo organizativo.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">10</div>
+          <div class="tip-text"><strong>Efectivo es rey en Japón</strong> — muchos restaurantes y tiendas pequeñas no aceptan tarjeta. Lleva ¥20,000-30,000 en efectivo siempre. Los cajeros 7-Eleven aceptan tarjetas internacionales.</div>
+        </div>
+      </section>
+
+      <!-- Frases -->
+      <section id="frases" class="itin-section" aria-labelledby="h-frases">
+        <h2 class="section-heading" id="h-frases">Frases en japonés</h2>
+        <div class="phrases-grid">
+          <div class="phrase-card">
+            <div class="phrase-es">Hola</div>
+            <div class="phrase-local">Konnichiwa (こんにちは)</div>
+            <div class="phrase-pron">[kon-ni-chi-wa]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">Gracias (formal)</div>
+            <div class="phrase-local">Arigatou gozaimasu</div>
+            <div class="phrase-pron">[a-ri-ga-to go-zai-mas]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">Por favor</div>
+            <div class="phrase-local">Onegaishimasu (おねがいします)</div>
+            <div class="phrase-pron">[o-ne-gai-shi-mas]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">¿Cuánto cuesta?</div>
+            <div class="phrase-local">Ikura desu ka? (いくらですか？)</div>
+            <div class="phrase-pron">[i-ku-ra des-ka]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">La cuenta, por favor</div>
+            <div class="phrase-local">Okaikei onegaishimasu</div>
+            <div class="phrase-pron">[o-kai-kei o-ne-gai-shi-mas]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">No hablo japonés</div>
+            <div class="phrase-local">Nihongo ga hanasemasen</div>
+            <div class="phrase-pron">[ni-hon-go ga ha-na-se-ma-sen]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">¿Dónde está…?</div>
+            <div class="phrase-local">…wa doko desu ka?</div>
+            <div class="phrase-pron">[...wa do-ko des-ka]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">¡Delicioso!</div>
+            <div class="phrase-local">Oishii! (おいしい！)</div>
+            <div class="phrase-pron">[o-i-shi]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">Disculpe / perdona</div>
+            <div class="phrase-local">Sumimasen (すみません)</div>
+            <div class="phrase-pron">[su-mi-ma-sen]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">¿Hay menú en inglés?</div>
+            <div class="phrase-local">Eigo no menyu wa arimasu ka?</div>
+            <div class="phrase-pron">[ei-go no me-nyu wa a-ri-mas-ka]</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Emergencias -->
+      <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+        <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+        <div class="emerg-grid">
+          <div class="emerg-card">
+            <div class="emerg-label">Policía</div>
+            <div class="emerg-value">110</div>
+            <div class="emerg-note">Solo emergencias policiales</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Ambulancia / Bomberos</div>
+            <div class="emerg-value">119</div>
+            <div class="emerg-note">Emergencias médicas y fuego</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Línea turista (inglés 24h)</div>
+            <div class="emerg-value" style="font-size:0.9rem">0120-461-350</div>
+            <div class="emerg-note">Japan Tourism Agency, 24 horas</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">St. Luke's International (inglés)</div>
+            <div class="emerg-value" style="font-size:0.85rem">+81-3-5550-7166</div>
+            <div class="emerg-note">Hospital con atención en español e inglés</div>
+          </div>
+          <div class="emerg-card" style="grid-column:1/-1">
+            <div class="emerg-label">Embajada de España en Tokio</div>
+            <div class="emerg-value" style="font-size:0.85rem">+81-3-3583-8531</div>
+            <div class="emerg-note">1-24-14, Higashi Azabu, Minato, Tokyo — Emergencias consulares</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Checklist -->
+      <section id="checklist" class="itin-section" aria-labelledby="h-check">
+        <h2 class="section-heading" id="h-check">Checklist pre-viaje</h2>
+        <div style="background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px">
+          <div class="check-section">
+            <div class="check-section-title">2 semanas antes</div>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Reservar vuelos Madrid–Tokio (con 2 meses de antelación idealmente)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Reservar hotel en Shinjuku (o la zona elegida)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Reservar teamLab online (se agota semanas antes)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Reservar visita subasta del atún en Toyosu (si interesa — cupo muy limitado)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Contratar seguro de viaje IATI Mochilero Asiático
+            </label>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">1 semana antes</div>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Descargar Google Maps offline de Tokio y Kawaguchiko
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Descargar Google Translate (paquete japonés offline)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Avisar al banco de los países que visitarás
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Instalar Hyperdia para horarios de trenes
+            </label>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">Día antes</div>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Check-in online del vuelo
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Preparar efectivo en yenes (¥20,000-30,000 para los primeros días)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Descargar música / podcast para el vuelo (~14 horas)
+            </label>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">En el aeropuerto de llegada</div>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Comprar Suica card en la máquina de JR (depósito ¥500 + recarga)
+            </label>
+            <label class="check-item">
+              <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+              Activar SIM local o recoger pocket wifi reservado (Sakura Mobile, IIJmio)
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Disclosure -->
+      <div class="disclosure" role="note" aria-label="Aviso legal sobre enlaces de afiliados">
+        <strong style="color:#edeef2">Aviso sobre enlaces de afiliados:</strong> Algunos enlaces en esta página son de afiliados (Booking.com, GetYourGuide, Skyscanner, IATI Seguros). Si realizas una compra a través de ellos, VoyageAI recibe una pequeña comisión sin coste adicional para ti. Esto nos permite mantener el servicio gratuito. Los precios y disponibilidad son indicativos y pueden variar. Siempre verifica en los sitios oficiales antes de reservar. Los precios están expresados en euros (€) y son estimaciones para 2026.
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html" style="font-family:'Bodoni Moda',serif;font-size:1.2rem;font-weight:700;color:#edeef2;text-decoration:none" aria-label="VoyageAI — Inicio">Voyage<span style="color:#c9a96e">AI</span></a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+      <a href="../index.html#como-funciona" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Cómo funciona</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 VoyageAI</p>
+  </div>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Nav scroll effect ──
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // ── TOC active highlighting ──
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#', '');
+    const el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+
+  function updateTOC() {
+    const scrollY = window.scrollY;
+    const offset = 120;
+    let current = null;
+    sections.forEach(function(s) {
+      if (s.el.offsetTop - offset <= scrollY) {
+        current = s;
+      }
+    });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateTOC, { passive: true });
+  updateTOC();
+
+  // ── Smooth scroll for TOC links ──
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const id = this.getAttribute('href').replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 96;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ── Checkbox keyboard support ──
+  document.querySelectorAll('.check-box').forEach(function(box) {
+    box.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const checked = this.getAttribute('aria-checked') === 'true';
+        this.setAttribute('aria-checked', (!checked).toString());
+        this.style.background = !checked ? 'rgba(94,203,138,0.3)' : '';
+        this.style.borderColor = !checked ? '#5ecb8a' : '';
+      }
+    });
+    box.addEventListener('click', function() {
+      const checked = this.getAttribute('aria-checked') === 'true';
+      this.setAttribute('aria-checked', (!checked).toString());
+      this.style.background = !checked ? 'rgba(94,203,138,0.3)' : '';
+      this.style.borderColor = !checked ? '#5ecb8a' : '';
+    });
+  });
+
+  // ── Scroll reveal ──
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.day-card, .top10-item, .tip-item').forEach(function(el) {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }
+})();
+</script>
+</body>
+</html>
