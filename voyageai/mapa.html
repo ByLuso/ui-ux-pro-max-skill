@@ -265,7 +265,8 @@
   </ul>
   <button class="nav-mobile-btn" aria-label="Menú" onclick="
     const ul=document.querySelector('.nav-links');
-    ul.style.cssText=ul.style.display==='flex'?'':'display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:rgba(4,8,16,0.97);padding:16px;gap:4px;border-bottom:1px solid rgba(255,255,255,0.08);z-index:99;'
+    ul.classList.toggle('mobile-open');
+    ul.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>ul.classList.remove('mobile-open'),{once:true}));
   ">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>

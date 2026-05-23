@@ -257,10 +257,30 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
   .footer-inner { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 768px) {
+  nav { padding: 0 16px; }
   .nav-links { display: none; }
+  .nav-links.mobile-open {
+    display: flex !important; flex-direction: column;
+    position: absolute; top: 72px; left: 0; right: 0;
+    background: rgba(4,8,16,0.98); backdrop-filter: blur(20px);
+    padding: 12px 16px 16px; gap: 4px;
+    border-bottom: 1px solid var(--border); z-index: 99;
+  }
+  .nav-links.mobile-open li a {
+    display: block; padding: 11px 14px; font-size: 1rem;
+    border-radius: 10px; border-bottom: none;
+  }
+  .nav-links.mobile-open .nav-cta {
+    margin-top: 6px; text-align: center; justify-content: center;
+  }
   .nav-mobile-btn { display: flex; }
+  .nav-logo img { height: 32px !important; }
   .footer-inner { grid-template-columns: 1fr; gap: 28px; }
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+}
+@media (max-width: 480px) {
+  nav { height: 60px; }
+  .itin-card-img { height: 160px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .aurora::before, .aurora::after, .aurora span { animation: none; }

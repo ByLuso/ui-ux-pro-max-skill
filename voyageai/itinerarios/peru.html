@@ -110,7 +110,38 @@
     .alert-box h3{font-family:'Bodoni Moda',serif;font-size:1rem;font-weight:700;color:#c9a96e;margin-bottom:8px}
     .alert-box p{font-size:0.875rem;color:rgba(237,238,242,0.7);line-height:1.75}
     @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.hotel-grid{grid-template-columns:repeat(2,1fr)}.meal-grid{grid-template-columns:1fr}}
-    @media(max-width:640px){.hotel-grid{grid-template-columns:1fr}.phrases-grid{grid-template-columns:1fr}.emerg-grid{grid-template-columns:1fr}.sum-bar{flex-direction:column}}
+        @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .hotel-grid { grid-template-columns: repeat(2,1fr); }
+      .transport-grid { grid-template-columns: 1fr; }
+      .gastro-grid { grid-template-columns: 1fr; }
+      .meal-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 14px; }
+      nav ul { display: none; }
+      .dest-hero { padding: 100px 16px 40px; }
+      .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
+      .dest-country { font-size: 1.1rem; }
+      .sum-bar { display: grid; grid-template-columns: repeat(3,1fr); border-radius: 12px; }
+      .sum-item { padding: 12px 8px; }
+      .sum-label { font-size: 0.6rem; }
+      .sum-val { font-size: 1rem; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+      .day-num { font-size: 1.8rem; min-width: 44px; }
+      .day-title { font-size: 1rem; }
+      .day-metas { margin-left: 0; flex-direction: row; gap: 8px; width: 100%; }
+      .day-body { padding: 14px 16px; }
+      .act-time { min-width: 44px; font-size: 0.72rem; }
+      .act-title { font-size: 0.88rem; }
+      .hotel-grid { grid-template-columns: 1fr; }
+      .phrases-grid { grid-template-columns: 1fr; }
+      .emerg-grid { grid-template-columns: 1fr; }
+      .section-heading { font-size: 1.3rem; }
+      .budget-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px; }
+    }
   </style>
 </head>
 <body>
