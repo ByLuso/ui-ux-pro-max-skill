@@ -67,7 +67,8 @@
     <li><a href="index.html">Inicio</a></li>
     <li><a href="itinerarios.html" class="active">Itinerarios</a></li>
     <li><a href="mapa.html">Mapa</a></li>
-    <li><a href="#cta-footer" class="nav-cta">Empezar gratis</a></li>
+    <li><a href="chatbot.html" onclick="return checkAuth(event)">Chatbot IA</a></li>
+    <li class="nav-auth" id="navAuth"></li>
   </ul>
   <button class="nav-mobile-btn" onclick="toggleMenu()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
 </nav>
@@ -359,13 +360,27 @@
   function toggleMenu() {
     const links = document.querySelector('.nav-links');
     links.classList.toggle('mobile-open');
-    // Close when any link is clicked
     if (links.classList.contains('mobile-open')) {
       links.querySelectorAll('a').forEach(a => {
         a.addEventListener('click', () => links.classList.remove('mobile-open'), { once: true });
       });
     }
   }
+  function checkAuth(e) {
+    if (!localStorage.getItem('routlo_token')) { e.preventDefault(); window.location.href = 'login.html'; return false; }
+    return true;
+  }
+  (function initNav() {
+    const token = localStorage.getItem('routlo_token');
+    const user = JSON.parse(localStorage.getItem('routlo_user') || 'null');
+    const authLi = document.getElementById('navAuth');
+    if (!authLi) return;
+    if (token && user) {
+      authLi.innerHTML = `<a href="chatbot.html" class="nav-cta">✈️ Planificador</a><a href="chatbot.html" class="nav-user-badge" title="${user.name}">${user.name[0].toUpperCase()}</a>`;
+    } else {
+      authLi.innerHTML = `<a href="login.html" class="nav-login-link">Iniciar sesión</a><a href="registro.html" class="nav-cta">Registrarse</a>`;
+    }
+  })();
 </script>
 </body>
 </html>

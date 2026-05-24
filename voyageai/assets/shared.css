@@ -103,6 +103,11 @@ nav {
   padding: 9px 20px !important; border-radius: 10px !important;
 }
 .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+.nav-auth { display: flex; align-items: center; gap: 6px; list-style: none; }
+.nav-login-link { font-size: 0.875rem !important; color: rgba(237,238,242,0.6) !important; background: none !important; }
+.nav-login-link:hover { color: var(--fg) !important; background: var(--surface-hover) !important; }
+.nav-user-badge { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), #a07840); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 0.85rem; font-weight: 700; color: #0a0a0a; text-decoration: none; flex-shrink: 0; border: 2px solid rgba(201,169,110,0.3); transition: border-color 0.2s; }
+.nav-user-badge:hover { border-color: var(--gold); }
 .nav-mobile-btn { display: none; background: none; border: none; cursor: pointer; color: var(--fg); }
 
 /* ─── Buttons ─── */
@@ -273,6 +278,9 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
   .nav-links.mobile-open .nav-cta {
     margin-top: 6px; text-align: center; justify-content: center;
   }
+  .nav-links.mobile-open .nav-auth { flex-direction: column; gap: 6px; padding: 4px 0; }
+  .nav-links.mobile-open .nav-auth a { display: block; padding: 10px 14px; border-radius: 10px; text-align: center; }
+  .nav-links.mobile-open .nav-user-badge { width: auto; height: auto; border-radius: 10px; padding: 10px 14px; }
   .nav-mobile-btn { display: flex; }
   .nav-logo img { height: 32px !important; }
   .footer-inner { grid-template-columns: 1fr; gap: 28px; }
