@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Norte de Italia — 9 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 9 días por el Norte de Italia: Milán, Lago de Como, Verona, Dolomitas y Venecia. Presupuesto, hoteles y consejos insider de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    nav { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav.scrolled { background:rgba(4,8,16,0.95); }
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d1e3d 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a2a10 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d1a1a 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg,#040d1a 0%,#0d1e3d 35%,#1a3a55 60%,rgba(201,169,110,0.18) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .phrases-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .phrase-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px; }
+    .phrase-es { font-size:0.78rem;color:rgba(237,238,242,0.5);margin-bottom:4px; }
+    .phrase-local { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:3px; }
+    .phrase-pron { font-size:0.75rem;color:#c9a96e;font-style:italic; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    @media(max-width:1024px) { .itin-layout{grid-template-columns:1fr} .toc{display:none} .hotel-grid{grid-template-columns:repeat(2,1fr)} .transport-grid{grid-template-columns:1fr} .gastro-grid{grid-template-columns:1fr} .phrases-grid{grid-template-columns:1fr} }
+    @media(max-width:640px) { nav{padding:0 14px} nav ul{display:none} .dest-hero{padding:100px 16px 40px} .dest-title{font-size:clamp(2rem,10vw,3rem)} .hotel-grid{grid-template-columns:1fr} .emerg-grid{grid-template-columns:1fr} .section-heading{font-size:1.3rem} .budget-wrap{overflow-x:auto} .budget-table{min-width:520px} }
+    @media(prefers-reduced-motion:reduce) { .aurora::before,.aurora::after,.aurora-span{animation:none} }
+  </style>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo — Inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;">
+  </a>
+  <ul style="display:flex;align-items:center;gap:4px;list-style:none" role="list">
+    <li><a href="../index.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Inicio</a></li>
+    <li><a href="../itinerarios.html" style="font-size:0.875rem;font-weight:500;color:#c9a96e;text-decoration:none;padding:8px 14px;border-radius:8px">Itinerarios</a></li>
+    <li><a href="../mapa.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Mapa</a></li>
+    <li><a href="../chatbot.html" onclick="if(!localStorage.getItem('routlo_token')){event.preventDefault();window.location.href='../login.html'}" style="font-size:0.875rem;font-weight:600;color:#0a0a0a;background:linear-gradient(135deg,#c9a96e,#a07840);padding:9px 20px;border-radius:10px;text-decoration:none">Planificador IA</a></li>
+  </ul>
+</nav>
+
+<a href="#main-content" style="position:absolute;top:-100px;left:0;background:#c9a96e;color:#0a0a0a;padding:8px 16px;border-radius:0 0 8px 0;font-weight:600;z-index:999;transition:top 0.2s" onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Saltar al contenido</a>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(74,127,165,0.1);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Norte de Italia</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Norte de Italia</h1>
+  <p class="dest-country">Milán · Como · Verona · Dolomitas · Venecia</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 9 días / 8 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Amigos / Solo</span>
+    <span class="dest-badge gold" role="listitem">💶 €2,100–3,800/persona</span>
+    <span class="dest-badge" role="listitem">🌍 Europa · Italia</span>
+    <span class="dest-badge" role="listitem">🏔️ Naturaleza + Arte + Gastronomía</span>
+    <a href="https://www.skyscanner.es/transport/flights/MAD/MIL/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">9 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">5 destinos</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€2,100–3,800</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Moderado</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">May–Oct</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Milán</a></li>
+        <li><a href="#dia2">Día 2 · Milán</a></li>
+        <li><a href="#dia3">Día 3 · Lago Como</a></li>
+        <li><a href="#dia4">Día 4 · Verona</a></li>
+        <li><a href="#dia5">Día 5 · Dolomitas</a></li>
+        <li><a href="#dia6">Día 6 · Dolomitas</a></li>
+        <li><a href="#dia7">Día 7 · Venecia</a></li>
+        <li><a href="#dia8">Día 8 · Venecia</a></li>
+        <li><a href="#dia9">Día 9 · Salida</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#frases">Frases útiles</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        El norte de Italia es el viaje que lo tiene todo: la moda y el diseño de Milán, el azul imposible del Lago de Como entre villas de ensueño, la historia romántica de Verona con su Arena romana, las Dolomitas —declaradas Patrimonio de la UNESCO— con sus agujas de roca que parecen pintadas, y finalmente Venecia, la ciudad más irrepetible del planeta. Nueve días que atraviesan cuatro regiones distintas: Lombardía, Véneto, Trentino-Alto Adige y la laguna veneciana. Cada día es radicalmente diferente al anterior. Ningún otro rincón de Europa concentra tanta belleza por kilómetro cuadrado.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏙️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Milán + Como</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1–3</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏔️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Verona + Dolomitas</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 4–6</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🚢</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Venecia</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 7–9</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn" onclick="if(!localStorage.getItem('routlo_token')){event.preventDefault();window.location.href='../login.html'}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Económico</th><th>Confort</th><th>Premium</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo A/R (desde Madrid)</td><td>€120–180</td><td>€200–320</td><td>€500–900</td><td>Ryanair/Vueling a MXP o BGY · Iberia a LIN</td></tr>
+            <tr><td>🏨 Alojamiento (8 noches)</td><td>€380</td><td>€760</td><td>€1,600+</td><td>Mix: Milán 2n · Como 1n · Verona 1n · Dolomitas 2n · Venecia 2n</td></tr>
+            <tr><td>🍽️ Comidas (9 días)</td><td>€270</td><td>€450</td><td>€810</td><td>~30€ / 50€ / 90€ por día</td></tr>
+            <tr><td>🚗 Alquiler de coche</td><td>€220</td><td>€320</td><td>€500</td><td>Necesario para Dolomitas. 6–7 días desde Verona</td></tr>
+            <tr><td>🚂 Trenes (MXP→Como, →Verona, →VCE)</td><td>€65</td><td>€90</td><td>€130</td><td>Trenitalia. Reservar con antelación</td></tr>
+            <tr><td>🎟️ Entradas (Última Cena, Ducal, etc.)</td><td>€80</td><td>€110</td><td>€150</td><td>Última Cena: reservar 2–3 meses antes</td></tr>
+            <tr><td>🚢 Vaporetto Venecia (72h)</td><td>€45</td><td>€45</td><td>€45</td><td>Pase ilimitado. Imprescindible</td></tr>
+            <tr><td>🎭 Tours y experiencias</td><td>€0</td><td>€80</td><td>€200</td><td>Gondola, tours privados, cata de vinos</td></tr>
+            <tr><td>🔄 Imprevistos (10%)</td><td>€120</td><td>€220</td><td>€430</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€1,300</strong></td><td><strong>~€2,275</strong></td><td><strong>~€4,765</strong></td><td>Sin vuelo de primera clase</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo:</strong> El mayor gasto variable es el alojamiento en Venecia. Los hoteles con vistas al canal se disparan. Una opción intermedia inteligente: dormir en Mestre (tierra firme) y entrar a Venecia en vaporetto — ahorra un 60% en alojamiento sin perder nada.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚗 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Vuelos</div>
+          <div class="transport-content">
+            Llegar a <strong>Milán Malpensa (MXP)</strong> o Bérgamo (BGY). Salir desde <strong>Venecia Marco Polo (VCE)</strong>. Ryanair, Vueling e Iberia operan ambas rutas desde Madrid. Reserva con 2–3 meses de antelación para los mejores precios. Compara en <strong>Skyscanner</strong> o <strong>Google Flights</strong>.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚂 Trenes regionales</div>
+          <div class="transport-content">
+            <strong>Milán → Como:</strong> 40 min, ~€5 · <strong>Milán → Verona:</strong> 1h15 en Frecciarossa, ~€20–35 · <strong>Venecia → aeropuerto:</strong> ATVO bus o taxi acuático. Compra en <strong>Trenitalia.com</strong>. Los Frecciarossa se agotan — reserva con días de antelación.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 Alquiler de coche</div>
+          <div class="transport-content">
+            <strong>Imprescindible para las Dolomitas.</strong> Recoge en Verona y devuelve en Venecia (Mestre). Las carreteras de montaña son estrechas y espectaculares. En verano, el <strong>Paso Giau</strong> y el <strong>Paso Falzarego</strong> pueden tener mucho tráfico. Reserva con Hertz, Europcar o AutoEurope.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚢 Venecia — Vaporetto</div>
+          <div class="transport-content">
+            El <strong>pase de 72 horas (€45)</strong> es la opción más rentable. Línea 1 (lenta, todas las paradas) o Línea 2 (rápida). El taxi acuático es caro (~€80–100 desde el aeropuerto). El vaporetto desde Marco Polo cuesta ~€8. <strong>Evita el taxi en góndola para desplazamientos</strong> — es solo turístico.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento por ciudad</h2>
+
+      <h3 style="font-size:1rem;color:#c9a96e;margin-bottom:12px;font-weight:600">Milán (2 noches)</h3>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Budget</div>
+          <div class="hotel-name">Ostello Bello Grande</div>
+          <div class="hotel-zone">Stazione Centrale</div>
+          <div class="hotel-price">~€35/noche en hab. compartida · €90 doble privada</div>
+          <ul class="hotel-features"><li>Terraza en la azotea</li><li>Bar y eventos nocturnos</li><li>Excelente ubicación</li></ul>
+          <a href="https://www.booking.com/hotel/it/ostello-bello-grande.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐ Confort</div>
+          <div class="hotel-name">Hotel Spadari al Duomo</div>
+          <div class="hotel-zone">Centro histórico</div>
+          <div class="hotel-price">~€180–220/noche</div>
+          <ul class="hotel-features"><li>A 2 min a pie del Duomo</li><li>Desayuno incluido</li><li>Arte contemporáneo en habitaciones</li></ul>
+          <a href="https://www.booking.com/hotel/it/spadari-al-duomo.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Mandarin Oriental Milano</div>
+          <div class="hotel-zone">Quadrilatero della Moda</div>
+          <div class="hotel-price">~€600–900/noche</div>
+          <ul class="hotel-features"><li>Spa y piscina interior</li><li>En el corazón del barrio de la moda</li><li>Restaurante con estrella Michelin</li></ul>
+          <a href="https://www.booking.com/hotel/it/mandarin-oriental-milan.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+
+      <h3 style="font-size:1rem;color:#c9a96e;margin:22px 0 12px;font-weight:600">Dolomitas — Cortina d'Ampezzo (2 noches)</h3>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Budget</div>
+          <div class="hotel-name">Rifugio Auronzo</div>
+          <div class="hotel-zone">Base Tre Cime di Lavaredo</div>
+          <div class="hotel-price">~€60–80/persona en media pensión</div>
+          <ul class="hotel-features"><li>A pie de las Tre Cime</li><li>Experiencia alpina auténtica</li><li>Desayuno y cena incluidos</li></ul>
+          <a href="https://www.booking.com" target="_blank" rel="noopener" class="hotel-link">Ver en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐ Confort</div>
+          <div class="hotel-name">Hotel Cristallo Cortina</div>
+          <div class="hotel-zone">Cortina d'Ampezzo centro</div>
+          <div class="hotel-price">~€160–220/noche</div>
+          <ul class="hotel-features"><li>Vistas panorámicas a las Dolomitas</li><li>Spa y piscina</li><li>Restaurante con productos locales</li></ul>
+          <a href="https://www.booking.com" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Rosapetra SPA Resort</div>
+          <div class="hotel-zone">Cortina d'Ampezzo</div>
+          <div class="hotel-price">~€400–600/noche</div>
+          <ul class="hotel-features"><li>Spa privado con vistas a las cimas</li><li>Arquitectura alpina de diseño</li><li>Desayuno gourmet incluido</li></ul>
+          <a href="https://www.booking.com" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+
+      <h3 style="font-size:1rem;color:#c9a96e;margin:22px 0 12px;font-weight:600">Venecia (2 noches)</h3>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Budget (recomendado)</div>
+          <div class="hotel-name">Hotel Bologna · Mestre</div>
+          <div class="hotel-zone">Mestre (tierra firme)</div>
+          <div class="hotel-price">~€70–90/noche</div>
+          <ul class="hotel-features"><li>10 min en tren a Venecia</li><li>Ahorro del 60% vs Venice isla</li><li>Parking gratuito</li></ul>
+          <a href="https://www.booking.com" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐ Confort</div>
+          <div class="hotel-name">Hotel Al Ponte Mocenigo</div>
+          <div class="hotel-zone">Santa Croce, isla de Venecia</div>
+          <div class="hotel-price">~€180–250/noche</div>
+          <ul class="hotel-features"><li>En la isla — sin trasbordos</li><li>Terraza sobre el canal</li><li>Palacio veneciano restaurado</li></ul>
+          <a href="https://www.booking.com" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Belmond Hotel Cipriani</div>
+          <div class="hotel-zone">Isla de La Giudecca</div>
+          <div class="hotel-price">~€1,200–2,000/noche</div>
+          <ul class="hotel-features"><li>Lancha privada a San Marco</li><li>La mejor piscina al aire libre de Venecia</li><li>Jardín secreto de 3.000 m²</li></ul>
+          <a href="https://www.booking.com" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍA 1 ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Llegada a Milán — La Capital del Diseño</div>
+            <div class="day-subtitle">Malpensa · Centro histórico · Navigli</div>
+          </div>
+          <div class="day-meta"><span>🏙️ Milán</span><span>Vuelo + llegada</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">Mañana</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo y llegada a Malpensa (MXP)</div>
+              <div class="act-desc">El tren Malpensa Express conecta el aeropuerto con la Stazione Centrale de Milán en 52 minutos (~€13). Evita los taxis del aeropuerto que pueden cobrar €90–120 por el mismo trayecto. Check-in en el hotel y deja el equipaje.</div>
+              <div class="act-tags"><span class="act-tag">€13 tren</span><span class="act-tag info">52 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Duomo di Milano — la catedral más ambiciosa de Italia</div>
+              <div class="act-desc">135 agujas de mármol blanco, 3.400 estatuas y 600 años de construcción. Sube a las terrazas (ascensor €15 / escaleras €9) para ver Milán desde arriba con las agujas al mismo nivel que tus pies. Al anochecer, la catedral se ilumina con un oro cálido que corta la respiración.</div>
+              <div class="act-tags"><span class="act-tag">€3 entrada catedral</span><span class="act-tag">€15 terrazas</span><span class="act-tag info">1.5–2h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Galleria Vittorio Emanuele II</div>
+              <div class="act-desc">El "salotto di Milano" — el centro comercial más antiguo del mundo (1865). Un pasaje de hierro y cristal con mosaicos en el suelo, tiendas de lujo y el café Camparino donde Verdi tomaba su aperitivo. Encuentra el símbolo del toro en el mosaico central y gira tres veces sobre el talón para que te dé buena suerte.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">30 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Aperitivo en los Navigli — el alma nocturna de Milán</div>
+              <div class="act-desc">Los Navigli son los antiguos canales de la ciudad, hoy el barrio más bohemio de Milán. Entre las 18:00 y las 21:00 todos los bares ofrecen el "aperitivo all'italiana": pagas una copa (€8–12) y accedes a un bufet de chutneys, embutidos, quesos y pasta. El Radetzky Café y el Bar Basso son los más icónicos.</div>
+              <div class="act-tags"><span class="act-tag">€8–12 aperitivo</span><span class="act-tag info">Ambiente local</span><span class="act-tag green">Mejor plan de tarde</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Luini Panzerotti</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Via S. Radegonda 16</span></td><td>Panzerotti al pomodoro — la mejor comida callejera de Milán. Cola de 15 min que vale la pena.</td><td>~€4</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Trattoria del Nuovo Macello</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Via Cesare Lombroso 20</span></td><td>Risotto alla milanese y ossobuco. Cocina lombarda auténtica lejos del turismo.</td><td>~€35</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Il Luogo di Aimo e Nadia</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Via Montecuccoli 6</span></td><td>Menú degustación de cocina italiana contemporánea. Dos estrellas Michelin.</td><td>~€150</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Milán — Arte, Moda y la Última Cena</div>
+            <div class="day-subtitle">Santa Maria delle Grazie · Brera · Castello Sforzesco</div>
+          </div>
+          <div class="day-meta"><span>🏙️ Milán</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box warn">
+            <strong>⚠️ CRÍTICO:</strong> La Última Cena de Leonardo da Vinci requiere reserva obligatoria con <strong>2–3 meses de antelación</strong>. Sin reserva, es imposible entrar. Reserva en <a href="https://www.vivaticket.com" target="_blank" rel="noopener" style="color:#c9a96e">vivaticket.com</a>. Solo entran 25 personas cada 15 minutos. La visita dura exactamente 15 minutos.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">La Última Cena — Il Cenacolo Vinciano</div>
+              <div class="act-desc">El mural más famoso del mundo (no es una pintura al fresco, es témpera sobre yeso seco). Pintado entre 1495 y 1498 en el refectorio del convento de Santa Maria delle Grazie. Ver la reacción de los apóstoles al anuncio de Judas con la luz de las ventanas reales cayendo exactamente igual que la pintada es una experiencia que no se olvida.</div>
+              <div class="act-tags"><span class="act-tag">€15 + €2 preventa</span><span class="act-tag warn">Reserva obligatoria</span><span class="act-tag info">15 minutos exactos</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Castello Sforzesco</div>
+              <div class="act-desc">La fortaleza del siglo XV que alberga la última escultura inacabada de Miguel Ángel: la Pietà Rondanini. Ver los dedos de la Virgen fundidos con los de Cristo es comprender qué es la escultura moderna 500 años antes de que existiera. El parque Sempione detrás del castillo es perfecto para el descanso de media mañana.</div>
+              <div class="act-tags"><span class="act-tag">€5 museos</span><span class="act-tag green">Parque gratis</span><span class="act-tag info">1.5h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Brera — el Montmartre milanés</div>
+              <div class="act-desc">Las calles empedradas de Brera son el barrio artístico e intelectual de Milán. La Pinacoteca di Brera alberga obras de Mantegna, Raphael y Caravaggio (€15, cerrado lunes). Después pasea por las tiendas de diseño independiente y toma un negroni en el aperitivo más civilizado de la ciudad.</div>
+              <div class="act-tags"><span class="act-tag">€15 Pinacoteca</span><span class="act-tag info">2–3h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Quadrilatero della Moda — paseo por la moda italiana</div>
+              <div class="act-desc">Via Montenapoleone, Via della Spiga, Via Sant'Andrea y Via Manzoni forman el cuadrilátero de la moda más caro del mundo. No hace falta comprar nada — mirar los escaparates de Prada, Versace, Gucci y Armani es una experiencia cultural en sí misma. El Armani Caffè es perfecto para un café con mucho estilo.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis pasear</span><span class="act-tag info">1.5h</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Lago de Como — Bellagio y las Villas de Ensueño</div>
+            <div class="day-subtitle">Como · Bellagio · Villa del Balbianello · Varenna</div>
+          </div>
+          <div class="day-meta"><span>🏞️ Lago Como</span><span>Excursión de día</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:15</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tren Milán → Como (S11)</div>
+              <div class="act-desc">El tren S11 desde Milano Cadorna llega a Como San Giovanni en 40 minutos. Billete ~€5. Desde la estación de Como baja andando al lago — son 10 minutos.</div>
+              <div class="act-tags"><span class="act-tag">€5</span><span class="act-tag info">40 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ferry a Bellagio — "La Perla del Lago"</div>
+              <div class="act-desc">El ferry de Navigazione Lago di Como cruza en 50 minutos. Bellagio es el pueblo más bonito del lago: jardines en terrazas, callecitas empedradas en pendiente, buganvillas y vistas a las tres ramas del lago desde el promontorio. George Clooney tiene su villa aquí — con suerte lo ves tomando un café.</div>
+              <div class="act-tags"><span class="act-tag">€8–14 ferry</span><span class="act-tag info">1.5–2h para explorar</span><span class="act-tag green">Vistas únicas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Villa del Balbianello — la más cinematográfica de Italia</div>
+              <div class="act-desc">Accede en taxi acuático desde Lenno (~€15). Esta villa del siglo XVIII fue escenario del rodaje de Star Wars: El Ataque de los Clones y James Bond en Casino Royale. Sus jardines en terrazas sobre el lago con cipreses y estatuas son la imagen más reproducida del Lago de Como. Reserva entrada en FAI (€22).</div>
+              <div class="act-tags"><span class="act-tag">€22 entrada</span><span class="act-tag">€15 taxi acuático</span><span class="act-tag info">1.5h</span><span class="act-tag warn">Cerrado martes</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Varenna — el secreto mejor guardado del lago</div>
+              <div class="act-desc">Más tranquila que Bellagio, Varenna tiene el Passeggiata degli Innamorati (el paseo de los enamorados) sobre el agua, el Castello di Vezio con halcones en vuelo libre, y la Villa Monastero con jardín botánico. Quédate al atardecer — la luz sobre el lago es de una belleza casi irreal.</div>
+              <div class="act-tags"><span class="act-tag">€5 jardín villa</span><span class="act-tag info">2h</span><span class="act-tag green">Menos masificada</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bar Sport · Bellagio</strong></td><td>Sándwich con bresaola y queso local. Terraza al lago sin recargo de turista.</td><td>~€12</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Ristorante Bilacus · Bellagio</strong></td><td>Risotto con persico (perca del lago) y lavarello ahumado. Cocina lacustre auténtica.</td><td>~€40</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Il Gatto Nero · Rovenna</strong></td><td>Con vistas panorámicas al lago. Reservar con días. La mejor relación calidad-vistas de la zona.</td><td>~€70</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Verona — Romeo, Julieta y Vino de Altura</div>
+            <div class="day-subtitle">Arena di Verona · Casa di Giulietta · Valpolicella</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Verona</span><span>Tren + día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tren Milán → Verona Porta Nuova</div>
+              <div class="act-desc">Frecciarossa en 1h15, desde €18 si se reserva con antelación. Recoge el coche de alquiler en Verona para los días de Dolomitas.</div>
+              <div class="act-tags"><span class="act-tag">€18–35</span><span class="act-tag info">1h15</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Arena di Verona — el anfiteatro más espectacular del mundo</div>
+              <div class="act-desc">Construida en el siglo I d.C., con capacidad para 30.000 personas. Mejor conservada que el Coliseo de Roma. De junio a septiembre acoge la temporada de ópera al aire libre más famosa del mundo — ver a La Traviata bajo las estrellas con las gradas de 2.000 años a tu alrededor es una de las experiencias más poderosas de Europa.</div>
+              <div class="act-tags"><span class="act-tag">€10 entrada diurna</span><span class="act-tag">€30–150 ópera</span><span class="act-tag info">45 min visita</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Piazza delle Erbe y centro histórico</div>
+              <div class="act-desc">La plaza más viva de Verona, con su mercado diario de frutas y verduras, los palacios medievales pintados al fresco y la Torre dei Lamberti desde la que se ve toda la ciudad. A 5 minutos está la Casa di Giulietta (Via Cappello 23): el balcón de Shakespeare, real o no, es un pelegrinage inevitable.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis plaza</span><span class="act-tag">€6 balcón Giulietta</span><span class="act-tag info">1.5h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Valpolicella — la tierra del Amarone</div>
+              <div class="act-desc">A 20 minutos en coche de Verona, la región vinícola donde nace el Amarone della Valpolicella, uno de los vinos más potentes y complejos de Italia. La Cantina Allegrini, Masi y Bertani hacen visitas con cata (~€20–30). El paisaje de viñedos en terrazas al atardecer con las Dolomitas al fondo es absolutamente cinematográfico.</div>
+              <div class="act-tags"><span class="act-tag">€20–30 cata</span><span class="act-tag info">2h</span><span class="act-tag green">Paisaje excepcional</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 5 -->
+      <div class="day-card" id="dia5">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Camino a las Dolomitas — Bolzano y el Valle de Funes</div>
+            <div class="day-subtitle">Verona → Bolzano → Val di Funes → Cortina</div>
+          </div>
+          <div class="day-meta"><span>🏔️ Dolomitas</span><span>Conducción 3h30</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Verona → Bolzano (1h45 en coche)</div>
+              <div class="act-desc">Bolzano / Bozen es la capital del Tirol del Sur, una ciudad a caballo entre Italia y Austria donde los rótulos están en dos idiomas y la comida mezcla strudel con tiramisú. En el Museo Arqueológico está Ötzi, el hombre de los hielos de 5.300 años hallado en un glaciar cercano. Vale mucho la parada de 2 horas.</div>
+              <div class="act-tags"><span class="act-tag">€11 museo Ötzi</span><span class="act-tag info">2h parada</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Val di Funes — la postal más famosa de los Alpes</div>
+              <div class="act-desc">La iglesia de Santa Maddalena con las agujas de las Odle al fondo es la imagen más reproducida de toda la región. Un valle verde esmeralda con granjas alpinas, vacas con cencerros y montañas verticales de roca rosa al fondo. El sendero circular alrededor de la iglesia (2h, dificultad baja) es de una belleza que no se puede explicar.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">2h senderismo suave</span><span class="act-tag green">La foto más icónica</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada a Cortina d'Ampezzo</div>
+              <div class="act-desc">La "Reina de las Dolomitas" — el Chamonix italiano. Paseo por el Corso Italia, la calle peatonal de lujo alpino. Al atardecer, si hay buena visibilidad, las cimas de las Dolomitas se tiñen de rojo y naranja con la luz del sol poniente en lo que los locales llaman "enrosadira" — un fenómeno óptico único que hace que la roca calcárea brille como brasa.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis pasear</span><span class="act-tag info">Atardecer: 19:30–20:30 en verano</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 6 -->
+      <div class="day-card" id="dia6">
+        <div class="day-header">
+          <div class="day-num">06</div>
+          <div>
+            <div class="day-title">Dolomitas — Tre Cime y Lago di Braies</div>
+            <div class="day-subtitle">Las dos rutas más espectaculares del planeta</div>
+          </div>
+          <div class="day-meta"><span>🏔️ Dolomitas</span><span>Senderismo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Estrategia:</strong> En julio y agosto, el Lago di Braies y las Tre Cime se saturan. Llega al Lago di Braies <strong>antes de las 8:00</strong> (acceso en coche libre hasta las 9:00, después solo autobús lanzadera). Las Tre Cime son mejor visitarlas por la tarde cuando los grupos de turismo ya se han ido.
+          </div>
+          <div class="activity" style="margin-top:16px">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Lago di Braies (Pragser Wildsee) — el amanecer más bello de Europa</div>
+              <div class="act-desc">Un lago de agua turquesa perfectamente enmarcado por bosques de abetos y picos de roca. Aparece en la serie Dark de Netflix. El sendero circular alrededor del lago (3,5 km, 1h, facilísimo) ofrece reflejos perfectos de las montañas en el agua. Alquila una barca de remos en el embarcadero (~€20/30min) para la perspectiva definitiva.</div>
+              <div class="act-tags"><span class="act-tag">€3 parking mañana</span><span class="act-tag">€20 barca</span><span class="act-tag info">1.5h circular</span><span class="act-tag green">Amanecer irrepetible</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tre Cime di Lavaredo — el símbolo de los Alpes</div>
+              <div class="act-desc">Las tres agujas de roca de 2.999 metros son el símbolo absoluto de las Dolomitas. La ruta circular alrededor de las tres cimas (10 km, 3–4h, desnivel 500m, nivel medio) es una de las 10 mejores caminatas de Europa. El Rifugio Auronzo al inicio del sendero sirve la mejor pasta al pomodoro de la montaña. Niebla ocasional: perfectamente seguro para caminar.</div>
+              <div class="act-tags"><span class="act-tag">€30 peaje acceso en coche</span><span class="act-tag info">3–4h circular</span><span class="act-tag">Nivel medio</span><span class="act-tag green">Paisaje UNESCO</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Cortina — Spa y cena en rifugio</div>
+              <div class="act-desc">Dúchate y relájate. Cena en el Rifugio Col Gallina o directamente en algún gasthaus de Cortina con canederli (albóndigas de pan), speck y strudel de manzana. Es el único lugar del mundo donde la cocina italiana y la austriaca conviven con absoluta naturalidad.</div>
+              <div class="act-tags"><span class="act-tag info">Cena tirolesa</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 7 -->
+      <div class="day-card" id="dia7">
+        <div class="day-header">
+          <div class="day-num">07</div>
+          <div>
+            <div class="day-title">Cortina → Venecia — La Serenísima te espera</div>
+            <div class="act-subtitle">Llegada a Venecia · Rialto · Zattere</div>
+          </div>
+          <div class="day-meta"><span>🚢 Venecia</span><span>2h30 coche + llegada</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cortina → Mestre (2h30 en coche)</div>
+              <div class="act-desc">Devuelve el coche en Mestre (tierra firme) o en el Tronchetto de Venecia. Si duermes en Mestre, el tren a Venecia Santa Lucia tarda 10 minutos y sale cada 10 min (~€1,35). Si duermes en la isla, deja el coche en el parking de Tronchetto (€30/día) y coge el vaporetto.</div>
+              <div class="act-tags"><span class="act-tag info">2h30 conducción</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado de Rialto y primeros pasos por Venecia</div>
+              <div class="act-desc">El mercado de Rialto (abre hasta las 13:00) lleva 1.000 años en el mismo sitio. Compra cicchetti (pintxos venecianos) en los bacari del alrededor por €1,50–2,50 cada uno con un ombra de vino blanco. Es el mejor — y más barato — almuerzo de Venecia. Evita los restaurantes con foto en el menú junto al Gran Canal.</div>
+              <div class="act-tags"><span class="act-tag green">€10–15 almuerzo cicchetti</span><span class="act-tag info">Mejor antes de las 13:00</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vaporetto por el Gran Canal — el mejor paseo de Europa (sin coste extra)</div>
+              <div class="act-desc">Con el pase de 72h incluido, la línea 1 del vaporetto desde Santa Lucia hasta San Marco recorre el Gran Canal en 45 minutos con vistas a palazzi del siglo XIV. Ocupa la proa del barco para las mejores vistas. Gratis con tu pase.</div>
+              <div class="act-tags"><span class="act-tag green">Incluido en pase 72h</span><span class="act-tag info">45 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Atardecer en las Zattere — lejos del turismo</div>
+              <div class="act-desc">Las Zattere son el paseo marítimo del barrio de Dorsoduro, orientado al sur, con vistas a la isla de La Giudecca. Es donde los venecianos de verdad pasean al atardecer. La gelatería Nico sirve el mejor gianduiotto de Venecia desde 1935: helado de chocolate con nata montada, consumido de pie mirando la laguna.</div>
+              <div class="act-tags"><span class="act-tag green">Ambiente local</span><span class="act-tag">€3 gelato Nico</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 8 -->
+      <div class="day-card" id="dia8">
+        <div class="day-header">
+          <div class="day-num">08</div>
+          <div>
+            <div class="day-title">Venecia — San Marco, Murano y la Góndola</div>
+            <div class="day-subtitle">Basílica · Palazzo Ducale · Murano · Dorsoduro</div>
+          </div>
+          <div class="day-meta"><span>🚢 Venecia</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Basílica di San Marco — antes de que abra al turismo masivo</div>
+              <div class="act-desc">Llegando a las 8:00 (abre a las 9:45 en verano, 9:45 en invierno) puedes formarte 45 min antes y entrar entre los primeros. Reserva online la visita a la galería superior (€5) para ver los caballos de bronce originales robados de Constantinopla en 1204 y los mosaicos de oro desde arriba. Los mosaicos cubren 8.000 m² de superficie.</div>
+              <div class="act-tags"><span class="act-tag green">Basílica gratis</span><span class="act-tag">€5 galería superior</span><span class="act-tag warn">Llegar temprano</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Palazzo Ducale — el corazón del poder veneciano durante 1.000 años</div>
+              <div class="act-desc">El palacio gótico más grande del mundo. La Sala del Maggior Consiglio tiene el cuadro más grande pintado al óleo de la historia (22m × 7m, de Tintoretto). El Ponte dei Sospiri (Puente de los Suspiros) conecta el palacio con la cárcel — el nombre viene de los suspiros de los condenados al ver Venecia por última vez.</div>
+              <div class="act-tags"><span class="act-tag">€25 combo Ducal + museos</span><span class="act-tag info">2h</span><span class="act-tag warn">Reservar online</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Murano — la isla del vidrio</div>
+              <div class="act-desc">Vaporetto línea 4.1 desde San Zaccaria (15 min). La industria vidriera veneciana lleva aquí desde 1291 (la trasladaron de Venecia por el riesgo de incendio). Asiste a una demostración de soplado de vidrio (gratis en muchas tiendas) y visita el Museo del Vetro (€10). Evita las tiendas de vidrio en San Marco — son importaciones chinas a precio de Murano.</div>
+              <div class="act-tags"><span class="act-tag">€10 museo</span><span class="act-tag green">Demostración gratis</span><span class="act-tag info">2h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Góndola por los canales interiores — el momento inevitabile</div>
+              <div class="act-desc">La góndola oficial tiene precio fijo: €80 por 30 minutos para hasta 6 personas (no por persona). Divide el precio entre 6 y sale a €13/persona — muy razonable. Pide al gondolero que te lleve por los canales interiores del sestiere de San Polo: callejones de agua tan estrechos que las paredes de los edificios se tocan, con ropa tendida y gatos en los alféizares. Eso es la Venecia real.</div>
+              <div class="act-tags"><span class="act-tag">€80 total (6 pax)</span><span class="act-tag info">30 min</span><span class="act-tag green">Canales interiores > Gran Canal</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena de despedida en Dorsoduro</div>
+              <div class="act-desc">El barrio universitario de Venecia es el más auténtico. Ai Pugni, All'Arco y Osteria Enoteca Ai Artisti son el contrapunto perfecto a los restaurantes trampa de San Marco. Pide sarde in saor (sardinas agridulces en escabeche), bigoli in salsa y el tiramisú que inventó un pastelero de Treviso en 1969.</div>
+              <div class="act-tags"><span class="act-tag info">Barrio local</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>All'Arco · San Polo</strong></td><td>Cicchetti variados con ombra de vino. El bacaro más famoso de Venecia. Llegar pronto.</td><td>~€15</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Osteria alle Testiere</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Castello · Reserva obligatoria</span></td><td>Mariscos del Adriático. Spaghetti alle vongole que cambia la percepción de la pasta.</td><td>~€55</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Oro · Cipriani</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Isla Giudecca</span></td><td>La mejor mesa con vistas de Venecia. Cocina veneciana de autor. Reserva con 1 semana.</td><td>~€120</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 9 -->
+      <div class="day-card" id="dia9">
+        <div class="day-header">
+          <div class="day-num">09</div>
+          <div>
+            <div class="day-title">Venecia — Mañana tranquila y regreso</div>
+            <div class="day-subtitle">Gallerie dell'Accademia · Vuelo desde Marco Polo</div>
+          </div>
+          <div class="day-meta"><span>✈️ Salida</span><span>Vuelo de vuelta</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Gallerie dell'Accademia — si tienes tiempo</div>
+              <div class="act-desc">La mejor colección de pintura veneciana del mundo: Bellini, Giorgione, Tiziano, Tintoretto y Veronese. La Tempestad de Giorgione y La Virgen de los Peregrinos de Bellini son las piezas estrella. Abren a las 8:15. Si el vuelo es por la tarde, merece la visita (2h).</div>
+              <div class="act-tags"><span class="act-tag">€12</span><span class="act-tag info">2h · Abre 8:15</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Aeropuerto Marco Polo (VCE)</div>
+              <div class="act-desc">ATVO bus desde Piazzale Roma: 20 min, €8. Taxi acuático: 25 min, ~€115. Vaporetto línea 5: 75 min, €8 (la más barata pero lenta). Añade 2h30 de margen para vuelos internacionales. Aduanas y controles en VCE son lentos en temporada alta.</div>
+              <div class="act-tags"><span class="act-tag">€8 bus ATVO</span><span class="act-tag info">20 min</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Tre Cime di Lavaredo al amanecer</h4><p>Las tres agujas de roca más fotografiadas de Europa. La ruta circular de 3–4h al amanecer, con la luz rosa tiñendo la roca calcárea, es una experiencia que muy pocos tienen el privilegio de vivir.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>La Última Cena de Leonardo da Vinci</h4><p>No hay imagen preparatoria que pueda anticipar el impacto de ver el original. Los 15 minutos que te dan son suficientes para entender por qué este mural lleva 500 años cambiando el arte.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Lago di Braies al amanecer</h4><p>El lago más fotogénico de Europa. El reflejo perfecto de los picos Dolomíticos en el agua turquesa antes de las 8:00, cuando no hay nadie más, es de una belleza que detiene el pensamiento.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Aperitivo en los Navigli de Milán</h4><p>El ritual social más elegante de Italia. Por el precio de una copa consumes un bufet completo mientras el atardecer enciende los reflejos en los canales.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Val di Funes — Santa Maddalena</h4><p>La iglesia blanca con las agujas de roca de las Odle al fondo. El secreto mejor guardado de los Alpes. La fotografía más reproducida de toda Italia del norte en los últimos 10 años.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Góndola por los canales interiores de Venecia</h4><p>No el Gran Canal turístico: los canales estrechos del sestiere de San Polo, donde la ciudad funciona de verdad y el tiempo parece detenido en el siglo XV.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Valpolicella — cata de Amarone</h4><p>El vino más complejo de Italia, hecho con uvas pasificadas durante 3–4 meses. Una cata en Allegrini o Masi con vistas a los viñedos cambia para siempre la relación con el vino.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Villa del Balbianello — Lago de Como</h4><p>El jardín de ensueño del FAI con vistas al lago desde tres ángulos distintos. Escenario de Star Wars y James Bond. La arquitectura, el jardín y el agua juntos son pura magia cinematográfica.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Arena di Verona al anochecer</h4><p>El anfiteatro romano más grande del mundo aún en uso. En verano, ver una ópera bajo las estrellas con las gradas de 2.000 años es una experiencia que Europa no puede igualar en ningún otro lugar.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Terrazas del Duomo de Milán</h4><p>Caminar entre las 135 agujas de mármol blanco al mismo nivel que las gárgolas, con la planicie del Po a tus pies y los Alpes al fondo en los días claros, es la mejor introducción posible a Italia.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍝 Gastronomía del Norte</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Lombardía · Milano</div><div class="gastro-title">Risotto alla Milanese</div><div class="gastro-desc">Arroz Carnaroli cocinado en caldo de carne y mantecado con médula de buey. El azafrán le da el color dorado característico. Se sirve "all'onda" (fluyendo como una ola). El mejor en Da Claudio o Trattoria del Nuevo Macello. Precio: ~€16–22.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Lombardía · Milano</div><div class="gastro-title">Ossobuco</div><div class="gastro-desc">Jarrete de ternera braseado durante 3 horas con vino blanco, tomate y gremolata (limón, ajo y perejil). Se sirve siempre junto al risotto alla milanese. La médula del hueso es la parte más codiciada. Precio: ~€22–28.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Véneto · Verona</div><div class="gastro-title">Bigoli in Salsa</div><div class="gastro-desc">Pasta gruesa artesanal (tipo espagueti muy gordo) con anchoas deshilachadas y cebolla pochada durante horas en aceite. Un plato de pobre convertido en joya gastronómica. La salazón de las anchoas equilibra perfectamente la dulzura de la cebolla.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Véneto · Venecia</div><div class="gastro-title">Sarde in Saor</div><div class="gastro-desc">Sardinas fritas y marinadas en escabeche de cebolla, vinagre, pasas y piñones. Receta medieval de conservación que se ha convertido en el aperitivo más veneciano que existe. Se come fría. Precio en bacari: €2,50 la ración.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Alto Adige · Dolomitas</div><div class="gastro-title">Canederli in Brodo</div><div class="gastro-desc">Albóndigas de pan duro, speck tirolés y queso, servidas en caldo de carne. La mezcla de cocina italiana y austriaca que define el Tirol del Sur. Se encuentran en todos los rifugi de las Dolomitas. Calientes en la montaña son uno de los mejores platos del mundo.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Véneto · General</div><div class="gastro-title">Tiramisú</div><div class="gastro-desc">Inventado en el restaurante Le Beccherie de Treviso en 1969. La receta original usa mascarpone, yemas de huevo, azúcar, café espresso, bizcochos de soletilla (savoiardi) y cacao en polvo. Sin nata montada, sin licor. El tiramisú original nada tiene que ver con las versiones industriales. Pídelo en cualquier pasticceria de la región.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Lombardía · Como</div><div class="gastro-title">Lavarello del Lago</div><div class="gastro-desc">Pez de agua dulce exclusivo del Lago de Como, cocinado a la plancha con aceite, limón y hierbas alpinas. Su carne blanca y delicada es insustituible. Se pesca de madrugada y llega a los restaurantes a mediodía. Precio: ~€18–24.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Véneto · Venecia</div><div class="gastro-title">Cicchetti</div><div class="gastro-desc">Los pintxos venecianos: pequeñas raciones sobre pan tostado que van desde baccalà mantecato (bacalao en aceite batido) hasta polpo (pulpo) o folpeti con salsa. Se comen de pie en los bacari (tabernas), a €1,50–2,50 por pieza, con un ombra de vino blanco del Véneto a €1,50.</div></div>
+      </div>
+    </section>
+
+    <!-- ── FRASES ── -->
+    <section id="frases" class="itin-section">
+      <h2 class="section-heading">🗣️ Frases útiles en italiano</h2>
+      <div class="phrases-grid">
+        <div class="phrase-card"><div class="phrase-es">Buenos días / Buenas tardes</div><div class="phrase-local">Buongiorno / Buonasera</div><div class="phrase-pron">"Buon-yor-no / Buona-se-ra"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Por favor / Gracias</div><div class="phrase-local">Per favore / Grazie</div><div class="phrase-pron">"Per fa-vo-re / Gra-tsie"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Cuánto cuesta?</div><div class="phrase-local">Quanto costa?</div><div class="phrase-pron">"Kuan-to cos-ta?"</div></div>
+        <div class="phrase-card"><div class="phrase-es">La cuenta, por favor</div><div class="phrase-local">Il conto, per favore</div><div class="phrase-pron">"Il con-to, per fa-vo-re"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Una mesa para dos</div><div class="phrase-local">Un tavolo per due</div><div class="phrase-pron">"Un ta-vo-lo per du-e"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Dónde está...?</div><div class="phrase-local">Dov'è...?</div><div class="phrase-pron">"Do-ve?"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Un café, por favor</div><div class="phrase-local">Un caffè, per favore</div><div class="phrase-pron">"Un caf-fè, per fa-vo-re"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¡Salud! (al brindar)</div><div class="phrase-local">Cin cin! / Salute!</div><div class="phrase-pron">"Chin chin / Sa-lu-te"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Estoy perdido/a</div><div class="phrase-local">Mi sono perso/a</div><div class="phrase-pron">"Mi so-no per-so/a"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¡Está delicioso!</div><div class="phrase-local">È buonissimo!</div><div class="phrase-pron">"È buo-nis-si-mo"</div></div>
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales (UE)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos, ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía italiana (Carabinieri)</div><div class="emerg-value">112 / 113</div><div class="emerg-note">También en turismo, denuncia robos</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">118</div><div class="emerg-note">Servicio de urgencias médicas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España · Roma</div><div class="emerg-value">+39 06 684 0401</div><div class="emerg-note">Via Campo Marzio 23, Roma</div></div>
+        <div class="emerg-card"><div class="emerg-label">Consulado España · Milán</div><div class="emerg-value">+39 02 4352 8800</div><div class="emerg-note">Urgencias consulares 24h</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Milán (urgencias)</div><div class="emerg-value">Ospedale Niguarda</div><div class="emerg-note">Piazza Ospedale Maggiore 3 · 02 6444 1</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Venecia (urgencias)</div><div class="emerg-value">Ospedale SS. Giovanni e Paolo</div><div class="emerg-note">Campo Santi Giovanni e Paolo · 041 5294111</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia de Costa</div><div class="emerg-value">1530</div><div class="emerg-note">Emergencias en el agua (lago / laguna)</div></div>
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje con cobertura médica (IATI Seguros)</div>
+            <div class="check-item"><div class="check-box"></div>Carné de conducir internacional (para coche)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">✈️ Reservas confirmadas</div>
+            <div class="check-item"><div class="check-box"></div>Vuelos (entrada MXP, salida VCE)</div>
+            <div class="check-item"><div class="check-box"></div><strong>Última Cena — reserva con 2–3 meses de antelación</strong></div>
+            <div class="check-item"><div class="check-box"></div>Alojamiento todas las noches</div>
+            <div class="check-item"><div class="check-box"></div>Coche de alquiler (Verona → Mestre)</div>
+            <div class="check-item"><div class="check-box"></div>Palazzo Ducale (reserva online para evitar cola)</div>
+            <div class="check-item"><div class="check-box"></div>Villa del Balbianello (entrada FAI)</div>
+            <div class="check-item"><div class="check-box"></div>Ópera en la Arena si es temporada (jun–sep)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">🎒 Equipaje</div>
+            <div class="check-item"><div class="check-box"></div>Calzado de trekking (Dolomitas)</div>
+            <div class="check-item"><div class="check-box"></div>Calzado cómodo para caminar en ciudad</div>
+            <div class="check-item"><div class="check-box"></div>Ropa de abrigo (Dolomitas, aunque sea verano)</div>
+            <div class="check-item"><div class="check-box"></div>Chubasquero ligero</div>
+            <div class="check-item"><div class="check-box"></div>Ropa elegante (para restaurantes y ópera)</div>
+            <div class="check-item"><div class="check-box"></div>Adaptador de enchufe (Italia usa el mismo que España)</div>
+            <div class="check-item"><div class="check-box"></div>Protector solar (nieve refleja UV en montaña)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">📱 Apps esenciales</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps — descarga offline norte de Italia</div>
+            <div class="check-item"><div class="check-box"></div>Trenitalia — billetes de tren</div>
+            <div class="check-item"><div class="check-box"></div>Navigazione Lago di Como — horarios ferry</div>
+            <div class="check-item"><div class="check-box"></div>Actv Venezia — vaporetto Venecia</div>
+            <div class="check-item"><div class="check-box"></div>Komoot o AllTrails — rutas de senderismo Dolomitas</div>
+            <div class="check-item"><div class="check-box"></div>Revolut o N26 — tarjeta sin comisiones</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com, Skyscanner y GetYourGuide pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.5);text-decoration:none;font-size:0.85rem;margin-bottom:16px">← Ver todos los itinerarios</a>
+    <div style="font-size:0.78rem;color:rgba(237,238,242,0.3)">© 2026 Routlo · Hecho con IA para viajeros del mundo</div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+    const sections = document.querySelectorAll('.itin-section[id], .day-card[id]');
+    const links = document.querySelectorAll('.toc-list a');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }, { passive: true });
+</script>
+</body>
+</html>
