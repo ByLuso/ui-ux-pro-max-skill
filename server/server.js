@@ -196,7 +196,17 @@ Si el usuario NO especifica algún dato importante, pregunta amablemente por:
 `.trim();
 
 // ── Middleware ────────────────────────────────────────────────────────────────
-app.use(cors({ origin: '*' }));
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:3001', 'http://127.0.0.1:5500', 'null']; // 'null' = file://
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    // En dev permite todo; en prod solo los orígenes listados
+    if (process.env.NODE_ENV !== 'production') return cb(null, true);
+    cb(new Error('CORS: origen no permitido'));
+  }
+}));
 app.use(express.json({ limit: '2mb' }));
 
 // ── Users helpers (simple JSON file DB) ──────────────────────────────────────

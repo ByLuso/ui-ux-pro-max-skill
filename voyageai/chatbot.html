@@ -343,7 +343,9 @@
 </div>
 
 <script>
-  const API = 'http://localhost:3001';
+  const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3001'
+    : 'https://TU-SERVIDOR.up.railway.app';  // ← cambia esto por tu URL
 
   // ── Auth guard ──────────────────────────────────────────────────────────────
   const token = localStorage.getItem('routlo_token');

@@ -137,7 +137,10 @@
 </main>
 
 <script>
-  const API = 'http://localhost:3001';
+  // En local usa localhost; en producción usa tu URL de Railway/VPS
+  const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3001'
+    : 'https://TU-SERVIDOR.up.railway.app';  // ← cambia esto por tu URL
 
   // Redirect if already logged in
   if (localStorage.getItem('routlo_token')) {
