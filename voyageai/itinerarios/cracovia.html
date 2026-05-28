@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cracovia — 4 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 4 días en Cracovia, Polonia: Casco Antiguo, Kazimierz, Auschwitz, Castillo Wawel y Minas de Sal de Wieliczka. Presupuesto, hoteles y consejos insider de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Base (fallback si shared.css no carga en file:// / content://) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav.scrolled { background:rgba(4,8,16,0.95); }
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#2e0a0a 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0a0a 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#3d0f0f 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg,#0f0505 0%,#2e0a0a 40%,#7a1515 70%,rgba(201,169,110,0.18) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .phrases-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .phrase-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px; }
+    .phrase-es { font-size:0.78rem;color:rgba(237,238,242,0.5);margin-bottom:4px; }
+    .phrase-local { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:3px; }
+    .phrase-pron { font-size:0.75rem;color:#c9a96e;font-style:italic; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* ── Tablet ── */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+    }
+    /* ── Mobile ── */
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    /* ── Small mobile ── */
+    @media screen and (max-width: 640px) {
+      nav { padding: 0 14px !important; }
+      nav ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .alert-box { font-size: 0.8rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .act-desc { font-size: 0.82rem !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .phrase-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+      .disclosure { padding: 12px 14px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo — Inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;">
+  </a>
+  <ul style="display:flex;align-items:center;gap:4px;list-style:none" role="list">
+    <li><a href="../index.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Inicio</a></li>
+    <li><a href="../itinerarios.html" style="font-size:0.875rem;font-weight:500;color:#c9a96e;text-decoration:none;padding:8px 14px;border-radius:8px">Itinerarios</a></li>
+    <li><a href="../mapa.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Mapa</a></li>
+    <li><a href="../chatbot.html" style="font-size:0.875rem;font-weight:600;color:#0a0a0a;background:linear-gradient(135deg,#c9a96e,#a07840);padding:9px 20px;border-radius:10px;text-decoration:none">Planificador IA</a></li>
+  </ul>
+</nav>
+
+<a href="#main-content" style="position:absolute;top:-100px;left:0;background:#c9a96e;color:#0a0a0a;padding:8px 16px;border-radius:0 0 8px 0;font-weight:600;z-index:999;transition:top 0.2s" onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Saltar al contenido</a>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(122,21,21,0.15);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Cracovia</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Cracovia</h1>
+  <p class="dest-country">Polonia · Historia · Cultura · Memoria</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 4 días / 3 noches</span>
+    <span class="dest-badge" role="listitem">👥 Solo / Pareja / Amigos</span>
+    <span class="dest-badge gold" role="listitem">💶 €480–850/persona</span>
+    <span class="dest-badge" role="listitem">🌍 Europa · Polonia</span>
+    <span class="dest-badge" role="listitem">🏰 Historia + Gastronomía + Patrimonio</span>
+    <a href="https://www.skyscanner.es/transport/flights/MAD/KRK/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">4 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">2 destinos</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€480–850</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Abr–Oct</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Casco Antiguo</a></li>
+        <li><a href="#dia2">Día 2 · Wawel + Wieliczka</a></li>
+        <li><a href="#dia3">Día 3 · Auschwitz</a></li>
+        <li><a href="#dia4">Día 4 · Nowa Huta</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#frases">Frases útiles</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Cracovia es uno de los secretos mejor guardados de Europa: una ciudad medieval perfectamente conservada donde el gótico, el renacimiento y el barroco conviven en una plaza que lleva ocho siglos siendo el corazón de Polonia. Aquí el tiempo tiene dos capas: la belleza deslumbrante del Casco Antiguo y el barrio judío de Kazimierz por un lado, y el peso moral de Auschwitz-Birkenau y el ghetto de la Segunda Guerra Mundial por otro. Cuatro días que atraviesan la historia de Europa sin anestesia: desde la grandiosidad de los reyes polacos en el Castillo Wawel hasta la catedral de sal a 135 metros bajo tierra en Wieliczka, pasando por el más importante memorial de la humanidad. Y todo ello con una gastronomía que es de las mejores relaciones calidad-precio del continente.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏰</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Casco Antiguo + Kazimierz</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1 y 4</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">⛏️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Wawel + Wieliczka</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 2</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🕯️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Auschwitz-Birkenau</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 3</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Económico</th><th>Confort</th><th>Premium</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo A/R (desde Madrid)</td><td>€50–100</td><td>€130–200</td><td>€280+</td><td>Ryanair/Wizz Air desde Madrid. 2h50min</td></tr>
+            <tr><td>🏨 Alojamiento (3 noches)</td><td>€54</td><td>€285</td><td>€840</td><td>Hostel / Hotel boutique / Hotel lujo</td></tr>
+            <tr><td>🍽️ Comidas (4 días)</td><td>€60</td><td>€140</td><td>€280</td><td>~€15/35/70 por día (muy barato)</td></tr>
+            <tr><td>🚌 Transporte</td><td>€15</td><td>€25</td><td>€45</td><td>Autobuses + tranvías</td></tr>
+            <tr><td>🎟️ Auschwitz + entradas</td><td>€65</td><td>€80</td><td>€100</td><td>Wawel + Wieliczka + Auschwitz</td></tr>
+            <tr><td>🎭 Tours</td><td>€0</td><td>€30</td><td>€80</td><td>Trabant Nowa Huta</td></tr>
+            <tr><td>🔄 Imprevistos</td><td>€25</td><td>€70</td><td>€165</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€269</strong></td><td><strong>~€730</strong></td><td><strong>~€1,790</strong></td><td>Uno de los destinos más baratos de Europa</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo:</strong> Cracovia es extraordinariamente barata. Un buen restaurante polaco cuesta €12–18. Los autobuses y tranvías cuestan €0.80 por trayecto. El mayor gasto es la excursión a las Minas de Wieliczka (€50 tour obligatorio) y la combinación Wawel + entradas, pero incluso así el presupuesto total es notablemente reducido para una capital europea tan rica en contenido.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚗 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Vuelos</div>
+          <div class="transport-content">
+            <strong>Ryanair y Wizz Air</strong> operan vuelos directos desde Madrid al Aeropuerto Internacional Juan Pablo II (KRK). 2h50min de vuelo. Desde €25 si se reserva con suficiente antelación. El aeropuerto está a 15 km del centro. Autobús 208 o 902 al centro por <strong>€0.80</strong> (40 min). Taxi: €20–25.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Transporte urbano</div>
+          <div class="transport-content">
+            Red excelente de <strong>tranvías y autobuses</strong> que llega a todos los puntos del itinerario. Billete: <strong>€0.80</strong> por trayecto o €2 pase de día. El Casco Antiguo es completamente peatonal. Para Wieliczka: autobús 304 desde Plac Wolnica (Kazimierz) por <strong>€1.50</strong>, 30 min.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Auschwitz desde Cracovia</div>
+          <div class="transport-content">
+            Autobús directo desde la <strong>Estación Central de Autobuses</strong> (ul. Bosacka): €5 ida, 1h30min. Salen cada hora desde las 7:00. Alternativamente, tour organizado desde Cracovia (~€30) que incluye transporte y guía. Recuerda: la entrada al memorial de Auschwitz es <strong>gratuita</strong>.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 Alquiler de coche</div>
+          <div class="transport-content">
+            <strong>No necesario</strong> para este itinerario. Todo es accesible en transporte público. Si quieres explorar los alrededores (Castillo Pieskowa Skała, montes Tatra), considera alquiler por un día. Parking en el centro es complicado y caro. En Cracovia, el transporte público es siempre la mejor opción.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Budget</div>
+          <div class="hotel-name">Mundo Hostel</div>
+          <div class="hotel-zone">Kazimierz</div>
+          <div class="hotel-price">~€18/noche en dormitorio</div>
+          <ul class="hotel-features">
+            <li>En el barrio más animado de Cracovia</li>
+            <li>Ropa de cama incluida</li>
+            <li>Cocina compartida equipada</li>
+            <li>Ambiente joven y viajero</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/pl/mundo-hostel-krakow.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐ Confort</div>
+          <div class="hotel-name">Hotel Amadeus</div>
+          <div class="hotel-zone">Ciudad Vieja</div>
+          <div class="hotel-price">~€95/noche</div>
+          <ul class="hotel-features">
+            <li>En un palacio del siglo XV</li>
+            <li>Pleno centro histórico</li>
+            <li>Desayuno polaco incluido</li>
+            <li>A 2 min a pie del Rynek</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/pl/amadeus.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Hotel Copernicus</div>
+          <div class="hotel-zone">Colina Wawel</div>
+          <div class="hotel-price">~€280/noche</div>
+          <ul class="hotel-features">
+            <li>Edificio renacentista del s.XVI</li>
+            <li>Piscina en la azotea con vistas</li>
+            <li>Restaurante recomendado Michelin</li>
+            <li>Frente al Castillo Wawel</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/pl/copernicus-krakow.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Casco Antiguo y Rynek Główny</div>
+            <div class="day-subtitle">Rynek Główny · Basílica de Santa María · Kazimierz · Szeroka</div>
+          </div>
+          <div class="day-meta"><span>🏰 Cracovia</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Rynek Główny — La plaza medieval más grande de Europa</div>
+              <div class="act-desc">200 metros de lado y 800 años de historia. La Lonja de los Paños (Sukiennice) del siglo XVI domina el centro con su arquitectura renacentista y sus arcos. En la planta baja, artesanía polaca; en la primera planta, una pinacoteca del romanticismo polaco. Las palomas llevan aquí desde la Edad Media. Entrada a la galería: €10.</div>
+              <div class="act-tags"><span class="act-tag green">Plaza gratis</span><span class="act-tag">€10 Lonja</span><span class="act-tag info">1.5h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Basílica de Santa María — Torres asimétricas icónicas</div>
+              <div class="act-desc">Las dos torres de alturas diferentes tienen una historia: dos hermanos compitieron por construirlas, y el menor mató al mayor con una daga para que la suya fuera más alta. Cada hora, en punto, un trompetista toca el hejnał mariacki desde la torre más alta —una melodía que se interrumpe abruptamente, en memoria de un centinela medieval abatido por una flecha tártara. Interior dorado deslumbrante con altar mayor de madera tallada del siglo XV. €6.</div>
+              <div class="act-tags"><span class="act-tag">€6</span><span class="act-tag info">Trompetista cada hora</span><span class="act-tag green">Interior impresionante</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Stary Kleparz — Mercado cubierto</div>
+              <div class="act-desc">El mercado más auténtico de Cracovia, a 10 minutos del Rynek. Puestos de comida local baratísima: barszcz (borscht de remolacha), pierogi recién hechos, kielbasa asada, buñuelos de queso. Ningún restaurante turístico puede igualar esto. Comida de pie y de primera calidad por €5 o menos.</div>
+              <div class="act-tags"><span class="act-tag">~€5</span><span class="act-tag green">Mercado local auténtico</span><span class="act-tag info">10 min del Rynek</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Kazimierz — El histórico barrio judío</div>
+              <div class="act-desc">Fundado en 1335, Kazimierz fue durante siglos el centro de la vida judía en Polonia. Hoy es el barrio más vibrante de Cracovia: sinagogas, galerías de arte, mercadillos de antigüedades, librerías independientes y los mejores cafés de la ciudad. El Café Cheder, instalado en una antigua escuela judía, sirve el mejor café de Polonia. El barrio entero es patrimonio de la memoria judía europea.</div>
+              <div class="act-tags"><span class="act-tag green">Barrio histórico gratis</span><span class="act-tag info">2.5h exploración</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Synagoga Remu'h — La más antigua en uso de Cracovia</div>
+              <div class="act-desc">Construida en 1553, la sinagoga Remu'h es todavía un lugar de culto activo. El cementerio adyacente es uno de los mejor conservados de Europa —las lápidas medievales, recuperadas después de la guerra, forman un muro de fragmentos de piedra. Moses Isserles, el rabino más importante del judaísmo askenazí del siglo XVI, está enterrado aquí. €5.</div>
+              <div class="act-tags"><span class="act-tag">€5</span><span class="act-tag info">Cementerio medieval</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Calle Szeroka — El corazón de Kazimierz</div>
+              <div class="act-desc">La calle más ancha de Kazimierz es en realidad una pequeña plaza alargada rodeada de restaurantes, bares y cafés. A la hora del atardecer, si hay músicos de klezmer tocando en la terraza del Café Singer o del Alchemia, la atmósfera es absolutamente única. Es el mejor lugar de Cracovia para tomar una cerveza Żywiec o Okocim al aire libre.</div>
+              <div class="act-tags"><span class="act-tag info">Música klezmer en vivo</span><span class="act-tag green">Ambiente único</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Zalewajka — Cocina polaca auténtica</div>
+              <div class="act-desc">Uno de los mejores representantes de la cocina polaca tradicional en Kazimierz. Pide el żurek: la legendaria sopa ácida de centeno fermentado con huevo duro, kielbasa y ajo, servida en una hogaza de pan. El kotlet schabowy (filete de cerdo empanado, el plato nacional de Polonia) con repollo estofado es imprescindible. €12 una cena completa con bebida.</div>
+              <div class="act-tags"><span class="act-tag">~€12</span><span class="act-tag green">Cocina auténtica</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bar Mleczny</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">ul. Grodzka 43</span></td><td>Bares de leche soviéticos, comida casera polaca a precios de otra era. Pierogi, bigos, żurek.</td><td>~€5</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Pod Nosem</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">ul. Kanonicza 22</span></td><td>Cocina polaca moderna en un palacio medieval. Ambiente íntimo, selección de vodkas polacos.</td><td>~€25</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Miód i Wino</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">ul. Sławkowska 32</span></td><td>Hidromiel polaco, cocina medieval recreada. El espacio —una bodega del s.XV— es extraordinario.</td><td>~€50</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Castillo Wawel y Minas de Sal de Wieliczka</div>
+            <div class="day-subtitle">Colina Wawel · Catedral Real · Wieliczka UNESCO</div>
+          </div>
+          <div class="day-meta"><span>⛏️ Cracovia</span><span>Día intenso</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Castillo de Wawel — Residencia real de los reyes polacos</div>
+              <div class="act-desc">El complejo más importante de Polonia, símbolo nacional equivalente al Escorial para España. Los aposentos reales, la sala de los embajadores con techumbre de casetones con 30 cabezas talladas (solo 30 de las 194 originales sobrevivieron a los nazis), la Catedral donde están enterrados todos los reyes de Polonia, y la cueva del dragón de Wawel —cuyas fauces escupen fuego real— se concentran en esta colina sobre el Vístula. Pase completo: €24. Llegar temprano para evitar colas. 3h mínimo.</div>
+              <div class="act-tags"><span class="act-tag">€24 pase completo</span><span class="act-tag info">3h</span><span class="act-tag warn">Llegar antes de las 9:30</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en la colina Wawel — Vistas al Vístula</div>
+              <div class="act-desc">La Kawiarnia pod Basztą, en la propia colina de Wawel, sirve comida decente con vistas al río Vístula y los jardines reales. Bigos (estofado de col) o żurek como plato principal. El entorno justifica el precio ligeramente más alto que en el resto de la ciudad. €10.</div>
+              <div class="act-tags"><span class="act-tag">~€10</span><span class="act-tag info">Vistas al Vístula</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Minas de sal de Wieliczka — Patrimonio UNESCO único en el mundo</div>
+              <div class="act-desc">A 15 km de Cracovia, las minas de sal de Wieliczka llevan en explotación desde el siglo XIII. El tour obligatorio (€50, 2h) desciende 135 metros bajo tierra a través de túneles, lagos subterráneos y capillas talladas completamente en sal —incluyendo la impresionante Capilla de Santa Kinga, con sus dimensiones de catedral, sus esculturas y sus lámparas de cristal de sal. Leonardo da Vinci visitó estas minas; la descripción que hizo de ellas es lo primero que entendemos al llegar. Absolutamente único en el mundo. Autobús 304 desde Kazimierz: €1.50. 30 min.</div>
+              <div class="act-tags"><span class="act-tag">€50 tour</span><span class="act-tag info">2h bajo tierra</span><span class="act-tag">€1.50 autobús</span><span class="act-tag green">Patrimonio UNESCO</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Cracovia — Cena ligera</div>
+              <div class="act-desc">Después de la visita a Wieliczka, el regreso al centro por autobús deja tiempo para una cena ligera en Kazimierz. Si no estás agotado, el barrio de noche —con sus bares de jazz, sus fachadas iluminadas y sus callejuelas medievales— es un lugar completamente diferente al que viste por la tarde.</div>
+              <div class="act-tags"><span class="act-tag info">Regreso fácil en autobús</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bar Stara Zajezdnia — En una antigua cochera de tranvías</div>
+              <div class="act-desc">La cervecería artesanal más original de Cracovia, instalada en una cochera de tranvías del siglo XIX completamente restaurada. Los vagones de tranvía son ahora reservados de comedor, y los andenes son las barras de cervezas artesanales. Ambiente polaco auténtico, cervezas de producción propia entre €3 y €4. El sitio en sí mismo merece la visita.</div>
+              <div class="act-tags"><span class="act-tag">€3–4 cerveza artesanal</span><span class="act-tag green">Espacio único</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Gospoda CK Dezerter</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">ul. Bracka 6</span></td><td>Cocina de inspiración austro-húngara. Menú del día con sopa, segundo y bebida.</td><td>~€10</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Copernicus Hotel Restaurant</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">ul. Kanonicza 16</span></td><td>Terraza en el jardín renacentista. Cocina polaca contemporánea.</td><td>~€35</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Ancora</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Hotel Stary, ul. Szczepańska 5</span></td><td>Restaurante del Hotel Stary, el más elegante de la ciudad. Cocina europea de autor.</td><td>~€60</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Auschwitz-Birkenau (visita solemne)</div>
+            <div class="day-subtitle">Auschwitz I · Birkenau · Podgórze · Fábrica de Schindler</div>
+          </div>
+          <div class="day-meta"><span>🕯️ Memorial</span><span>Día de reflexión</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box warn">
+            <strong>⚠️ Nota importante:</strong> La visita a Auschwitz-Birkenau es emocionalmente agotadora. Es un memorial, no una atracción turística. Reserva este día exclusivamente para esta visita. No planifiques actividades festivas por la noche. Llevar ropa discreta. La entrada es <strong>gratuita</strong>, pero el tour guiado es obligatorio en julio y agosto (€15). <a href="https://auschwitz.org" target="_blank" rel="noopener" style="color:#c9a96e">Reserva en auschwitz.org</a>
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">07:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida temprana a Auschwitz</div>
+              <div class="act-desc">Autobús directo desde la Estación Central de Autobuses de Cracovia (ul. Bosacka), €5 ida. Duración: 1h30. Salir temprano para evitar las masas de tours organizados que llegan a partir de las 10:00. La experiencia es radicalmente distinta con menos gente. El primer autobús sale a las 7:00.</div>
+              <div class="act-tags"><span class="act-tag">€5 autobús</span><span class="act-tag info">1h30 trayecto</span><span class="act-tag warn">Salir temprano</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Auschwitz I y Birkenau — El memorial más importante de la humanidad</div>
+              <div class="act-desc">El campo de concentración y exterminio donde 1.1 millones de personas —el 90% de ellas judíos— fueron asesinadas entre 1940 y 1945. Auschwitz I es el campo original, con los barracones convertidos en bloques de exposición, la cámara de gas y el crematorio original. Birkenau, a 3 km, es la extensión industrial del exterminio: 300 barracones, cuatro grandes crematorios destruidos por los nazis en retirada, los estanques de cenizas. Ver la rampa de selección, las ruinas de los crematorios y las montañas de objetos personales es necesario para comprender el siglo XX. Entrada gratuita. Tour guiado €15 (obligatorio en temporada alta).</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag">€15 tour guiado (jul–ago)</span><span class="act-tag info">Visita: 09:00–14:00</span><span class="act-tag warn">Emocionalmente intenso</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Cracovia — Pausa emocional necesaria</div>
+              <div class="act-desc">El regreso al autobús y el trayecto de vuelta es tiempo de silencio y asimilación. Muchos viajeros no pueden hablar durante las primeras horas. Tómate el tiempo necesario para procesar la visita antes de continuar el día.</div>
+              <div class="act-tags"><span class="act-tag info">Tiempo de asimilación</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Podgórze — El antiguo gueto judío</div>
+              <div class="act-desc">En este barrio de Cracovia, los nazis confinaron a los judíos de la ciudad en 1941 antes de deportarlos. La Fábrica de Óskar Schindler —donde el empresario alemán salvó la vida de 1.200 judíos empleándolos como mano de obra— es hoy un museo histórico extraordinario sobre la ocupación alemana (€18, reservar). El Monumento de las Sillas Vacías, en la plaza Bohaterów Getta, representa los muebles que dejaron los judíos al ser deportados.</div>
+              <div class="act-tags"><span class="act-tag">€18 Fábrica de Schindler</span><span class="act-tag warn">Reservar con antelación</span><span class="act-tag info">2h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena reflexiva en Hamsa Hummus & Happiness</div>
+              <div class="act-desc">Restaurante israelí en Kazimierz, con hummus, falafel, shawarma y platos de la cocina de Oriente Próximo. Poner fin a este día en un restaurante de cocina judía en el barrio histórico judío de Cracovia tiene una dimensión de continuidad cultural que se siente con fuerza después de todo lo visto. €14.</div>
+              <div class="act-tags"><span class="act-tag">~€14</span><span class="act-tag green">Cocina israelí en Kazimierz</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bar Centralny</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">ul. Józefińska 2, Podgórze</span></td><td>Bar de barrio, cocina polaca sencilla. Bigos, kotlet schabowy. Muy local.</td><td>~€8</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Momo</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">ul. Dietla 49</span></td><td>Cocina vegetariana, tranquila. Perfecta para este día. Ensaladas, sopas, wraps.</td><td>~€20</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Szara Gęś</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Rynek Główny 17</span></td><td>Cocina polaca de autor en el corazón del Rynek. Pato confitado, wild boar.</td><td>~€45</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Barrio Nowa Huta y salida</div>
+            <div class="day-subtitle">Nowa Huta · Rynek Główny · Aeropuerto Juan Pablo II</div>
+          </div>
+          <div class="day-meta"><span>✈️ Salida</span><span>Último día</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio Nowa Huta — Ciudad utópica comunista construida por Stalin</div>
+              <div class="act-desc">En 1949, Stalin ordenó construir desde cero una ciudad obrera modelo a las afueras de Cracovia —en parte para diluir el carácter intelectual y religioso de la ciudad. Nowa Huta ("Nueva Fundición") tiene una arquitectura monumental única: avenidas anchas, edificios imponentes de realismo socialista y un teatro de ópera que podría estar en Moscú. El tour en Trabant —el coche de fabricación comunista— es fascinante y divertido a la vez (€20). Imprescindible para entender la guerra fría en Europa del Este.</div>
+              <div class="act-tags"><span class="act-tag">€20 tour en Trabant</span><span class="act-tag info">2h</span><span class="act-tag green">Única en el mundo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último paseo por el Rynek — Compras</div>
+              <div class="act-desc">Dedicar el último paseo por la plaza medieval a buscar los mejores recuerdos de Polonia: ámbar báltico (el "oro del norte", se vende por todos los joyeros de la calle Floriańska), kielbasa ahumada de alta calidad envuelta en vacío para el vuelo, y vodka premium polaco —Żubrówka con hierba de bisonte, Belvedere o LVOV son las mejores opciones. La calle Floriańska, desde el Rynek hasta la Puerta Florian, es la arteria comercial más hermosa de Cracovia.</div>
+              <div class="act-tags"><span class="act-tag green">Ámbar + kielbasa + vodka</span><span class="act-tag info">1h compras</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo de despedida — Bigos</div>
+              <div class="act-desc">El bigos —estofado de col con carne, champiñones, ciruelas y especias— es el plato de despedida perfecto. El mejor tiene dos o tres días de cocción y cada recalentado lo mejora. Cualquier restaurante del centro tiene una versión decente. Pide también un obwarzanek (la rosca de pan trenzado de Cracovia, €0.40 en los carritos de la calle) para llevar al vuelo. €9.</div>
+              <div class="act-tags"><span class="act-tag">~€9</span><span class="act-tag green">Bigos — el plato de despedida</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado al aeropuerto Juan Pablo II</div>
+              <div class="act-desc">Autobús 208 o 902 desde el centro (parada Teatr Bagatela o Jubilat) al aeropuerto: €0.80, 40 minutos. Con vuelo en Ryanair o Wizz Air, llega 2h antes para el control de seguridad. El aeropuerto de Cracovia es relativamente pequeño y los controles son rápidos, pero en verano las colas pueden ser inesperadamente largas.</div>
+              <div class="act-tags"><span class="act-tag">€0.80 autobús</span><span class="act-tag info">40 min al aeropuerto</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Biała Różyczka</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">ul. Szewska 2</span></td><td>Bar de leche en pleno centro. Bigos, barszcz, kopytka. Precios de los años 80.</td><td>~€7</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Fiorentina</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">ul. Starowiślna 22</span></td><td>Cocina polaca con toques modernos. Gran bodega de vinos polacos e importados.</td><td>~€25</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Bottiglieria 1881</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">ul. Bocheńska 5</span></td><td>El mejor restaurante de Cracovia. Cocina de autor, menú degustación, sommelier.</td><td>~€65</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Auschwitz-Birkenau al amanecer</h4><p>El memorial más importante del siglo XX. La visita temprana, antes de que lleguen los grupos organizados, permite una experiencia de silencio y contemplación que es imposible más tarde. Una obligación moral para cualquier viajero europeo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Minas de Sal de Wieliczka — Capilla de Santa Kinga</h4><p>Una catedral tallada completamente en sal a 135 metros bajo tierra. Las esculturas, los frescos en sal y las lámparas de cristal de sal crean un espacio que no se puede anticipar ni preparar mentalmente. Sencillamente no existe nada igual en el mundo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Rynek Główny al atardecer</h4><p>La plaza más grande de la Europa medieval, iluminada con una luz dorada, con el sonido del trompetista en la torre de Santa María y los cafés abriendo sus terrazas. La vida polaca en su mejor momento.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Castillo de Wawel — Sala de los Embajadores</h4><p>Las 30 cabezas talladas en el techo que, según la leyenda, hablaban y daban consejos a los reyes. Solo sobrevivieron 30 de las 194 originales —el resto fueron destruidas por los nazis. Ver las que quedan es comprender el alcance de lo que se perdió.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Barrio de Kazimierz — la atmósfera de la tarde</h4><p>Cuando el turismo se marcha y los locales salen, Kazimierz se convierte en el barrio más auténtico de Cracovia. Los cafés de klezmer, las librerías anticuarias y los bares de diseño en edificios históricos crean una atmósfera completamente única en Europa.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Tour en Trabant por Nowa Huta</h4><p>La experiencia más insólita y divertida de Cracovia: recorrer una ciudad utópica estalinista en el coche icónico del comunismo europeo del este. Bizarro, fascinante y absolutamente único en el mundo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Fábrica de Schindler</h4><p>El museo más innovador de Polonia. La historia de Óskar Schindler y los 1.200 judíos que salvó se cuenta a través de instalaciones inmersivas que recrean la ocupación alemana de Cracovia. Emocionalmente poderoso y narrativamente brillante.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Żurek — La sopa más compleja de Europa</h4><p>El żurek, sopa ácida de centeno fermentado con huevo duro, kielbasa y ajo, servida en pan, es una de las experiencias gastronómicas más únicas de Europa del Este. El primer cucharón cambia la percepción de lo que puede ser una sopa.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Synagoga Remu'h y su cementerio medieval</h4><p>El muro de fragmentos de lápidas medievales recuperadas después de la guerra —los nazis las usaron para pavimentar calles— es uno de los monumentos más conmovedores de Europa. El silencio del recinto lo hace aún más poderoso.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Aperitivo en la calle Szeroka al caer la tarde</h4><p>Una cerveza polaca en la terraza de la calle más icónica de Kazimierz, con músicos de klezmer, fachadas del siglo XVI y la mezcla de turistas y locales que hace de Cracovia uno de los destinos más vibrantes de Europa.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍽️ Gastronomía polaca</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Plato Nacional · Polonia</div><div class="gastro-title">Pierogi</div><div class="gastro-desc">Empanadillas de masa hervida rellenas de patata y queso blanco (ruskie), carne picada con chucrut, o cerdo con champiñones. Se sirven con cebolla frita y crema agria. El plato más popular de Polonia. Los mejores en Kazimierz: Bar Mleczny o Pierogi Mr. Pierogi. €5–8.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Sopa · Especialidad de Cracovia</div><div class="gastro-title">Żurek</div><div class="gastro-desc">Sopa ácida elaborada con harina de centeno fermentada durante días. Se sirve con huevo duro, kielbasa ahumada y ajo, a menudo dentro de una hogaza de pan vaciada. El sabor es complejo, ácido, ahumado y saciante. Sin duda la mejor sopa de Europa del Este y una de las experiencias culinarias imprescindibles del viaje.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Estofado · Plato tradicional</div><div class="gastro-title">Bigos</div><div class="gastro-desc">El "estofado del cazador": col blanca y chucrut cocinados durante horas con carne de cerdo, salchicha, champiñones secos, ciruelas, laurel y pimienta. El secreto es que mejora con cada recalentado —los polacos lo hacen durante días. Un buen bigos tiene mínimo tres días de cocción. €8.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Segundo plato · Omnipresente</div><div class="gastro-title">Kotlet Schabowy</div><div class="gastro-desc">Filete de lomo de cerdo empanado y frito, el equivalente polaco del wiener schnitzel. Se sirve con repollo estofado o ensalada de remolacha y kopytka (ñoquis de patata). Presente en todos los restaurantes polacos. Plato de origen campesino que pasó a ser símbolo de la cocina polaca entera. €6.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Panadería · Especialidad de Cracovia</div><div class="gastro-title">Obwarzanek Krakowski</div><div class="gastro-desc">La rosca de pan trenzado con semillas de sésamo o amapola que los vendedores ambulantes ofrecen en los carritos amarillos de todo el centro de Cracovia. Reconocida como Indicación Geográfica Protegida por la UE: solo puede llamarse obwarzanek la que se fabrica en Cracovia según la receta tradicional. €0.40 — el mejor €0.40 del viaje.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Bebida · Orgullo nacional</div><div class="gastro-title">Wódka polaca</div><div class="gastro-desc">El vodka polaco es reconocido mundialmente como el mejor. Tres etiquetas imprescindibles: Żubrówka (con hierba de bisonte del bosque de Białowieża, aroma herbal único), Belvedere (premium, centeno del sur de Polonia) y LVOV (el más antiguo de la región). €2/chupito en bares. €8–15 la botella para llevar.</div></div>
+      </div>
+    </section>
+
+    <!-- ── FRASES ── -->
+    <section id="frases" class="itin-section">
+      <h2 class="section-heading">🗣️ Frases útiles en polaco</h2>
+      <div class="phrases-grid">
+        <div class="phrase-card"><div class="phrase-es">Hola (informal)</div><div class="phrase-local">Cześć</div><div class="phrase-pron">"cheshch"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Buenos días (formal)</div><div class="phrase-local">Dzień dobry</div><div class="phrase-pron">"jen DOB-rih"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Gracias</div><div class="phrase-local">Dziękuję</div><div class="phrase-pron">"jen-KOO-yeh"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Por favor</div><div class="phrase-local">Proszę</div><div class="phrase-pron">"PRO-sheh"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Cuánto cuesta?</div><div class="phrase-local">Ile to kosztuje?</div><div class="phrase-pron">"EE-leh toh kosh-TOO-yeh"</div></div>
+        <div class="phrase-card"><div class="phrase-es">La cuenta</div><div class="phrase-local">Rachunek proszę</div><div class="phrase-pron">"ra-KHOO-nek PRO-sheh"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Una cerveza</div><div class="phrase-local">Jedno piwo</div><div class="phrase-pron">"YED-noh PEE-voh"</div></div>
+        <div class="phrase-card"><div class="phrase-es">No entiendo</div><div class="phrase-local">Nie rozumiem</div><div class="phrase-pron">"nyeh ro-ZOO-myem"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Salud (al brindar)</div><div class="phrase-local">Na zdrowie</div><div class="phrase-pron">"nah ZDRO-vyeh"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¡Ayuda!</div><div class="phrase-local">Pomocy!</div><div class="phrase-pron">"po-MO-tsi"</div></div>
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos, ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía</div><div class="emerg-value">997</div><div class="emerg-note">Policía nacional polaca</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">999</div><div class="emerg-note">Servicio de urgencias médicas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Bomberos</div><div class="emerg-value">998</div><div class="emerg-note">Servicio de bomberos</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital universitario</div><div class="emerg-value">+48 12 424 7000</div><div class="emerg-note">Szpital Uniwersytecki — urgencias 24h</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada española en Varsovia</div><div class="emerg-value">+48 22 583 4000</div><div class="emerg-note">Calle Mysia 5, Varsovia — urgencias consulares</div></div>
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje con cobertura médica</div>
+            <div class="check-item"><div class="check-box"></div>Efectivo en zlotys (PLN) — Polonia no usa euro</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">✈️ Reservas confirmadas</div>
+            <div class="check-item"><div class="check-box"></div>Vuelos Cracovia (KRK)</div>
+            <div class="check-item"><div class="check-box"></div><strong>Auschwitz — reservar en auschwitz.org</strong></div>
+            <div class="check-item"><div class="check-box"></div>Fábrica de Schindler (reservar online)</div>
+            <div class="check-item"><div class="check-box"></div>Alojamiento todas las noches</div>
+            <div class="check-item"><div class="check-box"></div>Minas de Wieliczka (entrada incluida en tour €50)</div>
+            <div class="check-item"><div class="check-box"></div>Tour en Trabant por Nowa Huta (si interesa)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">🎒 Equipaje</div>
+            <div class="check-item"><div class="check-box"></div>Calzado cómodo para adoquines medievales</div>
+            <div class="check-item"><div class="check-box"></div>Abrigo — Cracovia es fría incluso en verano por la noche</div>
+            <div class="check-item"><div class="check-box"></div>Ropa discreta y respetuosa para Auschwitz</div>
+            <div class="check-item"><div class="check-box"></div>Paraguas o chubasquero ligero</div>
+            <div class="check-item"><div class="check-box"></div>Pañuelos — la visita a Auschwitz los hace necesarios</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">📱 Apps esenciales</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps — descarga offline Cracovia</div>
+            <div class="check-item"><div class="check-box"></div>Jakdojade — transporte público de Cracovia</div>
+            <div class="check-item"><div class="check-box"></div>Revolut o N26 — tarjeta sin comisiones en zlotys</div>
+            <div class="check-item"><div class="check-box"></div>Google Translate — polski es difícil</div>
+            <div class="check-item"><div class="check-box"></div>Bolt o Free Now — taxi app en Cracovia</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario a tu medida?</h3>
+      <p>Dile a Routlo tus fechas, tu presupuesto y cuánto quieres caminar. La IA crea tu plan en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar con IA
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com, Skyscanner y otros servicios pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar. Los precios en este itinerario están expresados en euros pero Polonia usa el złoty (PLN). Tipo de cambio aprox.: 1€ = 4.25 PLN (mayo 2026).
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.5);text-decoration:none;font-size:0.85rem;margin-bottom:16px">← Ver todos los itinerarios</a>
+    <div style="font-size:0.78rem;color:rgba(237,238,242,0.3)">© 2026 Routlo · Hecho con IA para viajeros del mundo</div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+    const sections = document.querySelectorAll('.itin-section[id], .day-card[id]');
+    const links = document.querySelectorAll('.toc-list a');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }, { passive: true });
+</script>
+</body>
+</html>

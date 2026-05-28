@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Budapest, Hungría — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 5 días en Budapest: Castillo de Buda, Parlamento, balnearios termales, excursión al Danubio y ruin bars. Presupuesto, hoteles y consejos insider de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Base (fallback si shared.css no carga en file:// / content://) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav.scrolled { background:rgba(4,8,16,0.95); }
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d1e3d 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a2a10 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d1a1a 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg,#050810 0%,#0d1535 40%,#1a2875 70%,rgba(201,169,110,0.22) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .phrases-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .phrase-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px; }
+    .phrase-es { font-size:0.78rem;color:rgba(237,238,242,0.5);margin-bottom:4px; }
+    .phrase-local { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:3px; }
+    .phrase-pron { font-size:0.75rem;color:#c9a96e;font-style:italic; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* ── Tablet ── */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+    }
+    /* ── Mobile ── */
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    /* ── Small mobile ── */
+    @media screen and (max-width: 640px) {
+      nav { padding: 0 14px !important; }
+      nav ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .alert-box { font-size: 0.8rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .act-desc { font-size: 0.82rem !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .phrase-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+      .disclosure { padding: 12px 14px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo — Inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;">
+  </a>
+  <ul style="display:flex;align-items:center;gap:4px;list-style:none" role="list">
+    <li><a href="../index.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Inicio</a></li>
+    <li><a href="../itinerarios.html" style="font-size:0.875rem;font-weight:500;color:#c9a96e;text-decoration:none;padding:8px 14px;border-radius:8px">Itinerarios</a></li>
+    <li><a href="../mapa.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Mapa</a></li>
+    <li><a href="../chatbot.html" style="font-size:0.875rem;font-weight:600;color:#0a0a0a;background:linear-gradient(135deg,#c9a96e,#a07840);padding:9px 20px;border-radius:10px;text-decoration:none">Planificador IA</a></li>
+  </ul>
+</nav>
+
+<a href="#main-content" style="position:absolute;top:-100px;left:0;background:#c9a96e;color:#0a0a0a;padding:8px 16px;border-radius:0 0 8px 0;font-weight:600;z-index:999;transition:top 0.2s" onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Saltar al contenido</a>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(74,127,165,0.1);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Budapest</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Budapest</h1>
+  <p class="dest-country">Hungría · Buda · Pest · Danubio</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 5 días / 4 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Amigos / Solo</span>
+    <span class="dest-badge gold" role="listitem">💶 €650–1,100/persona</span>
+    <span class="dest-badge" role="listitem">🌍 Europa · Hungría</span>
+    <span class="dest-badge" role="listitem">♨️ Termas + Historia + Gastronomía</span>
+    <a href="https://www.skyscanner.es/transport/flights/MAD/BUD/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">5 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">1 destino</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€650–1,100</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Abr–Oct</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Buda</a></li>
+        <li><a href="#dia2">Día 2 · Pest</a></li>
+        <li><a href="#dia3">Día 3 · Termas</a></li>
+        <li><a href="#dia4">Día 4 · Danubio</a></li>
+        <li><a href="#dia5">Día 5 · Ópera</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#frases">Frases útiles</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Budapest es la capital más sorprendente de Europa Central: una ciudad partida en dos por el Danubio que une la colina medieval de Buda con la vibrante metrópoli plana de Pest. En cinco días descubrirás el Parlamento más bello del mundo, el Bastión de los Pescadores con sus torres neo-románicas, los balnearios termales más espectaculares del continente —Budapest se asienta sobre 123 fuentes termales— y los legendarios ruin bars que convirtieron un barrio judío en ruinas en el destino de fiesta más original de Europa. Todo ello a precios que hacen que Italia o Francia parezcan un lujo inalcanzable. Budapest es, en 2026, el mejor destino calidad-precio de Europa sin discusión posible.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏰</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Buda histórico</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1 y parte del 5</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">♨️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Pest y termas</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 2–3</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🛶</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Curva del Danubio</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 4</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Económico</th><th>Confort</th><th>Premium</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo A/R (desde Madrid)</td><td>€60–120</td><td>€160–250</td><td>€400+</td><td>Wizz Air/Ryanair desde Madrid. 2h30min</td></tr>
+            <tr><td>🏨 Alojamiento (4 noches)</td><td>€112</td><td>€640</td><td>€1,600</td><td></td></tr>
+            <tr><td>🍽️ Comidas (5 días)</td><td>€90</td><td>€200</td><td>€450</td><td>~18€/40€/90€ por día (todo es barato en Hungría)</td></tr>
+            <tr><td>🚇 Transporte local</td><td>€15</td><td>€30</td><td>€60</td><td>Metro + autobús vs taxi</td></tr>
+            <tr><td>🎟️ Entradas</td><td>€50</td><td>€80</td><td>€120</td><td>Balnearios + Parlamento + museos</td></tr>
+            <tr><td>🛶 Tours</td><td>€0</td><td>€40</td><td>€100</td><td>Crucero + visitas guiadas</td></tr>
+            <tr><td>🔄 Imprevistos (10%)</td><td>€33</td><td>€120</td><td>€280</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€360</strong></td><td><strong>~€1,310</strong></td><td><strong>~€3,010</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo:</strong> Hungría usa el forinto (HUF), no el euro. 1 EUR ≈ 395 HUF. Retira efectivo en cajeros (evita los de aeropuerto) o paga con tarjeta. Los precios en euros son orientativos. Budapest es una de las capitales más baratas de la UE: una cerveza artesanal cuesta €1.50, un menú del día €8–12.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚇 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Vuelos</div>
+          <div class="transport-content">
+            Aeropuerto <strong>Budapest Liszt Ferenc (BUD)</strong>, a 24 km del centro. Wizz Air y Ryanair operan desde Madrid con precios desde €30 de ida. Reserva con 6–8 semanas de antelación. El aeropuerto solo tiene una terminal principal. Evita el taxi del aeropuerto (~€35–40) — el metro es mucho más económico.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚇 Metro al centro</div>
+          <div class="transport-content">
+            <strong>Línea M3 (azul)</strong> conecta el aeropuerto con el centro vía combinación: autobús 200E hasta Kőbánya-Kispest (€0.90, 30 min), luego metro M3 hasta Deák Ferenc tér (~15 min). Total <strong>€1.80</strong> y 45 min. Pase de 24 horas <strong>€6.60</strong>, pase de 72 horas €12.50.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Transporte urbano</div>
+          <div class="transport-content">
+            La red BKK tiene <strong>4 líneas de metro + tranvías + autobuses</strong>. El billete sencillo €0.90 (validar al entrar — multa de €30 si no). El <strong>tranvía 2</strong> recorre el paseo del Danubio en Pest con vistas al Parlamento. El <strong>tranvía 19</strong> en Buda es igualmente espectacular. Compra billetes en máquinas (aceptan tarjeta).
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚲 Bicicletas MOL Bubi</div>
+          <div class="transport-content">
+            Sistema de bici pública <strong>MOL Bubi</strong> — ideal para la Isla Margarita y el paseo del Danubio. Registro en la app o en las estaciones. <strong>€2/hora</strong>. Primera media hora gratis con suscripción de 24h (€3). Más de 150 estaciones en toda la ciudad. No recomendable para Buda (muchas pendientes).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Budget</div>
+          <div class="hotel-name">Maverick Urban Lodge</div>
+          <div class="hotel-zone">Pest centro</div>
+          <div class="hotel-price">~€28/noche</div>
+          <ul class="hotel-features">
+            <li>Hostel boutique con diseño moderno</li>
+            <li>Desayuno incluido</li>
+            <li>Ubicación perfecta junto al mercado</li>
+            <li>Ambiente social, bar en el local</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/hu/maverick-urban-lodge.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐⭐ Confort</div>
+          <div class="hotel-name">Aria Hotel Budapest</div>
+          <div class="hotel-zone">Centro histórico</div>
+          <div class="hotel-price">~€160/noche</div>
+          <ul class="hotel-features">
+            <li>Temática musical, rooftop bar con vistas</li>
+            <li>Spa y piscina interior</li>
+            <li>5 estrellas a precio de 4</li>
+            <li>A 2 min de la Basílica de San Esteban</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/hu/aria-budapest.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Four Seasons Gresham Palace</div>
+          <div class="hotel-zone">Junto al Puente de las Cadenas</div>
+          <div class="hotel-price">~€400/noche</div>
+          <ul class="hotel-features">
+            <li>Palacio art nouveau de 1906 restaurado</li>
+            <li>Vistas directas al Puente de las Cadenas</li>
+            <li>Spa Gresham y restaurante estrella</li>
+            <li>El hotel más icónico de Budapest</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/hu/four-seasons-gresham-palace.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS DEL ITINERARIO ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Buda: Castillo y panorámicas</div>
+            <div class="day-subtitle">Bastión de los Pescadores · Palacio Real · Puente de las Cadenas</div>
+          </div>
+          <div class="day-meta"><span>🏰 Buda</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bastión de los Pescadores — Torres neo-románicas con la mejor vista del Parlamento</div>
+              <div class="act-desc">Construido entre 1895 y 1902, el Bastión de los Pescadores es la estructura más fotogénica de Budapest. Sus siete torres en forma de tienda cónica representan las siete tribus magiares fundadoras de Hungría. Desde aquí la vista del Parlamento al otro lado del Danubio es absolutamente perfecta, especialmente con la luz de la mañana. El exterior es gratuito; la galería interior cuesta €3 pero vale la pena para las vistas desde arriba.</div>
+              <div class="act-tags"><span class="act-tag">€3 interior</span><span class="act-tag green">Exterior gratis</span><span class="act-tag info">1h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Palacio Real y Museo Nacional de Historia</div>
+              <div class="act-desc">El enorme complejo palaciego domina la colina de Buda desde el siglo XIII. La cúpula central de 80 metros es impresionante. En su interior alberga el Museo Nacional de Historia de Hungría con colecciones que van desde la conquista magiar hasta el siglo XX. Los jardines exteriores son gratuitos y ofrecen otra perspectiva del Danubio y Pest.</div>
+              <div class="act-tags"><span class="act-tag">€5 museo</span><span class="act-tag info">1.5h</span><span class="act-tag green">Jardines gratis</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Buda — Gulyás auténtico en Gundel Étterem</div>
+              <div class="act-desc">El gulyás (pronunciado "goulash") húngaro es muy diferente al que conocemos en España: aquí es una sopa densa con ternera, paprika dulce, patatas y zanahorias, sin nata ni harina de espesante. En cualquier étterem (restaurante) del barrio del castillo encontrarás el menú del día con sopa + plato principal + bebida por €10–14. Gundel es la opción con más historia.</div>
+              <div class="act-tags"><span class="act-tag">Menú del día €12</span><span class="act-tag info">Gulyás auténtico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Iglesia de Matías — Interior con frescos únicos</div>
+              <div class="act-desc">La Iglesia de la Asunción de Matías, conocida como Iglesia de Matías, data del siglo XIV aunque fue reconstruida en estilo neo-gótico en 1896. Su interior es extraordinario: los frescos de Bertalan Székely y Károly Lotz cubren cada centímetro de las paredes con patrones geométricos húngaros en azul, rojo y dorado. Un interior completamente diferente a cualquier iglesia occidental.</div>
+              <div class="act-tags"><span class="act-tag">€3.50</span><span class="act-tag info">45 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Funicular de Buda — el histórico ascensor de la colina</div>
+              <div class="act-desc">El Sikló (funicular) de Budapest opera desde 1870 conectando el Puente de las Cadenas con el Palacio Real. Solo tiene dos vagones que se contrapeso entre sí. Es una experiencia histórica única aunque el trayecto dura apenas 90 segundos. Sube en funicular (€6 ida) y baja caminando por el Jardín de Varkert, los jardines terraceados del palacio con magnolias centenarias.</div>
+              <div class="act-tags"><span class="act-tag">€6 ida</span><span class="act-tag info">90 segundos de trayecto</span><span class="act-tag green">Bajada a pie gratis</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Puente de las Cadenas — el símbolo de Budapest</div>
+              <div class="act-desc">El Széchenyi Lánchíd fue el primer puente permanente sobre el Danubio en Budapest, inaugurado en 1849 por el Conde Széchenyi. Sus leones de piedra custodian ambas entradas. Cruzarlo a pie al atardecer, con el Parlamento iluminando el lado de Pest y el Palacio Real brillando desde Buda, es uno de los mejores momentos del viaje. Completamente gratuito.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">20 min cruzar</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Muzeum Café — ambiente del siglo XIX</div>
+              <div class="act-desc">El Muzeum Café abrió en 1885 y es uno de los cafés más históricos de Pest. Tras cruzar el puente a pie, este restaurante de estilo vienés sirve cocina húngara tradicional en un interior de estucos, espejos y lámparas de araña que no ha cambiado en un siglo. El foie gras húngaro con cebolla caramelizada y el pörkölt son imprescindibles.</div>
+              <div class="act-tags"><span class="act-tag">~€20</span><span class="act-tag info">Ambiente histórico</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Langos Büfé</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Barrio del Castillo</span></td><td>Lángos con crema agria y queso. El street food más húngaro que existe.</td><td>~€5</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Klassz</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Andrássy út</span></td><td>Foie gras húngaro + vinos naturales de la región de Eger.</td><td>~€28</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Gundel</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Parque de la Ciudad</span></td><td>Palacsinta Gundel (crepe de nueces con salsa de chocolate flambeada). Desde 1894.</td><td>~€70</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Pest: Parlamento y ruin bars</div>
+            <div class="day-subtitle">Parlamento · Gran Sinagoga · Mercado Central · Szimpla Kert</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Pest</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box warn">
+            <strong>⚠️ Importante:</strong> La visita al Parlamento requiere <strong>reserva online obligatoria</strong>. Las entradas se agotan con días o semanas de antelación en temporada alta. Reserva en <a href="https://www.jegy.hu" target="_blank" rel="noopener" style="color:#c9a96e">jegy.hu</a> antes de viajar. Solo se accede con visita guiada en grupos horarios.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Parlamento de Budapest — el más bello del mundo</div>
+              <div class="act-desc">Construido entre 1885 y 1904 en estilo neo-gótico, el Parlamento húngaro es considerado por muchos arquitectos el edificio más hermoso del mundo. Con 268 metros de fachada y 96 metros de altura (el mismo año de la fundación de Hungría: 896 d.C.), sus interiores son de una opulencia irreproducible: techos dorados, alfombras rojas, la Sala de la Cúpula con la Corona de San Esteban. La visita guiada dura 45 minutos y es imprescindible.</div>
+              <div class="act-tags"><span class="act-tag">€20</span><span class="act-tag warn">Reservar online</span><span class="act-tag info">1h visita guiada</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Gran Sinagoga de Dohány — la más grande de Europa</div>
+              <div class="act-desc">La Sinagoga de Dohány Street, inaugurada en 1859, es la más grande de Europa y la segunda del mundo, con capacidad para 3.000 personas. Su arquitectura morisca y el interior con columnas de hierro fundido son únicos en el continente. En el jardín trasero se encuentra el árbol metálico del Holocausto, con hojas de acero grabadas con nombres de víctimas. Una visita de enorme carga histórica y belleza arquitectónica.</div>
+              <div class="act-tags"><span class="act-tag">€12</span><span class="act-tag info">1.5h</span><span class="act-tag">Historia del barrio judío</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado Central (Nagy Vásárcsarnok) — arte nuevo de 1897</div>
+              <div class="act-desc">El Gran Mercado cubierto de Budapest es un edificio de arte nouveau con tejado de cerámica Zsolnay de 1897. En la planta baja: carnicerías, puestos de especias, paprika en todas las variedades, foie gras, salami Pick y embutidos húngaros. En el piso de arriba hay restaurantes de cocina húngara donde comer por €7–10. Imprescindible para llevarse paprika y foie de vacío a casa.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratis</span><span class="act-tag">Almuerzo €8</span><span class="act-tag info">Arte nouveau 1897</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Avenida Andrássy — el Champs-Élysées de Budapest</div>
+              <div class="act-desc">La Andrássy út es el bulevar más elegante de Budapest, Patrimonio de la Humanidad UNESCO desde 2002. Sus 2.3 km están flanqueados por mansiones de la Belle Époque, tiendas de lujo, la Ópera Estatal y la Casa del Terror (el antiguo cuartel general de la Gestapo y después de la policía secreta comunista, hoy museo). La Casa del Terror (€8) es uno de los museos más impactantes de Europa.</div>
+              <div class="act-tags"><span class="act-tag green">Paseo gratis</span><span class="act-tag">€8 Casa del Terror</span><span class="act-tag info">Patrimonio UNESCO</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Hősök tere (Plaza de los Héroes) y Parque de la Ciudad</div>
+              <div class="act-desc">La Plaza de los Héroes es la más grande de Budapest, construida para el milenario de la conquista magiar en 1896. Las columnas con las estatuas de los siete caudillos magiares originales y los grandes reyes de Hungría son impresionantes. Detrás está el Parque de la Ciudad (Városliget) con el castillo Vajdahunyad, un capricho arquitectónico que combina románico, gótico, renacentista y barroco en un único edificio.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1.5h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ruin bar en Szimpla Kert — el bar más famoso del mundo</div>
+              <div class="act-desc">Szimpla Kert abrió en 2002 en una fábrica abandonada del barrio judío y se convirtió en el inventor del concepto ruin bar (bar en ruinas): muebles reciclados, coches empotrados en paredes, arte urbano y decenas de ambientes en el mismo espacio. Hoy es el bar más visitado de Europa Central. Llega a las 20h para ver el espacio sin saturación — a las 22h la cola para entrar es larga. Cerveza €2.50.</div>
+              <div class="act-tags"><span class="act-tag">Cerveza €2.50</span><span class="act-tag green">Entrada gratis</span><span class="act-tag info">Llegar a las 20h</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Kazár</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">VII. Kerület</span></td><td>Menú del día húngaro con sopa + plato principal. Frecuentado por locales.</td><td>~€10</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Borkonyha</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Sas utca · Estrella Michelin</span></td><td>Cocina húngara contemporánea. Lista de vinos de Tokaj impresionante.</td><td>~€35</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Onyx</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Vörösmarty tér · 2 estrellas Michelin</span></td><td>Menú degustación de cocina magiar de vanguardia. Reservar con semanas.</td><td>~€90</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Balnearios termales</div>
+            <div class="day-subtitle">Széchenyi · Isla Margarita · Gellért · Colina Gellért</div>
+          </div>
+          <div class="day-meta"><span>♨️ Termas</span><span>Día relajado</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Consejo termal:</strong> Budapest tiene 123 fuentes termales y 10 balnearios públicos. Los edificios son tan espectaculares como el interior de cualquier museo. Lleva bañador, chanclas, candado para la taquilla y una toalla. La temperatura del agua exterior está entre 26°C y 38°C según las piscinas.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Balneario Széchenyi — el más grande y fotogénico de Europa</div>
+              <div class="act-desc">El Széchenyi Fürdő, inaugurado en 1913, es el balneario más grande de Europa y el más fotografiado del mundo: sus piscinas exteriores de color azul brillante en un palacio barroco amarillo son la imagen icónica de Budapest. Tres piscinas exteriores y 15 interiores a temperaturas entre 26°C y 40°C. Los domingos por la mañana celebran el "Sparty" (spa-party) con DJ. Abre a las 6h — llega antes de las 10h para evitar colas en taquilla.</div>
+              <div class="act-tags"><span class="act-tag">€22 entrada con taquilla</span><span class="act-tag info">Abre a las 6h</span><span class="act-tag warn">Lleva chanclas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Alquiler de bicicletas MOL Bubi — Isla Margarita en bici</div>
+              <div class="act-desc">La Isla Margarita (Margit-sziget) es un parque de 2.5 kilómetros en medio del Danubio, completamente libre de coches. Conectada al norte con el puente Árpád y al sur con el puente Margarita, es donde los budapestinos corren, hacen yoga y toman el sol. Recórrela en bicicleta MOL Bubi (€2/hora) — hay estaciones en ambas entradas. En el centro hay ruinas de una abadía del siglo XIII y una torre musical.</div>
+              <div class="act-tags"><span class="act-tag">€2/hora bici</span><span class="act-tag green">Sin coches</span><span class="act-tag info">2.5 km isla</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en la Isla Margarita</div>
+              <div class="act-desc">La isla tiene varios quioscos y restaurantes frente al río. El lángos (buñuelo frito) recién hecho es la opción más auténtica y económica por €3. También hay terrazas con vistas al Danubio donde comer hamburguesas húngaras o ensaladas frescas por €8–12. El ambiente es completamente local — pocas zonas de Budapest tan alejadas del turismo.</div>
+              <div class="act-tags"><span class="act-tag">Lángos €3</span><span class="act-tag info">Ambiente local</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Balneario Gellért — arquitectura art nouveau impresionante</div>
+              <div class="act-desc">El Gellért Fürdő, abierto en 1918, es el más romántico y lujoso de Budapest. Su fachada art nouveau con mosaicos azules y su interior con columnas de mármol, vidrieras emplomadas y piscinas con olas artificiales son de una belleza imposible. Más caro que el Széchenyi (€28) pero la experiencia arquitectónica no tiene precio. La piscina exterior con sol de tarde es especialmente hermosa.</div>
+              <div class="act-tags"><span class="act-tag">€28</span><span class="act-tag info">Art nouveau 1918</span><span class="act-tag green">Más romántico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Colina Gellért al atardecer — panorámica de la ciudad entera</div>
+              <div class="act-desc">La Ciudadela de Gellért, a 235 metros sobre el Danubio, ofrece la panorámica más completa de Budapest: el Parlamento al norte, el Puente de las Cadenas al centro, los puentes en fila y las dos orillas perfectamente visibles. Son 20 minutos a pie desde el balneario. La estatua de la Libertad (construida por los soviéticos en 1947, hoy resignificada) corona la colina. Gratis y accesible.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">20 min a pie</span><span class="act-tag">Mejor vista de la ciudad</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Kadarka — vinos naturales húngaros</div>
+              <div class="act-desc">Kadarka es una de las mejores wine bars de Budapest, especializada en vinos naturales húngaros de las regiones de Tokaj, Villány y Eger. La tabla de embutidos húngaros — mangalica (cerdo autóctono) curado, queso de oveja y panes artesanales — es perfecta para compartir. Ambiente joven, precios muy razonables y una selección de vinos que cambia según la temporada.</div>
+              <div class="act-tags"><span class="act-tag">~€25</span><span class="act-tag info">Vinos naturales húngaros</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Kantin</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Ráday utca</span></td><td>Menú del día casero con pörkölt y noquis húngaros (nokedli). Colas de locales a mediodía.</td><td>~€12</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Babel</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Piarista köz · Estrella Michelin</span></td><td>Cocina húngara moderna con productos de mercado. Menú de mediodía excelente precio.</td><td>~€40</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Stand</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Széll Kálmán tér · Estrella Michelin</span></td><td>El mejor restaurante fino de Budapest. Menú degustación de alta cocina magiar.</td><td>~€80</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Excursión a Szentendre y la curva del Danubio</div>
+            <div class="day-subtitle">Szentendre · Visegrád · Crucero nocturno</div>
+          </div>
+          <div class="day-meta"><span>🛶 Danubio</span><span>Excursión de día</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tren HÉV a Szentendre — €1.80 desde Budapest</div>
+              <div class="act-desc">El tren de cercanías HÉV (línea H5) sale de la estación de Batthyány tér (metro M2) cada 10–15 minutos y llega a Szentendre en 45 minutos. Billete €1.80 solo ida. Evita el tour organizado en autobús — el tren es más barato, más frecuente y más independiente. Desde la estación de Szentendre al centro son 10 minutos a pie.</div>
+              <div class="act-tags"><span class="act-tag">€1.80 ida</span><span class="act-tag info">45 min</span><span class="act-tag">Sale de Batthyány tér</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Szentendre — el pueblo serbio a 20 km de Budapest</div>
+              <div class="act-desc">Szentendre es el pueblo más pintoresco de los alrededores de Budapest: calles empedradas de colores pastel, iglesias ortodoxas serbias del siglo XVIII, galerías de arte, museos de marzipan y tiendas de artesanía. Fue fundado por refugiados serbios en el siglo XVII. El Museo de Arte Serbio (€4) y el Museo del Marzipan (€3) son sus mayores atracciones. Dedícale 3 horas sin prisa.</div>
+              <div class="act-tags"><span class="act-tag">Museos €3–4</span><span class="act-tag info">3h para explorar</span><span class="act-tag green">Pueblo único</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Szentendre — palacsinta con cereza</div>
+              <div class="act-desc">Los restaurantes de Szentendre sirven cocina húngara y serbia en terrazas con flores. La especialidad local son las palacsinta (crepes húngaras) rellenas de cereza o mermelada de albaricoque con nata montada, por €3–5. El Régimódi Étterem y el Rab Ráby tienen excelentes menús del día. La paprika local de Szentendre es considerada la mejor del país — llévate un paquete.</div>
+              <div class="act-tags"><span class="act-tag">Almuerzo ~€8</span><span class="act-tag info">Palacsinta locales</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Visegrád — fortaleza medieval en la curva del Danubio</div>
+              <div class="act-desc">A 30 km de Szentendre (autobús €3 desde la plaza principal), Visegrád domina la curva más espectacular del Danubio desde una fortaleza del siglo XIII. El Palacio Real de Matías Corvino (€4) fue uno de los más lujosos de Europa en el siglo XV. Desde la Torre Salomón, la vista de la curva del Danubio —el Dunakanyar— es absolutamente única. Alternativa: Esztergom con la catedral más grande de Hungría (autobús directo).</div>
+              <div class="act-tags"><span class="act-tag">Autobús €3</span><span class="act-tag">€4 entrada</span><span class="act-tag info">Vista del Dunakanyar</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Budapest — barco por el Danubio opcional</div>
+              <div class="act-desc">El regreso en barco desde Szentendre o Visegrád a Budapest es la opción más pintoresca (€7, 1.5–2h). El barco pasa por la curva del Danubio con las colinas verdes a ambos lados. Desde finales de mayo hasta septiembre hay servicio regular. La alternativa es el tren HÉV de vuelta desde Szentendre en 45 minutos.</div>
+              <div class="act-tags"><span class="act-tag">Barco €7</span><span class="act-tag info">1.5–2h por río</span><span class="act-tag green">Experiencia única</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Crucero nocturno por el Danubio — Budapest iluminada</div>
+              <div class="act-desc">Los cruceros nocturnos por el Danubio son la manera más impresionante de ver Budapest: el Parlamento, el Castillo, el Puente de las Cadenas y todos los puentes iluminados en su reflejo en el agua. Las embarcaciones salen del Vigadó tér cada hora en verano. Duración 1 hora. Precio entre €15 y €30 según empresa y si incluye bebida. Reserva online o compra en el embarcadero.</div>
+              <div class="act-tags"><span class="act-tag">€15–30</span><span class="act-tag info">1 hora</span><span class="act-tag green">Las mejores fotos nocturnas</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Koleves</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Kazinczy utca, barrio judío</span></td><td>Cocina judía-húngara. El cholent (guiso de judías) y el gefilte fish son imprescindibles.</td><td>~€14</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Costes Downtown</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Ferenciek tere</span></td><td>Bistró del chef Tamás Széll. Cocina húngara de temporada a precios razonables.</td><td>~€45</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Costes</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Ráday utca · Estrella Michelin</span></td><td>El primer restaurante con estrella Michelin de Hungría. Menú degustación húngaro.</td><td>~€95</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 5 -->
+      <div class="day-card" id="dia5">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Ópera, mercados y salida</div>
+            <div class="day-subtitle">Ópera Estatal · New York Kávéház · Traslado aeropuerto</div>
+          </div>
+          <div class="day-meta"><span>✈️ Salida</span><span>Mañana + vuelo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ópera Estatal de Hungría — más lujosa que Viena o París</div>
+              <div class="act-desc">La Magyar Állami Operaház, construida en 1884, es considerada por muchos la ópera más lujosa del mundo: su interior dorado con frescos, el telón de terciopelo rojo, la araña de 2.7 toneladas y los palcos con boiseries talladas dejan sin palabras. La visita guiada diaria (9h, 11h y 15h) dura 45 minutos. Reservar en la web. Interior más ornamentado que la Ópera de Viena o la Garnier de París.</div>
+              <div class="act-tags"><span class="act-tag">€13 visita guiada</span><span class="act-tag warn">Reservar online</span><span class="act-tag info">45 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Belváros y New York Kávéház</div>
+              <div class="act-desc">El casco histórico de Pest concentra los cafés más opulentos del mundo. El New York Kávéház (inaugurado en 1894) es el café más fotogénico y extravagante del planeta: techos dorados de 8 metros, frescos, columnas de mármol y una historia que incluye a escritores, artistas y revolucionarios húngaros. El café o el desayuno cuestan €6–10 —caro para Budapest pero la experiencia es única. Merece la visita aunque sea para un café.</div>
+              <div class="act-tags"><span class="act-tag">Café €6</span><span class="act-tag info">El más opulento del mundo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último almuerzo — pörkölt con noquis húngaros</div>
+              <div class="act-desc">Despídete de Budapest con el pörkölt: el estofado de paprika roja sin nata —diferente del gulyás en su consistencia más densa— servido con nokedli (noquis húngaros en forma de lágrima). Es el plato más honesto y delicioso de la cocina magiar. Cualquier étterem tradicional del centro lo prepara con ternera, cerdo o cordero por €12–16.</div>
+              <div class="act-tags"><span class="act-tag">~€14</span><span class="act-tag info">Pörkölt + nokedli</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado aeropuerto Budapest Liszt Ferenc</div>
+              <div class="act-desc">La opción más económica: metro M3 hasta Kőbánya-Kispest + autobús 200E hasta el aeropuerto. Total €1.80 y 45–50 minutos. La alternativa rápida es el taxi (~€25, 30 min sin tráfico) o el Minibud shuttle (€8, tarda más pero te deja en la puerta). Añade 2h de margen para vuelos internacionales. El aeropuerto es pequeño pero los controles pueden tardar en horas punta.</div>
+              <div class="act-tags"><span class="act-tag">Metro + bus €1.80</span><span class="act-tag">Taxi ~€25</span><span class="act-tag info">45 min en transporte público</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Frici Papa</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Király utca</span></td><td>La cocina más auténtica y barata de Budapest. Raciones enormes. Cola de locales en la puerta.</td><td>~€9</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Hungarikum Bisztró</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Steindl Imre utca</span></td><td>Junto al Parlamento. Pörkölt de mangalica y foie gras húngaro. Ambiente elegante.</td><td>~€30</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Pavilon</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Városliget, Parque de la Ciudad</span></td><td>Cocina de mercado en el parque. Menú degustación con vistas a los jardines.</td><td>~€65</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Parlamento de Budapest al amanecer</h4><p>El edificio más hermoso del mundo visto desde el lado de Buda al amanecer, con el reflejo perfecto en el Danubio. Una imagen que no se puede preparar ni anticipar: hay que estar ahí.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Bastión de los Pescadores con niebla matinal</h4><p>Las torres neo-románicas emergiendo de la niebla sobre el Danubio. Llega antes de las 9h para tener el bastión casi solo, con la ciudad aún dormida al otro lado del río.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Piscinas exteriores del Széchenyi en invierno</h4><p>Bañarse en agua termal a 38°C con nieve cayendo y el palacio barroco amarillo de fondo es una de las experiencias más surrealistas y placenteras que puede ofrecer una ciudad europea.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Szimpla Kert un domingo por la mañana</h4><p>Los domingos por la mañana el ruin bar más famoso del mundo se convierte en mercado de agricultores locales. El contraste entre el espacio descuidado y los productos frescos es fascinante.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Crucero nocturno — Budapest iluminada desde el agua</h4><p>Ver el Parlamento, el Castillo y los siete puentes perfectamente iluminados reflejados en el Danubio desde una embarcación es la visión más hermosa posible de esta ciudad extraordinaria.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>New York Kávéház — el café más opulento del mundo</h4><p>Un desayuno o un café en el interior más extravagante que ha creado el ser humano para tomar un café. Techos dorados, frescos, estucos y la historia de un siglo de cultura húngara en cada rincón.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Curva del Danubio — Visegrád y el Dunakanyar</h4><p>La fortaleza medieval sobre la curva más espectacular del Danubio. Un paisaje que explica por qué los romanos, los magiares y los Habsburgo eligieron este punto estratégico durante 2.000 años.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Mercado Central — la catedral de la paprika</h4><p>El edificio de arte nuevo de 1897, los puestos de especias con 20 variedades de paprika, el foie gras más barato de Europa y el almuerzo en el piso de arriba entre locales que llevan la cesta de la compra.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Gran Sinagoga de Dohány</h4><p>La sinagoga más grande de Europa con arquitectura morisca, 3.000 asientos y el árbol metálico del Holocausto en el jardín. Una visita de enorme peso histórico y belleza arquitectónica sin parangón.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Atardecer en la Colina Gellért</h4><p>La panorámica más completa de Budapest: los dos lados del Danubio, los siete puentes, el Parlamento al norte y la ciudad entera desplegada a 235 metros. La mejor foto de Budapest, gratis y sin multitudes.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍲 Gastronomía húngara</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Plato nacional · Sopa</div><div class="gastro-title">Gulyás</div><div class="gastro-desc">El plato más representativo de Hungría: estofado de ternera con paprika dulce, patatas y zanahorias cocinado a fuego lento durante horas. Nada que ver con el goulash español o austriaco — aquí es una sopa densa con grandes trozos de carne. Se sirve en caldero de hierro. Precio: €8–14 en cualquier étterem.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Street food · Frito</div><div class="gastro-title">Lángos</div><div class="gastro-desc">Buñuelo de masa de patata frito en aceite, cubierto con crema agria (tejföl) y queso rallado. Es el street food más icónico de Hungría y el favorito de los mercados y ferias. Las variaciones incluyen ajo, cebolla caramelizada o foie gras. Por €2–4, el mejor snack de Budapest. Imprescindible el primer día.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Gastronomía · Lujo</div><div class="gastro-title">Foie gras húngaro</div><div class="gastro-desc">Hungría es el segundo productor mundial de foie gras (hígado graso de oca), solo por detrás de Francia. El foie a la húngara se sirve con cebolla caramelizada, manzana asada y una cucharada de mermelada de guindilla. En cualquier bistró de Budapest cuesta €12–15, un tercio del precio francés con la misma calidad. Producto imprescindible del país.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Postre · Crepe</div><div class="gastro-title">Palacsinta</div><div class="gastro-desc">Las crepes húngaras son más finas y delicadas que las francesas. Rellenos clásicos: mermelada de albaricoque, nueces molidas con azúcar o cottage cheese con pasas. La variación más famosa es la Palacsinta Gundel: rellena de nueces, pasas y ron, flameada con chocolate caliente. Postre imprescindible en cualquier visita a Budapest.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Bebida · Digestivo</div><div class="gastro-title">Unicum</div><div class="gastro-desc">El licor de hierbas más famoso de Hungría, producido por la familia Zwack desde 1790 según una receta secreta de 40 hierbas y especias. Amargo, especiado y potente (40% vol.), se bebe como digestivo. El Museo Zwack en Budapest ofrece visitas a la destilería y catas. Sin probarlo no puedes decir que conoces Hungría.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Plato · Estofado</div><div class="gastro-title">Pörkölt</div><div class="gastro-desc">Pariente cercano del gulyás pero sin caldo: estofado muy denso de carne (ternera, cerdo o cordero) con paprika roja y cebolla, cocinado hasta que la salsa se reduce casi completamente. Se sirve con nokedli (noquis húngaros pequeñísimos) y pepinillos encurtidos. La diferencia con el gulyás está en la consistencia: el pörkölt es mucho más espeso.</div></div>
+      </div>
+    </section>
+
+    <!-- ── FRASES ── -->
+    <section id="frases" class="itin-section">
+      <h2 class="section-heading">🗣️ Frases útiles en húngaro</h2>
+      <div class="phrases-grid">
+        <div class="phrase-card"><div class="phrase-es">Hola (informal)</div><div class="phrase-local">Szia</div><div class="phrase-pron">"SEE-ya"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Gracias</div><div class="phrase-local">Köszönöm</div><div class="phrase-pron">"KUH-suh-nuhm"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Cuánto cuesta?</div><div class="phrase-local">Mennyibe kerül?</div><div class="phrase-pron">"MEN-yee-beh KER-ul"</div></div>
+        <div class="phrase-card"><div class="phrase-es">La cuenta, por favor</div><div class="phrase-local">A számlát kérem</div><div class="phrase-pron">"ah SAHM-laht KAY-rem"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Dónde está?</div><div class="phrase-local">Hol van?</div><div class="phrase-pron">"hole von"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Una cerveza</div><div class="phrase-local">Egy sört</div><div class="phrase-pron">"edge shuhrt"</div></div>
+        <div class="phrase-card"><div class="phrase-es">No entiendo</div><div class="phrase-local">Nem értem</div><div class="phrase-pron">"nem AIR-tem"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¡Salud! (al brindar)</div><div class="phrase-local">Egészségére</div><div class="phrase-pron">"egg-ACE-shay-geh-reh"</div></div>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Nota lingüística:</strong> El húngaro es una lengua finougria (pariente del finés y el estonio) radicalmente diferente a cualquier idioma europeo occidental. No intentes aprenderla — es imposible en unos días. El inglés funciona perfectamente en Budapest, especialmente con jóvenes y en el sector turístico.
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales (UE)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos, ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Nacional</div><div class="emerg-value">107</div><div class="emerg-note">Rendőrség — también atienden robos a turistas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">104</div><div class="emerg-note">Mentők — servicio médico de emergencias</div></div>
+        <div class="emerg-card"><div class="emerg-label">Bomberos</div><div class="emerg-value">105</div><div class="emerg-note">Tűzoltóság</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Semmelweis</div><div class="emerg-value">+36 1 459 1500</div><div class="emerg-note">Urgencias 24h · Üllői út 78, Budapest</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada española</div><div class="emerg-value">+36 1 202 4006</div><div class="emerg-note">Esteban István út 11-13 · Budapest II</div></div>
+      </div>
+      <div class="alert-box warn" style="margin-top:14px">
+        <strong>⚠️ Moneda y estafas:</strong> Desconfía de los cambistas en la calle — ofrecen tasas falsas. Usa cajeros automáticos de bancos reconocidos (OTP Bank, K&H). Evita los taxis sin taxímetro visible — usa la app Bolt (equivalente de Uber en Hungría) para precios transparentes. Los precios para turistas en algunas zonas junto al Bastión pueden ser el doble.
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje con cobertura médica</div>
+            <div class="check-item"><div class="check-box"></div>Descarga app Bolt (taxi) antes de llegar</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">✈️ Reservas confirmadas</div>
+            <div class="check-item"><div class="check-box"></div>Vuelos (Budapest BUD)</div>
+            <div class="check-item"><div class="check-box"></div><strong>Parlamento — reservar con 1–2 semanas de antelación</strong></div>
+            <div class="check-item"><div class="check-box"></div>Alojamiento (4 noches)</div>
+            <div class="check-item"><div class="check-box"></div>Ópera Estatal — visita guiada online</div>
+            <div class="check-item"><div class="check-box"></div>Crucero nocturno (optativo)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">🎒 Equipaje</div>
+            <div class="check-item"><div class="check-box"></div>Bañador y chanclas (balnearios)</div>
+            <div class="check-item"><div class="check-box"></div>Candado para taquilla del balneario</div>
+            <div class="check-item"><div class="check-box"></div>Calzado cómodo para caminar</div>
+            <div class="check-item"><div class="check-box"></div>Chaqueta — las noches en Budapest son frescas</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta sin comisiones (Revolut, N26)</div>
+            <div class="check-item"><div class="check-box"></div>Algo de efectivo en euros (cambiable en la ciudad)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">📱 Apps esenciales</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps — descarga offline Budapest</div>
+            <div class="check-item"><div class="check-box"></div>BKK Futár — transporte público de Budapest</div>
+            <div class="check-item"><div class="check-box"></div>Bolt — taxi a precio justo</div>
+            <div class="check-item"><div class="check-box"></div>MOL Bubi — bicicletas públicas</div>
+            <div class="check-item"><div class="check-box"></div>Revolut o N26 — cambio de moneda sin comisión</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para Budapest?</h3>
+      <p>Dinos tus fechas, presupuesto y estilo de viaje. Routlo IA te crea un plan a medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a Budapest
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com, Skyscanner y operadores de actividades pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos en euros (1 EUR ≈ 395 HUF) y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.5);text-decoration:none;font-size:0.85rem;margin-bottom:16px">← Ver todos los itinerarios</a>
+    <div style="font-size:0.78rem;color:rgba(237,238,242,0.3)">© 2026 Routlo · Hecho con IA para viajeros del mundo</div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+    const sections = document.querySelectorAll('.itin-section[id], .day-card[id]');
+    const links = document.querySelectorAll('.toc-list a');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }, { passive: true });
+</script>
+</body>
+</html>
