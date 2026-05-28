@@ -192,9 +192,10 @@
 
     .popup-wrap { font-family: 'Jost', sans-serif; overflow: hidden; border-radius: 16px; }
     .popup-hero {
-      height: 110px; position: relative; overflow: hidden;
+      height: 150px; position: relative; overflow: hidden;
     }
-    .popup-hero-bg { position: absolute; inset: 0; }
+    .popup-hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.4s ease; }
+    .popup-wrap:hover .popup-hero-bg { transform: scale(1.05); }
     .popup-hero-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(7,13,26,0.92) 0%, transparent 60%);
@@ -307,6 +308,7 @@ const DESTINOS = [
     coords: [35.6762, 139.6503],
     desc: 'Gastronomía Michelin, templos zen y la tecnología más avanzada del planeta.',
     gradient: 'linear-gradient(160deg,#0d1b2e 0%,#1a3a5c 50%,#2d5a8a 100%)',
+    img: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/tokio.html'
   },
   {
@@ -320,6 +322,7 @@ const DESTINOS = [
     coords: [-8.3405, 115.092],
     desc: 'Terrazas de arroz esmeralda, templos sagrados y playas paradisíacas.',
     gradient: 'linear-gradient(160deg,#0d1a12 0%,#0d3a22 50%,#1a7a4a 100%)',
+    img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/bali.html'
   },
   {
@@ -333,6 +336,7 @@ const DESTINOS = [
     coords: [13.7563, 100.5018],
     desc: 'Bangkok, Chiang Mai, elefantes éticos y las mejores islas del sur.',
     gradient: 'linear-gradient(160deg,#0d1a0d 0%,#1a3d1a 50%,#2a6e2a 100%)',
+    img: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/tailandia.html'
   },
   {
@@ -346,6 +350,7 @@ const DESTINOS = [
     coords: [31.6295, -7.9811],
     desc: 'Souks laberínticos, riad con piscina y el mejor hammam de África.',
     gradient: 'linear-gradient(160deg,#1a0d00 0%,#4a2200 50%,#c67c1a 100%)',
+    img: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/marrakech.html'
   },
   {
@@ -359,6 +364,7 @@ const DESTINOS = [
     coords: [48.8566, 2.3522],
     desc: 'Torre Eiffel, el Louvre, Montmartre y los mejores bistros de Europa.',
     gradient: 'linear-gradient(160deg,#0d0a1e 0%,#1e1048 50%,#3a2090 100%)',
+    img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/paris.html'
   },
   {
@@ -372,6 +378,7 @@ const DESTINOS = [
     coords: [41.9028, 12.4964],
     desc: 'La Ciudad Eterna: Vaticano, Coliseo y la mejor pasta de tu vida.',
     gradient: 'linear-gradient(160deg,#1a0a0a 0%,#3d1515 50%,#c0392b 100%)',
+    img: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/roma.html'
   },
   {
@@ -385,6 +392,7 @@ const DESTINOS = [
     coords: [-9.19, -75.015],
     desc: 'Lima, Cusco y Machu Picchu: historia inca y gastronomía de nivel mundial.',
     gradient: 'linear-gradient(160deg,#0d0a1e 0%,#1e1048 50%,#5c3a9e 100%)',
+    img: 'https://images.unsplash.com/photo-1526392060635-9d6019884377?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/peru.html'
   },
   {
@@ -398,6 +406,7 @@ const DESTINOS = [
     coords: [28.2916, -16.6291],
     desc: 'Delfines en libertad frente a Los Gigantes, ruta por el Teide y arena volcánica negra.',
     gradient: 'linear-gradient(160deg,#0d0806 0%,#2e1005 50%,#7a2d00 100%)',
+    img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/tenerife.html'
   },
   {
@@ -411,6 +420,7 @@ const DESTINOS = [
     coords: [52.5200, 13.4050],
     desc: 'East Side Gallery, Mauerpark, Kreuzberg y la mejor vida nocturna de Europa. 5 jóvenes, 700€.',
     gradient: 'linear-gradient(160deg,#060812 0%,#0d1422 50%,#162238 100%)',
+    img: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/berlin.html'
   },
   {
@@ -424,6 +434,7 @@ const DESTINOS = [
     coords: [46.1, 11.8],
     desc: 'Milán, Lago de Como, Verona, Dolomitas y Venecia. El viaje que lo tiene todo en 9 días.',
     gradient: 'linear-gradient(160deg,#040d1a 0%,#0d1e3d 50%,#1a3a55 100%)',
+    img: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/norte-italia.html'
   }
 ];
@@ -462,7 +473,7 @@ DESTINOS.forEach(d => {
   const popup = L.popup({ maxWidth: 280, minWidth: 280, className: '' }).setContent(`
     <div class="popup-wrap">
       <div class="popup-hero">
-        <div class="popup-hero-bg" style="background:${d.gradient}"></div>
+        <div class="popup-hero-bg" style="background:${d.gradient};background-image:url('${d.img}');background-size:cover;background-position:center"></div>
         <div class="popup-hero-overlay"></div>
         <div class="popup-badges">
           <span class="popup-badge">${d.region}</span>
