@@ -67,7 +67,7 @@
     <li><a href="index.html">Inicio</a></li>
     <li><a href="itinerarios.html" class="active">Itinerarios</a></li>
     <li><a href="mapa.html">Mapa</a></li>
-    <li><a href="chatbot.html" onclick="return checkAuth(event)">Chatbot IA</a></li>
+    <li><a href="chatbot.html">Chatbot IA</a></li>
     <li class="nav-auth" id="navAuth"></li>
   </ul>
   <button class="nav-mobile-btn" onclick="toggleMenu()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
@@ -382,10 +382,6 @@
         a.addEventListener('click', () => links.classList.remove('mobile-open'), { once: true });
       });
     }
-  }
-  function checkAuth(e) {
-    if (!localStorage.getItem('routlo_token')) { e.preventDefault(); window.location.href = 'login.html'; return false; }
-    return true;
   }
   (function initNav() {
     const token = localStorage.getItem('routlo_token');

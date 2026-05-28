@@ -285,7 +285,7 @@
         <div class="user-email" id="userEmail">—</div>
       </div>
     </div>
-    <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    <a id="authFooterBtn" class="logout-btn" style="cursor:pointer">Cerrar sesión</a>
   </div>
 </aside>
 
@@ -347,18 +347,32 @@
     ? 'http://localhost:3001'
     : 'https://TU-SERVIDOR.up.railway.app';  // ← cambia esto por tu URL
 
-  // ── Auth guard ──────────────────────────────────────────────────────────────
+  // ── Auth (opcional — sin login el chatbot funciona igual) ───────────────────
   const token = localStorage.getItem('routlo_token');
   const userStr = localStorage.getItem('routlo_user');
-  if (!token || !userStr) {
-    window.location.href = 'login.html';
-  }
-  const user = JSON.parse(userStr || '{}');
+  const user = userStr ? JSON.parse(userStr) : null;
+  const isLoggedIn = !!(token && user);
 
   // ── Init user UI ────────────────────────────────────────────────────────────
-  document.getElementById('userAvatar').textContent = (user.name || '?')[0].toUpperCase();
-  document.getElementById('userName').textContent = user.name || 'Usuario';
-  document.getElementById('userEmail').textContent = user.email || '';
+  if (isLoggedIn) {
+    document.getElementById('userAvatar').textContent = user.name[0].toUpperCase();
+    document.getElementById('userName').textContent = user.name;
+    document.getElementById('userEmail').textContent = user.email;
+    document.getElementById('authFooterBtn').textContent = 'Cerrar sesión';
+    document.getElementById('authFooterBtn').onclick = logout;
+  } else {
+    document.getElementById('userAvatar').textContent = '✈️';
+    document.getElementById('userAvatar').style.fontSize = '1rem';
+    document.getElementById('userName').textContent = 'Viajero anónimo';
+    document.getElementById('userEmail').textContent = 'Historial guardado en este navegador';
+    const btn = document.getElementById('authFooterBtn');
+    btn.textContent = 'Crear cuenta gratis';
+    btn.href = 'registro.html';
+    btn.style.textAlign = 'center';
+    btn.style.textDecoration = 'none';
+    btn.style.display = 'block';
+    btn.style.color = '#c9a96e';
+  }
 
   // ── Conversations (localStorage) ────────────────────────────────────────────
   let conversations = JSON.parse(localStorage.getItem('routlo_convs') || '[]');
@@ -514,24 +528,18 @@
     abortController = new AbortController();
 
     try {
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
       const res = await fetch(`${API}/api/chat`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
+        headers,
         body: JSON.stringify({ messages: currentMessages }),
         signal: abortController.signal
       });
 
       if (!res.ok) {
         const err = await res.json();
-        if (res.status === 401) {
-          localStorage.removeItem('routlo_token');
-          localStorage.removeItem('routlo_user');
-          window.location.href = 'login.html';
-          return;
-        }
         throw new Error(err.error || 'Error del servidor');
       }
 

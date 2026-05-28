@@ -142,7 +142,7 @@
     <li><a href="itinerarios.html">Itinerarios</a></li>
     <li><a href="mapa.html">Mapa</a></li>
     <li><a href="#como-funciona">Cómo funciona</a></li>
-    <li><a href="chatbot.html" onclick="return checkAuth(event)">Chatbot IA</a></li>
+    <li><a href="chatbot.html">Chatbot IA</a></li>
     <li class="nav-auth" id="navAuth"></li>
   </ul>
   <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
@@ -382,7 +382,7 @@
       <h2 class="cta-title">¿Listo para tu<br/>próxima aventura?</h2>
       <p class="cta-sub">Únete a 50,000 viajeros que ya confían en Routlo. Crea tu primer itinerario gratis, sin tarjeta de crédito.</p>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:4px" id="ctaActions">
-        <a href="chatbot.html" class="btn-primary" id="ctaMainBtn" onclick="return checkAuth(event)">
+        <a href="chatbot.html" class="btn-primary" id="ctaMainBtn">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           Crear mi itinerario gratis
         </a>
@@ -446,14 +446,6 @@
   });
   const nav = document.querySelector('nav');
   window.addEventListener('scroll', () => { nav.style.background = window.scrollY > 40 ? 'rgba(4,8,16,0.92)' : 'rgba(4,8,16,0.6)'; }, { passive: true });
-  function checkAuth(e) {
-    if (!localStorage.getItem('routlo_token')) {
-      e.preventDefault();
-      window.location.href = 'login.html';
-      return false;
-    }
-    return true;
-  }
   (function initNav() {
     const token = localStorage.getItem('routlo_token');
     const user = JSON.parse(localStorage.getItem('routlo_user') || 'null');

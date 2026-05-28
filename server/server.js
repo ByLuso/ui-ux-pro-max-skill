@@ -219,17 +219,30 @@ const saveUsers = (users) => {
   fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 };
 
-// ── Auth middleware ───────────────────────────────────────────────────────────
-const auth = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'Token requerido. Inicia sesión.' });
-  try {
-    req.user = jwt.verify(token, JWT_SECRET);
-    next();
-  } catch {
-    res.status(401).json({ error: 'Token inválido o expirado. Vuelve a iniciar sesión.' });
+// ── Rate limiter en memoria (sin dependencias extra) ─────────────────────────
+const ipBuckets = new Map();
+const RATE_MAX = parseInt(process.env.RATE_MAX || '40');   // peticiones por ventana
+const RATE_WINDOW = parseInt(process.env.RATE_WINDOW || '3600000'); // 1 hora en ms
+
+const rateLimit = (req, res, next) => {
+  const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || 'unknown';
+  const now = Date.now();
+  const bucket = ipBuckets.get(ip) || { count: 0, resetAt: now + RATE_WINDOW };
+  if (now > bucket.resetAt) { bucket.count = 0; bucket.resetAt = now + RATE_WINDOW; }
+  bucket.count++;
+  ipBuckets.set(ip, bucket);
+  if (bucket.count > RATE_MAX) {
+    const retryAfter = Math.ceil((bucket.resetAt - now) / 60000);
+    return res.status(429).json({ error: `Demasiadas solicitudes. Vuelve a intentarlo en ${retryAfter} min.` });
   }
+  next();
 };
+
+// Limpieza periódica para no acumular IPs viejas
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, b] of ipBuckets) { if (now > b.resetAt) ipBuckets.delete(ip); }
+}, RATE_WINDOW);
 
 // ── Auth routes ───────────────────────────────────────────────────────────────
 app.post('/api/auth/register', async (req, res) => {
@@ -290,8 +303,8 @@ app.post('/api/auth/login', async (req, res) => {
   res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
 });
 
-// ── Chat route (streaming SSE) ────────────────────────────────────────────────
-app.post('/api/chat', auth, async (req, res) => {
+// ── Chat route — abierto (sin auth), protegido por rate limiting ─────────────
+app.post('/api/chat', rateLimit, async (req, res) => {
   const { messages } = req.body;
   if (!messages?.length) {
     return res.status(400).json({ error: 'Se requieren mensajes.' });

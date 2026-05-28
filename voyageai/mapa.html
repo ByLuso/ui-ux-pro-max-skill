@@ -261,7 +261,7 @@
     <li><a href="index.html">Inicio</a></li>
     <li><a href="itinerarios.html">Itinerarios</a></li>
     <li><a href="mapa.html" class="active">Mapa</a></li>
-    <li><a href="chatbot.html" onclick="return checkAuth(event)">Chatbot IA</a></li>
+    <li><a href="chatbot.html">Chatbot IA</a></li>
     <li class="nav-auth" id="navAuth"></li>
   </ul>
   <button class="nav-mobile-btn" aria-label="Menú" onclick="
@@ -571,10 +571,6 @@ buildSidebar('');
 setTimeout(() => map.invalidateSize(), 200);
 window.addEventListener('resize', () => map.invalidateSize());
 
-function checkAuth(e) {
-  if (!localStorage.getItem('routlo_token')) { e.preventDefault(); window.location.href = 'login.html'; return false; }
-  return true;
-}
 (function initNav() {
   const token = localStorage.getItem('routlo_token');
   const user = JSON.parse(localStorage.getItem('routlo_user') || 'null');
