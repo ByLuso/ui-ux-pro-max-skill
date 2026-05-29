@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mapa Interactivo de España — Routlo</title>
+  <meta name="description" content="Explora el mapa de España con itinerarios de Routlo: Canarias, Península Ibérica y Baleares. Próximamente Madrid, Barcelona, Sevilla y más."/>
+  <link rel="stylesheet" href="assets/shared.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+
+    /* Aurora — Spanish crimson/gold */
+    .aurora::before { background: radial-gradient(circle, #5c0808 0%, transparent 70%) !important; }
+    .aurora::after  { background: radial-gradient(circle, #3a1500 0%, transparent 70%) !important; }
+    .aurora span    { background: radial-gradient(circle, #2a0d0a 0%, transparent 70%) !important; }
+
+    .map-shell {
+      position: fixed;
+      top: 72px; left: 0; right: 0; bottom: 0;
+      display: flex; z-index: 1;
+    }
+
+    /* ── Sidebar ── */
+    .map-sidebar {
+      width: 320px; flex-shrink: 0;
+      background: rgba(4,8,16,0.95);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-right: 1px solid rgba(255,255,255,0.08);
+      display: flex; flex-direction: column;
+      overflow: hidden; z-index: 10;
+    }
+
+    .sidebar-back {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 16px;
+      background: rgba(255,255,255,0.025);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      text-decoration: none;
+      color: rgba(237,238,242,0.45); font-size: 0.76rem;
+      transition: color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .sidebar-back:hover { color: rgba(237,238,242,0.8); background: rgba(255,255,255,0.04); }
+    .sidebar-back svg { width:12px; height:12px; flex-shrink:0; }
+
+    .sidebar-header {
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .sidebar-flag-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
+    }
+    .spain-flag {
+      width: 28px; height: 20px; border-radius: 3px; flex-shrink: 0; overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+      display: flex; flex-direction: column;
+    }
+    .spain-flag-red { flex: 1; background: #c60b1e; }
+    .spain-flag-yellow { flex: 1.4; background: #ffc400; }
+    .sidebar-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.08rem; font-weight: 700; color: #edeef2;
+    }
+    .sidebar-sub { font-size: 0.74rem; color: rgba(237,238,242,0.5); }
+
+    .sidebar-quick-nav {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 12px;
+    }
+    .quick-btn {
+      padding: 7px 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 9px;
+      color: rgba(237,238,242,0.65);
+      font-family: 'Jost', sans-serif; font-size: 0.77rem; font-weight: 500;
+      cursor: pointer; text-align: center;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .quick-btn:hover {
+      background: rgba(201,169,110,0.1);
+      border-color: rgba(201,169,110,0.3);
+      color: #c9a96e;
+    }
+    .quick-btn.active-view {
+      background: rgba(201,169,110,0.12);
+      border-color: rgba(201,169,110,0.35);
+      color: #c9a96e;
+    }
+
+    /* ── Tabs ── */
+    .sidebar-tabs {
+      display: flex; border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .sidebar-tab {
+      flex: 1; padding: 10px 12px;
+      font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 500;
+      color: rgba(237,238,242,0.45);
+      background: none; border: none; border-bottom: 2px solid transparent;
+      cursor: pointer; text-align: center;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .sidebar-tab.active { color: #c9a96e; border-bottom-color: #c9a96e; }
+    .sidebar-tab-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.2);
+      font-size: 0.62rem; font-weight: 700; color: #c9a96e;
+      margin-left: 5px; vertical-align: middle;
+    }
+
+    /* ── Search ── */
+    .sidebar-search { position: relative; padding: 10px 8px 0; flex-shrink: 0; }
+    .sidebar-search input {
+      width: 100%; padding: 8px 12px 8px 34px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 9px; color: #edeef2;
+      font-family: 'Jost', sans-serif; font-size: 0.84rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .sidebar-search input:focus { border-color: rgba(201,169,110,0.4); }
+    .sidebar-search input::placeholder { color: rgba(237,238,242,0.3); }
+    .sidebar-search svg { position: absolute; left: 17px; top: 50%; transform: translateY(-50%); color: rgba(237,238,242,0.4); pointer-events: none; }
+
+    /* ── List ── */
+    .sidebar-list {
+      overflow-y: auto; flex: 1; padding: 8px 8px 16px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+
+    .region-divider {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.15em;
+      text-transform: uppercase; color: rgba(201,169,110,0.5);
+      padding: 10px 6px 4px; display: flex; align-items: center; gap: 8px;
+    }
+    .region-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+
+    /* Destination card */
+    .dest-card {
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.03);
+      margin-bottom: 5px; overflow: hidden;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .dest-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+    .dest-card.active { background: rgba(201,169,110,0.08); border-color: rgba(201,169,110,0.3); }
+
+    .dest-card-top {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px 8px; cursor: pointer;
+    }
+    .dest-emoji {
+      width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .dest-info { flex: 1; min-width: 0; }
+    .dest-name { font-weight: 600; font-size: 0.87rem; color: #edeef2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dest-meta { font-size: 0.71rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .dest-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; flex-shrink: 0; }
+
+    .dest-card-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 12px 8px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-decoration: none;
+    }
+    .dest-card-link span { font-size: 0.74rem; color: #c9a96e; font-weight: 600; font-family: 'Jost', sans-serif; }
+    .dest-card-link svg { color: #c9a96e; }
+    .dest-card.active .dest-card-link { border-top-color: rgba(201,169,110,0.15); }
+
+    /* Coming soon card */
+    .dest-card.soon { opacity: 0.65; }
+    .dest-card.soon:hover { opacity: 0.85; }
+    .soon-badge {
+      font-size: 0.66rem; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 2px 8px; border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(237,238,242,0.4);
+      flex-shrink: 0; white-space: nowrap;
+    }
+
+    /* Stats strip */
+    .sidebar-stats {
+      display: flex; gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .stat-item {
+      flex: 1; padding: 8px 4px;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-val { display: block; font-size: 0.95rem; font-weight: 700; color: #c9a96e; font-family: 'Bodoni Moda', serif; line-height: 1.1; }
+    .stat-lbl { font-size: 0.63rem; color: rgba(237,238,242,0.4); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ── Map ── */
+    #map { flex: 1; height: 100%; background: #040810; }
+    .leaflet-container { background: #040810 !important; font-family: 'Jost', sans-serif !important; }
+    .leaflet-tile { filter: brightness(0.82) contrast(0.88) saturate(0.55) hue-rotate(190deg); }
+    .leaflet-control-zoom { border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 10px !important; overflow: hidden; }
+    .leaflet-control-zoom a { background: rgba(4,8,16,0.9) !important; color: rgba(237,238,242,0.7) !important; border-color: rgba(255,255,255,0.08) !important; }
+    .leaflet-control-zoom a:hover { background: rgba(13,22,40,0.97) !important; color: #c9a96e !important; }
+    .leaflet-control-attribution { background: rgba(4,8,16,0.7) !important; color: rgba(237,238,242,0.3) !important; font-size: 10px !important; }
+    .leaflet-control-attribution a { color: rgba(237,238,242,0.4) !important; }
+
+    /* Spain boundary hint */
+    .map-region-label {
+      background: rgba(4,8,16,0.8) !important;
+      border: 1px solid rgba(201,169,110,0.25) !important;
+      border-radius: 20px; padding: 3px 10px;
+      font-family: 'Jost', sans-serif; font-size: 0.7rem;
+      color: rgba(201,169,110,0.7); font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      white-space: nowrap; box-shadow: none !important;
+    }
+    .map-region-label::before { display: none !important; }
+    .leaflet-tooltip.map-region-label { background: rgba(4,8,16,0.85) !important; border: 1px solid rgba(201,169,110,0.25) !important; box-shadow: none !important; }
+
+    /* ── Active (gold) map pin ── */
+    .map-pin {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #c9a96e 0%, #a07840 100%);
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(201,169,110,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .map-pin:hover, .map-pin.open {
+      transform: rotate(-45deg) scale(1.15);
+      box-shadow: 0 6px 24px rgba(201,169,110,0.75);
+    }
+    .map-pin-emoji { transform: rotate(45deg); font-size: 15px; line-height: 1; }
+
+    /* ── Coming soon (grey) pin ── */
+    .map-pin-soon {
+      width: 28px; height: 28px;
+      background: rgba(50,55,65,0.75);
+      border: 1.5px dashed rgba(255,255,255,0.2);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .map-pin-soon:hover { transform: rotate(-45deg) scale(1.12); background: rgba(70,75,85,0.85); }
+    .map-pin-soon-inner { transform: rotate(45deg); font-size: 11px; opacity: 0.55; }
+
+    /* ── Popups ── */
+    .leaflet-popup-content-wrapper {
+      background: rgba(7,13,26,0.98) !important;
+      border: 1px solid rgba(201,169,110,0.35) !important;
+      border-radius: 16px !important;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.75) !important;
+      padding: 0 !important; overflow: hidden;
+    }
+    .leaflet-popup-tip-container { display: none !important; }
+    .leaflet-popup-close-button { color: rgba(237,238,242,0.5) !important; font-size: 20px !important; top: 8px !important; right: 10px !important; z-index: 10; }
+    .leaflet-popup-close-button:hover { color: #edeef2 !important; }
+    .leaflet-popup-content { margin: 0 !important; width: 280px !important; }
+
+    .popup-wrap { font-family: 'Jost', sans-serif; overflow: hidden; border-radius: 16px; }
+    .popup-hero { height: 150px; position: relative; overflow: hidden; }
+    .popup-hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.4s ease; }
+    .popup-wrap:hover .popup-hero-bg { transform: scale(1.05); }
+    .popup-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(7,13,26,0.92) 0%, transparent 60%); }
+    .popup-badges { position: absolute; top: 9px; left: 9px; right: 36px; display: flex; gap: 6px; }
+    .popup-badge { padding: 2px 9px; background: rgba(4,8,16,0.7); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.63rem; color: #c9a96e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .popup-badge.muted { border-color: rgba(255,255,255,0.1); color: rgba(237,238,242,0.5); }
+    .popup-body { padding: 12px 14px 14px; }
+    .popup-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 5px; }
+    .popup-desc { font-size: 0.78rem; color: rgba(237,238,242,0.55); line-height: 1.55; margin-bottom: 12px; }
+    .popup-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .popup-price { font-size: 0.78rem; color: rgba(237,238,242,0.5); }
+    .popup-price strong { color: #c9a96e; font-size: 0.95rem; font-weight: 700; }
+    .popup-cta { display: inline-flex; align-items: center; gap: 5px; padding: 7px 14px; background: linear-gradient(135deg, #c9a96e, #a07840); border-radius: 8px; font-size: 0.78rem; font-weight: 700; color: #0a0a0a; text-decoration: none; transition: opacity 0.2s, transform 0.15s; }
+    .popup-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* Coming-soon popup */
+    .popup-soon { font-family: 'Jost', sans-serif; padding: 20px 20px 22px; text-align: center; }
+    .popup-soon-emoji { font-size: 2.6rem; margin-bottom: 10px; display: block; }
+    .popup-soon-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.12rem; font-weight: 700; color: #edeef2; margin-bottom: 6px; }
+    .popup-soon-sub { font-size: 0.77rem; color: rgba(237,238,242,0.5); line-height: 1.6; margin-bottom: 14px; }
+    .popup-soon-pill { display: inline-flex; align-items: center; gap: 5px; padding: 5px 13px; background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.25); border-radius: 20px; font-size: 0.72rem; font-weight: 600; color: #c9a96e; }
+    .popup-soon-cta { display: block; margin-top: 12px; font-size: 0.75rem; color: rgba(237,238,242,0.35); text-decoration: none; }
+    .popup-soon-cta:hover { color: rgba(237,238,242,0.6); }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      html, body { overflow: auto; }
+      .map-shell { flex-direction: column; }
+      .map-sidebar { width: 100%; height: 44vh; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); order: 2; }
+      #map { height: 56vh; flex: none; order: 1; }
+    }
+  </style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span></span></div>
+
+<!-- Navbar -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="itinerarios.html">Itinerarios</a></li>
+    <li><a href="itinerarios-espana.html" class="active">España</a></li>
+    <li><a href="mapa.html">Mapa Mundial</a></li>
+    <li><a href="chatbot.html">Chatbot IA</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Menú" onclick="
+    const ul=document.querySelector('.nav-links');
+    ul.classList.toggle('mobile-open');
+    ul.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>ul.classList.remove('mobile-open'),{once:true}));
+  ">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<div class="map-shell">
+  <!-- ── Sidebar ── -->
+  <aside class="map-sidebar" aria-label="Destinos en España">
+    <!-- Back to world map -->
+    <a href="mapa.html" class="sidebar-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Mapa Mundial
+    </a>
+
+    <!-- Header -->
+    <div class="sidebar-header">
+      <div class="sidebar-flag-row">
+        <div class="spain-flag" aria-hidden="true">
+          <div class="spain-flag-red"></div>
+          <div class="spain-flag-yellow"></div>
+          <div class="spain-flag-red"></div>
+        </div>
+        <div class="sidebar-title">Mapa de España</div>
+      </div>
+      <div class="sidebar-sub">Destinos con itinerario completo + próximamente</div>
+      <!-- Quick nav -->
+      <div class="sidebar-quick-nav">
+        <button class="quick-btn" onclick="flyToPeninsula()" id="btnPeninsula">🌍 Península</button>
+        <button class="quick-btn active-view" onclick="flyToCanarias()" id="btnCanarias">🏝️ Canarias</button>
+        <button class="quick-btn" onclick="flyToBaleares()" id="btnBaleares">⛵ Baleares</button>
+        <button class="quick-btn" onclick="flyToAll()" id="btnAll">🗺️ Ver todo</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="sidebar-tabs">
+      <button class="sidebar-tab active" id="tabActivos" onclick="switchTab('activos')">
+        Con itinerario <span class="sidebar-tab-count">2</span>
+      </button>
+      <button class="sidebar-tab" id="tabProximos" onclick="switchTab('proximos')">
+        Próximamente <span class="sidebar-tab-count">7</span>
+      </button>
+    </div>
+
+    <!-- Search -->
+    <div class="sidebar-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="sidebarSearch" placeholder="Buscar destino..." aria-label="Buscar destino en España" oninput="filterSidebar()"/>
+    </div>
+
+    <!-- List -->
+    <div class="sidebar-list" id="sidebarList" role="list"></div>
+
+    <!-- Stats -->
+    <div class="sidebar-stats" aria-label="Estadísticas">
+      <div class="stat-item"><span class="stat-val">2</span><span class="stat-lbl">Activos</span></div>
+      <div class="stat-item"><span class="stat-val">7</span><span class="stat-lbl">Próximos</span></div>
+      <div class="stat-item"><span class="stat-val">€650</span><span class="stat-lbl">Desde</span></div>
+    </div>
+  </aside>
+
+  <!-- ── Map ── -->
+  <div id="map" role="application" aria-label="Mapa interactivo de España"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── Data ────────────────────────────────────────────────
+
+const ACTIVOS = [
+  {
+    id: 'tenerife',
+    nombre: 'Tenerife',
+    region: 'Islas Canarias',
+    emoji: '🌋',
+    dias: 3,
+    precio: '€800',
+    coords: [28.2916, -16.6291],
+    desc: 'Delfines en libertad frente a Los Gigantes, ruta por el Teide y arena volcánica negra.',
+    gradient: 'linear-gradient(160deg,#0d0806 0%,#2e1005 50%,#7a2d00 100%)',
+    img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/tenerife.html'
+  },
+  {
+    id: 'fuerteventura',
+    nombre: 'Fuerteventura',
+    region: 'Islas Canarias',
+    emoji: '🏖️',
+    dias: 5,
+    precio: '€650',
+    coords: [28.3587, -14.0537],
+    desc: 'Dunas de arena blanca, playa virgen de Cofete de 14km, kitesurf y el mejor queso del mundo.',
+    gradient: 'linear-gradient(160deg,#080600 0%,#1a1200 50%,#4a3400 100%)',
+    img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/fuerteventura.html'
+  }
+];
+
+const PROXIMOS = [
+  { id: 'madrid',       nombre: 'Madrid',         region: 'Comunidad de Madrid',   emoji: '🏟️', coords: [40.4168, -3.7038], desc: 'El Prado, Retiro, tapas en La Latina y la mejor vida nocturna de Europa.' },
+  { id: 'barcelona',    nombre: 'Barcelona',       region: 'Cataluña',              emoji: '🏛️', coords: [41.3851,  2.1734], desc: 'Gaudí, Las Ramblas, Barceloneta y el fascinante barrio Gótico.' },
+  { id: 'sevilla',      nombre: 'Sevilla',          region: 'Andalucía',             emoji: '🌹', coords: [37.3891, -5.9845], desc: 'Giralda, Real Alcázar, tapas en el Arenal y flamenco auténtico.' },
+  { id: 'granada',      nombre: 'Granada',          region: 'Andalucía',             emoji: '🏰', coords: [37.1773, -3.5986], desc: 'La Alhambra, el Albaicín y las mejores tapas gratis de toda España.' },
+  { id: 'mallorca',     nombre: 'Mallorca',         region: 'Islas Baleares',        emoji: '⛵', coords: [39.6953,  3.0176], desc: 'Calas de cristal, Serra de Tramuntana UNESCO y Palma histórica.' },
+  { id: 'sansebastian', nombre: 'San Sebastián',   region: 'País Vasco',            emoji: '🐟', coords: [43.3183, -1.9812], desc: 'Pintxos en La Parte Vieja, Playa de la Concha y las mejores estrellas Michelin por m².' },
+  { id: 'valencia',     nombre: 'Valencia',         region: 'Comunitat Valenciana',  emoji: '🟡', coords: [39.4699, -0.3763], desc: 'Paella auténtica, Ciudad de las Artes, Bioparc y playas de La Malvarrosa.' }
+];
+
+// ── Map init ─────────────────────────────────────────────
+
+const map = L.map('map', {
+  zoomControl: false,
+  minZoom: 4,
+  maxZoom: 14,
+  maxBounds: [[25.5, -22], [45, 6.5]],
+  maxBoundsViscosity: 0.85,
+  worldCopyJump: false
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
+  subdomains: 'abcd', maxZoom: 20
+}).addTo(map);
+
+L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+// Fit to show all of Spain (peninsula + Canaries)
+map.fitBounds([[27.0, -19.5], [43.8, 5.0]], { padding: [20, 20] });
+
+// ── Navigation helpers ────────────────────────────────────
+
+function updateQuickBtns(active) {
+  ['btnPeninsula','btnCanarias','btnBaleares','btnAll'].forEach(id => {
+    document.getElementById(id)?.classList.remove('active-view');
+  });
+  if (active) document.getElementById(active)?.classList.add('active-view');
+}
+
+function flyToPeninsula() {
+  map.flyTo([40.4, -3.7], 6, { duration: 1.2 });
+  updateQuickBtns('btnPeninsula');
+}
+function flyToCanarias() {
+  map.flyTo([28.3, -15.7], 8, { duration: 1.2 });
+  updateQuickBtns('btnCanarias');
+}
+function flyToBaleares() {
+  map.flyTo([39.7, 2.9], 9, { duration: 1.2 });
+  updateQuickBtns('btnBaleares');
+}
+function flyToAll() {
+  map.fitBounds([[27.0, -19.5], [43.8, 5.0]], { padding: [20, 20], animate: true, duration: 1.2 });
+  updateQuickBtns('btnAll');
+}
+
+// ── Markers ──────────────────────────────────────────────
+
+const activeMarkers = {};
+const soonMarkers = {};
+let activeId = null;
+
+// Active gold pins
+ACTIVOS.forEach(d => {
+  const icon = L.divIcon({
+    className: '',
+    html: `<div class="map-pin"><span class="map-pin-emoji">${d.emoji}</span></div>`,
+    iconSize: [36, 36], iconAnchor: [18, 36], popupAnchor: [0, -42]
+  });
+  const popup = L.popup({ maxWidth: 280, minWidth: 280 }).setContent(`
+    <div class="popup-wrap">
+      <div class="popup-hero">
+        <div class="popup-hero-bg" style="background:${d.gradient};background-image:url('${d.img}');background-size:cover;background-position:center"></div>
+        <div class="popup-hero-overlay"></div>
+        <div class="popup-badges">
+          <span class="popup-badge">${d.region}</span>
+          <span class="popup-badge muted">${d.dias} días</span>
+        </div>
+      </div>
+      <div class="popup-body">
+        <div class="popup-title">${d.nombre}</div>
+        <div class="popup-desc">${d.desc}</div>
+        <div class="popup-footer">
+          <div class="popup-price">Desde <strong>${d.precio}</strong></div>
+          <a href="${d.url}" class="popup-cta">
+            Ver itinerario
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>`);
+
+  const marker = L.marker(d.coords, { icon, title: d.nombre })
+    .bindPopup(popup).addTo(map);
+  marker.on('click', () => setActive(d.id));
+  marker.on('popupclose', () => { if (activeId === d.id) setActive(null); });
+  activeMarkers[d.id] = marker;
+});
+
+// Coming soon grey pins
+PROXIMOS.forEach(d => {
+  const icon = L.divIcon({
+    className: '',
+    html: `<div class="map-pin-soon"><span class="map-pin-soon-inner">${d.emoji}</span></div>`,
+    iconSize: [28, 28], iconAnchor: [14, 28], popupAnchor: [0, -34]
+  });
+  const popup = L.popup({ maxWidth: 260, minWidth: 260 }).setContent(`
+    <div class="popup-soon">
+      <span class="popup-soon-emoji">${d.emoji}</span>
+      <div class="popup-soon-title">${d.nombre}</div>
+      <div class="popup-soon-sub">${d.desc}</div>
+      <div class="popup-soon-pill">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        Itinerario próximamente
+      </div>
+      <a href="chatbot.html" class="popup-soon-cta">Planifica ${d.nombre} con IA →</a>
+    </div>`);
+
+  const marker = L.marker(d.coords, { icon, title: d.nombre + ' (próximamente)' })
+    .bindPopup(popup).addTo(map);
+  soonMarkers[d.id] = marker;
+});
+
+// ── Active state ──────────────────────────────────────────
+
+function setActive(id) {
+  activeId = id;
+  ACTIVOS.forEach(d => {
+    const el = activeMarkers[d.id]?.getElement();
+    if (el) el.querySelector('.map-pin')?.classList.toggle('open', d.id === id);
+  });
+  document.querySelectorAll('.dest-card[data-active-id]').forEach(el => {
+    el.classList.toggle('active', el.dataset.activeId === id);
+  });
+  if (id) {
+    const el = document.querySelector(`.dest-card[data-active-id="${id}"]`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+// ── Sidebar rendering ─────────────────────────────────────
+
+let currentTab = 'activos';
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tabActivos').classList.toggle('active', tab === 'activos');
+  document.getElementById('tabProximos').classList.toggle('active', tab === 'proximos');
+  buildSidebar(document.getElementById('sidebarSearch').value.toLowerCase().trim());
+}
+
+function buildSidebar(q) {
+  const list = document.getElementById('sidebarList');
+  list.innerHTML = '';
+
+  if (currentTab === 'activos') {
+    const filtered = ACTIVOS.filter(d => !q || (d.nombre + d.region).toLowerCase().includes(q));
+    if (!filtered.length) { list.innerHTML = '<p style="padding:20px 14px;font-size:0.82rem;color:rgba(237,238,242,0.35);text-align:center">Sin resultados</p>'; return; }
+
+    // Group by region
+    const byRegion = {};
+    filtered.forEach(d => { (byRegion[d.region] = byRegion[d.region] || []).push(d); });
+    Object.entries(byRegion).forEach(([region, items]) => {
+      const div = document.createElement('div');
+      div.className = 'region-divider'; div.textContent = region;
+      list.appendChild(div);
+      items.forEach(d => {
+        const card = document.createElement('div');
+        card.className = 'dest-card'; card.dataset.activeId = d.id;
+        card.setAttribute('role', 'listitem');
+        const top = document.createElement('div'); top.className = 'dest-card-top';
+        top.innerHTML = `
+          <div class="dest-emoji" style="background:${d.gradient}">${d.emoji}</div>
+          <div class="dest-info">
+            <div class="dest-name">${d.nombre}</div>
+            <div class="dest-meta">${d.region} · ${d.dias} días</div>
+          </div>
+          <div class="dest-price">${d.precio}</div>`;
+        top.addEventListener('click', () => {
+          map.setView(d.coords, 9, { animate: true, duration: 1 });
+          setTimeout(() => activeMarkers[d.id]?.openPopup(), 700);
+          setActive(d.id);
+        });
+        const link = document.createElement('a'); link.className = 'dest-card-link'; link.href = d.url;
+        link.innerHTML = `<span>Ver itinerario completo</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+        card.appendChild(top); card.appendChild(link);
+        list.appendChild(card);
+      });
+    });
+
+  } else {
+    const filtered = PROXIMOS.filter(d => !q || (d.nombre + d.region).toLowerCase().includes(q));
+    if (!filtered.length) { list.innerHTML = '<p style="padding:20px 14px;font-size:0.82rem;color:rgba(237,238,242,0.35);text-align:center">Sin resultados</p>'; return; }
+
+    const byRegion = {};
+    filtered.forEach(d => {
+      const r = d.region.includes('Andalucía') ? 'Andalucía' : d.region.includes('Madrid') ? 'Centro' : d.region.includes('Canarias') ? 'Islas Canarias' : d.region.includes('Baleares') ? 'Islas Baleares' : d.region;
+      (byRegion[r] = byRegion[r] || []).push(d);
+    });
+
+    Object.entries(byRegion).forEach(([region, items]) => {
+      const div = document.createElement('div'); div.className = 'region-divider'; div.textContent = region;
+      list.appendChild(div);
+      items.forEach(d => {
+        const card = document.createElement('div');
+        card.className = 'dest-card soon'; card.setAttribute('role', 'listitem');
+        const top = document.createElement('div'); top.className = 'dest-card-top';
+        top.innerHTML = `
+          <div class="dest-emoji" style="background:rgba(40,45,55,0.9)">${d.emoji}</div>
+          <div class="dest-info">
+            <div class="dest-name">${d.nombre}</div>
+            <div class="dest-meta">${d.region}</div>
+          </div>
+          <span class="soon-badge">Pronto</span>`;
+        top.addEventListener('click', () => {
+          map.setView(d.coords, 9, { animate: true, duration: 1 });
+          setTimeout(() => soonMarkers[d.id]?.openPopup(), 700);
+        });
+        card.appendChild(top);
+        list.appendChild(card);
+      });
+    });
+  }
+}
+
+function filterSidebar() {
+  const q = document.getElementById('sidebarSearch').value.toLowerCase().trim();
+  buildSidebar(q);
+}
+
+buildSidebar('');
+
+// ── Map ready ─────────────────────────────────────────────
+
+setTimeout(() => map.invalidateSize(), 200);
+window.addEventListener('resize', () => map.invalidateSize());
+
+// ── Nav auth ──────────────────────────────────────────────
+
+(function initNav() {
+  const token = localStorage.getItem('routlo_token');
+  const user  = JSON.parse(localStorage.getItem('routlo_user') || 'null');
+  const authLi = document.getElementById('navAuth');
+  if (!authLi) return;
+  if (token && user) {
+    authLi.innerHTML = `<a href="chatbot.html" class="nav-cta">✈️ Planificador</a><a href="chatbot.html" class="nav-user-badge" title="${user.name}">${user.name[0].toUpperCase()}</a>`;
+  } else {
+    authLi.innerHTML = `<a href="login.html" class="nav-login-link">Iniciar sesión</a><a href="registro.html" class="nav-cta">Registrarse</a>`;
+  }
+})();
+</script>
+</body>
+</html>

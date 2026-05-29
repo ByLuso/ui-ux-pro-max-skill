@@ -92,8 +92,9 @@
     <div class="filter-label">Filtrar por región</div>
     <div class="filter-chips" role="group" aria-label="Filtrar por región">
       <button class="chip active" onclick="setFilter('todos', this)" data-filter="todos">Todos (20)</button>
+      <button class="chip" onclick="setFilter('espana', this)" data-filter="espana">🇪🇸 España (2)</button>
       <button class="chip" onclick="setFilter('asia', this)" data-filter="asia">Asia (3)</button>
-      <button class="chip" onclick="setFilter('europa', this)" data-filter="europa">Europa (15)</button>
+      <button class="chip" onclick="setFilter('europa', this)" data-filter="europa">Europa (13)</button>
       <button class="chip" onclick="setFilter('africa', this)" data-filter="africa">África (1)</button>
       <button class="chip" onclick="setFilter('latinoamerica', this)" data-filter="latinoamerica">Latinoamérica (1)</button>
     </div>
@@ -108,6 +109,45 @@
       <div class="stats-bar-item"><div class="stats-bar-num">5</div> regiones</div>
       <div class="stats-bar-item"><div class="stats-bar-num">3–9</div> días de media</div>
       <div class="stats-bar-item"><div class="stats-bar-num">€450</div> desde</div>
+    </div>
+
+    <!-- ESPAÑA -->
+    <div class="region-label" data-region-header="espana" style="display:flex;align-items:center;gap:10px;">🇪🇸 España <a href="itinerarios-espana.html" style="font-size:0.7rem;color:rgba(201,169,110,0.6);text-decoration:none;font-family:'Jost',sans-serif;font-weight:500;padding:2px 8px;border:1px solid rgba(201,169,110,0.2);border-radius:12px;margin-left:4px;">Ver todo →</a></div>
+    <div class="itin-grid" id="grid-espana">
+      <!-- Tenerife -->
+      <a href="itinerarios/tenerife.html" class="itin-card" data-region="espana" data-name="tenerife canarias españa delfines teide volcán">
+        <div class="itin-card-img">
+          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#0d0806 0%,#2e1005 40%,#7a2d00 70%,#e8640844 100%);"></div>
+          <div class="itin-card-overlay"></div>
+          <span class="itin-card-tag">España · Canarias</span>
+          <span class="itin-card-dias">3 días</span>
+        </div>
+        <div class="itin-card-body">
+          <div class="itin-card-title">Tenerife, España</div>
+          <div class="itin-card-sub">🐬 Delfines en libertad frente a Los Gigantes, ruta por el Parque Nacional del Teide (3.718 m) y el pueblo secreto de Masca. Para 2 personas.</div>
+          <div class="itin-card-footer">
+            <div class="itin-card-price">Desde <strong>€800</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
+            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
+          </div>
+        </div>
+      </a>
+      <!-- Fuerteventura -->
+      <a href="itinerarios/fuerteventura.html" class="itin-card" data-region="espana" data-name="fuerteventura canarias dunas corralejo cofete kitesurf playa españa">
+        <div class="itin-card-img">
+          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#080600 0%,#1a1200 40%,#4a3400 70%,rgba(201,169,110,0.3) 100%);"></div>
+          <div class="itin-card-overlay"></div>
+          <span class="itin-card-tag">España · Canarias</span>
+          <span class="itin-card-dias">5 días</span>
+        </div>
+        <div class="itin-card-body">
+          <div class="itin-card-title">Fuerteventura, España</div>
+          <div class="itin-card-sub">🏖️ Dunas de arena blanca, playa virgen de Cofete de 14km, kitesurf y el mejor queso del mundo. El destino de playa más auténtico de España.</div>
+          <div class="itin-card-footer">
+            <div class="itin-card-price">Desde <strong>€650</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
+            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
+          </div>
+        </div>
+      </a>
     </div>
 
     <!-- ASIA -->
@@ -199,23 +239,6 @@
           <div class="itin-card-sub">Torre Eiffel, el Louvre, Montmartre y los mejores bistros: la Ciudad de la Luz en 4 días perfectamente optimizados.</div>
           <div class="itin-card-footer">
             <div class="itin-card-price">Desde <strong>€2,200</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
-            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
-          </div>
-        </div>
-      </a>
-      <!-- Tenerife -->
-      <a href="itinerarios/tenerife.html" class="itin-card" data-region="europa" data-name="tenerife canarias españa delfines teide">
-        <div class="itin-card-img">
-          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#0d0806 0%,#2e1005 40%,#7a2d00 70%,#e8640844 100%);"></div>
-          <div class="itin-card-overlay"></div>
-          <span class="itin-card-tag">Europa · España</span>
-          <span class="itin-card-dias">3 días</span>
-        </div>
-        <div class="itin-card-body">
-          <div class="itin-card-title">Tenerife, España</div>
-          <div class="itin-card-sub">🐬 Delfines en libertad frente a Los Gigantes, ruta por el Parque Nacional del Teide (3.718 m) y el pueblo secreto de Masca. Para 2 personas.</div>
-          <div class="itin-card-footer">
-            <div class="itin-card-price">Desde <strong>€800</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
             <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
           </div>
         </div>
@@ -407,23 +430,6 @@
           </div>
         </div>
       </a>
-      <!-- Fuerteventura -->
-      <a href="itinerarios/fuerteventura.html" class="itin-card" data-region="europa" data-name="fuerteventura canarias dunas corralejo cofete kitesurf playa españa">
-        <div class="itin-card-img">
-          <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#080600 0%,#1a1200 40%,#4a3400 70%,rgba(201,169,110,0.3) 100%);"></div>
-          <div class="itin-card-overlay"></div>
-          <span class="itin-card-tag">Europa · España</span>
-          <span class="itin-card-dias">5 días</span>
-        </div>
-        <div class="itin-card-body">
-          <div class="itin-card-title">Fuerteventura, España</div>
-          <div class="itin-card-sub">🏖️ Dunas de arena blanca, playa virgen de Cofete de 14km, kitesurf y el mejor queso del mundo. El destino de playa más auténtico de España.</div>
-          <div class="itin-card-footer">
-            <div class="itin-card-price">Desde <strong>€650</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
-            <span class="itin-card-btn">Ver itinerario <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
-          </div>
-        </div>
-      </a>
     </div>
 
     <!-- ÁFRICA -->
@@ -525,7 +531,7 @@
     });
 
     // Show/hide region headers and grids
-    ['asia','europa','africa','latinoamerica'].forEach(r => {
+    ['espana','asia','europa','africa','latinoamerica'].forEach(r => {
       const header = document.querySelector(`[data-region-header="${r}"]`);
       const grid = document.getElementById(`grid-${r}`);
       const regionVisible = currentFilter === 'todos' || currentFilter === r;
