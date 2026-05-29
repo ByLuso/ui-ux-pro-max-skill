@@ -231,18 +231,21 @@
 
 <div class="aurora" aria-hidden="true"><div class="aurora-mid"></div></div>
 
-<a href="#main-content" style="position:absolute;top:-100px;left:0;background:#c9a96e;color:#0a0a0a;padding:8px 16px;border-radius:0 0 8px 0;font-weight:600;z-index:999;transition:top 0.2s" onfocus="this.style.top='0'" onblur="this.style.top='-100px'">Saltar al contenido</a>
 
 <nav role="navigation" aria-label="Navegación principal">
-  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none" aria-label="Routlo — Inicio">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
     <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;">
   </a>
-  <ul style="display:flex;align-items:center;gap:4px;list-style:none" role="list">
-    <li><a href="../index.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.6);text-decoration:none;padding:8px 14px;border-radius:8px;transition:color 0.2s,background 0.2s" onmouseover="this.style.color='#edeef2';this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.color='rgba(237,238,242,0.6)';this.style.background='transparent'">Inicio</a></li>
-    <li><a href="../itinerarios.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.6);text-decoration:none;padding:8px 14px;border-radius:8px;transition:color 0.2s,background 0.2s" onmouseover="this.style.color='#edeef2';this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.color='rgba(237,238,242,0.6)';this.style.background='transparent'">Itinerarios</a></li>
-    <li><a href="../mapa.html" style="font-size:0.875rem;font-weight:500;color:rgba(237,238,242,0.6);text-decoration:none;padding:8px 14px;border-radius:8px;transition:color 0.2s,background 0.2s" onmouseover="this.style.color='#edeef2';this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.color='rgba(237,238,242,0.6)';this.style.background='transparent'">Mapa</a></li>
-    <li><a href="../index.html#generar" style="font-size:0.875rem;font-weight:600;color:#0a0a0a;text-decoration:none;padding:9px 20px;border-radius:10px;background:linear-gradient(135deg,#c9a96e,#a07840)">Generar itinerario</a></li>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li class="nav-auth" id="navAuth"></li>
   </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
 
 <!-- Hero -->
@@ -1023,6 +1026,11 @@
 </footer>
 
 <script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
   // Nav scroll effect
   window.addEventListener('scroll', () => {
     document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);

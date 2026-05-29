@@ -455,13 +455,20 @@
 <div class="aurora"></div>
 
 <!-- Nav -->
-<nav id="main-nav">
-  <a href="../index.html" class="nav-logo">Routlo</a>
-  <ul class="nav-links">
-    <li><a href="../itinerarios.html">Itinerarios</a></li>
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
     <li><a href="../mapa.html">Mapa</a></li>
-    <li><a href="../chatbot.html">Chat IA</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li class="nav-auth" id="navAuth"></li>
   </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
 
 <!-- Hero -->
@@ -1389,8 +1396,13 @@
 </footer>
 
 <script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
   // Nav scroll effect
-  const nav = document.getElementById('main-nav');
+  const nav = document.document.querySelector('nav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 60);
   });

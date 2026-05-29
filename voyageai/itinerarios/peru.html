@@ -150,16 +150,20 @@
 <div class="aurora"></div>
 
 <!-- NAVIGATION -->
-<nav style="position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08)">
-  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
     <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;">
   </a>
-  <ul style="display:flex;align-items:center;gap:4px;list-style:none">
-    <li><a href="../index.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Inicio</a></li>
-    <li><a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Itinerarios</a></li>
-    <li><a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none;padding:8px 14px;border-radius:8px">Mapa</a></li>
-    <li><a href="../index.html#cta" style="font-size:0.875rem;font-weight:600;color:#0a0a0a;background:linear-gradient(135deg,#c9a96e,#a07840);padding:9px 20px;border-radius:10px;text-decoration:none">Empezar gratis</a></li>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li class="nav-auth" id="navAuth"></li>
   </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -1054,6 +1058,11 @@
 </footer>
 
 <script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
 // TOC highlighting
 const sections = document.querySelectorAll('.itin-section');
 const tocLinks = document.querySelectorAll('.toc-link');
