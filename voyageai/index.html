@@ -135,12 +135,12 @@
 <!-- ─── NAVBAR ─── -->
 <nav role="navigation" aria-label="Navegación principal">
   <a href="index.html" class="nav-logo" aria-label="Routlo inicio">
-    <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#c9a96e;padding:3px 10px;">
+    <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
   </a>
   <ul class="nav-links" role="list">
     <li><a href="index.html" class="active">Inicio</a></li>
     <li><a href="itinerarios.html">Itinerarios</a></li>
-    <li><a href="itinerarios-espana.html">🇪🇸 España</a></li>
+    <li><a href="itinerarios-espana.html">España</a></li>
     <li><a href="mapa.html">Mapa</a></li>
     <li><a href="chatbot.html">Chatbot IA</a></li>
     <li class="nav-auth" id="navAuth"></li>
@@ -170,7 +170,7 @@
   <div class="hero-previews" role="list" aria-label="Destinos destacados">
     <a href="itinerarios/tokio.html" class="hero-preview-card" role="listitem" aria-label="Tokio, Japón - 5 días">
       <div class="hero-preview-img">
-        <div class="hero-preview-img-inner" style="background: linear-gradient(160deg,#0d1b2e 0%,#1a3a5c 40%,#2d5a8a 70%,#c9a96e44 100%);" aria-hidden="true"></div>
+        <div class="hero-preview-img-inner" style="background: linear-gradient(160deg,rgba(13,27,46,0.6) 0%,rgba(26,58,92,0.35) 50%,transparent 100%),url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=220&fit=crop&q=80&auto=format');background-size:cover;background-position:center;" aria-hidden="true"></div>
         <div class="hero-preview-overlay" aria-hidden="true"></div>
         <span class="hero-preview-days">5 días</span>
       </div>
@@ -181,7 +181,7 @@
     </a>
     <a href="itinerarios/roma.html" class="hero-preview-card" role="listitem" aria-label="Roma, Italia - 5 días">
       <div class="hero-preview-img">
-        <div class="hero-preview-img-inner" style="background: linear-gradient(160deg,#1a0a0a 0%,#3d1515 40%,#c0392b 70%,#e8c06844 100%);" aria-hidden="true"></div>
+        <div class="hero-preview-img-inner" style="background: linear-gradient(160deg,rgba(26,10,10,0.6) 0%,rgba(61,21,21,0.35) 50%,transparent 100%),url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=400&h=220&fit=crop&q=80&auto=format');background-size:cover;background-position:center;" aria-hidden="true"></div>
         <div class="hero-preview-overlay" aria-hidden="true"></div>
         <span class="hero-preview-days">5 días</span>
       </div>
@@ -375,7 +375,7 @@
       <div class="itin-card-img">
         <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#0d0200 0%,#350800 35%,#8b1a00 65%,rgba(201,169,110,0.25) 100%);"></div>
         <div class="itin-card-overlay"></div>
-        <span class="itin-card-tag" style="background:rgba(198,11,30,0.18);border-color:rgba(198,11,30,0.45);color:#ff6b7a">🇪🇸 España · 12 destinos</span>
+        <span class="itin-card-tag" style="background:rgba(198,11,30,0.18);border-color:rgba(198,11,30,0.45);color:#ff6b7a">España · 12 destinos</span>
         <span class="itin-card-dias">Colección</span>
       </div>
       <div class="itin-card-body">
@@ -416,7 +416,7 @@
   <div class="footer-inner container">
     <div class="footer-brand">
       <a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:4px">
-        <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#c9a96e;padding:3px 10px;">
+        <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
       </a>
       <p>La primera agencia de viajes impulsada por IA. Itinerarios personalizados para cada viajero, en cada destino del mundo.</p>
     </div>
@@ -468,7 +468,7 @@
     const authLi = document.getElementById('navAuth');
     if (!authLi) return;
     if (token && user) {
-      authLi.innerHTML = `<a href="chatbot.html" class="nav-cta">✈️ Planificador</a><a href="chatbot.html" class="nav-user-badge" title="${user.name}">${user.name[0].toUpperCase()}</a>`;
+      authLi.innerHTML = `<a href="chatbot.html" class="nav-cta">Planificador</a><a href="chatbot.html" class="nav-user-badge" title="${user.name}">${user.name[0].toUpperCase()}</a>`;
       document.getElementById('ctaRegisterBtn')?.remove();
       const main = document.getElementById('ctaMainBtn');
       if (main) main.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Ir al planificador`;

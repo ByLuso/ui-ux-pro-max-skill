@@ -61,7 +61,7 @@
 <!-- NAVBAR -->
 <nav role="navigation" aria-label="Navegación principal">
   <a href="index.html" class="nav-logo">
-    <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#c9a96e;padding:3px 10px;">
+    <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Inicio</a></li>
@@ -92,7 +92,7 @@
     <div class="filter-label">Filtrar por región</div>
     <div class="filter-chips" role="group" aria-label="Filtrar por región">
       <button class="chip active" onclick="setFilter('todos', this)" data-filter="todos">Todos (20)</button>
-      <button class="chip" onclick="setFilter('espana', this)" data-filter="espana">🇪🇸 España (12)</button>
+      <button class="chip" onclick="setFilter('espana', this)" data-filter="espana">España (12)</button>
       <button class="chip" onclick="setFilter('asia', this)" data-filter="asia">Asia (3)</button>
       <button class="chip" onclick="setFilter('europa', this)" data-filter="europa">Europa (13)</button>
       <button class="chip" onclick="setFilter('africa', this)" data-filter="africa">África (1)</button>
@@ -112,7 +112,7 @@
     </div>
 
     <!-- ESPAÑA -->
-    <div class="region-label" data-region-header="espana" style="display:flex;align-items:center;gap:10px;">🇪🇸 España <a href="itinerarios-espana.html" style="font-size:0.7rem;color:rgba(201,169,110,0.6);text-decoration:none;font-family:'Jost',sans-serif;font-weight:500;padding:2px 8px;border:1px solid rgba(201,169,110,0.2);border-radius:12px;margin-left:4px;">Ver todo →</a></div>
+    <div class="region-label" data-region-header="espana" style="display:flex;align-items:center;gap:10px;">España <a href="itinerarios-espana.html" style="font-size:0.7rem;color:rgba(201,169,110,0.6);text-decoration:none;font-family:'Jost',sans-serif;font-weight:500;padding:2px 8px;border:1px solid rgba(201,169,110,0.2);border-radius:12px;margin-left:4px;">Ver todo →</a></div>
     <div class="itin-grid" id="grid-espana">
       <!-- Tenerife -->
       <a href="itinerarios/tenerife.html" class="itin-card" data-region="espana" data-name="tenerife canarias españa delfines teide volcán">
@@ -658,7 +658,7 @@
   <div class="footer-inner container">
     <div class="footer-brand">
       <a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:4px">
-        <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#c9a96e;padding:3px 10px;">
+        <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
       </a>
       <p>La primera agencia de viajes impulsada por IA. Itinerarios personalizados para cada viajero, en cada destino del mundo.</p>
     </div>
@@ -736,7 +736,7 @@
     const authLi = document.getElementById('navAuth');
     if (!authLi) return;
     if (token && user) {
-      authLi.innerHTML = `<a href="chatbot.html" class="nav-cta">✈️ Planificador</a><a href="chatbot.html" class="nav-user-badge" title="${user.name}">${user.name[0].toUpperCase()}</a>`;
+      authLi.innerHTML = `<a href="chatbot.html" class="nav-cta">Planificador</a><a href="chatbot.html" class="nav-user-badge" title="${user.name}">${user.name[0].toUpperCase()}</a>`;
     } else {
       authLi.innerHTML = `<a href="login.html" class="nav-login-link">Iniciar sesión</a><a href="registro.html" class="nav-cta">Registrarse</a>`;
     }
