@@ -71,7 +71,7 @@ body {
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
 /* ─── Navbar ─── */
-nav {
+nav[role="navigation"] {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 0 32px; height: 72px;
   display: flex; align-items: center; justify-content: space-between;
@@ -262,7 +262,7 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
   .footer-inner { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 768px) {
-  nav { padding: 0 16px; }
+  nav[role="navigation"] { padding: 0 16px; }
   .nav-links { display: none; }
   .nav-links.mobile-open {
     display: flex !important; flex-direction: column;
@@ -287,7 +287,7 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
 }
 @media (max-width: 480px) {
-  nav { height: 60px; }
+  nav[role="navigation"] { height: 60px; }
   .itin-card-img { height: 160px; }
 }
 @media (prefers-reduced-motion: reduce) {
