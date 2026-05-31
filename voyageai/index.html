@@ -110,7 +110,7 @@
     .destacados-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 48px; }
     .all-link { display: flex; align-items: center; gap: 6px; font-size: 0.875rem; font-weight: 500; color: var(--gold); text-decoration: none; transition: gap 0.2s; }
     .all-link:hover { gap: 10px; }
-    .featured-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .featured-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 
     /* ─── CTA ─── */
     #cta { position: relative; z-index: 1; padding: 120px 24px; }
@@ -125,7 +125,7 @@
     .cta-input::placeholder { color: var(--fg-muted); }
 
     /* ─── Responsive ─── */
-    @media(max-width:1024px) { .how-inner{grid-template-columns:1fr;gap:48px} .features-grid{grid-template-columns:repeat(2,1fr)} .featured-grid{grid-template-columns:repeat(2,1fr)} .stats-grid{grid-template-columns:repeat(2,1fr)} }
+    @media(max-width:1024px) { .how-inner{grid-template-columns:1fr;gap:48px} .features-grid{grid-template-columns:repeat(2,1fr)} .featured-grid{grid-template-columns:repeat(2,1fr);} .stats-grid{grid-template-columns:repeat(2,1fr)} }
     @media(max-width:768px) { .features-grid{grid-template-columns:1fr} .featured-grid{grid-template-columns:1fr} .destacados-header{flex-direction:column;align-items:flex-start;gap:12px} .hero-previews{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding-bottom:8px} .hero-actions{flex-direction:column;align-items:center} .btn-primary,.btn-ghost{width:100%;justify-content:center;max-width:320px} .cta-inner{padding:48px 24px} }
   </style>
 </head>
@@ -135,13 +135,13 @@
 <!-- ─── NAVBAR ─── -->
 <nav role="navigation" aria-label="Navegación principal">
   <a href="index.html" class="nav-logo" aria-label="Routlo inicio">
-    <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#a3b18a;padding:3px 10px;">
+    <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#c9a96e;padding:3px 10px;">
   </a>
   <ul class="nav-links" role="list">
     <li><a href="index.html" class="active">Inicio</a></li>
     <li><a href="itinerarios.html">Itinerarios</a></li>
+    <li><a href="itinerarios-espana.html">🇪🇸 España</a></li>
     <li><a href="mapa.html">Mapa</a></li>
-    <li><a href="#como-funciona">Cómo funciona</a></li>
     <li><a href="chatbot.html">Chatbot IA</a></li>
     <li class="nav-auth" id="navAuth"></li>
   </ul>
@@ -371,6 +371,22 @@
         </div>
       </div>
     </a>
+    <a href="itinerarios-espana.html" class="itin-card reveal reveal-delay-3">
+      <div class="itin-card-img">
+        <div class="itin-card-img-inner" style="background:linear-gradient(160deg,#0d0200 0%,#350800 35%,#8b1a00 65%,rgba(201,169,110,0.25) 100%);"></div>
+        <div class="itin-card-overlay"></div>
+        <span class="itin-card-tag" style="background:rgba(198,11,30,0.18);border-color:rgba(198,11,30,0.45);color:#ff6b7a">🇪🇸 España · 12 destinos</span>
+        <span class="itin-card-dias">Colección</span>
+      </div>
+      <div class="itin-card-body">
+        <div class="itin-card-title">Itinerarios España</div>
+        <div class="itin-card-sub">Madrid, Barcelona, Sevilla, Granada, Mallorca, Doñana y mucho más. La guía completa de España.</div>
+        <div class="itin-card-footer">
+          <div class="itin-card-price">Desde <strong>€25</strong> <span style="font-size:0.75rem;color:var(--fg-muted)">/persona</span></div>
+          <span class="itin-card-btn">Explorar <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></span>
+        </div>
+      </div>
+    </a>
   </div>
 </section>
 
@@ -400,7 +416,7 @@
   <div class="footer-inner container">
     <div class="footer-brand">
       <a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:4px">
-        <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#a3b18a;padding:3px 10px;">
+        <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#c9a96e;padding:3px 10px;">
       </a>
       <p>La primera agencia de viajes impulsada por IA. Itinerarios personalizados para cada viajero, en cada destino del mundo.</p>
     </div>
