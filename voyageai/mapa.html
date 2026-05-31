@@ -240,6 +240,51 @@
     }
     .popup-cta:hover { opacity: 0.88; transform: translateY(-1px); }
 
+    /* ── Filter chips ── */
+    .filter-group { margin-top: 10px; }
+    .filter-label {
+      font-size: 0.65rem; font-weight: 700;
+      color: rgba(237,238,242,0.32);
+      text-transform: uppercase; letter-spacing: 0.09em;
+      margin-bottom: 5px;
+    }
+    .filter-chips {
+      display: flex; gap: 4px; flex-wrap: wrap;
+    }
+    .chip {
+      padding: 3px 10px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: rgba(237,238,242,0.5);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.71rem; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+      transition: border-color 0.18s, background 0.18s, color 0.18s;
+      line-height: 1.7;
+    }
+    .chip:hover {
+      border-color: rgba(255,255,255,0.22);
+      color: rgba(237,238,242,0.85);
+      background: rgba(255,255,255,0.07);
+    }
+    .chip.active {
+      background: rgba(201,169,110,0.14);
+      border-color: rgba(201,169,110,0.45);
+      color: #c9a96e;
+    }
+    .chip.active-green {
+      background: rgba(94,203,138,0.12);
+      border-color: rgba(94,203,138,0.4);
+      color: #5ecb8a;
+    }
+
+    /* Count badge */
+    .sidebar-count {
+      font-size: 0.7rem; color: rgba(237,238,242,0.35);
+      margin: 8px 0 2px; text-align: right;
+    }
+
     /* Mobile */
     @media (max-width: 768px) {
       html, body { overflow: auto; }
@@ -282,6 +327,28 @@
       <div class="sidebar-title">Destinos con itinerario</div>
       <div class="sidebar-sub">Clic en un destino → ver en mapa · "Ver itinerario" → página completa</div>
       <a href="mapa-espana.html" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;background:rgba(198,11,30,0.1);border:1px solid rgba(198,11,30,0.3);border-radius:9px;font-family:'Jost',sans-serif;font-size:0.78rem;font-weight:600;color:rgba(237,238,242,0.75);text-decoration:none;transition:background .2s,border-color .2s,color .2s;" onmouseover="this.style.background='rgba(198,11,30,0.18)';this.style.color='#edeef2'" onmouseout="this.style.background='rgba(198,11,30,0.1)';this.style.color='rgba(237,238,242,0.75)'">🇪🇸 Ver Mapa de España <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      <!-- Filtro: Continente -->
+      <div class="filter-group">
+        <div class="filter-label">Continente</div>
+        <div class="filter-chips" id="filterRegion">
+          <button class="chip active" data-value="all">Todos</button>
+          <button class="chip" data-value="Europa">🌍 Europa</button>
+          <button class="chip" data-value="Asia">🌏 Asia</button>
+          <button class="chip" data-value="África">África</button>
+          <button class="chip" data-value="Latinoamérica">🌎 Latam</button>
+        </div>
+      </div>
+      <!-- Filtro: Tipo -->
+      <div class="filter-group">
+        <div class="filter-label">Tipo</div>
+        <div class="filter-chips" id="filterTipo">
+          <button class="chip active" data-value="all">Todos</button>
+          <button class="chip" data-value="ciudad">🏙️ Ciudad</button>
+          <button class="chip" data-value="isla">🏝️ Isla</button>
+          <button class="chip" data-value="parque">🌿 Naturaleza</button>
+        </div>
+      </div>
+      <div class="sidebar-count" id="sidebarCount"></div>
       <div class="sidebar-search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="search" id="sidebarSearch" placeholder="Buscar destino..." aria-label="Buscar destino" oninput="filterSidebar()"/>
@@ -303,6 +370,7 @@ const DESTINOS = [
     nombre: 'Tokio',
     pais: 'Japón',
     region: 'Asia',
+    tipo: 'ciudad',
     emoji: '🗾',
     dias: 5,
     precio: '2.400€',
@@ -312,272 +380,37 @@ const DESTINOS = [
     img: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/tokio.html'
   },
-  {
-    id: 'bali',
-    nombre: 'Bali',
-    pais: 'Indonesia',
-    region: 'Asia',
-    emoji: '🌴',
-    dias: 7,
-    precio: '1.800€',
-    coords: [-8.3405, 115.092],
-    desc: 'Terrazas de arroz esmeralda, templos sagrados y playas paradisíacas.',
-    gradient: 'linear-gradient(160deg,#0d1a12 0%,#0d3a22 50%,#1a7a4a 100%)',
-    img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/bali.html'
-  },
-  {
-    id: 'tailandia',
-    nombre: 'Tailandia',
-    pais: 'Tailandia',
-    region: 'Asia',
-    emoji: '🏯',
-    dias: 8,
-    precio: '1.600€',
-    coords: [13.7563, 100.5018],
-    desc: 'Bangkok, Chiang Mai, elefantes éticos y las mejores islas del sur.',
-    gradient: 'linear-gradient(160deg,#0d1a0d 0%,#1a3d1a 50%,#2a6e2a 100%)',
-    img: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/tailandia.html'
-  },
-  {
-    id: 'marrakech',
-    nombre: 'Marrakech',
-    pais: 'Marruecos',
-    region: 'África',
-    emoji: '🇲🇦',
-    dias: 5,
-    precio: '1.200€',
-    coords: [31.6295, -7.9811],
-    desc: 'Souks laberínticos, riad con piscina y el mejor hammam de África.',
-    gradient: 'linear-gradient(160deg,#1a0d00 0%,#4a2200 50%,#c67c1a 100%)',
-    img: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/marrakech.html'
-  },
-  {
-    id: 'paris',
-    nombre: 'París',
-    pais: 'Francia',
-    region: 'Europa',
-    emoji: '🗼',
-    dias: 4,
-    precio: '2.200€',
-    coords: [48.8566, 2.3522],
-    desc: 'Torre Eiffel, el Louvre, Montmartre y los mejores bistros de Europa.',
-    gradient: 'linear-gradient(160deg,#0d0a1e 0%,#1e1048 50%,#3a2090 100%)',
-    img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/paris.html'
-  },
-  {
-    id: 'roma',
-    nombre: 'Roma',
-    pais: 'Italia',
-    region: 'Europa',
-    emoji: '🇮🇹',
-    dias: 5,
-    precio: '1.800€',
-    coords: [41.9028, 12.4964],
-    desc: 'La Ciudad Eterna: Vaticano, Coliseo y la mejor pasta de tu vida.',
-    gradient: 'linear-gradient(160deg,#1a0a0a 0%,#3d1515 50%,#c0392b 100%)',
-    img: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/roma.html'
-  },
-  {
-    id: 'peru',
-    nombre: 'Perú',
-    pais: 'Perú',
-    region: 'Latinoamérica',
-    emoji: '🦙',
-    dias: 6,
-    precio: '2.100€',
-    coords: [-9.19, -75.015],
-    desc: 'Lima, Cusco y Machu Picchu: historia inca y gastronomía de nivel mundial.',
-    gradient: 'linear-gradient(160deg,#0d0a1e 0%,#1e1048 50%,#5c3a9e 100%)',
-    img: 'https://images.unsplash.com/photo-1526392060635-9d6019884377?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/peru.html'
-  },
-  {
-    id: 'tenerife',
-    nombre: 'Tenerife',
-    pais: 'España',
-    region: 'Europa',
-    emoji: '🌋',
-    dias: 3,
-    precio: '800€',
-    coords: [28.2916, -16.6291],
-    desc: 'Delfines en libertad frente a Los Gigantes, ruta por el Teide y arena volcánica negra.',
-    gradient: 'linear-gradient(160deg,#0d0806 0%,#2e1005 50%,#7a2d00 100%)',
-    img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/tenerife.html'
-  },
-  {
-    id: 'berlin',
-    nombre: 'Berlín',
-    pais: 'Alemania',
-    region: 'Europa',
-    emoji: '🐻',
-    dias: 4,
-    precio: '700€',
-    coords: [52.5200, 13.4050],
-    desc: 'East Side Gallery, Mauerpark, Kreuzberg y la mejor vida nocturna de Europa. 5 jóvenes, 700€.',
-    gradient: 'linear-gradient(160deg,#060812 0%,#0d1422 50%,#162238 100%)',
-    img: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/berlin.html'
-  },
-  {
-    id: 'norte-italia',
-    nombre: 'Norte de Italia',
-    pais: 'Italia',
-    region: 'Europa',
-    emoji: '🏔️',
-    dias: 9,
-    precio: '2,100€',
-    coords: [46.1, 11.8],
-    desc: 'Milán, Lago de Como, Verona, Dolomitas y Venecia. El viaje que lo tiene todo en 9 días.',
-    gradient: 'linear-gradient(160deg,#040d1a 0%,#0d1e3d 50%,#1a3a55 100%)',
-    img: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/norte-italia.html'
-  },
-  {
-    id: 'lisboa',
-    nombre: 'Lisboa',
-    pais: 'Portugal',
-    region: 'Europa',
-    emoji: '🇵🇹',
-    dias: 4,
-    precio: '550€',
-    coords: [38.7169, -9.1399],
-    desc: 'Alfama, tranvía 28, pastéis de Belém y fado en vivo. La ciudad más auténtica de Europa occidental.',
-    gradient: 'linear-gradient(160deg,#0d0a06 0%,#2e1a08 50%,#8b3a10 100%)',
-    img: 'https://images.unsplash.com/photo-1548707309-dcebeab9ea9b?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/lisboa.html'
-  },
-  {
-    id: 'oporto',
-    nombre: 'Oporto',
-    pais: 'Portugal',
-    region: 'Europa',
-    emoji: '🍷',
-    dias: 3,
-    precio: '450€',
-    coords: [41.1579, -8.6291],
-    desc: 'Ribeira, bodegas de vino de Oporto, Livraria Lello y la Francesinha. El fin de semana perfecto.',
-    gradient: 'linear-gradient(160deg,#0a0500 0%,#2a1000 50%,#7a2e0a 100%)',
-    img: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/oporto.html'
-  },
-  {
-    id: 'budapest',
-    nombre: 'Budapest',
-    pais: 'Hungría',
-    region: 'Europa',
-    emoji: '🛁',
-    dias: 5,
-    precio: '650€',
-    coords: [47.4979, 19.0402],
-    desc: 'Balnearios termales, Parlamento deslumbrante, ruin bars y la gastronomía centroeuropea más rica.',
-    gradient: 'linear-gradient(160deg,#050810 0%,#0d1535 50%,#1a2875 100%)',
-    img: 'https://images.unsplash.com/photo-1541849546-216549ae216d?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/budapest.html'
-  },
-  {
-    id: 'praga',
-    nombre: 'Praga',
-    pais: 'República Checa',
-    region: 'Europa',
-    emoji: '🏰',
-    dias: 4,
-    precio: '600€',
-    coords: [50.0755, 14.4378],
-    desc: 'Ciudad medieval perfectamente conservada, cerveza a €1.50 y el castillo más grande de Europa.',
-    gradient: 'linear-gradient(160deg,#080500 0%,#1e1000 50%,#5a3200 100%)',
-    img: 'https://images.unsplash.com/photo-1562783999-31a2fd2ac734?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/praga.html'
-  },
-  {
-    id: 'cracovia',
-    nombre: 'Cracovia',
-    pais: 'Polonia',
-    region: 'Europa',
-    emoji: '🦅',
-    dias: 4,
-    precio: '480€',
-    coords: [50.0647, 19.9450],
-    desc: 'Plaza medieval más grande de Europa, Castillo Wawel, Minas de sal y el impactante memorial de Auschwitz.',
-    gradient: 'linear-gradient(160deg,#0f0505 0%,#2e0a0a 50%,#7a1515 100%)',
-    img: 'https://images.unsplash.com/photo-1519197924294-4ba991a11128?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/cracovia.html'
-  },
-  {
-    id: 'estambul',
-    nombre: 'Estambul',
-    pais: 'Turquía',
-    region: 'Europa',
-    emoji: '🕌',
-    dias: 5,
-    precio: '750€',
-    coords: [41.0082, 28.9784],
-    desc: 'Hagia Sofía, Gran Bazar, crucero por el Bósforo y hamam otomano. Donde Europa y Asia se abrazan.',
-    gradient: 'linear-gradient(160deg,#040d0f 0%,#0a2a2e 50%,#0d4a4a 100%)',
-    img: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/estambul.html'
-  },
-  {
-    id: 'rumania',
-    nombre: 'Rumanía',
-    pais: 'Rumanía',
-    region: 'Europa',
-    emoji: '🏰',
-    dias: 6,
-    precio: '580€',
-    coords: [44.4268, 26.1025],
-    desc: 'Bucarest, Castillo de Bran (Drácula), Brașov y las joyas medievales de Transilvania entre los Cárpatos.',
-    gradient: 'linear-gradient(160deg,#050a05 0%,#0d1f0a 50%,#1a4010 100%)',
-    img: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/rumania.html'
-  },
-  {
-    id: 'albania',
-    nombre: 'Albania',
-    pais: 'Albania',
-    region: 'Europa',
-    emoji: '🦅',
-    dias: 6,
-    precio: '550€',
-    coords: [41.3275, 19.8187],
-    desc: 'El secreto mejor guardado de Europa: riviera con agua turquesa, bunkers comunistas y Berat medieval.',
-    gradient: 'linear-gradient(160deg,#0f0505 0%,#2a0808 50%,#700a0a 100%)',
-    img: 'https://images.unsplash.com/photo-1571406252241-db0280bd36cd?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/albania.html'
-  },
-  {
-    id: 'belgrado',
-    nombre: 'Belgrado',
-    pais: 'Serbia',
-    region: 'Europa',
-    emoji: '🏯',
-    dias: 4,
-    precio: '480€',
-    coords: [44.7866, 20.4489],
-    desc: 'Fortaleza Kalemegdan, vida nocturna en splavovi flotantes y la gastronomía balcánica más auténtica.',
-    gradient: 'linear-gradient(160deg,#060508 0%,#150d20 50%,#2d1c50 100%)',
-    img: 'https://images.unsplash.com/photo-1597424216809-3ba9864aeb36?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/belgrado.html'
-  },
-  {
-    id: 'fuerteventura',
-    nombre: 'Fuerteventura',
-    pais: 'España',
-    region: 'Europa',
-    emoji: '🏖️',
-    dias: 5,
-    precio: '650€',
-    coords: [28.3587, -14.0537],
-    desc: 'Dunas de arena blanca, playa virgen de Cofete, kitesurf y el queso majorero premiado del mundo.',
-    gradient: 'linear-gradient(160deg,#080600 0%,#1a1200 50%,#4a3400 100%)',
-    img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=560&h=300&fit=crop&q=80&auto=format',
-    url: 'itinerarios/fuerteventura.html'
-  }
+  { id: 'bali', nombre: 'Bali', pais: 'Indonesia', region: 'Asia', tipo: 'isla', emoji: '🌴', dias: 7, precio: '1.800€', coords: [-8.3405, 115.092], desc: 'Terrazas de arroz esmeralda, templos sagrados y playas paradisíacas.', gradient: 'linear-gradient(160deg,#0d1a12 0%,#0d3a22 50%,#1a7a4a 100%)', img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/bali.html' },
+  { id: 'tailandia', nombre: 'Tailandia', pais: 'Tailandia', region: 'Asia', tipo: 'ciudad', emoji: '🏯', dias: 8, precio: '1.600€', coords: [13.7563, 100.5018], desc: 'Bangkok, Chiang Mai, elefantes éticos y las mejores islas del sur.', gradient: 'linear-gradient(160deg,#0d1a0d 0%,#1a3d1a 50%,#2a6e2a 100%)', img: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/tailandia.html' },
+  { id: 'marrakech', nombre: 'Marrakech', pais: 'Marruecos', region: 'África', tipo: 'ciudad', emoji: '🇲🇦', dias: 5, precio: '1.200€', coords: [31.6295, -7.9811], desc: 'Souks laberínticos, riad con piscina y el mejor hammam de África.', gradient: 'linear-gradient(160deg,#1a0d00 0%,#4a2200 50%,#c67c1a 100%)', img: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/marrakech.html' },
+  { id: 'paris', nombre: 'París', pais: 'Francia', region: 'Europa', tipo: 'ciudad', emoji: '🗼', dias: 4, precio: '2.200€', coords: [48.8566, 2.3522], desc: 'Torre Eiffel, el Louvre, Montmartre y los mejores bistros de Europa.', gradient: 'linear-gradient(160deg,#0d0a1e 0%,#1e1048 50%,#3a2090 100%)', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/paris.html' },
+  { id: 'roma', nombre: 'Roma', pais: 'Italia', region: 'Europa', tipo: 'ciudad', emoji: '🇮🇹', dias: 5, precio: '1.800€', coords: [41.9028, 12.4964], desc: 'La Ciudad Eterna: Vaticano, Coliseo y la mejor pasta de tu vida.', gradient: 'linear-gradient(160deg,#1a0a0a 0%,#3d1515 50%,#c0392b 100%)', img: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/roma.html' },
+  { id: 'peru', nombre: 'Perú', pais: 'Perú', region: 'Latinoamérica', tipo: 'ciudad', emoji: '🦙', dias: 6, precio: '2.100€', coords: [-9.19, -75.015], desc: 'Lima, Cusco y Machu Picchu: historia inca y gastronomía de nivel mundial.', gradient: 'linear-gradient(160deg,#0d0a1e 0%,#1e1048 50%,#5c3a9e 100%)', img: 'https://images.unsplash.com/photo-1526392060635-9d6019884377?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/peru.html' },
+  { id: 'tenerife', nombre: 'Tenerife', pais: 'España', region: 'Europa', tipo: 'isla', emoji: '🌋', dias: 3, precio: '800€', coords: [28.2916, -16.6291], desc: 'Delfines en libertad frente a Los Gigantes, ruta por el Teide y arena volcánica negra.', gradient: 'linear-gradient(160deg,#0d0806 0%,#2e1005 50%,#7a2d00 100%)', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/tenerife.html' },
+  { id: 'berlin', nombre: 'Berlín', pais: 'Alemania', region: 'Europa', tipo: 'ciudad', emoji: '🐻', dias: 4, precio: '700€', coords: [52.5200, 13.4050], desc: 'East Side Gallery, Mauerpark, Kreuzberg y la mejor vida nocturna de Europa.', gradient: 'linear-gradient(160deg,#060812 0%,#0d1422 50%,#162238 100%)', img: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/berlin.html' },
+  { id: 'norte-italia', nombre: 'Norte de Italia', pais: 'Italia', region: 'Europa', tipo: 'ciudad', emoji: '🏔️', dias: 9, precio: '2.100€', coords: [46.1, 11.8], desc: 'Milán, Lago de Como, Verona, Dolomitas y Venecia. El viaje que lo tiene todo en 9 días.', gradient: 'linear-gradient(160deg,#040d1a 0%,#0d1e3d 50%,#1a3a55 100%)', img: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/norte-italia.html' },
+  { id: 'lisboa', nombre: 'Lisboa', pais: 'Portugal', region: 'Europa', tipo: 'ciudad', emoji: '🇵🇹', dias: 4, precio: '550€', coords: [38.7169, -9.1399], desc: 'Alfama, tranvía 28, pastéis de Belém y fado en vivo. La ciudad más auténtica de Europa occidental.', gradient: 'linear-gradient(160deg,#0d0a06 0%,#2e1a08 50%,#8b3a10 100%)', img: 'https://images.unsplash.com/photo-1548707309-dcebeab9ea9b?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/lisboa.html' },
+  { id: 'oporto', nombre: 'Oporto', pais: 'Portugal', region: 'Europa', tipo: 'ciudad', emoji: '🍷', dias: 3, precio: '450€', coords: [41.1579, -8.6291], desc: 'Ribeira, bodegas de vino de Oporto, Livraria Lello y la Francesinha. El fin de semana perfecto.', gradient: 'linear-gradient(160deg,#0a0500 0%,#2a1000 50%,#7a2e0a 100%)', img: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/oporto.html' },
+  { id: 'budapest', nombre: 'Budapest', pais: 'Hungría', region: 'Europa', tipo: 'ciudad', emoji: '🛁', dias: 5, precio: '650€', coords: [47.4979, 19.0402], desc: 'Balnearios termales, Parlamento deslumbrante, ruin bars y la gastronomía centroeuropea más rica.', gradient: 'linear-gradient(160deg,#050810 0%,#0d1535 50%,#1a2875 100%)', img: 'https://images.unsplash.com/photo-1541849546-216549ae216d?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/budapest.html' },
+  { id: 'praga', nombre: 'Praga', pais: 'República Checa', region: 'Europa', tipo: 'ciudad', emoji: '🏰', dias: 4, precio: '600€', coords: [50.0755, 14.4378], desc: 'Ciudad medieval perfectamente conservada, cerveza a €1.50 y el castillo más grande de Europa.', gradient: 'linear-gradient(160deg,#080500 0%,#1e1000 50%,#5a3200 100%)', img: 'https://images.unsplash.com/photo-1562783999-31a2fd2ac734?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/praga.html' },
+  { id: 'cracovia', nombre: 'Cracovia', pais: 'Polonia', region: 'Europa', tipo: 'ciudad', emoji: '🦅', dias: 4, precio: '480€', coords: [50.0647, 19.9450], desc: 'Plaza medieval más grande de Europa, Castillo Wawel, Minas de sal y el impactante memorial de Auschwitz.', gradient: 'linear-gradient(160deg,#0f0505 0%,#2e0a0a 50%,#7a1515 100%)', img: 'https://images.unsplash.com/photo-1519197924294-4ba991a11128?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/cracovia.html' },
+  { id: 'estambul', nombre: 'Estambul', pais: 'Turquía', region: 'Europa', tipo: 'ciudad', emoji: '🕌', dias: 5, precio: '750€', coords: [41.0082, 28.9784], desc: 'Hagia Sofía, Gran Bazar, crucero por el Bósforo y hamam otomano. Donde Europa y Asia se abrazan.', gradient: 'linear-gradient(160deg,#040d0f 0%,#0a2a2e 50%,#0d4a4a 100%)', img: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/estambul.html' },
+  { id: 'rumania', nombre: 'Rumanía', pais: 'Rumanía', region: 'Europa', tipo: 'ciudad', emoji: '🏰', dias: 6, precio: '580€', coords: [44.4268, 26.1025], desc: 'Bucarest, Castillo de Bran (Drácula), Brașov y las joyas medievales de Transilvania.', gradient: 'linear-gradient(160deg,#050a05 0%,#0d1f0a 50%,#1a4010 100%)', img: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/rumania.html' },
+  { id: 'albania', nombre: 'Albania', pais: 'Albania', region: 'Europa', tipo: 'ciudad', emoji: '🦅', dias: 6, precio: '550€', coords: [41.3275, 19.8187], desc: 'El secreto mejor guardado de Europa: riviera con agua turquesa, bunkers comunistas y Berat medieval.', gradient: 'linear-gradient(160deg,#0f0505 0%,#2a0808 50%,#700a0a 100%)', img: 'https://images.unsplash.com/photo-1571406252241-db0280bd36cd?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/albania.html' },
+  { id: 'belgrado', nombre: 'Belgrado', pais: 'Serbia', region: 'Europa', tipo: 'ciudad', emoji: '🏯', dias: 4, precio: '480€', coords: [44.7866, 20.4489], desc: 'Fortaleza Kalemegdan, vida nocturna en splavovi flotantes y la gastronomía balcánica más auténtica.', gradient: 'linear-gradient(160deg,#060508 0%,#150d20 50%,#2d1c50 100%)', img: 'https://images.unsplash.com/photo-1597424216809-3ba9864aeb36?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/belgrado.html' },
+  { id: 'fuerteventura', nombre: 'Fuerteventura', pais: 'España', region: 'Europa', tipo: 'isla', emoji: '🏖️', dias: 5, precio: '650€', coords: [28.3587, -14.0537], desc: 'Dunas de arena blanca, playa virgen de Cofete, kitesurf y el queso majorero premiado del mundo.', gradient: 'linear-gradient(160deg,#080600 0%,#1a1200 50%,#4a3400 100%)', img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/fuerteventura.html' },
+  // ── España: ciudades ──
+  { id: 'madrid', nombre: 'Madrid', pais: 'España', region: 'Europa', tipo: 'ciudad', emoji: '🏛️', dias: 5, precio: '~200€', coords: [40.4168, -3.7038], desc: 'Prado, Reina Sofía, Retiro y la mejor escena gastronómica de la Península.', gradient: 'linear-gradient(160deg,#1a0000 0%,#4a0000 40%,#8b0000 70%,rgba(201,169,110,0.2) 100%)', img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/madrid.html' },
+  { id: 'barcelona', nombre: 'Barcelona', pais: 'España', region: 'Europa', tipo: 'ciudad', emoji: '🏗️', dias: 5, precio: '~220€', coords: [41.3851, 2.1734], desc: 'Sagrada Família, Las Ramblas, Gaudí y las playas más vibrantes del Mediterráneo.', gradient: 'linear-gradient(160deg,#020a1a 0%,#051830 35%,#0a3060 65%,rgba(201,169,110,0.2) 100%)', img: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/barcelona.html' },
+  { id: 'sevilla', nombre: 'Sevilla', pais: 'España', region: 'Europa', tipo: 'ciudad', emoji: '💃', dias: 4, precio: '~180€', coords: [37.3891, -5.9845], desc: 'Catedral, Real Alcázar, flamenco en el Triana y la naranja amarga más famosa de Europa.', gradient: 'linear-gradient(160deg,#100500 0%,#301500 35%,#803000 65%,rgba(230,120,20,0.2) 100%)', img: 'https://images.unsplash.com/photo-1508848575493-4e96e3f44e08?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/sevilla.html' },
+  { id: 'granada', nombre: 'Granada', pais: 'España', region: 'Europa', tipo: 'ciudad', emoji: '🏰', dias: 3, precio: '~160€', coords: [37.1773, -3.5986], desc: 'La Alhambra, el Albaicín morisco y las tapas gratuitas más generosas de España.', gradient: 'linear-gradient(160deg,#0d0008 0%,#250015 35%,#6b0035 65%,rgba(201,169,110,0.18) 100%)', img: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/granada.html' },
+  { id: 'mallorca', nombre: 'Mallorca', pais: 'España', region: 'Europa', tipo: 'isla', emoji: '⛵', dias: 5, precio: '~600€', coords: [39.6953, 2.9085], desc: 'Calas de aguas cristalinas, Serra de Tramuntana declarada Patrimonio UNESCO y Palma medieval.', gradient: 'linear-gradient(160deg,#020a10 0%,#051828 35%,#0a3050 65%,rgba(30,180,200,0.18) 100%)', img: 'https://images.unsplash.com/photo-1552083375-1447ce886485?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/mallorca.html' },
+  { id: 'san-sebastian', nombre: 'San Sebastián', pais: 'España', region: 'Europa', tipo: 'ciudad', emoji: '🦞', dias: 3, precio: '~280€', coords: [43.3183, -1.9812], desc: 'La playa de La Concha, pinxtos de primer nivel y la concentración más alta de estrellas Michelin del mundo.', gradient: 'linear-gradient(160deg,#030d08 0%,#082018 35%,#154535 65%,rgba(94,203,138,0.15) 100%)', img: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/san-sebastian.html' },
+  { id: 'valencia', nombre: 'Valencia', pais: 'España', region: 'Europa', tipo: 'ciudad', emoji: '🥘', dias: 4, precio: '~200€', coords: [39.4699, -0.3763], desc: 'Ciudad de las Artes y las Ciencias, paella auténtica en la Albufera y el Mercado Central más bello de Europa.', gradient: 'linear-gradient(160deg,#100500 0%,#2d1000 35%,#7a2800 65%,rgba(230,140,0,0.2) 100%)', img: 'https://images.unsplash.com/photo-1529551136879-af4fd258a992?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/valencia.html' },
+  // ── España: naturaleza ──
+  { id: 'donana', nombre: 'Doñana', pais: 'España', region: 'Europa', tipo: 'parque', emoji: '🦩', dias: 1, precio: '~52€', coords: [36.9388, -6.3553], desc: 'Reserva de la Biosfera con flamencos rosas, lince ibérico y las marismas más vastas de Europa.', gradient: 'linear-gradient(160deg,#020d04 0%,#063010 35%,#0d5520 65%,rgba(94,180,60,0.2) 100%)', img: 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/donana.html' },
+  { id: 'ordesa', nombre: 'Ordesa y Monte Perdido', pais: 'España', region: 'Europa', tipo: 'parque', emoji: '🏔️', dias: 1, precio: '~25€', coords: [42.5837, -0.0465], desc: 'El gran cañón español: cascadas heladas, quebrantahuesos y el imponente Monte Perdido (3.355 m).', gradient: 'linear-gradient(160deg,#030812 0%,#091828 35%,#142e55 65%,rgba(147,200,255,0.15) 100%)', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/ordesa.html' },
+  { id: 'montserrat', nombre: 'Montserrat', pais: 'España', region: 'Europa', tipo: 'parque', emoji: '⛰️', dias: 1, precio: '~31€', coords: [41.5931, 1.8394], desc: 'Montaña sagrada catalana con formaciones rocosas únicas, monasterio benedictino y vistas panorámicas.', gradient: 'linear-gradient(160deg,#100800 0%,#2a1500 35%,#5a3000 65%,rgba(201,169,110,0.2) 100%)', img: 'https://images.unsplash.com/photo-1589553816003-e5e83d7d9d08?w=560&h=300&fit=crop&q=80&auto=format', url: 'itinerarios/montserrat.html' }
 ];
 
 // ── Init map ──
@@ -663,13 +496,38 @@ function setActive(id) {
   }
 }
 
+// ── Filter state ──
+let filterRegion = 'all';
+let filterTipo   = 'all';
+
+function getFiltered() {
+  const q = document.getElementById('sidebarSearch').value.toLowerCase().trim();
+  return DESTINOS.filter(d => {
+    if (filterRegion !== 'all' && d.region !== filterRegion) return false;
+    if (filterTipo   !== 'all' && d.tipo   !== filterTipo)   return false;
+    if (q && !(d.nombre + d.pais + d.region + d.tipo).toLowerCase().includes(q)) return false;
+    return true;
+  });
+}
+
+function updateMarkers() {
+  const vis = new Set(getFiltered().map(d => d.id));
+  DESTINOS.forEach(d => {
+    const m = markers[d.id];
+    if (!m) return;
+    if (vis.has(d.id)) { if (!map.hasLayer(m)) m.addTo(map); }
+    else { if (map.hasLayer(m)) { m.closePopup(); m.remove(); } }
+  });
+}
+
 // ── Build sidebar ──
-function buildSidebar(q) {
+function buildSidebar() {
   const list = document.getElementById('sidebarList');
   list.innerHTML = '';
-  const filtered = q
-    ? DESTINOS.filter(d => (d.nombre + d.pais + d.region).toLowerCase().includes(q))
-    : DESTINOS;
+  const filtered = getFiltered();
+
+  const countEl = document.getElementById('sidebarCount');
+  if (countEl) countEl.textContent = `${filtered.length} destino${filtered.length !== 1 ? 's' : ''}`;
 
   if (!filtered.length) {
     list.innerHTML = '<p style="padding:20px 14px;font-size:0.82rem;color:rgba(237,238,242,0.4);text-align:center">Sin resultados</p>';
@@ -682,14 +540,13 @@ function buildSidebar(q) {
     card.dataset.id = d.id;
     card.setAttribute('role', 'listitem');
 
-    // Top row: click to fly to map
     const top = document.createElement('div');
     top.className = 'dest-card-top';
     top.innerHTML = `
       <div class="dest-emoji" style="background:${d.gradient}">${d.emoji}</div>
       <div class="dest-info">
         <div class="dest-name">${d.nombre}, ${d.pais}</div>
-        <div class="dest-meta">${d.region} · ${d.dias} días</div>
+        <div class="dest-meta">${d.region} · ${d.dias} día${d.dias !== 1 ? 's' : ''}</div>
       </div>
       <div class="dest-price">${d.precio}</div>`;
     top.addEventListener('click', () => {
@@ -698,7 +555,6 @@ function buildSidebar(q) {
       setActive(d.id);
     });
 
-    // Bottom row: direct link to itinerary page
     const link = document.createElement('a');
     link.className = 'dest-card-link';
     link.href = d.url;
@@ -712,12 +568,33 @@ function buildSidebar(q) {
   });
 }
 
-function filterSidebar() {
-  const q = document.getElementById('sidebarSearch').value.toLowerCase().trim();
-  buildSidebar(q);
+function applyFilters() {
+  updateMarkers();
+  buildSidebar();
 }
 
-buildSidebar('');
+function filterSidebar() { applyFilters(); }
+
+// ── Chip click handlers ──
+document.getElementById('filterRegion').addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('#filterRegion .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  filterRegion = btn.dataset.value;
+  applyFilters();
+});
+
+document.getElementById('filterTipo').addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('#filterTipo .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  filterTipo = btn.dataset.value;
+  applyFilters();
+});
+
+buildSidebar();
 
 // Ensure map renders correctly after layout settles
 setTimeout(() => map.invalidateSize(), 200);
