@@ -540,10 +540,15 @@ function buildSidebar() {
     card.dataset.id = d.id;
     card.setAttribute('role', 'listitem');
 
+    const thumbStyle = d.img
+      ? `background:linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.15)),url('${d.img.replace('w=560&h=300','w=80&h=80')}');background-size:cover;background-position:center`
+      : `background:${d.gradient}`;
+    const thumbContent = d.img ? '' : d.emoji;
+
     const top = document.createElement('div');
     top.className = 'dest-card-top';
     top.innerHTML = `
-      <div class="dest-emoji" style="background:${d.gradient}">${d.emoji}</div>
+      <div class="dest-emoji" style="${thumbStyle}">${thumbContent}</div>
       <div class="dest-info">
         <div class="dest-name">${d.nombre}, ${d.pais}</div>
         <div class="dest-meta">${d.region} · ${d.dias} día${d.dias !== 1 ? 's' : ''}</div>
