@@ -479,14 +479,11 @@
   function toggleMenu() {
     const links = document.querySelector('.nav-links');
     links.classList.toggle('mobile-open');
-    // Close when any link is clicked
     if (links.classList.contains('mobile-open')) {
       links.querySelectorAll('a').forEach(a => {
         a.addEventListener('click', () => links.classList.remove('mobile-open'), { once: true });
       });
     }
-  }
-    else { links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:rgba(4,8,16,0.97);padding:16px;gap:4px;border-bottom:1px solid rgba(255,255,255,0.08);z-index:99;'; }
   }
 </script>
 </body>
