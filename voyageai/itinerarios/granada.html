@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Granada — 3 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 3 días en Granada: la Alhambra, el Albaicín, el Sacromonte y el flamenco en cueva. Presupuesto desde €90 hasta €780/persona."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Base (fallback si shared.css no carga en file:// / content://) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav.scrolled { background:rgba(4,8,16,0.95); }
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#2d0020 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0010 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1e0018 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg,#0d0008 0%,#250015 35%,#6b0035 65%,rgba(201,169,110,0.18) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* ── Tablet ── */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+    /* ── Mobile ── */
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    /* ── Small mobile ── */
+    @media screen and (max-width: 640px) {
+      nav { padding: 0 14px !important; }
+      nav ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .alert-box { font-size: 0.8rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .act-desc { font-size: 0.82rem !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+      .disclosure { padding: 12px 14px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(150,0,80,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Granada</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Granada</h1>
+  <p class="dest-country">España · Andalucía · La Alhambra · Albaicín · Sacromonte</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 3 días / 2 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Romántico</span>
+    <span class="dest-badge gold" role="listitem">💶 €90–780/persona</span>
+    <span class="dest-badge" role="listitem">🌍 España · Andalucía</span>
+    <span class="dest-badge" role="listitem">🏰 Alhambra · Flamenco en cueva</span>
+    <a href="https://www.skyscanner.es/transport/flights/MAD/GRX/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">3 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">1 destino</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€90–780</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Abr–Jun / Sep–Nov</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · La Alhambra</a></li>
+        <li><a href="#dia2">Día 2 · Sacromonte</a></li>
+        <li><a href="#dia3">Día 3 · Sierra Nevada</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Granada es la ciudad más dramática de Andalucía: el último reducto del poder islámico en Europa, donde la Alhambra corona la colina como el más perfecto de los palacios construidos por el ser humano. En tres días descubrirás los palacios nazaríes del s.XIV —la obra maestra de la arquitectura islámica en Europa—, el barrio blanco del Albaicín encaramado frente a la Alhambra, el Sacromonte con sus cuevas de flamenco gitano y un sistema de tapas gratuitas que es único en toda España: en Granada, cada bebida viene acompañada de una tapa sin coste adicional. Una ciudad que combina lo árabe, lo cristiano y lo gitano en un equilibrio irrepetible.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏰</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">La Alhambra</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 1</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">💃</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Sacromonte</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 2</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">⛰️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Sierra Nevada</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 3</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Mochilero</th><th>Estándar</th><th>Lujo</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo/Bus A/R</td><td>€15–25</td><td>€60–120</td><td>€200</td><td>Bus desde Málaga/Sevilla €15–25 / Vuelo desde Madrid €60–120</td></tr>
+            <tr><td>🏨 Alojamiento (2 noches)</td><td>€40</td><td>€200</td><td>€500</td><td>Hay alojamiento en el Albaicín con vistas a la Alhambra iluminada</td></tr>
+            <tr><td>🍽️ Comidas (3 días)</td><td>€40</td><td>€110</td><td>€280</td><td>Granada es famosa por las tapas gratuitas con cada bebida — única ciudad de España</td></tr>
+            <tr><td>🚶 Transporte</td><td>€8</td><td>€15</td><td>€40</td><td></td></tr>
+            <tr><td>🎟️ La Alhambra</td><td>€19</td><td>€19</td><td>€19</td><td>El precio es fijo para todos. La variable es el horario y visitas adicionales</td></tr>
+            <tr><td>🌙 Flamenco en cueva</td><td>€25</td><td>€35</td><td>€70</td><td></td></tr>
+            <tr><td>🔄 Imprevistos</td><td>€13</td><td>€38</td><td>€105</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€145</strong></td><td><strong>~€417</strong></td><td><strong>~€1,014</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 El truco de Granada:</strong> Granada es única en España porque cada bebida incluye una tapa gratuita. El bar elige cuál. Esto significa que yendo de bar en bar puedes cenar con €6–8 en bebidas y salir comido. Los mejores barrios para este sistema: Calle Navas, Calle Elvira, Plaza Nueva y el Realejo. La tapa crece en generosidad según el bar y el barrio.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚌 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">🚌 Autobús ALSA — principal acceso</div>
+          <div class="transport-content">
+            Principal acceso a Granada. Desde <strong>Sevilla 3h (€15–25)</strong>, Málaga 1.5h (€12–18), Madrid 5h (€22–35). La estación de autobuses está junto a la de tren — ambas a 15 min del centro a pie o 5 min en bus LAC.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">✈️ Aeropuerto GRX</div>
+          <div class="transport-content">
+            <strong>17 km del centro.</strong> Autobús Autocares J. González (€3, 45 min) sale coordinado con los vuelos. Taxi <strong>~€25</strong>. Vuelos directos desde Madrid (Iberia/Vueling, 1h15min) y desde muchas ciudades europeas en temporada.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Bus urbano LAC — al Albaicín</div>
+          <div class="transport-content">
+            <strong>€1.40</strong> el billete. La línea <strong>LAC sube al Albaicín y al Sacromonte</strong> — esencial para no subir caminando con el calor de verano. El autobús C1 circula por el centro. Imprescindible para llegar al Mirador de San Nicolás desde el centro.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🏨 Aparcamiento en Granada</div>
+          <div class="transport-content">
+            Si vas en coche, el centro es <strong>zona azul difícil</strong>. Los hoteles del Albaicín tienen acceso para clientes pero calles muy estrechas. Mejor aparcar fuera (parking Puerta Real, €12/día) y usar transporte público o ir a pie.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Mochilero</div>
+          <div class="hotel-name">Oasis Backpackers Granada</div>
+          <div class="hotel-zone">Centro</div>
+          <div class="hotel-price">~€20/noche</div>
+          <ul class="hotel-features">
+            <li>Terraza-patio andaluz con bar</li>
+            <li>Organiza tours gratuitos a la Alhambra</li>
+            <li>Excelente ubicación para tapas</li>
+            <li>Comunidad viajera activa</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/oasis-backpackers-hostel-granada.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐⭐ Estándar</div>
+          <div class="hotel-name">Hotel Palacio de los Patos</div>
+          <div class="hotel-zone">Centro histórico</div>
+          <div class="hotel-price">~€100/noche</div>
+          <ul class="hotel-features">
+            <li>Palacio del s.XIX completamente restaurado</li>
+            <li>Piscina en jardín interior</li>
+            <li>Spa y restaurante Senzone</li>
+            <li>A 10 min del centro a pie</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/palacio-de-los-patos.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Alhambra Palace Hotel</div>
+          <div class="hotel-zone">Junto a la Alhambra</div>
+          <div class="hotel-price">~€250/noche</div>
+          <ul class="hotel-features">
+            <li>Inaugurado en 1910, vistas a la Vega</li>
+            <li>Interior neonazarí con cúpulas de muqarnas</li>
+            <li>Bar-terraza con mejor vista del atardecer</li>
+            <li>A 5 min a pie de la Alhambra</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/alhambra-palace.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">La Alhambra — la visita más importante de España</div>
+            <div class="day-subtitle">Palacio Nazarí · Generalife · Albaicín · Mirador San Nicolás · Tapas</div>
+          </div>
+          <div class="day-meta"><span>🏰 La Alhambra</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box warn">
+            <strong>⚠️ CRÍTICO — Reserva con meses de antelación:</strong> La Alhambra solo admite <strong>8.000 visitantes por día</strong> y las entradas al Palacio Nazarí se agotan semanas o meses antes en temporada alta. Reserva en <a href="https://www.alhambra-patronato.es" target="_blank" rel="noopener" style="color:#c9a96e">alhambra-patronato.es</a>. No hay venta en taquilla en temporada alta (Semana Santa, julio-agosto).
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">La Alhambra — el palacio nazarí más importante de España</div>
+              <div class="act-desc">El palacio-fortaleza nazarí es el monumento más visitado de España (2.9 millones/año). La Alhambra tiene varias partes: Palacio Nazarí (Comares con el Patio de los Arrayanes, el Palacio de los Leones con el Patio del mismo nombre y sus 124 columnas, y el Mexuar); el Palacio de Carlos V (renacentista dentro del nazarí, un contraste brutal); el Generalife (jardines de verano con fuentes que llevan 700 años sonando). La visita dura 3–4 horas sin prisa.</div>
+              <div class="act-tags"><span class="act-tag">€19 entrada general</span><span class="act-tag warn">Reservar con semanas</span><span class="act-tag info">3–4h visita</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en el Realejo — el barrio judío medieval de Granada</div>
+              <div class="act-desc">El Realejo es el antiguo barrio judío de Granada, hoy el más tranquilo y bohemio de la ciudad. Sus calles empedradas, casas con jardines ocultos y bares de tapas sin turistas son un contraste perfecto con la masificación de la Alhambra. Los bares de la Calle Pagés, Plaza del Campillo y Campo del Príncipe tienen las tapas más generosas de la ciudad.</div>
+              <div class="act-tags"><span class="act-tag">Tapa gratis con bebida</span><span class="act-tag green">Barrio tranquilo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">El Albaicín — subir al Mirador de San Nicolás</div>
+              <div class="act-desc">El barrio árabe medieval de Granada, declarado Patrimonio de la Humanidad junto a la Alhambra. Laberinto de callejuelas blancas, carmenes (casas con jardines privados), mezquitas reconvertidas y teterías. La subida al Mirador de San Nicolás (en bus LAC o a pie, 20 min de caminata cuesta arriba) al atardecer ofrece la vista más fotografiada de Andalucía: la Alhambra iluminada con la Sierra Nevada de fondo.</div>
+              <div class="act-tags"><span class="act-tag green">Mirador gratis</span><span class="act-tag info">Bus LAC</span><span class="act-tag">Mejor foto de Andalucía</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tapas gratuitas — Bar Los Diamantes, Bodegas Castañeda, El Bar de Eric</div>
+              <div class="act-desc">En Granada cada caña (o bebida) incluye una tapa gratis — el bar decide cuál, y cuanto más tiempo llevas en el mismo bar, más generosa suele ser la siguiente tapa. Bar Los Diamantes es legendario por sus gambas al ajillo. Bodegas Castañeda (1870) conserva sus tinajas originales de vino. El Bar de Eric en la Calle Navas es el favorito de los granadinos nocturnos.</div>
+              <div class="act-tags"><span class="act-tag green">Tapa gratis con bebida</span><span class="act-tag info">Sistema único en España</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">22:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mirador de San Nicolás de noche — la Alhambra iluminada</div>
+              <div class="act-desc">La Alhambra iluminada de noche es un espectáculo completamente diferente al de día. El mirador de San Nicolás, a pesar de estar lleno durante el atardecer, se vacía después de las 22h y recupera una calma especial. Las luces del palacio sobre el fondo oscuro de la colina y el cielo estrellado granadino (sin contaminación lumínica al sur) son una imagen difícil de olvidar.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Se vacía después de las 22h</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Bar / Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bar Los Diamantes</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Calle Navas</span></td><td>Gambas al ajillo como tapa gratis con cada caña. La más generosa de Granada.</td><td>~€8 (bebidas)</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Damasqueros</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Realejo</span></td><td>Cocina granadina contemporánea con influencias árabes. Menú de mediodía excelente.</td><td>~€28</td></tr>
+                <tr><td>👑 Premium</td><td><strong>La Fábula</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Centro · Estrella Michelin</span></td><td>Alta cocina con productos granadinos. El único restaurante con estrella Michelin de Granada.</td><td>~€75</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">El Sacromonte, las cuevas y el flamenco</div>
+            <div class="day-subtitle">Albaicín · Sacromonte · Capilla Real · Catedral · Zambra en cueva</div>
+          </div>
+          <div class="day-meta"><span>💃 Flamenco y Cultura</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Paseo por el Albaicín al amanecer — el barrio más silencioso de Granada</div>
+              <div class="act-desc">El Albaicín a primera hora de la mañana, cuando los turistas del atardecer aún no han llegado, es completamente diferente: gatos durmiendo en los peldaños, olor a pan recién hecho y los últimos vecinos del barrio árabe histórico recogiendo su ropa de los balcones. La Mezquita Mayor de Granada (construida en 2003 junto al Mirador de San Nicolás) y los carmenes son imprescindibles para entender cómo vivía la Granada árabe.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Mañana silenciosa</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Sacromonte — el barrio gitano y flamenco de Granada</div>
+              <div class="act-desc">El Sacromonte es el barrio gitano de Granada: cuevas habitadas desde el s.XV por familias gitanas que conservan sus enseres, sus tradiciones y su arte. El camino del Sacromonte, con las cuevas abiertas a la ladera, es diferente a cualquier barrio de Europa. El Museo Cuevas del Sacromonte (€5) da contexto histórico y cultural imprescindible sobre la zambra —el flamenco granadino—, diferente al flamenco sevillano en ritmo y estructura.</div>
+              <div class="act-tags"><span class="act-tag">€5 museo</span><span class="act-tag info">2h</span><span class="act-tag green">Cuevas habitadas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo con tapa gratis — ruta Calle Navas y Calle Elvira</div>
+              <div class="act-desc">La Calle Navas (peatonal, entre la Catedral y la Plaza de Trinidad) y la Calle Elvira son las dos arterias del sistema de tapas gratuitas. Cada bar tiene su especialidad: unos sirven gambas, otros morcilla con pimientos, otros patatas bravas o bocadillo caliente. La secuencia es: pide bebida, come tapa gratis, cambia de bar. Con €10 en bebidas comes perfectamente.</div>
+              <div class="act-tags"><span class="act-tag green">Tapa gratis</span><span class="act-tag info">Sistema único Granada</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Capilla Real de Granada — la tumba de los Reyes Católicos</div>
+              <div class="act-desc">Fernando e Isabel, los Reyes Católicos que financiaron a Colón y expulsaron a los moros de Granada, están enterrados aquí junto a su hija Juana la Loca y Felipe el Hermoso. El aguafuerte (la reja de hierro forjado) es la obra de orfebrería más impresionante del s.XVI en España. La colección de pinturas flamencas —Memling, Botticelli— que Isabel reunió en vida es extraordinaria.</div>
+              <div class="act-tags"><span class="act-tag">€5</span><span class="act-tag info">1h</span><span class="act-tag">Tumba Reyes Católicos</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Catedral de Granada + Alcaicería</div>
+              <div class="act-desc">La primera catedral renacentista de España, comenzada en 1523 sobre la antigua mezquita mayor de Granada. La Capilla Mayor con el altar de oro es impresionante por su escala. La Alcaicería —el antiguo zoco árabe de sedas y especias— está junto a la Catedral: hoy mercado de artesanía y especias con tiendas de azulejos, cerámica y productos de la Alpujarra.</div>
+              <div class="act-tags"><span class="act-tag">€5</span><span class="act-tag info">1h Catedral</span><span class="act-tag green">Alcaicería gratis</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ruta de tapas nocturna — Bodegas Castañeda 1870</div>
+              <div class="act-desc">Bodegas Castañeda (1870) es el bar más histórico del centro de Granada: tinajas de vino incrustadas en el mostrador, jamones colgados del techo y el vino de pitarra servido a temperatura de bodega. La Plaza Bib-Rambla y la zona de la Pescadería tienen concentración de bares para la ruta de tapas nocturna. Los locales de la Calle Reyes Católicos son los más frecuentados por universitarios.</div>
+              <div class="act-tags"><span class="act-tag green">Tapa gratis</span><span class="act-tag info">Bar histórico 1870</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">22:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Zambra en cueva del Sacromonte — flamenco en cueva</div>
+              <div class="act-desc">La zambra granadina en cueva es el flamenco más primitivo y auténtico que existe: artistas gitanos de familias que llevan generaciones en el Sacromonte, a metros del espectador en el interior de una cueva con paredes de adobe blanco. Cueva La Rocío, Venta El Gallo y Cueva María la Canastera son las más respetadas. Reservar con antelación — máximo 30–40 personas por cueva. €25–45.</div>
+              <div class="act-tags"><span class="act-tag">€25–45</span><span class="act-tag warn">Reservar online</span><span class="act-tag info">Máx. 30–40 personas</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Bar / Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bodegas Castañeda</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Calle Almecería</span></td><td>Vino de pitarra con tapa gratuita. Bodega centenaria con tinajas originales en el mostrador.</td><td>~€6</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Hicuri</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Plaza de los Girones</span></td><td>Cocina granadina creativa con influencias del norte de África. Carta de vinos local.</td><td>~€35</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Parador de Granada</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Dentro de la Alhambra</span></td><td>Cena en el único hotel dentro de la Alhambra, en un convento del s.XV. Cocina andaluza clásica.</td><td>~€60</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Sierra Nevada o Monasterio de La Cartuja · Despedida</div>
+            <div class="day-subtitle">Sierra Nevada / La Cartuja · Última ruta de tapas · Regreso</div>
+          </div>
+          <div class="day-meta"><span>⛰️ Excursión + Salida</span><span>Media jornada</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Dos opciones para el tercer día:</strong> Sierra Nevada (noviembre–mayo con nieve para esquiar, junio–octubre para senderismo de alta montaña) o el Monasterio de La Cartuja (todo el año), la obra más exuberante del barroco churrigueresco español.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">OPCIÓN A: Sierra Nevada — la estación de esquí más al sur de Europa</div>
+              <div class="act-desc">A 30 km de Granada, Sierra Nevada es la estación de esquí más meridional de Europa. De diciembre a abril: pistas con nieve garantizada, esquí con vistas al Mediterráneo y África en los días claros. Alquiler de esquís + forfait = €45–55/día. Se sube en 30 min desde Granada en coche o bus (€3, sale desde Gran Vía). En verano: senderismo por rutas de alta montaña hasta los 3.479m del Veleta.</div>
+              <div class="act-tags"><span class="act-tag">€45–55 esquí completo</span><span class="act-tag">Bus €3 ida</span><span class="act-tag info">30 km de Granada</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">OPCIÓN B: Monasterio de La Cartuja — barroco churrigueresco extremo</div>
+              <div class="act-desc">El Monasterio de La Cartuja (s.XVI–XVIII) tiene la sacristía más exuberante de España: mármoles de colores, jaspes, madreperla incrustada, estucos dorados y pinturas en un horror vacui que bordea lo surrealista. Es el barroco más extremo que existe y completamente diferente a cualquier iglesia conocida. El contraste entre el exterior austero y el interior abrumador es parte del impacto. A 15 min del centro en bus.</div>
+              <div class="act-tags"><span class="act-tag">€5</span><span class="act-tag info">1.5h</span><span class="act-tag">Barroco churrigueresco</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Última ruta de tapas por el centro</div>
+              <div class="act-desc">El último mediodía en Granada merece una ruta de tapas de despedida. La zona de Plaza Nueva, Calle Navas y Calle Pescadería tiene la mayor concentración de bares con tapas generosas. Pide una caña con remojón granadino (la tapa más típica), morcilla con pimientos y una caña más con gambas. El sistema de tapas gratuitas es el mejor recuerdo gastronómico que te lleva Granada.</div>
+              <div class="act-tags"><span class="act-tag green">Tapa gratis</span><span class="act-tag info">Despedida</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Comida de despedida</div>
+              <div class="act-desc">Para la última comida, el Restaurante Chikito (Plaza del Campillo) es histórico: Federico García Lorca y Manuel de Falla eran clientes habituales. La cocina granadina clásica —remojón, puchero andaluz, rabo de toro— en un ambiente que no ha cambiado en décadas. Los piononos de Santa Fe como postre son la firma dulce de la provincia.</div>
+              <div class="act-tags"><span class="act-tag">~€25</span><span class="act-tag info">Restaurante histórico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso — autobús, tren o vuelo</div>
+              <div class="act-desc">La estación de autobuses y la de tren están juntas, a 15 min del centro en bus C1. Autobús ALSA a Sevilla 3h (€15–25), a Málaga 1.5h (€12–18). El aeropuerto GRX está a 45 min en autobús (€3) o 25 min en taxi (€25). Añade 1h30min de margen para el aeropuerto.</div>
+              <div class="act-tags"><span class="act-tag">Bus a Málaga 1.5h €12–18</span><span class="act-tag">Bus a Sevilla 3h €15–25</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>La Alhambra — la obra maestra de la arquitectura islámica en Europa</h4><p>El Patio de los Leones, con sus 124 columnas de mármol blanco y la fuente central de 12 leones de piedra, y el Salón de Embajadores con su cúpula de 8.000 piezas de madera en forma de estrella, son la cumbre del arte nazarí.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Mirador de San Nicolás al atardecer — la foto más copiada de Andalucía</h4><p>La Alhambra iluminada por el sol poniente con la Sierra Nevada nevada de fondo es la imagen más reproducida de Andalucía. Llega 1 hora antes del atardecer para conseguir un buen sitio — o a las 8h de la mañana cuando solo hay gatos y fotógrafos profesionales.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Tapas GRATIS con cada bebida — único en España, único en el mundo</h4><p>El sistema granadino de tapas gratuitas es una institución cultural: cada bebida incluye una tapa decidida por el bar. Ir de bar en bar toda la noche comiendo sin pagar más que las bebidas es una experiencia que no existe en ninguna otra ciudad del mundo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Zambra en cueva del Sacromonte — flamenco en su contexto más primitivo</h4><p>30 personas en el interior de una cueva de adobe blanco con un artista gitano que lleva 3 generaciones en el Sacromonte. La acústica, la intimidad y la autenticidad no tienen equivalente en ningún tablao.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Generalife — los jardines del verano nazarí, 700 años sonando</h4><p>Los jardines de verano de los sultanes nazaríes tienen fuentes que llevan sonando desde el s.XIV. El Patio de la Acequia, con el canal central de agua y los chorros cruzados, es el prototipo de todos los jardines islámicos del Mediterráneo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>El Albaicín al amanecer — el barrio más silencioso y hermoso de Granada</h4><p>A las 7h de la mañana, el Albaicín pertenece a sus vecinos. Las calles blancas, los gatos, el olor a azahar y el silencio roto solo por alguna campana son la verdadera Granada árabe, antes de que lleguen los tours organizados.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Patio de los Leones — la geometría de los arcos y el reflejo en el agua</h4><p>El patio más fotografiado de la Alhambra: 124 columnas de mármol que se reflejan en el agua de la acequia circular, con la fuente de los 12 leones de piedra en el centro. La proporción matemática de los arcos es fruto de cálculos geométricos del s.XIV.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Bodegas Castañeda 1870 — bodega centenaria con tapas y vino de barril</h4><p>Las tinajas de vino incrustadas en el mostrador de madera, el jamón ibérico colgado del techo y el vino de pitarra a temperatura de bodega son el ambiente más auténtico del centro de Granada. El bar más honesto de la ciudad.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Nevadas en el Albaicín — la imagen más mágica posible</h4><p>Cuando nieva en Granada (diciembre–febrero), el Albaicín blanco cubierto de nieve con la Alhambra nevada de fondo es una imagen que existe solo aquí. Y ocurre más a menudo de lo que se cree: Granada está a 680 metros de altitud.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Capilla Real — la tumba de quien decidió el destino del mundo</h4><p>Fernando e Isabel son las dos personas que más han influido en la historia del mundo occidental moderno: financiaron a Colón, expulsaron a los árabes de Europa, crearon el Estado nación. Su tumba en Granada cierra ese ciclo histórico con una solemnidad sobria e impactante.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍽️ Gastronomía granadina</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Tapa única · Sistema</div><div class="gastro-title">El sistema de tapas gratuitas</div><div class="gastro-desc">Cuando pides una bebida (caña, vino, refresco), el bar te sirve una tapa gratis. El bar elige cuál. Se puede ir de bar en bar toda la noche comiendo gratis. Tradición única de Granada en toda España — y probablemente en todo el mundo. Mejor de lunes a jueves en Calle Navas, Elvira, Plaza Nueva y Realejo.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Plato local · Ensalada</div><div class="gastro-title">Remojón granadino</div><div class="gastro-desc">Ensalada de naranja, bacalao desalado, aceitunas negras, cebolla y aceite de oliva. Sabor agridulce característico de la Granada árabe-cristiana — la naranja viene de la influencia morisca, el bacalao de la tradición de Cuaresma. El plato más representativo de la cocina de frontera.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Carne · Cocido</div><div class="gastro-title">Puchero andaluz</div><div class="gastro-desc">El cocido granadino con garbanzos, carne de vacuno, morcilla, tocino y verduras de temporada. Contundente y perfecto para el frío de las noches granadinas de otoño e invierno. La morcilla de la Alpujarra, curada en altura, tiene un sabor diferente a cualquier morcilla de España.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Dulce árabe · Repostería</div><div class="gastro-title">Pasteles de almendra del Albaicín</div><div class="gastro-desc">Las panaderías del Albaicín con fachada de azulejo venden surtidos de pastas de almendra, coco y dátil de tradición árabe. La repostería nazarí, introducida en Granada en el s.XV por las familias moriscas, sobrevive aquí en formas que no han cambiado desde entonces.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Vino local · DO</div><div class="gastro-title">Vinos de Contraviesa-Alpujarra</div><div class="gastro-desc">Vinos de altura de las laderas de Sierra Nevada, entre 900m y 1.400m de altitud. Los tintos de monastrell y garnacha a estas alturas tienen una acidez y frescura única. Las bodegas familiares de la Alpujarra producen tirages limitados que solo se encuentran en la zona. Buscarlos en Bodegas Castañeda o en las teterías del Albaicín.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Dulce · Santa Fe</div><div class="gastro-title">Piononos de Santa Fe</div><div class="gastro-desc">El dulce más famoso de la provincia de Granada. Bizcocho enrollado bañado en almíbar, relleno de crema y tostado por arriba — pequeños, redondos e intensamente dulces. Se fabrican en Santa Fe, a 8 km de Granada, desde 1897 en la pastelería Casa Ysla. Se venden en todas las pastelerías de Granada.</div></div>
+      </div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section id="consejos" class="itin-section">
+      <h2 class="section-heading">💡 Consejos insider</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>LA ALHAMBRA SE AGOTA.</strong> La entrada al Palacio Nazarí tiene horarios de 30 minutos y cada horario solo tiene cupo limitado. Las entradas se agotan con semanas o meses de antelación en Semana Santa y verano. Reserva en alhambra-patronato.es lo antes posible. No hay venta en taquilla en temporada alta.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>La visita nocturna a la Alhambra</strong> (viernes, sábados y festivos) tiene cupo reducido (400 personas) y es más fácil de conseguir que la diurna. Solo acceso al Patio de los Leones y Palacio Nazarí — pero de noche es absolutamente mágico. Precio €8.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>El sistema de tapas gratuitas funciona mejor de lunes a jueves</strong> (el fin de semana está más lleno). Los mejores barrios: Calle Navas, Calle Elvira, Plaza Nueva, Realejo. Pide siempre "una caña" (o agua/refresco si no bebes alcohol) para activar la tapa.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Sube al Mirador de San Nicolás 1 hora antes del atardecer</strong> para conseguir buen sitio — o justo después de la salida del sol. El mirador a las 8h de la mañana solo tiene gatos y algún fotógrafo profesional. El contraste de luz a esa hora sobre la Alhambra es excepcional.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Para la Sierra Nevada en invierno:</strong> las pistas tienen nieve garantizada de diciembre a abril. Alquiler de esquís + forfait = €45–55/día. Se sube en 30 min desde Granada en coche o bus (€3). Ir a esquiar y comer tapas en el Albaicín el mismo día es un plan único en el mundo.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Granada es fría en invierno</strong> (noches bajo 0°C en enero–febrero) y muy calurosa en verano (hasta 40°C). La mejor época es abril–mayo y septiembre–octubre. En diciembre–febrero la ciudad está vacía de turistas, los precios bajan un 40% y puede nevar en el Albaicín.</div></div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales (UE)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos, ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Nacional</div><div class="emerg-value">091</div><div class="emerg-note">También atienden robos a turistas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Urgencias médicas</div><div class="emerg-value">061</div><div class="emerg-note">Servicio de urgencias de Andalucía</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil</div><div class="emerg-value">062</div><div class="emerg-note">Para zonas rurales y carreteras</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Virgen de las Nieves</div><div class="emerg-value">+34 958 020 000</div><div class="emerg-note">Urgencias 24h · Avda. Fuerzas Armadas, 2</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Universitario San Cecilio</div><div class="emerg-value">+34 958 023 000</div><div class="emerg-note">Urgencias 24h · Av. del Conocimiento, s/n</div></div>
+      </div>
+      <div class="alert-box warn" style="margin-top:14px">
+        <strong>⚠️ Seguridad en Granada:</strong> El entorno de la Catedral y la zona del Albaicín tienen presencia de carteristas en temporada alta. El Sacromonte de noche es seguro en los caminos principales pero evita los secundarios sin compañía. En la Sierra Nevada en invierno, respeta siempre las señales de pistas cerradas — los aludes son un riesgo real fuera de pistas.
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje con cobertura médica</div>
+            <div class="check-item"><div class="check-box"></div>Descarga Google Maps offline Granada</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">✈️ Reservas confirmadas</div>
+            <div class="check-item"><div class="check-box"></div>Vuelo, tren o bus (Granada GRX)</div>
+            <div class="check-item"><div class="check-box"></div><strong>LA ALHAMBRA — reservar con 1–3 meses en temporada alta</strong></div>
+            <div class="check-item"><div class="check-box"></div>Alojamiento (2 noches)</div>
+            <div class="check-item"><div class="check-box"></div>Zambra en cueva del Sacromonte</div>
+            <div class="check-item"><div class="check-box"></div>Visita nocturna Alhambra (opcional)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">🎒 Equipaje Granada</div>
+            <div class="check-item"><div class="check-box"></div>Calzado muy cómodo (Albaicín: cuestas)</div>
+            <div class="check-item"><div class="check-box"></div>Chaqueta (noches frías en primavera/otoño)</div>
+            <div class="check-item"><div class="check-box"></div>Ropa de abrigo si hay nieve prevista</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta sin comisiones (Revolut, N26)</div>
+            <div class="check-item"><div class="check-box"></div>Efectivo para tapas (algunos bares solo cash)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">📱 Apps esenciales Granada</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps — descarga offline Granada</div>
+            <div class="check-item"><div class="check-box"></div>ALSA — comprar bus Málaga/Sevilla/Madrid</div>
+            <div class="check-item"><div class="check-box"></div>Alhambra oficial — gestión de entradas</div>
+            <div class="check-item"><div class="check-box"></div>Sierra Nevada app (si vas a esquiar)</div>
+            <div class="check-item"><div class="check-box"></div>Booking para alojamiento en el Albaicín</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para Granada?</h3>
+      <p>Dinos tus fechas, presupuesto y estilo de viaje. Routlo IA te crea un plan a medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a Granada
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com, Skyscanner y operadores de actividades pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos y pueden variar según temporada, antelación y disponibilidad. La entrada a la Alhambra debe comprarse directamente en alhambra-patronato.es — desconfía de revendedores externos.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.5);text-decoration:none;font-size:0.85rem;margin-bottom:16px">← Ver todos los itinerarios</a>
+    <div style="font-size:0.78rem;color:rgba(237,238,242,0.3)">© 2026 Routlo · Hecho con IA para viajeros del mundo</div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+    const sections = document.querySelectorAll('.itin-section[id], .day-card[id]');
+    const links = document.querySelectorAll('.toc-list a');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }, { passive: true });
+</script>
+</body>
+</html>
