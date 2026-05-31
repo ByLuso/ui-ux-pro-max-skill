@@ -50,13 +50,13 @@
     }
 
     /* ── Nav ── */
-    nav {
+    nav[role="navigation"] {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: .9rem 2rem;
       transition: background .4s, backdrop-filter .4s;
     }
-    nav.scrolled {
+    nav[role="navigation"].scrolled {
       background: rgba(4,8,16,.85);
       backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--glass-border);
@@ -464,6 +464,7 @@
     <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
     <li><a href="../mapa.html">Mapa</a></li>
     <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
     <li class="nav-auth" id="navAuth"></li>
   </ul>
   <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">

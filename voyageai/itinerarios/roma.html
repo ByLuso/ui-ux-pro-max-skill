@@ -9,7 +9,7 @@
   <style>
     html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
     /* ── Nav override ── */
-    nav {
+    nav[role="navigation"] {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       padding: 0 32px; height: 72px;
       display: flex; align-items: center; justify-content: space-between;
@@ -18,7 +18,7 @@
       border-bottom: 1px solid rgba(255,255,255,0.08);
       transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
     }
-    nav.scrolled { background: rgba(4,8,16,0.95); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
 
     /* ── Aurora (warm Rome tones) ── */
     .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -357,8 +357,8 @@
       .gastro-grid { grid-template-columns: 1fr; }
     }
         @media (max-width: 640px) {
-      nav { padding: 0 14px; }
-      nav ul { display: none; }
+      nav[role="navigation"] { padding: 0 14px; }
+      nav[role="navigation"] ul { display: none; }
       /* Hero */
       .dest-hero { padding: 100px 16px 40px; }
       .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
@@ -413,6 +413,7 @@
     <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
     <li><a href="../mapa.html">Mapa</a></li>
     <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
     <li class="nav-auth" id="navAuth"></li>
   </ul>
   <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
@@ -1398,7 +1399,6 @@
     <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
       <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
       <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
-      <a href="../index.html#como-funciona" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Cómo funciona</a>
     </nav>
     <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
   </div>

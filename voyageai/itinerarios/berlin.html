@@ -17,8 +17,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #040810; color: #edeef2; font-family: 'Jost', system-ui, sans-serif; line-height: 1.6; }
 
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
-    nav.scrolled { background: rgba(4,8,16,0.96); }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.96); }
 
     /* Aurora — industrial steel blue for Berlin */
     .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -194,8 +194,8 @@
       .meal-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 640px) {
-      nav { padding: 0 14px; }
-      nav ul { display: none; }
+      nav[role="navigation"] { padding: 0 14px; }
+      nav[role="navigation"] ul { display: none; }
       .dest-hero { padding: 100px 16px 40px; }
       .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
       .dest-country { font-size: 1.1rem; }
@@ -235,6 +235,7 @@
     <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
     <li><a href="../mapa.html">Mapa</a></li>
     <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
     <li class="nav-auth" id="navAuth"></li>
   </ul>
   <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
