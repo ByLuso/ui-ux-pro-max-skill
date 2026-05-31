@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parque Nacional de Doñana — 1 día | Routlo</title>
+  <meta name="description" content="Guía para visitar Doñana en 1 día: tour en jeep por las marismas, lince ibérico en libertad y los flamencos del mayor humedal de Europa occidental. Desde Sevilla."/>
+  <meta property="og:title" content="Parque Nacional de Doñana — 1 día | Routlo"/>
+  <meta property="og:description" content="Tour en jeep por las marismas, lince ibérico en libertad y los flamencos del mayor humedal de Europa occidental."/>
+  <meta property="og:type" content="article"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav.scrolled { background:rgba(4,8,16,0.95); }
+
+    /* Aurora — deep greens for Doñana */
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d3010 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#061a08 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d2010 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none !important; } }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg, #020d04 0%, #063010 35%, #0d5520 65%, rgba(94,180,60,0.2) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-badge.green { border-color:rgba(94,203,138,0.3);color:#5ecb8a; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent;font-size:0.82rem; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2;border-left-color:rgba(201,169,110,0.4); }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box.green { background:rgba(94,203,138,0.06);border:1px solid rgba(94,203,138,0.2); }
+    .alert-box strong { color:#edeef2; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* Responsive */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+    }
+    @media screen and (max-width: 640px) {
+      nav { padding: 0 14px !important; }
+      nav ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.9rem !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(94,180,60,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(13,80,30,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e" aria-current="page">Doñana</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Doñana</h1>
+  <p class="dest-country">España · Andalucía · Huelva / Sevilla · Patrimonio UNESCO</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">🌿 1 día</span>
+    <span class="dest-badge" role="listitem">🚙 Tour en jeep obligatorio</span>
+    <span class="dest-badge gold" role="listitem">💶 €52–185/persona</span>
+    <span class="dest-badge" role="listitem">🌍 UNESCO 1994</span>
+    <span class="dest-badge green" role="listitem">🦁 Lince ibérico en libertad</span>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">1 día</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Acceso</div><div class="dest-sum-val" style="font-size:0.85rem">Tour organizado</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Desde Sevilla</div><div class="dest-sum-val">1h</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">UNESCO desde</div><div class="dest-sum-val">1994</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Must-see</div><div class="dest-sum-val" style="font-size:0.82rem">Lince ibérico</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#sobre" class="active">Sobre el lugar</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#como-llegar">Cómo llegar</a></li>
+        <li><a href="#ruta">Ruta del día</a></li>
+        <li><a href="#fauna">Fauna y Flora</a></li>
+        <li><a href="#que-llevar">Qué llevar</a></li>
+        <li><a href="#mejor-epoca">Mejor época</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── SOBRE EL LUGAR ── -->
+    <section id="sobre" class="itin-section">
+      <h2 class="section-heading">🌿 Sobre el lugar</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        El Parque Nacional de Doñana (103.000 hectáreas) es el mayor humedal de Europa occidental y uno de los espacios naturales más importantes del mundo. Situado en el estuario del río Guadalquivir, en la costa atlántica andaluza (provincias de Huelva y Sevilla), es Patrimonio de la Humanidad UNESCO desde 1994 y Reserva de la Biosfera.
+      </p>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        El parque tiene tres ecosistemas completamente diferentes: las <strong style="color:#c9a96e">marismas</strong> (lagunas y zonas inundadas), el <strong style="color:#c9a96e">coto</strong> (bosque mediterráneo de alcornoques y pinos) y las <strong style="color:#c9a96e">dunas móviles</strong> del litoral atlántico. Esta combinación genera una biodiversidad única en Europa: 370 especies de aves, el lince ibérico (el felino más amenazado del mundo occidental), el águila imperial ibérica y el meloncillo.
+      </p>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        La Romería del Rocío (Pentecostés, año par) concentra en el pueblo de El Rocío más de 1 millón de personas durante una semana — la procesión más multitudinaria del mundo. El pueblo de arena blanca y casas encaladas al borde del parque es visitable todo el año.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🦁</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Lince ibérico</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">70–80% avistamiento</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🦩</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">60.000 flamencos</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">En las marismas (oct-mar)</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏜️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Dunas móviles</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">6 metros/año de desplazamiento</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza tu visita a Doñana con IA</h3>
+        <p>Ajusta fechas, intereses y punto de partida. Routlo te genera el plan perfecto en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi plan de visita
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Económico</th><th>Estándar</th><th>Premium</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>🚗 Transporte A/R</td><td>Bus desde Sevilla €10</td><td>Coche propio €18</td><td>Tour privado desde hotel Sevilla €50</td></tr>
+            <tr><td>🌿 Tour en jeep (obligatorio para el interior)</td><td>Tour grupo grande €30</td><td>Tour estándar €45</td><td>Tour privado €90</td></tr>
+            <tr><td>🍽️ Comida del día</td><td>Bocadillo propio €0</td><td>Restaurante El Rocío €25</td><td>Restaurante gastronómico €45</td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€40</strong></td><td><strong>~€88</strong></td><td><strong>~€185</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo:</strong> Reserva el tour en jeep con 1–2 semanas de antelación en temporada alta (oct-mar). Los tours salen del Centro de Visitantes El Acebuche. No se puede entrar al interior del Parque Nacional en vehículo propio, a pie ni en bicicleta.
+      </div>
+    </section>
+
+    <!-- ── CÓMO LLEGAR ── -->
+    <section id="como-llegar" class="itin-section">
+      <h2 class="section-heading">🚗 Cómo llegar</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">🚗 Desde Sevilla (1h)</div>
+          <div class="transport-content">
+            <strong>A-49 hacia Huelva</strong>, desvío Almonte, A-483 a El Rocío. El Centro de Visitantes El Acebuche (entrada principal) está a 3 km de El Rocío. Parking gratuito junto al centro de visitantes. La ruta es sencilla y bien señalizada desde la A-49.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Bus desde Sevilla</div>
+          <div class="transport-content">
+            Empresa <strong>Damas</strong>, línea Sevilla-Almonte-El Rocío (<strong>€8, 1h15</strong>). El bus no entra al parque. Combina con el tour de jeep que sale del Centro de Visitantes El Acebuche, a 3 km de la parada de bus en El Rocío. Taxi El Rocío → El Acebuche €8 aprox.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 Desde Huelva (45 min)</div>
+          <div class="transport-content">
+            Por la <strong>A-483</strong>. La distancia es menor que desde Sevilla. El Centro de Visitantes <strong>José Antonio Valverde</strong> (mejor para aves en invierno, en el lado de Huelva) es la alternativa para los visitantes que llegan desde el oeste. Las marismas son especialmente espectaculares desde este acceso.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 Desde Cádiz (1.5h) o Málaga (2h)</div>
+          <div class="transport-content">
+            Perfecta <strong>parada de 1 día</strong> entre destinos en ruta hacia Sevilla. Desde Cádiz por la A-480. Desde Málaga por la A-92 hasta Sevilla y luego A-49. Doñana queda en el recorrido entre la Costa del Sol y Sevilla — añadirla no supone desvío significativo.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RUTA DEL DÍA ── -->
+    <section id="ruta" class="itin-section">
+      <h2 class="section-heading">🗓️ Ruta del día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Doñana: marismas, lince y flamencos</div>
+            <div class="day-subtitle">Tour en jeep · El Rocío · Observatorio de aves · Ermita</div>
+          </div>
+          <div class="day-meta"><span>🌿 Doñana</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+
+          <div class="alert-box warn" style="margin-bottom:18px">
+            <strong>⚠️ Imprescindible:</strong> El interior del Parque Nacional es de acceso PROHIBIDO sin tour autorizado. Reserva online con 1–2 semanas de antelación. Los tours salen del Centro de Visitantes El Acebuche.
+          </div>
+
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida desde Sevilla hacia El Acebuche</div>
+              <div class="act-desc">Llega 30 minutos antes del tour para registrarse y preparar el material. Los tours matutinos tienen la mayor probabilidad de avistamiento de lince — la luz del amanecer y las horas frescas son cuando el lince está más activo. A-49 hacia Huelva, desvío Almonte.</div>
+              <div class="act-tags"><span class="act-tag">1h desde Sevilla</span><span class="act-tag info">Llevar prismáticos</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tour en jeep todo terreno — 4 horas en el interior del Parque Nacional</div>
+              <div class="act-desc">El jeep accede al interior del Parque Nacional SOLO a través de tours autorizados. El vehículo atraviesa las marismas (en invierno con miles de aves), el coto (bosque de pinos y alcornoques) y las dunas móviles del litoral atlántico. La playa interior del parque es completamente virgen — sin construcción visible en ningún ángulo. Los guías llevan radio-localizadores GPS de los linces marcados.</div>
+              <div class="act-tags"><span class="act-tag gold">€30–90 según tour</span><span class="act-tag green">70–80% avistamiento lince</span><span class="act-tag info">4 horas</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Marismas — flamencos, espátulas y cigüeñas</div>
+              <div class="act-desc">Máxima concentración de flamencos, espátulas y cigüeñas de octubre a marzo. Colonias de hasta 60.000 flamencos rozando el agua al amanecer. En verano queda menos agua pero el lince es más activo. Los patos cuchara, las agachadizas y las gaviotas cabecinegras completan el paisaje ornitológico.</div>
+              <div class="act-tags"><span class="act-tag green">Mejor oct-mar</span><span class="act-tag info">370 especies de aves</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Dunas móviles del litoral atlántico</div>
+              <div class="act-desc">Las dunas más activas de Europa, que se desplazan 6 metros por año. Enterran el bosque que encuentran — los troncos de pinos enterrados y luego descubiertos forman paisajes únicos. La perspectiva desde lo alto de las dunas sobre el océano Atlántico y los pinares es extraordinaria.</div>
+              <div class="act-tags"><span class="act-tag">6 m/año de movimiento</span><span class="act-tag info">Única en Europa</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Coto — Bosque mediterráneo y avistamiento del lince ibérico</div>
+              <div class="act-desc">El guía tiene localizadores GPS de los linces marcados con radiocollares. Probabilidad de avistamiento del lince ibérico: 70–80% en los tours matutinos. El lince ibérico quedaba en 94 individuos en todo el mundo en 2002; hoy superan los 1.000 gracias al programa de cría en cautividad y reintroducción. Ver uno en libertad es uno de los privilegios naturales más exclusivos del planeta.</div>
+              <div class="act-tags"><span class="act-tag green">70-80% avistamiento</span><span class="act-tag">Radiocollares GPS</span><span class="act-tag info">El felino más amenazado de Europa</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a El Acebuche — Centro de Visitantes</div>
+              <div class="act-desc">El Centro de Visitantes El Acebuche tiene una exposición permanente sobre la biodiversidad de Doñana, la historia del parque y el programa de recuperación del lince. Entrada gratuita. Tienda con publicaciones y recuerdos del parque.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Exposición permanente</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en El Rocío — el pueblo de arena blanca</div>
+              <div class="act-desc">El Rocío es el único pueblo del mundo sin asfalto — todas las calles son de arena blanca, y los caballos marismeños campan libremente por ellas. La gastronomía local incluye cangrejos del río, choco frito (sepia pequeña), chocos con habas y el jamón de bellota de los cerdos ibéricos que pastan en las dehesas del coto.</div>
+              <div class="act-tags"><span class="act-tag">~€20-25</span><span class="act-tag">🦀 Cangrejos y chocos</span><span class="act-tag info">Sin asfalto en ninguna calle</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Observatorio de aves de El Rocío — gratis y sin reserva</div>
+              <div class="act-desc">Desde el paseo de madera junto a la Ermita del Rocío se ven flamencos, garzas imperiales y espátulas a distancia de metros. Es uno de los mejores observatorios de aves de Europa, completamente gratuito y sin necesidad de tour ni guía. Solo el interior del Parque Nacional está restringido — las marismas de El Rocío son acceso libre.</div>
+              <div class="act-tags"><span class="act-tag green">100% gratis</span><span class="act-tag green">Sin reserva</span><span class="act-tag info">Flamencos a metros</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ermita del Rocío — imagen más venerada de Andalucía</div>
+              <div class="act-desc">Visitar el santuario de la Virgen del Rocío, la imagen religiosa más importante de Andalucía y una de las más veneradas de España. La ermita es visitable todo el año. La imagen de la Virgen está en su camarín y puede venerarse directamente. Al atardecer la luz dorada sobre la ermita blanca y las marismas de fondo es una de las estampas más hermosas de la España interior.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag">Imagen románica s.XIII</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Sevilla</div>
+              <div class="act-desc">1 hora de regreso por la A-483 y A-49. Si el viaje empieza o termina en la Costa del Sol o Cádiz, continúa en dirección contraria — Doñana está perfectamente situada entre destinos.</div>
+              <div class="act-tags"><span class="act-tag info">1h hasta Sevilla</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAUNA ── -->
+    <section id="fauna" class="itin-section">
+      <h2 class="section-heading">🦁 Fauna y Flora de Doñana</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Mamífero · Amenazado</div>
+          <div class="gastro-title">Lince ibérico (Lynx pardinus)</div>
+          <div class="gastro-desc">El felino más amenazado de Europa. Cuerpo manchado, patas largas, orejas con mechones negros. Activo al amanecer y atardecer. En 2002 quedaban 94 individuos en el mundo; hoy superan los 1.000 gracias al programa de cría y reintroducción. Ver uno en libertad es uno de los privilegios naturales más exclusivos del planeta.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Ave rapaz · Amenazada</div>
+          <div class="gastro-title">Águila imperial ibérica (Aquila adalberti)</div>
+          <div class="gastro-desc">El ave rapaz más amenazada de Europa. Envergadura de 1.8m. Plumaje marrón oscuro con parches blancos en los hombros. Las parejas nidifican en los pinos del coto y son territoriales — los mismos nidos se usan año tras año. Solo existen en la Península Ibérica.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Ave · Colonia masiva</div>
+          <div class="gastro-title">Flamenco rosa (Phoenicopterus roseus)</div>
+          <div class="gastro-desc">Colonias de hasta 60.000 individuos en las marismas en invierno. El rosa intenso de las alas en vuelo sobre el agua es uno de los espectáculos naturales más impresionantes de Europa. Se alimentan filtrando microorganismos del barro con el pico en forma de cucharón invertido.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Ave · Pico singular</div>
+          <div class="gastro-title">Espátula común (Platalea leucorodia)</div>
+          <div class="gastro-desc">Pico en forma de espátula para remover el barro y capturar peces. Plumaje blanco inmaculado con cresta amarilla. La colonia de Doñana es una de las más importantes de Europa. Nidifican en los carrizales y árboles junto a las marismas. Fácilmente observable desde el paseo de El Rocío.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Mamífero · Único</div>
+          <div class="gastro-title">Meloncillo (Herpestes ichneumon)</div>
+          <div class="gastro-desc">La única mangosta autóctona de Europa. Cuerpo alargado, pelaje gris jaspeado, cola larga. Activa de día, frecuente en el coto de alcornoques y pinos. Se alimenta de ratones, conejos, serpientes y huevos. Doñana tiene una de las poblaciones más densas de Europa.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Mamífero · Icónico</div>
+          <div class="gastro-title">Caballo marismeño</div>
+          <div class="gastro-desc">Raza autóctona andaluza que vive en semilibertad en las marismas de Doñana. Grupos de caballos sueltos en las llanuras inundadas son una imagen característica del parque. Descienden de los caballos que los campesinos dejaban pastar libremente en las marismas desde hace siglos.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── QUÉ LLEVAR ── -->
+    <section id="que-llevar" class="itin-section">
+      <h2 class="section-heading">🎒 Qué llevar</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Prismáticos:</strong> imprescindibles para fauna y aves a distancia. Las distancias de avistamiento en las marismas son grandes y sin prismáticos muchas aves quedan solo como puntos en el horizonte.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Ropa en capas:</strong> las mañanas pueden ser frescas (10–15°C) aunque el mediodía alcance 30°C en verano. Lleva una chaqueta ligera para el tour matutino.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Protección solar FPS50+ y gorra:</strong> las marismas son espacios abiertos sin sombra. La radiación UV es intensa, especialmente de abril a septiembre.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Repelente de mosquitos con DEET:</strong> en primavera-verano los mosquitos son abundantes en las marismas y zonas húmedas. El repelente es esencial de abril a septiembre.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Calzado cerrado:</strong> el coto (bosque) tiene piedras y espinas. Las zapatillas de deporte son suficientes para el tour en jeep, pero evita las sandalias o el calzado abierto.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">6</div>
+        <div class="tip-text"><strong>Agua abundante (2L):</strong> no hay fuentes en el interior del parque. Los tours duran 4 horas al sol. Lleva más agua de la que crees necesitar.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">7</div>
+        <div class="tip-text"><strong>Cámara con teleobjetivo:</strong> las distancias de avistamiento de fauna son considerables. Un objetivo de 200–300mm mínimo para fotografía de fauna seria. El móvil es suficiente para los paisajes.</div>
+      </div>
+    </section>
+
+    <!-- ── MEJOR ÉPOCA ── -->
+    <section id="mejor-epoca" class="itin-section">
+      <h2 class="section-heading">📅 Mejor época para visitar</h2>
+      <div class="alert-box info" style="margin-bottom:12px">
+        <strong>🌟 Oct–Mar (la mejor época):</strong> Máxima concentración de aves migratorias. Aguas altas en las marismas. Fresco y sin mosquitos. Las colonias de flamencos, espátulas y patos alcanzan su máxima densidad. La mejor época para aves y paisaje.
+      </div>
+      <div class="alert-box green" style="margin-bottom:12px">
+        <strong>🌸 Abr–May:</strong> Prados florecidos, aves criando, pollos de flamenco visibles. Lince activo. El parque luce exuberante. Aumentan los mosquitos progresivamente.
+      </div>
+      <div class="alert-box warn" style="margin-bottom:12px">
+        <strong>☀️ Jun–Sep:</strong> Calor extremo (hasta 45°C). Marismas secas. Mejor para ver linces (más activos en el coto) y para las dunas. Muchos mosquitos en junio. No recomendable para aves acuáticas.
+      </div>
+      <div class="alert-box warn" style="margin-bottom:12px">
+        <strong>⚠️ Romería del Rocío (Pentecostés, año par):</strong> El pueblo de El Rocío se llena de 1 millón de personas. Los alrededores del parque son prácticamente inaccesibles por el tráfico. Evita esa semana a menos que quieras vivir la Romería como experiencia en sí misma.
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Ver un lince ibérico en libertad</h4><p>Uno de los avistamientos más exclusivos del mundo natural. En 2002 quedaban 94; hoy superan los 1.000. Doñana tiene la mayor probabilidad de avistamiento de todos los puntos de su distribución.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>La playa virgen de Doñana</h4><p>Sin construcción visible en ningún ángulo. Sin chiringuitos, sin sombrillas, sin acceso rodado. La única playa atlántica completamente virgen de España occidental, accesible solo a través del tour en jeep.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Amanecer sobre las marismas con miles de flamencos</h4><p>Colonias de hasta 60.000 flamencos rozando el agua con la luz del amanecer. El sonido de sus alas y el rosa intenso del plumaje contra la niebla matinal es un espectáculo inolvidable.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>El pueblo de arena de El Rocío: sin asfalto</h4><p>El único pueblo sin asfalto de España. Caballos sueltos por las calles de arena blanca, casas encaladas y la ermita de la Virgen del Rocío como telón de fondo. Un escenario de película.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Las dunas móviles del litoral atlántico vistas desde el jeep</h4><p>Las dunas más activas de Europa, desplazándose 6 metros por año. Enterran el bosque que encuentran. Los troncos de pinos a medio sepultar son una imagen surrealista del parque.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>El observatorio de El Rocío: gratis y sin cola</h4><p>Flamencos y espátulas a metros de distancia desde el paseo de madera junto a la Ermita. Sin tour, sin guía, sin reserva. Uno de los mejores puntos de observación de aves de Europa completamente gratuito.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>La silueta del águila imperial planeando sobre los pinos</h4><p>El ave rapaz más amenazada de Europa, con una envergadura de 1.8m. Las parejas del coto de Doñana son territoriales y fáciles de localizar una vez que sabes dónde buscar.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Los caballos marismeños sueltos en las llanuras inundadas</h4><p>Grupos de caballos en semilibertad pastando en las marismas. Una imagen que evoca Andalucía antes de la civilización industrial, perfectamente conservada en el parque.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>El amanecer en el coto con la luz horizontal entre los alcornoques</h4><p>La luz de primera hora del día filtrada horizontalmente entre los alcornoques y pinos crea un ambiente de bosque encantado. Los guías conocen los mejores puntos para esta luz.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>La ermita del Rocío al atardecer con el cielo andaluz de fondo</h4><p>La imagen religiosa más importante de Andalucía, en su ermita blanca encalada al borde de las marismas, con el cielo naranja del atardecer como fondo. Una estampa única de la Andalucía más profunda.</p></div></div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section id="consejos" class="itin-section">
+      <h2 class="section-heading">💡 Consejos de Routlo</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>El interior del Parque Nacional es de acceso PROHIBIDO sin tour autorizado.</strong> No se puede entrar en coche, a pie ni en bici. Los tours en jeep salen de El Acebuche y son la única forma legal de visitar el interior. Reserva online con 1–2 semanas de antelación en temporada alta.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Para avistamiento de lince:</strong> los guías tienen radio-localizadores GPS de los individuos marcados con radiocollares. Probabilidad del 70–80% con los tours madrugadores. No está garantizado pero es alta. Si no lo ves en el tour, pregunta al guía sobre el observatorio de El Acebuche.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>El pueblo de El Rocío y sus marismas son accesibles libremente</strong> (solo el interior del P.N. está restringido). El paseo de madera junto a la Ermita es un observatorio de aves de primer nivel, completamente gratuito y sin reserva. No te lo pierdas aunque no hagas el tour.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Los tours operan con independencia del tiempo.</strong> La lluvia ligera no suspende la visita. Con lluvia suave el avistamiento es a menudo mejor — los animales están más activos. Solo se cancela con lluvia torrencial o viento fuerte.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>El Parque Natural de Doñana (distinto del Parque Nacional) tiene zonas accesibles libremente.</strong> El sendero del Acebrón (5 km, bosque de alcornoques y galería) no requiere tour ni reserva. Es una buena opción complementaria para después del tour en jeep.</div>
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🆘 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos y ambulancia (24h)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil / SEPRONA</div><div class="emerg-value">062</div><div class="emerg-note">Protección del medio ambiente y fauna</div></div>
+        <div class="emerg-card"><div class="emerg-label">Centro Visitantes El Acebuche</div><div class="emerg-value">+34 959 439 560</div><div class="emerg-note">Entrada principal del Parque Nacional</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Juan Ramón Jiménez</div><div class="emerg-value">+34 959 016 000</div><div class="emerg-note">Huelva — urgencias 24h</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Virgen del Rocío</div><div class="emerg-value">+34 955 012 000</div><div class="emerg-note">Sevilla — urgencias 24h</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil Almonte</div><div class="emerg-value">+34 959 406 002</div><div class="emerg-note">Puesto más cercano al parque</div></div>
+      </div>
+      <div class="alert-box green" style="margin-top:14px">
+        <strong>✅ Seguridad:</strong> El tour en jeep se realiza con guías expertos certificados. El parque no tiene riesgos para visitantes. En caso de incidencia con fauna (avistamiento irregular, animal herido), contacta con el 112 o la Guardia Civil SEPRONA (062).
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres planificar tu visita a Doñana?</h3>
+      <p>Dinos tu punto de partida, fechas e intereses. Routlo IA te crea el itinerario perfecto en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi visita
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los precios indicados son orientativos (2026) y pueden variar según temporada y operador. Los tours en jeep deben contratarse con operadores autorizados por el Organismo Autónomo Parques Nacionales (OAPN). La probabilidad de avistamiento del lince ibérico indicada (70–80%) es la media de los operadores autorizados en tours matutinos — los animales son libres y no está garantizado.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:64px 24px 40px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px">
+    <div>
+      <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px">
+        <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;">
+      </a>
+      <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.7;max-width:280px">Itinerarios de viaje generados por inteligencia artificial. Personalizados para cada viajero.</p>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">España</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="donana.html" style="font-size:0.875rem;color:#c9a96e;text-decoration:none">Doñana</a></li>
+        <li><a href="ordesa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Ordesa</a></li>
+        <li><a href="montserrat.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Montserrat</a></li>
+        <li><a href="tenerife.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Tenerife</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Europa</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="budapest.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Budapest</a></li>
+        <li><a href="roma.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Roma</a></li>
+        <li><a href="paris.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">París</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Más</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Ver todos →</a></li>
+        <li><a href="../chatbot.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Chatbot IA</a></li>
+        <li><a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Mapa</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.8rem;color:rgba(237,238,242,0.55)">
+    <span>© 2026 Routlo · Todos los derechos reservados</span>
+    <span>Generado con IA para viajeros del mundo</span>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
