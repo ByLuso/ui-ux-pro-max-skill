@@ -26,13 +26,73 @@
     .chip:hover { background: var(--surface-hover); color: var(--fg); }
     .chip.active { background: var(--gold-glow); border-color: var(--border-gold); color: var(--gold); }
 
-    /* Grid */
+    /* Grid / Carousel */
     .itin-section { position: relative; z-index: 1; padding: 0 24px 120px; }
     .itin-section-inner { max-width: 1200px; margin: 0 auto; }
-    .region-label { font-size: 0.78rem; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+
+    .region-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 12px; }
+    .region-label { font-size: 0.78rem; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; display: flex; align-items: center; gap: 8px; flex: 1; margin-bottom: 0; }
     .region-label::before { content: ''; width: 20px; height: 1px; background: var(--gold); opacity: 0.6; }
     .region-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-    .itin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 56px; }
+
+    .carousel-btns { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+    .cbtn {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      color: rgba(237,238,242,0.6);
+      font-size: 1.1rem; line-height: 1;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .cbtn:hover { background: rgba(201,169,110,0.12); border-color: rgba(201,169,110,0.35); color: #c9a96e; }
+    .cbtn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+    .cbtn-expand {
+      width: auto; padding: 0 14px;
+      border-radius: 20px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem; font-weight: 500;
+    }
+
+    /* Carousel viewport clips overflow */
+    .carousel-vp { overflow: hidden; margin-bottom: 56px; }
+
+    /* Carousel track: flex, single row */
+    .itin-grid {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 24px;
+      transition: transform 0.42s cubic-bezier(0.25,1,0.5,1);
+      will-change: transform;
+      margin-bottom: 0;
+    }
+    .itin-grid .itin-card {
+      flex: 0 0 calc((100% - 48px) / 3);
+      min-width: 0;
+    }
+
+    /* Expanded: show all in wrapped grid */
+    .carousel-vp.expanded { overflow: visible; }
+    .itin-grid.expanded {
+      flex-wrap: wrap;
+      transform: none !important;
+    }
+    .itin-grid.expanded .itin-card { flex: 0 0 calc((100% - 48px) / 3); }
+
+    /* Search active: show all visible cards */
+    .search-active .carousel-vp { overflow: visible; }
+    .search-active .itin-grid { flex-wrap: wrap; transform: none !important; }
+
+    @media(max-width:1024px) {
+      .itin-grid .itin-card { flex: 0 0 calc((100% - 24px) / 2); }
+      .itin-grid.expanded .itin-card { flex: 0 0 calc((100% - 24px) / 2); }
+    }
+    @media(max-width:640px) {
+      .itin-grid .itin-card { flex: 0 0 calc(100vw - 60px); }
+      .itin-grid.expanded .itin-card { flex: 0 0 100%; }
+    }
 
     /* Search */
     .search-bar { position: relative; max-width: 400px; margin-bottom: 40px; }
@@ -51,8 +111,6 @@
     .stats-bar-item { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--fg-muted); }
     .stats-bar-num { font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; color: var(--gold); }
 
-    @media(max-width:1024px) { .itin-grid{grid-template-columns:repeat(2,1fr)} }
-    @media(max-width:640px) { .itin-grid{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -112,7 +170,15 @@
     </div>
 
     <!-- ESPAÑA -->
-    <div class="region-label" data-region-header="espana" style="display:flex;align-items:center;gap:10px;">España <a href="itinerarios-espana.html" style="font-size:0.7rem;color:rgba(201,169,110,0.6);text-decoration:none;font-family:'Jost',sans-serif;font-weight:500;padding:2px 8px;border:1px solid rgba(201,169,110,0.2);border-radius:12px;margin-left:4px;">Ver todo →</a></div>
+    <div class="region-head" data-region-header="espana">
+      <div class="region-label">España <a href="itinerarios-espana.html" style="font-size:0.7rem;color:rgba(201,169,110,0.6);text-decoration:none;font-family:'Jost',sans-serif;font-weight:500;padding:2px 8px;border:1px solid rgba(201,169,110,0.2);border-radius:12px;margin-left:4px;">Ver todo →</a></div>
+      <div class="carousel-btns">
+        <button class="cbtn" id="prev-espana" onclick="carouselMove('espana',-1)" aria-label="Anterior">&#8249;</button>
+        <button class="cbtn" id="next-espana" onclick="carouselMove('espana',1)" aria-label="Siguiente">&#8250;</button>
+        <button class="cbtn cbtn-expand" onclick="carouselExpand('espana',this)" aria-expanded="false">Ver todos</button>
+      </div>
+    </div>
+    <div class="carousel-vp" id="vp-espana">
     <div class="itin-grid" id="grid-espana">
       <!-- Tenerife -->
       <a href="itinerarios/tenerife.html" class="itin-card" data-region="espana" data-name="tenerife canarias españa delfines teide volcán">
@@ -319,9 +385,18 @@
         </div>
       </a>
     </div>
+    </div><!-- /vp espana -->
 
     <!-- ASIA -->
-    <div class="region-label" data-region-header="asia">Asia</div>
+    <div class="region-head" data-region-header="asia">
+      <div class="region-label">Asia</div>
+      <div class="carousel-btns">
+        <button class="cbtn" id="prev-asia" onclick="carouselMove('asia',-1)" aria-label="Anterior">&#8249;</button>
+        <button class="cbtn" id="next-asia" onclick="carouselMove('asia',1)" aria-label="Siguiente">&#8250;</button>
+        <button class="cbtn cbtn-expand" onclick="carouselExpand('asia',this)" aria-expanded="false">Ver todos</button>
+      </div>
+    </div>
+    <div class="carousel-vp" id="vp-asia">
     <div class="itin-grid" id="grid-asia">
       <!-- Tokio -->
       <a href="itinerarios/tokio.html" class="itin-card" data-region="asia" data-name="tokio japón">
@@ -375,9 +450,18 @@
         </div>
       </a>
     </div>
+    </div><!-- /vp asia -->
 
     <!-- EUROPA -->
-    <div class="region-label" data-region-header="europa">Europa</div>
+    <div class="region-head" data-region-header="europa">
+      <div class="region-label">Europa</div>
+      <div class="carousel-btns">
+        <button class="cbtn" id="prev-europa" onclick="carouselMove('europa',-1)" aria-label="Anterior">&#8249;</button>
+        <button class="cbtn" id="next-europa" onclick="carouselMove('europa',1)" aria-label="Siguiente">&#8250;</button>
+        <button class="cbtn cbtn-expand" onclick="carouselExpand('europa',this)" aria-expanded="false">Ver todos</button>
+      </div>
+    </div>
+    <div class="carousel-vp" id="vp-europa">
     <div class="itin-grid" id="grid-europa">
       <!-- Roma -->
       <a href="itinerarios/roma.html" class="itin-card" data-region="europa" data-name="roma italia">
@@ -601,9 +685,18 @@
         </div>
       </a>
     </div>
+    </div><!-- /vp europa -->
 
     <!-- ÁFRICA -->
-    <div class="region-label" data-region-header="africa">África</div>
+    <div class="region-head" data-region-header="africa">
+      <div class="region-label">África</div>
+      <div class="carousel-btns">
+        <button class="cbtn" id="prev-africa" onclick="carouselMove('africa',-1)" aria-label="Anterior">&#8249;</button>
+        <button class="cbtn" id="next-africa" onclick="carouselMove('africa',1)" aria-label="Siguiente">&#8250;</button>
+        <button class="cbtn cbtn-expand" onclick="carouselExpand('africa',this)" aria-expanded="false">Ver todos</button>
+      </div>
+    </div>
+    <div class="carousel-vp" id="vp-africa">
     <div class="itin-grid" id="grid-africa">
       <!-- Marrakech -->
       <a href="itinerarios/marrakech.html" class="itin-card" data-region="africa" data-name="marrakech marruecos">
@@ -623,9 +716,18 @@
         </div>
       </a>
     </div>
+    </div><!-- /vp africa -->
 
     <!-- LATINOAMÉRICA -->
-    <div class="region-label" data-region-header="latinoamerica">Latinoamérica</div>
+    <div class="region-head" data-region-header="latinoamerica">
+      <div class="region-label">Latinoamérica</div>
+      <div class="carousel-btns">
+        <button class="cbtn" id="prev-latinoamerica" onclick="carouselMove('latinoamerica',-1)" aria-label="Anterior">&#8249;</button>
+        <button class="cbtn" id="next-latinoamerica" onclick="carouselMove('latinoamerica',1)" aria-label="Siguiente">&#8250;</button>
+        <button class="cbtn cbtn-expand" onclick="carouselExpand('latinoamerica',this)" aria-expanded="false">Ver todos</button>
+      </div>
+    </div>
+    <div class="carousel-vp" id="vp-latinoamerica">
     <div class="itin-grid" id="grid-latinoamerica">
       <!-- Perú -->
       <a href="itinerarios/peru.html" class="itin-card" data-region="latinoamerica" data-name="peru cusco machu picchu lima">
@@ -645,6 +747,7 @@
         </div>
       </a>
     </div>
+    </div><!-- /vp latinoamerica -->
 
     <div class="no-results" id="noResults">
       <div class="no-results-icon">✈️</div>
@@ -700,14 +803,24 @@
       if (show) visible++;
     });
 
-    // Show/hide region headers and grids
-    ['espana','asia','europa','africa','latinoamerica'].forEach(r => {
-      const header = document.querySelector(`[data-region-header="${r}"]`);
-      const grid = document.getElementById(`grid-${r}`);
+    const REGIONS = ['espana','asia','europa','africa','latinoamerica'];
+    const isSearching = !!search;
+
+    // In search mode expand all carousels so every matching card is visible
+    document.querySelector('.itin-section-inner').classList.toggle('search-active', isSearching);
+
+    REGIONS.forEach(r => {
+      const head  = document.querySelector('[data-region-header="' + r + '"]');
+      const vp    = document.getElementById('vp-' + r);
+      const grid  = document.getElementById('grid-' + r);
       const regionVisible = currentFilter === 'todos' || currentFilter === r;
-      const hasCards = regionVisible && [...document.querySelectorAll(`.itin-card[data-region="${r}"]`)].some(c => c.style.display !== 'none');
-      if (header) header.style.display = hasCards ? '' : 'none';
+      const hasCards = regionVisible && [...document.querySelectorAll('.itin-card[data-region="' + r + '"]')].some(c => c.style.display !== 'none');
+      const parentHead = head ? head.closest('.region-head') : null;
+      if (parentHead) parentHead.style.display = hasCards ? '' : 'none';
+      if (vp) vp.style.display = hasCards ? '' : 'none';
       if (grid) grid.style.display = hasCards ? '' : 'none';
+      // Sync carousel arrows after filter
+      if (!isSearching) syncArrows(r);
     });
 
     document.getElementById('countVisible').textContent = visible;
@@ -716,6 +829,74 @@
     searchTerm.textContent = search;
     noResults.style.display = visible === 0 ? 'block' : 'none';
   }
+
+  // ── Carousel ──────────────────────────────────────────────
+  const carouselOffset = { espana:0, asia:0, europa:0, africa:0, latinoamerica:0 };
+
+  function getPerPage() {
+    if (window.innerWidth <= 640) return 1;
+    if (window.innerWidth <= 1024) return 2;
+    return 3;
+  }
+
+  function syncArrows(id) {
+    const grid = document.getElementById('grid-' + id);
+    if (!grid || grid.classList.contains('expanded')) return;
+    const cards = [...grid.querySelectorAll('.itin-card')].filter(c => c.style.display !== 'none');
+    const pp = getPerPage();
+    const off = carouselOffset[id] || 0;
+    const prev = document.getElementById('prev-' + id);
+    const next = document.getElementById('next-' + id);
+    if (prev) prev.disabled = off <= 0;
+    if (next) next.disabled = off + pp >= cards.length;
+  }
+
+  function carouselMove(id, dir) {
+    const grid = document.getElementById('grid-' + id);
+    if (!grid || grid.classList.contains('expanded')) return;
+    const cards = [...grid.querySelectorAll('.itin-card')].filter(c => c.style.display !== 'none');
+    const pp = getPerPage();
+    carouselOffset[id] = Math.max(0, Math.min((carouselOffset[id] || 0) + dir, cards.length - pp));
+    updateCarouselTransform(id);
+    syncArrows(id);
+  }
+
+  function updateCarouselTransform(id) {
+    const grid = document.getElementById('grid-' + id);
+    if (!grid || grid.classList.contains('expanded')) return;
+    const off = carouselOffset[id] || 0;
+    const card = grid.querySelector('.itin-card');
+    if (!card) return;
+    const gap = 24;
+    const move = off * (card.offsetWidth + gap);
+    grid.style.transform = 'translateX(-' + move + 'px)';
+  }
+
+  function carouselExpand(id, btn) {
+    const vp   = document.getElementById('vp-' + id);
+    const grid = document.getElementById('grid-' + id);
+    const expanded = grid.classList.toggle('expanded');
+    vp.classList.toggle('expanded', expanded);
+    btn.setAttribute('aria-expanded', expanded);
+    btn.textContent = expanded ? 'Compactar' : 'Ver todos';
+    if (!expanded) {
+      carouselOffset[id] = 0;
+      grid.style.transform = 'translateX(0)';
+    }
+    syncArrows(id);
+  }
+
+  // Init arrows on load
+  window.addEventListener('load', () => {
+    ['espana','asia','europa','africa','latinoamerica'].forEach(id => syncArrows(id));
+  });
+  window.addEventListener('resize', () => {
+    ['espana','asia','europa','africa','latinoamerica'].forEach(id => {
+      carouselOffset[id] = 0;
+      updateCarouselTransform(id);
+      syncArrows(id);
+    });
+  });
 
   // Scroll
   const nav = document.querySelector('nav');
