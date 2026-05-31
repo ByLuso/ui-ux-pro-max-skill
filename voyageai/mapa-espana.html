@@ -362,10 +362,13 @@
     <!-- Tabs -->
     <div class="sidebar-tabs">
       <button class="sidebar-tab active" id="tabActivos" onclick="switchTab('activos')">
-        Con itinerario <span class="sidebar-tab-count">2</span>
+        Con itinerario <span class="sidebar-tab-count">9</span>
+      </button>
+      <button class="sidebar-tab" id="tabParques" onclick="switchTab('parques')">
+        Parques <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">3</span>
       </button>
       <button class="sidebar-tab" id="tabProximos" onclick="switchTab('proximos')">
-        Próximamente <span class="sidebar-tab-count">7</span>
+        Próximos <span class="sidebar-tab-count">1</span>
       </button>
     </div>
 
@@ -380,9 +383,9 @@
 
     <!-- Stats -->
     <div class="sidebar-stats" aria-label="Estadísticas">
-      <div class="stat-item"><span class="stat-val">2</span><span class="stat-lbl">Activos</span></div>
-      <div class="stat-item"><span class="stat-val">7</span><span class="stat-lbl">Próximos</span></div>
-      <div class="stat-item"><span class="stat-val">€650</span><span class="stat-lbl">Desde</span></div>
+      <div class="stat-item"><span class="stat-val">9</span><span class="stat-lbl">Activos</span></div>
+      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">3</span><span class="stat-lbl">Parques</span></div>
+      <div class="stat-item"><span class="stat-val">€90</span><span class="stat-lbl">Desde</span></div>
     </div>
   </aside>
 
@@ -420,17 +423,141 @@ const ACTIVOS = [
     gradient: 'linear-gradient(160deg,#080600 0%,#1a1200 50%,#4a3400 100%)',
     img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/fuerteventura.html'
+  },
+  {
+    id: 'madrid',
+    nombre: 'Madrid',
+    region: 'Comunidad de Madrid',
+    emoji: '🏟️',
+    dias: 5,
+    precio: '€230',
+    coords: [40.4168, -3.7038],
+    desc: 'El Prado, Retiro, tapas en La Latina y la mejor vida nocturna de Europa.',
+    gradient: 'linear-gradient(135deg,#2d0000 0%,#7a0000 100%)',
+    img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/madrid.html'
+  },
+  {
+    id: 'barcelona',
+    nombre: 'Barcelona',
+    region: 'Cataluña',
+    emoji: '🏛️',
+    dias: 5,
+    precio: '€320',
+    coords: [41.3851, 2.1734],
+    desc: 'Gaudí, playas mediterráneas y la gastronomía más creativa de España.',
+    gradient: 'linear-gradient(135deg,#0a2040 0%,#1a4080 100%)',
+    img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/barcelona.html'
+  },
+  {
+    id: 'sevilla',
+    nombre: 'Sevilla',
+    region: 'Andalucía',
+    emoji: '🌹',
+    dias: 4,
+    precio: '€200',
+    coords: [37.3891, -5.9845],
+    desc: 'Flamenco, Alcázar nazarí y las mejores tapas del sur bajo el sol andaluz.',
+    gradient: 'linear-gradient(135deg,#3d1200 0%,#803000 100%)',
+    img: 'https://images.unsplash.com/photo-1555993539-1732b0258235?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/sevilla.html'
+  },
+  {
+    id: 'granada',
+    nombre: 'Granada',
+    region: 'Andalucía',
+    emoji: '🏰',
+    dias: 3,
+    precio: '€145',
+    coords: [37.1773, -3.5986],
+    desc: 'La Alhambra, el Albaicín y un sistema de tapas gratuitas único en el mundo.',
+    gradient: 'linear-gradient(135deg,#250015 0%,#6b0035 100%)',
+    img: 'https://images.unsplash.com/photo-1592142091938-1b00e7c4b2a1?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/granada.html'
+  },
+  {
+    id: 'mallorca',
+    nombre: 'Mallorca',
+    region: 'Islas Baleares',
+    emoji: '⛵',
+    dias: 5,
+    precio: '€340',
+    coords: [39.5696, 2.6502],
+    desc: 'Calas de aguas turquesas, la Serra de Tramuntana y Palma histórica.',
+    gradient: 'linear-gradient(135deg,#051828 0%,#0a3050 100%)',
+    img: 'https://images.unsplash.com/photo-1574087988580-47e50f89de3f?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/mallorca.html'
+  },
+  {
+    id: 'sansebastian',
+    nombre: 'San Sebastián',
+    region: 'País Vasco',
+    emoji: '🐟',
+    dias: 3,
+    precio: '€225',
+    coords: [43.3183, -1.9812],
+    desc: 'La mayor densidad de estrellas Michelin del mundo y los pintxos más creativos.',
+    gradient: 'linear-gradient(135deg,#082018 0%,#154535 100%)',
+    img: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/san-sebastian.html'
+  },
+  {
+    id: 'valencia',
+    nombre: 'Valencia',
+    region: 'Comunitat Valenciana',
+    emoji: '🟡',
+    dias: 4,
+    precio: '€200',
+    coords: [39.4699, -0.3763],
+    desc: 'La paella original, la Ciudad de las Artes de Calatrava y Las Fallas en marzo.',
+    gradient: 'linear-gradient(135deg,#2d1000 0%,#7a2800 100%)',
+    img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/valencia.html'
+  }
+];
+
+const PARQUES = [
+  {
+    id: 'donana',
+    nombre: 'Doñana',
+    region: 'Parque Nacional',
+    emoji: '🌿',
+    dias: 1,
+    precio: '€50',
+    coords: [37.1289, -6.4742],
+    desc: 'El lince ibérico en libertad y los flamencos del mayor humedal de Europa occidental.',
+    gradient: 'linear-gradient(135deg,#062010 0%,#0d4020 100%)',
+    url: 'itinerarios/donana.html'
+  },
+  {
+    id: 'ordesa',
+    nombre: 'Ordesa',
+    region: 'Parque Nacional',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€40',
+    coords: [42.6209, -0.0981],
+    desc: 'El cañón más espectacular de los Pirineos y el quebrantahuesos en vuelo.',
+    gradient: 'linear-gradient(135deg,#091828 0%,#142e55 100%)',
+    url: 'itinerarios/ordesa.html'
+  },
+  {
+    id: 'montserrat',
+    nombre: 'Montserrat',
+    region: 'Montaña Sagrada',
+    emoji: '⛰️',
+    dias: 1,
+    precio: '€30',
+    coords: [41.5931, 1.8353],
+    desc: 'El monasterio benedictino más visitado de España y vistas desde 1.236 metros.',
+    gradient: 'linear-gradient(135deg,#2a1500 0%,#5a3000 100%)',
+    url: 'itinerarios/montserrat.html'
   }
 ];
 
 const PROXIMOS = [
-  { id: 'madrid',       nombre: 'Madrid',         region: 'Comunidad de Madrid',   emoji: '🏟️', coords: [40.4168, -3.7038], desc: 'El Prado, Retiro, tapas en La Latina y la mejor vida nocturna de Europa.' },
-  { id: 'barcelona',    nombre: 'Barcelona',       region: 'Cataluña',              emoji: '🏛️', coords: [41.3851,  2.1734], desc: 'Gaudí, Las Ramblas, Barceloneta y el fascinante barrio Gótico.' },
-  { id: 'sevilla',      nombre: 'Sevilla',          region: 'Andalucía',             emoji: '🌹', coords: [37.3891, -5.9845], desc: 'Giralda, Real Alcázar, tapas en el Arenal y flamenco auténtico.' },
-  { id: 'granada',      nombre: 'Granada',          region: 'Andalucía',             emoji: '🏰', coords: [37.1773, -3.5986], desc: 'La Alhambra, el Albaicín y las mejores tapas gratis de toda España.' },
-  { id: 'mallorca',     nombre: 'Mallorca',         region: 'Islas Baleares',        emoji: '⛵', coords: [39.6953,  3.0176], desc: 'Calas de cristal, Serra de Tramuntana UNESCO y Palma histórica.' },
-  { id: 'sansebastian', nombre: 'San Sebastián',   region: 'País Vasco',            emoji: '🐟', coords: [43.3183, -1.9812], desc: 'Pintxos en La Parte Vieja, Playa de la Concha y las mejores estrellas Michelin por m².' },
-  { id: 'valencia',     nombre: 'Valencia',         region: 'Comunitat Valenciana',  emoji: '🟡', coords: [39.4699, -0.3763], desc: 'Paella auténtica, Ciudad de las Artes, Bioparc y playas de La Malvarrosa.' }
+  { id: 'lanzarote', nombre: 'Lanzarote', region: 'Islas Canarias', emoji: '🌴', coords: [29.0469, -13.5899], desc: 'Timanfaya, el Jameos del Agua y astroturismo en las noches más estrelladas del Atlántico.' }
 ];
 
 // ── Map init ─────────────────────────────────────────────
@@ -547,6 +674,48 @@ PROXIMOS.forEach(d => {
   soonMarkers[d.id] = marker;
 });
 
+// Green park pins
+function createGreenIcon(emoji) {
+  return L.divIcon({
+    className: '',
+    html: `<div class="map-pin-park" style="width:32px;height:32px;background:rgba(94,203,138,0.2);border:2px solid rgba(94,203,138,0.6);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;">${emoji}</div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -16]
+  });
+}
+
+const parkMarkers = {};
+PARQUES.forEach(d => {
+  const icon = createGreenIcon(d.emoji);
+  const popup = L.popup({ maxWidth: 280, minWidth: 280 }).setContent(`
+    <div class="popup-wrap">
+      <div class="popup-hero">
+        <div class="popup-hero-bg" style="background:${d.gradient};background-size:cover;background-position:center"></div>
+        <div class="popup-hero-overlay"></div>
+        <div class="popup-badges">
+          <span class="popup-badge" style="border-color:rgba(94,203,138,0.4);color:rgba(94,203,138,0.9);">${d.region}</span>
+          <span class="popup-badge muted">${d.dias} día</span>
+        </div>
+      </div>
+      <div class="popup-body">
+        <div class="popup-title">${d.nombre}</div>
+        <div class="popup-desc">${d.desc}</div>
+        <div class="popup-footer">
+          <div class="popup-price">Desde <strong style="color:rgba(94,203,138,0.9)">${d.precio}</strong></div>
+          <a href="${d.url}" class="popup-cta" style="background:linear-gradient(135deg,rgba(94,203,138,0.8),rgba(46,160,100,0.9));">
+            Ver itinerario
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>`);
+
+  const marker = L.marker(d.coords, { icon, title: d.nombre })
+    .bindPopup(popup).addTo(map);
+  parkMarkers[d.id] = marker;
+});
+
 // ── Active state ──────────────────────────────────────────
 
 function setActive(id) {
@@ -571,6 +740,7 @@ let currentTab = 'activos';
 function switchTab(tab) {
   currentTab = tab;
   document.getElementById('tabActivos').classList.toggle('active', tab === 'activos');
+  document.getElementById('tabParques').classList.toggle('active', tab === 'parques');
   document.getElementById('tabProximos').classList.toggle('active', tab === 'proximos');
   buildSidebar(document.getElementById('sidebarSearch').value.toLowerCase().trim());
 }
@@ -612,6 +782,36 @@ function buildSidebar(q) {
         card.appendChild(top); card.appendChild(link);
         list.appendChild(card);
       });
+    });
+
+  } else if (currentTab === 'parques') {
+    const filtered = PARQUES.filter(d => !q || (d.nombre + d.region).toLowerCase().includes(q));
+    if (!filtered.length) { list.innerHTML = '<p style="padding:20px 14px;font-size:0.82rem;color:rgba(237,238,242,0.35);text-align:center">Sin resultados</p>'; return; }
+
+    const divHeader = document.createElement('div');
+    divHeader.className = 'region-divider'; divHeader.textContent = 'Parques Naturales';
+    list.appendChild(divHeader);
+
+    filtered.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'dest-card'; card.setAttribute('role', 'listitem');
+      const top = document.createElement('div'); top.className = 'dest-card-top';
+      top.innerHTML = `
+        <div class="dest-emoji" style="background:${d.gradient}">${d.emoji}</div>
+        <div class="dest-info">
+          <div class="dest-name">${d.nombre}</div>
+          <div class="dest-meta">${d.region} · ${d.dias} día</div>
+        </div>
+        <div class="dest-price" style="color:rgba(94,203,138,0.9)">${d.precio}</div>`;
+      top.addEventListener('click', () => {
+        map.setView(d.coords, 10, { animate: true, duration: 1 });
+        setTimeout(() => parkMarkers[d.id]?.openPopup(), 700);
+      });
+      const link = document.createElement('a'); link.className = 'dest-card-link'; link.href = d.url;
+      link.style.cssText = 'border-top-color:rgba(94,203,138,0.12)';
+      link.innerHTML = `<span style="color:rgba(94,203,138,0.9)">Ver itinerario completo</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(94,203,138,0.9)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+      card.appendChild(top); card.appendChild(link);
+      list.appendChild(card);
     });
 
   } else {
