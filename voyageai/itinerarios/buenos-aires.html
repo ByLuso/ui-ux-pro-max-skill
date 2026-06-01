@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buenos Aires, Argentina — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 5 días en Buenos Aires: San Telmo, Recoleta, La Boca, el delta del Tigre y la mejor gastronomía porteña. Presupuesto detallado y consejos exclusivos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #030818 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    /* ── Nav override ── */
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(3,8,24,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(3,8,24,0.95); }
+
+    /* ── Aurora ── */
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #0d1a4e 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #3a5fcd 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #1a3080 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    /* ── Hero ── */
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #030818 0%, #0d1a4e 40%, #1a2d80 70%, rgba(201,169,110,0.2) 100%), url('https://images.unsplash.com/photo-h-BUepo0YWQ?w=1400&h=700&fit=crop&q=80&auto=format');
+      background-size: cover; background-position: center;
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #030818 0%, rgba(3,8,24,0.5) 50%, rgba(3,8,24,0.2) 100%);
+    }
+    .dest-hero-deco {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+      background: linear-gradient(to top, #030818 0%, transparent 100%);
+      z-index: 0;
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(3,8,24,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label {
+      font-size: 0.7rem; color: rgba(237,238,242,0.55);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .dest-sum-val {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.2rem; font-weight: 700; color: #c9a96e;
+    }
+
+    /* ── Layout ── */
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title {
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(237,238,242,0.55); margin-bottom: 12px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    /* ── Sections ── */
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    /* ── Day Card ── */
+    .day-card {
+      background: #0d1628;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; overflow: hidden; margin-bottom: 28px;
+    }
+    .day-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .day-num {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 2.2rem; font-weight: 700; color: #c9a96e;
+      line-height: 1; min-width: 60px;
+    }
+    .day-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px;
+    }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    /* ── Activity ── */
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time {
+      min-width: 55px; font-size: 0.78rem; color: #c9a96e;
+      font-weight: 600; padding-top: 3px; flex-shrink: 0;
+    }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #c9a96e; border: 2px solid #0d1628;
+      flex-shrink: 0; margin-top: 3px;
+    }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag {
+      display: inline-block; padding: 2px 8px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 100px; font-size: 0.67rem; color: #c9a96e;
+    }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    /* ── Hotels ── */
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px; transition: border-color 0.2s;
+    }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600;
+      border-bottom: 1px solid rgba(201,169,110,0.3); padding-bottom: 1px;
+    }
+    .hotel-link:hover { border-color: #c9a96e; }
+
+    /* ── Budget table ── */
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th {
+      text-align: left; padding: 10px 14px; background: #0d1628;
+      color: #c9a96e; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(201,169,110,0.3);
+    }
+    .budget-table td {
+      padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: rgba(237,238,242,0.55); vertical-align: top;
+    }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    /* ── Transport ── */
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 18px;
+    }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    /* ── Tips ── */
+    .tip-item {
+      display: flex; gap: 12px; padding: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .tip-num {
+      min-width: 28px; height: 28px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700;
+      color: #c9a96e; flex-shrink: 0;
+    }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    /* ── Emergency ── */
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+
+    /* ── Gastronomy ── */
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 16px;
+    }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    /* ── CTA banner ── */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%);
+      border: 1px solid rgba(201,169,110,0.3); border-radius: 20px;
+      padding: 32px; text-align: center; margin-bottom: 28px;
+    }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px;
+      background: linear-gradient(135deg, #c9a96e, #a07840);
+      color: #0a0a0a; font-weight: 600; font-size: 0.9rem;
+      border-radius: 10px; text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* ── Disclosure ── */
+    .disclosure {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 16px 18px;
+      font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65;
+      margin-top: 40px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .hotel-grid { grid-template-columns: repeat(2,1fr); }
+      .transport-grid { grid-template-columns: 1fr; }
+      .gastro-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px; }
+      nav[role="navigation"] ul { display: none; }
+      .dest-hero { padding: 100px 16px 40px; }
+      .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
+      .dest-country { font-size: 1.1rem; }
+      .hotel-grid { grid-template-columns: 1fr; }
+      .emerg-grid { grid-template-columns: 1fr; }
+      .section-heading { font-size: 1.3rem; }
+      .budget-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Aurora background -->
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<!-- Navigation -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Buenos Aires</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Buenos Aires</h1>
+  <p class="dest-country">Argentina</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      5 días / 4 noches
+    </span>
+    <span class="dest-badge" role="listitem">América del Sur · Argentina</span>
+    <span class="dest-badge gold" role="listitem">~€1,200/persona</span>
+    <span class="dest-badge" role="listitem">Tango + Gastronomía + Cultura</span>
+    <a href="https://www.skyscanner.net/transport/flights/MAD/BUE/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      Buscar vuelos
+    </a>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">5 días</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Precio/persona</div>
+      <div class="dest-sum-val">~€1,200</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Mejor época</div>
+      <div class="dest-sum-val" style="font-size:0.9rem">Mar–May / Sep–Nov</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Visado</div>
+      <div class="dest-sum-val" style="font-size:0.9rem">No necesario</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main content -->
+<main id="main-content">
+  <div class="itin-layout">
+
+    <!-- TOC Sidebar -->
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#alojamiento">Alojamiento</a></li>
+          <li><a href="#dia1">Día 1</a></li>
+          <li><a href="#dia2">Día 2</a></li>
+          <li><a href="#dia3">Día 3</a></li>
+          <li><a href="#dia4">Día 4</a></li>
+          <li><a href="#dia5">Día 5</a></li>
+          <li><a href="#gastronomia">Gastronomía</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+          <li><a href="#emergencias">Emergencias</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <article>
+
+      <!-- Resumen -->
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          Buenos Aires es la París latinoamericana: boulevares anchos, arquitectura belle époque, una cultura que gira en torno a la buena mesa, el vino y la conversación interminable. Capital del tango, cuna del Malbec, ciudad que no duerme hasta las 4 de la mañana. Este itinerario de 5 días recorre San Telmo y su mercado dominical, los museos de Recoleta, el barrio obrero de La Boca, el delta del Tigre y el ritual sagrado del asado porteño.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Empezar gratis
+          </a>
+        </div>
+      </section>
+
+      <!-- Presupuesto -->
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto por tier">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Económico (~€700)</th>
+                <th>Medio (~€1,200)</th>
+                <th>Premium (~€2,500)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>✈️ Vuelos ida/vuelta</td>
+                <td>€350</td>
+                <td>€600</td>
+                <td>€1,200</td>
+              </tr>
+              <tr>
+                <td>🏨 Alojamiento (4 noches)</td>
+                <td>€120 (hostel)</td>
+                <td>€280 (hotel boutique)</td>
+                <td>€700 (hotel 5★)</td>
+              </tr>
+              <tr>
+                <td>🍽️ Alimentación (5 días)</td>
+                <td>€100</td>
+                <td>€180</td>
+                <td>€350</td>
+              </tr>
+              <tr>
+                <td>🚇 Transporte local</td>
+                <td>€30 (SUBE + bus)</td>
+                <td>€50</td>
+                <td>€100 (Uber/taxi)</td>
+              </tr>
+              <tr>
+                <td>🎫 Entradas y actividades</td>
+                <td>€50</td>
+                <td>€100 (show tango)</td>
+                <td>€200 (shows premium)</td>
+              </tr>
+              <tr>
+                <td>🛡️ Seguro de viaje</td>
+                <td>€30</td>
+                <td>€40</td>
+                <td>€60</td>
+              </tr>
+              <tr>
+                <td>🎁 Extras / souvenirs</td>
+                <td>€50</td>
+                <td>€80</td>
+                <td>€200</td>
+              </tr>
+              <tr>
+                <td><strong>TOTAL</strong></td>
+                <td><strong>~€700</strong></td>
+                <td><strong>~€1,200</strong></td>
+                <td><strong>~€2,500</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos para 2026. La economía argentina tiene variaciones frecuentes — consultar tipo de cambio real antes del viaje.</p>
+      </section>
+
+      <!-- Transporte -->
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+              Desde Ezeiza al centro
+            </div>
+            <div class="transport-content">
+              <strong>Bus Tienda León</strong> — servicio directo al centro (~€5). La opción más económica y fiable.<br><br>
+              <strong>Taxi oficial</strong> — 45-60 min según tráfico, ~€15-20. Tomar solo en mostrador oficial del aeropuerto.<br><br>
+              <span style="color:rgba(237,238,242,0.4)">Uber funciona en Buenos Aires pero no puede recoger en Ezeiza oficialmente.</span>
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 6V4M16 6V4M2 10h20"/></svg>
+              Transporte urbano
+            </div>
+            <div class="transport-content">
+              <strong>Tarjeta SUBE</strong> recargable — metro (Subte), autobuses y tren. Costo por viaje ~€0.15.<br><br>
+              <strong>Subte (metro)</strong> — 6 líneas cubriendo el centro. Operativo 5:30–22:30h. La forma más rápida de moverse.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+              Apps esenciales
+            </div>
+            <div class="transport-content">
+              <strong>Uber</strong> — funciona perfectamente dentro de la ciudad. La app más usada por los turistas.<br><br>
+              <strong>Cabify</strong> — alternativa a Uber, muy segura y confiable.<br><br>
+              <strong>Google Maps</strong> — incluye rutas de Subte y buses porteños.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Dinero y cambio
+            </div>
+            <div class="transport-content">
+              Argentina tiene un sistema de tipos de cambio complejo. <strong>Llevar euros en efectivo</strong> y cambiar en casa de cambio oficial para obtener el mejor tipo. El dólar blue (mercado informal) ofrece tasas más altas — consultar la situación actual antes del viaje.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Alojamiento -->
+      <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+        <h2 class="section-heading" id="h-alojamiento">Dónde alojarse</h2>
+        <div class="hotel-grid">
+          <div class="hotel-card">
+            <div class="hotel-tier">💎 Premium</div>
+            <div class="hotel-name">Alvear Palace Hotel</div>
+            <div class="hotel-zone">Recoleta — El más icónico de BA</div>
+            <div class="hotel-price">Desde €220/noche</div>
+            <ul class="hotel-features">
+              <li>Inaugurado en 1932, todo Art Déco</li>
+              <li>Spa, piscina y jardín interior</li>
+              <li>Desayuno bufé incluido</li>
+              <li>A pasos del Cementerio de Recoleta</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Alvear+Palace+Hotel+Buenos+Aires" class="hotel-link" target="_blank" rel="noopener">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver en Booking.com
+            </a>
+          </div>
+          <div class="hotel-card">
+            <div class="hotel-tier">⭐ Recomendado</div>
+            <div class="hotel-name">Home Hotel Buenos Aires</div>
+            <div class="hotel-zone">Palermo Hollywood</div>
+            <div class="hotel-price">Desde €90/noche</div>
+            <ul class="hotel-features">
+              <li>Diseño contemporáneo con jardín</li>
+              <li>Piscina exterior temporada</li>
+              <li>Desayuno casero incluido</li>
+              <li>A pasos de restaurantes y bares</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Home+Hotel+Buenos+Aires" class="hotel-link" target="_blank" rel="noopener">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver en Booking.com
+            </a>
+          </div>
+          <div class="hotel-card">
+            <div class="hotel-tier">💵 Económico</div>
+            <div class="hotel-name">Milhouse Hostel Avenue</div>
+            <div class="hotel-zone">San Telmo — Zona bohemia</div>
+            <div class="hotel-price">Desde €18/noche</div>
+            <ul class="hotel-features">
+              <li>Hostel más famoso de BA</li>
+              <li>Bar propio y eventos nocturnos</li>
+              <li>Terraza con vistas</li>
+              <li>Ambiente viajero internacional</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Milhouse+Hostel+Buenos+Aires" class="hotel-link" target="_blank" rel="noopener">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver en Booking.com
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 1 -->
+      <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+        <h2 class="section-heading" id="h-dia1">Día 1</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Llegada + San Telmo + Tango</div>
+              <div class="day-subtitle">El barrio más auténtico de Buenos Aires</div>
+            </div>
+            <div class="day-meta">
+              <span>✈️ Llegada Ezeiza</span>
+              <span>🏘️ San Telmo</span>
+              <span>💃 Show de Tango</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada al Aeropuerto de Ezeiza</div>
+                <div class="act-desc">Tomar el Bus Tienda León directamente al centro (~€5, 45-60 min). Cambiar euros en la casa de cambio del aeropuerto o en el centro para obtener la mejor tasa. Guardar maletas en el hotel.</div>
+                <div class="act-tags"><span class="act-tag info">Transporte</span><span class="act-tag green">Bus recomendado</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo porteño en San Telmo</div>
+                <div class="act-desc">Primera comida argentina: empanadas de carne en alguna de las parrillas del Mercado de San Telmo. Las empanadas porteñas tienen su masa más gruesa que las salteñas y el relleno de carne cortada a cuchillo es inigualable. Con vino Malbec de Mendoza, por supuesto.</div>
+                <div class="act-tags"><span class="act-tag">~€8 menú</span><span class="act-tag green">Mercado San Telmo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Barrio de San Telmo — paseo histórico</div>
+                <div class="act-desc">El barrio más antiguo de Buenos Aires conserva la arquitectura colonial del siglo XIX. Plaza Dorrego los domingos se convierte en feria de antigüedades y baile de tango espontáneo. Calles adoquinadas, librerías de viejo, bares con historia. Este es el corazón genuino de la ciudad.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">Feria dominical imprescindible</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena + Show de Tango</div>
+                <div class="act-desc">Cena con show de tango en Café de los Angelitos o El Viejo Almacén — dos de los más auténticos. El tango en vivo con orquesta en vivo y bailarines profesionales es una experiencia que no tiene equivalente en ningún otro lugar del mundo. La milonga termina con el público en la pista.</div>
+                <div class="act-tags"><span class="act-tag">€50-80 cena + show</span><span class="act-tag info">Reserva anticipada</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 2 -->
+      <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+        <h2 class="section-heading" id="h-dia2">Día 2</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">02</div>
+            <div>
+              <div class="day-title">Recoleta, Museos y Palermo Soho</div>
+              <div class="day-subtitle">Arte, elegancia y vida bohemia</div>
+            </div>
+            <div class="day-meta">
+              <span>⛪ Cementerio Recoleta</span>
+              <span>🎨 MALBA</span>
+              <span>🍷 Palermo Soho</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cementerio de la Recoleta</div>
+                <div class="act-desc">El cementerio más famoso del mundo — no es hipérbole. Ciudad de mausoleos de mármol que alberga a presidentes, generales y a Evita Perón. La tumba de Eva Duarte de Perón siempre tiene flores frescas y pequeños mensajes. Arquitectura neoclásica, historias dramáticas, silencio impresionante.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">Visita guiada recomendada</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Barrio de Recoleta y Café Tortoni</div>
+                <div class="act-desc">Paseo por la Avenida Alvear (las boutiques más elegantes de BA) y el Museo Nacional de Bellas Artes (gratuito). Pausa de media mañana en el Café Tortoni — inaugurado en 1858, es el café más antiguo de Argentina. Sus medialunas con café cortado son el desayuno porteño definitivo.</div>
+                <div class="act-tags"><span class="act-tag">Café Tortoni: ~€5</span><span class="act-tag green">MNBA gratuito</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">MALBA — Museo de Arte Latinoamericano</div>
+                <div class="act-desc">El mejor museo de arte latinoamericano del mundo. Colección permanente de Frida Kahlo, Diego Rivera, Xul Solar y la vanguardia argentina del siglo XX. El edificio de crystal diseñado por el estudio Gastón Atelman es una obra en sí mismo. Imprescindible en cualquier visita a Buenos Aires.</div>
+                <div class="act-tags"><span class="act-tag">€5 entrada</span><span class="act-tag info">Cerrado martes</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Palermo Soho — barrio de diseñadores</div>
+                <div class="act-desc">El barrio más trendy de Buenos Aires: diseñadores locales, restaurantes de cocina de autor, bares de vinos naturales y la escena gastronómica más vibrante de Sudamérica. La calle Thames es el epicentro del diseño argentino contemporáneo. Compras únicas que no encontrarás en ningún otro lugar.</div>
+                <div class="act-tags"><span class="act-tag green">Libre exploración</span><span class="act-tag">Tiendas hasta 20h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">20:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena en Palermo — cocina argentina de autor</div>
+                <div class="act-desc">Cena en Don Julio (mejor parrilla de BA, reserva imprescindible) o Tegui si prefieres alta gastronomía. Los porteños cenan tarde — llegar antes de las 21h garantiza mesa sin espera. Pedir entraña o costilla de res con chimichurri y ensalada mixta. Malbec de cosecha es obligatorio.</div>
+                <div class="act-tags"><span class="act-tag">Don Julio: ~€30 pp</span><span class="act-tag info">Reserva anticipada</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 3 -->
+      <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+        <h2 class="section-heading" id="h-dia3">Día 3</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">03</div>
+            <div>
+              <div class="day-title">La Boca, Puerto Madero y Teatro Colón</div>
+              <div class="day-subtitle">Del barrio obrero a la ópera más bella del mundo</div>
+            </div>
+            <div class="day-meta">
+              <span>🎨 Caminito</span>
+              <span>⚓ Puerto Madero</span>
+              <span>🎭 Teatro Colón</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">La Boca — Caminito</div>
+                <div class="act-desc">El barrio obrero de los inmigrantes genoveses, pintado de todos los colores imaginables. Caminito es la calle más fotografiada de Argentina: casas de chapa pintadas en azul, rojo y amarillo, parejas bailando tango en la calle, murales de Quinquela Martín. Llegar por la mañana para evitar las masas turísticas.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">Ir en grupo — zona turística</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Estadio La Bombonera (Boca Juniors)</div>
+                <div class="act-desc">El estadio más pasional del fútbol mundial. Visita guiada al museo de Boca Juniors con los trofeos de Maradona, las camisetas históricas y el recorrido por el vestuario. Si hay partido de local en tu visita — compra entradas con semanas de antelación. La experiencia sonora es única en el mundo.</div>
+                <div class="act-tags"><span class="act-tag">Visita museo: ~€8</span><span class="act-tag info">Partido si hay disponibilidad</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en Puerto Madero</div>
+                <div class="act-desc">El antiguo puerto industrial reconvertido en barrio gastronómico de primera categoría. Parrilla con vista al Río de la Plata en los docks restaurados. Pedir bife de chorizo al punto justo con chimichurri casero — el asado porteño en su expresión más depurada.</div>
+                <div class="act-tags"><span class="act-tag">~€20-30 pp</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Teatro Colón — visita guiada</div>
+                <div class="act-desc">Inaugurado en 1908, es considerado uno de los cinco mejores teatros de ópera del mundo. Acústica perfecta, oro de 24 quilates en las paredes, el gran telón tejido por artesanos italianos. La visita guiada recorre el foso de la orquesta, el escenario y los talleres de vestuario. Si hay función en tu fecha — compra entradas.</div>
+                <div class="act-tags"><span class="act-tag">Visita: ~€12</span><span class="act-tag info">Función ópera si hay disponibilidad</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">20:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena tardía en el centro histórico</div>
+                <div class="act-desc">Cena cerca del Teatro Colón en alguno de los clásicos del centro: La Cabrera para carnívoros o El Federal (San Telmo, 1864) para una experiencia histórica con cocina argentina tradicional. Los porteños comen a las 21-22h — aceptar el horario y disfrutar del ambiente.</div>
+                <div class="act-tags"><span class="act-tag">~€15-25 pp</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 4 -->
+      <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+        <h2 class="section-heading" id="h-dia4">Día 4</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">04</div>
+            <div>
+              <div class="day-title">Delta del Tigre + Cultura del Mate</div>
+              <div class="day-subtitle">Naturaleza fluvial a 30 km de la ciudad</div>
+            </div>
+            <div class="day-meta">
+              <span>🚂 Tren desde Retiro</span>
+              <span>🌿 Delta del Tigre</span>
+              <span>🧉 Cultura del Mate</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Tren Mitre desde Estación Retiro</div>
+                <div class="act-desc">Tren suburbano desde la Estación Retiro hasta Tigre — 50 minutos, precio irrisorio (~€1). El tren pasa por barrios residenciales y suburbanísticos de Buenos Aires, brindando una perspectiva auténtica de la vida cotidiana porteña que ningún tour organizado muestra.</div>
+                <div class="act-tags"><span class="act-tag green">~€1 tren</span><span class="act-tag info">Salida temprana recomendada</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Puerto de Frutos de Tigre</div>
+                <div class="act-desc">El mercado de artesanías y frutas junto al río es el corazón de Tigre. Mimbres, ratán, flores y artesanías locales. Desayuno en alguno de los cafés junto al agua con medialunas y café con leche mientras los barcos de pasajeros salen hacia las islas del delta.</div>
+                <div class="act-tags"><span class="act-tag">Desayuno ~€4</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Paseo en lancha por el Delta del Paraná</div>
+                <div class="act-desc">El Delta del Tigre tiene más canales que Venecia — 14,000 km de ríos y arroyos navegables. Lanchas colectivas o privadas recorren los canales entre casas flotantes, juncos y pajarería extraordinaria. Los isleños viven aquí sin caminos, solo botes. Un mundo paralelo a 30 km del obelisco.</div>
+                <div class="act-tags"><span class="act-tag">Lancha colectiva: ~€5</span><span class="act-tag info">Lancha privada: ~€30/h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en restaurante del delta</div>
+                <div class="act-desc">Almuerzo de pescado de río en uno de los restaurantes con muelle propio en las islas. Surubí, dorado o boga a la parrilla con ensalada fresca. El ritual del mate aparece en la sobremesa — aceptar el mate que ofrezcan y aprender los códigos: no girar la bombilla, devolver siempre al cebador.</div>
+                <div class="act-tags"><span class="act-tag">~€15 pp</span><span class="act-tag green">Cultura del mate</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Vuelta a Buenos Aires — barrio Belgrano</div>
+                <div class="act-desc">Regreso en tren y paseo por el barrio de Belgrano: el Chinatown porteño en el Barrio Chino (Arribeños), la Feria de Artesanos de Belgrano y el Museo de Arte Español Enrique Larreta. Cena ligera en alguno de los restaurantes vietnamitas o chinos del Barrio Chino.</div>
+                <div class="act-tags"><span class="act-tag green">Barrio Chino gratuito</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 5 -->
+      <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+        <h2 class="section-heading" id="h-dia5">Día 5</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">05</div>
+            <div>
+              <div class="day-title">Belgrano, Shopping y Asado de Despedida</div>
+              <div class="div-subtitle">El ritual final de Buenos Aires</div>
+            </div>
+            <div class="day-meta">
+              <span>🛍️ Shopping</span>
+              <span>🥩 Asado</span>
+              <span>✈️ Vuelta a casa</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Desayuno en confitería clásica</div>
+                <div class="act-desc">Desayuno en alguna de las confiterías históricas de Palermo o Recoleta: medialuna de manteca recién horneada, café con leche y jugo de naranja exprimido al momento. Este ritual matutino porteño es tan propio de Buenos Aires como el tango.</div>
+                <div class="act-tags"><span class="act-tag">~€5 desayuno</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Shopping y artesanías — últimas compras</div>
+                <div class="act-desc">Buenos Aires tiene excelentes opciones para comprar cuero de alta calidad (carteras, cinturones, zapatos), vinos Malbec, alfajores Havanna y artesanías. El Mercado de Pulgas en Palermo y la feria de San Telmo (domingos) son los mejores puntos. Precios muy competitivos respecto a Europa.</div>
+                <div class="act-tags"><span class="act-tag">Cuero: €30-80</span><span class="act-tag">Malbec premium: €8-20</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Asado de despedida — el ritual sagrado</div>
+                <div class="act-desc">El asado no es solo una técnica de cocción — es una forma de vida porteña. El asador (el que maneja las brasas) tiene un estatus social especial. Reunión de 2-4 horas de cortes variados: tira de asado, vacío, chorizos, morcilla y mollejas. El chimichurri casero y el Malbec completan el cuadro.</div>
+                <div class="act-tags"><span class="act-tag">Parrilla en restaurante: ~€25 pp</span><span class="act-tag green">Experiencia definitiva</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Traslado al aeropuerto Ezeiza</div>
+                <div class="act-desc">Bus Tienda León desde el centro (~€5) o taxi oficial. Calcular mínimo 3-4 horas de antelación incluyendo posible tráfico. Buenos Aires es una ciudad que deja huella: el tango, el Malbec, los porteños y sus contradicciones permanecen.</div>
+                <div class="act-tags"><span class="act-tag info">3-4 horas de antelación</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gastronomía -->
+      <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+        <h2 class="section-heading" id="h-gastro">Gastronomía porteña</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:20px">Buenos Aires es una de las grandes capitales gastronómicas del mundo, con precios muy inferiores a Europa. La carne argentina es la mejor del mundo por consenso general — las reses pastan en la pampa húmeda sin confinamiento y el resultado en el plato es indiscutible.</p>
+        <div class="gastro-grid">
+          <div class="gastro-card">
+            <div class="gastro-cat">Carne</div>
+            <div class="gastro-title">El asado — religión argentina</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">Don Julio</strong> (Palermo, reserva esencial) — la mejor parrilla de BA según los porteños. <strong style="color:#edeef2">El Preferido de Palermo</strong> — clásico sin pretensiones. Cortes clave: entraña, tira de asado, bife de chorizo. Siempre a punto (término medio en Argentina).</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Empanadas</div>
+            <div class="gastro-title">El snack nacional</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">El Sanjuanino</strong> (Recoleta) — las mejores empanadas al horno de BA. La diferencia entre al horno y fritas es filosófica para los argentinos. Rellenos: carne cortada a cuchillo, humita, jamón y queso, caprese. Siempre con un vaso de Malbec.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Dulce de Leche</div>
+            <div class="gastro-title">La obsesión nacional</div>
+            <div class="gastro-desc">El dulce de leche argentino no tiene nada que ver con el europeo. En <strong style="color:#edeef2">Havanna</strong> los alfajores de dulce de leche bañados en chocolate son la obsesión de cualquier viajero. Llevar en la maleta de vuelta como los mejores souvenirs posibles.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Vinos</div>
+            <div class="gastro-title">Malbec de Mendoza</div>
+            <div class="gastro-desc">Argentina produce algunos de los mejores Malbec del mundo en Mendoza (Achaval Ferrer, Zuccardi, Catena Zapata). En BA los vinos de bodega se consiguen a precios increíbles. Una botella de Malbec premium cuesta en restaurante lo que en Europa pagarías por un vino de tabla.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Mate</div>
+            <div class="gastro-title">El ritual diario</div>
+            <div class="gastro-desc">El mate no es simplemente una infusión — es un acto social. Se comparte en ronda, el cebador sirve siempre en el mismo mate, cada uno bebe hasta que el agua se acaba y devuelve. Aprender el ritual y aceptar siempre el mate que ofrecen los locales. Abre todas las puertas.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Alfajores</div>
+            <div class="gastro-title">El souvenir perfecto</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">Havanna</strong> (cadena clásica) y <strong style="color:#edeef2">Cachafaz</strong> (artesanales premium) son los reyes del alfajor porteño. Tres capas de galleta de maicena unidas con dulce de leche y bañadas en chocolate negro. No existe equivalente en ningún otro lugar del mundo.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Consejos -->
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">10 Consejos para Buenos Aires</h2>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">1</div>
+          <div class="tip-text"><strong>El tipo de cambio es crucial</strong> — la economía argentina tiene complejidades. Llevar euros en efectivo y preguntar por el tipo de cambio actual antes de salir. Evitar cambiar en el aeropuerto si es posible.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">2</div>
+          <div class="tip-text"><strong>Los porteños cenan muy tarde</strong> — los restaurantes se llenan a partir de las 21h. Llegar antes de las 20h garantiza mesa sin espera pero el ambiente es escaso. El ritmo de vida nocturno empieza a las 23h.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">3</div>
+          <div class="tip-text"><strong>La tarjeta SUBE</strong> es indispensable para el transporte público. Comprarla en kioscos o estaciones de Subte (€1 + recarga inicial). El metro y buses son seguros y muy baratos.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">4</div>
+          <div class="tip-text"><strong>La Boca solo de día</strong> — es un barrio turístico que requiere precaución. Quedarse en la zona de Caminito durante el día y evitar alejarse por calles laterales. Por la noche, elegir otros barrios.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">5</div>
+          <div class="tip-text"><strong>Reserva con anticipación</strong> los shows de tango y los mejores restaurantes (Don Julio, La Cabrera). Buenos Aires tiene demanda turística alta todo el año y los mejores sitios se agotan.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">6</div>
+          <div class="tip-text"><strong>El mejor momento</strong> para visitar Buenos Aires es primavera (septiembre-noviembre) u otoño (marzo-mayo). El verano porteño (diciembre-febrero) puede ser muy caluroso y húmedo.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">7</div>
+          <div class="tip-text"><strong>Llevar adaptador de enchufe</strong> — Argentina usa el estándar IRAM (clavija en V), diferente al europeo. Los hoteles suelen tener adaptadores pero mejor traer el propio.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">8</div>
+          <div class="tip-text"><strong>El fútbol es una religión</strong> — si hay posibilidad de ver un partido de River o Boca, hacerlo. La experiencia sonora y emocional de La Bombonera o el Monumental no tiene equivalente en el mundo del fútbol.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">9</div>
+          <div class="tip-text"><strong>Uber funciona perfectamente</strong> en Buenos Aires y es más económico que los taxis. Alternativamente, los taxis oficiales (con taxímetro) son seguros — pedir siempre recibo.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">10</div>
+          <div class="tip-text"><strong>Los argentinos son muy hospitalarios</strong> — hablar con locales, aceptar invitaciones a tomar un mate o un asado. La cultura porteña se abre solo cuando bajas la guardia del turista y te permites ser parte del ritmo de la ciudad.</div>
+        </div>
+      </section>
+
+      <!-- Emergencias -->
+      <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+        <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+        <div class="emerg-grid">
+          <div class="emerg-card">
+            <div class="emerg-label">Policía</div>
+            <div class="emerg-value">101</div>
+            <div class="emerg-note">Emergencias policiales</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Ambulancia / SAME</div>
+            <div class="emerg-value">107</div>
+            <div class="emerg-note">Sistema de Atención Médica de Emergencia</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Bomberos</div>
+            <div class="emerg-value">100</div>
+            <div class="emerg-note">Emergencias de incendio</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Emergencias general</div>
+            <div class="emerg-value">911</div>
+            <div class="emerg-note">Línea unificada de emergencias</div>
+          </div>
+          <div class="emerg-card" style="grid-column:1/-1">
+            <div class="emerg-label">Embajada de España en Buenos Aires</div>
+            <div class="emerg-value" style="font-size:0.85rem">+54-11-4814-2002</div>
+            <div class="emerg-note">Calle Guido 1760, Buenos Aires — Emergencias consulares 24h</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Disclosure -->
+      <div class="disclosure" role="note" aria-label="Aviso legal sobre enlaces de afiliados">
+        <strong style="color:#edeef2">Aviso sobre enlaces de afiliados:</strong> Algunos enlaces en esta página son de afiliados (Booking.com, GetYourGuide, Skyscanner, IATI Seguros). Si realizas una compra a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Esto nos permite mantener el servicio gratuito. Los precios y disponibilidad son indicativos y pueden variar. La economía argentina está sujeta a cambios frecuentes — verificar información actualizada antes del viaje. Precios expresados en euros (€), estimaciones para 2026.
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html" style="font-family:'Bodoni Moda',serif;font-size:1.2rem;font-weight:700;color:#edeef2;text-decoration:none" aria-label="Routlo — Inicio"><img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);"></a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+(function() {
+  'use strict';
+
+  // ── Nav scroll effect ──
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // ── TOC active highlighting ──
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#', '');
+    const el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+
+  function updateTOC() {
+    const scrollY = window.scrollY;
+    const offset = 120;
+    let current = null;
+    sections.forEach(function(s) {
+      if (s.el.offsetTop - offset <= scrollY) {
+        current = s;
+      }
+    });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateTOC, { passive: true });
+  updateTOC();
+
+  // ── Smooth scroll for TOC links ──
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const id = this.getAttribute('href').replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 96;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ── initNav ──
+  function initNav() {
+    const navAuth = document.getElementById('navAuth');
+    if (!navAuth) return;
+    const loggedIn = localStorage.getItem('routlo_user');
+    if (loggedIn) {
+      navAuth.innerHTML = '<a href="../chatbot.html" style="color:#c9a96e;text-decoration:none;font-weight:600">Mi cuenta</a>';
+    } else {
+      navAuth.innerHTML = '<a href="../login.html" style="color:rgba(237,238,242,0.7);text-decoration:none;margin-right:12px">Iniciar sesión</a><a href="../registro.html" style="background:#c9a96e;color:#0a0a0a;padding:6px 16px;border-radius:8px;text-decoration:none;font-weight:600">Registrarse</a>';
+    }
+  }
+  initNav();
+
+  // ── Scroll reveal ──
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.day-card, .tip-item').forEach(function(el) {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }
+})();
+</script>
+</body>
+</html>
