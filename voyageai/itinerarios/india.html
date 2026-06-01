@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>India — Triángulo de Oro | 7 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 7 días en el Triángulo de Oro de India: Delhi, Agra y el Taj Mahal, Jaipur. Presupuesto detallado, hoteles y consejos exclusivos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #1a0800 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(26,8,0,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(26,8,0,0.95); }
+
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #c96e00 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #4a1500 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #8b3a00 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.3; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #1a0800 0%, #4a1500 40%, #c96e00 70%, rgba(201,169,110,0.15) 100%),
+        url('https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1400&h=700&fit=crop&q=80&auto=format');
+      background-size: cover; background-position: center;
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #1a0800 0%, rgba(26,8,0,0.5) 50%, rgba(26,8,0,0.2) 100%);
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px; padding: 6px 14px;
+      background: rgba(26,8,0,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px; background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px; position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #2a1000; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+
+    .itin-layout {
+      position: relative; z-index: 1; max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+    .toc {
+      position: sticky; top: 96px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+
+    .day-card { background: #2a1000; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #2a1000; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 5px; color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(201,169,110,0.3); padding-bottom: 1px; }
+    .hotel-link:hover { border-color: #c9a96e; }
+
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #2a1000; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #2a1000; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    .phrases-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .phrase-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .phrase-es { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 4px; }
+    .phrase-local { font-size: 0.88rem; font-weight: 600; color: #edeef2; margin-bottom: 2px; }
+    .phrase-pron { font-size: 0.74rem; color: #c9a96e; font-style: italic; }
+
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(201,110,0,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .hotel-grid { grid-template-columns: repeat(2,1fr); } .transport-grid { grid-template-columns: 1fr; } .gastro-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .dest-title { font-size: clamp(2rem,10vw,3.2rem); } .hotel-grid { grid-template-columns: 1fr; } .phrases-grid { grid-template-columns: 1fr; } .emerg-grid { grid-template-columns: 1fr; } .section-heading { font-size: 1.3rem; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } }
+  </style>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">India</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">India</h1>
+  <p class="dest-country">Triángulo de Oro</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">7 días / 6 noches</span>
+    <span class="dest-badge gold" role="listitem">~€1,200/persona</span>
+    <span class="dest-badge" role="listitem">Asia del Sur · India</span>
+    <span class="dest-badge" role="listitem">Historia + Palacios + Espiritualidad</span>
+    <a href="https://www.skyscanner.net/transport/flights/MAD/DEL/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">7 días</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Precio/persona</div>
+      <div class="dest-sum-val">~€1,200</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Mejor época</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Oct–Mar</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Visado</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">e-Visa India</div>
+    </div>
+  </div>
+</section>
+
+<main id="main-content">
+  <div class="itin-layout">
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#dia1">Día 1 — Delhi</a></li>
+          <li><a href="#dia2">Día 2 — Old Delhi</a></li>
+          <li><a href="#dia3">Día 3 — Taj Mahal</a></li>
+          <li><a href="#dia4">Día 4 — Fatehpur Sikri</a></li>
+          <li><a href="#dia5">Día 5 — Jaipur</a></li>
+          <li><a href="#dia6">Día 6 — Mercados</a></li>
+          <li><a href="#dia7">Día 7 — Regreso</a></li>
+          <li><a href="#gastronomia">Gastronomía</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+          <li><a href="#emergencias">Emergencias</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <article>
+
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          El Triángulo de Oro conecta tres de las ciudades más fascinantes del mundo: Delhi, la megalópolis de 32 millones de habitantes donde conviven 3.000 años de historia con autopistas de 12 carriles; Agra, hogar del Taj Mahal, el monumento al amor más reconocible del planeta; y Jaipur, la Ciudad Rosa con sus palacios de arenisca roja, mercados de gemas y elefantes decorados. Una ruta de 7 días que condensa lo esencial del norte de India y abruma todos los sentidos.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">Empezar gratis</a>
+        </div>
+      </section>
+
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto India">
+            <thead><tr><th>Concepto</th><th>Económico</th><th>Medio</th><th>Premium</th></tr></thead>
+            <tbody>
+              <tr><td>✈️ Vuelos Madrid–Delhi i/v</td><td>€400–500</td><td>€550–700</td><td>€1,500+</td></tr>
+              <tr><td>🏨 Alojamiento (6 noches)</td><td>€80–120</td><td>€200–400</td><td>€800–2,000</td></tr>
+              <tr><td>🍽️ Alimentación (7 días)</td><td>€60–90</td><td>€120–180</td><td>€300–500</td></tr>
+              <tr><td>🚆 Tren Shatabdi Delhi–Agra–Jaipur</td><td>€20–30</td><td>€30–50</td><td>€50–80</td></tr>
+              <tr><td>🚗 Coche privado con conductor (opcional)</td><td>—</td><td>€150–200</td><td>€300–500</td></tr>
+              <tr><td>🎫 Entradas (Taj Mahal, Amber, etc.)</td><td>€40–60</td><td>€60–90</td><td>€90–150</td></tr>
+              <tr><td>🛡️ Seguro de viaje</td><td>€35–50</td><td>€35–50</td><td>€60–90</td></tr>
+              <tr><td><strong>TOTAL</strong></td><td><strong>~€700</strong></td><td><strong>~€1,200</strong></td><td><strong>~€2,600</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* e-Visa India: €25, procesada en 2-3 días. Exigida para españoles. La entrada al Taj Mahal cuesta ~€13 para extranjeros.</p>
+      </section>
+
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">🚆 Tren Shatabdi Express</div>
+            <div class="transport-content"><strong>Delhi–Agra:</strong> 2h, ~€8 (clase AC). El tren más cómodo y puntual de India. Reservar online en irctc.co.in con semanas de antelación — los cupos para extranjeros ("Tourist Quota") se agotan.<br><br><strong>Agra–Jaipur:</strong> 4h, ~€10.</div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">🚗 Coche privado con conductor</div>
+            <div class="transport-content"><strong>La opción más cómoda:</strong> Un conductor que te lleva todo el circuito (~€150-200 el paquete 7 días). Incluye paradas foto, recogida en hotel y experiencia de un local. Reservar a través del hotel o GetYourGuide.</div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">📱 Uber / Ola en Delhi</div>
+            <div class="transport-content"><strong>Uber funciona en Delhi</strong> y es la forma más segura de moverse. Precio fijo sin regateo. Ola es la alternativa local igualmente válida. Evitar tuk-tuk en distancias largas sin precio acordado antes.</div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">🗣️ Guías locales</div>
+            <div class="transport-content">Contratar un guía oficial en el Taj Mahal (~€15/2h) añade dimensiones imposibles de descubrir solo: leyendas, óptica del edificio, historias del sha Jahan. Los guías no oficiales que se ofrecen en la entrada suelen ser estafadores.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+        <h2 class="section-heading" id="h-dia1">Día 1</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Delhi — Nueva Delhi</div>
+              <div class="day-subtitle">Qutb Minar, India Gate y la India monumental</div>
+            </div>
+            <div class="day-meta"><span>🕌 Qutb Minar</span><span>🏛️ India Gate</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Qutb Minar — El alminar más alto de India</div>
+                <div class="act-desc">Construido en 1193, el minarete islámico de 73 metros es el más antiguo de la India y Patrimonio UNESCO. El complejo incluye la mezquita más antigua del subcontinente, columnas de granito hindú reutilizadas y el famoso Pilar de Hierro de 1.600 años que no se oxida — un misterio metalúrgico aún sin resolver.</div>
+                <div class="act-tags"><span class="act-tag">€2 entrada extranjeros</span><span class="act-tag info">Ir antes de las 10h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Tumba de Humayun — El Taj Mahal anterior</div>
+                <div class="act-desc">El mausoleo del emperador mogol Humayun (1570) es la inspiración directa del Taj Mahal — 60 años antes. Jardines charbagh simétricos, cúpula blanca sobre arenisca roja. Patrimonio UNESCO y mucho menos concurrida que el Taj. Una de las grandes arquitecturas del mundo.</div>
+                <div class="act-tags"><span class="act-tag">€3 entrada</span><span class="act-tag green">Sin colas</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">India Gate + Rajpath</div>
+                <div class="act-desc">El arco triunfal de 42 metros dedicado a los 90.000 soldados indios caídos en la Primera Guerra Mundial. El eje ceremonial de Nueva Delhi diseñado por Edwin Lutyens, el mismo arquitecto que diseñó el West End de Londres. Al fondo, el Rashtrapati Bhavan (Palacio Presidencial). Rodeado de parques llenos de familias indias — una experiencia social maravillosa.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Chandni Chowk — El caos organizado más alucinante de Asia</div>
+                <div class="act-desc">El mercado más antiguo de Delhi (1650), diseñado por la princesa mogol Jahanara. Un laberinto de callejuelas especializadas: la calle del papel, de los novios (ropas de boda), de los electrónicos, de las especias. Rickshaws, vacas, motos, vendedores ambulantes y siglos de comercio en el mismo espacio. Ir en rickshaw manual (€1) por las callejuelas interiores.</div>
+                <div class="act-tags"><span class="act-tag">Rickshaw: €1</span><span class="act-tag green">Gratis explorar</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">20:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena en Karim's — Desde 1913</div>
+                <div class="act-desc">Karim's en Chandni Chowk: fundado por el chef de la cocina real mogol en 1913, el restaurante más legendario de Delhi. Mutton korma, seekh kebabs y naan de horno de barro. Sin decoración, sin menú en inglés, con 110 años de historia y cola en la calle.</div>
+                <div class="act-tags"><span class="act-tag">Cena ~€6 pp</span><span class="act-tag green">Desde 1913</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+        <h2 class="section-heading" id="h-dia2">Día 2</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">02</div>
+            <div>
+              <div class="day-title">Old Delhi — Jama Masjid y Red Fort</div>
+              <div class="day-subtitle">La mezquita más grande de India y la fortaleza roja mogol</div>
+            </div>
+            <div class="day-meta"><span>🕌 Jama Masjid</span><span>🏰 Red Fort</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">07:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Jama Masjid al amanecer</div>
+                <div class="act-desc">La mezquita más grande de India, construida por Shah Jahan entre 1644-1656 con mármol blanco y arenisca roja. Capacidad para 25.000 fieles. Subir al minarete (€2 extra) para ver Delhi despertando desde lo alto — los tejados planos, las palomas, el bullicio que empieza. Cubrirse con tela a la entrada (la proporcionan gratis).</div>
+                <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag">Minarete: €2</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Red Fort — La Fortaleza Roja</div>
+                <div class="act-desc">El palacio de los emperadores mogoles durante 200 años, construido en 1638. Muros de arenisca roja de 33 metros de altura que encierran palacios de mármol blanco con incrustaciones de piedras preciosas. Aquí Jawaharlal Nehru proclamó la independencia de India el 15 de agosto de 1947. Patrimonio UNESCO.</div>
+                <div class="act-tags"><span class="act-tag">€7 extranjeros</span><span class="act-tag info">Son del Light Show por la noche (€3)</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Rickshaw por el Old Quarter + Mercado de especias Khari Baoli</div>
+                <div class="act-desc">Khari Baoli es el mercado de especias más grande de Asia: montañas de cúrcuma, azafrán, cardamomo, anís, chiles rojos de 50 variedades, rosas secas para chai. El color y el aroma son una experiencia sensorial total. Fotografías extraordinarias en cada esquina.</div>
+                <div class="act-tags"><span class="act-tag green">Acceso gratuito</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">18:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Barrio de Hauz Khas — Delhi moderna</div>
+                <div class="act-desc">Hauz Khas Village: galerías de arte, cafés de diseño y restaurantes de fusión indo-europea alrededor de un lago medieval. El lado del Delhi que el turista habitual no ve — joven, creativo, cosmopolita. Cena en uno de los restaurantes con terraza sobre el lago iluminado.</div>
+                <div class="act-tags"><span class="act-tag">Cena ~€15 pp</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+        <h2 class="section-heading" id="h-dia3">Día 3</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">03</div>
+            <div>
+              <div class="day-title">Tren a Agra — Taj Mahal</div>
+              <div class="day-subtitle">El monumento al amor al alba y al atardecer</div>
+            </div>
+            <div class="day-meta"><span>🚆 Shatabdi Express</span><span>🕌 Taj Mahal</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">06:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Tren Shatabdi Express Delhi–Agra (2h)</div>
+                <div class="act-desc">El tren más puntual de India: sale desde la Estación de Delhi Cantt a las 6:00h y llega a Agra Cantonment a las 8:00h. Incluye desayuno a bordo. Llegar temprano a Agra es fundamental para ver el Taj antes de las masas turísticas.</div>
+                <div class="act-tags"><span class="act-tag">~€8 clase AC Chair</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">08:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Taj Mahal — La primera vez</div>
+                <div class="act-desc">La entrada por la Puerta del Sur revela el Taj de repente: 73 metros de mármol blanco de Makrana perfectamente simétrico, reflejado en el canal central. Shah Jahan lo construyó entre 1632-1653 como tumba para su esposa favorita Mumtaz Mahal, muerta en el parto de su 14.º hijo. Empleó 20.000 artesanos. El interior está incrustado de piedras preciosas con versículos del Corán. Ninguna foto lo hace justicia.</div>
+                <div class="act-tags"><span class="act-tag">€13 entrada extranjeros</span><span class="act-tag info">Mejor hora: 8-10h o 17-18h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Fuerte de Agra</div>
+                <div class="act-desc">A 2km del Taj, el Fuerte Rojo de Agra fue el palacio principal de los emperadores mogoles antes que el de Delhi. Desde el balcón de la Torre de Jasmín, Shah Jahan pasó los últimos 8 años de su vida prisionero de su hijo — con vista directa al Taj Mahal donde dormía su amada Mumtaz. La historia de amor más trágica de India.</div>
+                <div class="act-tags"><span class="act-tag">€7 entrada</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Taj Mahal al atardecer — Desde Mehtab Bagh</div>
+                <div class="act-desc">Mehtab Bagh ("Jardín del Claro de Luna") es el jardín al otro lado del río Yamuna con vista frontal al Taj. A las 17-18h, el mármol se tiñe de naranja y rosa. Sin colas, sin masificación. El mejor ángulo del Taj que la mayoría de turistas no conoce.</div>
+                <div class="act-tags"><span class="act-tag">€2 entrada Mehtab Bagh</span><span class="act-tag green">Sin aglomeraciones</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+        <h2 class="section-heading" id="h-dia4">Día 4</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">04</div>
+            <div>
+              <div class="day-title">Fatehpur Sikri — Ciudad Fantasma</div>
+              <div class="day-subtitle">La capital mogol abandonada y la ruta a Jaipur</div>
+            </div>
+            <div class="day-meta"><span>🏙️ Ciudad abandonada</span><span>🐪 Ruta carretera</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Fatehpur Sikri — Capital mogol abandonada</div>
+                <div class="act-desc">A 40km de Agra, Akbar el Grande construyó esta capital colosal entre 1569-1585 y la abandonó apenas 15 años después (posiblemente por escasez de agua). El resultado: una ciudad mogol intacta del siglo XVI sin nadie viviendo en ella. El Buland Darwaza (puerta de 54 metros) y el Panch Mahal de 5 pisos son extraordinarios. Patrimonio UNESCO.</div>
+                <div class="act-tags"><span class="act-tag">€7 extranjeros</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Ruta Agra–Jaipur por la National Highway 21</div>
+                <div class="act-desc">5 horas de carretera a través del Rajastán: pueblos de adobe pintados de azul (los brahministas) y ocre, camellos cargando leña, mujeres con saris de colores intensísimos, niños en bicicleta, templos de carretera. La India profunda que no sale en los libros de viaje. Llegar a Jaipur al atardecer.</div>
+                <div class="act-tags"><span class="act-tag info">Coche privado recomendado (~€40)</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+        <h2 class="section-heading" id="h-dia5">Día 5</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">05</div>
+            <div>
+              <div class="day-title">Jaipur — La Ciudad Rosa</div>
+              <div class="day-subtitle">Palacio del Viento, Fuerte Amber y Jantar Mantar</div>
+            </div>
+            <div class="day-meta"><span>🏰 Fuerte Amber</span><span>🏯 Hawa Mahal</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Fuerte Amber — Subida en elefante (opcional)</div>
+                <div class="act-desc">El fuerte más impresionante del Rajastán, a 11km de Jaipur, construido en 1592. La subida en elefante decorado es la imagen icónica (€15 pp, aunque hay debate sobre el bienestar animal — hay alternativa en jeep). Los interiores con jardines, espejos y pinturas son extraordinarios. El Sheesh Mahal (Sala de los Espejos) refleja una vela en miles de espejos.</div>
+                <div class="act-tags"><span class="act-tag">€5 entrada</span><span class="act-tag info">Elefante opcional: €15 pp</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Hawa Mahal — El Palacio de los Vientos</div>
+                <div class="act-desc">La fachada más icónica de Jaipur: 953 ventanas de celosía de arenisca rosa en 5 pisos, construidas en 1799 para que las mujeres del harén pudieran observar la calle sin ser vistas. Una pantalla de piedra de encaje medieval. La mejor vista es desde la calle de enfrente, en el café del primer piso.</div>
+                <div class="act-tags"><span class="act-tag">€2 entrada</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">City Palace + Jantar Mantar</div>
+                <div class="act-desc">City Palace: el palacio real actualmente habitado por la familia real de Jaipur. Los apartamentos privados con la colección de armas mogoles y los trajes de seda de los maharajás. Jantar Mantar (al lado): observatorio astronómico del siglo XVIII con instrumentos de piedra gigantes que miden eclipses y solsticios con precisión de 2 segundos. Incomprensible que funcione.</div>
+                <div class="act-tags"><span class="act-tag">City Palace: €10</span><span class="act-tag">Jantar Mantar: €3</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena en terraza con vista al Fuerte Nahargarh</div>
+                <div class="act-desc">Jaipur de noche vista desde una terraza con el Fuerte Nahargarh iluminado sobre la colina: thali rajasthani con dal baati churma (lentejas con panes de trigo), bajra roti, la cocina más contundente y sabrosa del norte de India.</div>
+                <div class="act-tags"><span class="act-tag">Thali: €6-10</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia6" class="itin-section" aria-labelledby="h-dia6">
+        <h2 class="section-heading" id="h-dia6">Día 6</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">06</div>
+            <div>
+              <div class="day-title">Jaipur — Johari Bazaar y Block Printing</div>
+              <div class="day-subtitle">Gemas, telas y artesanía rajasthani</div>
+            </div>
+            <div class="day-meta"><span>💎 Johari Bazaar</span><span>🎨 Block printing</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">10:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Johari Bazaar — El mercado de gemas</div>
+                <div class="act-desc">Jaipur es el mayor centro de corte y comercio de gemas del mundo: esmeraldas de Colombia, rubíes de Birmania, zafiros de Sri Lanka y las famosas piedras semipreciosas locales pasan por talleres de Johari Bazaar antes de llegar a las joyerías de lujo de París y Nueva York. Ver un taller de corte de gemas (gratuito) es fascinante. Telas de seda con bordados zari (hilo de oro) desde €15.</div>
+                <div class="act-tags"><span class="act-tag green">Ver talleres gratis</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Taller de Block Printing en Sanganer</div>
+                <div class="act-desc">En el pueblo de Sanganer (10km de Jaipur), talleres artesanos enseñan el block printing: el arte de estampar tejidos con bloques de madera tallados a mano. Una técnica de 500 años. Puedes participar y te quedas con tu pieza estampada (€10-20 pp el taller). Los tejidos aquí se venden a precio de fábrica.</div>
+                <div class="act-tags"><span class="act-tag">Taller: €10-20 pp</span><span class="act-tag green">Llevas tu tela</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso a Delhi en tren o vuelo</div>
+                <div class="act-desc">Tren Jaipur–Delhi (5h, ~€10) o vuelo (1h, desde €30 con IndiGo o SpiceJet). Si tomas el tren nocturno, llegas a Delhi descansado para el vuelo internacional del día siguiente.</div>
+                <div class="act-tags"><span class="act-tag info">Tren Ajmer-Delhi Express</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia7" class="itin-section" aria-labelledby="h-dia7">
+        <h2 class="section-heading" id="h-dia7">Día 7</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">07</div>
+            <div>
+              <div class="day-title">Vuelo internacional desde Delhi</div>
+              <div class="day-subtitle">Despedida de India</div>
+            </div>
+            <div class="day-meta"><span>✈️ IGI Airport Delhi</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">Mañana</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Últimas compras en Connaught Place</div>
+                <div class="act-desc">Si hay tiempo: Connaught Place, el centro comercial neoclásico de Nueva Delhi. Tiendas de artesanía india oficial (Cottage Emporium — sin regateo, calidad garantizada). Últimas especias, tés de Darjeeling, chai masala. Khadi (telas de Gandhi) — las únicas donde compra la clase media india sofisticada.</div>
+                <div class="act-tags"><span class="act-tag">Khadi: precios fijos</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">Tarde</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Aeropuerto Internacional Indira Gandhi (IGI) — Terminal 3</div>
+                <div class="act-desc">Llegar al aeropuerto con al menos 3h de antelación. El metro Metro Airport Express llega desde New Delhi Station en 19 minutos (€2,50). India cambia a todo el que la visita — sin excepción.</div>
+                <div class="act-tags"><span class="act-tag info">Metro Airport Express: 19 min desde centro</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+        <h2 class="section-heading" id="h-gastro">Gastronomía india</h2>
+        <div class="gastro-grid">
+          <div class="gastro-card">
+            <div class="gastro-cat">Lenteja Negra</div>
+            <div class="gastro-title">Dal Makhani</div>
+            <div class="gastro-desc">Lentejas negras y judías rojas cocidas a fuego lento 12 horas con mantequilla y crema. El plato vegetariano más rico de India del Norte, con una profundidad de sabor imposible de creer. Presente en cualquier restaurante desde €1,50.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Arroz Real</div>
+            <div class="gastro-title">Biryani</div>
+            <div class="gastro-desc">Arroz basmati cocinado en capas con cordero (o pollo), especias, azafrán y frutos secos en una olla sellada. Cada región tiene su versión — el biryani de Agra es más seco y especiado que el de Hyderabad. El plato festivo de India.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Horno de Barro</div>
+            <div class="gastro-title">Tandoori Chicken</div>
+            <div class="gastro-desc">Pollo marinado en yogur y especias durante 24h, cocinado en horno tandoor a 480°C. Rojo intenso, ahumado, jugoso. Inventado en Peshawar en los años 40, hoy el plato más reconocido de la cocina india en el mundo.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Menú Completo</div>
+            <div class="gastro-title">Thali</div>
+            <div class="gastro-desc">La forma más completa de comer india: una bandeja circular con 8-12 preparaciones en cuencos pequeños — dal, curry, raita, chutneys, roti, arroz, gulab jamun. Todo al mismo tiempo. Precio fijo, rellenado infinitamente. La comida más democrática de India (desde €2).</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Bebida Nacional</div>
+            <div class="gastro-title">Chai Masala</div>
+            <div class="gastro-desc">Té negro cocido con leche entera, jengibre, cardamomo, canela y clavo. Servido en vasitos de barro (kullhad) de un solo uso que se rompen en el suelo al terminar. El ritual del chai en cada esquina, a cualquier hora, con cualquier excusa.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Postre de Leche</div>
+            <div class="gastro-title">Kulfi y Gulab Jamun</div>
+            <div class="gastro-desc">Kulfi: helado denso de leche concentrada con pistachos y azafrán, servido en molde de terracota (€0,50). Gulab Jamun: bolitas de leche evaporada fritas y sumergidas en almíbar de rosas. Los dos postres más amados de India.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">10 Consejos para India</h2>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">1</div>
+          <div class="tip-text"><strong>e-Visa India obligatoria para españoles:</strong> Solicita en indianvisaonline.gov.in. Dos fotos, datos del pasaporte, €25. Aprobada en 2-3 días hábiles. Imprimir una copia física.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">2</div>
+          <div class="tip-text"><strong>Estómago del viajero:</strong> Los primeros días el sistema digestivo se adapta. Comer en lugares concurridos (muchos indios = frescos e higiénicos), evitar agua del grifo, pedir bebidas sin hielo. Llevarse loperamida en el neceser.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">3</div>
+          <div class="tip-text"><strong>Reservar trenes con antelación:</strong> El "Tourist Quota" en irctc.co.in se llena rápido. Reservar con 4-6 semanas de antelación, especialmente el Shatabdi Delhi–Agra en temporada alta (oct–feb).</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">4</div>
+          <div class="tip-text"><strong>Usar Uber siempre en Delhi y Jaipur:</strong> Los tuk-tuks y taxis en la calle sin taxímetro suelen pedir 5x el precio real a turistas. Uber/Ola tienen precio fijado y registro. Sin excepciones.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">5</div>
+          <div class="tip-text"><strong>Ropa: cubrir siempre hombros y rodillas</strong> en templos, mezquitas y sitios religiosos. Una tela ligera de algodón que se anuda como sarong cabe en cualquier bolsillo y soluciona todas las situaciones.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">6</div>
+          <div class="tip-text"><strong>No fotografíes a personas sin pedir permiso.</strong> En India hay una sensibilidad creciente sobre el "turismo de la pobreza". Pedir siempre con un gesto y respetar el "no".</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">7</div>
+          <div class="tip-text"><strong>La contaminación del aire en Delhi</strong> puede ser muy elevada en noviembre-enero. Llevar mascarilla (N95) para los días de alta polución, especialmente con niños o personas mayores.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">8</div>
+          <div class="tip-text"><strong>Regatear es una forma de arte:</strong> En bazares y tuk-tuks, regatear es esperado y divertido. Nunca se cierra un precio justo en la primera ronda. Empezar al 40% del precio pedido y encontrarse en el 60%.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">9</div>
+          <div class="tip-text"><strong>SIM local:</strong> Compra una SIM de Airtel o Jio en el aeropuerto (necesitas el pasaporte y una foto). Datos ilimitados por €5/mes. El trámite tarda 1-2h pero vale cada minuto.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">10</div>
+          <div class="tip-text"><strong>India tiene un ritmo propio:</strong> Los trenes se retrasan, los planes cambian, el caos es la constante. Llegar con un plan pero sin rigidez. India premia a los viajeros flexibles con las mejores historias.</div>
+        </div>
+      </section>
+
+      <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+        <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+        <div class="emerg-grid">
+          <div class="emerg-card">
+            <div class="emerg-label">Policía</div>
+            <div class="emerg-value">100</div>
+            <div class="emerg-note">Emergencias policiales India</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Ambulancia</div>
+            <div class="emerg-value">102</div>
+            <div class="emerg-note">Emergencias médicas</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Número único de emergencias</div>
+            <div class="emerg-value">112</div>
+            <div class="emerg-note">Policía, bomberos y ambulancia</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Max Hospital Delhi (24h, inglés)</div>
+            <div class="emerg-value" style="font-size:0.85rem">+91-11-2651-5050</div>
+            <div class="emerg-note">Hospital de referencia con servicio en inglés</div>
+          </div>
+          <div class="emerg-card" style="grid-column:1/-1">
+            <div class="emerg-label">Embajada de España en Nueva Delhi</div>
+            <div class="emerg-value" style="font-size:0.85rem">+91-11-4600-3900</div>
+            <div class="emerg-note">12 Prithviraj Road, New Delhi — Emergencias consulares</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="disclosure" role="note">
+        <strong style="color:#edeef2">Aviso sobre enlaces de afiliados:</strong> Algunos enlaces en esta página son de afiliados (Booking.com, GetYourGuide, Skyscanner). Si realizas una compra a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Los precios son orientativos para 2026.
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#2a1000">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html"><img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);"></a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() { document.querySelector('nav').classList.toggle('menu-open'); }
+  (function() {
+    'use strict';
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', function() { nav.classList.toggle('scrolled', window.scrollY > 40); }, { passive: true });
+    const tocLinks = document.querySelectorAll('.toc-list a');
+    const sections = [];
+    tocLinks.forEach(function(link) {
+      const el = document.getElementById(link.getAttribute('href').replace('#', ''));
+      if (el) sections.push({ el, link });
+    });
+    function updateTOC() {
+      let current = null;
+      sections.forEach(function(s) { if (s.el.offsetTop - 120 <= window.scrollY) current = s; });
+      tocLinks.forEach(function(l) { l.classList.remove('active'); });
+      if (current) current.link.classList.add('active');
+    }
+    window.addEventListener('scroll', updateTOC, { passive: true });
+    updateTOC();
+    tocLinks.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const el = document.getElementById(this.getAttribute('href').replace('#', ''));
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 96, behavior: 'smooth' });
+      });
+    });
+  })();
+</script>
+</body>
+</html>
