@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Filipinas — Manila + Palawan — 8 días | Routlo</title>
+  <meta name="description" content="Itinerario de 8 días en Filipinas: Intramuros en Manila, río subterráneo UNESCO en Puerto Princesa e island hopping en El Nido Palawan. Presupuesto detallado y consejos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #051020 0%, transparent 70%); top: -200px; left: -150px; opacity: 0.5; animation: blob 14s ease-in-out infinite; }
+    .aurora::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0d2040 0%, transparent 70%); bottom: -150px; right: -100px; opacity: 0.45; animation: blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0a1830 0%, transparent 70%); top: 40%; left: 50%; transform: translate(-50%,-50%); opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-60px) scale(1.08); } 66% { transform: translate(-30px,40px) scale(0.94); } }
+    .dest-hero { position: relative; z-index: 1; min-height: 65vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 140px 24px 60px; overflow: hidden; }
+    .dest-hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #051020 0%, #0d2040 40%, #1a3a6a 70%, rgba(201,169,110,0.15) 100%), url('https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=1400&q=80') center/cover no-repeat; }
+    .dest-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%); }
+    .dest-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); margin-bottom: 20px; position: relative; z-index: 1; }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2; }
+    .dest-country { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; font-style: italic; color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1; }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(4,8,16,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar { display: flex; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 600px; position: relative; z-index: 1; }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .hotel-grid { grid-template-columns: repeat(2,1fr); } .gastro-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .hotel-grid { grid-template-columns: 1fr; } .emerg-grid { grid-template-columns: 1fr; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } }
+  </style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Asia</span>
+    <span aria-hidden="true">›</span><span>Filipinas</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Filipinas</h1>
+  <p class="dest-country">7,641 islas en el Pacífico</p>
+  <div class="dest-meta">
+    <span class="dest-badge">✈️ ~15h desde Madrid</span>
+    <span class="dest-badge gold">8 días</span>
+    <span class="dest-badge">💰 ~€1,500/persona</span>
+    <span class="dest-badge">🏝️ Las mejores playas de Asia</span>
+  </div>
+  <div class="dest-summary-bar" role="region" aria-label="Resumen del viaje">
+    <div class="dest-sum-item"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">8 días</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€1,500</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Mejor época</div><div class="dest-sum-val">Nov–May</div></div>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#alojamiento">Alojamiento</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#dia1">Día 1 — Llegada Manila</a></li>
+      <li><a href="#dia2">Día 2 — Binondo + Museo Nacional</a></li>
+      <li><a href="#dia3">Día 3 — Puerto Princesa</a></li>
+      <li><a href="#dia4">Día 4 — El Nido + Lagunas</a></li>
+      <li><a href="#dia5">Día 5 — Island Hopping Tour A</a></li>
+      <li><a href="#dia6">Día 6 — Island Hopping Tour C</a></li>
+      <li><a href="#dia7">Día 7 — Kayak Laguna Bacuit</a></li>
+      <li><a href="#dia8">Día 8 — Regreso Manila</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Alojamiento</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">Económico</div>
+          <div class="hotel-name">Hostal Intramuros</div>
+          <div class="hotel-zone">Intramuros, Manila</div>
+          <div class="hotel-price">€18/noche</div>
+          <ul class="hotel-features"><li>Dentro de la ciudad amurallada</li><li>A pasos de Fort Santiago</li><li>Ambiente colonial español</li></ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Intermedio</div>
+          <div class="hotel-name">El Nido Cove Resort</div>
+          <div class="hotel-zone">El Nido, Palawan</div>
+          <div class="hotel-price">€90/noche</div>
+          <ul class="hotel-features"><li>Vistas directas al archipiélago</li><li>Piscina con vistas al mar</li><li>Organiza tours isla propios</li></ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Lujo</div>
+          <div class="hotel-name">Lagen Island Resort</div>
+          <div class="hotel-zone">Lagen Island, El Nido</div>
+          <div class="hotel-price">€300/noche</div>
+          <ul class="hotel-features"><li>Isla privada en la bahía</li><li>Bungalows sobre el agua</li><li>Todo incluido, snorkel desde la terraza</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead><tr><th>Concepto</th><th>Coste</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Vuelo internacional ida y vuelta</td><td>€700–1,000</td><td>Madrid–Manila con escala (Qatar, Emirates, Cathay)</td></tr>
+            <tr><td>Vuelo interno Manila–Puerto Princesa</td><td>€50–80</td><td>Cebu Pacific o Philippine Airlines, ~1h 15min</td></tr>
+            <tr><td>Alojamiento (8 noches)</td><td>€144–1,200</td><td>Hostal Manila + resort El Nido según nivel</td></tr>
+            <tr><td>Tours island hopping</td><td>€60–100</td><td>Tours A + C en El Nido con almuerzo incluido</td></tr>
+            <tr><td>Comidas</td><td>€100–160</td><td>Manila económico, El Nido algo más caro</td></tr>
+            <tr><td>Transporte local</td><td>€60–100</td><td>Jeepneys, tricycles, transfer El Nido</td></tr>
+            <tr><td><strong>TOTAL</strong></td><td><strong>€1,114–2,640</strong></td><td>Por persona (vuelos incluidos)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* La mayor variación es el alojamiento en El Nido. Con hostal en Manila y resort mid-range en Palawan, el presupuesto medio ronda €1,500/persona.</p>
+    </section>
+
+    <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+      <h2 class="section-heading" id="h-dia1">Día 1</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div><div class="day-title">Llegada a Manila</div><div class="day-subtitle">Intramuros — la ciudad amurallada española</div></div>
+          <div class="day-meta"><span>🛬 Aeropuerto Ninoy Aquino</span><span>🏰 Intramuros</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">Tarde</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada y traslado a Intramuros</div>
+              <div class="act-desc">El aeropuerto internacional Ninoy Aquino está a 7 km del centro. Grab (equivalente filipino de Uber) al barrio de Intramuros es lo más seguro y económico (€4–6). Manila es una megaciudad de 14 millones de habitantes — caótica, vibrante y llena de contrastes entre rascacielos modernos y calles coloniales del siglo XVI.</div>
+              <div class="act-tags"><span class="act-tag info">Usar Grab, no taxistas del aeropuerto</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Intramuros — la ciudad amurallada</div>
+              <div class="act-desc">Construida por los españoles en el siglo XVI, Intramuros es el núcleo histórico de Manila. Las murallas de piedra volcánica de 6 metros de altura encierran iglesias barrocas, conventos, plazas empedradas y la Catedral de Manila. El Barrio Bárbaro mezcla el ambiente colonial con cafés artísticos y tiendas de artesanía. Al atardecer, las murallas se tiñen de dorado.</div>
+              <div class="act-tags"><span class="act-tag">Paseo libre</span><span class="act-tag green">Entrada murallas gratuita</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:30</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Fort Santiago</div>
+              <div class="act-desc">La fortaleza española más famosa de Filipinas, construida en 1571 por Miguel López de Legazpi. En sus mazmorras fueron encarcelados centenares de filipinos durante la ocupación española y japonesa. El poeta nacional José Rizal pasó sus últimas horas aquí antes de su ejecución en 1896. El museo dentro del fuerte conserva sus manuscritos originales. Una visita obligatoria al anochecer.</div>
+              <div class="act-tags"><span class="act-tag">€2 entrada</span><span class="act-tag info">Cierra a las 20:00</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+      <h2 class="section-heading" id="h-dia2">Día 2</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div><div class="day-title">Museo Nacional + Binondo</div><div class="day-subtitle">Arte filipino y el Chinatown más antiguo del mundo</div></div>
+          <div class="day-meta"><span>🏛️ Museo Nacional</span><span>🐉 Binondo 1594</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Museo Nacional de Filipinas</div>
+              <div class="act-desc">El museo más importante del país, ubicado frente al Luneta Park. La joya de la colección es el Spoliarium de Juan Luna (1884), una pintura monumental de 4×7 metros que ganó la medalla de oro en la Exposición de Bellas Artes de Madrid. También alberga el Balangiga Bells, tres campanas recuperadas de EEUU en 2018 tras más de un siglo. El Museo de Arte y el de Historia Natural comparten el mismo complejo.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag">Abrir a las 10:00</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Binondo — el Chinatown más antiguo del mundo (1594)</div>
+              <div class="act-desc">Fundado por los españoles en 1594 para concentrar a los sangleys (chinos comerciantes), Binondo lleva más de 430 años siendo el corazón de la comunidad china en Filipinas. Sus calles estrechas están repletas de tiendas de hierbas medicinales, joyerías de oro, restaurantes de dim sum y pastelerías tradicionales. La Iglesia de Binondo, construida en 1596, es la más antigua del mundo dedicada a los chinos. El mercado de Ongpin Street es una explosión de olores y colores.</div>
+              <div class="act-tags"><span class="act-tag">Dim sum €3</span><span class="act-tag info">Chinatown desde 1594</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+      <h2 class="section-heading" id="h-dia3">Día 3</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div><div class="day-title">Vuelo a Puerto Princesa</div><div class="day-subtitle">El río subterráneo más largo del mundo navegable</div></div>
+          <div class="day-meta"><span>✈️ Vuelo 1h 15min</span><span>🌿 Patrimonio UNESCO</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo Manila–Puerto Princesa</div>
+              <div class="act-desc">Vuelo de 1h 15min a la capital de Palawan. Desde el avión, la transición de la jungla urbana de Manila a las selvas vírgenes y bahías turquesas de Palawan es impactante. Puerto Princesa es una ciudad tranquila y sorprendentemente limpia para estándares filipinos — el alcalde Hagedorn convirtió la ciudad en una de las más limpias de Asia.</div>
+              <div class="act-tags"><span class="act-tag">Vuelo €50–80</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Puerto Princesa Subterranean River — Patrimonio UNESCO</div>
+              <div class="act-desc">Declarado Patrimonio Mundial por la UNESCO en 1999 y una de las Nuevas 7 Maravillas Naturales, el río subterráneo navegable de Puerto Princesa tiene 8.2 km de longitud dentro de una cueva de piedra caliza. Las barcas de remo recorren los primeros 4.3 km navegables entre estalactitas colosales, colonias de millones de murciélagos y formaciones de mármol. El sonido del agua en la oscuridad absoluta es indescriptible.</div>
+              <div class="act-tags"><span class="act-tag">€15 tour + entrada</span><span class="act-tag info">Reservar con antelación</span><span class="act-tag green">8.2 km de río subterráneo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Paseo por Puerto Princesa</div>
+              <div class="act-desc">Regreso a la ciudad. Cenar en el Kalui Restaurant, el mejor de la ciudad: cocina filipina en una casa de madera con suelo de bambú, sin sillas — se come sentado en el suelo sobre cojines. Menú de degustación a precio fijo con los mejores mariscos de Palawan.</div>
+              <div class="act-tags"><span class="act-tag">Cena €12–15</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+      <h2 class="section-heading" id="h-dia4">Día 4</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div><div class="day-title">Transfer a El Nido</div><div class="day-subtitle">Laguna Grande y Laguna Pequeña</div></div>
+          <div class="day-meta"><span>🚐 Transfer 5–6h</span><span>🏝️ El Nido, Palawan</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Transfer Puerto Princesa → El Nido</div>
+              <div class="act-desc">Furgoneta compartida de 5–6 horas por la carretera costera del norte de Palawan. La ruta atraviesa selvas primarias, arrozales y pequeños pueblos de pescadores. Las vistas del estrecho de Palawan aparecen en los últimos 2 km de bajada hacia el pueblo. El transfer cuesta €12–18. También existe vuelo directo en avioneta (~30 min, €70) si prefieres ahorrar tiempo.</div>
+              <div class="act-tags"><span class="act-tag">€12–18 furgoneta</span><span class="act-tag info">Reservar el día anterior</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada a El Nido + Laguna Grande</div>
+              <div class="act-desc">El Nido es el epicentro del turismo de Palawan: un pueblo de pescadores rodeado por 45 islas de piedra caliza kárstica con 50 playas de arena blanca y arrecifes de coral. Check-in en el resort y por la tarde, excursión en banca (barca tradicional filipina con estabilizadores de bambú) a la Laguna Grande — un lago de agua turquesa encerrado entre acantilados verticales de 200m. El color del agua cambia del verde esmeralda al azul cobalto según la hora.</div>
+              <div class="act-tags"><span class="act-tag green">Snorkel en la laguna</span><span class="act-tag">Banca €5 trayecto</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Laguna Pequeña</div>
+              <div class="act-desc">A 10 minutos de remo de la Grande, la Laguna Pequeña es más íntima y silenciosa — las paredes de caliza emergen directamente del agua sin playa ni acceso terrestre. Solo se puede entrar en kayak individual a través de una abertura baja en la roca. El silencio dentro, roto solo por el goteo del agua, es uno de los momentos más memorables de Palawan.</div>
+              <div class="act-tags"><span class="act-tag">Alquiler kayak €3</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+      <h2 class="section-heading" id="h-dia5">Día 5</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div><div class="day-title">Island Hopping Tour A</div><div class="day-subtitle">Playa de las 7 Comandos + Cadlao Lagoon</div></div>
+          <div class="day-meta"><span>🏝️ Tour A</span><span>🤿 Snorkel</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida en banca al Tour A</div>
+              <div class="act-desc">El Tour A es el clásico de El Nido, perfecto para primeros días. Se navega entre formaciones de roca caliza emergentes del mar turquesa. La banca lleva almuerzo preparado a bordo (arroz, pescado fresco, frutas). Los tours salen a las 8:00 y regresan a las 17:00, visitando 4–5 puntos de parada.</div>
+              <div class="act-tags"><span class="act-tag">€18–25 por persona</span><span class="act-tag green">Almuerzo incluido</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de las 7 Comandos</div>
+              <div class="act-desc">La playa más famosa de El Nido: arena blanca fina con palmeras perfectamente alineadas, aguas de cristal y acantilados de caliza al fondo. Su nombre viene de los soldados americanos que usaban este lugar durante la Segunda Guerra Mundial. En temporada alta puede estar concurrida por la mañana, pero al mediodía muchos tours se van y queda más tranquila. El snorkel en el arrecife adyacente es excelente.</div>
+              <div class="act-tags"><span class="act-tag info">Mejor foto: primera hora</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cadlao Lagoon</div>
+              <div class="act-desc">Una laguna semioculta en la isla Cadlao, la isla más grande de la bahía de Bacuit. Las aguas poco profundas de color turquesa intenso están rodeadas por una selva tropical espesa que llega hasta el borde del agua. Se puede explorar en kayak o nadando. Los manglares alrededor albergan nutrias marinas y cigüeñas.  Almuerzo a bordo de la banca en aguas abiertas.</div>
+              <div class="act-tags"><span class="act-tag green">Nutrias y aves</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia6" class="itin-section" aria-labelledby="h-dia6">
+      <h2 class="section-heading" id="h-dia6">Día 6</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">06</div>
+          <div><div class="day-title">Island Hopping Tour C</div><div class="day-subtitle">Helicopter Island + Matinloc Shrine + Secret Beach</div></div>
+          <div class="day-meta"><span>🏝️ Tour C</span><span>🌊 Lugares secretos</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida Tour C</div>
+              <div class="act-desc">El Tour C es considerado el más espectacular de El Nido y va más lejos hacia el norte de la bahía. Navega entre formaciones kársticas más dramáticas y visita lugares más remotos con menos turistas. Salida a las 8:00, regreso 17:00. Llevar protector solar mineral (los arrecifes son sensibles).</div>
+              <div class="act-tags"><span class="act-tag">€20–28 por persona</span><span class="act-tag info">Protector solar mineral</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Helicopter Island</div>
+              <div class="act-desc">Su nombre viene de su silueta vista desde el mar — una formación caliza que recuerda a un helicóptero. La playa en su base tiene uno de los arrecifes de coral más vivos de Palawan: tortugas marinas, peces payaso, rayas, y miles de peces de colores. El snorkel aquí puede durar horas sin aburrirse. La arena es tan blanca que duele a los ojos bajo el sol de mediodía.</div>
+              <div class="act-tags"><span class="act-tag green">Tortugas marinas frecuentes</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Matinloc Shrine</div>
+              <div class="act-desc">Un santuario mariano construido sobre los acantilados de la isla Matinloc, a 20 metros sobre el nivel del mar. La escalera de piedra que sube entre las rocas ofrece vistas panorámicas de la bahía de Bacuit con todas sus islas. Lugar de peregrinación para los filipinos locales. La atmósfera sagrada y silenciosa contrasta con la belleza natural circundante.</div>
+              <div class="act-tags"><span class="act-tag info">Subida 10 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:30</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Secret Beach</div>
+              <div class="act-desc">La playa más buscada de El Nido: solo se puede llegar nadando por una abertura submarina en la roca caliza con marea baja. Nadar 5–10 metros bajo el agua y emerger en una pequeña playa circular completamente escondida entre acantilados de 30 metros. Solo caben unas pocas personas. Uno de esos lugares que hacen que el viaje valga la pena.</div>
+              <div class="act-tags"><span class="act-tag">Solo con marea baja</span><span class="act-tag info">Saber nadar bien</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia7" class="itin-section" aria-labelledby="h-dia7">
+      <h2 class="section-heading" id="h-dia7">Día 7</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">07</div>
+          <div><div class="day-title">Kayak al atardecer</div><div class="day-subtitle">Laguna Bacuit + Big Lagoon en kayak</div></div>
+          <div class="day-meta"><span>🚣 Kayak</span><span>🌅 Atardecer</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mañana libre en El Nido pueblo</div>
+              <div class="act-desc">Día más tranquilo. Por la mañana, explorar el pueblo de El Nido: el mercado de pescadores al amanecer, las calles empedradas con casas de colores, la pequeña iglesia de San Salvador. Desayuno en las taquerías y cafés que han abierto los últimos años con dueños europeos que se quedaron atrapados en Palawan.</div>
+              <div class="act-tags"><span class="act-tag">Pueblo libre</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Big Lagoon en kayak</div>
+              <div class="act-desc">La Big Lagoon es la laguna más grande de la bahía de Bacuit — 2 km de largo rodeados de paredes de caliza de 150m con jungla encima. El kayak individual permite explorar cada rincón a tu ritmo: los manglares del fondo, las cuevas pequeñas en los laterales, los peces de colores visibles a simple vista en las aguas cristalinas. La luz de la tarde proyecta sombras dramáticas sobre las paredes.</div>
+              <div class="act-tags"><span class="act-tag">Alquiler kayak €8/2h</span><span class="act-tag green">Mejor luz: 15:00–17:00</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Atardecer en la Laguna Bacuit</div>
+              <div class="act-desc">El atardecer desde la bahía de Bacuit es legendario: las siluetas de las islas de caliza se recortan contra un cielo naranja y rosa mientras los pescadores regresan en sus bancas. Cenar en el restaurante El Nido Boutique & Art Café — la mejor cocina filipina del pueblo con los mariscos más frescos del día.</div>
+              <div class="act-tags"><span class="act-tag info">El atardecer más bonito de Filipinas</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia8" class="itin-section" aria-labelledby="h-dia8">
+      <h2 class="section-heading" id="h-dia8">Día 8</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">08</div>
+          <div><div class="day-title">Regreso a Manila + vuelo internacional</div><div class="day-subtitle">Último vistazo a Palawan</div></div>
+          <div class="day-meta"><span>✈️ Vuelo doméstico</span><span>🛍️ Manila</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Transfer El Nido → Puerto Princesa o avioneta directa</div>
+              <div class="act-desc">Dependiendo de la hora de vuelo a Madrid, tomar el transfer de 5–6h o la avioneta de 30min. Opción recomendada: vuelo en avioneta Air Juan o Island Transvoyager directamente El Nido–Manila (1h 40min, ~€90) para no volver a Puerto Princesa. Más cómodo y permite llegar a Manila para conexión nocturna.</div>
+              <div class="act-tags"><span class="act-tag">Avioneta €70–90</span><span class="act-tag info">Reservar con semanas de antelación</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tiempo libre en Manila</div>
+              <div class="act-desc">Si la conexión lo permite, tiempo para compras: Greenhills Shopping Center para ropa, artesanía y souvenirs a buen precio. La tienda de artesanía Tesoro's en Ermita tiene los mejores productos filipinos — banig (esteras tejidas), barong tagalog (la camisa nacional), figuras de madera de narra. También se puede visitar el Ayala Museum con sus dioramas de la historia filipina.</div>
+              <div class="act-tags"><span class="act-tag">Barong tagalog €25–60</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">22:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo internacional de regreso</div>
+              <div class="act-desc">Los vuelos a Madrid suelen salir de noche desde Manila. Última cena filipina en el aeropuerto T3 o en el restaurante Max's de SM Mall of Asia. Filipinas deja siempre con ganas de volver — las 7,641 islas dan para muchos más viajes. Ang ganda! (¡Qué belleza!)</div>
+              <div class="act-tags"><span class="act-tag info">Check-in 3h antes</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía filipina</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato nacional</div>
+          <div class="gastro-title">Adobo</div>
+          <div class="gastro-desc">Pollo o cerdo guisado en vinagre de caña, salsa de soja, ajo, laurel y granos de pimienta. Cada familia tiene su receta y cada región su variante — el adobo de Cavite lleva leche de coco, el de Bicol es más picante. El ácido del vinagre actúa como conservante natural, tradición precolonial. El plato más representativo de Filipinas en el mundo.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Sopa tradicional</div>
+          <div class="gastro-title">Sinigang</div>
+          <div class="gastro-desc">Sopa agria hecha a base de tamarindo con cerdo, camarones o pescado, verduras y piezas de carne. El sabor ácido y el caldo ligero hacen que sea el plato preferido para el calor. Cada versión tiene su punto de acidez diferente — algunos la hacen con guayaba en lugar de tamarindo. Reconfortante, sana y profundamente filipina.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Festivo</div>
+          <div class="gastro-title">Lechón</div>
+          <div class="gastro-desc">Cerdo entero asado lentamente sobre brasas de carbón durante 4–5 horas, rotando sin parar. La piel queda crujiente como una oblea de cristal y la carne interior jugosa y aromática. Presente en todas las fiestas familiares, bodas y celebraciones. El lechón de Cebu es famoso mundialmente — Anthony Bourdain lo llamó "el mejor cerdo del mundo".</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Postre</div>
+          <div class="gastro-title">Halo-Halo</div>
+          <div class="gastro-desc">El postre filipino por excelencia: un vaso alto con hielo raspado, leche evaporada, y una decena de ingredientes mezclados — frijoles rojos y blancos dulces, coco jelly, tubo (tiras de sago), yema de leche, plátano, jackfruit, ube (batata morada) y helado encima. "Halo-halo" significa "mezcla-mezcla" en tagalo. Perfecto para combatir el calor tropical.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Temporada:</strong> noviembre a mayo es la temporada seca en Palawan. Evitar junio–octubre (monzón) — El Nido puede cerrar los tours por mal tiempo. La mejor ventana es diciembre a marzo. Reservar alojamiento en El Nido con meses de antelación en temporada alta.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Agua y salud:</strong> nunca beber agua del grifo. Las aguas embotelladas son baratas (€0.30). Aplicar DEET para mosquitos especialmente al amanecer y atardecer — dengue y malaria existen en Palawan aunque el riesgo en El Nido pueblo es bajo. Llevar protector solar mineral (los arrecifes filipinos están protegidos).</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Tours island hopping:</strong> contratar los tours directamente con las cooperativas de bancas locales en El Nido (más barato) o con el hotel (más cómodo). Los tours A y C no se solapan — se pueden hacer en días distintos. Llevar siempre efectivo en pesos filipinos — muy pocas bancas aceptan tarjeta.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Conectividad:</strong> comprar SIM de Globe o Smart en el aeropuerto de Manila. 15GB de datos por €5–8. El Nido tiene cobertura 4G en el pueblo pero no en las islas. Avisar a familiares que habrá momentos sin señal durante los tours. Llevar un powerbank grande.</div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Policía</div><div class="emerg-value">911</div><div class="emerg-note">Philippine National Police</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">911</div><div class="emerg-note">Emergencias médicas y rescate</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada de España (Manila)</div><div class="emerg-value">+63 2 8523-2471</div><div class="emerg-note">Urgencias consulares 24h</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Costera El Nido</div><div class="emerg-value">+63 48 723-0014</div><div class="emerg-note">Rescate marítimo Palawan</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede adaptar el itinerario a tus fechas, presupuesto y preferencias en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos para 2026. El island hopping en El Nido puede cancelarse por mal tiempo. Recomendamos contratar seguro de viaje con cobertura de cancelación de actividades y asistencia médica en el extranjero. Consulta el Ministerio de Asuntos Exteriores antes de viajar.
+    </div>
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Asia</div>
+      <nav aria-label="Destinos Asia"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="tokio.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Tokio</a></li>
+        <li><a href="vietnam.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Vietnam</a></li>
+        <li><a href="nepal.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Nepal</a></li>
+      </ul></nav>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+})();
+</script>
+</body>
+</html>
