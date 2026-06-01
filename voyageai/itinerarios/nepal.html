@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nepal — Katmandú + Trekking — 8 días | Routlo</title>
+  <meta name="description" content="Itinerario de 8 días en Nepal: templos de Katmandú, Pokhara y trekking en el Himalaya. Presupuesto detallado y consejos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #1a0a3a 0%, transparent 70%); top: -200px; left: -150px; opacity: 0.5; animation: blob 14s ease-in-out infinite; }
+    .aurora::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0a1a3a 0%, transparent 70%); bottom: -150px; right: -100px; opacity: 0.45; animation: blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0a0a2a 0%, transparent 70%); top: 40%; left: 50%; transform: translate(-50%,-50%); opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-60px) scale(1.08); } 66% { transform: translate(-30px,40px) scale(0.94); } }
+    .dest-hero { position: relative; z-index: 1; min-height: 65vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 140px 24px 60px; overflow: hidden; }
+    .dest-hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #050510 0%, #0d0d2e 40%, #1a1a4a 70%, rgba(201,169,110,0.15) 100%), url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1400&q=80') center/cover no-repeat; }
+    .dest-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%); }
+    .dest-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); margin-bottom: 20px; position: relative; z-index: 1; }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2; }
+    .dest-country { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; font-style: italic; color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1; }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(4,8,16,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar { display: flex; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 600px; position: relative; z-index: 1; }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .hotel-grid { grid-template-columns: repeat(2,1fr); } .gastro-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .hotel-grid { grid-template-columns: 1fr; } .emerg-grid { grid-template-columns: 1fr; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } }
+  </style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Asia</span>
+    <span aria-hidden="true">›</span><span>Nepal</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Nepal</h1>
+  <p class="dest-country">Katmandú · Pokhara · Himalaya</p>
+  <div class="dest-meta">
+    <span class="dest-badge">✈️ ~12h desde Madrid</span>
+    <span class="dest-badge gold">8 días</span>
+    <span class="dest-badge">💰 ~€1,100/persona</span>
+    <span class="dest-badge">🏔️ El techo del mundo</span>
+  </div>
+  <div class="dest-summary-bar" role="region" aria-label="Resumen del viaje">
+    <div class="dest-sum-item"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">8 días</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€1,100</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Mejor época</div><div class="dest-sum-val">Oct–Nov</div></div>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#alojamiento">Alojamiento</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#dia1">Día 1 — Llegada Katmandú</a></li>
+      <li><a href="#dia2">Día 2 — Boudhanath + Pashupatinath</a></li>
+      <li><a href="#dia3">Día 3 — Bhaktapur + Patan</a></li>
+      <li><a href="#dia4">Día 4 — Vuelo a Pokhara</a></li>
+      <li><a href="#dia5">Día 5 — Trekking Poon Hill</a></li>
+      <li><a href="#dia6">Día 6 — Amanecer Poon Hill</a></li>
+      <li><a href="#dia7">Día 7 — Pokhara + Lago Phewa</a></li>
+      <li><a href="#dia8">Día 8 — Regreso Katmandú + vuelo</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Alojamiento</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">Económico</div>
+          <div class="hotel-name">Kathmandu Guest House</div>
+          <div class="hotel-zone">Thamel, Katmandú</div>
+          <div class="hotel-price">€15–30/noche</div>
+          <ul class="hotel-features"><li>El guesthouse más famoso de Nepal</li><li>Jardín tranquilo en Thamel</li><li>Desayuno incluido</li></ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Intermedio</div>
+          <div class="hotel-name">Hotel Mulberry</div>
+          <div class="hotel-zone">Lazimpat, Katmandú</div>
+          <div class="hotel-price">€50–80/noche</div>
+          <ul class="hotel-features"><li>Vista al Himalaya desde azotea</li><li>Restaurante con cocina nepalesa</li><li>Zona tranquila fuera de Thamel</li></ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Lujo</div>
+          <div class="hotel-name">Dwarika's Hotel</div>
+          <div class="hotel-zone">Battisputali, Katmandú</div>
+          <div class="hotel-price">€180–280/noche</div>
+          <ul class="hotel-features"><li>Arquitectura newari tradicional</li><li>Declarado Patrimonio Cultural</li><li>Spa con terapias ayurvédicas</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead><tr><th>Concepto</th><th>Coste</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Vuelo ida y vuelta</td><td>€550–850</td><td>Madrid–KTM con escala en Doha o Dubái</td></tr>
+            <tr><td>Visado Nepal</td><td>€28</td><td>Visado a la llegada o e-visa online</td></tr>
+            <tr><td>Alojamiento (8 noches)</td><td>€120–500</td><td>Guesthouses + lodges en trekking</td></tr>
+            <tr><td>Vuelo interno KTM–PKR</td><td>€50–80</td><td>Buddha Air, 25 min con vistas Himalaya</td></tr>
+            <tr><td>TIMS + Annapurna permit</td><td>€25</td><td>Permisos obligatorios para trekking</td></tr>
+            <tr><td>Comidas</td><td>€80–120</td><td>Nepal es muy económico</td></tr>
+            <tr><td>Transporte y actividades</td><td>€80–130</td><td>Guías, alquiler bicicleta, entradas</td></tr>
+            <tr><td><strong>TOTAL</strong></td><td><strong>€933–1,733</strong></td><td>Por persona (vuelos incluidos)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Nepal es uno de los países más económicos de Asia. El mayor coste es el vuelo internacional. Una vez allí, vivir bien cuesta €30–50/día.</p>
+    </section>
+
+    <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+      <h2 class="section-heading" id="h-dia1">Día 1</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div><div class="day-title">Llegada a Katmandú</div><div class="day-subtitle">El corazón del mundo</div></div>
+          <div class="day-meta"><span>🛬 Aeropuerto Tribhuvan</span><span>🏘️ Thamel</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">Tarde</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada y primeras impresiones</div>
+              <div class="act-desc">El aeropuerto Tribhuvan está a 6 km del centro. Taxi prepago al barrio de Thamel (€5–8). Katmandú tiene 1.400m de altitud — algunos viajeros sienten leve altitud. Descanso el primer día. El caos ordenado de la ciudad — motos, vacas sagradas, vendedores de incienso — es un shock cultural positivo.</div>
+              <div class="act-tags"><span class="act-tag info">Adaptación altitud</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Thamel</div>
+              <div class="act-desc">El barrio de los viajeros: tiendas de equipo de trekking, restaurantes con música tibetana, cafés con vistas a la calle caótica. Pasear sin prisa. Cenar en alguno de los restaurantes del barrio — el dal bhat (arroz con lentejas) a €2 es la mejor cena bienvenida.</div>
+              <div class="act-tags"><span class="act-tag">Dal bhat €2</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+      <h2 class="section-heading" id="h-dia2">Día 2</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div><div class="day-title">Boudhanath + Pashupatinath</div><div class="day-subtitle">Dos Patrimonios UNESCO en un día</div></div>
+          <div class="day-meta"><span>🕌 Stupa Boudhanath</span><span>🔥 Pashupatinath</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Stupa de Boudhanath</div>
+              <div class="act-desc">La stupa tibetana más grande del mundo fuera del Tíbet. Los ojos de Buda pintados en los cuatro lados observan en todas direcciones. Al amanecer, centenares de monjes tibetanos con túnicas azafrán circunvalan la stupa en el sentido de las agujas del reloj rezando el mantra Om Mani Padme Hum. Silencioso, hipnótico y sagrado.</div>
+              <div class="act-tags"><span class="act-tag">€3 entrada</span><span class="act-tag info">Impresionante al amanecer</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Templo de Pashupatinath</div>
+              <div class="act-desc">El templo hindú más sagrado de Nepal, dedicado a Shiva. En las ghats del río Bagmati se celebran cremaciones al aire libre — una confrontación directa y respetuosa con la muerte. Los saddhus (ascetas hindús) cubiertos de ceniza y pintura naranja se dejan fotografiar por una propina. Solo se puede entrar al recinto exterior siendo hindú, pero las vistas desde los ghats son completas.</div>
+              <div class="act-tags"><span class="act-tag">€5 entrada exterior</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+      <h2 class="section-heading" id="h-dia3">Día 3</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div><div class="day-title">Bhaktapur + Patan</div><div class="day-subtitle">Las ciudades medievales del valle</div></div>
+          <div class="day-meta"><span>🏛️ Bhaktapur Durbar</span><span>🎨 Patan</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bhaktapur — la ciudad medieval</div>
+              <div class="act-desc">A 13 km de Katmandú, Bhaktapur es la ciudad medieval mejor conservada de Nepal. Su Plaza Durbar tiene el Palacio de los 55 Ventanas con intrincadas tallas en madera de cedro. Los alfareros de la plaza cerámicas trabajan igual que en el siglo XV. La Golden Gate (Puerta Dorada) es la más elaborada de Asia.</div>
+              <div class="act-tags"><span class="act-tag">€12 entrada ciudad</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Patan — ciudad de los artesanos</div>
+              <div class="act-desc">Patan (Lalitpur) era la capital del reino newar. Su plaza Durbar tiene la concentración de templos más densa del mundo por metro cuadrado. El Museo de Patan muestra los tesoros del arte newari: dioses de bronce, pinturas thangka, instrumentos rituales. Cenar en Old House Restaurant, en un patio medieval restaurado.</div>
+              <div class="act-tags"><span class="act-tag">Museo €3</span><span class="act-tag green">Thangka auténticos</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+      <h2 class="section-heading" id="h-dia4">Día 4</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div><div class="day-title">Vuelo a Pokhara</div><div class="day-subtitle">La ciudad junto al lago con el Annapurna al fondo</div></div>
+          <div class="day-meta"><span>✈️ Vuelo 25 min</span><span>🏔️ Annapurna</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo doméstico Katmandú–Pokhara</div>
+              <div class="act-desc">25 minutos en avión turbohélice. Si el tiempo es despejado, las vistas de la cordillera del Himalaya desde la ventanilla son de infarto: el Ganesh Himal, el Manaslu, el Machhapuchhre (la montaña sagrada que nadie ha podido escalar) alineados en el horizonte a menos de 50 km. El mejor vuelo panorámico del mundo.</div>
+              <div class="act-tags"><span class="act-tag">€50–80 vuelo</span><span class="act-tag info">Ventanilla derecha = mejores vistas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Pokhara + Lago Phewa</div>
+              <div class="act-desc">Pokhara es la capital del trekking nepalés: relajada, con lakeside lleno de cafés y restaurantes mirando al lago. El Annapurna II (7.937m) se refleja en el Phewa Tal cuando el tiempo está despejado. Por la tarde, alquila una barca y rema al templo Tal Barahi en la isla del lago.</div>
+              <div class="act-tags"><span class="act-tag green">Barca €3/hora</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+      <h2 class="section-heading" id="h-dia5">Día 5</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div><div class="day-title">Inicio Trekking Poon Hill</div><div class="day-subtitle">Nayapul → Tikhedhunga → Ulleri</div></div>
+          <div class="day-meta"><span>🥾 Trekking día 1</span><span>🏘️ Ulleri (1,960m)</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Nayapul → Tikhedhunga (3h)</div>
+              <div class="act-desc">Jeep desde Pokhara a Nayapul (1h, €3). El trekking Poon Hill es el más popular de Nepal y no requiere guía, aunque se recomienda. El sendero sube por pueblos newari, terrazas de arroz y bosques de rododendro. Tikhedhunga tiene buenos teahouses.</div>
+              <div class="act-tags"><span class="act-tag">TIMS + Annapurna permit €25</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tikhedhunga → Ulleri (2h)</div>
+              <div class="act-desc">La subida más empinada del trekking: 3,000 escalones de piedra tallados en la ladera. Dura pero gratificante. Ulleri a 1.960m — las primeras vistas del Annapurna desde el pueblo al llegar son el mejor premio. Cenar dal bhat en el teahouse y dormir pronto.</div>
+              <div class="act-tags"><span class="act-tag">Teahouse €8 cama+cena</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia6" class="itin-section" aria-labelledby="h-dia6">
+      <h2 class="section-heading" id="h-dia6">Día 6</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">06</div>
+          <div><div class="day-title">Amanecer en Poon Hill</div><div class="day-subtitle">3,210m — la vista más fotográfica del Himalaya</div></div>
+          <div class="day-meta"><span>🌅 Amanecer 3,210m</span><span>🏔️ Annapurna</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">04:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Subida a Poon Hill en la oscuridad</div>
+              <div class="act-desc">Con linterna frontal, subir 45 minutos desde Ghorepani al mirador de Poon Hill. Al amanecer, la luz rosa tiñe el Dhaulagiri (8.167m), el Annapurna I (8.091m), el Machhapuchhre y el Annapurna Sur. Solos frente a cuatro ochomiles: una de las experiencias más sobrecogedoras posibles como viajero.</div>
+              <div class="act-tags"><span class="act-tag">Entrada mirador €1</span><span class="act-tag info">Llevar ropa de abrigo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Descenso a Pokhara</div>
+              <div class="act-desc">Descenso por Tadapani y Nayapul (6–7h totales) o acortar con jeep desde el pueblo más bajo. Regreso a Pokhara para ducha caliente y cena celebratoria en el restaurante Moondance mirando al lago.</div>
+              <div class="act-tags"><span class="act-tag green">Satisfacción garantizada</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia7" class="itin-section" aria-labelledby="h-dia7">
+      <h2 class="section-heading" id="h-dia7">Día 7</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">07</div>
+          <div><div class="day-title">Pokhara — día libre</div><div class="day-subtitle">Aventura en el valle</div></div>
+          <div class="day-meta"><span>🪂 Parapente</span><span>🚣 Kayak Phewa</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Parapente desde Sarangkot</div>
+              <div class="act-desc">Pokhara es uno de los mejores lugares del mundo para el parapente por sus corrientes térmicas y las vistas del Annapurna. Vuelos biplaza de 30 min desde Sarangkot con aterrizaje en la orilla del lago Phewa. Instructores certificados, equipos modernos.</div>
+              <div class="act-tags"><span class="act-tag">€60–80 biplaza</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cueva de Mahendra + Devi's Falls</div>
+              <div class="act-desc">La Cueva de Mahendra es una caverna de estalagmitas con un pequeño santuario a Shiva en su interior. Devi's Falls es una catarata que desaparece bajo tierra — en temporada de lluvias el rugido es ensordecedor. Cenar en la Lakeside con vistas nocturnas al lago.</div>
+              <div class="act-tags"><span class="act-tag">Cueva €1</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia8" class="itin-section" aria-labelledby="h-dia8">
+      <h2 class="section-heading" id="h-dia8">Día 8</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">08</div>
+          <div><div class="day-title">Regreso a Katmandú + vuelo</div><div class="day-subtitle">Compras de última hora en Thamel</div></div>
+          <div class="day-meta"><span>✈️ Vuelo doméstico</span><span>🛍️ Thamel</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo de regreso Pokhara–Katmandú</div>
+              <div class="act-desc">25 minutos. Tiempo libre en Katmandú para compras: bufandas de cachemira (€15–25, mucho más baratas que en Europa), pinturas thangka originales, cuencos cantantes tibetanos, ropa de trekking North Face (o réplicas de gran calidad). Bazares de Thamel y Durbar Marg.</div>
+              <div class="act-tags"><span class="act-tag">Vuelo €50–80</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo nocturno de regreso</div>
+              <div class="act-desc">Los vuelos desde Katmandú suelen ser nocturnos hacia Europa. Última cena en Thamel, último chai de cardamomo, último vistazo a las luces de la ciudad que queda siempre en el recuerdo. Nepal cambia a quienes la visitan.</div>
+              <div class="act-tags"><span class="act-tag info">Check-in 3h antes</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía nepalesa</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato nacional</div>
+          <div class="gastro-title">Dal Bhat</div>
+          <div class="gastro-desc">Arroz blanco + dal (lentejas especiadas) + tarkari (curry de verduras) + achar (encurtido). La comida diaria de 28 millones de nepaleses. En los teahouses se sirve dos veces al día y la porción de arroz es ilimitada. Cuesta €1.50–3 y es el combustible del trekker.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Tibetano</div>
+          <div class="gastro-title">Momo</div>
+          <div class="gastro-desc">Las empanadillas tibetanas al vapor o fritas son el snack más popular de Katmandú. Rellenas de cerdo, búfalo, pollo o verduras. Se acompañan con una salsa de tomate picante. Las mejores están en los puestos ambulantes de Thamel al atardecer.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida</div>
+          <div class="gastro-title">Chai de cardamomo</div>
+          <div class="gastro-desc">Té negro con leche, cardamomo, jengibre, canela y azúcar. Se hierve todo junto en un cazo pequeño. Se sirve en vasos de cristal pequeños. Cada familia y cada teahouse tiene su receta. En los días fríos de trekking, un chai caliente en la montaña es una de las mejores sensaciones del mundo.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Newari</div>
+          <div class="gastro-title">Newari Khana Set</div>
+          <div class="gastro-desc">La cocina newari es la más sofisticada de Nepal: chiura (arroz aplastado seco), bara (tortitas de lentejas negras), chatamari (pizza newari de arroz con huevo), samay baji (plato ceremonial completo). La mejor expresión de la gastronomía del valle de Katmandú.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Altitud:</strong> Katmandú está a 1.400m y Poon Hill a 3.210m. La aclimatación natural ocurre sola en este rango, pero sube siempre lentamente. Si sientes dolor de cabeza persistente, náuseas o confusión, baja inmediatamente. Llevar ibuprofeno y paracetamol.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Agua:</strong> nunca beber agua del grifo en Nepal. Comprar agua embotellada o usar pastillas purificadoras / filtros LifeStraw. Los teahouses ofrecen agua hervida gratis o muy barata para rellenar tu botella.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Equipaje para trekking:</strong> puedes alquilar todo el equipo en Thamel a precios muy bajos. Solo necesitas traer botas de trekking propias (lo más importante). El porter puede cargar tu mochila pesada por €10–15/día.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Temporada:</strong> octubre–noviembre es la mejor — cielos despejados, temperaturas perfectas. Marzo–mayo es la segunda mejor (rododendros en flor). Evitar junio–septiembre (monzón) — nubes constantes y senderos resbaladizos.</div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Policía</div><div class="emerg-value">100</div><div class="emerg-note">Nepal Police</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">102</div><div class="emerg-note">Emergencias médicas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Rescate en montaña</div><div class="emerg-value">+977 1 4220186</div><div class="emerg-note">Himalayan Rescue Association</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España (Delhi)</div><div class="emerg-value">+91 11 4600-3700</div><div class="emerg-note">Embajada competente para Nepal</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede adaptar el itinerario a tus fechas, presupuesto y preferencias en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos para 2026. El trekking en Nepal requiere preparación física básica y seguro de viaje con evacuación en helicóptero. Consulta el Ministerio de Asuntos Exteriores antes de viajar.
+    </div>
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Asia</div>
+      <nav aria-label="Destinos Asia"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="tokio.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Tokio</a></li>
+        <li><a href="vietnam.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Vietnam</a></li>
+        <li><a href="india.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">India</a></li>
+      </ul></nav>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+})();
+</script>
+</body>
+</html>
