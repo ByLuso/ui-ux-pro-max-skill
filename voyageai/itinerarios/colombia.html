@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Colombia — Medellín + Cartagena — 7 días | Routlo</title>
+  <meta name="description" content="Itinerario de 7 días en Colombia: la transformación de Medellín, el metrocable, la Ciudad Amurallada de Cartagena y playas del Caribe. Presupuesto y consejos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0a3a1a 0%, transparent 70%); top: -200px; left: -150px; opacity: 0.5; animation: blob 14s ease-in-out infinite; }
+    .aurora::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #3a1a0a 0%, transparent 70%); bottom: -150px; right: -100px; opacity: 0.45; animation: blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #1a2a0a 0%, transparent 70%); top: 40%; left: 50%; transform: translate(-50%,-50%); opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-60px) scale(1.08); } 66% { transform: translate(-30px,40px) scale(0.94); } }
+    .dest-hero { position: relative; z-index: 1; min-height: 65vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 140px 24px 60px; overflow: hidden; }
+    .dest-hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #051a10 0%, #0d3a1a 40%, #1a5a2a 70%, rgba(201,169,110,0.2) 100%), url('https://images.unsplash.com/photo-1583997052301-0e4f9a4e1a5b?w=1400&q=80') center/cover no-repeat; }
+    .dest-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%); }
+    .dest-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); margin-bottom: 20px; position: relative; z-index: 1; }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2; }
+    .dest-country { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; font-style: italic; color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1; }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(4,8,16,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar { display: flex; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 600px; position: relative; z-index: 1; }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .hotel-grid { grid-template-columns: repeat(2,1fr); } .gastro-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .hotel-grid { grid-template-columns: 1fr; } .emerg-grid { grid-template-columns: 1fr; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } }
+  </style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>América</span>
+    <span aria-hidden="true">›</span><span>Colombia</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Colombia</h1>
+  <p class="dest-country">Medellín · Cartagena</p>
+  <div class="dest-meta">
+    <span class="dest-badge">✈️ ~11h desde Madrid</span>
+    <span class="dest-badge gold">7 días</span>
+    <span class="dest-badge">💰 ~€1,100/persona</span>
+    <span class="dest-badge">🌺 Primavera eterna</span>
+  </div>
+  <div class="dest-summary-bar" role="region" aria-label="Resumen del viaje">
+    <div class="dest-sum-item"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">7 días</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€1,100</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Mejor época</div><div class="dest-sum-val">Dic–Mar</div></div>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#alojamiento">Alojamiento</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#dia1">Día 1 — Llegada Medellín</a></li>
+      <li><a href="#dia2">Día 2 — Metrocable + Comunas</a></li>
+      <li><a href="#dia3">Día 3 — Guatapé</a></li>
+      <li><a href="#dia4">Día 4 — Vuelo a Cartagena</a></li>
+      <li><a href="#dia5">Día 5 — Ciudad Amurallada</a></li>
+      <li><a href="#dia6">Día 6 — Islas del Rosario</a></li>
+      <li><a href="#dia7">Día 7 — Getsemaní + partida</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Alojamiento recomendado</h2>
+      <p style="font-size:0.85rem;color:rgba(237,238,242,0.55);margin-bottom:16px;">Este itinerario usa 2 bases: Medellín (días 1–3) y Cartagena (días 4–7).</p>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">Económico — Medellín</div>
+          <div class="hotel-name">Hostel Medellín City</div>
+          <div class="hotel-zone">El Poblado</div>
+          <div class="hotel-price">€18–30/noche</div>
+          <ul class="hotel-features"><li>Barrio más seguro para turistas</li><li>Piscina compartida</li></ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Intermedio — Medellín</div>
+          <div class="hotel-name">Hotel Entonces</div>
+          <div class="hotel-zone">El Poblado</div>
+          <div class="hotel-price">€60–90/noche</div>
+          <ul class="hotel-features"><li>Diseño contemporáneo colombiano</li><li>Terraza con vistas al valle</li></ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Intermedio — Cartagena</div>
+          <div class="hotel-name">Hotel Casa del Arzobispado</div>
+          <div class="hotel-zone">Ciudad Amurallada</div>
+          <div class="hotel-price">€80–130/noche</div>
+          <ul class="hotel-features"><li>Casa colonial del siglo XVIII</li><li>Patio interior con fuente</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead><tr><th>Concepto</th><th>Coste</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Vuelo internacional</td><td>€500–800</td><td>Madrid–MDE o BOG, con escala</td></tr>
+            <tr><td>Vuelo interno MDE–CTG</td><td>€40–80</td><td>Avianca / Latam, 1h</td></tr>
+            <tr><td>Alojamiento (7 noches)</td><td>€150–500</td><td>Mix Medellín + Cartagena</td></tr>
+            <tr><td>Comidas</td><td>€100–160</td><td>Restaurantes medios + mercados</td></tr>
+            <tr><td>Transporte local</td><td>€40–70</td><td>Metro + Uber + tuk-tuk Cartagena</td></tr>
+            <tr><td>Actividades</td><td>€80–120</td><td>Guatapé, Islas Rosario, tours</td></tr>
+            <tr><td><strong>TOTAL</strong></td><td><strong>€910–1,730</strong></td><td>Por persona (vuelos incluidos)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+      <h2 class="section-heading" id="h-dia1">Día 1 — Medellín</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div><div class="day-title">Llegada a la Ciudad de la Eterna Primavera</div><div class="day-subtitle">El Poblado y el parque Lleras</div></div>
+          <div class="day-meta"><span>🌺 El Poblado</span><span>🎶 Zona Rosa</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada y barrio El Poblado</div>
+              <div class="act-desc">Medellín, a 1.500m de altitud, tiene 22°C todo el año — de ahí el apodo "Ciudad de la Eterna Primavera." El Poblado es el barrio más cosmopolita: restaurantes, cafés de especialidad y bares de calidad. Pasea por el Parque Lleras al atardecer para ver la vida social paisa.</div>
+              <div class="act-tags"><span class="act-tag info">Uber desde aeropuerto</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Carmen Restaurant</div>
+              <div class="act-desc">El mejor restaurante de gastronomía colombiana contemporánea de Medellín. Ingredientes del campo colombiano transformados con técnica moderna: bandeja paisa deconstruida, patacones con hogao gourmet, trucha del río Magdalena. Reservar con antelación.</div>
+              <div class="act-tags"><span class="act-tag">~€25 pp</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+      <h2 class="section-heading" id="h-dia2">Día 2 — Medellín</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div><div class="day-title">Metrocable + Centro + Comunas</div><div class="day-subtitle">La transformación urbana más impresionante del siglo XXI</div></div>
+          <div class="day-meta"><span>🚡 Metrocable</span><span>🎨 Comunas</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Metrocable Línea K — Comunas</div>
+              <div class="act-desc">El teleférico urbano conecta el centro con las comunas de la ladera. La ciudad que fue sinónimo de violencia en los 90 se transformó construyendo infraestructura en los barrios más pobres. El viaje en cable car sobre los tejados de las comunas — con vistas al valle verde — es uno de los recorridos urbanos más impactantes del mundo.</div>
+              <div class="act-tags"><span class="act-tag">Metro €0.80</span><span class="act-tag green">Sistema integrado</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tour guiado por la Comuna 13</div>
+              <div class="act-desc">La transformación de la Comuna 13 — antes la más peligrosa de Medellín — es un caso de estudio mundial en urbanismo social. Escaleras eléctricas al aire libre, murales de artistas locales que cuentan la historia del barrio, chivas (buses coloridos), música hip-hop. Contratar guía local (€10–15) que vive en el barrio.</div>
+              <div class="act-tags"><span class="act-tag">Guía €12</span><span class="act-tag info">Solo con guía</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Plaza de Botero + Museo de Antioquia</div>
+              <div class="act-desc">Fernando Botero donó 23 de sus esculturas de figuras voluminosas a su ciudad natal. La plaza es completamente gratuita y fotogénica. El Museo de Antioquia tiene la mayor colección de pinturas y esculturas de Botero del mundo, además de arte precolombino.</div>
+              <div class="act-tags"><span class="act-tag green">Plaza gratuita</span><span class="act-tag">Museo €4</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+      <h2 class="section-heading" id="h-dia3">Día 3 — Guatapé</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div><div class="day-title">Guatapé y la Piedra del Peñol</div><div class="day-subtitle">740 escalones para la mejor vista de Colombia</div></div>
+          <div class="day-meta"><span>🧗 Piedra del Peñol</span><span>🏘️ Guatapé</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bus a Guatapé (2h)</div>
+              <div class="act-desc">A 79 km de Medellín, salida desde Terminal del Norte. O contratar tour organizado (€30–40). La carretera atraviesa paisaje cafetero andino.</div>
+              <div class="act-tags"><span class="act-tag">Bus €3</span><span class="act-tag">Tour €35</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Subida a la Piedra del Peñol</div>
+              <div class="act-desc">Un monolito de granito de 200 metros de altura que emerge de un embalse turquesa rodeado de 200 islas. Los 740 escalones (con intermitencias) llevan a la cima en 20–25 minutos. Las vistas del embalse de Guatapé — el paisaje más reconocible de Colombia — son absolutamente sobrecogedoras.</div>
+              <div class="act-tags"><span class="act-tag">€4 subida</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Pueblo de Guatapé + regreso</div>
+              <div class="act-desc">El pueblo más colorido de Colombia: cada casa tiene zócalos (bajorrelieves de cerámica) con escenas de la vida cotidiana. Come trucha del embalse en alguno de los restaurantes del malecón. Regreso a Medellín a las 17-18h.</div>
+              <div class="act-tags"><span class="act-tag">Almuerzo ~€10</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+      <h2 class="section-heading" id="h-dia4">Día 4 — Vuelo a Cartagena</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div><div class="day-title">Vuelo MDE–CTG + llegada al Caribe</div><div class="day-subtitle">Del valle andino al mar turquesa</div></div>
+          <div class="day-meta"><span>✈️ Vuelo interno 1h</span><span>🏰 Ciudad Amurallada</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo Medellín – Cartagena</div>
+              <div class="act-desc">1 hora de vuelo. Desde la ventanilla se ve el cambio de paisaje: montañas andinas → selva tropical → Caribe. Cartagena está a 10 metros sobre el nivel del mar y a 30–33°C constantes.</div>
+              <div class="act-tags"><span class="act-tag">€40–80 vuelo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Primera tarde en la Ciudad Amurallada</div>
+              <div class="act-desc">Las murallas del siglo XVII rodean el centro histórico de Cartagena — declarado Patrimonio UNESCO en 1984. Paseando por las calles de colores pastel (amarillo, naranja, azul) del barrio San Diego y la calle del Santísimo, cada esquina es una fotografía. Subir a las murallas al atardecer y ver el Caribe desde lo alto.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag">Atardecer espectacular</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+      <h2 class="section-heading" id="h-dia5">Día 5 — Cartagena histórica</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div><div class="day-title">Castillo San Felipe + Getsemaní</div><div class="day-subtitle">Fortaleza colonial y barrio urbano</div></div>
+          <div class="day-meta"><span>🏰 Castillo San Felipe</span><span>🎨 Getsemaní</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Castillo San Felipe de Barajas</div>
+              <div class="act-desc">La fortaleza colonial más grande de América, construida por los españoles para proteger la ciudad de piratas y corsarios. El sistema de túneles subterráneos y los bastiones escalonados desde los que se dominaba la bahía son impresionantes desde el punto de vista de la ingeniería militar del siglo XVII.</div>
+              <div class="act-tags"><span class="act-tag">€5 entrada</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio Getsemaní</div>
+              <div class="act-desc">El barrio más auténtico y artístico de Cartagena, fuera de las murallas. Murales enormes de artistas colombianos e internacionales cubren cada pared. La Plaza de la Trinidad se llena de vida nocturna local a buen precio. El proceso de gentrificación es visible pero el barrio conserva su esencia afrocaribena.</div>
+              <div class="act-tags"><span class="act-tag green">Libre</span><span class="act-tag">Street art único</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia6" class="itin-section" aria-labelledby="h-dia6">
+      <h2 class="section-heading" id="h-dia6">Día 6 — Islas del Rosario</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">06</div>
+          <div><div class="day-title">Archipiélago del Rosario</div><div class="day-subtitle">Arrecifes de coral en el Caribe colombiano</div></div>
+          <div class="day-meta"><span>🤿 Snorkeling</span><span>🏝️ Playa Blanca</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Lancha al Archipiélago del Rosario</div>
+              <div class="act-desc">A 45 minutos en lancha rápida desde el Muelle Turístico de Cartagena. 27 islas coralinas con agua turquesa cristalina. El Parque Nacional Natural Corales del Rosario tiene arrecifes de coral con tortugas, peces tropicales y manta rayas. El tour incluye snorkeling y parada en Playa Blanca.</div>
+              <div class="act-tags"><span class="act-tag">Tour €40–60 todo incluido</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tarde en Playa Blanca</div>
+              <div class="act-desc">Arena blanca fina, palmeras y agua turquesa transparente. Los vendedores ofrecen mariscos frescos directamente en la orilla — langosta asada, camarones al ajillo, ceviche de pargo. Una de las playas más bonitas del Caribe continental.</div>
+              <div class="act-tags"><span class="act-tag">Mariscos ~€15</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia7" class="itin-section" aria-labelledby="h-dia7">
+      <h2 class="section-heading" id="h-dia7">Día 7 — Partida</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">07</div>
+          <div><div class="day-title">Mercado de Bazurto + vuelo</div><div class="day-subtitle">El alma popular de Cartagena</div></div>
+          <div class="day-meta"><span>🛒 Mercado Bazurto</span><span>✈️ Regreso</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado de Bazurto</div>
+              <div class="act-desc">El mercado popular más grande de Cartagena — caótico, bullicioso y absolutamente auténtico. Frutas tropicales que no has visto nunca (borojó, mamoncillo, noni), mariscos frescos del Caribe, hierbas medicinales, chicha y viche (aguardiente artesanal afro). Ir antes de las 10h y con guía local recomendado.</div>
+              <div class="act-tags"><span class="act-tag info">Con guía recomendado</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último sancocho + vuelo internacional</div>
+              <div class="act-desc">Despídete de Colombia con un sancocho de pescado en algún restaurante del Centro Histórico. El aeropuerto Rafael Núñez está a 10 minutos en taxi. Colombia te habrá demostrado que las ciudades más transformadas del mundo son las que más tienen que enseñar.</div>
+              <div class="act-tags"><span class="act-tag">~€8 sancocho</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía colombiana</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato icónico</div>
+          <div class="gastro-title">Bandeja Paisa</div>
+          <div class="gastro-desc">El plato más contundente de Colombia: frijoles rojos, arroz blanco, carne molida, chicharrón, chorizo, huevo frito, tajada de plátano, hogao y aguacate. Todo junto en una bandeja. El alma de Antioquia en un plato.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Desayuno</div>
+          <div class="gastro-title">Arepas con Hogao</div>
+          <div class="gastro-desc">Las arepas colombianas son más gruesas y de maíz blanco. El hogao es un sofrito de tomate y cebolla larga que las acompaña. Con huevo revuelto y chocolate caliente con queso (sí, el queso se derrite en el chocolate) — el desayuno paisa completo.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Caribe</div>
+          <div class="gastro-title">Ceviche de Cartagena</div>
+          <div class="gastro-desc">Diferente al peruano: más suave, con leche de coco y ají dulce. El pargo o la corvina recién pescados marinados en limón con palmito, tomate y cilantro. Se sirven en vasos de plástico directamente en la playa.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida</div>
+          <div class="gastro-title">Café de Colombia</div>
+          <div class="gastro-desc">Colombia produce uno de los mejores cafés arábica del mundo. El tinto (café negro sin azúcar) es la bebida social del país — se ofrece en cada visita, reunión y pausa. Los cafés de especialidad de El Poblado tienen preparaciones de filtro con granos de finca que rivalizan con los mejores del mundo.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Seguridad en Medellín:</strong> El Poblado y Laureles son seguros para turistas. Evitar salir solo de noche fuera de estas zonas. Usar siempre Uber (el taxímetro no siempre funciona en taxis de la calle).</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Calor en Cartagena:</strong> 33°C con 90% de humedad. El cuerpo tarda 2–3 días en adaptarse. Hidratación constante, ropa ligera y aplicar bloqueador solar 50+ cada 2 horas. Los mejores momentos para actividades al aire libre son antes de las 11h y después de las 16h.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Moneda:</strong> el peso colombiano (COP). 1€ ≈ 4,400 COP. Pagar con tarjeta cuando sea posible. Llevar algo de efectivo para mercados y transporte.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Scopolamina (burundanga):</strong> una droga que incapacita la voluntad. Nunca aceptes bebidas o cigarrillos de desconocidos. Ir siempre a bares recomendados. Es un riesgo real aunque poco frecuente para los turistas que toman precauciones básicas.</div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias (único)</div><div class="emerg-value">123</div><div class="emerg-note">Policía, ambulancia, bomberos</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía de Turismo</div><div class="emerg-value">156</div><div class="emerg-note">Atención específica a turistas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Cruz Roja</div><div class="emerg-value">132</div><div class="emerg-note">Asistencia médica</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España (Bogotá)</div><div class="emerg-value">+57 1 622-0090</div><div class="emerg-note">Calle 92 No. 12-68</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede adaptar el itinerario a tus fechas, presupuesto y preferencias en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos para 2026. Consulta las recomendaciones de seguridad del Ministerio de Asuntos Exteriores antes de viajar a Colombia.
+    </div>
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">América</div>
+      <nav aria-label="Destinos América"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="buenos-aires.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Buenos Aires</a></li>
+        <li><a href="rio-de-janeiro.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Río de Janeiro</a></li>
+        <li><a href="la-habana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">La Habana</a></li>
+      </ul></nav>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+})();
+</script>
+</body>
+</html>
