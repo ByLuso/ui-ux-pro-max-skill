@@ -2,9 +2,9 @@
 // ── CONFIGURA ESTOS DATOS CON LOS DE TU HOSTINGER ────────────────────────────
 // Los encuentras en hPanel → Bases de datos → MySQL → Ver detalles
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'TU_NOMBRE_DB');      // ej: u123456789_routlo
-define('DB_USER', 'TU_USUARIO_DB');     // ej: u123456789_admin
-define('DB_PASS', 'TU_PASSWORD_DB');
+define('DB_NAME', 'u511334786_routli');
+define('DB_USER', 'u511334786_luisalbertoz');
+define('DB_PASS', 'EnfermeriaDura12$');
 // ─────────────────────────────────────────────────────────────────────────────
 
 define('ALLOWED_ORIGIN', 'https://routlo.com');
