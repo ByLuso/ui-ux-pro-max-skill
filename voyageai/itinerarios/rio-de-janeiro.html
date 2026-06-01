@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Río de Janeiro, Brasil — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 5 días en Río de Janeiro: Cristo Redentor, playas de Copacabana e Ipanema, Carnaval y favelas. Presupuesto detallado y consejos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,8,16,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #3a1a0e 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #1a3a1e 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #2a1a0a 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #1a0a05 0%, #3d1a0a 40%, #5a2d0a 70%, rgba(201,169,110,0.2) 100%),
+        url('https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=1400&q=80') center/cover no-repeat;
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%);
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(4,8,16,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .hotel-grid { grid-template-columns: repeat(2,1fr); } .transport-grid { grid-template-columns: 1fr; } .gastro-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .hotel-grid { grid-template-columns: 1fr; } .emerg-grid { grid-template-columns: 1fr; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } }
+  </style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span>América</span>
+    <span aria-hidden="true">›</span>
+    <span>Río de Janeiro</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Río de Janeiro</h1>
+  <p class="dest-country">Brasil</p>
+  <div class="dest-meta">
+    <span class="dest-badge">✈️ ~12h desde Madrid</span>
+    <span class="dest-badge gold">5 días</span>
+    <span class="dest-badge">💰 ~€1,400/persona</span>
+    <span class="dest-badge">☀️ Tropical todo el año</span>
+  </div>
+  <div class="dest-summary-bar" role="region" aria-label="Resumen del viaje">
+    <div class="dest-sum-item"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">5 días</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€1,400</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Mejor época</div><div class="dest-sum-val">Abr–Jun</div></div>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#alojamiento">Alojamiento</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#transporte">Transporte</a></li>
+      <li><a href="#dia1">Día 1 — Llegada + Ipanema</a></li>
+      <li><a href="#dia2">Día 2 — Cristo Redentor</a></li>
+      <li><a href="#dia3">Día 3 — Pan de Azúcar</a></li>
+      <li><a href="#dia4">Día 4 — Santa Teresa + Lapa</a></li>
+      <li><a href="#dia5">Día 5 — Pedra Bonita + partida</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <!-- Alojamiento -->
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Alojamiento</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">Económico</div>
+          <div class="hotel-name">Hostel Carambola</div>
+          <div class="hotel-zone">Santa Teresa</div>
+          <div class="hotel-price">€25–40/noche</div>
+          <ul class="hotel-features">
+            <li>Vistas panorámicas a la ciudad</li>
+            <li>Desayuno incluido</li>
+            <li>Ambiente bohemio y artístico</li>
+          </ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Intermedio</div>
+          <div class="hotel-name">Ipanema Inn</div>
+          <div class="hotel-zone">Ipanema</div>
+          <div class="hotel-price">€90–130/noche</div>
+          <ul class="hotel-features">
+            <li>A 2 min de la playa</li>
+            <li>Piscina en azotea</li>
+            <li>Desayuno bufé</li>
+          </ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Lujo</div>
+          <div class="hotel-name">Belmond Copacabana Palace</div>
+          <div class="hotel-zone">Copacabana</div>
+          <div class="hotel-price">€380–600/noche</div>
+          <ul class="hotel-features">
+            <li>Hotel icónico desde 1923</li>
+            <li>Piscina con vista al mar</li>
+            <li>Restaurante galardonado</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Presupuesto -->
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead><tr><th>Concepto</th><th>Coste</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Vuelo ida y vuelta</td><td>€600–900</td><td>Madrid–GIG, temporada media</td></tr>
+            <tr><td>Alojamiento (5 noches)</td><td>€150–600</td><td>Según categoría elegida</td></tr>
+            <tr><td>Comidas</td><td>€120–200</td><td>Pé de boi + restaurantes medios</td></tr>
+            <tr><td>Transporte local</td><td>€40–70</td><td>Metro + Uber + teleférico</td></tr>
+            <tr><td>Actividades</td><td>€80–130</td><td>Cristo, Pan de Azúcar, tour favela</td></tr>
+            <tr><td>Extras y compras</td><td>€80–150</td><td>Artesanía, caipiriñas, souvenirs</td></tr>
+            <tr><td><strong>TOTAL</strong></td><td><strong>€1,070–2,050</strong></td><td>Por persona (vuelos incluidos)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos 2026. Evitar viajar en Carnaval (Feb) si el presupuesto es ajustado — los precios se triplican.</p>
+    </section>
+
+    <!-- Transporte -->
+    <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+      <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+            Desde el aeropuerto
+          </div>
+          <div class="transport-content">
+            <strong>Aeropuerto Galeão (GIG)</strong> — a 20 km del centro.<br><br>
+            <strong>Uber/99</strong> — ~R$60–80 (~€10–14). La opción más cómoda y segura para turistas.<br><br>
+            <strong>Bus 2018</strong> — R$22 (~€4), sale de la Terminal 1. Lento pero económico.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 6V4M16 6V4M2 10h20"/></svg>
+            Movilidad urbana
+          </div>
+          <div class="transport-content">
+            <strong>Metro</strong> — cubre Ipanema, Copacabana, Centro. R$5.40/viaje (~€1).<br><br>
+            <strong>Uber</strong> — recomendado para desplazamientos nocturnos. Mucho más seguro que tomar taxi en la calle.<br><br>
+            Evitar moverse en transporte público de noche fuera de las zonas turísticas.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+            Apps esenciales
+          </div>
+          <div class="transport-content">
+            <strong>99 App</strong> — alternativa local a Uber, a veces más barata.<br><br>
+            <strong>Moovit</strong> — para rutas de autobús y metro.<br><br>
+            <strong>Google Maps</strong> — funciona bien pero verificar rutas nocturnas antes de usarlas.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Seguridad básica
+          </div>
+          <div class="transport-content">
+            Río es hermosa pero requiere precaución. <strong>No saques el móvil en la calle</strong> en zonas no turísticas. Usa una riñonera discreta.<br><br>
+            Las playas de Ipanema y Copacabana son seguras de día. Zona norte y favelas: solo con guía certificado.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 1 -->
+    <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+      <h2 class="section-heading" id="h-dia1">Día 1</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Llegada + Playa de Ipanema</div>
+            <div class="day-subtitle">La chica de Ipanema era real</div>
+          </div>
+          <div class="day-meta">
+            <span>🏖️ Ipanema al atardecer</span>
+            <span>🍹 Caipirinha en el Garota</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada y check-in</div>
+              <div class="act-desc">Aterriza en Galeão, toma un Uber al hotel en Ipanema. El primer impacto visual de la ciudad desde el coche ya es espectacular: la montaña, el mar verde turquesa, los edificios blancos.</div>
+              <div class="act-tags"><span class="act-tag info">Uber recomendado</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Primera tarde en Ipanema</div>
+              <div class="act-desc">Camina por el paseo marítimo de Ipanema hasta el Arpoador, la lengua de tierra que separa Ipanema de Copacabana. Desde la roca del Arpoador se ve simultáneamente las dos playas más famosas de Brasil. El atardecer aquí es de los mejores del mundo.</div>
+              <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag">Imprescindible al atardecer</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en el Garota de Ipanema</div>
+              <div class="act-desc">El bar donde se compuso "Garota de Ipanema" en 1962. Tom Jobim y Vinicius de Moraes observaban aquí a Helô Pinheiro pasear cada día hacia la playa. Pide una caipirinha de limão y el filé com fritas.</div>
+              <div class="act-tags"><span class="act-tag">~€20 pp</span><span class="act-tag">Bossa Nova en vivo</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 2 -->
+    <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+      <h2 class="section-heading" id="h-dia2">Día 2</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Cristo Redentor + Jardín Botánico</div>
+            <div class="day-subtitle">La vista más icónica de América del Sur</div>
+          </div>
+          <div class="day-meta">
+            <span>✝️ Cristo Redentor</span>
+            <span>🌿 Jardín Botánico</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Subida al Cristo Redentor — madrugada</div>
+              <div class="act-desc">Llegar a las 7:30h en el tren de cremallera desde la Estação do Cosme Velho. A esta hora hay poca gente y la luz es dorada. El Cristo mide 30m y tiene los brazos abiertos sobre 710m de altitud. Las vistas de Río son absolutamente sobrecogedoras.</div>
+              <div class="act-tags"><span class="act-tag">€12 tren cremallera</span><span class="act-tag info">Reservar online</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Jardín Botánico de Río</div>
+              <div class="act-desc">140 hectáreas de flora tropical, palmeras imperiales del siglo XVIII plantadas por orden de Dom João VI, y orquídeas silvestres. Un oasis de verdor entre el asfalto. Muy frecuentado por cariocas en familia los domingos.</div>
+              <div class="act-tags"><span class="act-tag">€3 entrada</span><span class="act-tag green">Apto familias</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en la Lagoa Rodrigo de Freitas</div>
+              <div class="act-desc">La laguna ornamental junto al Jardín Botánico tiene quioscos con excelente comida brasileña. Pide un açaí bowl y mira los remadores entrenar en la laguna con el Cristo al fondo.</div>
+              <div class="act-tags"><span class="act-tag">~€15 pp</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 3 -->
+    <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+      <h2 class="section-heading" id="h-dia3">Día 3</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Pan de Azúcar + Copacabana</div>
+            <div class="day-subtitle">El teleférico más famoso del mundo</div>
+          </div>
+          <div class="day-meta">
+            <span>🚡 Teleférico</span>
+            <span>🏖️ Copacabana</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Pão de Açúcar — primera cable car</div>
+              <div class="act-desc">El teleférico hace dos etapas: primero al Morro da Urca (215m), después a la cima del Pan de Azúcar (396m). Las vistas de la Bahía de Guanabara, con la ciudad rodeada de montañas y mar, son simplemente perfectas. Ir temprano para ver el amanecer sobre la bahía.</div>
+              <div class="act-tags"><span class="act-tag">€20 teleférico</span><span class="act-tag info">Ir antes de 10h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de Copacabana + almuerzo</div>
+              <div class="act-desc">4 km de arena blanca frente al Atlántico. La playa urbana más famosa del mundo. Come en los quioscos del paseo: peixe frito, camarão na brasa, coco verde. El paseo de mosaicos en blanco y negro diseñado por Burle Marx es obra de arte en sí mismo.</div>
+              <div class="act-tags"><span class="act-tag green">Libre</span><span class="act-tag">Quioscos ~€8 pp</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Churrascaria Plataforma</div>
+              <div class="act-desc">La mejor churrascaria de Río. Sistema rodízio: los garçons traen espadas de carne sin parar hasta que volteas el indicador a rojo. Picanha, fraldinha, costela, camarao. Buffet de ensaladas de 60 platos. Una experiencia gastronómica brasilerísima.</div>
+              <div class="act-tags"><span class="act-tag">€35 pp todo incluido</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 4 -->
+    <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+      <h2 class="section-heading" id="h-dia4">Día 4</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title">Santa Teresa + Lapa</div>
+            <div class="day-subtitle">El barrio bohemio y la noche carioca</div>
+          </div>
+          <div class="day-meta">
+            <span>🎨 Santa Teresa</span>
+            <span>🎵 Lapa de noche</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Santa Teresa</div>
+              <div class="act-desc">El barrio bohemio de Río, encaramado en una colina. Casas coloniales del siglo XIX convertidas en galerías y cafés. El Museo Chácara do Céu tiene obras de Matisse, Monet, Dalí y Picasso con una colección sorprendente. Las callejuelas con street art son fotogénicas.</div>
+              <div class="act-tags"><span class="act-tag">Museo €4</span><span class="act-tag green">Exploración libre</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Arcos da Lapa + Escadaria Selarón</div>
+              <div class="act-desc">Los Arcos da Lapa son un acueducto del siglo XVIII reconvertido en viaducto de tranvía. La Escadaria Selarón — la escalera de 215 escalones cubierta de azulejos de 60 países — es una de las imágenes más icónicas de Río. El artista chileno Jorge Selarón trabajó en ella desde 1990 hasta su muerte en 2013.</div>
+              <div class="act-tags"><span class="act-tag green">Gratuito</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Noche de samba en Lapa</div>
+              <div class="act-desc">Lapa se convierte los jueves, viernes y sábados en el epicentro del samba carioca. Clubs como Carioca da Gema o Rio Scenarium tienen bandas en vivo. Beber chope (cerveza de barril) y aprender los primeros pasos del samba con los lugareños.</div>
+              <div class="act-tags"><span class="act-tag">Entrada ~€5</span><span class="act-tag">Cerveza ~€2</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 5 -->
+    <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+      <h2 class="section-heading" id="h-dia5">Día 5</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div>
+            <div class="day-title">Pedra Bonita + partida</div>
+            <div class="day-subtitle">El parapente más espectacular del mundo</div>
+          </div>
+          <div class="day-meta">
+            <span>🪂 Parapente Pedra Bonita</span>
+            <span>✈️ Regreso</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Parapente desde Pedra Bonita</div>
+              <div class="act-desc">Si el vuelo lo permite, esta actividad es transformadora. Desde la roca de 696m en el Parque da Tijuca despegan parapentes biplaza con instructores certificados. El vuelo dura 10–15 min y aterrizas directamente en la playa de São Conrado. Vistas del Cristo, Pan de Azúcar, Barra y Ipanema simultáneamente.</div>
+              <div class="act-tags"><span class="act-tag">€80 pp biplaza</span><span class="act-tag info">Reservar el día anterior</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último açaí + salida al aeropuerto</div>
+              <div class="act-desc">Despídete de Río con un açaí na tigela en la playa — el desayuno carioca por excelencia: açaí congelado con banana, granola y mel de abelha. Después, Uber a Galeão con tiempo suficiente para el vuelo nocturno.</div>
+              <div class="act-tags"><span class="act-tag">~€6</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gastronomía -->
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía carioca</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato nacional</div>
+          <div class="gastro-title">Feijoada</div>
+          <div class="gastro-desc">Estofado de frijoles negros con cerdo (costilla, oreja, rabo, embutidos). Se sirve los miércoles y sábados. El plato más contundente y sabroso de Brasil. Acompañar con arroz, farofa, couve refogada y una caipirinha.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida icónica</div>
+          <div class="gastro-title">Caipirinha</div>
+          <div class="gastro-desc">Cachaça (aguardiente de caña), limão criollo, azúcar y hielo. La bebida nacional de Brasil. En Río se hace con limão galego (limón criollo pequeño) que le da un sabor diferente. Existen versiones con maracuyá, morango o kiwi.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Snack de playa</div>
+          <div class="gastro-title">Mate gelado + Biscoito Globo</div>
+          <div class="gastro-desc">Los vendedores ambulantes de Copacabana e Ipanema venden mate helado en termo y las galletas Globo (sabor salado o dulce) que se comen mirando el mar. Una combinación indisolublemente carioca desde los años 50.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Postre</div>
+          <div class="gastro-title">Açaí na tigela</div>
+          <div class="gastro-desc">Pulpa de açaí congelada servida en cuenco con banana, granola, mel, leite condensado y frutas tropicales. El desayuno y merienda carioca por excelencia. Muy energético — los surfistas lo toman antes de entrar al agua.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consejos -->
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Seguridad ante todo:</strong> usa Uber en lugar de taxis de la calle, lleva una cartera "señuelo" con poco efectivo, no saques el móvil en zonas no turísticas. Las áreas de Ipanema, Leblon, Barra y Santa Teresa son seguras de día.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Moneda local:</strong> el real brasileño (BRL). Los cajeros de Banco24Horas y Bradesco cobran comisiones bajas. Mastercard funciona mejor que Visa en muchos comercios. Llevar algo de efectivo para vendedores de playa.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Mosquitos y sol:</strong> aplica repelente con DEET en zonas con vegetación (Cristo, Jardín Botánico, Tijuca). El sol tropical quema mucho más rápido — protector solar 50+ y sombrero son imprescindibles en la playa.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Tours de favela:</strong> si quieres visitar el Complexo do Alemão o Rocinha, hazlo SOLO con operadores certificados (Favela Tour, Be a Local). Nunca entres solo. Los tours son seguros con guía y contribuyen a la economía local.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Mejor época:</strong> abril–junio (poscarnaval) y agosto–octubre. Evitar diciembre–marzo si quieres evitar las lluvias torrenciales, aunque el calor de enero puede ser perfecto si tienes tolerancia.</div></div>
+    </section>
+
+    <!-- Emergencias -->
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Policía</div><div class="emerg-value">190</div><div class="emerg-note">Policía Militar</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia / SAMU</div><div class="emerg-value">192</div><div class="emerg-note">Servicio de Urgencias</div></div>
+        <div class="emerg-card"><div class="emerg-label">Bombeiros</div><div class="emerg-value">193</div><div class="emerg-note">Emergencias incendio/rescate</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España (Brasilia)</div><div class="emerg-value">+55 61 3244-2416</div><div class="emerg-note">Consulado en Río: +55 21 2543-3232</div></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede adaptar el itinerario a tus fechas, presupuesto y preferencias en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos para 2026 y pueden variar según temporada y disponibilidad. Los enlaces de actividades son externos; Routlo no se responsabiliza de cambios en terceros. Consulta siempre las recomendaciones de seguridad del Ministerio de Asuntos Exteriores antes de viajar.
+    </div>
+  </main>
+</div>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div>
+      <div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div>
+      <p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Destinos</div>
+      <nav aria-label="Destinos populares">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li><a href="tokio.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Tokio</a></li>
+          <li><a href="buenos-aires.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Buenos Aires</a></li>
+          <li><a href="cairo.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">El Cairo</a></li>
+          <li><a href="vietnam.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Vietnam</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Destinos España">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li>
+          <li><a href="barcelona.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Barcelona</a></li>
+          <li><a href="sevilla.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Sevilla</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, {passive:true});
+
+  function toggleMenu() {
+    const ul = nav.querySelector('ul');
+    ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex';
+  }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+})();
+</script>
+</body>
+</html>
