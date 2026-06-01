@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ciudad de México, México — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 5 días en Ciudad de México: Zócalo, Teotihuacán, Coyoacán, Frida Kahlo, Chapultepec y la mejor gastronomía mexicana. Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040d04 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,13,4,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(4,13,4,0.95); }
+
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #0d2a0d 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #2d7a2d 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #1a5a1a 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    .dest-hero {
+      position: relative; z-index: 1; min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #040d04 0%, #0d2a0d 40%, #1a5a1a 70%, rgba(201,169,110,0.2) 100%), url('https://images.unsplash.com/photo-U1SLPzGSzu8?w=1400&h=700&fit=crop&q=80&auto=format');
+      background-size: cover; background-position: center;
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #040d04 0%, rgba(4,13,4,0.5) 50%, rgba(4,13,4,0.2) 100%);
+    }
+    .dest-hero-deco { position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, #040d04 0%, transparent 100%); z-index: 0; }
+    .dest-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); margin-bottom: 20px; position: relative; z-index: 1; }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2; }
+    .dest-country { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; font-style: italic; color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1; }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(4,13,4,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar { display: flex; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 600px; position: relative; z-index: 1; }
+    .dest-sum-item { flex: 1; background: #070d0a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 5px; color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(201,169,110,0.3); padding-bottom: 1px; }
+    .hotel-link:hover { border-color: #c9a96e; }
+
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .hotel-grid { grid-template-columns: repeat(2,1fr); } .transport-grid { grid-template-columns: 1fr; } .gastro-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .dest-title { font-size: clamp(2rem,10vw,3.2rem); } .hotel-grid { grid-template-columns: 1fr; } .emerg-grid { grid-template-columns: 1fr; } .section-heading { font-size: 1.3rem; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } }
+  </style>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Ciudad de México</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Ciudad de México</h1>
+  <p class="dest-country">México</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">5 días / 4 noches</span>
+    <span class="dest-badge" role="listitem">América del Norte · México</span>
+    <span class="dest-badge gold" role="listitem">~€950/persona</span>
+    <span class="dest-badge" role="listitem">Historia + Gastronomía + Arte</span>
+    <a href="https://www.skyscanner.net/transport/flights/MAD/MEX/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">5 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Precio/persona</div><div class="dest-sum-val">~€950</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Mejor época</div><div class="dest-sum-val" style="font-size:0.9rem">Oct–Abr</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Visado</div><div class="dest-sum-val" style="font-size:0.9rem">No necesario</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+  <div class="itin-layout">
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#alojamiento">Alojamiento</a></li>
+          <li><a href="#dia1">Día 1</a></li>
+          <li><a href="#dia2">Día 2</a></li>
+          <li><a href="#dia3">Día 3</a></li>
+          <li><a href="#dia4">Día 4</a></li>
+          <li><a href="#dia5">Día 5</a></li>
+          <li><a href="#gastronomia">Gastronomía</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+          <li><a href="#emergencias">Emergencias</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <article>
+
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          Ciudad de México es una de las megalópolis más fascinantes y contradictorias del planeta: 22 millones de personas, la mayor concentración de museos de América Latina, pirámides del 100 a.C. a 50 km del centro, una escena gastronómica reconocida como Patrimonio Cultural Inmaterial de la UNESCO y barrios bohemios donde el tiempo parece detenerse. Este itinerario de 5 días mezcla el esplendor azteca de Teotihuacán, la Casa Azul de Frida Kahlo, el Bosque de Chapultepec y la cocina que convirtió al taco en embajador cultural global.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">Empezar gratis</a>
+        </div>
+      </section>
+
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para Ciudad de México">
+            <thead><tr><th>Concepto</th><th>Económico (~€550)</th><th>Medio (~€950)</th><th>Premium (~€2,000)</th></tr></thead>
+            <tbody>
+              <tr><td>✈️ Vuelos ida/vuelta</td><td>€280</td><td>€450</td><td>€900</td></tr>
+              <tr><td>🏨 Alojamiento (4 noches)</td><td>€80 (hostel)</td><td>€240 (hotel boutique)</td><td>€600 (hotel 5★)</td></tr>
+              <tr><td>🍽️ Alimentación (5 días)</td><td>€70 (tacos + mercados)</td><td>€150</td><td>€300</td></tr>
+              <tr><td>🚇 Transporte local + Teotihuacán</td><td>€40</td><td>€60</td><td>€100</td></tr>
+              <tr><td>🎫 Entradas y actividades</td><td>€40</td><td>€80</td><td>€150</td></tr>
+              <tr><td>🛡️ Seguro de viaje</td><td>€30</td><td>€40</td><td>€60</td></tr>
+              <tr><td>🎁 Extras / souvenirs</td><td>€60</td><td>€80</td><td>€200</td></tr>
+              <tr><td><strong>TOTAL</strong></td><td><strong>~€550</strong></td><td><strong>~€950</strong></td><td><strong>~€2,000</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos para 2026. Ciudad de México es muy asequible para los estándares europeos.</p>
+      </section>
+
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">Desde el Aeropuerto NAICM</div>
+            <div class="transport-content">
+              <strong>Metrobús Línea 4</strong> — al centro, solo ~€0.50. Opción más económica.<br><br>
+              <strong>Taxi autorizado</strong> — al centro histórico ~€10-15 (comprar ticket en mostrador oficial, no en la calle).<br><br>
+              <strong>Uber</strong> — funciona desde el nuevo aeropuerto Felipe Ángeles (AIFA) también.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">Transporte urbano CDMX</div>
+            <div class="transport-content">
+              <strong>Metro CDMX</strong> — el más barato del mundo (~€0.25/viaje). 12 líneas, cubre toda la ciudad. Imprescindible tarjeta recargable.<br><br>
+              <strong>Metrobús</strong> — BRT de superficie, cubre las avenidas principales. Mismo precio que metro.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">Apps esenciales</div>
+            <div class="transport-content">
+              <strong>Uber</strong> — muy usado y muy económico en CDMX. Siempre pedir en la app, nunca abordar taxis en la calle.<br><br>
+              <strong>Google Maps</strong> — incluye metro, metrobús y camiones (autobuses).<br><br>
+              <strong>WhatsApp</strong> — los mexicanos coordinan todo por aquí.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">Altitud y aclimatación</div>
+            <div class="transport-content">
+              CDMX está a <strong>2,240 metros de altitud</strong>. Los primeros 1-2 días pueden provocar mareos leves o cansancio. Beber mucha agua, evitar alcohol el primer día y caminar despacio. El cuerpo se adapta en 48 horas.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+        <h2 class="section-heading" id="h-alojamiento">Dónde alojarse</h2>
+        <div class="hotel-grid">
+          <div class="hotel-card">
+            <div class="hotel-tier">💎 Premium</div>
+            <div class="hotel-name">Four Seasons México D.F.</div>
+            <div class="hotel-zone">Paseo de la Reforma</div>
+            <div class="hotel-price">Desde €280/noche</div>
+            <ul class="hotel-features">
+              <li>Jardín central con fuente colonial</li>
+              <li>Restaurante Fifty Mils (cócteles icónicos)</li>
+              <li>Spa y piscina climatizada</li>
+              <li>En la arteria más elegante de CDMX</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Four+Seasons+Mexico+City" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+          </div>
+          <div class="hotel-card">
+            <div class="hotel-tier">⭐ Recomendado</div>
+            <div class="hotel-name">Condesa DF Hotel</div>
+            <div class="hotel-zone">Colonia Condesa</div>
+            <div class="hotel-price">Desde €110/noche</div>
+            <ul class="hotel-features">
+              <li>Edificio Art Déco restaurado</li>
+              <li>Terraza rooftop con vistas</li>
+              <li>Bicicletas gratuitas para huéspedes</li>
+              <li>A pasos del Parque México</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Condesa+DF+Hotel+Mexico+City" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+          </div>
+          <div class="hotel-card">
+            <div class="hotel-tier">💵 Económico</div>
+            <div class="hotel-name">Hostel Mundo Joven Catedral</div>
+            <div class="hotel-zone">Centro Histórico</div>
+            <div class="hotel-price">Desde €15/noche</div>
+            <ul class="hotel-features">
+              <li>Frente a la Catedral Metropolitana</li>
+              <li>Terraza con vista al Zócalo</li>
+              <li>Tours organizados desde el hostel</li>
+              <li>Ambiente viajero internacional</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Hostel+Mundo+Joven+Catedral+Mexico" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 1 -->
+      <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+        <h2 class="section-heading" id="h-dia1">Día 1</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Centro Histórico — La raíz del México profundo</div>
+              <div class="day-subtitle">Zócalo, Catedral Metropolitana y Templo Mayor</div>
+            </div>
+            <div class="day-meta"><span>🏛️ Zócalo</span><span>⛪ Catedral</span><span>🗿 Templo Mayor</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">10:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">El Zócalo — Plaza de la Constitución</div>
+                <div class="act-desc">La segunda plaza más grande del mundo (después de la de Tiananmen) es el corazón simbólico de México. El mástil central tiene una bandera gigante que sube y baja con ritual diario. Rodeado por el Palacio Nacional, la Catedral y el Gobierno del DF — historia viva en cada metro cuadrado.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Catedral Metropolitana y Palacio Nacional</div>
+                <div class="act-desc">La Catedral Metropolitana, construida durante 240 años (1573-1813), es la más grande de América Latina. El Palacio Nacional alberga los murales de Diego Rivera que narran la historia completa de México — desde los aztecas hasta la revolución. Obra maestra del muralismo que no tiene precio.</div>
+                <div class="act-tags"><span class="act-tag green">Catedral y murales: gratuito</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Templo Mayor — El corazón azteca</div>
+                <div class="act-desc">Descubierto accidentalmente en 1978 durante obras de electricidad, el Templo Mayor es el centro ceremonial de Tenochtitlán, la capital azteca bajo la que yace Ciudad de México. El museo adyacente tiene la piedra del Sol (Calendario Azteca) y las piezas más significativas de la civilización mexica.</div>
+                <div class="act-tags"><span class="act-tag">€4 entrada</span><span class="act-tag info">Cerrado lunes</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en el centro — tacos y tlayudas</div>
+                <div class="act-desc">Almuerzo en El Cardenal (clásico del centro desde 1969) o en los puestos callejeros de la calle Regina: tacos de canasta, pozole rojo, tamales de mole negro y agua de jamaica bien fría. La cocina callejera de CDMX es Patrimonio Inmaterial de la UNESCO — y con razón.</div>
+                <div class="act-tags"><span class="act-tag">Tacos: ~€1 cada uno</span><span class="act-tag green">Experiencia auténtica</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Paseo por la Alameda Central y Bellas Artes</div>
+                <div class="act-desc">El Palacio de Bellas Artes, con su cúpula art nouveau y murales de Rivera, Orozco y Siqueiros, es el templo cultural de México. La Alameda Central es el parque urbano más antiguo de América (1592). Atardecer frente a la Torre Latinoamericana — el símbolo del México moderno del siglo XX.</div>
+                <div class="act-tags"><span class="act-tag">Bellas Artes: €2</span><span class="act-tag green">Alameda gratuita</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 2 -->
+      <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+        <h2 class="section-heading" id="h-dia2">Día 2</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">02</div>
+            <div>
+              <div class="day-title">Teotihuacán — Las Pirámides del Sol y la Luna</div>
+              <div class="day-subtitle">La ciudad sagrada más grande de Mesoamérica</div>
+            </div>
+            <div class="day-meta"><span>🚌 Bus desde Terminal Norte</span><span>🔺 Pirámide del Sol</span><span>🌙 Pirámide de la Luna</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">07:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Salida temprana — Bus desde Terminal Norte</div>
+                <div class="act-desc">Autobús desde la Terminal de Autobuses del Norte (Metro Autobuses del Norte, L5) — salida cada 30 min, viaje 50 min, precio ~€2. Llegar a Teotihuacán al abrir (9h) para evitar el calor del mediodía y las masas turísticas. En verano puede hacer 35°C en las pirámides — sombrero, protección solar y agua abundante.</div>
+                <div class="act-tags"><span class="act-tag">Bus: ~€2 ida</span><span class="act-tag info">Salir antes de las 8h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">La Calzada de los Muertos</div>
+                <div class="act-desc">El eje principal de Teotihuacán, de 4 km de longitud, que conecta los grandes edificios ceremoniales. Los aztecas que llegaron siglos después creyeron que esta ciudad había sido construida por dioses — llamaron al camino "la calzada de los muertos" porque pensaron que los montículos a los lados eran tumbas.</div>
+                <div class="act-tags"><span class="act-tag">€4 entrada zona arqueológica</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Pirámide del Sol (2,800 años, 65m de altura)</div>
+                <div class="act-desc">La tercera pirámide más grande del mundo — construida sobre una cueva natural que los teotihuacanos consideraban la entrada al inframundo. Subir los 248 escalones hasta la cima ofrece una vista panorámica de toda la ciudad sagrada. La mañana temprana es el único momento para hacerlo sin empujones.</div>
+                <div class="act-tags"><span class="act-tag green">Incluido en entrada</span><span class="act-tag info">Llevar agua</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Pirámide de la Luna y Templo de Quetzalcóatl</div>
+                <div class="act-desc">La Pirámide de la Luna, aunque más pequeña, ofrece las mejores vistas de la Calzada. El Templo de Quetzalcóatl (la Serpiente Emplumada) tiene los relieves más elaborados y mejor conservados del complejo — cabezas de serpiente emergiendo del muro con ojos de obsidiana.</div>
+                <div class="act-tags"><span class="act-tag green">Incluido en entrada</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo y regreso vía Tlatelolco</div>
+                <div class="act-desc">Almuerzo en alguno de los restaurantes junto a la zona arqueológica (barbacoa de borrego en hojas de maguey — especialidad de la región). Regreso en bus y parada en Plaza de las Tres Culturas (Tlatelolco): donde aztecas, colonos españoles y México moderno conviven en un mismo espacio físico — símbolo de un país de síntesis.</div>
+                <div class="act-tags"><span class="act-tag">Barbacoa: ~€8</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 3 -->
+      <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+        <h2 class="section-heading" id="h-dia3">Día 3</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">03</div>
+            <div>
+              <div class="day-title">Coyoacán, Frida Kahlo y Xochimilco</div>
+              <div class="day-subtitle">El México más íntimo y festivo</div>
+            </div>
+            <div class="day-meta"><span>🎨 Casa Azul</span><span>🛶 Xochimilco</span><span>🌺 Frida Kahlo</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Barrio de Coyoacán — antes de las masas</div>
+                <div class="act-desc">El barrio más pintoresco de CDMX mantiene el aspecto colonial del siglo XVIII que tenía cuando era un pueblo separado. La Plaza Hidalgo y el Jardín Centenario con sus jacarandas son el corazón del barrio bohemio donde vivieron Frida Kahlo, Diego Rivera, León Trotsky y el surrealismo latinoamericano.</div>
+                <div class="act-tags"><span class="act-tag green">Barrio gratuito</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">La Casa Azul — Museo Frida Kahlo</div>
+                <div class="act-desc">La casa donde nació, vivió y murió Frida Kahlo es uno de los museos más emocionantes del continente. Sus vestidos tehuana, su corsé pintado, sus herramientas de pintura y los diarios personales están expuestos. La azul cobalto de las paredes y el jardín con monos y pericos preservan el ambiente exacto en que ella creó.</div>
+                <div class="act-tags"><span class="act-tag">€12 entrada</span><span class="act-tag info">Reserva online obligatoria — se agota</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Mercado de Coyoacán y almuerzo</div>
+                <div class="act-desc">El mercado cubierto de Coyoacán es una experiencia sensorial total: colorines, aromas de chile ancho, puestos de tostadas de ceviche, memelas y las famosas garnachas. Los tostadas de Coyoacán son una institución — tostada de tinga de pollo, crema, queso y salsa verde. Todo por menos de €3.</div>
+                <div class="act-tags"><span class="act-tag">~€5 almuerzo completo</span><span class="act-tag green">Auténtico</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Xochimilco — Los canales flotantes</div>
+                <div class="act-desc">Las chinampas (jardines flotantes) de Xochimilco son lo que queda de la ingeniería hidráulica azteca que convirtió el lago de Texcoco en ciudad. Trajineras (barcas de colores) navegando entre canales, mariachis que se suben al barco, señoras vendiendo gorditas y elotes asados desde sus propias trajineras. México vivo y festivo.</div>
+                <div class="act-tags"><span class="act-tag">Trajinera 2h: ~€15 por barca</span><span class="act-tag green">Patrimonio UNESCO</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso y cena en la Roma Norte</div>
+                <div class="act-desc">La Colonia Roma Norte tiene la escena gastronómica más internacional de CDMX. Cena en Contramar (el pescado más icónico de la ciudad), Rosetta o Máximo Bistrot — la nueva cocina mexicana de autor que ha puesto a CDMX en el mapa gastronómico mundial. Maridaje con mezcal artesanal.</div>
+                <div class="act-tags"><span class="act-tag">~€20-40 pp</span><span class="act-tag info">Reserva anticipada recomendada</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 4 -->
+      <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+        <h2 class="section-heading" id="h-dia4">Día 4</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">04</div>
+            <div>
+              <div class="day-title">Chapultepec y Museo Nacional de Antropología</div>
+              <div class="day-subtitle">El bosque urbano más grande del mundo y el mejor museo de América</div>
+            </div>
+            <div class="day-meta"><span>🏛️ Museo Antropología</span><span>🌲 Chapultepec</span><span>🍽️ Polanco</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Museo Nacional de Antropología</div>
+                <div class="act-desc">El mejor museo de América Latina sin discusión posible: 23 salas que narran 3,000 años de civilizaciones mesoamericanas. La Sala Mexica alberga la Piedra del Sol (Calendario Azteca) de 24 toneladas y la escultura de Tláloc. Imposible verlo completo en un día — priorizar la Sala Mexica y la Sala Maya.</div>
+                <div class="act-tags"><span class="act-tag">€5 entrada</span><span class="act-tag info">4-5 horas mínimo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en Polanco</div>
+                <div class="act-desc">Polanco es el barrio más elegante de CDMX — el equivalente del Upper East Side neoyorquino. Almuerzo en alguno de los restaurantes de la Avenida Presidente Masaryk o en el emblemático Quintonil (menú degustación de cocina mexicana contemporánea — uno de los mejores de Latinoamérica).</div>
+                <div class="act-tags"><span class="act-tag">Opciones desde €15 pp</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Bosque de Chapultepec</div>
+                <div class="act-desc">El pulmón verde de CDMX — 686 hectáreas en el corazón de la ciudad, el parque urbano más grande del mundo occidental. El Castillo de Chapultepec (donde vivió Maximiliano de Habsburgo) tiene vistas panorámicas sobre toda la megalópolis. El lago artificial es el lugar de descanso de los chilangos los fines de semana.</div>
+                <div class="act-tags"><span class="act-tag green">Parque gratuito</span><span class="act-tag">Castillo: €4</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Mezcal al atardecer en la Condesa</div>
+                <div class="act-desc">La Colonia Condesa tiene los mejores bares de mezcal de CDMX. El mezcal no es solo un destilado — es el alma de Oaxaca en un vaso. Cada mezcal artesanal tiene terroir, como el vino: el agrado Espadín sabe diferente al Tobalá, al Cuixe o al Mexicano. Pedir una selección de tres y comparar.</div>
+                <div class="act-tags"><span class="act-tag">Mezcal artesanal: €4-8 copa</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 5 -->
+      <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+        <h2 class="section-heading" id="h-dia5">Día 5</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">05</div>
+            <div>
+              <div class="day-title">Mercados, Tacos y Despedida</div>
+              <div class="day-subtitle">El México más gastronómico y popular</div>
+            </div>
+            <div class="day-meta"><span>🌮 Tacos</span><span>🏪 Mercados</span><span>✈️ Vuelta</span></div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Desayuno en fonda del mercado</div>
+                <div class="act-desc">Desayuno en el Mercado de Medellín (Col. Roma) o el Mercado de Abelardo Rodríguez (Centro): chilaquiles rojos o verdes con huevo, café de olla con canela, jugo verde de nopal. Los chilaquiles son el mejor antídoto contra cualquier resaca y el mejor desayuno de América.</div>
+                <div class="act-tags"><span class="act-tag">~€3-5 desayuno completo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Mercado de la Merced — el mayor de México</div>
+                <div class="act-desc">El Mercado de la Merced es el más grande de América Latina: 63 naves, 8,000 locales, todo lo que existe en México se vende aquí. Chiles secos de todas las variedades, mole en pasta, especias precolombinas, chapulines (saltamontes fritos), huitlacoche (trufa mexicana). Una enciclopedia gastronómica en estado físico.</div>
+                <div class="act-tags"><span class="act-tag green">Entrada gratuita</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Tacos al pastor — el almuerzo de despedida</div>
+                <div class="act-desc">El taco al pastor es la síntesis perfecta de México: carne de cerdo marinada en chile y achiote, cocida en trompo vertical (herencia de los inmigrantes libaneses), con piña caramelizada y cilantro. En El Huequito (Centro, desde 1959) o Los Cocuyos se sirven en la tradición más pura. Pedir una docena y un agua de jamaica.</div>
+                <div class="act-tags"><span class="act-tag">Tacos: ~€1-1.50 c/u</span><span class="act-tag green">El taco perfecto</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Traslado al aeropuerto</div>
+                <div class="act-desc">Metro o Metrobús al aeropuerto (línea 4, ~€0.25) o Uber (~€8). Calcular 3 horas de antelación. CDMX — una ciudad que te entra por el estómago, te agota con sus 22 millones de historias simultáneas y te deja queriendo volver antes de subir al avión.</div>
+                <div class="act-tags"><span class="act-tag info">3 horas de antelación</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+        <h2 class="section-heading" id="h-gastro">Gastronomía mexicana</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:20px">La gastronomía mexicana fue declarada Patrimonio Cultural Inmaterial de la Humanidad por la UNESCO en 2010. No es solo comida — es un sistema de conocimiento, prácticas, rituales y saberes ancestrales que han sobrevivido 3,000 años.</p>
+        <div class="gastro-grid">
+          <div class="gastro-card">
+            <div class="gastro-cat">Tacos</div>
+            <div class="gastro-title">El embajador mundial de México</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">Al pastor</strong> (trompo, piña, cilantro), <strong style="color:#edeef2">de canasta</strong> (de guisado en tortilla suave), <strong style="color:#edeef2">de carnitas</strong> (cerdo confitado). El taco de CDMX no tiene nada que ver con la versión exportada. En El Huequito o Los Cocuyos a €1 cada uno.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Mole</div>
+            <div class="gastro-title">La salsa más compleja del mundo</div>
+            <div class="gastro-desc">El mole negro de Oaxaca tiene más de 30 ingredientes incluyendo chocolate, chiles secos, especias y semillas tostadas. En CDMX, <strong style="color:#edeef2">El Cardenal</strong> sirve mole negro sobre pavo con tortillas hechas a mano. El proceso de preparación dura 3 días — es arte culinario.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Mezcal</div>
+            <div class="gastro-title">El alma de Oaxaca</div>
+            <div class="gastro-desc">El mezcal artesanal se hace destilando agave en alambiques de cobre o barro. Cada variedad de agave da un mezcal diferente: Espadín (más común), Tobalá (más fino), Cuixe, Mexicano. No se bebe de un golpe — se saborea lentamente. <strong style="color:#edeef2">La Clandestina</strong> (Condesa) es el mejor bar de mezcal de CDMX.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Chiles en Nogada</div>
+            <div class="gastro-title">El plato más mexicano — solo en agosto-sept</div>
+            <div class="gastro-desc">Chile poblano relleno de picadillo (carne, frutas y especias), cubierto de nogada (salsa de nuez de castilla) y granadas y perejil — los colores de la bandera mexicana. Solo disponible en temporada (agosto-septiembre). En <strong style="color:#edeef2">Azul y Oro</strong> (UNAM) o <strong style="color:#edeef2">El Cardenal</strong>.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Tamales</div>
+            <div class="gastro-title">El desayuno ancestral</div>
+            <div class="gastro-desc">Masa de maíz rellena de mole con pollo, rajas con queso o dulce de fresa, envuelta en hoja de maíz o plátano y cocida al vapor. Los tamales oaxaqueños en hoja de plátano son los más aromáticos. En CDMX los tamales del metro son parte del patrimonio cultural urbano informal.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Aguas Frescas</div>
+            <div class="gastro-title">La hidratación perfecta</div>
+            <div class="gastro-desc">Jamaica (flor de hibisco ácida), horchata (arroz con canela cremosa), tamarindo, chía con limón. Imprescindibles con cualquier comida callejera. El agua de jamaica fría es la mejor bebida del mundo a 35°C. Se vende en todos los mercados y puestos callejeros por €0.50.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">10 Consejos para Ciudad de México</h2>
+        <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Uber es el rey del transporte</strong> — en CDMX el Uber es más seguro y más económico que los taxis en la calle. Nunca subir a un taxi sin solicitar por app o pedir en hotel/restaurante.</div></div>
+        <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Altitud de 2,240m</strong> — el primer día ir despacio, beber agua constantemente y evitar alcohol. Los mareos de altitud (soroche) son comunes en los primeros días.</div></div>
+        <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>La Casa Azul (Frida Kahlo) se agota</strong> — comprar las entradas online con semanas de antelación. Sin reserva previa, la fila puede ser de 3-4 horas.</div></div>
+        <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Teotihuacán: ir en la mañana</strong> — salir antes de las 8h para llegar a la apertura. El mediodía tiene 35°C sobre las pirámides y las masas turísticas hacen la experiencia agotadora.</div></div>
+        <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>El metro cuesta €0.25</strong> — es el transporte público más económico y eficiente. Usar siempre tarjeta recargable. Horas punta (7-9h y 18-20h) son muy concurridas.</div></div>
+        <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>La comida callejera es segura</strong> (si sigue estas reglas): elegir puestos con mucha gente local, verificar que cocinen a la vista, usar la salsa con moderación si no estás acostumbrado al picante.</div></div>
+        <div class="tip-item"><div class="tip-num">7</div><div class="tip-text"><strong>Los museos nacionales son baratos o gratuitos</strong> — el Museo de Antropología (€5), el Palacio de Bellas Artes (€2) y los murales de Diego Rivera en el Palacio Nacional son gratuitos. Semana de presupuesto cultural por menos de €20.</div></div>
+        <div class="tip-item"><div class="tip-num">8</div><div class="tip-text"><strong>Cargar siempre el móvil</strong> — CDMX tiene la mejor cobertura móvil de Latinoamérica. Una SIM local de Telcel o AT&T con datos ilimitados cuesta ~€5 por semana.</div></div>
+        <div class="tip-item"><div class="tip-num">9</div><div class="tip-text"><strong>Llevar efectivo para los mercados</strong> — los mercados y puestos callejeros solo aceptan efectivo. Cambiar en casas de cambio (mejor tipo) o retirar en cajero Citibanamex o HSBC (sin comisión con tarjetas internacionales).</div></div>
+        <div class="tip-item"><div class="tip-num">10</div><div class="tip-text"><strong>No llamar a los chilangos "mexicanos D.F."</strong> — CDMX ya no se llama D.F. desde 2016. Y los habitantes de la ciudad son "chilangos" — término que ellos usan con orgullo.</div></div>
+      </section>
+
+      <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+        <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+        <div class="emerg-grid">
+          <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">911</div><div class="emerg-note">Policía, ambulancia y bomberos</div></div>
+          <div class="emerg-card"><div class="emerg-label">LOCATEL (info ciudadana)</div><div class="emerg-value">55 5658-1111</div><div class="emerg-note">Información y denuncias CDMX</div></div>
+          <div class="emerg-card"><div class="emerg-label">Cruz Roja México</div><div class="emerg-value">55 5395-1111</div><div class="emerg-note">Emergencias médicas</div></div>
+          <div class="emerg-card"><div class="emerg-label">Turista extranjero</div><div class="emerg-value">800 906-2300</div><div class="emerg-note">SECTUR — atención a turistas 24h</div></div>
+          <div class="emerg-card" style="grid-column:1/-1"><div class="emerg-label">Embajada de España en México</div><div class="emerg-value" style="font-size:0.85rem">+52-55-5282-2974</div><div class="emerg-note">Galileo 114, Polanco — Emergencias consulares</div></div>
+        </div>
+      </section>
+
+      <div class="disclosure" role="note">
+        <strong style="color:#edeef2">Aviso sobre enlaces de afiliados:</strong> Algunos enlaces son de afiliados. Routlo recibe comisión sin coste adicional para ti. Precios orientativos en euros para 2026. Verificar siempre disponibilidad y precios actualizados antes de reservar.
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html"><img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);"></a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+function toggleMenu() { document.querySelector('nav').classList.toggle('menu-open'); }
+(function() {
+  'use strict';
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', function() { nav.classList.toggle('scrolled', window.scrollY > 40); }, { passive: true });
+
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#','');
+    const el = document.getElementById(id);
+    if (el) sections.push({ el: el, link: link });
+  });
+  function updateTOC() {
+    const scrollY = window.scrollY; const offset = 120; let current = null;
+    sections.forEach(function(s) { if (s.el.offsetTop - offset <= scrollY) current = s; });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+  window.addEventListener('scroll', updateTOC, { passive: true }); updateTOC();
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const el = document.getElementById(this.getAttribute('href').replace('#',''));
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 96, behavior: 'smooth' });
+    });
+  });
+
+  function initNav() {
+    const navAuth = document.getElementById('navAuth');
+    if (!navAuth) return;
+    if (localStorage.getItem('routlo_user')) {
+      navAuth.innerHTML = '<a href="../chatbot.html" style="color:#c9a96e;text-decoration:none;font-weight:600">Mi cuenta</a>';
+    } else {
+      navAuth.innerHTML = '<a href="../login.html" style="color:rgba(237,238,242,0.7);text-decoration:none;margin-right:12px">Iniciar sesión</a><a href="../registro.html" style="background:#c9a96e;color:#0a0a0a;padding:6px 16px;border-radius:8px;text-decoration:none;font-weight:600">Registrarse</a>';
+    }
+  }
+  initNav();
+
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver(function(entries) { entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }); }, { threshold: 0.08 });
+    document.querySelectorAll('.day-card, .tip-item').forEach(function(el) { el.classList.add('reveal'); obs.observe(el); });
+  }
+})();
+</script>
+</body>
+</html>
