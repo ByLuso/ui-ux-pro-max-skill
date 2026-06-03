@@ -205,6 +205,7 @@
     #map { flex: 1; height: 100%; background: #040810; }
     .leaflet-container { background: #040810 !important; font-family: 'Jost', sans-serif !important; }
     .leaflet-tile { filter: brightness(0.82) contrast(0.88) saturate(0.55) hue-rotate(190deg); }
+    .tile-osm-es { filter: grayscale(0.25) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg); }
     .leaflet-control-zoom { border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 10px !important; overflow: hidden; }
     .leaflet-control-zoom a { background: rgba(4,8,16,0.9) !important; color: rgba(237,238,242,0.7) !important; border-color: rgba(255,255,255,0.08) !important; }
     .leaflet-control-zoom a:hover { background: rgba(13,22,40,0.97) !important; color: #c9a96e !important; }
@@ -650,10 +651,23 @@ const map = L.map('map', {
   worldCopyJump: false
 });
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
-  subdomains: 'abcd', maxZoom: 20
-}).addTo(map);
+const _userLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+const _isEs = _userLang.startsWith('es');
+
+// Visitante hispanohablante → OSM (etiquetas en español: "Castilla y León", etc.) + filtro oscuro
+// Otros visitantes         → CartoDB dark (etiquetas en inglés)
+L.tileLayer(
+  _isEs
+    ? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  {
+    attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>' +
+      (_isEs ? ' contributors' : ' © <a href="https://carto.com/attributions">CARTO</a>'),
+    subdomains: _isEs ? 'abc' : 'abcd',
+    maxZoom: 20,
+    className: _isEs ? 'tile-osm-es' : ''
+  }
+).addTo(map);
 
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 

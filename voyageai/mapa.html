@@ -130,6 +130,9 @@
     .leaflet-tile {
       filter: brightness(0.8) contrast(0.9) saturate(0.6) hue-rotate(195deg);
     }
+    .tile-osm-es {
+      filter: grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg);
+    }
     .leaflet-control-zoom {
       border: 1px solid rgba(255,255,255,0.1) !important;
       border-radius: 10px !important; overflow: hidden;
@@ -468,11 +471,23 @@ const map = L.map('map', {
   worldCopyJump: true
 });
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
-  subdomains: 'abcd',
-  maxZoom: 20
-}).addTo(map);
+const _userLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+const _isEs = _userLang.startsWith('es');
+
+// Visitante hispanohablante → OSM (etiquetas en español) + filtro oscuro vía CSS
+// Otros visitantes         → CartoDB dark_all (etiquetas en inglés)
+L.tileLayer(
+  _isEs
+    ? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  {
+    attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>' +
+      (_isEs ? ' contributors' : ' © <a href="https://carto.com/attributions">CARTO</a>'),
+    subdomains: _isEs ? 'abc' : 'abcd',
+    maxZoom: 20,
+    className: _isEs ? 'tile-osm-es' : ''
+  }
+).addTo(map);
 
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 
