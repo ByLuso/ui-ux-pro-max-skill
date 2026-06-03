@@ -115,6 +115,27 @@
     .tips-list li:last-child{border-bottom:none}
     .tip-icon{color:var(--green);flex-shrink:0;font-size:1rem;margin-top:2px}
 
+    /* OPTION CARDS — día flexible */
+    .options-intro{font-size:.88rem;color:rgba(237,238,242,.6);line-height:1.7;margin-bottom:24px;padding:16px 20px;background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.15);border-radius:12px}
+    .options-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:4px}
+    .opt-card{background:#0d1628;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s}
+    .opt-card:hover{border-color:rgba(126,203,126,.3)}
+    .opt-header{display:flex;align-items:flex-start;gap:12px}
+    .opt-letter{font-family:'Bodoni Moda',serif;font-size:1.6rem;font-weight:600;color:var(--green);opacity:.5;line-height:1;flex-shrink:0}
+    .opt-title{font-size:.95rem;font-weight:500;line-height:1.3;margin-bottom:4px}
+    .opt-tags{display:flex;gap:6px;flex-wrap:wrap}
+    .opt-tag{font-size:.67rem;padding:2px 8px;border-radius:8px;background:rgba(100,200,100,.1);color:var(--green);border:1px solid rgba(100,200,100,.18)}
+    .opt-desc{font-size:.8rem;color:rgba(237,238,242,.58);line-height:1.65}
+    .opt-stops{list-style:none;margin-top:6px}
+    .opt-stops li{font-size:.78rem;color:rgba(237,238,242,.65);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:8px;align-items:baseline;line-height:1.5}
+    .opt-stops li:last-child{border-bottom:none}
+    .opt-stops li::before{content:'→';color:var(--green);font-size:.7rem;flex-shrink:0}
+    .opt-footer{margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+    .opt-km{font-size:.72rem;color:rgba(237,238,242,.4)}
+    .opt-nivel{font-size:.7rem;padding:2px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.1);color:rgba(237,238,242,.5)}
+    .opt-nivel.facil{border-color:rgba(100,200,100,.25);color:var(--green)}
+    .opt-nivel.medio{border-color:rgba(201,169,110,.25);color:var(--gold)}
+
     /* MAP STRIP */
     .route-strip{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin:24px 0;overflow:hidden}
     .route-node{font-size:.75rem;color:rgba(237,238,242,.75);background:#0d1628;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 14px;white-space:nowrap}
@@ -312,38 +333,108 @@
         </div>
       </div>
 
-      <!-- DÍA 3 -->
+      <!-- DÍA 3 — FLEXIBLE -->
       <div class="day-card">
         <div class="day-header">
           <div class="day-number">03</div>
           <div class="day-meta">
-            <h3>Priego, Cañamares, Fuertescusa y el Escabas</h3>
-            <div class="badges"><span class="badge">Castillo</span><span class="badge">Río</span><span class="badge">Gratis</span></div>
+            <h3>Día libre — Elige tu ruta</h3>
+            <div class="badges"><span class="badge">4 opciones</span><span class="badge">Todas gratis</span><span class="badge">Tú decides</span></div>
           </div>
         </div>
 
-        <div class="stop">
-          <div class="stop-name">Priego — El Balcón del Escabas</div>
-          <div class="stop-desc">Villa medieval de 900 habitantes construida sobre un promontorio calizo que cae verticalmente 150 m sobre la Hoz del Escabas. El Castillo de Priego (siglo XII, exterior libre) domina la confluencia del Escabas con el Cuervo. Desde la muralla norte hay una vista de vértigo sobre el río que discurre como una cinta verde en el fondo de la garganta. El casco histórico tiene portones con escudos heráldicos y una iglesia-fortaleza del siglo XIII con acceso libre al pórtico.</div>
-          <div class="stop-price">Gratis · Castillo exterior: gratis · Tapa en bar: €1.50</div>
-        </div>
+        <p class="options-intro">El tercer día depende de lo que más te haya gustado en los dos primeros y de tu nivel de energía. Las cuatro rutas son igualmente gratuitas y salen desde Beteta o Priego como base. Elige una — o mezcla tramos si tienes ganas.</p>
 
-        <div class="stop">
-          <div class="stop-name">Hoz del Escabas — Senda Ribereña</div>
-          <div class="stop-desc">Entre Priego y el Puente Vadillo, el Escabas discurre encajonado entre paredes de caliza con 4-5 km de senda señalizada que sigue el cauce del río. El agua tiene un color verde azulado que no se ve en ningún otro río español — efecto de la alta concentración de carbonatos del karst conquense. Nutrias y garzas reales son avistamientos habituales a primera hora de la mañana.</div>
-          <div class="stop-price">Gratis · Señalización PR-CU 49</div>
-        </div>
+        <div class="options-grid">
 
-        <div class="stop">
-          <div class="stop-name">Cañamares</div>
-          <div class="stop-desc">A 8 km de Priego, este pequeño pueblo conserva intacta su arquitectura serrana: casas de mampostería caliza con balcones de madera y bodegas excavadas en la roca. La ermita de la Virgen de la Hoz, a 1 km del pueblo por un camino de tierra, tiene una pequeña cascada junto al altar. El entorno de Cañamares concentra algunas de las rutas de senderismo menos frecuentadas de toda la Serranía.</div>
-          <div class="stop-price">Gratis</div>
-        </div>
+          <!-- OPCIÓN A -->
+          <div class="opt-card">
+            <div class="opt-header">
+              <div class="opt-letter">A</div>
+              <div>
+                <div class="opt-title">Hoz de Matasnos y Arroyo del Buitre</div>
+                <div class="opt-tags"><span class="opt-tag">Garganta</span><span class="opt-tag">Sin turistas</span><span class="opt-tag">Fotogénica</span></div>
+              </div>
+            </div>
+            <div class="opt-desc">La joya desconocida de la comarca. La Hoz de Matasnos es un cañón estrecho excavado por el arroyo homónimo en la caliza del macizo de Beteta — tan angosto en su parte central que las paredes casi se tocan sobre tu cabeza. Sin señalización oficial ni infraestructura: solo tú, el agua y la roca. Se accede desde Beteta por pista forestal (4x4 recomendado, aunque muchos llegan en turismo con cuidado). El arroyo del Buitre desemboca en la hoz con una cascada de 8 m accesible a pie.</div>
+            <ul class="opt-stops">
+              <li>Beteta → pista forestal Hoz de Matasnos (5 km)</li>
+              <li>Descenso por el arroyo entre paredes calizas (2 km)</li>
+              <li>Cascada del Arroyo del Buitre</li>
+              <li>Vuelta por la cresta sur con vistas a la Hoz de Beteta</li>
+            </ul>
+            <div class="opt-footer">
+              <span class="opt-km">~12 km · 4-5 h · sin señalizar</span>
+              <span class="opt-nivel medio">Medio</span>
+            </div>
+          </div>
 
-        <div class="stop">
-          <div class="stop-name">Fuertescusa</div>
-          <div class="stop-desc">Uno de los pueblos más pequeños y auténticos de la serranía: apenas treinta vecinos permanentes. La carretera que llega es de un solo carril con arcenes de hierba. El tiempo aquí no es una metáfora: el reloj del campanario lleva parado años. Las casas de piedra y madera oscurecida por el tiempo forman la imagen más honesta de la Castilla interior. Ideal para el anochecer: cielo sin contaminación lumínica y silencio absoluto.</div>
-          <div class="stop-price">Gratis · Astroturismo natural (sin instalación, solo cielo)</div>
+          <!-- OPCIÓN B -->
+          <div class="opt-card">
+            <div class="opt-header">
+              <div class="opt-letter">B</div>
+              <div>
+                <div class="opt-title">Priego + Hoz del Escabas + Senda Ribereña</div>
+                <div class="opt-tags"><span class="opt-tag">Castillo</span><span class="opt-tag">Río turquesa</span><span class="opt-tag">Nutrias</span></div>
+              </div>
+            </div>
+            <div class="opt-desc">Para los que quieren historia y naturaleza en el mismo día. Priego se asienta sobre un promontorio calizo de 150 m sobre el Escabas — el castillo del siglo XII domina la confluencia con el Cuervo. Desde ahí bajas por la senda PR-CU 49 al fondo de la hoz, donde el agua tiene ese color verde azulado característico del karst conquense. Entre Priego y el Puente Vadillo hay 5 km de camino sin desnivel junto al río donde avistan nutrias a menudo por la mañana.</div>
+            <ul class="opt-stops">
+              <li>Priego — castillo exterior y mirador norte (gratis)</li>
+              <li>Descenso senda PR-CU 49 al río Escabas</li>
+              <li>Senda ribereña Priego → Puente Vadillo (5 km)</li>
+              <li>Cañamares: ermita de la Virgen de la Hoz + cascada</li>
+            </ul>
+            <div class="opt-footer">
+              <span class="opt-km">~10 km · 3-4 h · señalizado</span>
+              <span class="opt-nivel facil">Fácil</span>
+            </div>
+          </div>
+
+          <!-- OPCIÓN C -->
+          <div class="opt-card">
+            <div class="opt-header">
+              <div class="opt-letter">C</div>
+              <div>
+                <div class="opt-title">Fuertescusa, Cañamares y cielos Bortle 2</div>
+                <div class="opt-tags"><span class="opt-tag">Pueblos</span><span class="opt-tag">Astroturismo</span><span class="opt-tag">Silencio</span></div>
+              </div>
+            </div>
+            <div class="opt-desc">Para los que quieren desconectar de verdad. Fuertescusa tiene treinta vecinos permanentes y una carretera de un carril con arcenes de hierba. El reloj del campanario lleva años parado. Cañamares, a 8 km, conserva bodegas excavadas en la roca y una ermita con cascada junto al altar. Por la noche, el cielo de este rincón de la serranía tiene una clasificación Bortle de 2 sobre 9 — la Vía Láctea se ve como una nube. Lleva una manta y una botella de vino.</div>
+            <ul class="opt-stops">
+              <li>Fuertescusa — paseo por el pueblo, bar si abre</li>
+              <li>Cañamares — bodegas rupestres y arquitectura serrana</li>
+              <li>Ermita de la Virgen de la Hoz (1 km desde Cañamares)</li>
+              <li>Anochecer en Fuertescusa — observación cielo nocturno</li>
+            </ul>
+            <div class="opt-footer">
+              <span class="opt-km">~5 km caminando · todo el día tranquilo</span>
+              <span class="opt-nivel facil">Muy fácil</span>
+            </div>
+          </div>
+
+          <!-- OPCIÓN D -->
+          <div class="opt-card">
+            <div class="opt-header">
+              <div class="opt-letter">D</div>
+              <div>
+                <div class="opt-title">Senda del Guadiela + Baños y Laguna</div>
+                <div class="opt-tags"><span class="opt-tag">Agua</span><span class="opt-tag">Baño</span><span class="opt-tag">Descanso</span></div>
+              </div>
+            </div>
+            <div class="opt-desc">Si los días anteriores han sido intensos y el cuerpo pide calma: vuelve a la Hoz de Beteta y al Tobar pero en modo lento. La senda del río Guadiela entre los Baños de Beteta y el salto aguas arriba es corta (4 km ida y vuelta) y llana, con pozas donde bañarse en verano. La Laguna del Tobar a primera hora de la tarde tiene una luz completamente diferente a la de la mañana — más dorada, con menos visitantes. Termina el día con una cerveza en la terraza de Beteta viendo el atardecer sobre la hoz.</div>
+            <ul class="opt-stops">
+              <li>Senda del Guadiela aguas arriba desde Beteta</li>
+              <li>Pozas termales — baño en el río (verano)</li>
+              <li>Laguna del Tobar en luz de tarde</li>
+              <li>Beteta pueblo — terraza, morteruelo, descanso</li>
+            </ul>
+            <div class="opt-footer">
+              <span class="opt-km">~4-6 km · ritmo propio · sin prisas</span>
+              <span class="opt-nivel facil">Fácil</span>
+            </div>
+          </div>
+
         </div>
       </div>
 
