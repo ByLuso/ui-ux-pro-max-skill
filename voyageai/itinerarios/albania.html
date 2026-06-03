@@ -1,1437 +1,337 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Albania: Tirana, Berat y Riviera — 6 días | Routlo</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #040810;
-      --gold: #c9a96e;
-      --gold-dim: rgba(201,169,110,.18);
-      --glass: rgba(255,255,255,.04);
-      --glass-border: rgba(255,255,255,.08);
-      --text: #e8e4dc;
-      --muted: #8a8680;
-      --accent1: #700a0a;
-      --accent2: #4a7fa5;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Jost', sans-serif;
-      font-weight: 300;
-      line-height: 1.7;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ── Aurora ── */
-    .aurora {
-      position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 15% 20%, rgba(112,10,10,.22) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 50% at 85% 75%, rgba(74,127,165,.14) 0%, transparent 70%),
-        radial-gradient(ellipse 70% 40% at 50% 10%, rgba(112,10,10,.10) 0%, transparent 60%);
-      animation: aurora-drift 18s ease-in-out infinite alternate;
-    }
-    @keyframes aurora-drift {
-      0%   { opacity: .7; transform: scale(1) translateY(0); }
-      50%  { opacity: 1;  transform: scale(1.04) translateY(-20px); }
-      100% { opacity: .8; transform: scale(1.01) translateY(10px); }
-    }
-
-    /* ── Nav ── */
-    nav[role="navigation"] {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: .9rem 2rem;
-      transition: background .4s, backdrop-filter .4s;
-    }
-    nav[role="navigation"].scrolled {
-      background: rgba(4,8,16,.85);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--glass-border);
-    }
-    .nav-logo {
-      font-family: 'Bodoni Moda', serif;
-      font-size: 1.35rem;
-      color: var(--gold);
-      text-decoration: none;
-      letter-spacing: .04em;
-    }
-    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: .88rem;
-      font-weight: 400;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      transition: color .25s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-
-    /* ── Hero ── */
-    .hero {
-      position: relative;
-      min-height: 72vh;
-      display: flex; align-items: flex-end;
-      padding: 0 2rem 4rem;
-      background: linear-gradient(160deg,#0f0505 0%,#2a0808 40%,#700a0a 70%,rgba(74,127,165,.25) 100%);
-    }
-    .hero::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 55% 50% at 70% 40%, rgba(74,127,165,.18) 0%, transparent 65%);
-      pointer-events: none;
-    }
-    .hero-content { position: relative; z-index: 2; max-width: 820px; }
-    .hero-eyebrow {
-      font-size: .78rem; font-weight: 500; letter-spacing: .18em;
-      text-transform: uppercase; color: var(--gold); opacity: .85;
-      margin-bottom: .7rem;
-    }
-    .hero-title {
-      font-family: 'Bodoni Moda', serif;
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
-      line-height: 1.15;
-      color: #fff;
-      margin-bottom: .6rem;
-    }
-    .hero-subtitle {
-      font-size: 1.05rem; color: rgba(255,255,255,.55); margin-bottom: 1.8rem;
-    }
-    .hero-badges { display: flex; flex-wrap: wrap; gap: .55rem; }
-    .badge {
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.13);
-      border-radius: 20px;
-      padding: .3rem .85rem;
-      font-size: .78rem; color: rgba(255,255,255,.75);
-      backdrop-filter: blur(8px);
-    }
-    .badge-gold {
-      background: rgba(201,169,110,.15);
-      border-color: rgba(201,169,110,.35);
-      color: var(--gold);
-    }
-
-    /* ── Layout ── */
-    .itin-layout {
-      position: relative; z-index: 1;
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 0;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem 5rem;
-    }
-
-    /* ── TOC ── */
-    .toc-sidebar {
-      position: sticky; top: 5.5rem;
-      height: fit-content;
-      padding-right: 1.5rem;
-    }
-    .toc-title {
-      font-size: .72rem; font-weight: 600; letter-spacing: .16em;
-      text-transform: uppercase; color: var(--gold); opacity: .7;
-      margin-bottom: 1rem;
-    }
-    .toc-list { list-style: none; }
-    .toc-list li + li { margin-top: .1rem; }
-    .toc-list a {
-      display: block;
-      padding: .38rem .75rem;
-      border-left: 2px solid transparent;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: .82rem;
-      border-radius: 0 4px 4px 0;
-      transition: color .2s, border-color .2s, background .2s;
-    }
-    .toc-list a:hover,
-    .toc-list a.active {
-      color: var(--gold);
-      border-left-color: var(--gold);
-      background: rgba(201,169,110,.06);
-    }
-
-    /* ── Article ── */
-    .itin-article { min-width: 0; }
-
-    /* ── Section headings ── */
-    .section-label {
-      font-size: .72rem; font-weight: 600; letter-spacing: .2em;
-      text-transform: uppercase; color: var(--gold); opacity: .75;
-      margin-bottom: .5rem;
-    }
-    h2.section-title {
-      font-family: 'Bodoni Moda', serif;
-      font-size: 1.85rem;
-      color: #fff;
-      margin-bottom: 1.5rem;
-      line-height: 1.2;
-    }
-
-    /* ── Summary bar ── */
-    .summary-bar {
-      display: flex; flex-wrap: wrap; gap: 1.2rem;
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      padding: 1.4rem 1.8rem;
-      margin-bottom: 2.5rem;
-      backdrop-filter: blur(12px);
-    }
-    .sum-item { text-align: center; }
-    .sum-val {
-      display: block; font-size: 1.3rem; font-weight: 600; color: var(--gold);
-    }
-    .sum-lbl { font-size: .74rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
-
-    /* ── Alert ── */
-    .alert {
-      border-radius: 12px;
-      padding: 1rem 1.4rem;
-      margin-bottom: 1.8rem;
-      font-size: .88rem;
-      border-left: 3px solid;
-    }
-    .alert-warning {
-      background: rgba(201,169,110,.09);
-      border-color: var(--gold);
-      color: rgba(232,228,220,.85);
-    }
-    .alert-info {
-      background: rgba(74,127,165,.1);
-      border-color: rgba(74,127,165,.5);
-      color: rgba(232,228,220,.85);
-    }
-    .alert strong { color: var(--gold); }
-
-    /* ── Budget table ── */
-    .budget-table { width: 100%; border-collapse: collapse; margin-bottom: 2.5rem; font-size: .88rem; }
-    .budget-table th {
-      text-align: left; padding: .6rem .9rem;
-      border-bottom: 1px solid rgba(201,169,110,.25);
-      color: var(--gold); font-weight: 500; font-size: .78rem;
-      text-transform: uppercase; letter-spacing: .1em;
-    }
-    .budget-table td { padding: .55rem .9rem; border-bottom: 1px solid var(--glass-border); }
-    .budget-table tr:last-child td { border-bottom: none; }
-    .budget-table .total td { color: var(--gold); font-weight: 600; border-top: 1px solid rgba(201,169,110,.3); }
-    .budget-table .eco { color: #6eb88a; }
-    .budget-table .com { color: #a0c4e0; }
-
-    /* ── Transport cards ── */
-    .transport-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
-    .transport-card {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 1.1rem 1.3rem;
-      backdrop-filter: blur(10px);
-    }
-    .transport-card .t-icon { font-size: 1.5rem; margin-bottom: .5rem; }
-    .transport-card .t-name { font-size: .82rem; font-weight: 600; color: var(--gold); margin-bottom: .3rem; }
-    .transport-card .t-desc { font-size: .79rem; color: var(--muted); line-height: 1.5; }
-
-    /* ── Day cards ── */
-    .day-card {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 2rem;
-      backdrop-filter: blur(10px);
-    }
-    .day-header {
-      display: flex; align-items: center; gap: 1.2rem;
-      padding: 1.4rem 1.8rem;
-      border-bottom: 1px solid var(--glass-border);
-      background: rgba(255,255,255,.02);
-    }
-    .day-num {
-      font-family: 'Bodoni Moda', serif;
-      font-size: 2.2rem; font-weight: 700; color: var(--gold);
-      line-height: 1; flex-shrink: 0;
-    }
-    .day-info { flex: 1; }
-    .day-title { font-size: 1.08rem; font-weight: 600; color: #fff; margin-bottom: .1rem; }
-    .day-subtitle { font-size: .82rem; color: var(--muted); }
-    .day-meta { display: flex; gap: .5rem; flex-wrap: wrap; }
-    .meta-tag {
-      background: rgba(201,169,110,.1);
-      border: 1px solid rgba(201,169,110,.2);
-      border-radius: 20px;
-      padding: .18rem .65rem;
-      font-size: .72rem; color: var(--gold);
-    }
-    .day-body { padding: 1.4rem 1.8rem; }
-
-    /* ── Activities ── */
-    .activities { display: flex; flex-direction: column; gap: 0; }
-    .activity { display: grid; grid-template-columns: 64px 28px 1fr; gap: 0 .8rem; position: relative; }
-    .activity:not(:last-child) { margin-bottom: 0; }
-    .act-time {
-      font-size: .75rem; font-weight: 500; color: var(--muted);
-      padding-top: .15rem; text-align: right; line-height: 1.4;
-    }
-    .act-connector { display: flex; flex-direction: column; align-items: center; }
-    .act-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--gold); flex-shrink: 0; margin-top: .18rem;
-      box-shadow: 0 0 8px rgba(201,169,110,.5);
-    }
-    .act-line {
-      width: 1px; flex: 1; background: linear-gradient(to bottom, rgba(201,169,110,.35), rgba(201,169,110,.05));
-      min-height: 2rem;
-    }
-    .activity:last-child .act-line { display: none; }
-    .act-content { padding-bottom: 1.2rem; }
-    .act-title { font-size: .92rem; font-weight: 600; color: #fff; margin-bottom: .25rem; }
-    .act-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; margin-bottom: .4rem; }
-    .act-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
-    .act-tag {
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.09);
-      border-radius: 12px;
-      padding: .12rem .55rem;
-      font-size: .7rem; color: rgba(232,228,220,.6);
-    }
-
-    /* ── Hotels & Gastro grids ── */
-    .hotel-grid, .gastro-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
-    .hotel-card, .gastro-card {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      padding: 1.3rem;
-      backdrop-filter: blur(10px);
-      transition: border-color .25s;
-    }
-    .hotel-card:hover, .gastro-card:hover { border-color: rgba(201,169,110,.3); }
-    .hotel-tier {
-      font-size: .68rem; font-weight: 600; letter-spacing: .15em;
-      text-transform: uppercase; color: var(--gold); opacity: .75; margin-bottom: .4rem;
-    }
-    .hotel-name, .gastro-name {
-      font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: .3rem;
-    }
-    .hotel-price { font-size: .88rem; color: var(--gold); margin-bottom: .5rem; }
-    .hotel-desc, .gastro-desc { font-size: .8rem; color: var(--muted); line-height: 1.55; }
-    .gastro-type {
-      font-size: .7rem; font-weight: 600; letter-spacing: .13em;
-      text-transform: uppercase; color: rgba(201,169,110,.7); margin-bottom: .3rem;
-    }
-    .gastro-price { font-size: .82rem; color: #6eb88a; margin-top: .4rem; }
-
-    /* ── Top 10 ── */
-    .top10-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .85rem; margin-bottom: 2.5rem; }
-    .top10-item {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 1rem 1.2rem;
-      backdrop-filter: blur(10px);
-      display: flex; gap: .8rem; align-items: flex-start;
-      transition: border-color .25s;
-    }
-    .top10-item:hover { border-color: rgba(201,169,110,.3); }
-    .top10-num {
-      font-family: 'Bodoni Moda', serif;
-      font-size: 1.4rem; color: var(--gold); opacity: .6;
-      line-height: 1; flex-shrink: 0;
-    }
-    .top10-text { }
-    .top10-name { font-size: .9rem; font-weight: 600; color: #fff; margin-bottom: .15rem; }
-    .top10-tip { font-size: .76rem; color: var(--muted); line-height: 1.5; }
-
-    /* ── Phrases ── */
-    .phrases-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .85rem; margin-bottom: 2.5rem; }
-    .phrase-card {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 1rem 1.2rem;
-      backdrop-filter: blur(10px);
-    }
-    .phrase-original { font-size: .85rem; font-weight: 600; color: var(--gold); margin-bottom: .2rem; }
-    .phrase-translation { font-size: .8rem; color: var(--muted); margin-bottom: .2rem; }
-    .phrase-pronunciation { font-size: .75rem; color: rgba(232,228,220,.4); font-style: italic; }
-
-    /* ── Emergency ── */
-    .emergency-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .85rem; margin-bottom: 2.5rem; }
-    .emergency-card {
-      background: rgba(255,60,60,.05);
-      border: 1px solid rgba(255,100,100,.12);
-      border-radius: 12px;
-      padding: 1rem 1.2rem;
-      backdrop-filter: blur(10px);
-    }
-    .emergency-icon { font-size: 1.3rem; margin-bottom: .4rem; }
-    .emergency-label { font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,150,150,.7); margin-bottom: .2rem; }
-    .emergency-value { font-size: .92rem; font-weight: 600; color: #fff; margin-bottom: .15rem; }
-    .emergency-note { font-size: .76rem; color: var(--muted); }
-
-    /* ── Checklist ── */
-    .checklist {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: .5rem; margin-bottom: 2.5rem;
-    }
-    .check-item {
-      display: flex; align-items: flex-start; gap: .7rem;
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 10px;
-      padding: .7rem 1rem;
-      backdrop-filter: blur(8px);
-      font-size: .83rem; color: rgba(232,228,220,.8);
-    }
-    .check-box {
-      width: 16px; height: 16px; border-radius: 4px;
-      border: 1.5px solid rgba(201,169,110,.4);
-      flex-shrink: 0; margin-top: .1rem;
-    }
-
-    /* ── Section spacing ── */
-    .itin-section { margin-bottom: 3.5rem; }
-
-    /* ── Divider ── */
-    .divider {
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(201,169,110,.2), transparent);
-      margin: 2.5rem 0;
-    }
-
-    /* ── Footer ── */
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--glass-border);
-      padding: 2.5rem 2rem;
-      text-align: center;
-      color: var(--muted);
-      font-size: .82rem;
-    }
-    footer a { color: var(--gold); text-decoration: none; }
-
-    /* ── Responsive ── */
-    @media (max-width: 1024px) {
-      .itin-layout {
-        grid-template-columns: 1fr !important;
-      }
-      .toc-sidebar {
-        display: none !important;
-      }
-    }
-    @media (max-width: 768px) {
-      .hero { padding: 0 1.2rem 3rem; }
-      .hero-title { font-size: 2rem; }
-      .itin-layout { padding: 2rem 1rem 4rem !important; }
-      .summary-bar { gap: .8rem !important; }
-      .hotel-grid, .gastro-grid, .top10-grid, .emergency-grid, .phrases-grid { grid-template-columns: 1fr !important; }
-      .transport-grid { grid-template-columns: 1fr 1fr !important; }
-      .day-header { flex-direction: column !important; align-items: flex-start !important; gap: .6rem !important; }
-    }
-    @media (max-width: 640px) {
-      .activity { grid-template-columns: 52px 22px 1fr !important; }
-      .transport-grid { grid-template-columns: 1fr !important; }
-      .checklist { grid-template-columns: 1fr !important; }
-    }
-  </style>
-  <!-- Google Analytics 4 -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Albania — 7 días | Routlo</title>
+  <meta name="description" content="Itinerario de 7 días en Albania: la Riviera Albanesa, Gjirokastër y Bérat UNESCO, los Alpes albaneses y la costa adriática más barata de Europa desde €600."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-G5XGWQQZ3J');
-  </script>
-  <!-- Google AdSense (Auto Ads) -->
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+  <style>
+    html,body{background:#040810!important;color:#edeef2!important;font-family:'Jost',system-ui,sans-serif}
+    nav[role="navigation"]{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background .3s}
+    nav[role="navigation"].scrolled{background:rgba(4,8,16,0.95)}
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a1a2e 0%,transparent 70%);top:-200px;left:-150px;opacity:0.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#2a1a1a 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1a2a 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.3;animation:blob 14s ease-in-out infinite -3.5s}
+    @keyframes blob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-60px) scale(1.08)}66%{transform:translate(-30px,40px) scale(0.94)}}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:130px 24px 56px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#07060a 0%,#12101e 40%,#1e1830 70%,rgba(201,169,110,0.12) 100%)}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 55%,rgba(4,8,16,0.1) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.5);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.5);text-decoration:none}.dest-breadcrumb a:hover{color:#c9a96e}.dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.1rem,3vw,1.9rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:22px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:28px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+    .dest-summary-bar{display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:600px;position:relative;z-index:1}
+    .dest-sum-item{flex:1;background:#070d1a;padding:14px;text-align:center}
+    .dest-sum-label{font-size:0.68rem;color:rgba(237,238,242,0.5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+    .dest-sum-val{font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e}
+    .itin-layout{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start}
+    .toc{position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem}
+    .toc-title{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(237,238,242,0.5);margin-bottom:12px}
+    .toc-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+    .toc-list a{display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.5);text-decoration:none;transition:all .2s;border-left:2px solid transparent}
+    .toc-list a:hover{background:rgba(255,255,255,0.08);color:#edeef2}
+    .toc-list a.active{color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.12)}
+    .itin-section{margin-bottom:52px;scroll-margin-top:96px}
+    .section-heading{font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:22px;display:flex;align-items:center;gap:12px;color:#edeef2}
+    .section-heading::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
+    .day-card{background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:24px}
+    .day-header{padding:16px 20px 12px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);display:flex;align-items:center;gap:16px}
+    .day-num{font-family:'Bodoni Moda',Georgia,serif;font-size:2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:54px}
+    .day-title{font-family:'Bodoni Moda',Georgia,serif;font-size:1.05rem;font-weight:700;color:#edeef2;margin-bottom:3px}
+    .day-subtitle{font-size:0.78rem;color:rgba(237,238,242,0.5)}
+    .day-meta{margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+    .day-meta .badge{padding:3px 10px;border-radius:100px;font-size:0.7rem;background:rgba(201,169,110,0.12);color:#c9a96e;border:1px solid rgba(201,169,110,0.2)}
+    .day-body{padding:20px}
+    .stop{display:flex;gap:14px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.06)}
+    .stop:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+    .stop-icon{width:36px;height:36px;border-radius:10px;background:rgba(201,169,110,0.12);border:1px solid rgba(201,169,110,0.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;margin-top:2px}
+    .stop-name{font-weight:600;color:#edeef2;margin-bottom:3px;font-size:0.9rem}
+    .stop-desc{font-size:0.82rem;color:rgba(237,238,242,0.6);line-height:1.55}
+    .stop-tip{font-size:0.78rem;color:#c9a96e;margin-top:4px}
+    .budget-table{width:100%;border-collapse:collapse;font-size:0.85rem}
+    .budget-table th{text-align:left;padding:10px 14px;background:rgba(255,255,255,0.04);color:rgba(237,238,242,0.5);font-size:0.72rem;text-transform:uppercase;letter-spacing:.07em;font-weight:500}
+    .budget-table td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(237,238,242,0.8)}
+    .budget-table tr:last-child td{border-bottom:none;font-weight:700;color:#c9a96e}
+    .budget-table .cat{color:rgba(237,238,242,0.5);font-size:0.78rem}
+    .tip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+    .tip-card{background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px}
+    .tip-card h4{font-size:0.88rem;font-weight:600;color:#edeef2;margin-bottom:6px}
+    .tip-card p{font-size:0.8rem;color:rgba(237,238,242,0.6);line-height:1.5;margin:0}
+    .phrase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+    .phrase-card{background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px}
+    .phrase-es{font-size:0.78rem;color:rgba(237,238,242,0.5);margin-bottom:4px}
+    .phrase-local{font-size:0.92rem;font-weight:600;color:#c9a96e}
+    .phrase-pron{font-size:0.73rem;color:rgba(237,238,242,0.4);margin-top:2px;font-style:italic}
+    .hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:16px}
+    .hotel-card{background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px}
+    .hotel-name{font-weight:700;color:#edeef2;margin-bottom:4px;font-size:0.9rem}
+    .hotel-price{color:#c9a96e;font-size:0.85rem;margin-bottom:6px}
+    .hotel-desc{font-size:0.78rem;color:rgba(237,238,242,0.55);line-height:1.5}
+    .checklist{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+    .checklist li{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:rgba(237,238,242,0.7);background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 12px}
+    .checklist li::before{content:'☐';color:#c9a96e;font-size:1rem;flex-shrink:0}
+    .emergency-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+    .em-card{background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;text-align:center}
+    .em-num{font-family:'Bodoni Moda',Georgia,serif;font-size:1.4rem;font-weight:700;color:#c9a96e}
+    .em-label{font-size:0.75rem;color:rgba(237,238,242,0.5);margin-top:4px}
+    .food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+    .food-card{background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px}
+    .food-name{font-weight:700;color:#edeef2;margin-bottom:4px;font-size:0.9rem}
+    .food-price{color:#c9a96e;font-size:0.8rem;margin-bottom:6px}
+    .food-desc{font-size:0.78rem;color:rgba(237,238,242,0.55);line-height:1.5}
+    .disclosure{font-size:0.74rem;color:rgba(237,238,242,0.3);line-height:1.6;padding:24px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:14px;margin-top:40px}
+    @media(max-width:768px){.itin-layout{grid-template-columns:1fr}.toc{display:none}}
+    .transport-step{display:flex;gap:14px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06)}
+    .transport-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+    .tr-icon{width:34px;height:34px;border-radius:8px;background:rgba(201,169,110,0.1);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;margin-top:2px}
+    .tr-name{font-weight:600;color:#edeef2;font-size:0.88rem;margin-bottom:2px}
+    .tr-info{font-size:0.8rem;color:rgba(237,238,242,0.55);line-height:1.5}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 </head>
 <body>
-
-<div class="aurora"></div>
-
-<!-- Nav -->
-<nav role="navigation" aria-label="Navegación principal">
-  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
-    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
-  </a>
-  <ul class="nav-links" role="list">
-    <li><a href="../index.html">Inicio</a></li>
-    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
-    <li><a href="../mapa.html">Mapa</a></li>
-    <li><a href="../chatbot.html">Chatbot IA</a></li>
-    <li><a href="../itinerarios-espana.html">España</a></li>
-    <li class="nav-auth" id="navAuth"></li>
-  </ul>
-  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-  </button>
+<div class="aurora"><span class="aurora-span"></span></div>
+<nav role="navigation">
+  <a href="../index.html" style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.35rem;font-weight:700;color:#edeef2;text-decoration:none;letter-spacing:-.01em">Routlo</a>
+  <div style="display:flex;align-items:center;gap:24px">
+    <a href="../itinerarios.html" style="font-size:0.85rem;color:rgba(237,238,242,0.6);text-decoration:none">Itinerarios</a>
+    <a href="../index.html#asistente" style="font-size:0.85rem;color:rgba(237,238,242,0.6);text-decoration:none">Asistente</a>
+    <a href="../registro.html" style="padding:8px 18px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:100px;font-size:0.82rem;font-weight:600;color:#040810;text-decoration:none">Empezar</a>
+  </div>
 </nav>
-
-<!-- Hero -->
-<section class="hero">
-  <div class="hero-content">
-    <p class="hero-eyebrow">Itinerario Completo · Albania</p>
-    <h1 class="hero-title">Albania:<br>Tirana, Berat y Riviera</h1>
-    <p class="hero-subtitle">Tirana · Krujë · Berat · Saranda · Ksamil · Gjirokastra</p>
-    <div class="hero-badges">
-      <span class="badge">📅 6 días / 5 noches</span>
-      <span class="badge">👥 Mochileros / Pareja</span>
-      <span class="badge badge-gold">💶 €550–900/persona</span>
-      <span class="badge">🌍 Europa · Albania</span>
-      <span class="badge">🦅 Historia + Playas + Gastronomía</span>
-    </div>
+<section class="dest-hero">
+  <div class="dest-hero-bg"></div><div class="dest-hero-overlay"></div>
+  <nav class="dest-breadcrumb" aria-label="breadcrumb">
+    <a href="../index.html">Inicio</a><span>›</span><a href="../itinerarios.html">Itinerarios</a><span>›</span><span style="color:#c9a96e">Albania</span>
+  </nav>
+  <h1 class="dest-title">Albania</h1>
+  <p class="dest-country">Riviera virgen, castillos UNESCO y Alpes albaneses</p>
+  <div class="dest-meta">
+    <span class="dest-badge">🌍 Europa · Adriático</span>
+    <span class="dest-badge">📅 7 días</span>
+    <span class="dest-badge gold">💶 €600–850</span>
+    <span class="dest-badge">🏖️ Costa + Montaña</span>
+    <span class="dest-badge">📍 Mayo–Octubre</span>
+  </div>
+  <div class="dest-summary-bar">
+    <div class="dest-sum-item"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€600–850</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">7 días</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Moneda</div><div class="dest-sum-val">ALL / EUR</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Idioma</div><div class="dest-sum-val">Albanés</div></div>
   </div>
 </section>
-
-<!-- Layout -->
 <div class="itin-layout">
-
-  <!-- TOC Sidebar -->
-  <aside class="toc-sidebar">
-    <p class="toc-title">Contenido</p>
+  <aside class="toc">
+    <div class="toc-title">Contenidos</div>
     <ul class="toc-list">
       <li><a href="#resumen">Resumen</a></li>
       <li><a href="#presupuesto">Presupuesto</a></li>
-      <li><a href="#transporte">Transporte</a></li>
+      <li><a href="#transporte">Cómo llegar</a></li>
+      <li><a href="#dias">Día a día</a></li>
       <li><a href="#alojamiento">Alojamiento</a></li>
-      <li><a href="#dia1">Día 1 · Tirana</a></li>
-      <li><a href="#dia2">Día 2 · Krujë + Durrës</a></li>
-      <li><a href="#dia3">Día 3 · Berat</a></li>
-      <li><a href="#dia4">Día 4 · Saranda + Ksamil</a></li>
-      <li><a href="#dia5">Día 5 · Gjirokastra</a></li>
-      <li><a href="#dia6">Día 6 · Riviera y salida</a></li>
-      <li><a href="#top10">Top 10 visitas</a></li>
       <li><a href="#gastronomia">Gastronomía</a></li>
-      <li><a href="#frases">Frases albanesas</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#frases">Frases útiles</a></li>
       <li><a href="#emergencias">Emergencias</a></li>
       <li><a href="#checklist">Checklist</a></li>
     </ul>
   </aside>
-
-  <!-- Article -->
-  <article class="itin-article">
-
-    <!-- RESUMEN -->
+  <main>
     <section class="itin-section" id="resumen">
-      <p class="section-label">Visión general</p>
-      <h2 class="section-title">Albania en 6 días</h2>
-
-      <div class="summary-bar">
-        <div class="sum-item">
-          <span class="sum-val">6</span>
-          <span class="sum-lbl">Días</span>
-        </div>
-        <div class="sum-item">
-          <span class="sum-val">4</span>
-          <span class="sum-lbl">Destinos</span>
-        </div>
-        <div class="sum-item">
-          <span class="sum-val">€550–900</span>
-          <span class="sum-lbl">Por persona</span>
-        </div>
-        <div class="sum-item">
-          <span class="sum-val">Fácil</span>
-          <span class="sum-lbl">Dificultad</span>
-        </div>
-        <div class="sum-item">
-          <span class="sum-val">May–Sep</span>
-          <span class="sum-lbl">Mejor época</span>
-        </div>
-      </div>
-
-      <div class="alert alert-warning">
-        <strong>💰 Albania usa Lek (ALL) + Euro es ampliamente aceptado:</strong> Llevar efectivo en ambas monedas. Los cajeros de Tirana dan euros. Muchos restaurantes y hoteles aceptan euros directamente. La tarjeta de crédito funciona en ciudades principales pero el efectivo es imprescindible en zonas rurales y playas.
-      </div>
-
-      <div class="alert alert-info">
-        <strong>ℹ️ El país más barato de Europa:</strong> Albania ofrece una relación calidad-precio excepcional. Una comida completa con bebida cuesta €3–6, un hostal de calidad €12–18/noche y las playas de cristal rivalizan con Grecia a una fracción del precio. No se necesita visado para ciudadanos de la UE.
+      <h2 class="section-heading">¿Por qué Albania?</h2>
+      <div style="background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;line-height:1.75;color:rgba(237,238,242,0.75);font-size:0.9rem">
+        <p style="margin-bottom:14px">Albania es la Grecia de hace 30 años que todavía no ha sido descubierta. Su Riviera tiene 70 km de acantilados calcáreos con calas de aguas turquesas a las que solo se llega a pie o en barca, con un único chiringuito sin WiFi y sin turistas masivos. Enver Hoxha, el dictador que aisló Albania del mundo (1944–1985), construyó 750.000 búnkeres en todo el país; algunos se han convertido en museos, otros en bares o establos.</p>
+        <p style="margin-bottom:14px">Bérat y Gjirokastër son dos ciudades Patrimonio UNESCO donde los albaneses viven en casas otomanas del s. XVIII entre calles empedradas medievales. Los Alpes albaneses —"las montañas malditas" según la cartografía italiana— son algunos de los paisajes más salvajes de Europa.</p>
+        <p style="margin-bottom:0">El presupuesto: cena completa con vino desde €5, habitación €12–20, taxi de ciudad a ciudad €15–25. La hospitalidad albanesa (<em>besa</em>) convierte a Albania en uno de los países más seguros de Europa.</p>
       </div>
     </section>
-
-    <div class="divider"></div>
-
-    <!-- PRESUPUESTO -->
     <section class="itin-section" id="presupuesto">
-      <p class="section-label">Finanzas</p>
-      <h2 class="section-title">Presupuesto detallado</h2>
-
-      <table class="budget-table">
-        <thead>
-          <tr>
-            <th>Categoría</th>
-            <th class="eco">Económico</th>
-            <th class="com">Confort</th>
-            <th>Notas</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Vuelos (ida y vuelta)</td>
-            <td class="eco">€80–150</td>
-            <td class="com">€150–280</td>
-            <td>Tirana (TIA) desde Madrid/Barcelona</td>
-          </tr>
-          <tr>
-            <td>Alojamiento (5 noches)</td>
-            <td class="eco">€60–90</td>
-            <td class="com">€180–300</td>
-            <td>Hostal dorm / habitación privada</td>
-          </tr>
-          <tr>
-            <td>Comida y bebida</td>
-            <td class="eco">€60–90</td>
-            <td class="com">€120–180</td>
-            <td>€3–6 por comida local</td>
-          </tr>
-          <tr>
-            <td>Transporte interno</td>
-            <td class="eco">€40–60</td>
-            <td class="com">€80–130</td>
-            <td>Furgones + taxi compartido</td>
-          </tr>
-          <tr>
-            <td>Entradas y visitas</td>
-            <td class="eco">€20–35</td>
-            <td class="com">€35–55</td>
-            <td>Museos, Bunk'Art, castillos</td>
-          </tr>
-          <tr>
-            <td>Ocio y extras</td>
-            <td class="eco">€30–50</td>
-            <td class="com">€80–130</td>
-            <td>Excursiones, playas de pago, souvenirs</td>
-          </tr>
-          <tr class="total">
-            <td><strong>TOTAL</strong></td>
-            <td class="eco"><strong>€290–475</strong></td>
-            <td class="com"><strong>€645–1,075</strong></td>
-            <td>Sin extras de lujo</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="alert alert-info">
-        <strong>💡 Tip de ahorro:</strong> Los furgones albaneses (furgon) son la forma más económica de moverse entre ciudades: €2–5 por trayecto. Salen cuando están llenos desde mercados y estaciones. No tienen horario fijo pero son frecuentes y económicos.
+      <h2 class="section-heading">Presupuesto estimado</h2>
+      <div style="background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden">
+        <table class="budget-table">
+          <thead><tr><th>Categoría</th><th>Económico</th><th>Confort</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Vuelo ida y vuelta</td><td>€80–130</td><td>€130–220</td><td class="cat">Wizz Air/Ryanair a Tirana (TIA)</td></tr>
+            <tr><td>Alojamiento (6 noches)</td><td>€72–108</td><td>€120–210</td><td class="cat">Guesthouse €12–18 · Hotel €20–35/noche</td></tr>
+            <tr><td>Comida (7 días)</td><td>€70–105</td><td>€110–175</td><td class="cat">Menú €4–6 · Byrek €0.80 · Cerveza Korça €1.50</td></tr>
+            <tr><td>Transporte local</td><td>€60–90</td><td>€90–140</td><td class="cat">Furgon €3–8 entre ciudades · Taxi €15–25</td></tr>
+            <tr><td>Entradas y actividades</td><td>€25–40</td><td>€40–65</td><td class="cat">Bunkart €4 · Guía trekking Valbona €20/día</td></tr>
+            <tr><td>Extras y recuerdos</td><td>€20–35</td><td>€35–60</td><td class="cat">Raki de higo €4/botella · Aceite de oliva</td></tr>
+            <tr><td><strong>TOTAL</strong></td><td><strong>€327–508</strong></td><td><strong>€525–870</strong></td><td class="cat">Por persona, vuelo incluido</td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
-
-    <div class="divider"></div>
-
-    <!-- TRANSPORTE -->
     <section class="itin-section" id="transporte">
-      <p class="section-label">Moverse por Albania</p>
-      <h2 class="section-title">Transporte</h2>
-
-      <div class="transport-grid">
-        <div class="transport-card">
-          <div class="t-icon">🚐</div>
-          <div class="t-name">Furgón (Furgon)</div>
-          <div class="t-desc">Minibuses colectivos. El transporte más usado. €2–5 entre ciudades. Salen cuando se llenan.</div>
+      <h2 class="section-heading">Cómo llegar y moverse</h2>
+      <div style="background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px">
+        <div class="transport-step"><div class="tr-icon">✈️</div><div><div class="tr-name">Vuelo a Tirana (TIA)</div><div class="tr-info">Wizz Air opera vuelos directos desde Madrid y Barcelona desde €35 ida. Aeropuerto a 17 km del centro, taxi €12 o bus €3. Alternativa: volar a Roma/Bari + ferry a Durrës (8h, €40).</div></div></div>
+        <div class="transport-step"><div class="tr-icon">🚐</div><div><div class="tr-name">Furgon — El transporte albanés</div><div class="tr-info">Minibuses de 12 plazas que salen cuando se llenan. Tirana–Bérat: €3 (2,5h). Tirana–Gjirokastër: €7 (4h). La experiencia más auténtica del país.</div></div></div>
+        <div class="transport-step"><div class="tr-icon">🚗</div><div><div class="tr-name">Alquiler de coche (recomendable)</div><div class="tr-info">Desde €20/día. Imprescindible para la Riviera y los Alpes. Carreteras principales en buen estado; pistas rurales requieren tracción total. Lleva efectivo para aparcamiento (€1–2).</div></div></div>
+        <div class="transport-step"><div class="tr-icon">⛴️</div><div><div class="tr-name">Ferry Sarandë → Corfú</div><div class="tr-info">35 minutos, €20 ida. Dos travesías diarias. Permite visitar Grecia en un día extra o hacer entrada/salida por distintos países.</div></div></div>
+      </div>
+    </section>
+    <section class="itin-section" id="dias">
+      <h2 class="section-heading">Itinerario día a día</h2>
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">01</div><div><div class="day-title">Tirana — La capital más pintoresca de los Balcanes</div><div class="day-subtitle">Bunkart · Mezquita de Ethem Bey · barrio Blloku</div></div><div class="day-meta"><span class="badge">€25–40</span></div></div>
+        <div class="day-body">
+          <div class="stop"><div class="stop-icon">🏛️</div><div><div class="stop-name">Bunkart — El búnker convertido en museo</div><div class="stop-desc">Enver Hoxha construyó 750.000 búnkeres en Albania. Bunkart es el mayor de Tirana: 5 plantas subterráneas con 106 habitaciones que narran la historia del comunismo albanés. Fotografías del régimen y testimonios de sobrevivientes. Uno de los mejores museos históricos de Europa.</div><div class="stop-tip">€4 · 2h mínimo · Abierto 10:00–20:00</div></div></div>
+          <div class="stop"><div class="stop-icon">🕌</div><div><div class="stop-name">Plaza Skanderbeg y Mezquita de Ethem Bey</div><div class="stop-desc">La estatua ecuestre de Skanderbeg —el héroe nacional que resistió al Imperio Otomano 25 años— domina la plaza central. La Mezquita de Ethem Bey (1821) tiene frescos de flores y árboles únicos en el Islam mediterráneo: representar seres vivos era tabú, pero el arquitecto lo ignoró.</div><div class="stop-tip">Gratis · Centro histórico a pie</div></div></div>
+          <div class="stop"><div class="stop-icon">🍸</div><div><div class="stop-name">Barrio Blloku — El antiguo barrio prohibido</div><div class="stop-desc">Durante el comunismo el Blloku era exclusivo para jerarcas del Partido; los ciudadanos normales tenían prohibida la entrada. Hoy es el barrio más moderno de Tirana: bares de especialidad, restaurantes de cocina albanesa contemporánea, galerías de arte. La Villa de Hoxha es visitable. Cerveza Korça artesanal €2.</div><div class="stop-tip">Gratis pasear · Bares hasta la madrugada</div></div></div>
         </div>
-        <div class="transport-card">
-          <div class="t-icon">🚌</div>
-          <div class="t-name">Autobuses intercity</div>
-          <div class="t-desc">Tirana–Saranda: €10. Tirana–Berat: €4. Más cómodos que los furgones.</div>
+      </div>
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">02</div><div><div class="day-title">Bérat — La ciudad de las 1.000 ventanas</div><div class="day-subtitle">Barrio Mangalem · Castillo habitado · Iconos de Onufri</div></div><div class="day-meta"><span class="badge">€20–35</span></div></div>
+        <div class="day-body">
+          <div class="stop"><div class="stop-icon">🏠</div><div><div class="stop-name">Barrio Mangalem — Casas otomanas en la ladera</div><div class="stop-desc">Las casas otomanas del s. XVIII tienen tantas ventanas que al sol parecen ojos. El barrio trepa la ladera con casas blancas de balcones de madera y escaleras de piedra. UNESCO 2005. Mejor al atardecer cuando las ventanas se iluminan desde dentro.</div><div class="stop-tip">Gratis · 45 min de Tirana en furgon</div></div></div>
+          <div class="stop"><div class="stop-icon">🏰</div><div><div class="stop-name">Kalaja — El castillo habitado del s. XIII</div><div class="stop-desc">Único en Europa: 400 familias albanesas viven dentro de las murallas del castillo medieval junto a iglesias bizantinas del s. XIII y mezquitas del s. XVII. Los niños juegan entre ruinas, las abuelas tienden ropa bajo columnas romanas. Vista del río Osum en el cañón abajo.</div><div class="stop-tip">Gratis · Sube a pie 30 min · Respeta la privacidad de los residentes</div></div></div>
+          <div class="stop"><div class="stop-icon">🎨</div><div><div class="stop-name">Museo Onufri — El rojo imposible de reproducir</div><div class="stop-desc">El pintor Onufri (s. XVI) extraía su rojo carmesí de un insecto del Peloponeso. 500 años después, sus iconos tienen el rojo más vibrante de cualquier iglesia ortodoxa de los Balcanes. 170 iconos del s. XVI–XIX en el museo dentro del castillo.</div><div class="stop-tip">€2 · Dentro del castillo · Sin flash</div></div></div>
         </div>
-        <div class="transport-card">
-          <div class="t-icon">🚖</div>
-          <div class="t-name">Taxi compartido</div>
-          <div class="t-desc">Para rutas sin furgón directo. €3–8/persona. Negociar siempre antes de subir.</div>
+      </div>
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">03</div><div><div class="day-title">Gjirokastër — La ciudad de piedra</div><div class="day-subtitle">Castillo con avión espía · casas-torre · raki de higo</div></div><div class="day-meta"><span class="badge">€20–30</span></div></div>
+        <div class="day-body">
+          <div class="stop"><div class="stop-icon">🏰</div><div><div class="stop-name">Castillo y el avión espía americano U-2</div><div class="stop-desc">La fortaleza otomana del s. XII incluye un avión espía U-2 americano (derribado sobre la URSS en 1960 y donado a Albania por Kruschev) que ocupa un pabellón entero. También hay un ala de tortura política con celdas originales del comunismo. Imprescindible históricamente.</div><div class="stop-tip">€3 · 2h mínimo · Vistas espectaculares al valle</div></div></div>
+          <div class="stop"><div class="stop-icon">🏠</div><div><div class="stop-name">Casas-torre otomanas del s. XVIII</div><div class="stop-desc">Torres de 3–4 pisos en piedra pizarra gris con techos de lajas. La Casa Skenduli es la más grande y conservada (€3 visita guiada). El escritor Ismail Kadare creció aquí. Las calles adoquinadas son empinadas hasta el vértigo.</div><div class="stop-tip">Barrio: gratis · Casa Skenduli: €3 · Mejor mañana fría</div></div></div>
+          <div class="stop"><div class="stop-icon">🛒</div><div><div class="stop-name">Bazar y raki de higo albanés</div><div class="stop-desc">El bazar semi-restaurado tiene herrerías, zapateros y especias. Compra raki de higo (rakia e fiqut) por €4/botella: más suave y aromático que el de uva, único en el Mediterráneo. Café turco en terraza del bazar: €0.60.</div><div class="stop-tip">Raki higo €4 · Artesanía cobre €5–15</div></div></div>
         </div>
-        <div class="transport-card">
-          <div class="t-icon">🚗</div>
-          <div class="t-name">Alquiler de coche</div>
-          <div class="t-desc">€20–35/día. Imprescindible para la Riviera. Carretera SH8: espectacular pero estrecha.</div>
+      </div>
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">04</div><div><div class="day-title">Riviera Albanesa — Las calas más vírgenes del Mediterráneo</div><div class="day-subtitle">Playa Gjipe · Paso de Llogara · Himara</div></div><div class="day-meta"><span class="badge">€25–40</span></div></div>
+        <div class="day-body">
+          <div class="stop"><div class="stop-icon">🏖️</div><div><div class="stop-name">Playa de Gjipe — La cala inaccesible</div><div class="stop-desc">Solo accesible a pie (45 min bajando por un cañón entre acantilados de 200m) o en barca desde Himara (€5). La playa tiene 150m de arena virgen con una cueva en la base del acantilado. Agua turquesa de visibilidad 20m. Sin bares, sin tumbonas, sin WiFi.</div><div class="stop-tip">Gratis · Lleva agua y comida · Barca €5 desde Himara</div></div></div>
+          <div class="stop"><div class="stop-icon">🌊</div><div><div class="stop-name">Paso de Llogara (1.027 m) — El punto donde cambia el mundo</div><div class="stop-desc">En un instante la carretera pasa de abetos alpinos a mar Jónico. La vista desde la cima muestra toda la Riviera Albanesa desde 1.000m de altura. Himara abajo tiene las mejores tabernas de marisco: langosta fresca €15–20.</div><div class="stop-tip">Gratis · Parada obligatoria · Langosta en Himara €15–20</div></div></div>
+          <div class="stop"><div class="stop-icon">🐙</div><div><div class="stop-name">Calas de Lukova y Kakome Bay</div><div class="stop-desc">La carretera costera revela calas de guijarros blancos sin acceso desde tierra. Kakome Bay está completamente rodeada de pinos piñoneros que llegan al agua. En junio o septiembre la tienes prácticamente sola. Camino de cabras desde la carretera (30 min).</div><div class="stop-tip">Gratis · Calzado cómodo · Lleva protección solar alta</div></div></div>
         </div>
-        <div class="transport-card">
-          <div class="t-icon">⛴️</div>
-          <div class="t-name">Ferry Saranda–Corfú</div>
-          <div class="t-desc">€20–35 ida. Cruce de 30 min. Posible excursión de día a Grecia.</div>
+      </div>
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">05</div><div><div class="day-title">Sarandë y Butrinto — Puerto y Roma antigua</div><div class="day-subtitle">Ruinas UNESCO · Lago Butrinto · flamencos rosas</div></div><div class="day-meta"><span class="badge">€20–35</span></div></div>
+        <div class="day-body">
+          <div class="stop"><div class="stop-icon">🏛️</div><div><div class="stop-name">Ruinas de Butrinto — 2.500 años en superposición</div><div class="stop-desc">Griegos, romanos (Virgilio la menciona en la Eneida), bizantinos, venecianos y otomanos: 2.500 años de historia en capas. Un teatro griego del s. III a.C. con una basílica paleocristiana encima, rodeado de muralla veneciana. Flamencos rosas en el lago adyacente. UNESCO. Entrada €10, vale el triple.</div><div class="stop-tip">€10 · 18 km de Sarandë · 3h · Mañana para evitar calor</div></div></div>
+          <div class="stop"><div class="stop-icon">🏝️</div><div><div class="stop-name">Sarandë — Corfú a 3 km de distancia</div><div class="stop-desc">Desde el paseo marítimo se ve Corfú a 3 km. Ferry opcional 35 min, €20. El marisco en el puerto de Sarandë tiene precios un 60% más bajos que en la isla griega de enfrente. Mejillones a la albanesa con limón y perejil: €4.</div><div class="stop-tip">Paseo gratis · Ferry a Corfú €20 opcional · Mejillones €4</div></div></div>
         </div>
-        <div class="transport-card">
-          <div class="t-icon">📱</div>
-          <div class="t-name">Indriver / Bolt</div>
-          <div class="t-desc">Funciona en Tirana. Mucho más barato que taxis convencionales. Recomendado en la capital.</div>
+      </div>
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">06</div><div><div class="day-title">Alpes albaneses — Trek Valbona a Theth</div><div class="day-subtitle">Paso de 1.793m · pueblo sin carretera · fauna salvaje</div></div><div class="day-meta"><span class="badge">€30–50</span></div></div>
+        <div class="day-body">
+          <div class="stop"><div class="stop-icon">🏔️</div><div><div class="stop-name">Trek Valbona → Theth (6h, 17 km)</div><div class="stop-desc">El trekking más famoso de Albania: cruzar el paso Valbona (1.793m) entre dos valles glaciares. Prados alpinos, glaciares colgantes y picos de 2.500m. El punto más alto tiene vistas de tres países (Albania, Kosovo, Montenegro). Guía local: €20. Salida a las 7:00 desde Valbona.</div><div class="stop-tip">6h · Guía recomendado €20 · Lleva comida y agua · Salida 7:00</div></div></div>
+          <div class="stop"><div class="stop-icon">🏠</div><div><div class="stop-name">Theth — El pueblo más aislado de los Balcanes</div><div class="stop-desc">Accesible solo por pista de tierra o el trek. Casas de piedra con techo de madera idénticas a las de hace 200 años. La Kulla (torre de honor) explica el Kanun albanés: el código de ley que regulaba las venganzas de sangre durante siglos. Guesthouse con cena incluida: cordero del huerto, queso de cabra. Sin internet, sin cajero.</div><div class="stop-tip">Guesthouse con cena €15–20 · Solo efectivo · Sin cobertura móvil</div></div></div>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">07</div><div><div class="day-title">Shkodër y vuelta a Tirana</div><div class="day-subtitle">Castillo de Rozafa · lago más grande de los Balcanes · aeropuerto</div></div><div class="day-meta"><span class="badge">€20–35</span></div></div>
+        <div class="day-body">
+          <div class="stop"><div class="stop-icon">🏰</div><div><div class="stop-name">Castillo de Rozafa y la leyenda de la mujer emparedada</div><div class="stop-desc">Murallas del s. VI sobre una colina entre el río Drin y el lago de Shkodër. La leyenda dice que los constructores emparedaron viva a la esposa más joven para que las murallas no se derrumbaran. Pidió que dejaran un agujero para dar leche a su bebé. La abertura todavía supura humedad blanca. Tres culturas en 2.500 años de historia sobre la misma colina.</div><div class="stop-tip">€3 · Vistas al lago · La leyenda más triste de Albania</div></div></div>
+          <div class="stop"><div class="stop-icon">✈️</div><div><div class="stop-name">Regreso a Tirana (TIA)</div><div class="stop-desc">Shkodër–Tirana: 1,5h en furgon (€3) o taxi (€25). El aeropuerto Nënë Tereza (por la Madre Teresa, albanesa) está a 17 km. El duty-free vende raki artesanal. En la terminal hay una estatua de la Madre Teresa de 3 metros.</div><div class="stop-tip">Furgon €3 · Taxi €25 · Llega 2h antes del vuelo</div></div></div>
         </div>
       </div>
     </section>
-
-    <div class="divider"></div>
-
-    <!-- ALOJAMIENTO -->
     <section class="itin-section" id="alojamiento">
-      <p class="section-label">Dónde dormir</p>
-      <h2 class="section-title">Alojamiento recomendado</h2>
-
+      <h2 class="section-heading">Dónde dormir</h2>
       <div class="hotel-grid">
-        <div class="hotel-card">
-          <div class="hotel-tier">Económico · Hostal</div>
-          <div class="hotel-name">Tirana Backpacker Hostel</div>
-          <div class="hotel-price">€12–18/noche en dorm</div>
-          <div class="hotel-desc">Centro de Tirana, cerca del Bloku. Social, cocina compartida, buenas reseñas. Ideal para mochileros y para conocer otros viajeros.</div>
-        </div>
-        <div class="hotel-card">
-          <div class="hotel-tier">Mid-range · Guesthouse</div>
-          <div class="hotel-name">Hotel Mangalemi (Berat)</div>
-          <div class="hotel-price">€40–65/noche</div>
-          <div class="hotel-desc">Antigua mansión otomana dentro del barrio Mangalem, declarado Patrimonio UNESCO. Vistas al castillo. Desayuno incluido con productos locales.</div>
-        </div>
-        <div class="hotel-card">
-          <div class="hotel-tier">Mid-range · Resort</div>
-          <div class="hotel-name">Hotel Kalemi (Gjirokastra)</div>
-          <div class="hotel-price">€35–55/noche</div>
-          <div class="hotel-desc">Bajo el castillo. Ambiente histórico, terraza con vistas, desayuno albanés. Propietarios muy amables con turistas españoles.</div>
-        </div>
-        <div class="hotel-card">
-          <div class="hotel-tier">Playa · Apartamento</div>
-          <div class="hotel-name">Ksamil Apartments</div>
-          <div class="hotel-price">€25–55/noche</div>
-          <div class="hotel-desc">Múltiples opciones en Booking cerca de la playa de Ksamil. Reservar con antelación en julio-agosto. Muchas incluyen cocina equipada.</div>
-        </div>
+        <div class="hotel-card"><div class="hotel-name">Freddy's Hostel, Tirana</div><div class="hotel-price">€12–18/noche · Dorm</div><div class="hotel-desc">El hostel más famoso de Albania en el barrio Blloku. Organiza tours a Bérat y Gjirokastër. Personal que habla español. Cenas comunitarias nocturnas con viajeros internacionales.</div></div>
+        <div class="hotel-card"><div class="hotel-name">Guesthouse Kotoni, Bérat</div><div class="hotel-price">€18–28/noche · Privado</div><div class="hotel-desc">Casa tradicional en el barrio Mangalem con vistas directas a las mil ventanas. Desayuno albanés con byrek casero, miel y fruta de temporada. Dueña italianoparlante, reserva con antelación.</div></div>
+        <div class="hotel-card"><div class="hotel-name">Guesthouse Alpet, Theth</div><div class="hotel-price">€15–22/noche · Media pensión</div><div class="hotel-desc">Casa familiar con cena incluida: cordero del huerto, queso de cabra, verduras propias. Sin internet. La única luz nocturna viene de las estrellas y la chimenea de leña. La experiencia más auténtica de los Balcanes.</div></div>
       </div>
     </section>
-
-    <div class="divider"></div>
-
-    <!-- DÍA 1 -->
-    <section class="itin-section" id="dia1">
-      <p class="section-label">Día 1</p>
-      <h2 class="section-title">Tirana: capital sorprendente</h2>
-
-      <div class="day-card">
-        <div class="day-header">
-          <div class="day-num">01</div>
-          <div class="day-info">
-            <div class="day-title">Tirana · Capital colorida y vibrante</div>
-            <div class="day-subtitle">Plaza Skanderbeg · Bloku · Bunk'Art 2 · Pirámide</div>
-          </div>
-          <div class="day-meta">
-            <span class="meta-tag">€15–25 entradas</span>
-            <span class="meta-tag">~10 km a pie</span>
-          </div>
-        </div>
-        <div class="day-body">
-          <div class="activities">
-            <div class="activity">
-              <div class="act-time">09:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Plaza Skanderbeg — corazón de la capital</div>
-                <div class="act-desc">La gran plaza central con la estatua ecuestre del héroe nacional albanés. Alrededor: Mezquita Et'hem Bey (gratis, siglo XIX), Torre del Reloj y el imponente edificio del ministerio. El mejor punto de partida para orientarse.</div>
-                <div class="act-tags"><span class="act-tag">Gratis</span><span class="act-tag">Icónico</span><span class="act-tag">Fotografía</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">10:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Bunk'Art 2 — historia del comunismo albanés</div>
-                <div class="act-desc">Búnker subterráneo convertido en museo de la dictadura comunista de Enver Hoxha (1944–1985). Instalaciones artísticas impactantes sobre el sistema de vigilancia y represión. Entrada €3. No te lo pierdas — es único en Europa.</div>
-                <div class="act-tags"><span class="act-tag">€3</span><span class="act-tag">Historia</span><span class="act-tag">1,5h</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">12:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Almuerzo en el Bloku</div>
-                <div class="act-desc">El antiguo barrio reservado para la élite comunista, hoy el centro de cafeterías y restaurantes de moda. Prueba las byrek (empanadas de espinacas o queso) por €1 en una panaderías local, o siéntate en un restaurante del Bloku por €5–8.</div>
-                <div class="act-tags"><span class="act-tag">€3–8</span><span class="act-tag">Byrek</span><span class="act-tag">Café albanés</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">14:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">La Pirámide de Tirana</div>
-                <div class="act-desc">Edificio piramidal construido como mausoleo de Hoxha, ahora reconvertido en centro cultural y tecnológico. Puedes subir por los laterales de cristal hasta la cima (gratis). Símbolo de la transformación del país. Fascinante arquitectura brutalista.</div>
-                <div class="act-tags"><span class="act-tag">Gratis</span><span class="act-tag">Arquitectura</span><span class="act-tag">Vistas</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">16:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Bunk'Art 1 — búnker del gobierno (opcional)</div>
-                <div class="act-desc">Complejo subterráneo de 5 pisos, 106 habitaciones, 1.000 metros cuadrados construidos para sobrevivir a un ataque nuclear. Si eres fan de la historia del comunismo, vale la pena el taxi hasta allí (€5). Entrada €5.</div>
-                <div class="act-tags"><span class="act-tag">€5</span><span class="act-tag">Opcional</span><span class="act-tag">2h</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">20:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Cena y vida nocturna en el Bloku</div>
-                <div class="act-desc">El Bloku se anima de noche. Cena en restaurante albanés: tavë kosi (cordero con yogur al horno) por €7–10. Las terrazas y bares llenan de jóvenes locales. La cerveza albanesa Korça cuesta €1,50 en bares locales.</div>
-                <div class="act-tags"><span class="act-tag">€7–12</span><span class="act-tag">Tavë kosi</span><span class="act-tag">Cerveza Korça</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DÍA 2 -->
-    <section class="itin-section" id="dia2">
-      <p class="section-label">Día 2</p>
-      <h2 class="section-title">Krujë y Durrës: historia y mar Adriático</h2>
-
-      <div class="day-card">
-        <div class="day-header">
-          <div class="day-num">02</div>
-          <div class="day-info">
-            <div class="day-title">Krujë · Durrës · Castillo · Playa Adriático</div>
-            <div class="day-subtitle">Castillo de Skanderbeg · Bazar antiguo · Anfiteatro romano · Primera playa</div>
-          </div>
-          <div class="day-meta">
-            <span class="meta-tag">€8 entradas</span>
-            <span class="meta-tag">Excursión en día</span>
-          </div>
-        </div>
-        <div class="day-body">
-          <div class="activities">
-            <div class="activity">
-              <div class="act-time">08:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Furgón Tirana → Krujë</div>
-                <div class="act-desc">Sale desde el mercado Sheshi Shqiponja. €2, 45 minutos. Ciudad montañosa a 608m de altitud. Ciudad natal del héroe nacional Gjergj Kastrioti "Skanderbeg" que resistió a los otomanos durante 25 años.</div>
-                <div class="act-tags"><span class="act-tag">€2</span><span class="act-tag">45 min</span><span class="act-tag">Furgón</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">09:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Castillo de Krujë y Museo Skanderbeg</div>
-                <div class="act-desc">Castillo medieval con vistas panorámicas a las montañas albesas y al mar Adriático en días claros. El Museo Skanderbeg dentro del castillo documenta la resistencia albanesa ante el Imperio Otomano. Entrada €3. Bazar antiguo en la bajada con artesanía tradicional.</div>
-                <div class="act-tags"><span class="act-tag">€3</span><span class="act-tag">Castillo</span><span class="act-tag">Vistas</span><span class="act-tag">Artesanía</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">12:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Furgón Krujë → Durrës</div>
-                <div class="act-desc">€3, 1 hora. Durrës es la segunda ciudad de Albania y su principal puerto. Ciudad con 2.500 años de historia fundada por griegos. Llegar antes de comer para aprovechar el día.</div>
-                <div class="act-tags"><span class="act-tag">€3</span><span class="act-tag">1h</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">13:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Anfiteatro romano de Durrës</div>
-                <div class="act-desc">Uno de los anfiteatros romanos más grandes de los Balcanes (siglo II d.C.), capaz de albergar 15.000 espectadores. Partes están integradas en casas modernas. Entrada €5. Al lado: Murallas de Diocleciano y mosaicos paleocristianos.</div>
-                <div class="act-tags"><span class="act-tag">€5</span><span class="act-tag">Roma</span><span class="act-tag">Historia</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">15:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Playa de Durrës — primer chapuzón en el Adriático</div>
-                <div class="act-desc">Playa de arena fina con aguas azules del Adriático. No la más espectacular (eso es el sur), pero perfecta para el primer día de playa. Tumbonas €3–5. Chiringuitos con mariscos frescos a buen precio.</div>
-                <div class="act-tags"><span class="act-tag">Tumbonas €3</span><span class="act-tag">Mariscos</span><span class="act-tag">Adriático</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">18:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Vuelta a Tirana</div>
-                <div class="act-desc">Autobús directo Durrës → Tirana cada 30 minutos desde la estación central. €1,50, 45 minutos. Cena en Tirana y preparar maleta para Berat mañana temprano.</div>
-                <div class="act-tags"><span class="act-tag">€1,50</span><span class="act-tag">45 min</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DÍA 3 -->
-    <section class="itin-section" id="dia3">
-      <p class="section-label">Día 3</p>
-      <h2 class="section-title">Berat: la ciudad de las mil ventanas</h2>
-
-      <div class="day-card">
-        <div class="day-header">
-          <div class="day-num">03</div>
-          <div class="day-info">
-            <div class="day-title">Berat · Ciudad Patrimonio UNESCO</div>
-            <div class="day-subtitle">Barrio Mangalem · Castillo · Barrio Goricë · Río Osum</div>
-          </div>
-          <div class="day-meta">
-            <span class="meta-tag">€5 entradas</span>
-            <span class="meta-tag">Día completo</span>
-          </div>
-        </div>
-        <div class="day-body">
-          <div class="activities">
-            <div class="activity">
-              <div class="act-time">08:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Bus Tirana → Berat</div>
-                <div class="act-desc">Sale desde la terminal de buses de Tirana. €4, 2,5 horas. Paisaje de montaña espectacular. Berat es una de las ciudades más bellas de los Balcanes, con sus casas blancas otomanas de enormes ventanas escalonadas en la colina.</div>
-                <div class="act-tags"><span class="act-tag">€4</span><span class="act-tag">2,5h</span><span class="act-tag">UNESCO</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">11:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Barrio Mangalem — arquitectura otomana</div>
-                <div class="act-desc">El barrio histórico de la orilla derecha del río Osum. Casas blancas del siglo XVIII con ventanas que se reflejan en la colina, dando el efecto "mil ojos". Calles empedradas, mezquitas, fuentes. Paseo libre sin coste. La mezquita Bacheloria del siglo XVII, única en Albania con minaret.</div>
-                <div class="act-tags"><span class="act-tag">Gratis</span><span class="act-tag">Otomano</span><span class="act-tag">Fotografía</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">13:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Almuerzo en restaurante con vista al castillo</div>
-                <div class="act-desc">Varios restaurantes en Mangalem con terrazas con vistas al río Osum y al castillo. Prueba: tavë kosi (cordero con yogur al horno, plato nacional) €5–7, o fergese (carne con tomate y pimientos) €4–6. Raki albanés de digestivo.</div>
-                <div class="act-tags"><span class="act-tag">€6–10</span><span class="act-tag">Tavë kosi</span><span class="act-tag">Fergese</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">14:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Castillo de Berat — ciudad habitada dentro del castillo</div>
-                <div class="act-desc">Subida a pie 20 minutos (o taxi €3). Dentro del castillo hay un barrio habitado con iglesias ortodoxas del siglo XIII, una mezquita y el Museo de Onufri (íconos religiosos únicos). Vistas de 360° sobre la ciudad y las montañas. Entrada al museo €2.</div>
-                <div class="act-tags"><span class="act-tag">€2</span><span class="act-tag">Castillo habitado</span><span class="act-tag">Iglesias medievales</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">17:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Barrio Goricë y puente otomano</div>
-                <div class="act-desc">Cruza el puente otomano sobre el río Osum al barrio Goricë, en la orilla opuesta. Más tranquilo y menos turístico, con casas igualmente hermosas. El atardecer desde el puente con el castillo al fondo es una de las mejores fotografías de Albania.</div>
-                <div class="act-tags"><span class="act-tag">Gratis</span><span class="act-tag">Atardecer</span><span class="act-tag">Fotografía</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">19:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Noche en Berat</div>
-                <div class="act-desc">Quedarse a dormir en Berat (hostal o guesthouse €15–40) o coger furgón a Gjirokastra (3h, €6) para continuar hacia el sur mañana. Recomendamos quedarse en Berat esta noche y salir temprano al día siguiente hacia Saranda.</div>
-                <div class="act-tags"><span class="act-tag">Dormir en Berat</span><span class="act-tag">€15–40</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DÍA 4 -->
-    <section class="itin-section" id="dia4">
-      <p class="section-label">Día 4</p>
-      <h2 class="section-title">Saranda y Ksamil: Riviera albanesa</h2>
-
-      <div class="day-card">
-        <div class="day-header">
-          <div class="day-num">04</div>
-          <div class="day-info">
-            <div class="day-title">Saranda · Ksamil · Butrint · Jónico</div>
-            <div class="day-subtitle">Ruinas de Butrint UNESCO · Playas de Ksamil · Aguas turquesas</div>
-          </div>
-          <div class="day-meta">
-            <span class="meta-tag">€8 Butrint</span>
-            <span class="meta-tag">Día de playa y ruinas</span>
-          </div>
-        </div>
-        <div class="day-body">
-          <div class="activities">
-            <div class="activity">
-              <div class="act-time">07:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Bus Berat → Saranda (con escala en Fier o Vlorë)</div>
-                <div class="act-desc">Trayecto largo de 4–5 horas con cambio. Salir temprano para aprovechar el día. Precio total €6–10. Saranda es la capital turística del sur, con vista directa a la isla de Corfú (Grecia) visible desde el paseo marítimo.</div>
-                <div class="act-tags"><span class="act-tag">€6–10</span><span class="act-tag">4–5h</span><span class="act-tag">Con escala</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">13:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Ruinas de Butrint — Patrimonio UNESCO</div>
-                <div class="act-desc">A 18 km de Saranda. Taxi o minibús €3–5. Sitio arqueológico griego, romano y bizantino en un parque natural protegido junto a una laguna. Anfiteatro griego, baptisterio paleocristiano, murallas medievales. Entrada €8. Uno de los sitios arqueológicos más impresionantes de Albania.</div>
-                <div class="act-tags"><span class="act-tag">€8</span><span class="act-tag">UNESCO</span><span class="act-tag">2h</span><span class="act-tag">Arqueología</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">15:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Playas de Ksamil — las mejores de Albania</div>
-                <div class="act-desc">A 14 km de Saranda. Taxi €4. Múltiples calitas con arena blanca y agua turquesa de cristal rivalizando con el Mediterráneo de lujo. Tres islitas a 100m nadando. Tumbonas €5/día o zona libre. Chiringuitos con langosta fresca, pulpo y mariscos.</div>
-                <div class="act-tags"><span class="act-tag">Tumbonas €5</span><span class="act-tag">Islitas</span><span class="act-tag">Aguas cristalinas</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">19:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Atardecer en el paseo de Saranda con vistas a Corfú</div>
-                <div class="act-desc">El paseo marítimo de Saranda al atardecer con la isla de Corfú iluminada al fondo es espectacular. Cena en el puerto: pez espada a la plancha, langostinos y mejillones por €10–15. Retsina griega de postre (la influencia helénica se nota en la gastronomía del sur).</div>
-                <div class="act-tags"><span class="act-tag">€10–15</span><span class="act-tag">Mariscos</span><span class="act-tag">Vistas Corfú</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DÍA 5 -->
-    <section class="itin-section" id="dia5">
-      <p class="section-label">Día 5</p>
-      <h2 class="section-title">Gjirokastra: la ciudad de piedra</h2>
-
-      <div class="day-card">
-        <div class="day-header">
-          <div class="day-num">05</div>
-          <div class="day-info">
-            <div class="day-title">Gjirokastra · Ciudad Patrimonio UNESCO</div>
-            <div class="day-subtitle">Castillo con avión de la CIA · Barrio antiguo · Casa de Enver Hoxha</div>
-          </div>
-          <div class="day-meta">
-            <span class="meta-tag">€5 castillo</span>
-            <span class="meta-tag">Día de historia</span>
-          </div>
-        </div>
-        <div class="day-body">
-          <div class="activities">
-            <div class="activity">
-              <div class="act-time">08:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Furgón Saranda → Gjirokastra</div>
-                <div class="act-desc">€4, 1,5 horas. Ruta por la autopista A2 entre montañas. Gjirokastra (Gjirokastër) es una ciudad de piedra gris declarada Patrimonio UNESCO, cuna de Enver Hoxha (el dictador) e Ismail Kadaré (el gran escritor albanés).</div>
-                <div class="act-tags"><span class="act-tag">€4</span><span class="act-tag">1,5h</span><span class="act-tag">UNESCO</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">10:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Castillo de Gjirokastra — avión de la CIA incluido</div>
-                <div class="act-desc">Castillo del siglo XII con 360° de vistas sobre el valle de Drino y las montañas del sur. Dentro: un avión espía americano U-2 capturado en los años 50 (leyenda local), prisión otomana, colección de armamento, museo de la ciudad. Entrada €5.</div>
-                <div class="act-tags"><span class="act-tag">€5</span><span class="act-tag">Avión CIA</span><span class="act-tag">Vistas 360°</span><span class="act-tag">2h</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">12:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Barrio antiguo Pazari — casas de piedra</div>
-                <div class="act-desc">Calles empedradas entre casas-torre de piedra del siglo XVII-XVIII, únicas en los Balcanes. La Casa de Ismail Kadaré abierta al público (€1). El bazar antiguo con tiendas de artesanía tradicional: cerámica, tejidos y el famoso qilim (alfombra albanesa).</div>
-                <div class="act-tags"><span class="act-tag">Gratis pasear</span><span class="act-tag">Artesanía</span><span class="act-tag">Arquitectura única</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">14:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Almuerzo tradicional del sur de Albania</div>
-                <div class="act-desc">La cocina del sur es la más refinada de Albania por influencia griega. Prueba: mëlçia e zier (hígado de cordero frito), paçe (sopa de cordero), o simplemente byrek con espinacas casero. Todo con vino de Gjirokastra a €2/vaso.</div>
-                <div class="act-tags"><span class="act-tag">€5–10</span><span class="act-tag">Cocina del sur</span><span class="act-tag">Vino local</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">15:30</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Casa Museo de Enver Hoxha (opcional)</div>
-                <div class="act-desc">La casa natal del dictador albanés, convertida en etnografía regional con objetos de la vida diaria durante el comunismo. Polémica pero interesante para entender la historia del país. €2. Alternativa: dar un paseo hasta la mezquita Bazaar del siglo XVIII.</div>
-                <div class="act-tags"><span class="act-tag">€2</span><span class="act-tag">Opcional</span><span class="act-tag">Comunismo</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">19:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Noche en Gjirokastra — alojamiento en guesthouse</div>
-                <div class="act-desc">Dormir en una de las casas-torre históricas reconvertidas en guesthouses. Hotel Kalemi o Guesthouse Argjiro (€30–50/noche) con desayuno albanés incluido (byrek, feta, aceitunas, miel). Las vistas nocturnas del castillo iluminado son mágicas.</div>
-                <div class="act-tags"><span class="act-tag">€30–50</span><span class="act-tag">Casa histórica</span><span class="act-tag">Desayuno incluido</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- DÍA 6 -->
-    <section class="itin-section" id="dia6">
-      <p class="section-label">Día 6</p>
-      <h2 class="section-title">Riviera y regreso</h2>
-
-      <div class="day-card">
-        <div class="day-header">
-          <div class="day-num">06</div>
-          <div class="day-info">
-            <div class="day-title">Riviera albanesa · Vlorë · Regreso a Tirana</div>
-            <div class="day-subtitle">Carretera de la Riviera · Playas vírgenes · Vlorë · Vuelo</div>
-          </div>
-          <div class="day-meta">
-            <span class="meta-tag">Día de viaje</span>
-            <span class="meta-tag">Riviera optativa</span>
-          </div>
-        </div>
-        <div class="day-body">
-          <div class="activities">
-            <div class="activity">
-              <div class="act-time">08:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Ruta por la Riviera albanesa (SH8) si tienes coche</div>
-                <div class="act-desc">La carretera SH8 entre Saranda y Vlorë es de las más espectaculares de Europa. Acantilados de 600m sobre el mar Jónico. Paradas en: Himara (playa tranquila, €0), Dhermi (playa de moda), Palasë (aguas azules). Si no tienes coche, autobús directo Gjirokastra → Tirana (€8, 4h).</div>
-                <div class="act-tags"><span class="act-tag">Carretera SH8</span><span class="act-tag">Acantilados</span><span class="act-tag">Playas vírgenes</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">12:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Parada en Himara o Dhermi (con coche)</div>
-                <div class="act-desc">Himara: pueblo griego-albanés con playa de guijarros y agua cristalina. Dhermi: la playa más famosa de la Riviera, con chiringuitos modernos y aguas turquesas. Comida de pescado fresco en el chiringuito de la playa: €8–12.</div>
-                <div class="act-tags"><span class="act-tag">€8–12 comida</span><span class="act-tag">Playa</span><span class="act-tag">Pescado fresco</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">15:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Vlorë — Monumento a la Independencia</div>
-                <div class="act-desc">Vlorë es donde se proclamó la Independencia albanesa en 1912. El Monumento a la Independencia y el Museo Histórico son visitables (€1–2). Buen punto para coger autobús hacia Tirana (€5, 2,5h).</div>
-                <div class="act-tags"><span class="act-tag">Independencia 1912</span><span class="act-tag">Museo €2</span></div>
-              </div>
-            </div>
-            <div class="activity">
-              <div class="act-time">18:00</div>
-              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
-              <div class="act-content">
-                <div class="act-title">Llegada a Tirana y aeropuerto</div>
-                <div class="act-desc">Aeropuerto Internacional de Tirana "Nënë Tereza" (TIA). Taxi aeropuerto desde el centro €20, o minibús €3. Última cena albanesa si el vuelo es nocturno: byrek, tavë kosi y cerveza Korça por €8 en cualquier restaurante del Bloku.</div>
-                <div class="act-tags"><span class="act-tag">Taxi €20</span><span class="act-tag">Minibús €3</span><span class="act-tag">Aeropuerto TIA</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- TOP 10 -->
-    <section class="itin-section" id="top10">
-      <p class="section-label">Lo mejor de Albania</p>
-      <h2 class="section-title">Top 10 imprescindibles</h2>
-
-      <div class="top10-grid">
-        <div class="top10-item">
-          <div class="top10-num">1</div>
-          <div class="top10-text">
-            <div class="top10-name">Playas de Ksamil</div>
-            <div class="top10-tip">Aguas turquesas con islitas a nado. Las mejores playas del Jónico a precio albanés.</div>
-          </div>
-        </div>
-        <div class="top10-item">
-          <div class="top10-num">2</div>
-          <div class="top10-text">
-            <div class="top10-name">Berat (UNESCO)</div>
-            <div class="top10-tip">La "ciudad de las mil ventanas". Casas otomanas blancas escalonadas en la colina.</div>
-          </div>
-        </div>
-        <div class="top10-item">
-          <div class="top10-num">3</div>
-          <div class="top10-text">
-            <div class="top10-name">Bunk'Art 2 (Tirana)</div>
-            <div class="top10-tip">El búnker subterráneo más impactante. Historia del comunismo albanés como ningún museo.</div>
-          </div>
-        </div>
-        <div class="top10-item">
-          <div class="top10-num">4</div>
-          <div class="top10-text">
-            <div class="top10-name">Gjirokastra (UNESCO)</div>
-            <div class="top10-tip">Ciudad de piedra con castillo medieval y un avión espía de la CIA en el patio.</div>
-          </div>
-        </div>
-        <div class="top10-item">
-          <div class="top10-num">5</div>
-          <div class="top10-text">
-            <div class="top10-name">Butrint (UNESCO)</div>
-            <div class="top10-tip">Ruinas griegas, romanas y bizantinas en parque natural junto a laguna. Impresionante.</div>
-          </div>
-        </div>
-        <div class="top10-item">
-          <div class="top10-num">6</div>
-          <div class="top10-text">
-            <div class="top10-name">Carretera SH8 Riviera</div>
-            <div class="top10-tip">Una de las carreteras costeras más espectaculares de Europa. Acantilados sobre el Jónico.</div>
-          </div>
-        </div>
-        <div class="top10-item">
-          <div class="top10-num">7</div>
-          <div class="top10-text">
-            <div class="top10-name">Castillo de Krujë</div>
-            <div class="top10-tip">Fortaleza de Skanderbeg con vistas al Adriático y bazar de artesanía centenario.</div>
-          </div>
-        </div>
-        <div class="top10-item">
-          <div class="top10-num">8</div>
-          <div class="top10-text">
-            <div class="top10-name">La Pirámide de Tirana</div>
-            <div class="top10-tip">Mausoleo brutalista de Hoxha reconvertido. Subir por los laterales de cristal gratis.</div>
-          </div>
-        </div>
-        <div class="top10-item">
-          <div class="top10-num">9</div>
-          <div class="top10-text">
-            <div class="top10-name">Vida nocturna del Bloku</div>
-            <div class="top10-tip">El antiguo barrio de la élite comunista, hoy el lugar más animado de Tirana. Cerveza €1,50.</div>
-          </div>
-        </div>
-        <div class="top10-item">
-          <div class="top10-num">10</div>
-          <div class="top10-text">
-            <div class="top10-name">Anfiteatro romano de Durrës</div>
-            <div class="top10-tip">Uno de los mayores de los Balcanes. Partes integradas en casas modernas habitadas.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- GASTRONOMÍA -->
     <section class="itin-section" id="gastronomia">
-      <p class="section-label">Sabores albaneses</p>
-      <h2 class="section-title">Gastronomía esencial</h2>
-
-      <div class="gastro-grid">
-        <div class="gastro-card">
-          <div class="gastro-type">Plato nacional</div>
-          <div class="gastro-name">Tavë Kosi</div>
-          <div class="gastro-desc">El plato nacional albanés: cordero al horno con yogur batido y arroz, cocinado en cazuela de barro. Cremoso, aromático, reconfortante. Obligatorio probarlo.</div>
-          <div class="gastro-price">€5–8 en restaurante local</div>
-        </div>
-        <div class="gastro-card">
-          <div class="gastro-type">Desayuno / merienda</div>
-          <div class="gastro-name">Byrek</div>
-          <div class="gastro-desc">Empanada de hojaldre albanesa. Variedades: spinaq (espinacas), djathë (queso feta), mish (carne). Se compra en panaderías por €0,50–1. Desayuno de reyes a precio de risa.</div>
-          <div class="gastro-price">€0,50–1 en panadería</div>
-        </div>
-        <div class="gastro-card">
-          <div class="gastro-type">Bebida tradicional</div>
-          <div class="gastro-name">Raki Shqiptar</div>
-          <div class="gastro-desc">El aguardiente albanés, destilado de uva o ciruelas. Se ofrece en casi todos los hogares como bienvenida. Fuerte (40–60% alcohol), transparente y muy aromático. Gratis en casas, €1–2 en bares.</div>
-          <div class="gastro-price">€1–2 en bar / gratis en casas</div>
-        </div>
-        <div class="gastro-card">
-          <div class="gastro-type">Queso autóctono</div>
-          <div class="gastro-name">Djathë i Bardhë</div>
-          <div class="gastro-desc">Queso blanco fresco similar al feta griego pero con sabor propio albanés. Se sirve en todos los desayunos con aceitunas, tomate y miel. También en ensaladas. Comprar en mercados locales.</div>
-          <div class="gastro-price">€1–2/100g en mercado</div>
-        </div>
-        <div class="gastro-card">
-          <div class="gastro-type">Plato de la Riviera</div>
-          <div class="gastro-name">Mariscos del Jónico</div>
-          <div class="gastro-desc">En Saranda y Ksamil: pulpo a la plancha, langosta fresca, mejillones y langostinos. Directamente de los pescadores locales. Calidad griega a precio albanés. Plato de mariscos mixtos €12–18.</div>
-          <div class="gastro-price">€12–18 plato de mariscos</div>
-        </div>
-        <div class="gastro-card">
-          <div class="gastro-type">Postre</div>
-          <div class="gastro-name">Llokume / Kadaif</div>
-          <div class="gastro-desc">Herencia otomana en los dulces albaneses. Llokume: delicias turcas con almendra y pistachos. Kadaif: fideos de sémola empapados en almíbar con nueces. En panaderías y mercados por €1–2.</div>
-          <div class="gastro-price">€1–2 por porción</div>
-        </div>
+      <h2 class="section-heading">Gastronomía albanesa</h2>
+      <div class="food-grid">
+        <div class="food-card"><div class="food-name">Byrek</div><div class="food-price">€0.80–1.50</div><div class="food-desc">Hojaldre relleno de queso feta, espinacas o carne. El desayuno nacional, vendido en panaderías (furra) desde las 7:00. Caliente, crujiente y absolutamente barato.</div></div>
+        <div class="food-card"><div class="food-name">Tavë kosi</div><div class="food-price">€5–8</div><div class="food-desc">Cordero horneado con arroz y yogur hasta que el yogur forma una costra dorada. Plato nacional albanés. Suave, aromático, profundamente satisfactorio.</div></div>
+        <div class="food-card"><div class="food-name">Fërgëse Tirane</div><div class="food-price">€5–7</div><div class="food-desc">Salsa de tomate asado, pimientos y queso gjizë en cazuela de barro. Servida caliente como entrante. El sabor más representativo de la cocina albanesa urbana.</div></div>
+        <div class="food-card"><div class="food-name">Langosta de Himara</div><div class="food-price">€15–25</div><div class="food-desc">A mitad de precio que Italia o Grecia. Los pescadores la sirven a la plancha con limón y aceite de oliva propio. El mejor marisco del Mediterráneo sin pagar precio mediterráneo.</div></div>
+        <div class="food-card"><div class="food-name">Raki de higo</div><div class="food-price">€1–2/copa</div><div class="food-desc">Aguardiente de higo, único en el mundo. Más suave y aromático que el de uva. Se ofrece como bienvenida en cualquier casa albanesa. Rechazarlo es de mala educación.</div></div>
+        <div class="food-card"><div class="food-name">Sufllaqe</div><div class="food-price">€2–3</div><div class="food-desc">Kebab albanés: carne a la brasa en pan pita con tomate, lechuga y yogur. El fast food local: rápido, barato y sabroso. En cada ciudad desde las 11:00.</div></div>
       </div>
     </section>
-
-    <div class="divider"></div>
-
-    <!-- FRASES -->
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">Consejos prácticos</h2>
+      <div class="tip-grid">
+        <div class="tip-card"><h4>Moneda: Lek albanés (ALL)</h4><p>1 EUR = ~108 ALL. Euros aceptados en hoteles y restaurantes turísticos. Pueblos rurales y furgon: solo efectivo. Cambia en aeropuerto o en kambim valutë del centro.</p></div>
+        <div class="tip-card"><h4>Visado: no necesario para UE</h4><p>Ciudadanos UE entran con DNI o pasaporte. Albania es candidata UE. Estancia máxima 90 días. Sin Schengen: sella en frontera. Puedes entrar/salir a/desde Kosovo y Macedonia.</p></div>
+        <div class="tip-card"><h4>Conducción en Albania</h4><p>Autopistas bien asfaltadas. Carreteras montaña: estrechas, sin guardarraíl, conductores albaneses agresivos. Cede el paso. La carretera Llogara–Himara es espectacular pero requiere atención constante.</p></div>
+        <div class="tip-card"><h4>La hospitalidad albanesa (besa)</h4><p>El Kanun obliga al albanés a proteger a su huésped con su vida. Acepta siempre el raki y el café ofrecidos; declinarlos es un insulto. Esta tradición hace de Albania uno de los países más seguros de los Balcanes.</p></div>
+        <div class="tip-card"><h4>Internet y SIM</h4><p>SIM de Vodafone Albania o ALBtelecom: €5 con 5GB. Roaming UE parcial (verifica con tu operador). En los Alpes albaneses no hay cobertura: descarga mapas offline antes de salir.</p></div>
+        <div class="tip-card"><h4>Mejor época</h4><p>Mayo–junio y septiembre–octubre: perfectos para la costa y el interior. Julio–agosto: calor intenso pero costa animada. Los Alpes albaneses solo son accesibles de junio a septiembre.</p></div>
+      </div>
+    </section>
     <section class="itin-section" id="frases">
-      <p class="section-label">Comunicarse</p>
-      <h2 class="section-title">Frases albanesas esenciales</h2>
-
-      <div class="alert alert-info">
-        <strong>ℹ️ El albanés es único:</strong> Idioma indoeuropeo sin parientes cercanos, con 2 dialectos: Gegë (norte) y Toskë (sur). Los jóvenes hablan inglés en ciudades. Los albaneses son extremadamente amables con los turistas y aprecian enormemente cualquier intento de hablar su idioma.
-      </div>
-
-      <div class="phrases-grid">
-        <div class="phrase-card">
-          <div class="phrase-original">Mirëdita</div>
-          <div class="phrase-translation">Buenos días</div>
-          <div class="phrase-pronunciation">mi-re-DI-ta</div>
-        </div>
-        <div class="phrase-card">
-          <div class="phrase-original">Faleminderit</div>
-          <div class="phrase-translation">Gracias</div>
-          <div class="phrase-pronunciation">fa-le-min-DE-rit</div>
-        </div>
-        <div class="phrase-card">
-          <div class="phrase-original">Ju lutem</div>
-          <div class="phrase-translation">Por favor</div>
-          <div class="phrase-pronunciation">yu LU-tem</div>
-        </div>
-        <div class="phrase-card">
-          <div class="phrase-original">Po / Jo</div>
-          <div class="phrase-translation">Sí / No</div>
-          <div class="phrase-pronunciation">poh / yoh</div>
-        </div>
-        <div class="phrase-card">
-          <div class="phrase-original">Sa kushton?</div>
-          <div class="phrase-translation">¿Cuánto cuesta?</div>
-          <div class="phrase-pronunciation">sa KUSH-ton</div>
-        </div>
-        <div class="phrase-card">
-          <div class="phrase-original">Ku është...?</div>
-          <div class="phrase-translation">¿Dónde está...?</div>
-          <div class="phrase-pronunciation">ku ESH-te</div>
-        </div>
-        <div class="phrase-card">
-          <div class="phrase-original">Gëzuar!</div>
-          <div class="phrase-translation">¡Salud! (al brindar)</div>
-          <div class="phrase-pronunciation">ghe-ZU-ar</div>
-        </div>
-        <div class="phrase-card">
-          <div class="phrase-original">Shqipëria është e bukur</div>
-          <div class="phrase-translation">Albania es bonita</div>
-          <div class="phrase-pronunciation">sh-ki-PE-ria ESH-te e BU-kur</div>
-        </div>
+      <h2 class="section-heading">Frases útiles en albanés</h2>
+      <div class="phrase-grid">
+        <div class="phrase-card"><div class="phrase-es">Hola</div><div class="phrase-local">Përshëndetje</div><div class="phrase-pron">pər-shën-DET-ye</div></div>
+        <div class="phrase-card"><div class="phrase-es">Gracias</div><div class="phrase-local">Faleminderit</div><div class="phrase-pron">fa-le-min-DE-rit</div></div>
+        <div class="phrase-card"><div class="phrase-es">Por favor</div><div class="phrase-local">Ju lutem</div><div class="phrase-pron">yu LU-tem</div></div>
+        <div class="phrase-card"><div class="phrase-es">Sí / No</div><div class="phrase-local">Po / Jo</div><div class="phrase-pron">po / yo</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Cuánto cuesta?</div><div class="phrase-local">Sa kushton?</div><div class="phrase-pron">sa KUSH-ton</div></div>
+        <div class="phrase-card"><div class="phrase-es">La cuenta</div><div class="phrase-local">Llogarinë</div><div class="phrase-pron">lloh-ga-RI-në</div></div>
+        <div class="phrase-card"><div class="phrase-es">Agua</div><div class="phrase-local">Ujë</div><div class="phrase-pron">U-yë</div></div>
+        <div class="phrase-card"><div class="phrase-es">Salud (brindis)</div><div class="phrase-local">Gëzuar!</div><div class="phrase-pron">gë-ZU-ar</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Dónde está?</div><div class="phrase-local">Ku është?</div><div class="phrase-pron">ku ËSHT-ë</div></div>
+        <div class="phrase-card"><div class="phrase-es">Ayuda</div><div class="phrase-local">Ndihmë!</div><div class="phrase-pron">NDIH-më</div></div>
+        <div class="phrase-card"><div class="phrase-es">Muy bonito</div><div class="phrase-local">Shumë bukur</div><div class="phrase-pron">SHU-më BU-kur</div></div>
+        <div class="phrase-card"><div class="phrase-es">Buen provecho</div><div class="phrase-local">Mirë se hani</div><div class="phrase-pron">MIR-ë se HA-ni</div></div>
       </div>
     </section>
-
-    <div class="divider"></div>
-
-    <!-- EMERGENCIAS -->
     <section class="itin-section" id="emergencias">
-      <p class="section-label">Seguridad</p>
-      <h2 class="section-title">Emergencias y contactos útiles</h2>
-
-      <div class="alert alert-warning">
-        <strong>🛡️ Albania es seguro para viajeros:</strong> Pese a la reputación histórica, Albania es hoy uno de los países más seguros de los Balcanes para los turistas. El Kanun (código de honor albanés) protege a los huéspedes. Aun así: cuidado en mercados concurridos con carteristas y confirmar precios de taxi antes de subir.
-      </div>
-
+      <h2 class="section-heading">Emergencias y contactos</h2>
       <div class="emergency-grid">
-        <div class="emergency-card">
-          <div class="emergency-icon">🚨</div>
-          <div class="emergency-label">Policía</div>
-          <div class="emergency-value">129</div>
-          <div class="emergency-note">Número de emergencias policiales</div>
-        </div>
-        <div class="emergency-card">
-          <div class="emergency-icon">🚑</div>
-          <div class="emergency-label">Ambulancia</div>
-          <div class="emergency-value">127</div>
-          <div class="emergency-note">Emergencias médicas</div>
-        </div>
-        <div class="emergency-card">
-          <div class="emergency-icon">🔥</div>
-          <div class="emergency-label">Bomberos</div>
-          <div class="emergency-value">128</div>
-          <div class="emergency-note">Incendios y rescates</div>
-        </div>
-        <div class="emergency-card">
-          <div class="emergency-icon">🏥</div>
-          <div class="emergency-label">Hospital Tirana</div>
-          <div class="emergency-value">+355 4 222 2235</div>
-          <div class="emergency-note">Hospital Universitario de Tirana</div>
-        </div>
-        <div class="emergency-card">
-          <div class="emergency-icon">🇪🇺</div>
-          <div class="emergency-label">Emergencia UE</div>
-          <div class="emergency-value">112</div>
-          <div class="emergency-note">Funciona también en Albania</div>
-        </div>
-        <div class="emergency-card">
-          <div class="emergency-icon">🏛️</div>
-          <div class="emergency-label">Embajada española</div>
-          <div class="emergency-value">+355 4 223 2093</div>
-          <div class="emergency-note">Embajada de España en Tirana</div>
-        </div>
+        <div class="em-card"><div class="em-num">129</div><div class="em-label">Policía</div></div>
+        <div class="em-card"><div class="em-num">128</div><div class="em-label">Ambulancia</div></div>
+        <div class="em-card"><div class="em-num">131</div><div class="em-label">Bomberos</div></div>
+        <div class="em-card"><div class="em-num">127</div><div class="em-label">Emergencias</div></div>
+        <div class="em-card"><div class="em-num">+355 4 2274 872</div><div class="em-label">Embajada España en Tirana</div></div>
+        <div class="em-card"><div class="em-num">+355 69 208 8888</div><div class="em-label">Rescate montaña Albania</div></div>
       </div>
     </section>
-
-    <div class="divider"></div>
-
-    <!-- CHECKLIST -->
     <section class="itin-section" id="checklist">
-      <p class="section-label">Antes de salir</p>
-      <h2 class="section-title">Checklist de viaje</h2>
-
-      <div class="checklist">
-        <div class="check-item"><div class="check-box"></div>DNI o pasaporte en vigor (no necesitas visado — UE)</div>
-        <div class="check-item"><div class="check-box"></div>Seguro de viaje con cobertura médica (recomendado)</div>
-        <div class="check-item"><div class="check-box"></div>Efectivo en euros (ampliamente aceptado) y en Lek albanés</div>
-        <div class="check-item"><div class="check-box"></div>Descargar Google Maps offline de Albania</div>
-        <div class="check-item"><div class="check-box"></div>Instalar Indriver o Bolt para taxis en Tirana</div>
-        <div class="check-item"><div class="check-box"></div>Ropa de baño y protector solar (playas del sur)</div>
-        <div class="check-item"><div class="check-box"></div>Calzado cómodo para adoquines históricos</div>
-        <div class="check-item"><div class="check-box"></div>Repelente de mosquitos (zona costera en verano)</div>
-        <div class="check-item"><div class="check-box"></div>Reservar alojamiento en Ksamil con antelación (julio-agosto)</div>
-        <div class="check-item"><div class="check-box"></div>SIM local: Vodafone Albania o ALBtelecom (~€10 con datos)</div>
-        <div class="check-item"><div class="check-box"></div>Confirmar horario de furgones la noche anterior</div>
-        <div class="check-item"><div class="check-box"></div>Aprender 3–4 palabras en albanés — los locales lo agradecen mucho</div>
-      </div>
+      <h2 class="section-heading">Checklist antes de salir</h2>
+      <ul class="checklist">
+        <li>Pasaporte UE o DNI vigente</li>
+        <li>Seguro de viaje (actividades montaña)</li>
+        <li>Lek albaneses o euros en efectivo</li>
+        <li>SIM local Vodafone Albania</li>
+        <li>Mapas offline descargados</li>
+        <li>Calzado de trekking (Valbona–Theth)</li>
+        <li>Ropa abrigo para el paso (1.793m)</li>
+        <li>Adaptador enchufe tipo F</li>
+        <li>Protección solar alta</li>
+        <li>Botella agua reutilizable</li>
+        <li>Reserva guesthouse Theth confirmada</li>
+        <li>Botiquín básico y medicación propia</li>
+      </ul>
     </section>
-
-  </article>
+    <div class="disclosure"><strong>Aviso legal:</strong> Precios y horarios orientativos. Los Alpes albaneses son impracticables con nieve (octubre–mayo). El trek Valbona–Theth requiere condición física media. Routlo no se hace responsable de incidencias climáticas. Consulta el portal de exteriores de tu país antes de viajar.</div>
+  </main>
 </div>
-
-<!-- Footer -->
-<footer>
-  <p>© 2025 Routlo · <a href="../index.html">Inicio</a> · <a href="../itinerarios.html">Todos los itinerarios</a> · <a href="../chatbot.html">Chat IA</a></p>
-  <p style="margin-top:.5rem; color: rgba(138,134,128,.5); font-size:.75rem;">Precios orientativos · Verificar antes del viaje</p>
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <p style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.2rem;color:#edeef2;margin-bottom:8px">Routlo</p>
+  <p style="font-size:0.78rem;color:rgba(237,238,242,0.35);margin-bottom:16px">Inteligencia de viaje · Destinos auténticos</p>
+  <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap">
+    <a href="../itinerarios.html" style="font-size:0.8rem;color:rgba(237,238,242,0.45);text-decoration:none">Itinerarios</a>
+    <a href="../index.html#asistente" style="font-size:0.8rem;color:rgba(237,238,242,0.45);text-decoration:none">Asistente IA</a>
+    <a href="../registro.html" style="font-size:0.8rem;color:rgba(237,238,242,0.45);text-decoration:none">Crear cuenta</a>
+  </div>
+  <p style="font-size:0.72rem;color:rgba(237,238,242,0.2);margin-top:20px">© 2025 Routlo. Todos los derechos reservados.</p>
 </footer>
-
 <script>
-  function toggleMenu() {
-    const nav = document.querySelector('nav');
-    nav.classList.toggle('menu-open');
-  }
-
-  // Nav scroll effect
-  const nav = document.document.querySelector('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  });
-
-  // TOC active link
-  const sections = document.querySelectorAll('.itin-section[id]');
-  const tocLinks = document.querySelectorAll('.toc-list a');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        tocLinks.forEach(link => link.classList.remove('active'));
-        const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
-        if (active) active.classList.add('active');
-      }
-    });
-  }, { rootMargin: '-20% 0px -70% 0px' });
-  sections.forEach(s => observer.observe(s));
+  const nav=document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>30);});
+  const sections=document.querySelectorAll('.itin-section');
+  const links=document.querySelectorAll('.toc-list a');
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-30% 0px -60% 0px'});
+  sections.forEach(s=>obs.observe(s));
 </script>
-
 </body>
 </html>
