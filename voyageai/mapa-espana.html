@@ -375,7 +375,7 @@
         Con itinerario <span class="sidebar-tab-count">9</span>
       </button>
       <button class="sidebar-tab" id="tabParques" onclick="switchTab('parques')">
-        Parques <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">3</span>
+        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">8</span>
       </button>
       <button class="sidebar-tab" id="tabProximos" onclick="switchTab('proximos')">
         Próximos <span class="sidebar-tab-count">1</span>
@@ -569,6 +569,75 @@ const PARQUES = [
 const PROXIMOS = [
   { id: 'lanzarote', nombre: 'Lanzarote', region: 'Islas Canarias', emoji: '🌴', coords: [29.0469, -13.5899], desc: 'Timanfaya, el Jameos del Agua y astroturismo en las noches más estrelladas del Atlántico.' }
 ];
+
+// Appended to PARQUES after declaration
+PARQUES.push(
+  {
+    id: 'bardenas',
+    nombre: 'Bardenas Reales',
+    region: 'Navarra · Gratis',
+    emoji: '🏜️',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [42.2050, -1.5030],
+    desc: 'El desierto español: badlands de arcilla roja, Castildetierra y cielos sin contaminación lumínica. Solo gasolina y comida.',
+    gradient: 'linear-gradient(135deg,#1a0a00 0%,#3a1800 100%)',
+    img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/bardenas.html'
+  },
+  {
+    id: 'pueblos-negros',
+    nombre: 'Pueblos Negros',
+    region: 'Guadalajara · Gratis',
+    emoji: '🪨',
+    dias: 3,
+    precio: '€0 actividades',
+    coords: [41.1350, -3.0580],
+    desc: 'Arquitectura de pizarra medieval a 100 km de Madrid. Hayedo más austral de Europa y el pueblo abandonado de Umbralejo.',
+    gradient: 'linear-gradient(135deg,#050f05 0%,#0d200d 100%)',
+    img: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/pueblos-negros.html'
+  },
+  {
+    id: 'las-medulas',
+    nombre: 'Las Médulas & El Bierzo',
+    region: 'León · UNESCO Gratis',
+    emoji: '⛏️',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [42.4580, -6.7720],
+    desc: 'Las mayores minas de oro del Imperio Romano, el Valle del Silencio y Ponferrada templaria. Patrimonio UNESCO de acceso libre.',
+    gradient: 'linear-gradient(135deg,#1a0800 0%,#3a1000 100%)',
+    img: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/las-medulas.html'
+  },
+  {
+    id: 'picos-europa',
+    nombre: 'Picos de Europa',
+    region: 'Asturias · Cantabria · Gratis',
+    emoji: '🏔️',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [43.1732, -4.8264],
+    desc: 'Ruta del Cares (12 km gratis), Lagos de Covadonga, Potes medieval y Fuente Dé. El Parque Nacional más visitado de España.',
+    gradient: 'linear-gradient(135deg,#021008 0%,#042018 100%)',
+    img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/picos-de-europa.html'
+  },
+  {
+    id: 'serrania-cuenca',
+    nombre: 'Serranía de Cuenca',
+    region: 'Cuenca · Gratis',
+    emoji: '🌿',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [40.4800, -1.9500],
+    desc: 'Hoz de Beteta, Nacimiento del Río Cuervo, La Chincha, Fuente de los Tilos, Cañizares y Las Torcas. A 2 h de Madrid.',
+    gradient: 'linear-gradient(135deg,#021006 0%,#041a0c 100%)',
+    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/serrania-cuenca.html'
+  }
+);
 
 // ── Map init ─────────────────────────────────────────────
 
