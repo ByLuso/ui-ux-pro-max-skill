@@ -2,493 +2,606 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Las Landas (Francia) — 7 días en pareja: surf, bosques de pinos y termas gascuñas | Routlo</title>
-  <meta name="description" content="7 días en Las Landas: Hossegor y el surf atlántico, el Courant d'Huchet en canoa, Dax y sus termas, la Duna de Pilat y el Armagnac. Presupuesto real para dos: 700€."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Las Landas (Francia) — 7 días en pareja: surf, Courant d'Huchet y termas de Dax | Routlo</title>
+  <meta name="description" content="7 días en Las Landas: Hossegor y el surf atlántico, canoa por el Courant d'Huchet, termas de Dax, Duna de Pilat y Armagnac. Presupuesto real para dos: 700€."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#162a50 70%,rgba(201,169,110,0.12) 100%),url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{--gold:#c9a96e;--bg:#040810;--text:#edeef2}
-    body{background:var(--bg);color:var(--text);font-family:'Jost',sans-serif;font-weight:300;line-height:1.7;min-height:100vh}
-    nav[role="navigation"]{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
-    .nav-brand{font-family:'Bodoni Moda',serif;font-size:1.3rem;color:var(--gold);text-decoration:none}
-    .nav-links{display:flex;gap:28px;list-style:none}
-    .nav-links a{color:rgba(237,238,242,.65);text-decoration:none;font-size:.82rem;font-weight:400;letter-spacing:.06em;text-transform:uppercase;transition:color .2s}
-    .nav-links a:hover{color:var(--text)}
-    /* Hero */
-    .hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:flex-end;overflow:hidden;padding-bottom:64px}
-    .hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#040810 0%,#070c18 30%,#080e20 65%,#040810 100%)}
-    .hero-blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.3}
-    .blob1{width:650px;height:650px;top:-120px;right:-100px;background:radial-gradient(circle,rgba(40,80,160,.35) 0%,transparent 70%)}
-    .blob2{width:420px;height:420px;bottom:40px;left:80px;background:radial-gradient(circle,rgba(201,169,110,.2) 0%,transparent 70%)}
-    .blob3{width:300px;height:300px;top:180px;right:320px;background:radial-gradient(circle,rgba(30,60,120,.2) 0%,transparent 70%)}
-    .hero-content{position:relative;z-index:2;max-width:1100px;margin:0 auto;width:100%;padding:0 32px}
-    .dest-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(201,169,110,.3);border-radius:20px;padding:6px 16px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
-    .hero h1{font-family:'Bodoni Moda',serif;font-size:clamp(2.4rem,5vw,4rem);font-weight:600;line-height:1.1;margin-bottom:16px;max-width:700px}
-    .hero h1 em{font-style:italic;color:var(--gold)}
-    .hero-sub{font-size:1.05rem;color:rgba(237,238,242,.7);max-width:540px;margin-bottom:32px}
-    .hero-meta{display:flex;flex-wrap:wrap;gap:12px}
-    .meta-chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 16px;font-size:.78rem;color:rgba(237,238,242,.8)}
-    .meta-chip.gold{background:rgba(201,169,110,.08);border-color:rgba(201,169,110,.25);color:var(--gold)}
-    /* Summary bar */
-    .summary-bar{background:rgba(10,16,32,.9);border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);padding:20px 32px;display:flex;flex-wrap:wrap;gap:32px;justify-content:center}
-    .summary-item{text-align:center}
-    .summary-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(237,238,242,.4);margin-bottom:4px}
-    .summary-value{font-size:.95rem;font-weight:500}
-    .summary-value.gold{color:var(--gold)}
-    /* Layout */
-    .itin-layout{max-width:1100px;margin:0 auto;padding:60px 32px;display:grid;grid-template-columns:240px 1fr;gap:48px;align-items:start}
-    .toc-sidebar{position:sticky;top:84px}
-    .toc-title{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(237,238,242,.4);margin-bottom:16px}
-    .toc-list{list-style:none}
-    .toc-list li{margin-bottom:4px}
-    .toc-list a{font-size:.82rem;color:rgba(237,238,242,.55);text-decoration:none;padding:6px 12px;border-radius:8px;display:block;border-left:2px solid transparent;transition:all .2s}
-    .toc-list a:hover,.toc-list a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,169,110,.06)}
-    /* Intro banner */
-    .intro-banner{background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.2);border-radius:16px;padding:18px 22px;margin-bottom:32px;display:flex;align-items:flex-start;gap:14px;font-size:.88rem;color:rgba(237,238,242,.8);line-height:1.6}
-    .intro-banner-icon{font-size:1.4rem;flex-shrink:0}
-    /* Sections */
-    .section-label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(237,238,242,.4);margin-bottom:8px}
-    .section-title{font-family:'Bodoni Moda',serif;font-size:1.9rem;font-weight:600;margin-bottom:32px;line-height:1.2}
-    .section-title em{font-style:italic;color:var(--gold)}
-    /* Day cards */
-    .day-card{background:rgba(13,22,40,.6);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:32px;margin-bottom:24px;backdrop-filter:blur(10px)}
-    .day-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap}
-    .day-number{font-family:'Bodoni Moda',serif;font-size:2rem;font-weight:600;color:var(--gold);opacity:.45;line-height:1;flex-shrink:0}
-    .day-meta h3{font-size:1.1rem;font-weight:500;margin-bottom:6px}
-    .day-meta .badges{display:flex;gap:8px;flex-wrap:wrap}
-    .day-meta .badge{font-size:.7rem;padding:3px 10px;border-radius:10px;background:rgba(201,169,110,.1);color:var(--gold);border:1px solid rgba(201,169,110,.2)}
-    .stop{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-    .stop:last-child{border-bottom:none;padding-bottom:0}
-    .stop-name{font-weight:500;font-size:.95rem;margin-bottom:4px}
-    .stop-desc{font-size:.82rem;color:rgba(237,238,242,.6);line-height:1.65}
-    .stop-price{font-size:.75rem;color:var(--gold);margin-top:5px;font-weight:600}
-    .highlight-box{background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.18);border-radius:14px;padding:16px 20px;margin:14px 0;font-size:.83rem;color:rgba(237,238,242,.75);line-height:1.65}
-    .highlight-box strong{color:var(--gold)}
-    /* Budget */
-    .budget-table{width:100%;border-collapse:collapse;margin-top:16px}
-    .budget-table th{text-align:left;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(237,238,242,.4);padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}
-    .budget-table td{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.88rem}
-    .budget-table td:last-child{text-align:right;color:var(--gold)}
-    .budget-table .total-row td{font-weight:600;color:var(--text);padding-top:16px;border-bottom:none}
-    .budget-total{background:rgba(201,169,110,.06);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:16px;border:1px solid rgba(201,169,110,.15)}
-    .budget-total-label{font-size:.85rem;font-weight:500}
-    .budget-total-value{font-family:'Bodoni Moda',serif;font-size:1.4rem;color:var(--gold)}
-    .budget-note{font-size:.75rem;color:rgba(237,238,242,.4);margin-top:10px;line-height:1.6}
-    /* Info grid */
-    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
-    .info-box{background:#0d1628;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:20px}
-    .info-box h4{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
-    .info-box p{font-size:.82rem;color:rgba(237,238,242,.65);line-height:1.7}
-    .hotel-price,.food-price{color:var(--gold);font-size:.82rem;margin-bottom:6px;font-weight:500}
-    /* Vocabulary */
-    .vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-    .vocab-card{background:#0d1628;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px}
-    .vocab-term{font-size:.92rem;font-weight:600;color:var(--gold);margin-bottom:4px}
-    .vocab-def{font-size:.78rem;color:rgba(237,238,242,.6);line-height:1.5}
-    /* Tips */
-    .tips-list{list-style:none;margin-top:16px}
-    .tips-list li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.85rem;color:rgba(237,238,242,.7);line-height:1.65}
-    .tips-list li:last-child{border-bottom:none}
-    .tip-icon{color:var(--gold);flex-shrink:0}
-    /* Emergency */
-    .emergency-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px}
-    .emergency-card{background:#0d1628;border:1px solid rgba(255,100,100,.15);border-radius:12px;padding:16px;text-align:center}
-    .emergency-num{font-family:'Bodoni Moda',serif;font-size:1.3rem;color:#f87171;margin-bottom:4px}
-    .emergency-label{font-size:.72rem;color:rgba(237,238,242,.5)}
-    /* Checklist */
-    .checklist{list-style:none;margin-top:16px;columns:2;gap:24px}
-    .checklist li{font-size:.83rem;color:rgba(237,238,242,.65);padding:5px 0;padding-left:22px;position:relative;break-inside:avoid}
-    .checklist li::before{content:'☐';position:absolute;left:0;color:var(--gold)}
-    /* Footer */
-    .disclosure{max-width:1100px;margin:0 auto 60px;padding:0 32px}
-    .disclosure p{font-size:.72rem;color:rgba(237,238,242,.3);line-height:1.8;border-top:1px solid rgba(255,255,255,.06);padding-top:24px}
-    footer{background:#020508;border-top:1px solid rgba(255,255,255,.06);padding:40px 32px;text-align:center}
-    footer p{font-size:.78rem;color:rgba(237,238,242,.3);margin-bottom:8px}
-    footer a{color:var(--gold);text-decoration:none}
-    /* Route strip */
-    .route-strip{background:rgba(13,22,40,.5);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 20px;margin-bottom:32px;font-size:.78rem;color:rgba(237,238,242,.55);line-height:1.8}
-    .route-strip strong{color:var(--gold)}
-    /* Responsive */
-    @media(max-width:768px){.itin-layout{grid-template-columns:1fr}.toc-sidebar{display:none}nav[role="navigation"]{padding:0 16px}.hero-content{padding:0 20px}.checklist{columns:1}}
-  </style>
 </head>
 <body>
-<nav role="navigation">
-  <a class="nav-brand" href="../index.html">Routlo</a>
-  <ul class="nav-links">
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
     <li><a href="../index.html">Inicio</a></li>
     <li><a href="../itinerarios.html">Itinerarios</a></li>
-    <li><a href="../index.html#asistente">Asistente</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
   </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
 
-<section class="hero">
-  <div class="hero-bg">
-    <div class="hero-blob blob1"></div>
-    <div class="hero-blob blob2"></div>
-    <div class="hero-blob blob3"></div>
-  </div>
-  <div class="hero-content">
-    <div class="dest-badge">&#9670; Francia · Nouvelle-Aquitaine</div>
-    <h1>Las Landas<br><em>Landes, Francia</em></h1>
-    <p class="hero-sub">El Atlántico salvaje, 106 kilómetros de dunas sin edificios, el bosque de pinos más extenso de Europa occidental y la ciudad más termal de Francia. Todo a 3 horas del País Vasco español.</p>
-    <div class="hero-meta">
-      <span class="meta-chip">7 días</span>
-      <span class="meta-chip">En pareja</span>
-      <span class="meta-chip gold">700 € dos personas</span>
-      <span class="meta-chip">Jul · Ago · Sep</span>
-    </div>
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Europa · Francia</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Las Landas</h1>
+  <p class="dest-country">Landes — Francia atlántica</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Nouvelle-Aquitaine · Francia</span>
+    <span class="dest-badge gold">7 días · En pareja</span>
+    <span class="dest-badge gold">💶 700 € dos personas</span>
+    <span class="dest-badge">🌊 Atlántico · Bosque · Termas</span>
+    <span class="dest-badge">☀️ Jul · Ago · Sep</span>
   </div>
 </section>
 
-<div class="summary-bar">
-  <div class="summary-item"><div class="summary-label">Presupuesto total</div><div class="summary-value gold">700 €</div></div>
-  <div class="summary-item"><div class="summary-label">Para</div><div class="summary-value">2 personas</div></div>
-  <div class="summary-item"><div class="summary-label">Duración</div><div class="summary-value">7 días · 6 noches</div></div>
-  <div class="summary-item"><div class="summary-label">País</div><div class="summary-value">Francia (Landes)</div></div>
-  <div class="summary-item"><div class="summary-label">Desde Bilbao</div><div class="summary-value">95 km</div></div>
-</div>
-
 <div class="itin-layout">
-  <aside class="toc-sidebar">
-    <div class="toc-title">Contenido</div>
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
     <ul class="toc-list">
-      <li><a href="#dias">Días del viaje</a></li>
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
       <li><a href="#presupuesto">Presupuesto</a></li>
-      <li><a href="#transporte">Cómo llegar</a></li>
-      <li><a href="#alojamiento">Alojamiento</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
       <li><a href="#gastronomia">Gastronomía</a></li>
       <li><a href="#consejos">Consejos</a></li>
-      <li><a href="#vocabulario">Vocabulario</a></li>
-      <li><a href="#emergencias">Emergencias</a></li>
       <li><a href="#checklist">Checklist</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
     </ul>
   </aside>
 
   <main>
-    <div class="intro-banner">
-      <span class="intro-banner-icon">🌊</span>
-      <span>Las Landas es el <strong>departamento más forestal de Francia</strong> y la costa atlántica menos masificada del suroeste europeo. Con €700 para dos personas cubrís una semana de surf, canoa, termas, bosque de pinos y gastronomía gascuña sin renunciar a nada esencial.</span>
-    </div>
 
-    <div class="route-strip">
-      <strong>Recorrido:</strong> Bayonne → Capbreton → Hossegor → Vieux-Boucau → Léon → Courant d'Huchet → Dax → Marquèze → Mont-de-Marsan → Biscarrosse → Duna de Pilat (Gironde) → Regreso
-    </div>
+    <!-- Datos del viaje -->
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">7 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~700 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Desde Bilbao</div><div class="route-info-val">95 km · 1 h</div></div>
+        <div class="route-info-item"><div class="route-info-label">Transporte</div><div class="route-info-val">Coche propio</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Jul · Ago · Sep</div></div>
+      </div>
+    </section>
 
-    <section id="dias">
-      <div class="section-label">El itinerario</div>
-      <h2 class="section-title">7 días en <em>Las Landas</em></h2>
+    <!-- Mapa -->
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Inicio · Bayonne</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del viaje</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:24px;height:3px;background:#c9a96e;border-radius:2px;"></span>Recorrido</span>
+      </div>
+    </section>
+
+    <!-- Días -->
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
 
       <div class="day-card">
         <div class="day-header">
-          <div class="day-number">01</div>
-          <div class="day-meta">
-            <h3>Bayonne y primera toma de contacto con el Atlántico</h3>
-            <div class="badges"><span class="badge">Ciudad</span><span class="badge">Jambon de Bayonne</span><span class="badge">Playas de Capbreton</span></div>
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Bayonne + Capbreton — entrada al Atlántico</div>
+            <div class="day-subtitle">95 km desde Bilbao · Jamón, catedral y primer chapuzón</div>
           </div>
         </div>
-        <div class="stop">
-          <div class="stop-name">Bayonne — casco histórico</div>
-          <div class="stop-desc">Técnicamente en los Pyrénées-Atlantiques pero puerta natural de Las Landas para quien viene del sur. El casco histórico tiene casas de entramado rojo y verde sobre el río Nive, la Catedral de Santa María (siglo XIII, patrimonio UNESCO del Camino de Santiago), los Quais (muelles) con mercado de productores los martes y sábados, y la Rue du Port Neuf repleta de tiendas de chocolatiers artesanos. El Museo Vasco (€7) es optativo pero muy bueno.</div>
-          <div class="stop-price">Pasear: gratis · Catedral: gratis · Museo: €7/persona</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Jambon de Bayonne — el jamón de la otra frontera</div>
-          <div class="stop-desc">El jamón de Bayonne tiene IGP propia desde 1998 y se cura durante mínimo 7 meses con sal de Salies-de-Béarn. Su sabor es más suave y menos salado que el jamón ibérico, con notas dulces. En las charcuterías del mercado cubierto (Les Halles de Bayonne) se vende por €12-18 el quart (100g de calidad top) y puedes pedirles que lo corten allí mismo. Comprar aquí sale 30-40% más barato que en España.</div>
-          <div class="stop-price">Jamón 200g: €6-10 · Mercado: gratis</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Capbreton — puerto pesquero y primer contacto atlántico</div>
-          <div class="stop-desc">A 20 km de Bayonne, Capbreton es el único puerto pesquero activo de Las Landas. El Bouche (canal que une el lago marino con el Atlántico) es el punto de encuentro de surfistas, pescadores y turistas. El muelle de madera sobre el Atlántico, la cofradía de pescadores con marisco fresco y las primeras dunas del Atlántico al sur: todo en 2 km a pie. La playa central de Capbreton tiene servicios y bandera azul.</div>
-          <div class="stop-price">Gratis pasear · Parking zona A: €2-4/h</div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Bayonne — casco histórico y mercado</div>
+              <div class="stop-desc">Catedral de Santa María (s. XIII, UNESCO Camino de Santiago), casas de entramado rojo sobre el río Nive, Rue du Port Neuf con chocolatiers artesanos. Les Halles de Bayonne: mercado cubierto donde venden el Jambon de Bayonne IGP directamente de los productores — 30-40% más barato que en España.</div>
+              <div class="stop-price">Pasear: gratis · Catedral: gratis · Jamón 200g: €6-10</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Capbreton — puerto pesquero atlántico</div>
+              <div class="stop-desc">Único puerto pesquero activo de Las Landas. El Bouche (canal que une el lago marino con el Atlántico) concentra surfistas, pescadores y turistas. Muelle de madera, cofradía de pescadores con marisco fresco y las primeras dunas atlánticas del viaje. Playa central con bandera azul.</div>
+              <div class="stop-price">Gratis · Parking: €2-4/h</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="day-card">
         <div class="day-header">
-          <div class="day-number">02</div>
-          <div class="day-meta">
-            <h3>Hossegor — la capital mundial del surf</h3>
-            <div class="badges"><span class="badge">Surf</span><span class="badge">Lac marin</span><span class="badge">Vieux-Boucau</span></div>
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Hossegor + Vieux-Boucau — surf capital de Europa</div>
+            <div class="day-subtitle">Olas de tubo, Lac Marin y laguna sin masificación</div>
           </div>
         </div>
-        <div class="stop">
-          <div class="stop-name">Hossegor — Playa Central y ambiente surf</div>
-          <div class="stop-desc">Hossegor es la meca del surf europeo: cada año acoge las pruebas del Championship Tour de la WSL (World Surf League) en octubre. Sus olas de tubo son las mejores de Europa gracias a un cañón submarino que concentra la energía del Atlántico. Si no surféais, el ambiente del pueblo (restaurantes, surfshops, la comunidad surfista internacional) es igualmente disfrutable. La playa es libre — solo pagáis parking.</div>
-          <div class="stop-price">Playa: gratis · Clases de surf: €35-45/persona · Alquiler tabla+traje: €20-25/día</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Lac Marin d'Hossegor</div>
-          <div class="stop-desc">El lago marino de Hossegor es una laguna tidal conectada al océano por el canal de Capbreton. El agua es salada pero la corriente es nula, lo que lo hace ideal para kayak, stand-up paddle y baño tranquilo. Las orillas del lago tienen carriles bici y los atardeceres desde la dársena, con los veleros reflejados y el bosque de pinos al fondo, son de los más fotogénicos de la costa atlántica.</div>
-          <div class="stop-price">Gratis nadar · Alquiler kayak/SUP: €12-18/hora</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Vieux-Boucau-les-Bains</div>
-          <div class="stop-desc">A 20 km al sur de Hossegor, Vieux-Boucau tiene lo mejor de la costa sin la masificación. Su laguna artificial (Lac Marin de Vieux-Boucau) se construyó en 1967 rodeando el pueblo — pinos hasta el borde del agua, paseo marítimo sin coches y una playa atlántica desierta al otro lado de las dunas. El pueblo tiene un mercado nocturno en verano. Kayak en la laguna: €10/hora.</div>
-          <div class="stop-price">Gratis · Kayak: €10/hora</div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Hossegor — la meca del surf europeo</div>
+              <div class="stop-desc">Sede del Championship Tour de la WSL cada octubre. Sus olas de tubo (generadas por un cañón submarino) son las mejores de Europa. El Lac Marin d'Hossegor — laguna tidal con el océano — es ideal para kayak y SUP tranquilo. Atardecer desde la dársena: veleros, pinos y cielo atlántico.</div>
+              <div class="stop-price">Playa: gratis · Clases surf: €35-45 · Kayak/SUP: €12-18/h</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Vieux-Boucau-les-Bains</div>
+              <div class="stop-desc">A 20 km al sur: pueblo rodeado por una laguna artificial (1967) con pinos hasta la orilla y paseo marítimo sin coches. En el otro lado de la duna: playa atlántica desierta. Mercado nocturno en verano.</div>
+              <div class="stop-price">Gratis · Kayak: €10/h</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="day-card">
         <div class="day-header">
-          <div class="day-number">03</div>
-          <div class="day-meta">
-            <h3>Courant d'Huchet — el Amazonas de Europa</h3>
-            <div class="badges"><span class="badge">Canoa</span><span class="badge">Bosque primario</span><span class="badge">Lac de Léon</span></div>
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Courant d'Huchet — el Amazonas de Europa</div>
+            <div class="day-subtitle">12 km en canoa por el bosque primario hasta el Atlántico</div>
           </div>
         </div>
-        <div class="stop">
-          <div class="stop-name">Lac de Léon</div>
-          <div class="stop-desc">El más salvaje de los lagos costeros de Las Landas: 4 km de longitud, bordeado por dunas y pinos, sin un solo hotel en sus orillas. El agua (temperatura en verano: 22-24°C) es la más limpia de la costa atlántica francesa — sin motoristas ni jetskis por regulación. El amanecer sobre el lago con niebla baja es el mejor argumento para madrugar. Aparca en el camping de Léon y accede a pie (1 km).</div>
-          <div class="stop-price">Gratis bañarse · Alquiler kayak/canoa: €12-15/hora</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Courant d'Huchet — descenso en barca</div>
-          <div class="stop-desc">El Courant d'Huchet es un río de 12 km que conecta el Lac de Léon con el Atlántico atravesando el bosque de pinos y dunas más intacto de Francia. Declarado Reserva Natural Europea, el descenso se hace en barcas de madera plana polegadas a mano (sin motor) entre lianas, laureles, alisos y mimosas que forman bóvedas sobre el agua. La guía de los barqueros de Moïse explica la flora y fauna en francés y algo de inglés. Duración: 3 h ida. Reserva con antelación en temporada alta.</div>
-          <div class="stop-price">€13-16/persona (barca guiada) · Canoa autónoma: €18-22/barca</div>
-        </div>
-        <div class="highlight-box">
-          <strong>Consejo para la pareja:</strong> Si queréis silencio, pedid una barca propia para dos (€18-22 la canoa). Si preferís historia natural, id en la barca comunitaria guiada (€13/persona). El descenso llega hasta la playa atlántica — volved a Léon por la duna costera (1 h a pie, vistas 360°) o en el servicio de recogida de los barqueros.
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Lac de Léon</div>
+              <div class="stop-desc">El más salvaje de los lagos costeros de Las Landas: 4 km de longitud, bordeado por dunas y pinos, sin un hotel en sus orillas. Sin motores por regulación. Agua a 22-24°C en verano. Base de salida para el Courant d'Huchet.</div>
+              <div class="stop-price">Gratis nadar · Kayak: €12-15/h</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Descenso del Courant d'Huchet</div>
+              <div class="stop-desc">Reserva Natural Europea. Río de 12 km que conecta el lago con el Atlántico entre lianas, laureles, alisos y mimosas que forman bóvedas sobre el agua. Las barcas de madera plana se polegan a mano, sin motor. Duración: 3 horas. Se llega a pie de playa atlántica virgen.</div>
+              <div class="stop-price">€13-16/persona (barca guiada) · €18-22 canoa para 2</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>Para la pareja:</strong> Pedid una canoa propia para dos (€18-22) si queréis silencio. La barca guiada comunitaria (€13/pax) incluye explicación de flora y fauna. El servicio de recogida devuelve desde la playa a Léon.
+          </div>
         </div>
       </div>
 
       <div class="day-card">
         <div class="day-header">
-          <div class="day-number">04</div>
-          <div class="day-meta">
-            <h3>Dax — la ciudad termal y la feria gascuña</h3>
-            <div class="badges"><span class="badge">Termas</span><span class="badge">Fango curativo</span><span class="badge">Feria</span></div>
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title">Dax — la ciudad termal más importante de Francia</div>
+            <div class="day-subtitle">64°C que brotan del suelo desde la época romana</div>
           </div>
         </div>
-        <div class="stop">
-          <div class="stop-name">La Fontaine Chaude de Dax</div>
-          <div class="stop-desc">En el centro de Dax, la Fuente Caliente mana a 64°C de manera ininterrumpida desde la época romana (las termas de Aquae Tarbellicae). Es de acceso libre las 24 h y puedes meter las manos en el agua que sube del subsuelo. El vapor que levanta en invierno es espectacular. El municipio de Dax es el mayor centro termal de Francia: 38 establecimientos, 52.000 clientes anuales. Para la pareja, una sesión de piscine thermale (piscina termal con hidrojets) es la actividad estrella del día.</div>
-          <div class="stop-price">Fuente exterior: gratis · Piscine thermale: €8-14/persona</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Fango de Dax — terapia de barro termal</div>
-          <div class="stop-desc">El fango de Dax (péloïde) es único en el mundo: barro gris cargado de micro-organismos termales que se aplica caliente sobre el cuerpo y actúa como antiinflamatorio y relajante muscular. Después de una semana de surf y senderismo, una sesión de envoltura de fango para dos (40 min + ducha) es la recuperación perfecta y una experiencia que no se repite fácilmente fuera de Las Landas.</div>
-          <div class="stop-price">€18-28/persona (según establecimiento)</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Dax: casco histórico y gastronomía</div>
-          <div class="stop-desc">El casco histórico de Dax tiene las ruinas de la muralla romana, la Catedral de Notre-Dame (siglo XVII) y las calles peatonales de la Rue Saint-Pierre. La Feria de Dax (primera semana de agosto) es la segunda más grande de Francia después de Pamplona: corridas, capeas, batukadas y fiestas de calle durante 5 días. Si tu viaje no coincide con la feria, el mercado cubierto (tous les jours) tiene foie gras fresco, Armagnac y fromages de la región.</div>
-          <div class="stop-price">Pasear: gratis · Mercado: sin obligación de compra</div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">La Fontaine Chaude — libre las 24 h</div>
+              <div class="stop-desc">En el centro de Dax, la Fuente Caliente mana a 64°C de manera ininterrumpida desde la época romana (Aquae Tarbellicae). Acceso completamente libre. El vapor que levanta en invierno es espectacular. 38 establecimientos termales en el municipio, 52.000 clientes anuales.</div>
+              <div class="stop-price">Gratis</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Piscine thermale + fango termal</div>
+              <div class="stop-desc">Para la pareja: una sesión de piscina termal con hidrojets (€8-14/persona) y una envoltura de fango (péloïde — barro gris con micro-organismos termales único en el mundo, antiinflamatorio y relajante). Después de días de surf y senderismo: la recuperación perfecta.</div>
+              <div class="stop-price">Piscina: €8-14/pax · Fango: €18-28/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Mercado de Dax y gastronomía gascuña</div>
+              <div class="stop-desc">El mercado cubierto de Dax tiene foie gras fresco, Armagnac y fromages de la región. La Feria de Dax (primera semana de agosto) es la segunda más grande de Francia: corridas, batukadas y fiesta durante 5 días. El casco histórico tiene las ruinas de la muralla romana.</div>
+              <div class="stop-price">Pasear: gratis · Foie gras 180g: €12-18</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="day-card">
         <div class="day-header">
-          <div class="day-number">05</div>
-          <div class="day-meta">
-            <h3>Marquèze y el interior: el bosque eterno y el Armagnac</h3>
-            <div class="badges"><span class="badge">Tren de vapor</span><span class="badge">Écomusée</span><span class="badge">Armagnac</span></div>
+          <div class="day-num" aria-hidden="true">05</div>
+          <div>
+            <div class="day-title">Marquèze + Mont-de-Marsan — el interior gascon</div>
+            <div class="day-subtitle">Tren de vapor, bosque eterno y Armagnac en bodega</div>
           </div>
         </div>
-        <div class="stop">
-          <div class="stop-name">Écomusée de la Grande Lande — Marquèze</div>
-          <div class="stop-desc">El único acceso al Écomusée de Marquèze (el corazón histórico de la Gran Lande) es en tren de vapor desde la estación de Sabres — 4 km de bosque de pinos y una llegada a una aldea gascuña del siglo XIX reconstruida en su entorno original. El museo de arquitectura viva muestra la vida del pastorillo de Las Landas (que usaba zancos para recorrer el bosque), los cultivos de centeno y el funcionamiento de las berges (molinos de agua). Impresionante contexto cultural para entender el paisaje que habéis cruzado los días anteriores.</div>
-          <div class="stop-price">€12/adulto (incluye tren + visita) · Gratis menores de 5 años</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Mont-de-Marsan — capital del departamento</div>
-          <div class="stop-desc">A 30 km de Sabres, la capital de Las Landas merece una parada de 2 horas: el Musée Despiau-Wlérick (esculturas del siglo XX, entrada libre), el Donjon Lacataye (torre medieval del siglo XIV, €4) y el mercado ganadero del miércoles — el más grande del suroeste francés, con 3.000 reses cada semana. La ciudad tiene la mejor oferta de restaurantes tradicionales gascos de todo el departamento.</div>
-          <div class="stop-price">Museo: gratis · Donjon: €4 · Mercado: gratis ver</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Armagnac — en la bodega del productor</stop-name>
-          <div class="stop-desc">El Armagnac es el brandy más antiguo del mundo (primera destilación documentada: 1411) y el más subestimado de Francia. A diferencia del Cognac, el Armagnac se destila una sola vez y se enveja en barricas de roble negro de Gascuña. En Villeneuve-de-Marsan (20 km de Mont-de-Marsan) varios domaines venden directamente con degustación libre. Una botella de Armagnac VS (3 años) cuesta €14-20 en domaine; el VSOP (5+ años) €22-32. Ninguno de esos precios existe fuera de Gascuña.</div>
-          <div class="stop-price">Degustación: gratis · Botella VS: €14-20</div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Écomusée de la Grande Lande — Marquèze</div>
+              <div class="stop-desc">Acceso único en tren de vapor desde Sabres (4 km de bosque de pinos). Aldea gascuña del siglo XIX reconstruida en su entorno original: pastilleros con zancos (tradición del terreno llano), molinos y cultivos de centeno. El contexto histórico del paisaje que habéis recorrido.</div>
+              <div class="stop-price">€12/persona (incluye tren + visita)</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Armagnac en Villeneuve-de-Marsan</div>
+              <div class="stop-desc">El brandy más antiguo del mundo (primera destilación documentada: 1411). A diferencia del Cognac, se destila una sola vez. Los domaines de Villeneuve-de-Marsan ofrecen degustación libre. Botella VS (3 años): €14-20 en origen — imposible a ese precio fuera de Gascuña.</div>
+              <div class="stop-price">Degustación: gratis · Botella VS: €14-20</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="day-card">
         <div class="day-header">
-          <div class="day-number">06</div>
-          <div class="day-meta">
-            <h3>Biscarrosse y la Duna de Pilat — el final del mundo atlántico</h3>
-            <div class="badges"><span class="badge">Lago + Atlántico</span><span class="badge">Duna 110 m</span><span class="badge">Baño</span></div>
+          <div class="day-num" aria-hidden="true">06</div>
+          <div>
+            <div class="day-title">Biscarrosse + Duna de Pilat — el final del mundo atlántico</div>
+            <div class="day-subtitle">Lago + playa + duna de 110 m al atardecer</div>
           </div>
         </div>
-        <div class="stop">
-          <div class="stop-name">Biscarrosse — lago y playa atlántica</div>
-          <div class="stop-desc">Biscarrosse tiene una dualidad única en Europa: el Lac de Biscarrosse-Parentis (el segundo lago más grande de Francia, 3.600 ha), a 3 km de una de las playas atlánticas menos masificadas de la costa. En el lago: agua templada (22-24°C en verano), kayak, windsurf y escuelas de vela. En la playa: olas del Atlántico, dunas de 15-20 m y el horizonte limpio. En 15 minutos en bici cambias completamente de ecosistema.</div>
-          <div class="stop-price">Gratis nadar · Alquiler bici: €10-14/día</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Duna de Pilat — la mayor duna de Europa</div>
-          <div class="stop-desc">A 45 km al norte de Biscarrosse, técnicamente en la Gironda pero puerta natural del extremo norte de Las Landas: la Duna de Pilat tiene 110 metros de altura, 500 m de anchura y 2,7 km de longitud. Subir (15 min por la escalinata de madera o 25 min por la duna libre) y ver desde la cima el Atlántico a un lado y el bosque de pinos del Arcachon al otro es uno de los paisajes más dramáticos de Francia. En agosto hay hasta 10.000 personas al día — id antes de las 9 h o después de las 18 h para verla en paz.</div>
-          <div class="stop-price">Subida a la duna: gratis · Parking: €8-12/día en temporada alta</div>
-        </div>
-        <div class="highlight-box">
-          <strong>Para la pareja:</strong> Si queréis el atardecer desde la Duna de Pilat con pocas personas, llegad a las 18:30 h. El sol cae sobre el Atlántico a las 21:30 h en julio-agosto — tenéis 3 horas de luz dorada. Llevad algo de cena para picnic en la cima.
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Biscarrosse — lago y playa atlántica</div>
+              <div class="stop-desc">Biscarrosse tiene el Lac de Biscarrosse-Parentis (segundo lago más grande de Francia, 3.600 ha) a 3 km de una playa atlántica virgen. En 15 minutos en bici cambias de ecosistema completamente: agua templada del lago (22-24°C) a olas atlánticas y dunas de 20 m.</div>
+              <div class="stop-price">Gratis nadar · Alquiler bici: €10-14/día</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Duna de Pilat (Gironde) — la mayor de Europa</div>
+              <div class="stop-desc">A 45 km al norte: 110 m de altura, 500 m de anchura, 2,7 km de longitud. Desde la cima: el Atlántico a un lado y el bosque de pinos del Arcachon al otro. En agosto hasta 10.000 personas al día — llegad antes de las 9 h o después de las 18 h. El atardecer desde la cima es de los más dramáticos de Francia.</div>
+              <div class="stop-price">Subida: gratis · Parking: €8-12/día en temporada alta</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>Atardecer en la Duna:</strong> Llegad a las 18:30 h. El sol cae sobre el Atlántico a las 21:30 h en julio-agosto — tres horas de luz dorada. Llevad cena de pícnic para la cima.
+          </div>
         </div>
       </div>
 
       <div class="day-card">
         <div class="day-header">
-          <div class="day-number">07</div>
-          <div class="day-meta">
-            <h3>Día libre y regreso — mercado final y despedida atlántica</h3>
-            <div class="badges"><span class="badge">Mercado</span><span class="badge">Playa libre</span><span class="badge">Vuelta</span></div>
+          <div class="day-num" aria-hidden="true">07</div>
+          <div>
+            <div class="day-title">Mercado final + despedida atlántica + regreso</div>
+            <div class="day-subtitle">Foie gras para llevar y último baño</div>
           </div>
         </div>
-        <div class="stop">
-          <div class="stop-name">Mercado gascon del domingo</div>
-          <div class="stop-desc">El mercado del domingo en Peyrehorade o Saint-Vincent-de-Tyrosse (según donde estéis alojados) es el mejor resumen de la gastronomía gascuña: foie gras fresco de pato (€12-18 en tarro, €8-12 en lata), magret de canard ahumado, terrines de lapin à l'armagnac, fromage de brebis (queso de oveja) de los Pirineos, miel de pino y melón del mediodía. Lo que compréis aquí para llevar de vuelta a España sale a un tercio del precio de cualquier tienda gourmet española.</div>
-          <div class="stop-price">Compras para llevar: €20-40 (presupuestado en el viaje)</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Última mañana de playa libre</div>
-          <div class="stop-desc">El último baño atlántico. Si venís del sur, la playa de Seignosse-l'Océan (entre Hossegor y Capbreton) tiene zonas sin servicios y casi sin gente en la orilla norte. Si venís del norte, la Plage du Gurp (límite Gironde-Landes) es salvaje y completamente libre. El océano Atlántico a esta latitud (43-44°N) tiene temperatura media de 20-22°C en agosto — ideal para el último chapuzón.</div>
-          <div class="stop-price">Gratis</div>
-        </div>
-        <div class="stop">
-          <div class="stop-name">Regreso a España</div>
-          <div class="stop-desc">Desde Hossegor hasta Irún son 95 km (1 h) por la AP-8/A-63. Desde Bayonne hasta San Sebastián: 50 km (40 min). Si venís de Madrid, contad 5 h 30 min desde la zona de Hossegor por la AP-8 + AP-1 o 6 h por carretera nacional. Última gasolinera económica antes del cruce: Biarritz o Bayonne (la gasolina en Francia es 10-15% más cara que en España).</div>
-          <div class="stop-price">Gasolina: ya contabilizada en el presupuesto</div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Mercado del domingo gascon</div>
+              <div class="stop-desc">Los mercados de Peyrehorade o Saint-Vincent-de-Tyrosse tienen foie gras fresco de pato (€12-18 tarro), magret ahumado, terrines de lapin à l'Armagnac, fromage de brebis y miel de pino. Lo que compréis aquí sale a un tercio del precio de cualquier tienda gourmet española.</div>
+              <div class="stop-price">Compras para llevar: presupuestado €20-40</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Última playa y regreso</div>
+              <div class="stop-desc">Playa de Seignosse-l'Océan o Plage du Gurp (límite Gironde-Landes): salvajes, sin servicios y con el Atlántico a 20-22°C en agosto. Regreso a España: Hossegor → Irún son 95 km (1 h). Última gasolinera económica antes del cruce: Bayonne — la gasolina en Francia es 10-15% más cara que en España.</div>
+              <div class="stop-price">Gratis</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="presupuesto" style="margin-top:60px">
-      <div class="section-label">Dinero</div>
-      <h2 class="section-title">Presupuesto <em>real 700 €</em></h2>
+    <!-- Presupuesto -->
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto desglosado</h2>
       <table class="budget-table">
         <thead><tr><th>Concepto</th><th>Mínimo (2 pax)</th><th>Cómodo (2 pax)</th></tr></thead>
         <tbody>
-          <tr><td>Gasolina (desde Bilbao ida+vuelta ~400 km)</td><td>€45</td><td>€55</td></tr>
-          <tr><td>Alojamiento 6 noches (camping/surf camp)</td><td>€130</td><td>€220</td></tr>
+          <tr><td>Gasolina ida+vuelta desde Bilbao (~400 km)</td><td>€45</td><td>€55</td></tr>
+          <tr><td>Alojamiento 6 noches (camping / surf camp)</td><td>€130</td><td>€220</td></tr>
           <tr><td>Comidas 7 días × 2 personas</td><td>€185</td><td>€260</td></tr>
           <tr><td>Courant d'Huchet (canoa 2 personas)</td><td>€26</td><td>€32</td></tr>
           <tr><td>Écomusée Marquèze (tren + visita)</td><td>€24</td><td>€24</td></tr>
           <tr><td>Piscine thermale Dax (2 sesiones)</td><td>€16</td><td>€28</td></tr>
           <tr><td>Parking Duna de Pilat</td><td>€8</td><td>€12</td></tr>
-          <tr><td>Alquiler kayak/SUP (2 días)</td><td>€24</td><td>€40</td></tr>
-          <tr><td>Mercado + compras para llevar (jamón, Armagnac, foie)</td><td>€35</td><td>€60</td></tr>
-          <tr><td>Otros (parking, extras, propinas)</td><td>€20</td><td>€40</td></tr>
+          <tr><td>Kayak / SUP (2 días)</td><td>€24</td><td>€40</td></tr>
+          <tr><td>Mercado + compras (jamón, Armagnac, foie)</td><td>€35</td><td>€60</td></tr>
+          <tr><td>Otros (parking, extras)</td><td>€20</td><td>€40</td></tr>
         </tbody>
       </table>
       <div class="budget-total">
-        <span class="budget-total-label">Total estimado para 2 personas</span>
-        <span class="budget-total-value">€513–771</span>
-      </div>
-      <p class="budget-note">El presupuesto de €700 es totalmente realista combinando camping o surf camp (€20-30/noche la parcela doble) con desayunos propios, algún pícnic de mercado y 2-3 restaurantes de menú del día (€14-18/menú). Las actividades incluidas en el desglose son las principales — las playas, senderos y paseos son gratuitos. Si venís desde Madrid, añadid €50-70 de gasolina adicional.</p>
-    </section>
-
-    <section id="transporte" style="margin-top:60px">
-      <div class="section-label">Movilidad</div>
-      <h2 class="section-title">Cómo <em>llegar y moverse</em></h2>
-      <div class="info-grid">
-        <div class="info-box"><h4>Coche desde Bilbao</h4><p>AP-8 dirección Biarritz, cruce frontera y A-63 hacia Hossegor/Capbreton. 95 km, 1 h. El coche es imprescindible para conectar los pueblos costeros con el interior.</p></div>
-        <div class="info-box"><h4>Coche desde Madrid</h4><p>AP-1 o N-I hasta Burgos, A-231 hasta Vitoria, AP-1/AP-68 hasta Bilbao, AP-8 hasta frontera. 560 km, 5 h 30 min. Salid de noche o muy temprano para evitar tráfico en verano.</p></div>
-        <div class="info-box"><h4>TGV París → Dax / Bayonne</h4><p>Desde París Montparnasse: TGV a Dax (3 h 30 min) o Bayonne (3 h 15 min). Desde €29 en anticipo. Útil si llegáis desde el norte de Francia o por conexión aérea en París.</p></div>
-        <div class="info-box"><h4>Bici en la costa</h4><p>La Véloroute de l'Océan (itinerario ciclista V80) conecta Hossegor, Capbreton, Vieux-Boucau y Léon por pistas separadas del tráfico entre dunas y pinos. Con bici de alquiler (€10-14/día) los desplazamientos costeros son más rápidos y baratos que en coche.</p></div>
+        <span class="budget-total-label">Total estimado para 2 personas · 7 días</span>
+        <span class="budget-total-value">€513 – €771</span>
       </div>
     </section>
 
-    <section id="alojamiento" style="margin-top:60px">
-      <div class="section-label">Dónde dormir</div>
-      <h2 class="section-title">Alojamiento <em>dentro del presupuesto</em></h2>
-      <div class="info-grid">
-        <div class="info-box"><h4>Camping (opción principal)</h4><div class="hotel-price">€20-35/noche (parcela 2 pax)</div><p>Las Landas tiene la mayor concentración de campings de Francia: 120 en el departamento. Los mejores: Camping Oyam (Bidart), Camping Atlantic Club Montalivet, Camping du Lac de Léon. Reserva en julio-agosto con semanas de antelación.</p></div>
-        <div class="info-box"><h4>Surf Camp Hossegor</h4><div class="hotel-price">€35-55/noche/habitación doble</div><p>Casas de surf con habitaciones compartidas o privadas, tablas de surf incluidas o en alquiler. Le Spot, Surf Camp Hossegor y varios hostels del entorno tienen habitaciones dobles en ese rango. Ambiente internacional, cenas comunitarias y sesiones de surf organizadas.</p></div>
-        <div class="info-box"><h4>Gîte rural interior</h4><div class="hotel-price">€55-85/noche</div><p>Para los días en Dax y el interior (días 4-5), los gîtes rurales de las Landas ofrecen habitaciones en casas de campo de pino con desayuno incluido. Muchos tienen piscina y están rodeados de bosque de pinos.</p></div>
-        <div class="info-box"><h4>Apartamento Airbnb/Booking</h4><div class="hotel-price">€50-80/noche</div><p>Los apartamentos en Capbreton, Hossegor o Biscarrosse tienen precios razonables fuera de agosto (julio y septiembre son las épocas más equilibradas entre precio y tiempo). Con cocina: el ahorro en comidas compensa la diferencia vs camping.</p></div>
+    <!-- Alojamiento -->
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-aloj">
+      <h2 class="section-heading" id="h-aloj">Dónde dormir</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">Camping — opción principal (€20-35/noche parcela doble)</div>
+            <div class="stop-desc">Las Landas tiene la mayor concentración de campings de Francia: 120 en el departamento. Los mejores para este viaje: Camping Atlantic Club Montalivet, Camping du Lac de Léon, Camping Oyam (Bidart). Reserva en julio-agosto con semanas de antelación.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">Surf Camp Hossegor (€35-55/noche habitación doble)</div>
+            <div class="stop-desc">Casas de surf con habitaciones privadas, tablas en alquiler y ambiente internacional. Le Spot, Surf Camp Hossegor. Cenas comunitarias y sesiones de surf organizadas.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">Gîte rural interior (€55-85/noche)</div>
+            <div class="stop-desc">Para los días de Dax y el interior. Casas de campo de pino con desayuno incluido. Muchas tienen piscina y están en medio del bosque sin cobertura — ideal.</div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- Gastronomía -->
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía gascuña</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Charcutería</div>
+          <div class="gastro-title">Jambon de Bayonne IGP</div>
+          <div class="gastro-price">€6-10 (200g en mercado)</div>
+          <div class="gastro-desc">Curado 7+ meses con sal de Béarn. Más suave y dulce que el serrano. En Les Halles de Bayonne, precio de origen.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Foie gras</div>
+          <div class="gastro-title">Foie gras de canard</div>
+          <div class="gastro-price">€12-18 (tarro 180g)</div>
+          <div class="gastro-desc">De pato (no de oca). El gascon es más graso y potente que el alsaciano. Mi-cuit en tarro: la versión más asequible para llevar.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Carne</div>
+          <div class="gastro-title">Magret de canard</div>
+          <div class="gastro-price">€12-18 (menú restaurante)</div>
+          <div class="gastro-desc">Pechuga del pato de foie, a la plancha con exterior crujiente e interior rosado. Con salsa de Armagnac y patatas sarladaises.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Destilado</div>
+          <div class="gastro-title">Armagnac</div>
+          <div class="gastro-price">€14-20 (botella VS en domaine)</div>
+          <div class="gastro-desc">El brandy más antiguo del mundo (1411). Destilado una sola vez en alambique de cobre. Precio en bodega: imposible fuera de Gascuña.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Menú diario</div>
+          <div class="gastro-title">Menú du jour</div>
+          <div class="gastro-price">€14-18 (con vino incluido)</div>
+          <div class="gastro-desc">Entrée + plat + dessert + vino de la casa. En los bistros de Dax y Mont-de-Marsan. Equivalente al menú del día español, con el vino incluido.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Pescado</div>
+          <div class="gastro-title">Ttoro (sopa vasca)</div>
+          <div class="gastro-price">€14-20 (ración)</div>
+          <div class="gastro-desc">Merluza, txipirón, gambas y mejillones en caldo de tomate y pimiento. En los restaurantes de Capbreton y Hossegor, en cazuela de barro.</div>
+        </div>
       </div>
     </section>
 
-    <section id="gastronomia" style="margin-top:60px">
-      <div class="section-label">Qué comer</div>
-      <h2 class="section-title">La cocina <em>gascuña</em></h2>
-      <div class="info-grid">
-        <div class="info-box"><h4>Foie gras de pato</h4><div class="food-price">€12-18 (tarro 180g)</div><p>El foie gras gascon es de pato (canard), no de oca. Más graso y potente que el alsaciano. En los mercados, el foie mi-cuit (semicocido) en tarro es el más asequible. Con una tostada gruesa de pain de campagne y un vaso de Sauternes: el aperitivo gascon perfecto.</p></div>
-        <div class="info-box"><h4>Magret de canard</h4><div class="food-price">€9-14 (menú)</div><p>La pechuga del pato de foie gras, cocinada como un filete: exterior crujiente, interior rosado, con la capa de grasa que derrite en boca. El plato principal gascon por excelencia. Los mejores los sirven con salsa de Armagnac y patatas sarladaises.</p></div>
-        <div class="info-box"><h4>Jambon de Bayonne IGP</h4><div class="food-price">€6-10 (200g)</div><p>Curado mínimo 7 meses con sal de Béarn. Más suave, más dulce y menos salado que el jamón serrano. Lo venden en los mercados de Bayonne y Capbreton. Combinado con fromage de brebis y un pan de sésamo: el picnic ideal de la playa.</p></div>
-        <div class="info-box"><h4>Ttoro</h4><div class="food-price">€14-20</div><p>Sopa de pescado vasca francesa (de la zona de Ciboure/Saint-Jean-de-Luz, a 30 km): merluza, txipirón, gambas y mejillones en caldo de tomate y pimiento. Los restaurantes de Capbreton y Hossegor la sirven en cazuela de barro.</p></div>
-        <div class="info-box"><h4>Menú du jour</h4><div class="food-price">€14-18 (con vino)</div><p>El menú del mediodía en los bistros franceses de Las Landas: entrée + plat + dessert + vino de la casa. Los mejores: Bistrot de Pays en Mont-de-Marsan y Dax, brasseries de Hossegor. El equivalente al menú del día español, con ventaja de que el vino suele estar incluido.</p></div>
-        <div class="info-box"><h4>Armagnac</h4><div class="food-price">€14-20 (botella VS en domaine)</div><p>El brandy más antiguo del mundo, destilado una sola vez en alambique de cobre en Villeneuve-de-Marsan y envejecido en roble de Gascuña. El VS (3 años) es fresco y frutal; el VSOP (5+ años) tiene notas de frutos secos y vainilla. Con dos hielos: digestivo perfecto de la noche.</p></div>
+    <!-- Consejos -->
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Olas de Hossegor:</strong> son potentes y rápidas. Sin experiencia en tubo, tomad clase antes de entrar solos. Las corrientes laterales en Hossegor Norte son peligrosas. Banderas: verde (bañarse), amarillo (precaución), rojo (prohibido bañarse).</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Courant d'Huchet:</strong> cierra con lluvias fuertes (nivel del río sube). Llamad antes si el tiempo es inestable: +33 5 58 48 73 91. Temporada: mayo-septiembre. Reservad en julio-agosto.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Duna de Pilat:</strong> el parking abre a las 7 h y se llena antes de las 9 h en agosto. Alternativa: aparcar en Le Pyla-sur-Mer (1 km, algunos tramos gratuitos) y acceder andando.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Precios Francia:</strong> hostelería 15-25% más cara que en España (sin IVA reducido). Compensadlo con 3-4 días de pícnic de mercado y cocinando en el camping.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Procesionaria del pino:</strong> endémica del bosque. Sus nidos de algodón en los pinos no son peligrosos en verano (orugas ya dispersas), pero no los toquéis nunca en primavera.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Gasolina:</strong> repostad en España o en Bayonne antes de entrar al interior. La gasolina en Francia es 10-15% más cara que en España. Última gasolinera económica antes del regreso: Biarritz.</div></div>
+    </section>
+
+    <!-- Checklist -->
+    <section id="checklist" class="itin-section" aria-labelledby="h-check">
+      <h2 class="section-heading" id="h-check">Qué llevar</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea (TARJETA — atención médica en Francia)</div>
+        <div class="check-item"><div class="check-box"></div>Bañador + toalla (playa, lago y termas)</div>
+        <div class="check-item"><div class="check-box"></div>Crema solar SPF 50 (Atlántico + altitud baja = UV alto)</div>
+        <div class="check-item"><div class="check-box"></div>Chubasquero ligero (Atlántico puede sorprender)</div>
+        <div class="check-item"><div class="check-box"></div>Calzado acuático cerrado (piedras Courant d'Huchet)</div>
+        <div class="check-item"><div class="check-box"></div>Bolsa isotérmica para foie gras fresco y quesos</div>
+        <div class="check-item"><div class="check-box"></div>Efectivo + Visa (algunos campings y mercados rurales)</div>
+        <div class="check-item"><div class="check-box"></div>Reserva anticipada del Courant d'Huchet</div>
+        <div class="check-item"><div class="check-box"></div>Maps.me o Google Maps offline descargado para la zona</div>
+        <div class="check-item"><div class="check-box"></div>Seguro de viaje (recomendado para Francia)</div>
+      </div></div>
+    </section>
+
+    <!-- Emergencias -->
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">SAMU (urgencias médicas)</div><div class="emerg-value">15</div><div class="emerg-note">Equivalente al 061 español</div></div>
+        <div class="emerg-card"><div class="emerg-label">Police / Gendarmerie</div><div class="emerg-value">17</div><div class="emerg-note">Equivalente al 091 español</div></div>
+        <div class="emerg-card"><div class="emerg-label">Pompiers (bomberos)</div><div class="emerg-value">18</div><div class="emerg-note"></div></div>
+        <div class="emerg-card"><div class="emerg-label">Emergencias (EU)</div><div class="emerg-value">112</div><div class="emerg-note">Funciona desde móvil sin cobertura</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital de Dax</div><div class="emerg-value">+33 5 58 05 10 10</div><div class="emerg-note">Centre Hospitalier de Dax</div></div>
+        <div class="emerg-card"><div class="emerg-label">CHU de Bayonne</div><div class="emerg-value">+33 5 59 44 35 35</div><div class="emerg-note">Hospital más completo de la zona</div></div>
       </div>
     </section>
 
-    <section id="consejos" style="margin-top:60px">
-      <div class="section-label">Información práctica</div>
-      <h2 class="section-title">Consejos <em>de Las Landas</em></h2>
-      <ul class="tips-list">
-        <li><span class="tip-icon">🏄</span>Las olas de Hossegor son potentes y rápidas. Si no tenéis experiencia de surf en olas de tubo, contratad una clase antes de entrar solos. Las corrientes laterales en Hossegor Norte pueden ser peligrosas. Haced caso de las banderas: verde (bañarse), amarillo (precaución), rojo (prohibido).</li>
-        <li><span class="tip-icon">🐛</span>La procesionaria del pino (insecto forestal) es endémica del bosque de Las Landas. Sus orugas forman cadenas en primavera (feb-may) y son urticantes. En verano no es problema — las procesionarias están en los nidos altos de los pinos. Pero no toquéis nunca un nido de algodón en un pino.</li>
-        <li><span class="tip-icon">🌊</span>El Courant d'Huchet cierra en caso de lluvias fuertes (el nivel del río sube y la corriente es peligrosa). Llamad antes si el tiempo es inestable: +33 5 58 48 73 91. La temporada de apertura es mayo-septiembre.</li>
-        <li><span class="tip-icon">🚗</span>En agosto, el parking de la Duna de Pilat abre a las 7 h y se llena antes de las 9 h. El precio del parking sube hasta €12/día en temporada alta. Alternativa: aparcar en Le Pyla-sur-Mer (1 km, gratuito algunos tramos) y acceder andando.</li>
-        <li><span class="tip-icon">💶</span>Francia no tiene el IVA reducido en hostelería que tiene España. Los precios en restaurantes son un 15-25% superiores a los equivalentes españoles. Compensadlo con pícnics de mercado (compra directa al productor) 3-4 de los 7 días.</li>
-        <li><span class="tip-icon">🌡️</span>El Atlántico en Las Landas tiene una temperatura media de 20-22°C en agosto (óptima) pero puede bajar a 17-18°C con baja presión. Llevad traje de lycra para días de olas y neopreno de 3mm si surfeáis.</li>
-      </ul>
-    </section>
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede ayudarte con alojamiento, rutas alternativas y presupuesto adaptado a tu situación.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
 
-    <section id="vocabulario" style="margin-top:60px">
-      <div class="section-label">Cultura local</div>
-      <h2 class="section-title">Vocabulario <em>gascon</em></h2>
-      <div class="vocab-grid">
-        <div class="vocab-card"><div class="vocab-term">Lande</div><div class="vocab-def">Páramo o matorral bajo en francés. El departamento "Les Landes" debe su nombre a la vegetación original de brezo y juncos que cubría la llanura antes de la reforestación de pinos del siglo XIX.</div></div>
-        <div class="vocab-card"><div class="vocab-term">Courant</div><div class="vocab-def">Río costero que conecta un lago o laguna con el Atlántico. El Courant d'Huchet es el más famoso y el más largo de Las Landas. También existen el Courant de Mimizan y el Courant de Contis.</div></div>
-        <div class="vocab-card"><div class="vocab-term">Péloïde</div><div class="vocab-def">Fango terapéutico termal de Dax. Mezcla de arcilla, agua termal y micro-organismos termales. Único en el mundo: las bacterias termófilas que contiene le dan sus propiedades antiinflamatorias.</div></div>
-        <div class="vocab-card"><div class="vocab-term">Magret</div><div class="vocab-def">Pechuga del pato que ha producido foie gras. Más grasa que el pato convencional (por la alimentación forzada del animal). El "magret de canard" es el plato principal gascon más exportado internacionalmente.</div></div>
-        <div class="vocab-card"><div class="vocab-term">Gîte</div><div class="vocab-def">Casa rural en alquiler en Francia. El equivalente francés de la "casa rural" española. Los Gîtes de France tienen sistema de clasificación por espigas (1 a 5). Los de Las Landas suelen ser en antiguas casas de pino rehabilitadas.</div></div>
-        <div class="vocab-card"><div class="vocab-term">Estive</div><div class="vocab-def">Pasto de altura en el dialecto gascon. Aunque Las Landas no tiene montañas, el término pervive en los nombres de aldeas y granjas de la zona interior. La "Grande Lande" del interior conserva muchos topónimos occitanos.</div></div>
-      </div>
-    </section>
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos y pueden variar según temporada y disponibilidad. El Courant d'Huchet puede cerrar por condiciones meteorológicas. La Duna de Pilat está en el departamento de Gironde, a 45 km del límite norte de Las Landas. Routlo no se responsabiliza de cambios en precios ni condiciones.
+    </div>
 
-    <section id="emergencias" style="margin-top:60px">
-      <div class="section-label">Seguridad</div>
-      <h2 class="section-title">Teléfonos de <em>emergencia</em></h2>
-      <div class="emergency-grid">
-        <div class="emergency-card"><div class="emergency-num">15</div><div class="emergency-label">SAMU (urgencias médicas)</div></div>
-        <div class="emergency-card"><div class="emergency-num">17</div><div class="emergency-label">Police / Gendarmerie</div></div>
-        <div class="emergency-card"><div class="emergency-num">18</div><div class="emergency-label">Pompiers (bomberos)</div></div>
-        <div class="emergency-card"><div class="emergency-num">112</div><div class="emergency-label">Emergencias generales (EU)</div></div>
-        <div class="emergency-card"><div class="emergency-num">+33 5 58 05 10 10</div><div class="emergency-label">Hospital de Dax</div></div>
-        <div class="emergency-card"><div class="emergency-num">+33 5 59 44 35 35</div><div class="emergency-label">CHU Bayonne</div></div>
-      </div>
-    </section>
-
-    <section id="checklist" style="margin-top:60px;margin-bottom:60px">
-      <div class="section-label">Antes de salir</div>
-      <h2 class="section-title">Checklist <em>del viaje</em></h2>
-      <ul class="checklist">
-        <li>Tarjeta sanitaria europea (TARJETA)</li>
-        <li>Bañador + toalla (playa y lago)</li>
-        <li>Crema solar SPF 50 (atlántico fuerte)</li>
-        <li>Chubasquero ligero (Atlántico)</li>
-        <li>Calzado acuático (Courant d'Huchet)</li>
-        <li>Bolsa isotérmica (foie gras fresco)</li>
-        <li>Efectivo + Visa (algunos campings)</li>
-        <li>Reserva Courant d'Huchet anticipada</li>
-        <li>Mapas offline (Google Maps descargado)</li>
-        <li>Seguro de viaje (recomendado Francia)</li>
-      </ul>
-    </section>
   </main>
 </div>
 
-<div class="disclosure">
-  <p>Itinerario elaborado con fines informativos. Los precios son estimativos y pueden variar según temporada, disponibilidad y tipo de alojamiento. El Courant d'Huchet puede cerrar por condiciones meteorológicas. La Duna de Pilat está técnicamente en el departamento de Gironde, a 45 km del límite norte de Las Landas. Routlo no se responsabiliza de cambios en precios, accesos ni condiciones.</p>
-</div>
-
-<footer>
-  <p>© 2025 Routlo · Itinerarios de viaje con IA</p>
-  <p><a href="../itinerarios.html">← Todos los itinerarios</a></p>
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Europa</div>
+      <nav aria-label="Itinerarios Europa"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="paris.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">París</a></li>
+        <li><a href="roma.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Roma</a></li>
+        <li><a href="lisboa.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Lisboa</a></li>
+        <li><a href="budapest.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Budapest</a></li>
+      </ul></nav>
+    </div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Itinerarios España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  const sections = document.querySelectorAll('section[id]');
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
   const tocLinks = document.querySelectorAll('.toc-list a');
-  const obs = new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){tocLinks.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'});
-  sections.forEach(s=>obs.observe(s));
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  // Route: Bayonne → Capbreton → Hossegor → Vieux-Boucau → Léon → Dax → Sabres → Biscarrosse
+  const routeCoords = [
+    [43.492, -1.474], [43.580, -1.455], [43.642, -1.440],
+    [43.663, -1.410], [43.795, -1.401], [43.878, -1.307],
+    [43.710, -1.052], [44.150, -0.737], [44.391, -1.163]
+  ];
+  const waypoints = [
+    { latlng: [43.492, -1.474], label: 'Bayonne — Día 1' },
+    { latlng: [43.642, -1.440], label: 'Capbreton — Día 1' },
+    { latlng: [43.663, -1.410], label: 'Hossegor — Día 2' },
+    { latlng: [43.795, -1.401], label: 'Vieux-Boucau — Día 2' },
+    { latlng: [43.878, -1.307], label: 'Lac de Léon + Courant d\'Huchet — Día 3' },
+    { latlng: [43.710, -1.052], label: 'Dax — Día 4' },
+    { latlng: [44.150, -0.737], label: 'Marquèze / Sabres — Día 5' },
+    { latlng: [44.391, -1.163], label: 'Biscarrosse — Día 6' }
+  ];
+
+  const map = L.map('route-map', { zoomControl: true, attributionControl: false })
+    .setView([43.85, -1.15], 8);
+
+  const _lang = (navigator.language || 'en').toLowerCase();
+  if (_lang.startsWith('es')) {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+      className: 'tile-osm-es'
+    }).addTo(map);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+  }
+
+  const bounds = L.latLngBounds(routeCoords).pad(0.12);
+  map.fitBounds(bounds);
+
+  L.polyline(routeCoords, { color: '#c9a96e', weight: 4, opacity: 0.85, lineJoin: 'round' }).addTo(map);
+
+  L.circleMarker(routeCoords[0], {
+    radius: 9, fillColor: '#5ecb8a', color: '#fff', weight: 2.5, fillOpacity: 1
+  }).bindTooltip('Bayonne — Inicio', { permanent: false, direction: 'right' }).addTo(map);
+
+  waypoints.slice(1).forEach(wp => {
+    L.circleMarker(wp.latlng, {
+      radius: 7, fillColor: '#c9a96e', color: '#fff', weight: 2, fillOpacity: 1
+    }).bindTooltip(wp.label, { permanent: false, direction: 'top' }).addTo(map);
+  });
+
+  L.control.attribution({ prefix: false }).addAttribution('© <a href="https://openstreetmap.org">OpenStreetMap</a>').addTo(map);
+  setTimeout(() => map.invalidateSize(), 100);
+})();
 </script>
+<style>.tile-osm-es{filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)}</style>
 </body>
 </html>
