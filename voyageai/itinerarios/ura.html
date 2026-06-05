@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ura (Bután) — 3 días en el valle más remoto del Himalaya: yaks, monasterios y Felicidad Nacional Bruta | Routlo</title>
+  <meta name="description" content="3 días en Ura, el valle más remoto de Bumthang en Bután: el único país del mundo que mide la Felicidad Nacional Bruta. Yak herders, monasterios del s. VIII y el festival Nimalung Tshechu."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#162a50 70%,rgba(201,169,110,0.12) 100%),url('https://images.unsplash.com/photo-1580130534776-a60f2f6c87e7?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Aldeas · Bután</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Ura</h1>
+  <p class="dest-country">El valle más remoto de Bumthang · Yaks · Felicidad Nacional Bruta</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Valle de Bumthang · Bután</span>
+    <span class="dest-badge gold">3 días · Aldea Himalaya</span>
+    <span class="dest-badge gold">💶 1.350 € dos personas (tasas incluidas)</span>
+    <span class="dest-badge">🏔️ Altitud 3.100 m</span>
+    <span class="dest-badge">🌸 Abr · May (festival) · Oct · Nov</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">3 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~1.350 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo a Paro</div></div>
+        <div class="route-info-item"><div class="route-info-label">Altitud</div><div class="route-info-val">3.100 m</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Abr · May · Oct</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Ura (aldea principal)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Paro → Jakar Dzong → primera llegada a Ura</div>
+            <div class="day-subtitle">Vuelo sobre el Himalaya · Fortaleza del s. XVII · El valle que el tiempo olvidó</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">El vuelo a Paro — la aproximación más espectacular del mundo</div>
+              <div class="stop-desc">El aeropuerto de Paro (2.235m) está rodeado de montañas de 5.000m y solo 8 pilotos del mundo están certificados para aterrizar en él. El vuelo desde Katmandú o Delhi dura 60-90 minutos. La aproximación — entre picos cubiertos de nieve, virando bruscamente a 50 metros del suelo para alinear con la única pista del país — es la más cinematográfica de la aviación civil. Todos los pasajeros llevan 20 años recordando ese momento de aterrizaje.</div>
+              <div class="stop-price">Vuelo Katmandú → Paro (Drukair o Bhutan Airlines): €180-280/persona</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Jakar Dzong — la fortaleza de las 4 horas de conducción</div>
+              <div class="stop-desc">Desde Paro, el drive a Bumthang (4h por la carretera Lateral Road, 260 km) atraviesa cuatro pasos de montaña sobre 3.000m con vistas al Himalaya. El Jakar Dzong (s. XVII, 1.647m de altitud) —la fortaleza administrativa de Bumthang— es el dzong más grande de Bután: murallas blancas de 15 metros sobre el valle con banderas de oración (lungta) que son renovadas cada año de Tigre. Cena en la granja de la familia local que sirve de alojamiento en Ura: el carácter del viaje empieza aquí.</desc>
+              <div class="stop-price">Guía+driver (obligatorio en Bután): incluido en el paquete turístico</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>La tasa SDF — por qué Bután es caro y por qué merece la pena:</strong> El Sustainable Development Fee (SDF) cuesta $100/persona/día en temporada baja (noviembre-febrero, junio-agosto) y $200 en alta (marzo-mayo, septiembre-octubre). Para 2 personas durante 3 días en temporada alta: $1.200 ≈ €1.100. Esta tasa financia educación gratuita, sanidad gratuita y el 70% de bosque protegido del país. Bután es el único país del mundo con emisiones de carbono negativas. El precio es la política.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Aldea de Ura — arquitectura de siglos y yak herders</div>
+            <div class="day-subtitle">Las casas blancas del s. XVI · Nimalung Gonpa · El pastor de yaks más alto del valle</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">La aldea de Ura — 40 casas y ningún turista</div>
+              <div class="stop-desc">El pueblo de Ura (3.100m) tiene 40 casas de piedra encalada de blanco agrupadas en torno a un lhakhang (templo) central — la arquitectura más compacta de los valles de Bumthang. Las casas de Ura tienen tres plantas: el primer piso para el ganado (yaks y vacas), el segundo para vivir, el tercero para el altar familiar. Las paredes de piedra de 80 cm de grosor mantienen el calor en invierno (-20°C) y la frescura en verano. En el festival Ura Yakchoe (abril-mayo), el pueblo saca en procesión la reliquia del monje Pema Lingpa con máscaras de madera del s. XVI.</desc>
+              <div class="stop-price">Gratis (incluido en el paquete turístico con guía)</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Nimalung Gonpa — el monasterio sin turistas de Bután</div>
+              <div class="stop-desc">A 8 km de Ura por pista de tierra, el monasterio de Nimalung (s. VIII, reconstruido en 1990) organiza el Nimalung Tshechu en junio: 3 días de danzas enmascaradas cham con trajes de seda del s. XVII. Es el festival más pequeño y auténtico de Bután — sin turistas fotógrafos apostados, sin entradas vendidas online. El jefe del monasterio —el Rinpoche local, monje de 70 años que habla un inglés aprendido de misioneros en los años 60— recibe a los visitantes si el guía avisa con 24 horas de antelación. La conversación puede durar 3 horas.</desc>
+              <div class="stop-price">Donación al monasterio: $10-20 recomendado</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Pastores de yak — los guardianes del valle alto</div>
+              <div class="stop-desc">Las familias de pastores de yak de Ura llevan el ganado a los pastos de verano (4.000-4.500m) de mayo a octubre y bajan al valle en noviembre. Las tiendas de yak lana negra que se ven en los prados altos son el único signo de vida humana permanente sobre 3.500m en Bután. El guía puede arreglar una visita al campamento de pastores (2h de camino): la mujer del pastor sirve suja (té con mantequilla de yak) en taza de madera lacada y el queso fresco de leche de yak —el mejor queso del Himalaya— se come con las manos.</desc>
+              <div class="stop-price">Con el guía. Propina al pastor: $5-10</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Shingkhar — el pueblo más allá de Ura · Regreso a Paro</div>
+            <div class="day-subtitle">La aldea que solo existe en el mapa · Lhakhang del s. VIII · Drive de regreso</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Shingkhar — más lejos todavía</div>
+              <div class="stop-desc">A 12 km de Ura por la última pista de tierra del valle, Shingkhar (3.200m) tiene 25 familias y un lhakhang (capilla) del s. VIII construido por Guru Rinpoche (Padmasambhava, el monje que llevó el budismo a Bután en el 747 d.C.). La capilla no está en ninguna guía turística. El monje que cuida las pinturas murales lleva la llave en el cinturón y abre si el guía lo pide correctamente (en dzongkha). Las pinturas del s. VIII están intactas — el aislamiento total de Shingkhar las ha preservado sin restauración.</desc>
+              <div class="stop-price">Donación al templo: $5 recomendado</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Regreso a Paro — cuatro pasos de montaña y el Tiger's Nest</div>
+              <div class="stop-desc">El drive de vuelta a Paro puede incluir una parada en el Taktshang Goemba (Tiger's Nest), el monasterio colgado en la roca a 3.120m — la imagen más famosa de Bután. La caminata desde el aparcamiento dura 1,5h (300m de desnivel). Si estáis agotados del trek del día anterior: la vista del monasterio desde el mirador (sin subir) es igualmente impactante. Vuelo de regreso desde Paro: la misma aproximación épica, pero en sentido inverso.</desc>
+              <div class="stop-price">Tiger's Nest: incluido en el paquete</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto desglosado</h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Temporada baja (2 pax)</th><th>Temporada alta (2 pax)</th></tr></thead>
+        <tbody>
+          <tr><td>SDF (Sustainable Development Fee) · 3 días × 2 personas</td><td>$600 (~€550)</td><td>$1.200 (~€1.100)</td></tr>
+          <tr><td>Paquete guía + driver + alojamiento + comidas (obligatorio)</td><td>€400</td><td>€500</td></tr>
+          <tr><td>Vuelos ida+vuelta a Paro vía Delhi o Katmandú (×2)</td><td>€500</td><td>€700</td></tr>
+          <tr><td>Donaciones templos + propinas guía + driver</td><td>€40</td><td>€60</td></tr>
+          <tr><td>Compras artesanía (tejidos de yak, máscaras)</td><td>€40</td><td>€80</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado para 2 personas · 3 días</span>
+        <span class="budget-total-value">€1.530 – €2.440</span>
+      </div>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-aloj">
+      <h2 class="section-heading" id="h-aloj">Dónde dormir</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">Guesthouse familiar en Ura (incluido en el paquete turístico)</div>
+            <div class="stop-desc">En Ura hay 2 guesthouses familiares registrados ante la Tourism Council of Bhutan. Las habitaciones son sencillas —camas de madera con colchones y mantas gruesas de lana— pero las cenas son el punto fuerte: ema datshi (chile con queso), buckwheat pancakes con miel y suja (té con mantequilla de yak) al amanecer. El frío nocturno a 3.100m en octubre requiere dos mantas extra — pedidlas al llegar.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">Hotel en Jakar / Bumthang (parte del paquete)</div>
+            <div class="stop-desc">La primera y última noche en Jakar town tiene opciones más cómodas: el Wangchuck Hotel y el Kaila Guesthouse tienen calefacción central, ducha caliente y Wi-Fi. El paquete turístico obligatorio cubre el alojamiento en categoría "standard" — upgrade a "superior" disponible con suplemento de ~$50/noche.</div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía del Himalaya butanés</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato nacional</div>
+          <div class="gastro-title">Ema Datshi</div>
+          <div class="gastro-price">Incluido en el paquete</div>
+          <div class="gastro-desc">El plato nacional de Bután: chiles enteros (ema) con queso fresco de yak (datshi) cocinados en una salsa espesa. No es una guarnición — el chile ES el ingrediente principal, no el picante del plato. En Ura usan los chiles rojos secos del invierno que aportan más calor que picor. El nivel de ají varía por familia. En algunas casas es literalmente incomible para paladares europeos.</desc>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Té ritual</div>
+          <div class="gastro-title">Suja (té con mantequilla de yak)</div>
+          <div class="gastro-price">Incluido en alojamiento</div>
+          <div class="gastro-desc">Té negro tibetano batido con mantequilla de yak y sal en un churner de bambú de 80 cm. El resultado es una bebida líquida, salada, grasa y caliente que repone los electrolitos perdidos a 3.100m. El sabor sorprende (no es un té dulce europeo) pero a la segunda taza se convierte en el líquido más reconfortante del planeta en frío de montaña.</desc>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Queso</div>
+          <div class="gastro-title">Churpi (queso duro de yak)</div>
+          <div class="gastro-price">€2-4 (paquete)</div>
+          <div class="gastro-desc">El snack de los pastores butaneses: leche de yak cuajada, prensada y secada al aire durante semanas hasta conseguir una textura dura como el cuero. Se mastica durante horas liberando el sabor suave y láctico gradualmente. Es literalmente el caramelo del Himalaya. Los vendedores de Jakar lo venden en tiras de 20 cm —duran semanas a temperatura de montaña.</desc>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Cereal</div>
+          <div class="gastro-title">Puta (pancakes de trigo sarraceno)</div>
+          <div class="gastro-price">Incluido en desayuno</div>
+          <div class="gastro-desc">Los pancakes de trigo sarraceno (buckwheat) de Bumthang son únicos en Bután — el trigo sarraceno crece a 3.000m donde el arroz no puede. Con miel de las abejas de flores de rododendro del valle. El color gris oscuro de la masa crudas se convierte en pancakes dorados con un sabor a nuez intenso. El mejor desayuno del viaje, garantizado.</desc>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Arroz</div>
+          <div class="gastro-title">Arroz rojo de Bumthang</div>
+          <div class="gastro-price">Incluido en el paquete</div>
+          <div class="gastro-desc">El arroz rojo de grano corto que solo crece en los valles de Bumthang (3.000m de altitud): textura ligeramente masticable, color terracota, sabor a nuez con notas de tierra. Fuera de Bután no existe. Los 4 valles de Bumthang producen toda la cosecha del país — unas 1.500 toneladas al año. Con ema datshi encima: el plato nacional completo.</desc>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Aguardiente</div>
+          <div class="gastro-title">Ara (licor destilado de cereales)</div>
+          <div class="gastro-price">€0,50-1 (vaso en casa)</div>
+          <div class="gastro-desc">El aguardiente casero de Bután: destilado de arroz, trigo, mijo o maíz fermentado, 30-60% vol. Cada familia tiene su receta. El ara de Bumthang, destilado del trigo sarraceno local, tiene un sabor ahumado y terroso muy diferente al del valle de Paro. Se ofrece a los visitantes como primer gesto de hospitalidad — rechazarlo es insultante.</desc>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>El paquete turístico es obligatorio — y no es lo que parece:</strong> todos los turistas en Bután deben contratar un paquete con agencia acreditada que incluye guía licenciado, conductor y alojamiento. No es una restricción arbitraria: el guía es el intermediario cultural que hace posible el acceso real a los monasterios, las familias y los eventos. Sin guía, las puertas del Bután profundo no se abren. Buscad agencias recomendadas por Bhutan Tourism (tourism.gov.bt).</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Aclimatación de un día antes de Ura:</strong> llegáis de 0m al mar al aeropuerto de Paro (2.235m) y subís a Ura (3.100m) en pocas horas. El soroche (mal de altura) puede aparecer como cefalea, náuseas o insomnio. Pasar la primera noche en Jakar (2.600m) antes de subir a Ura reduce el riesgo. Hidratarse mucho y no hacer esfuerzo físico en el primer día.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>El festival Ura Yakchoe — la razón más poderosa para ir:</strong> el festival de Ura dura 4 días en abril-mayo (fecha exacta según el calendario lunar butanés). Todo el pueblo sale a la calle con los mejores gho (traje masculino) y kira (femenino). Las máscaras de madera del s. XVI son sacadas del cofre del templo una vez al año. El guía puede confirmar las fechas exactas del año en curso.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Fotografías en monasterios: preguntad siempre:</strong> en algunos lhakhang (capillas) la fotografía está prohibida. En otros, el monje os abrirá la sala de pinturas murales y os invitará a fotografiar con flash apagado. La regla de oro en Bután: preguntad al guía, que pregunta al monje. Nunca entréis sin quitaros los zapatos y nunca fotografiéis sin permiso.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Internet en Ura: no esperéis nada:</strong> la cobertura móvil en el valle de Ura es inexistente. El único Wi-Fi existe en el guesthouse durante 2-3 horas por la tarde cuando hay electricidad. Usad estos días para desconectar — ningún otro destino del mundo lo fuerza tan gentilmente.</div></div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-check">
+      <h2 class="section-heading" id="h-check">Qué llevar</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="check-item"><div class="check-box"></div>Ropa de invierno de montaña (3.100m: -5°C a 0°C de noche en octubre-noviembre)</div>
+        <div class="check-item"><div class="check-box"></div>Botas de trekking impermeables (sendero a Shingkhar sobre piedra y barro)</div>
+        <div class="check-item"><div class="check-box"></div>Acetazolamida (Diamox) prescrita por médico para el soroche de altitud</div>
+        <div class="check-item"><div class="check-box"></div>Power bank (electricidad limitada en Ura)</div>
+        <div class="check-item"><div class="check-box"></div>Ropa respetuosa (rodillas y hombros cubiertos para los monasterios)</div>
+        <div class="check-item"><div class="check-box"></div>Dólares en efectivo para el SDF (se paga a la agencia antes de entrar al país)</div>
+        <div class="check-item"><div class="check-box"></div>Seguro de evacuación de altitud (el hospital más cercano con UCI está en Thimphu)</div>
+        <div class="check-item"><div class="check-box"></div>Visado de Bután tramitado por la agencia turística (no existe visado independiente)</div>
+      </div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias Bután</div><div class="emerg-value">112</div><div class="emerg-note">Policía · Bomberos · Ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Bumthang</div><div class="emerg-value">+975 3 631 165</div><div class="emerg-note">Chamkhar Hospital — urgencias básicas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Jigme Dorji (Thimphu)</div><div class="emerg-value">+975 2 322 496</div><div class="emerg-note">El hospital de referencia del país — UCI</div></div>
+        <div class="emerg-card"><div class="emerg-label">Tourism Council</div><div class="emerg-value">+975 2 323 251</div><div class="emerg-note">Asistencia turística · tourism.gov.bt</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España · Delhi</div><div class="emerg-value">+91 11 4600 8400</div><div class="emerg-note">España sin embajada en Bután — gestión desde India</div></div>
+        <div class="emerg-card"><div class="emerg-label">Evacuación aérea</div><div class="emerg-value">Imprescindible</div><div class="emerg-note">Seguro con cobertura de helicóptero desde €60/viaje</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar esta ruta?</h3>
+      <p>Nuestro chatbot IA puede ayudarte a elegir la agencia, calcular el SDF exacto según fechas, combinar Ura con el festival de Punakha Dzong o el trek del Snowman.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> El Sustainable Development Fee (SDF) de Bután es obligatorio y varía por temporada. Confirmad el precio actualizado en tourism.gov.bt antes de reservar. El visado solo puede tramitarse a través de una agencia de viajes acreditada por Bhutan Tourism — no existe visado individual. Routlo no se responsabiliza de cambios en las tasas del gobierno de Bután.
+    </div>
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Aldeas de Asia</div>
+      <nav aria-label="Aldeas de Asia"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="ghandruk.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ghandruk</a></li>
+        <li><a href="shirakawa.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Shirakawa-go</a></li>
+        <li><a href="muang-ngoi.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Muang Ngoi</a></li>
+      </ul></nav>
+    </div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Itinerarios España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  const routeCoords = [
+    [27.429, 89.411], [27.570, 90.728], [27.543, 90.803],
+    [27.520, 90.832]
+  ];
+  const waypoints = [
+    { latlng: [27.429, 89.411], label: 'Paro — aeropuerto' },
+    { latlng: [27.570, 90.728], label: 'Jakar Dzong — Bumthang' },
+    { latlng: [27.543, 90.803], label: 'Ura (3.100m) — aldea principal' },
+    { latlng: [27.520, 90.832], label: 'Shingkhar — más allá del mapa' }
+  ];
+
+  const map = L.map('route-map', { zoomControl: true, attributionControl: false })
+    .setView([27.50, 90.20], 9);
+
+  const _lang = (navigator.language || 'en').toLowerCase();
+  if (_lang.startsWith('es')) {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, className: 'tile-osm-es'
+    }).addTo(map);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+  }
+
+  const bounds = L.latLngBounds(routeCoords).pad(0.15);
+  map.fitBounds(bounds);
+  L.polyline(routeCoords, { color: '#c9a96e', weight: 4, opacity: 0.85, lineJoin: 'round', dashArray: '8,6' }).addTo(map);
+
+  L.circleMarker(routeCoords[2], { radius: 9, fillColor: '#5ecb8a', color: '#fff', weight: 2.5, fillOpacity: 1 })
+    .bindTooltip('Ura (3.100m)', { permanent: false }).addTo(map);
+  [waypoints[0], waypoints[1], waypoints[3]].forEach(wp => {
+    L.circleMarker(wp.latlng, { radius: 7, fillColor: '#c9a96e', color: '#fff', weight: 2, fillOpacity: 1 })
+      .bindTooltip(wp.label, { permanent: false, direction: 'top' }).addTo(map);
+  });
+
+  L.control.attribution({ prefix: false }).addAttribution('© <a href="https://openstreetmap.org">OpenStreetMap</a>').addTo(map);
+  setTimeout(() => map.invalidateSize(), 100);
+})();
+</script>
+<style>.tile-osm-es{filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)}</style>
+</body>
+</html>
