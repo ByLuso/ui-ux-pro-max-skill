@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yuanyang (China) — 4 días en las terrazas Hani: 1.300 años de ingeniería de arroz en el corazón de Yunnan | Routlo</title>
+  <meta name="description" content="4 días en Yuanyang: las terrazas de arroz Hani de Yunnan, UNESCO 2013, 10.000 hectáreas esculpidas en 1.300 años. Amaneceres sobre Duoyishu, aldeas Hani y el espejo de agua más grande de Asia."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#162a50 70%,rgba(201,169,110,0.12) 100%),url('https://images.unsplash.com/photo-1542640244-7e672d6cef4e?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Aldeas · China</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Yuanyang</h1>
+  <p class="dest-country">Terrazas Hani · Yunnan · UNESCO 2013</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Honghe · Yunnan · China</span>
+    <span class="dest-badge gold">4 días · Aldeas &amp; terrazas</span>
+    <span class="dest-badge gold">💶 460 € dos personas</span>
+    <span class="dest-badge">📸 Nov · Dic · Ene · Feb (mejores colores)</span>
+    <span class="dest-badge">🌾 UNESCO 2013 · 10.000 ha</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">4 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~460 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo a Kunming</div></div>
+        <div class="route-info-item"><div class="route-info-label">Destaque</div><div class="route-info-val">Amanecer Duoyishu</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Nov · Feb</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Xinjie (base)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Miradores y aldeas</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#f5c842;"></span>Kunming (salida)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:24px;height:3px;background:#c9a96e;border-radius:2px;border-top:1px dashed #c9a96e;"></span>Ruta</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Kunming → bus nocturno a Xinjie → llegada y orientación</div>
+            <div class="day-subtitle">Bus nocturno desde Kunming · Llegada a las 5h · Primer amanecer</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Bus nocturno Kunming → Yuanyang — la mejor opción logística</div>
+              <div class="stop-desc">El bus nocturno desde la estación de autobuses sur de Kunming (Kunming Nanbu Keyun Zhan) sale a las 21h y llega a Xinjie a las 5h de la mañana — justo a tiempo para el amanecer en Duoyishu. El billete cuesta 120-150 yuan (~€15-19). Los autobuses tienen asientos reclinables y son cómodos. Alternativamente, el tren de alta velocidad Kunming → Mengzi (2h) + bus Mengzi → Yuanyang (2h) sale de día y cuesta similar. La llegada a las 5h no es cansancio — es la llegada perfecta.</div>
+              <div class="stop-price">Bus nocturno Kunming → Xinjie: €15-19/persona</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Xinjie — el pueblo base de los chinos que vienen a fotografiar terrazas</div>
+              <div class="stop-desc">Xinjie es el Yuanyang "nuevo" (construido en los años 80 cuando el gobierno trasladó la ciudad original). Es funcional, sin ningún atractivo arquitectónico. Lo que tiene: los mejores restaurantes de cocina Hani de la zona, los hoteles más baratos y la conexión en mototaxi (€2) a los tres miradores principales. Los turistas chinos, que representan el 99% de los visitantes de Yuanyang, saben que Xinjie es solo la puerta — la razón son las terrazas.</div>
+              <div class="stop-price">Mototaxi Xinjie → Duoyishu: €2/trayecto</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>El secreto del color:</strong> las terrazas de Yuanyang cambian de color radicalmente según el mes. Noviembre-diciembre: el arroz cosechado deja el campo dorado con rastrojos. Enero-marzo: las terrazas se inundan para la nueva siembra — el agua refleja el cielo como 10.000 espejos. Junio-julio: el arroz verde intenso. El mejor periodo para la fotografía: enero-febrero con niebla matinal sobre el agua inundada.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Amanecer en Duoyishu + terrazas de Bada</div>
+            <div class="day-subtitle">El amanecer más famoso de China continental · El espejo de agua más largo de Yunnan</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Duoyishu — el amanecer más famoso de China continental</div>
+              <div class="stop-desc">A las 6h, con niebla baja sobre las terrazas inundadas de agua, el sol naciente pinta los 3.000 terrazas escalonadas de Duoyishu en un espectro de naranja, rosa y dorado que ninguna foto puede capturar completamente. Los fotógrafos chinos con trípode llenan los miradores desde las 5:30h — llegad antes o id al mirador secundario a 200m del principal (sin señalizar, preguntad a los vendedores de café) que tiene la misma vista sin nadie. La niebla dura hasta las 9h: después el espectáculo termina y las terrazas vuelven a ser verde intenso.</div>
+              <div class="stop-price">Entrada terrazas Yuanyang: €15/persona (cubre todos los miradores 2 días)</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Bada — el espejo de agua más largo de Yunnan</div>
+              <div class="stop-desc">A 14 km de Xinjie, el mirador de Bada tiene la perspectiva más horizontal de las terrazas: 1.000 metros de terrazas planas inundadas de agua que reflejan el cielo en enero-febrero. El efecto espejo es más pronunciado que en Duoyishu porque las terrazas de Bada son más anchas y menos escarpadas. Los Hani de la aldea de Bada (50 familias) tienen las casas tipo mogo fang (tejado de paja de forma de seta) más auténticas de la región.</div>
+              <div class="stop-price">Incluido en entrada de €15</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Laohuzui (Tiger's Mouth) + aldea Hani de Aichun</div>
+            <div class="day-subtitle">El mirador más dramático · El sistema de irrigación Hani de 1.300 años</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Laohuzui — la boca del tigre sobre el río Honghe</div>
+              <div class="stop-desc">El mirador de Laohuzui (35 km al sur de Xinjie) es el más dramático de todos: las terrazas descienden desde 2.000m hasta el río Honghe en una pendiente de 75°. El punto más alto del mirador tiene las terrazas bajo los pies y el río 1.500m abajo. La foto clásica desde Laohuzui —terrazas de plata reflejando el cielo en capas hasta perderse de vista— es la imagen de portada de todos los libros sobre Yunnan. Llegad 30 minutos antes del amanecer.</div>
+              <div class="stop-price">Incluido en entrada</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Aldea Hani de Aichun — el pueblo que organizó 1.300 años de terrazas</div>
+              <div class="stop-desc">La aldea Hani de Aichun (100 familias) es el ejemplo mejor conservado de la organización vertical del ecosistema Hani: el bosque sagrado en la cumbre (nadie corta un árbol — el bosque alimenta las fuentes que riegan las terrazas por gravedad), la aldea en el medio, las terrazas en la ladera y el río Honghe en el fondo. El sistema de irrigación Hani no tiene bombas ni canales artificiales — solo la topografía y la gravedad. 1.300 años funcionando sin mantenimiento mecánico. La UNESCO lo calificó como "un sistema de irrigación perfecto" en el expediente de 2013.</div>
+              <div class="stop-price">Gratis · Guía local Aichun: €8-12</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title">Regreso a Kunming + mercado de minorías</div>
+            <div class="day-subtitle">Mercado Hani, Yi, Dai y Zhuang · Bus de regreso o conexión sur de Yunnan</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Mercado de minorías de Xinjie — martes y viernes</div>
+              <div class="stop-desc">Los martes y viernes, el mercado central de Xinjie reúne a las minorías Hani, Yi, Dai y Zhuang del condado: mujeres Hani con tocados de plata y cuentas de colores venden mijo, chile seco, yerbas medicinales y telas bordadas a mano. Los precios son los mismos que pagan los aldeanos — sin recargo turístico. La mejor compra: tela bordada Hani (€5-10 metro, intrínsecamente hecha a mano) y semillas de chile Yunnan imposibles de encontrar fuera.</div>
+              <div class="stop-price">Gratis · Mercado: martes y viernes 7-11h</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Bus de vuelta a Kunming — o combinar con Mengzi y el sur de Yunnan</div>
+              <div class="stop-desc">El bus de vuelta a Kunming sale desde Xinjie a las 8h y 10h (~4h de trayecto desde el nuevo bypass). Alternativamente, Mengzi (2h al norte) conecta con el tren de alta velocidad Kunming-Nanning: el recorrido a Nanning en 3h permite combinar Yuanyang con Guangxi. Otra opción: bus a Jinghong (6h) para el triángulo dorado del Mekong.</div>
+              <div class="stop-price">Bus Xinjie → Kunming: €15-19/persona</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto desglosado</h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Mínimo (2 pax)</th><th>Cómodo (2 pax)</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida+vuelta a Kunming (×2)</td><td>€380</td><td>€600</td></tr>
+          <tr><td>Bus nocturno Kunming → Xinjie → Kunming (×2)</td><td>€60</td><td>€60</td></tr>
+          <tr><td>Alojamiento 3 noches en Xinjie (guesthouse)</td><td>€36</td><td>€70</td></tr>
+          <tr><td>Entrada terrazas Yuanyang (2 días, ×2)</td><td>€60</td><td>€60</td></tr>
+          <tr><td>Comidas 4 días (Yunnan muy barato)</td><td>€40</td><td>€70</td></tr>
+          <tr><td>Mototaxis + transporte local</td><td>€20</td><td>€30</td></tr>
+          <tr><td>Guía aldea Aichun + compras mercado</td><td>€30</td><td>€60</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total sin vuelos para 2 personas · 4 días</span>
+        <span class="budget-total-value">€246 – €350</span>
+      </div>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-aloj">
+      <h2 class="section-heading" id="h-aloj">Dónde dormir</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">Guesthouse en Xinjie (€8-18/noche doble)</div>
+            <div class="stop-desc">Xinjie tiene 30+ guesthouses para el turismo fotográfico chino. Los mejores tienen parking de mototaxi propio y servicio de wake-up call a las 5:30h para el amanecer. Buscad en Ctrip (la plataforma china, acepta tarjetas internacionales) con el término "元阳客栈" (Yuanyang kèzhàn). Los más recomendados: Yún Shàng Yuányang y el Terrace View Guesthouse.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">Homestay en aldea Hani (€5-8/noche)</div>
+            <div class="stop-desc">Para una noche en Aichun u otra aldea, los guías locales organizan homestays con familias Hani. La cena incluye el long-table banquet (changlong yan) — la comida ceremonial Hani servida en una mesa de 20 metros donde toda la familia y los vecinos se juntan. La experiencia más genuina de la visita, con diferencia.</div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía Hani · Yunnan</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Desayuno</div>
+          <div class="gastro-title">Hepi (pastel de arroz negro)</div>
+          <div class="gastro-price">€0,50</div>
+          <div class="gastro-desc">Arroz glutinoso negro de los campos Hani, cocido al vapor, prensado en tortas planas y frito en aceite de cacahuete. El exterior queda crujiente y el interior elástico. Con miel de flores silvestres de montaña o pasta de judía roja. Se vende en los puestos de la calle a las 6h, justo cuando los fotógrafos salen hacia Duoyishu.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Principal</div>
+          <div class="gastro-title">Lemongrass chicken (pollo con lemongrass)</div>
+          <div class="gastro-price">€4-6</div>
+          <div class="gastro-desc">Pollo de corral Hani estofado con lemongrass, galangal, chile teja y pasta de fermentado de soja Yunnan. El pollo de las aldeas come maíz y granos del campo — la textura es firme, diferente al pollo industrial. Plato de celebración Hani — si os invitan a comer en una casa, probablemente aparezca este.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Hongo</div>
+          <div class="gastro-title">Setas de Yunnan (variedad de temporada)</div>
+          <div class="gastro-price">€3-6</div>
+          <div class="gastro-desc">Yunnan tiene la mayor biodiversidad de setas del mundo: más de 800 variedades comestibles. Las más valoradas: el porcini yunnanés (jiǔgū), el matsutake (songrong, €40/kg) y la seta de sangre (jian shou qing, alucinógena en baja dosis — no comerla cruda). En los restaurantes de Xinjie, la olla de setas mixtas es el plato obligatorio de cualquier visita a Yunnan.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida ritual</div>
+          <div class="gastro-title">Miji (vino de arroz Hani)</div>
+          <div class="gastro-price">€0,50</div>
+          <div class="gastro-desc">Arroz glutinoso Hani fermentado durante 7 días: dulce, turbio, 5-8% vol. Se sirve en tazón de bambú en las celebraciones. El guía local lo describe como "el zumo de fruta de los adultos Hani". En el changlong yan (banquete de larga mesa), el miji circula sin parar — educadamente aceptad las primeras copas.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Charcutería</div>
+          <div class="gastro-title">Xuanwei ham (jamón curado de Yunnan)</div>
+          <div class="gastro-price">€8-15/kg</div>
+          <div class="gastro-desc">El jamón de cerdo negro de montaña curado en sal y ahumado de Xuanwei (Yunnan) durante 1-2 años. Considerado junto al Jinhua ham como uno de los dos grandes jamones de China. Con una nariz más ahumada y más grasa que el Jinhua. En los mercados de minorías de Yuanyang lo venden entero — el precio por kilo es el 20% del precio en Shanghái.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Sopa</div>
+          <div class="gastro-title">Crossing-the-bridge noodles (过桥米线)</div>
+          <div class="gastro-price">€3-5</div>
+          <div class="gastro-desc">El plato icónico de Yunnan: caldo de pollo hirviente en cuenco de barro acompañado de platos de fideos de arroz, verduras, tofu y carne cruda que se cuecen en la mesa en el caldo hirviente. El origen: una esposa que cruzaba el puente cada día para llevar sopa a su marido erudito — descubrió que el aceite flotante aislaba el calor durante el viaje. Leyenda o no, la sopa es extraordinaria.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Llegad en enero o febrero para el espejo de agua:</strong> las terrazas inundadas de agua reflejan el cielo y la niebla como espejos infinitos. Noviembre-diciembre el campo es dorado (rastrojos de cosecha). Julio-agosto el arroz está verde pero las lluvias tapan las vistas. Consultad el calendario agrícola Hani en los foros de fotografía de Yuanyang (yuanyang.org) antes de reservar.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>El amanecer requiere madrugar en serio:</strong> el espectáculo de luz en Duoyishu dura de las 6:15h a las 7:30h. A las 9h termina. Los mototaxis salen de Xinjie desde las 5:30h — los conductores conocen bien el horario. Acordad el regreso antes de salir (el mototaxi os espera por €2 extra) o coged el bus local que sale del mirador a las 9h.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>La entrada turística de €15 cubre todos los miradores durante 2 días:</strong> conservadla. Los guardias comprueban el billete en cada punto. El precio puede parecer alto para China, pero cubre la conservación de las 10.000 hectáreas — el 70% va directamente al fondo de mantenimiento del ecosistema Hani.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>El VPN es necesario para Google Maps y WhatsApp:</strong> China bloquea Google, WhatsApp, Instagram y la mayoría de servicios occidentales. Instalad un VPN antes de salir de España (NordVPN, ExpressVPN). En China no podréis descargar ninguna app sin VPN previo. Descargad también los mapas offline de la zona en Maps.me.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Respetad las restricciones de fotografía en las aldeas Hani:</strong> muchas familias Hani cobran una pequeña tarifa (5-20 yuan) para ser fotografiadas. No es molestia — es un modelo económico que permite mantener la vida tradicional. Preguntad siempre antes de fotografiar personas. El guía mediará si hay confusión.</div></div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-check">
+      <h2 class="section-heading" id="h-check">Qué llevar</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="check-item"><div class="check-box"></div>VPN instalado antes de salir de España (Google Maps, WhatsApp, Instagram bloqueados)</div>
+        <div class="check-item"><div class="check-box"></div>Visa de China tramitada en el consulado (www.visachina.es) — proceso 5-7 días hábiles</div>
+        <div class="check-item"><div class="check-box"></div>Aplicación AliPay o WeChat Pay configurada (efectivo cada vez más difícil en China)</div>
+        <div class="check-item"><div class="check-box"></div>Ropa de capas (Yuanyang: 8-15°C en enero-febrero, frío húmedo en el amanecer)</div>
+        <div class="check-item"><div class="check-box"></div>Tarjeta de memoria extra (amanecer en Duoyishu = 500+ fotos garantizadas)</div>
+        <div class="check-item"><div class="check-box"></div>Trípode ligero (imprescindible para el amanecer con poca luz)</div>
+        <div class="check-item"><div class="check-box"></div>Diccionario chino offline (DeepL o Pleco — sin VPN)</div>
+        <div class="check-item"><div class="check-box"></div>Power bank (los miradores no tienen enchufes)</div>
+      </div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias China</div><div class="emerg-value">120</div><div class="emerg-note">Ambulancia · Operadores no hablan inglés</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía</div><div class="emerg-value">110</div><div class="emerg-note">Comisaría en Xinjie Town</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Mengzi</div><div class="emerg-value">+86 873 304 0180</div><div class="emerg-note">El hospital más cercano con UCI — 2h de Xinjie</div></div>
+        <div class="emerg-card"><div class="emerg-label">CITS Asistencia Turística</div><div class="emerg-value">+86 10 6522 2991</div><div class="emerg-note">China International Travel Service en inglés</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España Pekín</div><div class="emerg-value">+86 10 6532 3629</div><div class="emerg-note">emb.pekin@maec.es — consulado Cantón más cercano a Yunnan</div></div>
+        <div class="emerg-card"><div class="emerg-label">Seguro médico</div><div class="emerg-value">Imprescindible</div><div class="emerg-note">China tiene acuerdo sanitario con España solo para emergencias básicas</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar esta ruta?</h3>
+      <p>Nuestro chatbot IA puede ayudarte a combinar Yuanyang con Lijiang (casco antiguo UNESCO), Shangri-La (Yunnan tibetano) o el Lago Lugu (matriarcado Mosuo) en un circuito completo de Yunnan.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> El visado de China para ciudadanos españoles requiere cita en el consulado y 5-7 días hábiles de tramitación. Los ciudadanos de algunos países europeos tienen acceso sin visado (72h en tránsito) — confirmad en el consulado chino. Los precios en yuan chino son orientativos (1 € ≈ 7,8 CNY). El VPN debe instalarse antes de entrar al país. Routlo no se responsabiliza de cambios en la política de visados china.
+    </div>
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Aldeas de Asia</div>
+      <nav aria-label="Aldeas de Asia"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="shirakawa.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Shirakawa-go</a></li>
+        <li><a href="ghandruk.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ghandruk</a></li>
+        <li><a href="ura.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ura</a></li>
+      </ul></nav>
+    </div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Itinerarios España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  const routeCoords = [
+    [24.882, 102.832], [23.235, 102.674], [23.125, 102.761],
+    [23.164, 102.821], [22.963, 102.613]
+  ];
+  const waypoints = [
+    { latlng: [24.882, 102.832], label: 'Kunming — punto de salida', color: '#f5c842' },
+    { latlng: [23.235, 102.674], label: 'Xinjie (Yuanyang town) — base', color: '#5ecb8a' },
+    { latlng: [23.125, 102.761], label: 'Duoyishu — mirador principal', color: '#c9a96e' },
+    { latlng: [23.164, 102.821], label: 'Bada — terrazas espejo', color: '#c9a96e' },
+    { latlng: [22.963, 102.613], label: "Laohuzui — Tiger's Mouth viewpoint", color: '#c9a96e' }
+  ];
+
+  const map = L.map('route-map', { zoomControl: true, attributionControl: false })
+    .setView([23.15, 102.70], 10);
+
+  const _lang = (navigator.language || 'en').toLowerCase();
+  if (_lang.startsWith('es')) {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, className: 'tile-osm-es'
+    }).addTo(map);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+  }
+
+  const bounds = L.latLngBounds(routeCoords).pad(0.15);
+  map.fitBounds(bounds);
+  L.polyline(routeCoords, { color: '#c9a96e', weight: 4, opacity: 0.85, lineJoin: 'round', dashArray: '8,6' }).addTo(map);
+
+  waypoints.forEach((wp, i) => {
+    const radius = i === 1 ? 9 : 7;
+    const fillColor = wp.color;
+    L.circleMarker(wp.latlng, { radius, fillColor, color: '#fff', weight: i === 1 ? 2.5 : 2, fillOpacity: 1 })
+      .bindTooltip(wp.label, { permanent: false, direction: 'top' }).addTo(map);
+  });
+
+  L.control.attribution({ prefix: false }).addAttribution('© <a href="https://openstreetmap.org">OpenStreetMap</a>').addTo(map);
+  setTimeout(() => map.invalidateSize(), 100);
+})();
+</script>
+<style>.tile-osm-es{filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)}</style>
+</body>
+</html>
