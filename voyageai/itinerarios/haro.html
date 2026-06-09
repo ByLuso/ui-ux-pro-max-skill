@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Haro — Capital del vino de La Rioja y el Barrio de la Estación | Routlo</title>
+  <meta name="description" content="40 km desde Logroño: Haro, la capital del vino de La Rioja, con el mítico Barrio de la Estación donde se concentran las bodegas más antiguas del mundo: López de Heredia, CVNE, Muga, La Rioja Alta y más. La Batalla del Vino el 29 de junio."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-wine { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(160,40,60,0.15); border: 1px solid rgba(160,40,60,0.3); font-size: 0.75rem; font-weight: 600; color: #e87a7a; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(160,40,60,0.08) 0%, rgba(15,0,5,0.6) 100%); border: 1px solid rgba(160,40,60,0.2); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #e87a7a; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c9a96e; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    .bodega-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .bodega-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; }
+    .bodega-name { font-weight: 600; font-size: 0.9rem; color: #edeef2; margin-bottom: 4px; }
+    .bodega-year { font-size: 0.72rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .bodega-desc { font-size: 0.8rem; color: rgba(237,238,242,0.5); line-height: 1.5; }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } .bodega-grid { grid-template-columns: 1fr; } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1474722883778-792e7fb1c4e3?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(16,0,4,0.28) 0%,rgba(22,0,6,0.58) 50%,rgba(12,0,4,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-wine" style="margin-bottom:0;">🍷 Capital del vino</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">40 km de Logroño</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🏭 Barrio de la Estación · La Rioja</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Haro<br><span style="color:#c9a96e;">La Meca del Rioja</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">El Barrio de la Estación reúne más bodegas centenarias por metro cuadrado que ningún otro lugar del mundo: López de Heredia (1877), CVNE (1879), Muga (1932), La Rioja Alta (1890). Un paseo de 500 metros entre historia del Rioja.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#bodegas">Las bodegas</a></li>
+      <li><a href="#batalla">La Batalla del Vino</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Haro · La Rioja</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🍷 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">40 km</div><div class="route-info-unit">desde Logroño</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Bodegas</div><div class="route-info-value">15+</div><div class="route-info-unit">centenarias</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~40€</div><div class="route-info-unit">catas + comida</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Dificultad</div><div class="route-info-value">Muy fácil</div><div class="route-info-unit">todo plano</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Batalla del Vino</div><div class="route-info-value">29 jun</div><div class="route-info-unit">San Felices</div></div>
+      </div>
+      <div class="highlight-box">
+        <h4>🏭 El Barrio de la Estación — un museo vivo del Rioja</h4>
+        <p>En la segunda mitad del s. XIX, las plagas de filoxera destruyeron los viñedos franceses. Los negociantes bordeleses cruzaron los Pirineos y se instalaron en Haro, donde el ferrocarril Madrid-Irún pasaba junto a los viñedos. Construyeron sus bodegas junto a la estación para exportar vino a Francia. Ese barrio de grandes naves de piedra y ladrillo rojo sigue intacto y en producción: es el Barrio de la Estación, el distrito bodeguero más antiguo del mundo.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:320px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Mañana: Barrio de la Estación</div><div class="day-subtitle">A pie entre bodegas centenarias · Cata con visita guiada</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🍾 Visita + cata en López de Heredia</div>
+            <div class="stop-desc">La bodega más icónica: fundada en 1877, con barricas de roble americano alineadas en naves neogóticas de ladrillo. Su Viña Tondonia Blanco Reserva es uno de los vinos más singulares del mundo —blanco que envejece 10 años en barrica. La visita guiada incluye recorrido por las naves y cata de 2 vinos. La tienda tiene botellas de añadas de los años 70.</div>
+            <div class="stop-price">Visita + cata: 15€ · Reserva obligatoria online</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏭 CVNE — Compañía Vinícola del Norte de España</div>
+            <div class="stop-desc">Fundada en 1879 por dos hermanos riojanos que habían visto las bodegas bordelesas. Su Imperial Gran Reserva es una leyenda. La nave de fermentación de 1909 —con su estructura de hierro y ladrillo— es Bien de Interés Cultural. Uno de los edificios industriales más bonitos de España.</div>
+            <div class="stop-price">Visita + cata: 12€</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🪵 Muga — vinos artesanos y cooperería propia</div>
+            <div class="stop-desc">Muga es la única bodega de España que fabrica sus propias barricas de roble. La cooperería histórica forma parte de la visita —ver al tonelero trabajar la madera a mano es una experiencia única. Sus vinos son de los más elegantes de toda la D.O. Rioja.</div>
+            <div class="stop-price">Visita + cata: 14€</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Mediodía: Casco histórico de Haro</div><div class="day-subtitle">Calle Santo Tomás · Tapeo · Plaza de la Paz</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🍷 Tapeo en la Calle Santo Tomás</div>
+            <div class="stop-desc">La calle más famosa de Haro para tapas: Bar Los Caños, Bar La Generala, Casa Naveda. La tapa clásica es las pochas (judías blancas frescas con chorizo), las chuletillas al sarmiento (asadas sobre sarmiento de vid) y el bacalao al ajoarriero. Con una copa de Rioja Reserva. Todo por menos de 3€ la tapa.</div>
+            <div class="stop-price">Tapa + vino: ~2.50–3€ · Presupuesto almuerzo: ~12–18€</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesia de Santo Tomás — fachada plateresca</div>
+            <div class="stop-desc">La iglesia tardogótica de Santo Tomás (s. XVI) tiene una portada plateresca de tres cuerpos que es uno de los mejores ejemplos del estilo en La Rioja. La torre de 60 m domina el casco histórico. Interior austero y grande, con retablos barrocos y una cripta del s. XIII.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🛒 Compras: tienda de vino centenario</div>
+            <div class="stop-desc">En el Barrio de la Estación, las tiendas de las bodegas venden añadas antiguas a precios muy razonables (comparado con el mercado secundario). Una botella de Viña Tondonia Reserva 2010 cuesta ~25€ directo de la bodega. El mejor recuerdo de Haro.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="bodegas">
+      <h2 class="section-heading">🏭 Las bodegas del Barrio de la Estación</h2>
+      <div class="bodega-grid">
+        <div class="bodega-card"><div class="bodega-name">López de Heredia</div><div class="bodega-year">Fundada 1877</div><div class="bodega-desc">La más auténtica. Viña Tondonia blanco que envejece 10 años en barrica. Arquitectura neogótica espectacular.</div></div>
+        <div class="bodega-card"><div class="bodega-name">CVNE</div><div class="bodega-year">Fundada 1879</div><div class="bodega-desc">Imperial Gran Reserva, leyenda del Rioja. Nave de fermentación BIC. Una de las bodegas más fotografiadas.</div></div>
+        <div class="bodega-card"><div class="bodega-name">Muga</div><div class="bodega-year">Fundada 1932</div><div class="bodega-desc">Única bodega con cooperería propia. Vinos elegantes y artesanos. Torre Muga es su gran apuesta contemporánea.</div></div>
+        <div class="bodega-card"><div class="bodega-name">La Rioja Alta</div><div class="bodega-year">Fundada 1890</div><div class="bodega-desc">Cinco socios fundadores, tradición intacta. Su 890 Gran Reserva tiene nombre de año de fundación. Catas excepcionales.</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="batalla">
+      <h2 class="section-heading">💦 La Batalla del Vino — 29 de junio</h2>
+      <div class="highlight-box">
+        <h4>🍷 La fiesta más loca de España</h4>
+        <p>Cada 29 de junio (San Pedro), los vecinos de Haro suben al Riscos de Bilibio en romería. Al regresar al pueblo, estallan la guerra: decenas de miles de personas se empapan mutuamente con vino tinto usando botas, jeringas y cualquier recipiente disponible. La ropa blanca con la que se llega se convierte en rojo intenso. Se consume más de 60.000 litros de vino en unas horas. Es la Batalla del Vino de Haro —Fiesta de Interés Turístico Internacional desde 1981.</p>
+      </div>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Ropa blanca obligatoria por tradición</strong> —se tiñe completamente de rojo. No lleves ropa que te importe. Muchos llevan ropa específica para ese día que guardan de año en año manchada como trofeo.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Gafas de buceo</strong> — para proteger los ojos del vino. Muy recomendables. El vino en los ojos no es agradable.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Bota de vino</strong> —compra una en cualquier tienda de Haro la noche anterior (~8€). Es el arma reglamentaria y también el souvenir perfecto.</div></div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>No conduzcas si vas a catar</strong> —designa conductor o usa el tren Logroño-Haro (Renfe, 45 min, ~6€ ida). Hay trenes directos varias veces al día.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Reserva las bodegas</strong> —especialmente López de Heredia. Se llenan en fin de semana. Reserva con una semana de antelación.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Madruga para el tapeo</strong> —la Calle Santo Tomás se llena a partir de las 13:00. A las 12:30 ya tiene ambiente y las tapas son más frescas.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Combina con Briones y San Vicente de la Sonsierra</strong> — dos pueblos de ladrillo rojo a 10 minutos de Haro con bodegas y casco histórico medieval. La ruta bodeguera completa de La Rioja Alta.</div></div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas por La Rioja?</h3>
+      <p>Laguardia, San Millán de la Cogolla y 5 escapadas más en la región.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([42.575,-2.850],11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[42.466,-2.445],label:'Logroño',color:'#5ecb8a',r:9},{coords:[42.576,-2.852],label:'Haro — Casco Histórico',color:'#c9a96e',r:11},{coords:[42.581,-2.859],label:'Barrio de la Estación (López de Heredia, CVNE, Muga)',color:'#e87a7a',r:13}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[42.466,-2.445],[42.576,-2.852],[42.581,-2.859]],{color:'#c9a96e',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
