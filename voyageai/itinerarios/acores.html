@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Açores — 5 días en São Miguel: Sete Cidades, Furnas geotérmica y la costa volcánica del Atlántico | Routlo</title>
+  <meta name="description" content="5 días en Açores (São Miguel): las calderas gemelas de Sete Cidades, los géiseres y el cozido de Furnas, Lagoa do Fogo y las cascadas de la costa norte. Bajo €700 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#001020 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#002218 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#001830 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#001a2c 0%,#003040 40%,#004a30 70%,rgba(94,203,138,0.12) 100%),url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Europa · Açores</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Açores</h1>
+  <p class="dest-country">Sete Cidades · Furnas · Costa volcánica · Bajo €680 para dos</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Atlántico Norte · Portugal</span>
+    <span class="dest-badge gold">5 días · Naturaleza volcánica única</span>
+    <span class="dest-badge gold">💶 ~640 € dos personas (vuelos incluidos)</span>
+    <span class="dest-badge">🌊 Abr · May · Sep · Oct</span>
+    <span class="dest-badge">✈️ Vuelo directo desde Madrid/Lisboa</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">5 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~640 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo directo</div></div>
+        <div class="route-info-item"><div class="route-info-label">Vuelo</div><div class="route-info-val">~2h 30min</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Abr · May · Sep</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Ponta Delgada (inicio/fin)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Llegada a Ponta Delgada — La capital azoriana</div>
+            <div class="day-subtitle">Portas da Cidade · Jardim António Borges · Primer atardecer atlántico</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Portas da Cidade y centro histórico</div>
+              <div class="stop-desc">Paseamos por el casco histórico de basalto negro y cal blanca. Las icónicas puertas barrocas del siglo XVIII son el arco triunfal de la ciudad y el mayor símbolo de São Miguel. La Praça Gonçalo Velho Cabral es el corazón comercial y social de la isla.</div>
+              <div class="stop-price">Entrada gratuita</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Jardim António Borges</div>
+              <div class="stop-desc">Uno de los jardines botánicos más peculiares de Portugal: grutas artificiales cubiertas de helechos gigantes, palmeras de más de 150 años y estanques rodeados de hortensias azules salvajes. Inaugurado en 1848 con exóticos traídos de los trópicos.</div>
+              <div class="stop-price">Entrada gratuita</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Fort de São Brás y mirador del puerto</div>
+              <div class="stop-desc">El fuerte del siglo XVI vigila el puerto atlántico más activo de las Azores. Al anochecer, la vista del volcán Fogo reflejado en el agua y los colores oceánicos del cielo justifican el viaje por sí solos. Cena en el Mercado da Graça con productos locales.</div>
+              <div class="stop-price">Cena mercado: ~€15-20/pax</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Sete Cidades — Las calderas gemelas del Atlántico</div>
+            <div class="day-subtitle">Mirador Vista do Rei · Lago Verde + Azul · Mosteiros · Puesta de sol en los acantilados</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Mirador Vista do Rei</div>
+              <div class="stop-desc">A 380 metros de altitud sobre la caldeira, este mirador es la imagen más reconocible de las Azores: dos lagunas dentro de un cráter volcánico de 12 km de diámetro, una de color verde esmeralda y otra azul cobalto, separadas tan solo por un puente. La leyenda dice que se formaron de las lágrimas de una princesa y su amado pastor.</div>
+              <div class="stop-price">Carretera libre, aparcamiento gratuito</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Bajada al fondo de la caldera</div>
+              <div class="stop-desc">El sendero PR6 (7 km, 3 h) desciende al interior de la caldera donde se puede caminar entre las dos lagunas. Pueblo de Sete Cidades: bar local, la única iglesia de la caldera, y silencio absoluto. El ecosistema interior es completamente distinto al exterior de la isla.</div>
+              <div class="stop-price">Senderismo gratuito · Alquiler bicicleta €15</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Costa de Mosteiros y balnearios naturales</div>
+              <div class="stop-desc">La costa más espectacular de São Miguel: piscinas naturales de lava negra donde el Atlántico rompe con furia a metros de distancia. Los charcones volcánicos son bañables de mayo a octubre. Atardecer desde el faro de Mosteiros con las islas Terceira y Graciosa en el horizonte.</div>
+              <div class="stop-price">Piscinas naturales gratuitas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Furnas — El valle geotérmico y las aguas termales</div>
+            <div class="day-subtitle">Caldeiras · Cozido das Furnas · Terra Nostra · Lagoa das Furnas</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Caldeiras de Furnas (géiseres y fumarolas)</div>
+              <div class="stop-desc">El valle de Furnas es literalmente una olla a presión: más de 20 fumarolas y géiseres brotan del suelo a 100ºC en el centro del pueblo. El olor a azufre es penetrante pero fascinante. En las caldeiras se entierran cada mañana las ollas con el <em>cozido das Furnas</em>, que cocinan 6 horas bajo tierra con el calor volcánico.</div>
+              <div class="stop-price">Zona abierta gratuita · Área privada €2</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Cozido das Furnas</div>
+              <div class="stop-desc">El plato más famoso de las Azores: guiso de carnes, chouriço, coles, patata y batata-doce cocido 6 horas en el subsuelo volcánico. Solo se sirve en los restaurantes de Furnas antes de las 14h porque hay una cantidad limitada. Sabor suave, gelatinoso, inconfundible. Reservar en el restaurante Tony's o Miroma.</div>
+              <div class="stop-price">~€12-15/pax · Solo mediodía</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Parque Terra Nostra y aguas termales ferruginosas</div>
+              <div class="stop-desc">El jardín botánico más extraordinario de las Azores (180 años de antigüedad) esconde en su centro la piscina termal de agua ferruginosa color oxidado a 38ºC. El bañarse tiñe ligeramente la ropa de marrón, así que llevar bañador viejo. Los helechos arbóreos, sequoias y ginkgos centenarios crean una atmósfera jurásica.</div>
+              <div class="stop-price">Entrada ~€12 (jardín + piscina)</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Lagoa das Furnas al anochecer</div>
+              <div class="stop-desc">El lago de 6 km en cuyo fondo hay más géiseres bajo el agua. Al atardecer, el vapor que sube de la superficie mezclado con los reflejos del cielo crea una imagen irreal. Paseo de 2 km por la orilla con vistas a las caldeiras termales en los márgenes del lago.</div>
+              <div class="stop-price">Acceso libre</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Lagoa do Fogo y la costa norte salvaje</div>
+            <div class="day-subtitle">Cráter volcánico · Salto do Cabrito · Nordeste · Cascadas y acantilados</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Lagoa do Fogo (Lago del Fuego)</div>
+              <div class="stop-desc">En el centro exacto de São Miguel, a 590 metros de altitud, el lago más prístino de las Azores: reserva natural protegida de máxima categoría dentro de un cráter volcánico activo. El agua es de un azul eléctrico sobrenatural rodeado de brezo y cedros macaronésicos. Los días despejados se puede bajar a la playa volcánica.</div>
+              <div class="stop-price">Acceso libre · Sendero PR9 recomendado</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Caldeira Velha y cascada termal</div>
+              <div class="stop-desc">Cascada de agua termal que cae desde 10 metros sobre una poza natural de agua caliente entre helechos gigantes y laurisilva. Es el paraíso secreto de São Miguel: menos visitado que Furnas, completamente rodeado de vegetación tropical. Temperatura del agua ~28-35ºC.</div>
+              <div class="stop-price">€4 entrada · Traer bañador</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Costa de Nordeste y Ribeira dos Caldeirões</div>
+              <div class="stop-desc">El extremo noreste de São Miguel es otro planeta: acantilados verdes cayendo al Atlántico, cascadas que caen directamente al mar, aldeas de pescadores con solo 200 habitantes. El Parque Natural Regional de Ribeira dos Caldeirões tiene una cascada de 15 metros con molinos de agua del siglo XVIII aún en pie.</div>
+              <div class="stop-price">Parque gratuito · Cena en Nordeste ~€12/pax</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Avistamiento de cetáceos y vuelta a casa</div>
+            <div class="day-subtitle">Whale watching · Pico do Ferro · Queijadas de Vila Franca · Aeropuerto</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Whale watching en el Canal das Baleias</div>
+              <div class="stop-desc">Las Azores es uno de los mejores lugares del mundo para ver cetáceos: el canal entre São Miguel y Santa Maria tiene aguas de 2.000 metros de profundidad donde habitan cachalotes de forma permanente. Los tours salen a las 8h y duran 3 horas. Garantía de avistamiento o repetición gratis en la mayoría de operadores. Se ven también golfinhos y baleias de aleta.</div>
+              <div class="stop-price">~€55/pax · Reservar con 2-3 días antelación</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Mirador Pico do Ferro</div>
+              <div class="stop-desc">El mejor mirador panorámico de toda la isla: a 588 metros sobre Furnas, se ve simultáneamente la Lagoa das Furnas, el valle geotérmico, y en días claros las islas de Santa Maria y Terceira. Vista de 360º en 5 minutos andando desde el aparcamiento.</div>
+              <div class="stop-price">Acceso gratuito</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Queijadas da Vila Franca do Campo y vuelta</div>
+              <div class="stop-desc">Último parada obligatoria: las queijadas são a pastelaria más emblemática de las Azores, pastelitos de requesón con canela y azúcar desde 1893. Vila Franca do Campo fue la antigua capital de São Miguel hasta que un terremoto la destruyó en 1522. Vuelta a Ponta Delgada y aeropuerto (10 min del centro).</div>
+              <div class="stop-price">Caja de queijadas: ~€8</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto detallado</h2>
+      <div class="highlight-box">
+        <strong>Precio estimado para 2 personas · 5 días · Vuelos incluidos</strong><br>
+        Las Azores son uno de los destinos más baratos de Europa occidental. SATA y Ryanair operan rutas directas desde Madrid y Lisboa por €80-120pp. El alojamiento rural y las excursiones de naturaleza son económicos, y la mayoría de la naturaleza es gratuita.
+      </div>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Detalle</th><th>2 personas</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida y vuelta</td><td>Madrid/Lisboa ↔ Ponta Delgada · SATA/Ryanair</td><td>€160–240</td></tr>
+          <tr><td>Alojamiento</td><td>4 noches Airbnb/hostel rural · €30–45/noche</td><td>€120–180</td></tr>
+          <tr><td>Coche de alquiler</td><td>5 días · Indispensable en São Miguel · Economía</td><td>€80–120</td></tr>
+          <tr><td>Comidas (10 comidas)</td><td>Mercados, tascas locales, cozido das Furnas</td><td>€80–120</td></tr>
+          <tr><td>Whale watching</td><td>Tour 3h con guía bilingüe</td><td>€110</td></tr>
+          <tr><td>Entradas y actividades</td><td>Terra Nostra, Caldeira Velha, queijadas</td><td>€40–55</td></tr>
+          <tr><td>Gasolina y peajes</td><td>São Miguel no tiene autopistas de peaje</td><td>€30–40</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado (2 pax, 5 días)</span>
+        <span class="budget-total-value">€620 – €865</span>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.45);margin-top:10px;">Temporada alta (jul-ago) puede subir un 20%. Reservar whale watching y Terra Nostra con antelación en verano.</p>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Dónde dormir</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Ponta Delgada (base recomendada)</strong> — Posición central para explorar toda la isla en coche. Airbnb en el casco histórico desde €35/noche. Alternativa: Quinta da Lagoa en São Vicente (rural, con huerta propia, €45/noche).</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Furnas</strong> — Si priorizas las aguas termales, alojarse una noche en Furnas Village (Hotel Villa Terra Nostra, €80-100/noche) permite acceso madrugador al Terra Nostra antes de los grupos.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Nordeste</strong> — Para los amantes del aislamiento: Casa de Campo do Nordeste ofrece casas rurales desde €40/noche en los acantilados norte. Sin turistas de grupos organizados.</div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía azoriana</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato estrella</div>
+          <div class="gastro-title">Cozido das Furnas</div>
+          <div class="gastro-price">€12–15/pax</div>
+          <div class="gastro-desc">Guiso de carnes, chouriço y verduras cocido 6 horas en calor geotérmico. Solo en Furnas, solo al mediodía. Único en el mundo.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Queso y mantequilla</div>
+          <div class="gastro-title">Queijo São Jorge</div>
+          <div class="gastro-price">€3–5 en tiendas</div>
+          <div class="gastro-desc">Queso curado de la isla vecina con DOP, sabor intenso y ligeramente picante. Con mantequilla azoriana en pan de trigo es el desayuno canónico de las islas.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Marisco</div>
+          <div class="gastro-title">Lapas grelhadas</div>
+          <div class="gastro-price">€8–12 ración</div>
+          <div class="gastro-desc">Lapas a la brasa con mantequilla de ajo y limón. El snack más popular de las costas azorianas. En cualquier tasca de Ponta Delgada o Nordeste.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Dulce</div>
+          <div class="gastro-title">Queijadas de Vila Franca</div>
+          <div class="gastro-price">€8 caja de 12</div>
+          <div class="gastro-desc">Pastelito de requesón con canela desde 1893. Protegidas por denominación geográfica. Solo se fabrican en Vila Franca do Campo. El souvenir comestible obligatorio.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos imprescindibles</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>El coche es obligatorio.</strong> São Miguel tiene 65 km de largo y 16 km de ancho. El transporte público es prácticamente inexistente fuera de Ponta Delgada. Alquila al llegar al aeropuerto (Sixt, Hertz o Ilha Verde son los más baratos localmente).</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>El tiempo cambia cada hora.</strong> El dicho local dice: «en las Azores hay cuatro estaciones en un día». Lleva siempre impermeable aunque salgas con sol. El micro-clima de los valles de caldeira puede estar nublado mientras la costa brilla.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Reserva el whale watching con antelación.</strong> En temporada alta los tours se llenan días antes. <strong>Futurismo</strong> y <strong>Picos de Aventura</strong> son los más recomendados con garantía de avistamiento.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Terra Nostra en madrugada.</strong> El parque abre a las 10h pero llega a saturarse de grupos organizados desde las 11h. Intenta entrar justo al abrir para disfrutar de las aguas termales solo (o casi).</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Caminos ER y senderos PR.</strong> La red de Estradas Regionais cubre toda la isla, pero algunos miradores requieren caminos de tierra en buen estado. El coche no necesita ser 4x4. Descarga la app <em>AllTrails</em> para los senderos oficiales.</div>
+      </div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-checklist">
+      <h2 class="section-heading" id="h-checklist">Qué llevar</h2>
+      <div class="check-item"><div class="check-box"></div><span>Impermeable ligero (obligatorio)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Bañador viejo para Terra Nostra (agua ferruginosa mancha)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Zapatillas de trekking o senderismo (terreno volcánico irregular)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Crema solar factor 50+ (incluso con nubes UV alto en el Atlántico)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Adaptador tipo F (Portugal, estándar europeo)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Euros en efectivo (muchas tascas rurales no aceptan tarjeta)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Ropa en capas (temperatura interior de caldeiras vs costa puede variar 10ºC)</span></div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias y datos útiles</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias</div><div class="emerg-value">112</div><div class="emerg-note">Policía · Bomberos · Ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital</div><div class="emerg-value">+351 296 203 000</div><div class="emerg-note">Hospital do Divino Espírito Santo, Ponta Delgada</div></div>
+        <div class="emerg-card"><div class="emerg-label">Moneda</div><div class="emerg-value">Euro (€)</div><div class="emerg-note">Portugal · Sin frontera monetaria</div></div>
+        <div class="emerg-card"><div class="emerg-label">Idioma</div><div class="emerg-value">Portugués</div><div class="emerg-note">Español entendido · Inglés en turismo</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Listo para explorar las Azores?</h3>
+      <p>Planifica tu ruta con IA y encuentra los mejores precios de vuelos, alojamiento y tours de cetáceos.</p>
+      <a href="../chatbot.html" class="cta-btn">Planificar con Routlo IA →</a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios indicados son estimaciones orientativas basadas en temporada media (abril-mayo / septiembre-octubre 2025-2026). Vuelos con Ryanair/SATA desde Madrid. Alojamiento en Airbnb o casas rurales. Este contenido es informativo y no constituye una oferta comercial. Las condiciones pueden variar.
+    </div>
+
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;background:rgba(4,8,16,0.95);border-top:1px solid rgba(255,255,255,0.08);padding:40px 24px;text-align:center;">
+  <a href="../index.html" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:20px;">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:32px;border-radius:6px;background:#fff;padding:2px 8px;">
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;color:#edeef2;font-weight:700;">Routlo</span>
+  </a>
+  <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-bottom:16px;">Itinerarios de viaje con inteligencia artificial · Açores y más de 100 destinos</p>
+  <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;font-size:0.8rem;">
+    <a href="../itinerarios.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Itinerarios</a>
+    <a href="../mapa.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Mapa</a>
+    <a href="../chatbot.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Chatbot IA</a>
+  </div>
+  <p style="font-size:0.72rem;color:rgba(237,238,242,0.25);margin-top:20px;">© 2025 Routlo · Todos los derechos reservados</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../assets/shared.js"></script>
+<script>
+(function(){
+  const isEs = navigator.language.startsWith('es');
+  const tileUrl = isEs
+    ? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+  const tileAttr = isEs
+    ? '© OpenStreetMap contributors'
+    : '© OpenStreetMap © CARTO';
+
+  const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false }).setView([37.78, -25.5], 10);
+  const tileLayer = L.tileLayer(tileUrl, { attribution: tileAttr, maxZoom: 18 }).addTo(map);
+
+  if (isEs) {
+    tileLayer.getContainer && tileLayer.once('load', function() {
+      const c = tileLayer.getContainer();
+      if (c) c.style.cssText += 'filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';
+    });
+  }
+
+  const waypoints = [
+    { latlng: [37.739, -25.669], label: 'Ponta Delgada', color: '#5ecb8a', start: true },
+    { latlng: [37.857, -25.785], label: 'Sete Cidades', color: '#c9a96e' },
+    { latlng: [37.894, -25.824], label: 'Mosteiros', color: '#c9a96e' },
+    { latlng: [37.755, -25.319], label: 'Furnas', color: '#c9a96e' },
+    { latlng: [37.789, -25.474], label: 'Lagoa do Fogo', color: '#c9a96e' },
+    { latlng: [37.863, -25.180], label: 'Nordeste', color: '#c9a96e' }
+  ];
+
+  const line = L.polyline(waypoints.map(w => w.latlng), { color: '#5ecb8a', weight: 3, opacity: 0.75 }).addTo(map);
+
+  waypoints.forEach(function(wp) {
+    const icon = L.divIcon({
+      className: '',
+      html: '<div style="width:12px;height:12px;border-radius:50%;background:' + wp.color + ';border:2px solid #fff;box-shadow:0 0 6px rgba(0,0,0,0.5);"></div>',
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
+    });
+    L.marker(wp.latlng, { icon: icon }).addTo(map).bindPopup('<strong>' + wp.label + '</strong>');
+  });
+})();
+
+window.addEventListener('scroll', function() {
+  const nav = document.querySelector('nav[role="navigation"]');
+  if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+(function() {
+  const links = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('active'); });
+        const id = e.target.getAttribute('id');
+        const a = document.querySelector('.toc-list a[href="#' + id + '"]');
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  document.querySelectorAll('.itin-section[id]').forEach(function(s) { observer.observe(s); });
+})();
+</script>
+</body>
+</html>
