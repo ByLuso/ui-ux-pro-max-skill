@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>San Vicente de la Sonsierra — Castillo templario sobre el Ebro | Routlo</title>
+  <meta name="description" content="35 km desde Logroño, 30-35 minutos: San Vicente de la Sonsierra, pueblo medieval con castillo templario, vistas privilegiadas sobre el Ebro y la Rioja Alavesa, y la singular tradición de los Picaos en Semana Santa. Menos de 60€ para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.3); font-size: 0.75rem; font-weight: 600; color: #c9a96e; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(201,169,110,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(201,169,110,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #c9a96e; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(201,169,110,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #7ab4e8; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c9a96e; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1504279807002-09854ccc9b6c?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,8,16,0.3) 0%,rgba(0,12,24,0.58) 50%,rgba(0,5,12,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;color:#7ab4e8;background:rgba(122,180,232,0.12);border:1px solid rgba(122,180,232,0.3);">🏰 Castillo Templario</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">35 km de Logroño</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🕐 30-35 min en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~59€ / 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">San Vicente de la Sonsierra<br><span style="color:#7ab4e8;">El balcón templario sobre el Ebro</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A 30-35 minutos de Logroño, este pueblo encaramado en lo alto de un cerro guarda las ruinas de un castillo ligado a los Caballeros Templarios, con vistas privilegiadas sobre el meandro del Ebro y los viñedos de la Rioja Alavesa al otro lado del río. Y en Semana Santa, una tradición única en España: la de los Picaos. Otro día completo por menos de 60€ para dos.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#castillo">El castillo y los Picaos</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">San Vicente de la Sonsierra</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🏰 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">35 km</div><div class="route-info-unit">desde Logroño</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">30-35 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~59€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Castillo</div><div class="route-info-value">s. XII-XIV</div><div class="route-info-unit">Orden del Temple</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tradición única</div><div class="route-info-value">Los Picaos</div><div class="route-info-unit">Semana Santa</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="castillo">
+      <h2 class="section-heading">🏰 El castillo y los Picaos</h2>
+      <div class="highlight-box">
+        <h4>🏰 Un castillo templario con vistas a dos provincias</h4>
+        <p>En lo alto del cerro que domina el pueblo se levantan los restos del castillo-fortaleza de San Vicente, vinculado a la Orden del Temple entre los siglos XII y XIV antes de pasar a manos de la familia Sarmiento. Justo al lado, la iglesia de Santa María la Mayor (s. XIII) conserva una torre de origen defensivo que formaba parte del mismo conjunto fortificado. Desde la explanada del castillo se abren algunas de las mejores vistas de toda La Rioja: el meandro del Ebro a los pies del pueblo, los viñedos de la Rioja Alavesa al otro lado del río y, al fondo, la silueta de la Sierra de Cantabria.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>✝️ La tradición de los Picaos</h4>
+        <p>San Vicente de la Sonsierra conserva una de las tradiciones más singulares y sobrecogedoras de España. Durante la Semana Santa, los "Picaos" —penitentes vestidos de blanco y con el rostro cubierto— recorren las calles del pueblo flagelándose la espalda con un manojo de cordeles encerados, en un rito de penitencia de raíces medievales declarado Fiesta de Interés Turístico Regional. Fuera de Semana Santa el pueblo vive con calma, y se puede visitar la ermita donde se guardan los instrumentos utilizados en la procesión.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Logroño → San Vicente de la Sonsierra · 30-35 min</div><div class="day-subtitle">Por la A-12/N-232 dirección Haro, cruzando el Ebro hacia la Rioja Alavesa</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 Camino entre viñedos hasta el río</div>
+            <div class="stop-desc">La ruta sale de Logroño por la A-12/N-232 en dirección a Haro, atravesando viñedos de Rioja Alta. Poco antes de llegar, la carretera cruza el Ebro para entrar en territorio de la Rioja Alavesa. Es entonces cuando el pueblo aparece en lo alto de un cerro al otro lado del río, con la silueta del castillo recortada contra el cielo —una de las estampas más fotogénicas de la zona.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento</div>
+            <div class="stop-desc">Hay aparcamiento gratuito en las inmediaciones del casco urbano, a poca distancia a pie de la subida al castillo. El pueblo es pequeño y se recorre fácilmente caminando.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Subida al castillo y la iglesia · 15-20 min</div><div class="day-subtitle">Paseo corto y empinado · Acceso libre</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏰 Subida a la explanada del castillo</div>
+            <div class="stop-desc">Desde el casco urbano parte un paseo corto pero con buena pendiente que sube hasta la explanada donde se levantan las ruinas del castillo templario. El acceso a las ruinas es libre y gratuito, sin horarios ni reservas.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesia de Santa María la Mayor</div>
+            <div class="stop-desc">Junto al castillo, la iglesia de Santa María la Mayor (s. XIII) conserva una torre de origen defensivo integrada en el antiguo recinto fortificado. Se puede visitar el exterior libremente; el interior depende de horarios de culto y apertura puntual.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Vistas y bodegas familiares</div><div class="day-subtitle">Mirador panorámico · Cata opcional con cita previa</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌄 Mirador 360° sobre el Ebro y los viñedos</div>
+            <div class="stop-desc">Desde la explanada del castillo las vistas son de 360°: el meandro del Ebro serpenteando a los pies del cerro, el mar de viñedos de la Rioja Alavesa al otro lado del río y, al fondo, la Sierra de Cantabria cerrando el horizonte. Es uno de los miradores más completos de toda la zona y un buen momento para sentarse un rato sin prisa.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍷 Bodegas familiares del pueblo</div>
+            <div class="stop-desc">San Vicente de la Sonsierra cuenta con varias bodegas familiares de pequeño tamaño que ofrecen visitas y catas con cita previa. Es una forma de conocer la elaboración del vino a pequeña escala, lejos de los circuitos más turísticos de otras bodegas de la región.</div>
+            <div class="stop-price">Cata en bodega familiar: ~8-12€/persona (opcional, con cita previa)</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Comida y regreso</div><div class="day-subtitle">Cocina riojana de río · Vuelta directa 30-35 min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🍽️ Restaurantes del pueblo</div>
+            <div class="stop-desc">Los restaurantes del pueblo, sencillos y de carácter familiar, sirven cocina riojana con productos del Ebro: cangrejo de río, verduras de temporada y platos tradicionales de cuchara. Una comida tranquila, sin aglomeraciones, con las vistas del valle como telón de fondo.</div>
+            <div class="stop-price">Menú del día: ~16-20€/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Logroño — 30-35 min</div>
+            <div class="stop-desc">Vuelta directa por la misma carretera. Si el enoturismo te ha dejado con ganas de más, Laguardia o Haro —al otro lado del Ebro— son otros itinerarios completos de Routlo para otro día.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, 70 km)</span><span>7€</span></div>
+        <div class="budget-row"><span>🎫 Castillo e iglesia (exterior)</span><span>0€ (acceso libre)</span></div>
+        <div class="budget-row"><span>🍽️ Comida (2 personas)</span><span>36€</span></div>
+        <div class="budget-row"><span>🍷 Cata en bodega familiar (2 personas, opcional)</span><span>16€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~59€</span></div>
+      </div>
+      <div class="budget-note">Incluso con la cata en bodega, el plan se queda muy por debajo de los 100€ —y sin ella, baja a unos 43€.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Semana Santa:</strong> si vas en esas fechas, reserva alojamiento con mucha antelación —los Picaos atraen visitantes de toda España y el pueblo se llena.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Calzado cómodo:</strong> el acceso al castillo es libre pero el terreno es irregular y la subida tiene pendiente, así que lleva calzado adecuado.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Reserva la cata con antelación:</strong> son bodegas pequeñas y familiares, conviene avisar con un día de margen para asegurar hueco.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Combina con Laguardia o Haro</strong> —al otro lado del Ebro, otros itinerarios de Routlo— si quieres prolongar el día de enoturismo.</div></div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas de un día desde Logroño?</h3>
+      <p>Rutas de menos de 1 hora y menos de 100€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([42.566,-2.760],11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[42.466,-2.445],label:'Logroño',color:'#5ecb8a',r:10},{coords:[42.566,-2.760],label:'San Vicente de la Sonsierra',color:'#7ab4e8',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[42.466,-2.445],[42.566,-2.760]],{color:'#7ab4e8',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
