@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clavijo — El castillo de la leyenda de Santiago | Routlo</title>
-  <meta name="description" content="25 km desde Logroño, 25-30 minutos: el castillo en ruinas de Clavijo, escenario de la legendaria batalla donde nació el grito '¡Santiago y cierra, España!'. Entrada gratuita, vistas a los Pirineos y la escapada más barata de La Rioja: menos de 35€ para dos."/>
+  <title>Briones — Pueblo más bonito de España + Museo Vivanco | Routlo</title>
+  <meta name="description" content="35 km desde Logroño, 30 minutos: Briones, uno de los pueblos más bonitos de España, y el Museo Vivanco de la Cultura del Vino, premiado como mejor museo enoturístico del mundo. Casco amurallado, viñedos y menos de 80€ para dos personas."/>
   <link rel="stylesheet" href="../assets/shared.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
@@ -31,7 +31,6 @@
     .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
     .tip-text strong { color: #edeef2; }
     .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.3); font-size: 0.75rem; font-weight: 600; color: #c9a96e; margin-bottom: 12px; }
-    .badge-leyenda { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(224,138,92,0.12); border: 1px solid rgba(224,138,92,0.3); font-size: 0.75rem; font-weight: 600; color: #e08a5c; margin-bottom: 12px; }
     .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
     .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
     .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
@@ -52,20 +51,20 @@
     .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
     .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
     .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
-    .highlight-box { background: linear-gradient(135deg, rgba(224,138,92,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(224,138,92,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
-    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #e08a5c; margin-bottom: 8px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(201,169,110,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(201,169,110,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #c9a96e; margin-bottom: 8px; }
     .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
     .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
     .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
     .budget-row:last-child { border-bottom: none; }
     .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
-    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(224,138,92,0.3); font-size: 1.02rem; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(201,169,110,0.3); font-size: 1.02rem; }
     .budget-total span:first-child { color: #edeef2; font-weight: 600; }
-    .budget-total span:last-child { color: #e08a5c; font-size: 1.4rem; }
+    .budget-total span:last-child { color: #c9a96e; font-size: 1.4rem; }
     .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
     .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
     .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
-    .breadcrumb a:hover { color: #e08a5c; }
+    .breadcrumb a:hover { color: #c9a96e; }
     .breadcrumb span { color: rgba(237,238,242,0.2); }
     @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
   </style>
@@ -90,17 +89,17 @@
 </nav>
 
 <section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1455156218388-5e61b526818b?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
-  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,5,0,0.3) 0%,rgba(28,8,0,0.58) 50%,rgba(10,3,0,0.94) 100%);"></div>
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(18,10,0,0.3) 0%,rgba(26,16,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
   <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-      <span class="badge-leyenda" style="margin-bottom:0;">⚔️ Leyenda de Santiago</span>
-      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">25 km de Logroño</span>
-      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🕐 25-30 min en coche</span>
-      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~33€ / 2 personas · La más barata</span>
+      <span class="badge-royal" style="margin-bottom:0;">🏘️ Pueblo más bonito de España</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">35 km de Logroño</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🕐 30 min en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~75€ / 2 personas</span>
     </div>
-    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Clavijo<br><span style="color:#e08a5c;">Donde nació '¡Santiago y cierra, España!'</span></h1>
-    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A solo 25 km de Logroño, las ruinas del castillo de Clavijo coronan un cerro de roca rojiza desde el que se domina el valle del Iregua. Aquí se libró —según la leyenda— la batalla del año 844 en la que el apóstol Santiago apareció a lomos de un caballo blanco para inclinar la balanza a favor de los cristianos, dando origen al grito "¡Santiago y cierra, España!". La entrada al castillo es gratuita, las vistas alcanzan los Pirineos en días despejados, y el plan completo es la escapada más barata de toda La Rioja: menos de 35€ para dos personas.</p>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Briones<br><span style="color:#c9a96e;">El balcón de piedra sobre el Ebro</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A 35 km de Logroño, Briones se asoma al valle del Ebro desde lo alto de un cerro, con su casco amurallado de piedra dorada considerado uno de los pueblos más bonitos de España. A sus pies, rodeado de viñedos, el Museo Vivanco de la Cultura del Vino —premiado como el mejor museo enoturístico del mundo— reúne 8.000 años de historia del vino y una colección de arte que sorprende incluso a quien no bebe ni una copa. Un día completo de pueblo, museo y vistas por menos de 80€ para dos personas.</p>
   </div>
 </section>
 
@@ -109,7 +108,7 @@
     <div class="toc-title">Contenido</div>
     <ul class="toc-list">
       <li><a href="#datos">Datos del viaje</a></li>
-      <li><a href="#leyenda">La leyenda de la batalla</a></li>
+      <li><a href="#pueblo">El pueblo y el museo</a></li>
       <li><a href="#mapa-ruta">Mapa</a></li>
       <li><a href="#ruta">El itinerario</a></li>
       <li><a href="#presupuesto">Presupuesto</a></li>
@@ -121,29 +120,29 @@
     <div class="breadcrumb">
       <a href="../index.html">Routlo</a><span>›</span>
       <a href="../itinerarios-espana.html">España</a><span>›</span>
-      <span style="color:rgba(237,238,242,0.65);">Clavijo</span>
+      <span style="color:rgba(237,238,242,0.65);">Briones</span>
     </div>
 
     <section class="itin-section" id="datos">
-      <h2 class="section-heading">⚔️ Datos del viaje</h2>
+      <h2 class="section-heading">🏘️ Datos del viaje</h2>
       <div class="route-info-bar">
-        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">25 km</div><div class="route-info-unit">desde Logroño</div></div>
-        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">25-30 min</div><div class="route-info-unit">en coche</div></div>
-        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~33€</div><div class="route-info-unit">para 2 personas</div></div>
-        <div class="route-info-cell"><div class="route-info-label">Entrada</div><div class="route-info-value">Gratis</div><div class="route-info-unit">acceso libre</div></div>
-        <div class="route-info-cell"><div class="route-info-label">Año de la batalla</div><div class="route-info-value">844 d.C.</div><div class="route-info-unit">Batalla de Clavijo</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">35 km</div><div class="route-info-unit">desde Logroño</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">30 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~75€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Museo Vivanco</div><div class="route-info-value">★ Mejor del mundo</div><div class="route-info-unit">premio enoturismo</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Todo el año</div><div class="route-info-unit">otoño = vendimia</div></div>
       </div>
     </section>
 
-    <section class="itin-section" id="leyenda">
-      <h2 class="section-heading">⚔️ La leyenda de la batalla</h2>
+    <section class="itin-section" id="pueblo">
+      <h2 class="section-heading">🏘️ El pueblo y el museo</h2>
       <div class="highlight-box">
-        <h4>⚔️ La batalla que (quizá) nunca existió</h4>
-        <p>Cuenta la leyenda que en el año 844 el rey Ramiro I de Asturias se enfrentó a las tropas del emir Abderramán II de Córdoba cerca de Clavijo. La noche anterior, el apóstol Santiago se apareció en sueños a Ramiro prometiéndole la victoria. Al día siguiente, en mitad del combate, Santiago apareció montado en un caballo blanco, espada en alto, encabezando a las tropas cristianas hasta la victoria. De ahí nacieron tanto el sobrenombre de "Matamoros" como el grito de guerra "¡Santiago y cierra, España!", que durante siglos resonó en los campos de batalla de toda la península. Los historiadores consideran ampliamente que la batalla fue, probablemente, una invención posterior para justificar el "Voto de Santiago" —un tributo que numerosos territorios pagaban a la Catedral de Santiago de Compostela—. Pero, real o no, la leyenda convirtió a Santiago en el patrón de España.</p>
+        <h4>🏘️ Uno de los pueblos más bonitos de España</h4>
+        <p>Briones se levanta sobre un cerro que domina el valle del Ebro, con un casco antiguo amurallado de calles empedradas que serpentean entre casas señoriales de los siglos XVI al XVIII, muchas de ellas con escudos heráldicos tallados en la fachada. Sobre todo el conjunto se eleva la imponente iglesia de Nuestra Señora de la Asunción, cuya torre se ve desde kilómetros a la redonda. Briones ha sido reconocido en repetidas ocasiones como uno de los pueblos más bonitos de España, y se nota en cuanto se camina por sus calles: ambiente tranquilo y auténtico, casi sin tiendas de souvenirs, con la sensación de un pueblo que vive su propio ritmo.</p>
       </div>
       <div class="highlight-box">
-        <h4>🏰 El castillo que vigiló durante 1.000 años</h4>
-        <p>Sobre un cerro de piedra arenisca rojiza se alzan las ruinas del castillo de Clavijo, construido originalmente por los emires de Córdoba (siglos IX-X) para defender la frontera del valle del Ebro. Más tarde fue conquistado y ampliado por los reinos cristianos de Navarra y Castilla, que lo convirtieron en una fortaleza clave para controlar el paso entre la Sierra de Cameros y el valle. Hoy, convertido en ruinas evocadoras, sigue dominando el paisaje desde lo alto, con vistas que en días despejados llegan hasta los Pirineos.</p>
+        <h4>🍷 Museo Vivanco de la Cultura del Vino</h4>
+        <p>A las afueras del pueblo, Bodegas Vivanco creó este museo que ha sido reconocido con el premio "Best of Wine Tourism" a nivel mundial. Sus salas recorren 8.000 años de historia del vino: ánforas romanas, herramientas de viticultura medieval, y una de las mayores colecciones de arte relacionado con el vino del mundo, con piezas de Picasso, Miró y Chagall. Además, alberga una colección de más de 3.000 sacacorchos de todas las épocas y procedencias. En el exterior, el "Jardín de Baco" reúne 220 variedades de vid de todo el mundo, una auténtica colección viva de viñedos en miniatura.</p>
       </div>
     </section>
 
@@ -156,58 +155,67 @@
       <h2 class="section-heading">🗺️ El itinerario</h2>
 
       <div class="day-card">
-        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Logroño → Clavijo · 25-30 min</div><div class="day-subtitle">Por la LR-250, subiendo hacia las estribaciones de la Sierra de Cameros</div></div></div>
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Logroño → Briones · 30 min</div><div class="day-subtitle">Por la A-12 dirección Haro, con vistas a los viñedos de Rioja Alta</div></div></div>
         <div class="day-body"><div class="stop-list">
           <div class="stop-item">
-            <div class="stop-name">🚗 La carretera hacia la sierra</div>
-            <div class="stop-desc">La LR-250 sale de Logroño y va ganando altura poco a poco hacia la Sierra de Cameros. El paisaje cambia rápido: los viñedos de las afueras de la ciudad dejan paso a matorral, encinares y los primeros afloramientos de roca rojiza que anuncian la llegada a Clavijo.</div>
+            <div class="stop-name">🚗 La carretera del vino</div>
+            <div class="stop-desc">La A-12 conecta Logroño con Haro atravesando el corazón de Rioja Alta. Poco antes de llegar, un desvío bien señalizado lleva hacia Briones. El último kilómetro asciende hasta el cerro amurallado, con vistas cada vez más amplias sobre el mar de viñedos que rodea el pueblo.</div>
           </div>
           <div class="stop-item">
-            <div class="stop-name">🅿️ Aparcamiento en el pueblo</div>
-            <div class="stop-desc">Clavijo es un pueblo pequeño con aparcamiento gratuito y sin complicaciones junto a la entrada del núcleo urbano, a pocos metros del inicio del sendero hacia el castillo.</div>
+            <div class="stop-name">🅿️ Aparcamiento</div>
+            <div class="stop-desc">Hay aparcamiento gratuito a las afueras del casco amurallado. El centro histórico es peatonal y tiene cierta pendiente, así que conviene dejar el coche cerca de la entrada al pueblo y subir andando.</div>
           </div>
         </div></div>
       </div>
 
       <div class="day-card">
-        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Subida al castillo · 15-20 min</div><div class="day-subtitle">Sendero corto y bien señalizado · Apto para todos los públicos</div></div></div>
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Museo Vivanco de la Cultura del Vino · 1h30-2h</div><div class="day-subtitle">Galerías de arqueología y arte del vino + cava-galería subterránea</div></div></div>
         <div class="day-body"><div class="stop-list">
           <div class="stop-item">
-            <div class="stop-name">🥾 El sendero hasta las ruinas</div>
-            <div class="stop-desc">Desde el pueblo parte un camino corto, fácil y muy bien señalizado que asciende hasta las ruinas del castillo, situado sobre un espolón de roca arenisca rojiza. Es apto para todas las edades, aunque conviene llevar calzado cómodo porque el último tramo gana algo de desnivel sobre terreno irregular.</div>
+            <div class="stop-name">🏛️ 8.000 años de historia del vino</div>
+            <div class="stop-desc">Las salas del museo recorren la historia del vino desde sus orígenes hasta la actualidad: ánforas romanas, prensas y herramientas de viticultura medieval, y vitrinas dedicadas a las técnicas de elaboración a lo largo de los siglos.</div>
           </div>
           <div class="stop-item">
-            <div class="stop-name">🪨 El paisaje durante la subida</div>
-            <div class="stop-desc">Durante el ascenso el color rojizo de la roca contrasta con el verde de la sierra. Es un buen lugar para hacer fotos incluso antes de llegar arriba, especialmente con luz de mañana.</div>
+            <div class="stop-name">🎨 La colección de arte</div>
+            <div class="stop-desc">Una de las mayores colecciones de arte relacionado con el vino del mundo, con obras de Picasso, Miró y Chagall, además de tapices, grabados y la sorprendente colección de más de 3.000 sacacorchos históricos.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍇 Cava-galería subterránea y Jardín de Baco</div>
+            <div class="stop-desc">El recorrido incluye una cava-galería bajo tierra y, en el exterior, el Jardín de Baco, con 220 variedades de vid procedentes de todo el mundo. Al final de la visita, opcionalmente, se puede hacer una cata de 3 vinos maridados con queso.</div>
+            <div class="stop-price">Entrada general: 16€/persona · Entrada + cata (3 vinos): 24€/persona · Reserva recomendada en fin de semana</div>
           </div>
         </div></div>
       </div>
 
       <div class="day-card">
-        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Las ruinas y el mirador</div><div class="day-subtitle">Visita libre · 30-45 min · Entrada gratuita</div></div></div>
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Casco histórico de Briones</div><div class="day-subtitle">Paseo a pie · 1h - 1h 15min · Gratis</div></div></div>
         <div class="day-body"><div class="stop-list">
           <div class="stop-item">
-            <div class="stop-name">🏰 Restos de la torre del homenaje</div>
-            <div class="stop-desc">De la antigua fortaleza se conservan los restos de la torre del homenaje, fragmentos de muralla y un aljibe excavado en la roca. Aunque está en ruinas, la silueta del castillo sobre el cerro rojizo sigue siendo imponente, y se puede recorrer libremente sin restricciones de horario.</div>
+            <div class="stop-name">🏛️ Calles empedradas y palacios renacentistas</div>
+            <div class="stop-desc">El casco antiguo conserva un trazado medieval de calles estrechas y empedradas, flanqueadas por palacios renacentistas con escudos heráldicos en sus fachadas. Es un paseo tranquilo, sin apenas tráfico ni masificación turística.</div>
           </div>
           <div class="stop-item">
-            <div class="stop-name">🔭 El mirador hacia los Pirineos</div>
-            <div class="stop-desc">Desde lo alto, las vistas son panorámicas: Logroño y el valle del Ebro a un lado, la Sierra de la Demanda al otro, y en días despejados, la silueta lejana de los Pirineos en el horizonte. Es, sin duda, el gran atractivo de la visita y el motivo por el que merece la pena subir.</div>
+            <div class="stop-name">⛪ Iglesia de Nuestra Señora de la Asunción</div>
+            <div class="stop-desc">Su torre, de unos 60 metros, es una de las más altas de toda La Rioja y domina el perfil del pueblo desde cualquier punto del valle. El interior conserva retablos y obras de arte religioso de gran valor.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🔭 Mirador de la Cruz del Castillo</div>
+            <div class="stop-desc">En el punto más alto del pueblo, este mirador ofrece vistas de 360° sobre el valle del Ebro, el mar de viñedos de Rioja Alta y la Sierra de la Demanda al fondo. Acceso libre y gratuito —de las mejores panorámicas de toda la región.</div>
           </div>
         </div></div>
       </div>
 
       <div class="day-card">
-        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Pueblo, comida y regreso</div><div class="day-subtitle">Pueblo pequeño y tranquilo · Vuelta directa 25-30 min</div></div></div>
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Comida y regreso</div><div class="day-subtitle">Cocina riojana de temporada · Vuelta directa 30 min</div></div></div>
         <div class="day-body"><div class="stop-list">
           <div class="stop-item">
-            <div class="stop-name">🍽️ Comer en Clavijo</div>
-            <div class="stop-desc">Clavijo es un pueblo muy pequeño, con uno o dos bares-restaurante sencillos donde ofrecen menú del día a precios muy ajustados. Otra opción, igual de recomendable, es traer un picnic y comer cerca del castillo, con las vistas de fondo —especialmente agradable en primavera y otoño.</div>
-            <div class="stop-price">Menú del día: ~12-15€/persona o picnic</div>
+            <div class="stop-name">🍽️ Comer en la plaza o en una bodega</div>
+            <div class="stop-desc">En la plaza mayor de Briones hay restaurantes con menú del día de cocina riojana de temporada, y algunas bodegas de la zona —incluida la propia Vivanco— cuentan con comedores abiertos al público con producto local y maridaje de sus propios vinos.</div>
+            <div class="stop-price">Menú del día: ~20€/persona · Carta: ~28-35€/persona</div>
           </div>
           <div class="stop-item">
-            <div class="stop-name">🚗 Regreso a Logroño — 25-30 min</div>
-            <div class="stop-desc">Vuelta directa por la misma carretera. Si te ha quedado tiempo y ganas de más, la Sierra de Toloño o el Hayedo de Moncalvillo (otros itinerarios de Routlo) son planes que combinan bien con esta ruta el mismo día.</div>
+            <div class="stop-name">🚗 Regreso a Logroño — 30 min</div>
+            <div class="stop-desc">Vuelta directa por la A-12. Si el día da para más, Haro y su Barrio de la Estación están a solo 8 km —otro itinerario completo de Routlo para combinar enoturismo en una sola jornada.</div>
           </div>
         </div></div>
       </div>
@@ -217,21 +225,20 @@
     <section class="itin-section" id="presupuesto">
       <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
       <div class="budget-table">
-        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, 50 km)</span><span>5€</span></div>
-        <div class="budget-row"><span>🎫 Entrada al castillo</span><span>0€ (acceso libre)</span></div>
-        <div class="budget-row"><span>🍽️ Menú del día o picnic (2 personas)</span><span>24€</span></div>
-        <div class="budget-row"><span>☕ Café/refresco</span><span>4€</span></div>
-        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~33€</span></div>
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, 70 km)</span><span>7€</span></div>
+        <div class="budget-row"><span>🎫 Entrada Museo Vivanco general (2 personas)</span><span>32€</span></div>
+        <div class="budget-row"><span>🍽️ Menú del día en Briones (2 personas)</span><span>36€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~75€</span></div>
       </div>
-      <div class="budget-note">La escapada más económica de toda la región: te sobran casi 70€ del presupuesto de 100€ para imprevistos o para combinarla con otro plan el mismo día.</div>
+      <div class="budget-note">Si os apetece añadir la cata de 3 vinos en el museo (+8€/persona), el total sube a ~91€ —sigue entrando en el presupuesto de 100€ para dos.</div>
     </section>
 
     <section class="itin-section" id="consejos">
       <h2 class="section-heading">💡 Consejos prácticos</h2>
-      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Calzado cómodo:</strong> el sendero hasta el castillo es de tierra y piedra, y puede resbalar después de la lluvia. Unas zapatillas con buen agarre son suficientes.</div></div>
-      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Elige un día despejado:</strong> las vistas desde el mirador —incluyendo los Pirineos al fondo— son el gran atractivo de Clavijo, así que merece la pena esperar a un día sin nubes bajas.</div></div>
-      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Combina con la Sierra de Toloño o el Hayedo de Moncalvillo</strong> (otros itinerarios de Routlo) si quieres sumar un mirador más o un sendero más largo el mismo día.</div></div>
-      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Lleva agua:</strong> no hay fuentes ni en el sendero ni en el castillo, así que conviene ir provisto desde el pueblo.</div></div>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Reserva con antelación</strong> el Museo Vivanco si vas en fin de semana o durante la vendimia (septiembre-octubre), cuando hay más visitantes.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Aparcamiento gratuito a las afueras:</strong> el casco amurallado es peatonal y empinado, así que deja el coche cerca de la entrada y sube andando al centro.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Combina con Haro</strong> (Barrio de la Estación, otro itinerario de Routlo) si quieres convertir el día en una ruta completa de enoturismo —están a solo 8 km.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>El Mirador de la Cruz del Castillo es gratis</strong> y ofrece una de las mejores vistas panorámicas de toda La Rioja Alta —no te lo pierdas.</div></div>
     </section>
 
     <div class="cta-banner">
@@ -245,12 +252,12 @@
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){
-  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([42.27,-2.42],12);
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([42.545,-2.755],12);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
   setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
-  [{coords:[42.466,-2.445],label:'Logroño',color:'#5ecb8a',r:10},{coords:[42.272,-2.422],label:'Clavijo',color:'#e08a5c',r:9},{coords:[42.2745,-2.4205],label:'Castillo de Clavijo',color:'#e0b44a',r:12}]
+  [{coords:[42.466,-2.445],label:'Logroño',color:'#5ecb8a',r:10},{coords:[42.5435,-2.7565],label:'Briones',color:'#c9a96e',r:9},{coords:[42.5495,-2.7620],label:'Museo Vivanco',color:'#e0b44a',r:12}]
     .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
-  L.polyline([[42.466,-2.445],[42.272,-2.422],[42.2745,-2.4205]],{color:'#e08a5c',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+  L.polyline([[42.466,-2.445],[42.5435,-2.7565],[42.5495,-2.7620]],{color:'#c9a96e',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
 })();
 </script>
 <script>
