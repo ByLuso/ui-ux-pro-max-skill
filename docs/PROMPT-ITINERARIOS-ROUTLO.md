@@ -5,7 +5,7 @@ Prompt de referencia, listo para copiar y pegar, que combina:
 2. El **flujo técnico** ya usado para generar páginas HTML estáticas en `voyageai/itinerarios/` (plantilla, sistema de diseño Aurora dark, workflow de commits e índices).
 3. La **integración de enlaces de afiliado** ya presente en itinerarios internacionales (`bali.html`, etc.), adaptada al formato de escapadas de 1 día.
 
-Aplica a partir de ahora para **nuevos** itinerarios. Los 7 ya creados (Nájera, Clavijo, Briones, Cañón del Río Leza, Arnedillo, San Vicente de la Sonsierra, Cuevas de Ortigosa) no se retocan retroactivamente salvo que se pida explícitamente.
+Aplica a partir de ahora para **nuevos** itinerarios. Los 7 ya creados (Nájera, Clavijo, Briones, Cañón del Río Leza, Arnedillo, San Vicente de la Sonsierra, Cuevas de Ortigosa) ya se actualizaron retroactivamente con enlaces de afiliado y aviso de transparencia, siguiendo este mismo enfoque.
 
 ---
 
