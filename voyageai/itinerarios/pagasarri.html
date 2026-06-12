@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pagasarri — La montaña que vigila Bilbao | Routlo</title>
+  <meta name="description" content="A 8 km del centro de Bilbao, el monte Pagasarri (671m) ofrece vistas de 360° sobre la ría y la costa de Bizkaia tras una sencilla ruta a pie de 1h-1h15min. Entrada gratuita: menos de 12€ para dos personas en un día."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #8fbf8f; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #8fbf8f; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(143,191,143,0.15); border: 1px solid rgba(143,191,143,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #8fbf8f; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(143,191,143,0.12); border: 1px solid rgba(143,191,143,0.3); font-size: 0.75rem; font-weight: 600; color: #8fbf8f; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(143,191,143,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(143,191,143,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #8fbf8f, #5a8f5a); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #8fbf8f; border-left-color: #8fbf8f; background: rgba(143,191,143,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(143,191,143,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(143,191,143,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #8fbf8f; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(143,191,143,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #8fbf8f; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #8fbf8f; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(143,191,143,0.3); }
+    .hotel-link:hover { border-color: #8fbf8f; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #8fbf8f; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#8fbf8f,#5a8f5a);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#8fbf8f'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#8fbf8f'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1400&h=900&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">⛰️ Monte Pagasarri</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">8 km de Bilbao</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🕐 15 min en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~12€ / 2 personas</span>
+      <span style="font-size:0.78rem;color:#5ecb8a;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);padding:4px 12px;border-radius:100px;">🆓 Entrada gratuita</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Pagasarri<br><span style="color:#8fbf8f;">La montaña que vigila Bilbao</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A solo 8 km del centro de Bilbao, el Pagasarri (671m) es el monte que asoma en casi cualquier postal de la ciudad. Una hora de ascenso por bosques de hayas y pinos te lleva a vistas de 360° sobre la ría, la metrópoli y la costa de Bizkaia. Sin entradas, sin colas, sin gastar un euro —solo gasolina o un billete de bus.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#contexto">El monte de Bilbao</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Pagasarri</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">⛰️ Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">8 km</div><div class="route-info-unit">desde Bilbao</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">15 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~12€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Altitud</div><div class="route-info-value">671m</div><div class="route-info-unit">cima del Pagasarri</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Todo el año</div><div class="route-info-unit">mejor en días claros</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="contexto">
+      <h2 class="section-heading">⛰️ El monte de Bilbao</h2>
+      <div class="highlight-box">
+        <h4>🏞️ El "patio trasero" de los bilbaínos</h4>
+        <p>El Pagasarri (671m) es la montaña-icono de Bilbao, visible desde casi cualquier punto de la ciudad —basta levantar la vista desde el centro para verla ahí, vigilando. Es el patio trasero de los bilbaínos: cada fin de semana cientos de personas suben a pie o corriendo por senderos bien señalizados que atraviesan bosques de hayas y pinos. No hace falta ser un montañero experimentado: es una de esas rutas que hace literalmente todo el mundo, desde familias con niños hasta corredores entrenando para sus próximas carreras.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🌄 Vistas de 360° y el Refugio de Pagasarri</h4>
+        <p>Desde la cima, las vistas son de 360°: toda la ría de Bilbao a tus pies, el área metropolitana extendiéndose entre los montes, la costa de Bizkaia hacia el norte y, en días muy claros, incluso los perfiles lejanos de los Picos de Europa hacia el oeste. Justo junto a la cima hay un pequeño refugio-bar, el Refugio de Pagasarri, donde reponer fuerzas con un bocata y una bebida a precios muy asequibles antes de bajar.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Bilbao → La Reineta / Larraskitu · 15 min</div><div class="day-subtitle">En coche o en autobús urbano, sin coste de entrada</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 En coche, 15 minutos</div>
+            <div class="stop-desc">El punto de acceso habitual a la ruta está en la zona de La Reineta / Larraskitu, a unos 8 km del centro de Bilbao y unos 15 minutos en coche. Hay zonas de aparcamiento gratuito junto al inicio del sendero, aunque en fines de semana soleados conviene llegar pronto.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚌 Sin coche: autobús urbano línea 58</div>
+            <div class="stop-desc">El autobús urbano de Bilbobus línea 58 conecta el centro de la ciudad con la zona de acceso al Pagasarri, lo que convierte esta escapada en un plan totalmente posible sin coche —solo el precio del billete de bus.</div>
+            <div class="stop-price">Bus urbano: ~1,40€/persona · Aparcamiento junto al sendero: gratis</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Ascenso por el sendero principal</div><div class="day-subtitle">A través del bosque · 1h - 1h 15min · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌳 Bosque de hayas y pinos</div>
+            <div class="stop-desc">El sendero principal sube de forma constante pero asequible a través de un bosque de hayas y pinos, con tramos de pista forestal y otros de camino más estrecho. La sombra del arbolado hace que la subida sea agradable casi cualquier día del año.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🪧 Señalización clara, apto para todos los niveles</div>
+            <div class="stop-desc">La ruta está bien señalizada en todo momento, por lo que es difícil perderse. No requiere experiencia previa en montaña: con calzado adecuado (botas o zapatillas de trail) y un ritmo tranquilo, cualquier persona con un mínimo de forma física puede completarla sin problema en aproximadamente una hora.</div>
+            <div class="stop-price">Coste: 0€ · Entrada: gratuita</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Cumbre del Pagasarri · 671m</div><div class="day-subtitle">Vistas 360° y parada en el refugio</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌄 Vistas panorámicas de 360°</div>
+            <div class="stop-desc">Desde la cumbre se despliega toda la ría de Bilbao, el área metropolitana entre los montes y la costa de Bizkaia. En días especialmente claros, hacia el oeste se llegan a distinguir los perfiles de los Picos de Europa. Es uno de los mejores miradores gratuitos de todo el País Vasco.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍻 Refugio de Pagasarri</div>
+            <div class="stop-desc">Junto a la cima hay un pequeño refugio-bar, el Refugio de Pagasarri, con bocatas, tortilla y bebidas a precios asequibles. Es el premio perfecto tras la subida y un buen sitio para sentarse un rato disfrutando de las vistas antes de bajar.</div>
+            <div class="stop-price">Bocata + bebida: ~5-8€/persona (gasto opcional)</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Descenso y regreso a Bilbao</div><div class="day-subtitle">Bajada ~1h · Vuelta directa en coche o bus</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🥾 Descenso, ~1 hora</div>
+            <div class="stop-desc">El descenso por el mismo sendero (u otra variante señalizada, si te apetece variar) lleva aproximadamente una hora. Las piernas lo notan más que en la subida, así que un buen calzado con buen agarre se nota especialmente aquí.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Vuelta a Bilbao — 15 min</div>
+            <div class="stop-desc">De vuelta al punto de partida en La Reineta / Larraskitu, el regreso al centro de Bilbao es de nuevo unos 15 minutos en coche, o el mismo trayecto en autobús urbano línea 58 si has venido sin vehículo propio.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, ~16 km)</span><span>~4€</span></div>
+        <div class="budget-row"><span>🥾 Acceso y ruta de senderismo (2 personas)</span><span>Gratis</span></div>
+        <div class="budget-row"><span>🌄 Vistas desde la cima (2 personas)</span><span>Gratis</span></div>
+        <div class="budget-row"><span>🍻 Bocata y bebida en el Refugio (opcional, 2 personas)</span><span>~8€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~12€</span></div>
+      </div>
+      <div class="budget-note">Este es un plan 100% gratuito salvo la gasolina —y ni siquiera eso si vas en el autobús urbano línea 58 o si vives cerca y subes andando desde la ciudad. El único gasto "extra" es totalmente opcional: un bocata y una bebida en el Refugio de Pagasarri al llegar a la cima. Si llevas tu propio picnic, el día puede salirte por 0€.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Lleva agua y calzado de monte:</strong> aunque la ruta es accesible para todos los niveles, son 1h-1h15min de subida constante. Botas o zapatillas de trail y al menos medio litro de agua por persona marcan la diferencia.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Evita los mediodías de verano:</strong> buena parte del sendero discurre por bosque y da sombra, pero en pleno verano es más agradable subir a primera hora de la mañana o a última de la tarde, evitando las horas de más calor.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Sin coche, autobús 58:</strong> la línea 58 de Bilbobus conecta el centro con la zona de acceso al Pagasarri, así que esta escapada es perfectamente viable —y aún más barata— sin necesidad de vehículo propio.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>El refugio puede cerrar algunos días de diario:</strong> el Refugio de Pagasarri suele tener más actividad en fines de semana. Si vas en día de diario, lleva tu propio picnic por si está cerrado.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Bilbao y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Bilbao" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Bilbao en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Bilbao?</h3>
+      <p>Rutas de menos de 1 hora y prácticamente sin gastos de entrada, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.2523,-2.955],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[43.263,-2.935],label:'Bilbao centro',color:'#5ecb8a',r:10},{coords:[43.2415,-2.9750],label:'Cima del Pagasarri (671m)',color:'#8fbf8f',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[43.263,-2.935],[43.2415,-2.9750]],{color:'#8fbf8f',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

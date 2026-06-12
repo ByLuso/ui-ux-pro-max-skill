@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Balmaseda — El pueblo más antiguo de Bizkaia | Routlo</title>
+  <meta name="description" content="30 km desde Bilbao, 30 minutos en coche: la primera villa de Bizkaia (Carta de Villazgo de 1199), su Puente Viejo medieval con el Portal de Sopeña y un casco histórico porticado de acceso libre. Escapada 100% gratuita: solo gasolina y comida, ~30€ para dos."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.3); font-size: 0.75rem; font-weight: 600; color: #c9a96e; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(201,169,110,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(201,169,110,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #c9a96e; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(201,169,110,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #c9a96e; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .hotel-link:hover { border-color: #c9a96e; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c9a96e; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1474722883778-792e7fb1c4e3?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">🏛️ La villa más antigua de Bizkaia</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">30 km de Bilbao</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🕐 ~30 min en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~30€ / 2 personas</span>
+      <span style="font-size:0.78rem;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;padding:4px 12px;border-radius:100px;">🆓 Entrada gratuita</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Balmaseda<br><span style="color:#c9a96e;">El pueblo más antiguo de Bizkaia</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A 30 minutos de Bilbao, en plena comarca de Las Encartaciones, Balmaseda fue la primera villa de Bizkaia en recibir Carta de Villazgo, allá por el año 1199. Su casco histórico medieval, las calles porticadas y el icónico Puente Viejo sobre el río Cadagua se visitan por completo gratis. Una escapada de un día con presupuesto prácticamente cero: solo gasolina y, si quieres, algo de comer.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">La villa más antigua</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Balmaseda</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🏛️ Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">30 km</div><div class="route-info-unit">desde Bilbao</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~30 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~30€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Fundada</div><div class="route-info-value">Año 1199</div><div class="route-info-unit">primera Carta de Villazgo de Bizkaia</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Todo el año</div><div class="route-info-unit">acceso libre</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">🏛️ La villa más antigua de Bizkaia</h2>
+      <div class="highlight-box">
+        <h4>📜 La primera Carta de Villazgo de Bizkaia (1199)</h4>
+        <p>Balmaseda fue la primera localidad de todo el Señorío de Bizkaia en recibir Carta de Villazgo, otorgada en el año 1199 por orden del rey Alfonso VIII de Castilla. Aquel privilegio convirtió a Balmaseda en una villa con derechos propios, mercado y muralla, y marcó el inicio de un casco histórico medieval que todavía hoy conserva calles porticadas (soportales) y casas-palacio de los siglos XVI al XVIII. Pasear por su trama urbana es, literalmente, caminar por el origen de Bizkaia como territorio organizado —y se puede hacer sin pagar entrada en ningún momento.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🌉 El Puente Viejo y el Vía Crucis Viviente</h4>
+        <p>El Puente Viejo, también conocido como Puente de la Muza, es de origen medieval y cruza el río Cadagua justo en el corazón del pueblo —es, sin duda, la imagen más icónica de Balmaseda. En uno de sus arcos incorpora una pequeña capilla-portal llamada "Portal de Sopeña", un detalle único que pocos puentes medievales conservan. Cada Semana Santa, Balmaseda acoge el Vía Crucis Viviente más conocido de España: cientos de vecinos representan la Pasión por las calles del casco histórico, una tradición declarada de Interés Turístico Nacional. Tanto el puente como todo el conjunto histórico son de acceso libre y gratuito los 365 días del año.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Bilbao → Balmaseda · ~30 min</div><div class="day-subtitle">Por la A-8 / BI-636, hacia el interior de Las Encartaciones</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 La carretera hacia Las Encartaciones</div>
+            <div class="stop-desc">Desde Bilbao, la ruta se adentra en la comarca de Las Encartaciones, un valle verde salpicado de caseríos que va estrechándose a medida que el río Cadagua acompaña la carretera. En poco más de media hora se llega al corazón de Balmaseda, sin peajes ni complicaciones.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento gratuito</div>
+            <div class="stop-desc">Hay zonas de aparcamiento gratuito muy cerca del Puente Viejo y del casco histórico, a pocos minutos a pie del centro. En fin de semana es recomendable llegar antes del mediodía para encontrar sitio sin dar vueltas.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">El Puente Viejo y el Portal de Sopeña</div><div class="day-subtitle">Paseo y fotos · 20-30 min · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌉 El Puente Viejo (Puente de la Muza)</div>
+            <div class="stop-desc">El puente medieval sobre el río Cadagua es la postal más fotografiada de Balmaseda. Sus arcos de piedra, reflejados en el agua, son especialmente bonitos a primera hora de la mañana o al atardecer, cuando la luz es más suave.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ El Portal de Sopeña</div>
+            <div class="stop-desc">En uno de los arcos del puente se esconde una pequeña capilla-portal, el "Portal de Sopeña", un elemento singular que convierte este puente en algo más que una simple infraestructura: es también un lugar de paso simbólico y devoción, integrado en la propia estructura medieval. Se puede observar y fotografiar libremente desde ambas orillas.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Casco histórico medieval</div><div class="day-subtitle">Paseo a pie · 1h - 1h 30min · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏘️ Calles porticadas y casas-palacio</div>
+            <div class="stop-desc">El casco antiguo de Balmaseda conserva un entramado de calles con soportales (pórticos) típicos de las villas medievales del norte, junto a casas-palacio de los siglos XVI al XVIII con escudos heráldicos en sus fachadas. Es un paseo tranquilo, sin aglomeraciones, donde se respira la atmósfera de villa fundacional.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesia de San Severino</div>
+            <div class="stop-desc">La iglesia gótica de San Severino, con su torre y su volumen macizo de piedra, domina el perfil del casco histórico. Su exterior y entorno se pueden recorrer y admirar sin coste alguno, y es uno de los puntos de referencia del Vía Crucis Viviente durante la Semana Santa.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Plazas con soportales</div>
+            <div class="stop-desc">Las pequeñas plazas porticadas del centro son un buen sitio para pararse, sentarse un momento y disfrutar del ambiente local. Muchas conservan el empedrado original y dan una idea muy fiel de cómo era la vida cotidiana en una villa de Bizkaia hace varios siglos.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Ribera del Cadagua, comida y regreso</div><div class="day-subtitle">Paseo fluvial + menú o pintxos · Vuelta directa ~30 min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏞️ Paseo por la ribera del río Cadagua</div>
+            <div class="stop-desc">Un agradable paseo bordea el río Cadagua a su paso por el pueblo, con vistas al Puente Viejo desde distintos ángulos y zonas verdes donde estirar las piernas antes de comer. Es gratuito y apto para todas las edades.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍽️ Menú del día o pintxos en el centro</div>
+            <div class="stop-desc">En las calles del centro hay bares y restaurantes con menú del día y barras de pintxos a precios razonables, ideales para reponer fuerzas antes de volver. Si prefieres no gastar nada en comida, las zonas verdes junto al río son perfectas para un picnic.</div>
+            <div class="stop-price">Menú del día: ~13-16€/persona · Pintxos: ~3-4€/unidad</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Bilbao — ~30 min</div>
+            <div class="stop-desc">Vuelta directa por la misma carretera. Si te apetece alargar el día, el tren turístico minero de Bizkaia y otras rutas de Las Encartaciones (otros itinerarios de Routlo) combinan muy bien con esta escapada.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, ~60 km)</span><span>7€</span></div>
+        <div class="budget-row"><span>🏛️ Entrada al casco histórico y Puente Viejo</span><span>Gratis</span></div>
+        <div class="budget-row"><span>🏛️ Entrada Portal de Sopeña / Iglesia San Severino (exterior)</span><span>0€</span></div>
+        <div class="budget-row"><span>🍽️ Menú del día o pintxos (2 personas)</span><span>20€</span></div>
+        <div class="budget-row"><span>☕ Café o refresco</span><span>4€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~31€</span></div>
+      </div>
+      <div class="budget-note">Una escapada 100% gratuita en cuanto a entradas y actividades: el único gasto real es la gasolina y, si quieres, la comida. Con un picnic junto al río el total bajaría a poco más de 10€ para dos personas.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Aparcamiento gratuito junto al Puente Viejo:</strong> hay zonas de aparcamiento sin coste muy próximas al puente y al casco histórico, a pocos minutos a pie de todo lo importante.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Fuera de Semana Santa</strong> encontrarás el pueblo mucho más tranquilo, ideal para fotos sin gente y paseos relajados por el casco histórico.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>En Semana Santa</strong>, en cambio, merece mucho la pena planificar la visita para coincidir con el Vía Crucis Viviente, declarado de Interés Turístico Nacional —reserva alojamiento con antelación si quieres quedarte a verlo.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Combina con el tren turístico minero de Bizkaia</strong> o con otras rutas de Las Encartaciones (otros itinerarios de Routlo) si quieres convertir el día en una ruta más completa por la comarca.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Bilbao y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Bilbao" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Bilbao en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Bilbao?</h3>
+      <p>Rutas de menos de 1 hora y con entradas a 0€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.222,-3.065],10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[43.263,-2.935],label:'Bilbao',color:'#5ecb8a',r:10},{coords:[43.1825,-3.1975],label:'Balmaseda',color:'#c9a96e',r:9},{coords:[43.182,-3.197],label:'Puente Viejo de Balmaseda',color:'#e0b44a',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[43.263,-2.935],[43.1825,-3.1975],[43.182,-3.197]],{color:'#c9a96e',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
