@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zumaia — Los acantilados de Flysch que fueron Rocadragón en Juego de Tronos | Routlo</title>
+  <meta name="description" content="38 km desde San Sebastián, 40 minutos en coche: los espectaculares acantilados de Flysch, 60 millones de años de historia geológica escritos en la roca, y el escenario de Rocadragón en Juego de Tronos. Gratis de visitar, desde unos 35€ para dos personas con ruta en barco incluida."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #7a8ea3; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #7a8ea3; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(122,142,163,0.15); border: 1px solid rgba(122,142,163,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #7a8ea3; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(122,142,163,0.12); border: 1px solid rgba(122,142,163,0.3); font-size: 0.75rem; font-weight: 600; color: #7a8ea3; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(122,142,163,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(122,142,163,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #7a8ea3, #5a7088); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #7a8ea3; border-left-color: #7a8ea3; background: rgba(122,142,163,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(122,142,163,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(122,142,163,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #7a8ea3; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(122,142,163,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #7a8ea3; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #7a8ea3; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(122,142,163,0.3); }
+    .hotel-link:hover { border-color: #7a8ea3; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #7a8ea3; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#7a8ea3'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#7a8ea3'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">🐉 Escapada de un día</span>
+      <span style="font-size:0.78rem;font-weight:600;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;padding:4px 12px;border-radius:100px;">🆓 Entrada gratuita</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">38 km · ~40 min en coche desde San Sebastián</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~35€ / 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Zumaia<br><span style="color:#7a8ea3;">Los acantilados que fueron Rocadragón</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A 40 minutos de San Sebastián, la playa de Itzurun en Zumaia está flanqueada por los acantilados de Flysch, capas de roca sedimentaria que registran 60 millones de años de historia de la Tierra y que forman parte del Geoparque de la Costa Vasca (Geoparkea). En 2017, esta playa se convirtió en Rocadragón (Dragonstone), el primer destino de Daenerys Targaryen al llegar a Poniente en la séptima temporada de Juego de Tronos.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#flysch">El Flysch y Rocadragón</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Zumaia</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🐉 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">38 km</div><div class="route-info-unit">desde San Sebastián</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~40 min</div><div class="route-info-unit">por la N-634/GI-3391</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~35€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Flysch</div><div class="route-info-value">60M</div><div class="route-info-unit">años de historia geológica</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Todo el año</div><div class="route-info-unit">marea baja recomendable</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="flysch">
+      <h2 class="section-heading">🐉 60 millones de años de historia escritos en la roca (y en Rocadragón)</h2>
+      <div class="highlight-box">
+        <h4>🪨 La geología del Flysch</h4>
+        <p>Las capas de roca visibles en los acantilados de Itzurun y Algorri se formaron durante 60 millones de años de sedimentación marina, entre el Cretácico y el Eoceno. Entre esas capas se encuentra el límite K-T (Cretácico-Terciario), asociado a la extinción de los dinosaurios por el impacto de un asteroide hace 66 millones de años —uno de los pocos lugares del mundo donde este límite es visible a simple vista. La zona forma parte del Geoparque de la Costa Vasca (Geoparkea), reconocido por la UNESCO.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🐲 Rocadragón en Juego de Tronos</h4>
+        <p>En 2016, durante el rodaje de la séptima temporada de Juego de Tronos, la playa de Itzurun se transformó en la costa de Rocadragón (Dragonstone), donde Daenerys Targaryen desembarca por primera vez en Poniente. Los acantilados y la playa de arena negra son fácilmente reconocibles para los fans de la serie. Si te queda tiempo, el Museo Ignacio Zuloaga (Zuloaga Etxea), una antigua ermita de Santiago convertida en museo dedicado al pintor vasco, ofrece una visita complementaria de entrada de pago opcional.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">San Sebastián → Zumaia · ~40 min</div><div class="day-subtitle">Por la costa, vía Zarautz y Getaria</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 La carretera costera</div>
+            <div class="stop-desc">Desde San Sebastián, la N-634 y la GI-3391 siguen la costa hacia el oeste, pasando por Orio, Zarautz y Getaria antes de llegar a Zumaia. Es un trayecto corto pero con vistas constantes al mar, ideal para empezar el día con calma.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento en Zumaia</div>
+            <div class="stop-desc">Hay aparcamiento junto a la playa de Itzurun y en el casco urbano de Zumaia, a pocos minutos a pie del acceso a la playa. En verano y fines de semana de buen tiempo conviene llegar pronto.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Playa de Itzurun y los acantilados de Flysch</div><div class="day-subtitle">Paseo por la playa (marea baja) · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏖️ La playa de arena negra</div>
+            <div class="stop-desc">Itzurun es una playa de arena oscura flanqueada por imponentes paredes de roca estratificada. Con marea baja se puede caminar por la arena y acercarse a las capas de roca, observando de cerca los pliegues y estratos que documentan millones de años de sedimentación.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🐲 El escenario de Rocadragón</div>
+            <div class="stop-desc">Reconocerás al instante el lugar donde Daenerys Targaryen desembarca por primera vez en Poniente en la séptima temporada de Juego de Tronos. Las formaciones rocosas y la disposición de la playa son inconfundibles para cualquier fan de la serie.</div>
+            <div class="stop-price">Acceso y visita: gratis</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Mirador de Algorri y sendero del Geoparkea</div><div class="day-subtitle">Paseo costero · 45 min - 1h · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌊 Mirador de Algorri</div>
+            <div class="stop-desc">Un breve paseo costero lleva al mirador de Algorri, desde donde se obtienen vistas panorámicas de los acantilados de Flysch y de la línea de costa hacia Deba. Es uno de los mejores puntos para apreciar la magnitud de las capas de roca desde tierra.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🥾 Sendero del Geoparkea</div>
+            <div class="stop-desc">El sendero costero del Geoparque de la Costa Vasca está señalizado con paneles informativos sobre la geología de la zona, explicando la formación del Flysch y su importancia científica internacional.</div>
+            <div class="stop-price">Acceso: gratis</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🎨 Opcional: Museo Ignacio Zuloaga</div>
+            <div class="stop-desc">Zuloaga Etxea, una antigua ermita de Santiago reconvertida en museo dedicado al pintor vasco Ignacio Zuloaga, ofrece una colección de obra propia y de otros artistas de su entorno. Entrada de pago opcional para quienes quieran completar la visita con algo de arte.</div>
+            <div class="stop-price">Entrada: ~5€/persona (opcional, no incluido en el presupuesto del día)</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Ruta en barco por el Flysch y regreso</div><div class="day-subtitle">Vista desde el mar + comida + vuelta ~40 min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚤 Ruta en barco por la costa de Flysch</div>
+            <div class="stop-desc">Una ruta en barco recorre la costa entre Zumaia y Deba, permitiendo ver desde el mar la magnitud completa de los acantilados de Flysch —algo que desde tierra solo se aprecia parcialmente. Es además la mejor forma de reconocer los escenarios de Rocadragón y otras localizaciones de Juego de Tronos desde una perspectiva única.</div>
+            <div class="stop-price">Ruta en barco (2 personas): ~20€</div>
+            <a href="https://www.getyourguide.com/s/?q=Zumaia+flysch+Game+of+Thrones&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener" aria-label="Reservar ruta en barco por el Flysch en GetYourGuide">🎫 Reservar ruta en barco en GetYourGuide</a>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍽️ Comida en el pueblo</div>
+            <div class="stop-desc">El casco urbano de Zumaia tiene varios bares y restaurantes con menú del día y pintxos de pescado y marisco, ideales para recuperar fuerzas después del paseo y la ruta en barco.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a San Sebastián — ~40 min</div>
+            <div class="stop-desc">Vuelta directa por la misma carretera costera. Si te ha sabido a poco, Getaria y Zarautz están a pocos minutos y merecen una parada para otro día.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, ~76 km)</span><span>15€</span></div>
+        <div class="budget-row"><span>🚤 Ruta en barco por el Flysch (GetYourGuide, 2 personas)</span><span>20€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~35€</span></div>
+      </div>
+      <div class="budget-note">El Museo Ignacio Zuloaga (~5€/persona) es un extra opcional no incluido en este presupuesto. La playa de Itzurun, los acantilados de Flysch, el mirador de Algorri y el sendero del Geoparkea son gratuitos.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Consulta la tabla de mareas antes de ir:</strong> con marea baja se puede caminar por la playa y ver mucho mejor las capas de roca del Flysch; con marea alta el acceso a algunas zonas queda cubierto.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>La ruta en barco</strong> es la mejor forma de ver la magnitud completa de los acantilados, que desde tierra solo se aprecian parcialmente.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Si has visto Juego de Tronos</strong>, reconocerás la playa de Itzurun al instante: es el lugar exacto donde Daenerys pisa Rocadragón por primera vez.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Combina la visita con Getaria o Zarautz</strong>, ambos a pocos minutos en coche, para completar un día de costa vasca.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en San Sebastián y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=San%20Sebastian" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en San Sebastián en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados"><strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (GetYourGuide, DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.</div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde San Sebastián?</h3>
+      <p>Rutas de menos de 1 hora y menos de 50€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.308,-2.12],10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[43.3183,-1.9812],label:'San Sebastián',color:'#5ecb8a',r:10},{coords:[43.2975,-2.2592],label:'Zumaia',color:'#7a8ea3',r:9}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}).bindPopup(wp.label));
+  L.polyline([[43.3183,-1.9812],[43.2975,-2.2592]],{color:'#7a8ea3',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
