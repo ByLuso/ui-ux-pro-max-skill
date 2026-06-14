@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Java — 8 días | Routlo</title>
+  <meta name="description" content="Itinerario de 8 días en Java, Indonesia: amanecer en Borobudur, el templo hindú de Prambanan, el mar de arena del Monte Bromo y el fuego azul del cráter Ijen."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+  <style>
+    html,body{background:#040810!important;color:#edeef2!important;font-family:'Jost',system-ui,sans-serif}
+    nav[role="navigation"]{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background .3s}
+    nav[role="navigation"].scrolled{background:rgba(4,8,16,0.95)}
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d1a20 0%,transparent 70%);top:-200px;left:-150px;opacity:0.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a2a1a 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1a20 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @keyframes blob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-60px) scale(1.08)}66%{transform:translate(-30px,40px) scale(0.94)}}
+    .dest-hero{position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#080a06 0%,#1e2410 40%,#3a4818 70%,rgba(201,169,110,0.15) 100%)}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.5) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+    .dest-summary-bar{display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:600px;position:relative;z-index:1}
+    .dest-sum-item{flex:1;background:#070d1a;padding:16px;text-align:center}
+    .dest-sum-label{font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+    .dest-sum-val{font-family:'Bodoni Moda',Georgia,serif;font-size:1.2rem;font-weight:700;color:#c9a96e}
+    .itin-layout{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start}
+    .toc{position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem}
+    .toc-title{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(237,238,242,0.55);margin-bottom:12px}
+    .toc-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+    .toc-list a{display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all .2s;border-left:2px solid transparent}
+    .toc-list a:hover{background:rgba(255,255,255,0.08);color:#edeef2}
+    .toc-list a.active{color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.15)}
+    .itin-section{margin-bottom:56px;scroll-margin-top:96px}
+    .section-heading{font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2}
+    .section-heading::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
+    .day-card{background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px}
+    .day-header{padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px}
+    .day-num{font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px}
+    .day-title{font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px}
+    .day-subtitle{font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .day-meta{margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+    .day-meta span{font-size:0.75rem;color:rgba(237,238,242,0.55)}
+    .day-body{padding:22px}
+    .activity{display:flex;gap:14px;margin-bottom:22px}
+    .act-time{min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0}
+    .act-connector{display:flex;flex-direction:column;align-items:center}
+    .act-dot{width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px}
+    .act-line{width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px}
+    .act-content{flex:1}
+    .act-title{font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px}
+    .act-desc{font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px}
+    .act-tags{display:flex;gap:6px;flex-wrap:wrap}
+    .act-tag{display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e}
+    .act-tag.info{background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5}
+    .act-tag.green{background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a}
+    .hotel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+    .hotel-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color .2s}
+    .hotel-card:hover{border-color:rgba(201,169,110,0.3)}
+    .hotel-tier{font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(237,238,242,0.55);margin-bottom:6px}
+    .hotel-name{font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px}
+    .hotel-zone{font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px}
+    .hotel-price{color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px}
+    .hotel-features{list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px}
+    .hotel-features li{font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative}
+    .hotel-features li::before{content:'✓';position:absolute;left:0;color:#5ecb8a}
+    .hotel-link{display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px}
+    .budget-table{width:100%;border-collapse:collapse;font-size:0.88rem}
+    .budget-table th{text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid rgba(201,169,110,0.3)}
+    .budget-table td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top}
+    .budget-table td:first-child{color:#edeef2;font-weight:500}
+    .budget-table tr:last-child td{border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem}
+    .budget-wrap{background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden}
+    .transport-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .transport-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px}
+    .transport-title{font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .transport-content{font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65}
+    .transport-content strong{color:#c9a96e}
+    .top10-item{display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px}
+    .top10-num{font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px}
+    .top10-content h4{font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px}
+    .top10-content p{font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55}
+    .gastro-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .gastro-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px}
+    .gastro-cat{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#c9a96e;margin-bottom:6px}
+    .gastro-title{font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px}
+    .gastro-desc{font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6}
+    .tip-item{display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px}
+    .tip-num{min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0}
+    .tip-text{font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65}
+    .tip-text strong{color:#edeef2}
+    .phrases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .phrase-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px}
+    .phrase-es{font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:4px}
+    .phrase-local{font-size:0.88rem;font-weight:600;color:#edeef2;margin-bottom:2px}
+    .phrase-pron{font-size:0.74rem;color:#c9a96e;font-style:italic}
+    .emerg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .emerg-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px}
+    .emerg-label{font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+    .emerg-value{font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px}
+    .emerg-note{font-size:0.72rem;color:rgba(237,238,242,0.55)}
+    .check-section{margin-bottom:20px}
+    .check-section-title{font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#c9a96e;margin-bottom:10px}
+    .check-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55)}
+    .check-item:last-child{border-bottom:none}
+    .check-box{width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px}
+    .cta-banner{background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px}
+    .cta-banner h3{font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px}
+    .cta-banner p{font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px}
+    .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform .2s,opacity .2s}
+    .cta-btn:hover{transform:translateY(-2px);opacity:.9}
+    .disclosure{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.hotel-grid{grid-template-columns:repeat(2,1fr)}.gastro-grid{grid-template-columns:1fr}.transport-grid{grid-template-columns:1fr}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.dest-hero{padding:100px 16px 40px}.hotel-grid{grid-template-columns:1fr}.phrases-grid{grid-template-columns:1fr}.emerg-grid{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+  </style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="this.closest('nav').querySelector('ul').style.display='flex'">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span>›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span>›</span>
+    <span style="color:#c9a96e">Java</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Java</h1>
+  <p class="dest-country">Indonesia · Sudeste Asiático</p>
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 8 días / 7 noches</span>
+    <span class="dest-badge" role="listitem">👥 Mochileros y amantes de los volcanes</span>
+    <span class="dest-badge gold" role="listitem">€1,150 por persona</span>
+    <span class="dest-badge" role="listitem">Asia · Sudeste Asiático</span>
+    <span class="dest-badge" role="listitem">Volcanes · Templos · Tradición</span>
+  </div>
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">8 días</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€1.15K</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Media</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Región</div><div class="dest-sum-val">Asia</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Visado</div><div class="dest-sum-val">e-VOA</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#dia1">Día 1</a></li>
+        <li><a href="#dia2">Día 2</a></li>
+        <li><a href="#dia3">Día 3</a></li>
+        <li><a href="#dia4">Día 4</a></li>
+        <li><a href="#dia5">Días 5–8</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#frases">Frases</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <article>
+    <!-- RESUMEN -->
+    <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+      <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Java, la isla más poblada de Indonesia, es un lugar de contrastes extraordinarios. Yogyakarta, el corazón cultural de Java, alberga un sultanato todavía en activo, talleres tradicionales de batik y el monumento budista más grande de la Tierra, Borobudur, junto al gran complejo hindú de Prambanan. Hacia el este aguardan dos de los paisajes volcánicos más surrealistas del Sudeste Asiático: el Monte Bromo, cuya caldera en forma de "mar de arena" se ve mejor al amanecer desde el mirador de Penanjakan, y el cráter Ijen, famoso por sus inquietantes llamas azules — la combustión de gas sulfúrico visible solo de noche, un fenómeno que apenas existe en un puñado de lugares del planeta. Java combina una historia espiritual profunda, tradiciones vivas como el batik y el gamelán, y algunos de los paisajes volcánicos más espectaculares del mundo — todo ello accesible con un presupuesto ajustado.
+      </p>
+      <div class="cta-banner">
+        <h3>Planifica este viaje con IA</h3>
+        <p>Routlo personaliza cada etapa según tus fechas, presupuesto y ritmo de viaje.</p>
+        <a href="../index.html#cta" class="cta-btn">✦ Empezar gratis</a>
+      </div>
+    </section>
+
+    <!-- PRESUPUESTO -->
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead><tr><th>Concepto</th><th>Por persona</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>✈️ Vuelos Madrid–Yogyakarta (vía Yakarta, Doha o Kuala Lumpur)</td><td>€600–750</td><td>Qatar Airways, Turkish Airlines + vuelo doméstico a Yogyakarta</td></tr>
+            <tr><td>🛂 Visa on arrival / e-VOA</td><td>€30–35</td><td>Tramitable online en evisa.imigrasi.go.id antes de viajar</td></tr>
+            <tr><td>🏨 Alojamiento (7 noches)</td><td>€120–250</td><td>Guesthouses desde €15, hoteles boutique hasta €40</td></tr>
+            <tr><td>🚙 Jeeps Bromo + Ijen (tours)</td><td>€70–100</td><td>Incluye transporte nocturno y guía</td></tr>
+            <tr><td>🎫 Entradas (Borobudur, Prambanan)</td><td>€30–40</td><td>Templos UNESCO, entrada combinada disponible</td></tr>
+            <tr><td>🍽️ Comidas (8 días)</td><td>€60–100</td><td>Warungs locales desde €1.50-3/plato</td></tr>
+            <tr><td><strong>TOTAL</strong></td><td><strong>€910–1,275</strong></td><td>Uno de los itinerarios más asequibles de todo el Sudeste Asiático</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* La moneda es la rupia indonesia (IDR), con cifras que parecen enormes (100.000 IDR ≈ €6). Hay cajeros en todas las ciudades; en los warungs y mercados se paga en efectivo.</p>
+    </section>
+
+    <!-- TRANSPORTE -->
+    <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+      <h2 class="section-heading" id="h-transporte">Cómo llegar y moverse</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Vuelo a Yogyakarta</div>
+          <div class="transport-content">
+            La forma más habitual de llegar es volando hasta <strong>Yakarta (Jakarta)</strong> desde Europa, con conexión doméstica de aproximadamente <strong>1h</strong> hasta el Aeropuerto Internacional de Yogyakarta (YIA).<br><br>
+            Si tu ruta pasa por Kuala Lumpur, comprueba también los vuelos directos disponibles desde allí — a veces resultan más rápidos y baratos que la combinación vía Yakarta.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚙 Jeep 4x4 al Monte Bromo</div>
+          <div class="transport-content">
+            Desde <strong>Cemoro Lawang</strong>, los jeeps 4x4 salen de madrugada (sobre las 3:00h) hacia el mirador de <strong>Penanjakan</strong> para llegar antes del amanecer.<br><br>
+            Los jeeps se comparten entre varios viajeros para repartir el coste — normalmente entre 4 y 6 personas por vehículo. Tu guesthouse o tour puede organizarlo la noche anterior.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🥾 Trekking nocturno al Kawah Ijen</div>
+          <div class="transport-content">
+            El acceso al cráter Ijen es a pie: una caminata de <strong>1-2 horas en la oscuridad</strong> con linterna frontal para llegar al borde antes del amanecer y poder ver el fuego azul, que solo es visible de noche.<br><br>
+            El sendero es de tierra volcánica con pendiente constante — buen calzado y ritmo tranquilo son más importantes que la forma física.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Traslados Yogyakarta–Bromo–Ijen</div>
+          <div class="transport-content">
+            Autobuses turísticos o minivanes privados conectan las tres zonas con trayectos de <strong>varias horas por carreteras de montaña</strong>.<br><br>
+            La mayoría de viajeros contratan un <strong>paquete combinado</strong> que incluye traslados, jeep al Bromo y trekking al Ijen con transporte nocturno — la opción más práctica y económica.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DÍA 1 -->
+    <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+      <h2 class="section-heading" id="h-dia1">Día 1</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div><div class="day-title">Yogyakarta — El corazón cultural de Java</div><div class="day-subtitle">El palacio del sultán, Malioboro y un paseo en becak</div></div>
+          <div class="day-meta"><span>🏯 Kraton</span><span>🛺 Malioboro Street</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada y check-in</div>
+              <div class="act-desc">Las primeras impresiones de Yogyakarta —capital cultural y artística de Java— suelen ser inmediatas: el aroma a incienso y especias, el tráfico de motos en calma, las casas bajas pintadas de colores y un ritmo de vida mucho más relajado que el de Yakarta. Tras instalarte en el hotel, dedica la tarde a pasear sin prisa por el barrio donde te alojes, dejarte sorprender por algún warung de esquina y aclimatarte al calor húmedo tropical antes de empezar con fuerza al día siguiente.</div>
+              <div class="act-tags"><span class="act-tag info">Yogyakarta = capital cultural de Java</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Kraton (Palacio del Sultán)</div>
+              <div class="act-desc">El Kraton es el palacio real, todavía en funcionamiento, del Sultanato de Yogyakarta — una de las pocas monarquías tradicionales que sigue activa en Indonesia. Sus pabellones de arquitectura javanesa clásica, con tejados a varias alturas y columnas de madera tallada, albergan colecciones de objetos reales, retratos de sultanes y patios donde se celebran ceremonias. Muchas tardes hay actuaciones de música de gamelán y danza tradicional javanesa, con trajes de batik y movimientos lentos e hipnóticos que llevan siglos transmitiéndose de generación en generación.</div>
+              <div class="act-tags"><span class="act-tag">Entrada: aprox. €2-3</span><span class="act-tag green">Gamelán y danza algunas tardes</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Paseo en becak por Malioboro Street</div>
+              <div class="act-desc">Malioboro Street es la arteria comercial y social de Yogyakarta, una avenida larguísima repleta de tiendas, puestos de batik, vendedores ambulantes y artistas callejeros. La mejor manera de recorrerla al anochecer es en becak, el triciclo-taxi tradicional pedaleado, deslizándote entre el bullicio mientras el conductor va señalando puestos de comida, talleres textiles y rincones con música en directo. Es el lugar perfecto para cenar en uno de los puestos ambulantes (lesehan) que se instalan sobre esteras en la acera al caer la noche.</div>
+              <div class="act-tags"><span class="act-tag">Becak: aprox. €2-3 por trayecto</span><span class="act-tag green">Cena en lesehan callejero</span></div>
+            </div>
+          </div>
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;color:#c9a96e;margin:24px 0 10px">Dónde dormir — Noche 1 (Yogyakarta)</h3>
+          <div class="hotel-grid">
+            <div class="hotel-card">
+              <div class="hotel-tier">💎 Premium</div>
+              <div class="hotel-name">The Phoenix Hotel Yogyakarta</div>
+              <div class="hotel-zone">Centro — edificio colonial restaurado</div>
+              <div class="hotel-price">Desde €60/noche</div>
+              <ul class="hotel-features"><li>Hotel de herencia colonial restaurado</li><li>Piscina y jardines tropicales</li><li>A pocos minutos de Malioboro</li><li>Spa y restaurante de cocina javanesa</li></ul>
+              <a href="https://www.booking.com/searchresults.html?ss=The+Phoenix+Hotel+Yogyakarta+Yogyakarta" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐ Recomendado</div>
+              <div class="hotel-name">Greenhost Boutique Hotel</div>
+              <div class="hotel-zone">Cerca de Malioboro</div>
+              <div class="hotel-price">Desde €30/noche</div>
+              <ul class="hotel-features"><li>Diseño eco-friendly y vegetación</li><li>Azotea con vistas a la ciudad</li><li>A pocos minutos a pie de Malioboro</li><li>Desayuno incluido</li></ul>
+              <a href="https://www.booking.com/searchresults.html?ss=Greenhost+Boutique+Hotel+Yogyakarta" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">💵 Económico</div>
+              <div class="hotel-name">FabHotel Bedrock Premiere</div>
+              <div class="hotel-zone">Zona céntrica</div>
+              <div class="hotel-price">Desde €12/noche</div>
+              <ul class="hotel-features"><li>Hotel económico limpio y funcional</li><li>Aire acondicionado en todas las habitaciones</li><li>Buena conexión con el centro</li><li>Personal amable y atento</li></ul>
+              <a href="https://www.booking.com/searchresults.html?ss=FabHotel+Bedrock+Premiere+Yogyakarta" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DÍA 2 -->
+    <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+      <h2 class="section-heading" id="h-dia2">Día 2</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div><div class="day-title">Borobudur al amanecer + Prambanan</div><div class="day-subtitle">El templo budista más grande del mundo y el complejo hindú de Prambanan</div></div>
+          <div class="day-meta"><span>🌅 Borobudur amanecer</span><span>🛕 Prambanan atardecer</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">04:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Amanecer en Borobudur</div>
+              <div class="act-desc">Borobudur es el monumento budista más grande del mundo: una enorme pirámide escalonada del siglo IX con 2.672 paneles en relieve y 504 estatuas de Buda, construida con más de dos millones de bloques de piedra volcánica. Llegar antes del alba y subir hasta los niveles superiores justo cuando sale el sol es una de las experiencias más sobrecogedoras de todo el Sudeste Asiático: la niebla matutina flota sobre la selva y, al fondo, los volcanes Merapi y Merbabu emergen entre las nubes mientras la primera luz dorada ilumina las cúpulas de piedra perforadas donde se sientan los Budas.</div>
+              <div class="act-tags"><span class="act-tag">Tique de amanecer: reserva con antelación</span><span class="act-tag green">Vista de los volcanes Merapi y Merbabu</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Exploración detallada de Borobudur</div>
+              <div class="act-desc">Una vez sube el sol, merece la pena recorrer con calma los distintos niveles del templo, que representan visualmente la cosmología budista: desde la base, asociada al mundo del deseo y los apegos terrenales (Kamadhatu), pasando por los niveles intermedios del mundo de las formas (Rupadhatu) con sus relieves narrativos tallados en piedra, hasta llegar a las terrazas circulares superiores que simbolizan el mundo sin forma y la iluminación (Arupadhatu), coronadas por la gran estupa central. Cada panel cuenta una historia distinta de la vida de Buda y de la vida cotidiana en la Java del siglo IX.</div>
+              <div class="act-tags"><span class="act-tag">2.672 relieves · 504 estatuas de Buda</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Prambanan al atardecer</div>
+              <div class="act-desc">Prambanan es el complejo de templos hindúes más grande de Indonesia, un conjunto de altísimos candi (templos) del siglo IX dedicados a la Trimurti hindú: Shiva, Brahma y Vishnu. La torre principal, dedicada a Shiva, se eleva más de 47 metros y está decorada con relieves que narran el Ramayana. Visitarlo al atardecer es especial: la luz dorada del sol poniente baña las agujas de piedra oscura del templo, creando un contraste espectacular entre la silueta puntiaguda de los candi y el cielo encendido, mientras los últimos visitantes del día pasean entre las ruinas en un ambiente casi mágico.</div>
+              <div class="act-tags"><span class="act-tag">Entrada combinada Borobudur + Prambanan disponible</span><span class="act-tag green">Templo hindú más grande de Indonesia</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DÍA 3 -->
+    <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+      <h2 class="section-heading" id="h-dia3">Día 3</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div><div class="day-title">Batik, Tamansari y la cueva de luz</div><div class="day-subtitle">Tradición artesanal y la espectacular Goa Jomblang</div></div>
+          <div class="day-meta"><span>🎨 Taller de batik</span><span>🕳️ Goa Jomblang</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Taller de batik tradicional</div>
+              <div class="act-desc">El batik es la técnica de teñido por reserva de cera reconocida por la UNESCO como Patrimonio Cultural Inmaterial de Indonesia, y Yogyakarta es uno de sus centros más importantes. En un taller práctico aprenderás a dibujar motivos tradicionales sobre tela de algodón con un canting (la pluma de cobre que aplica la cera caliente) y a sumergir la tela en tintes naturales para crear los característicos patrones geométricos y florales javaneses. Es una actividad relajante y profundamente cultural que conecta con siglos de artesanía transmitida de generación en generación.</div>
+              <div class="act-tags"><span class="act-tag">Patrimonio Inmaterial UNESCO</span><span class="act-tag green">Te llevas tu propia pieza de batik</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tamansari (Palacio del Agua)</div>
+              <div class="act-desc">Tamansari fue el complejo de jardines y baños reales del sultán, construido en el siglo XVIII como retiro de recreo y meditación. Hoy son unas evocadoras ruinas de piscinas, torres de vigilancia y túneles subterráneos que conectaban distintas partes del recinto con el Kraton. Pasear por sus pasillos en penumbra, las piscinas ajardinadas donde antaño se bañaban las consortes del sultán y las plataformas elevadas con vistas a la ciudad ofrece una imagen íntima de la vida palaciega javanesa de hace más de dos siglos.</div>
+              <div class="act-tags"><span class="act-tag">Entrada: aprox. €1-2</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Goa Jomblang</div>
+              <div class="act-desc">Goa Jomblang es una cueva vertical a la que se accede haciendo rappel desde la superficie, descendiendo varias decenas de metros hasta el fondo de una cavidad cubierta de selva. Hacia el mediodía, un haz de luz solar se filtra desde la abertura superior e ilumina el suelo de la cueva en un fenómeno conocido como el "Rayo del Cielo" (Ray of Heaven): la luz dorada atraviesa la vegetación colgante y proyecta un círculo luminoso sobre las rocas húmedas y verdes del fondo, creando una de las imágenes más fotografiadas de toda Java. La experiencia incluye equipo de seguridad y guías especializados.</div>
+              <div class="act-tags"><span class="act-tag">Rappel + guía incluidos</span><span class="act-tag green">"Ray of Heaven" visible hacia el mediodía</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DÍA 4 -->
+    <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+      <h2 class="section-heading" id="h-dia4">Día 4</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div><div class="day-title">Traslado a Cemoro Lawang — Base del Bromo</div><div class="day-subtitle">Viaje hacia el este y preparación para el amanecer volcánico</div></div>
+          <div class="day-meta"><span>🚌 Traslado</span><span>🌋 Llegada a Cemoro Lawang</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado de Yogyakarta a Probolinggo/Cemoro Lawang</div>
+              <div class="act-desc">El traslado hacia el este de Java es largo pero muy escénico, ya sea en minivan turística directa o combinando tren hasta Probolinggo o Surabaya con un coche privado para el último tramo de montaña. El trayecto atraviesa la Java rural: interminables arrozales en terrazas, pequeños pueblos con mercados al borde de la carretera, plantaciones de café y caña de azúcar, y vistas progresivas de las siluetas volcánicas que dominan el horizonte. Es un buen día para descansar, disfrutar del paisaje y prepararse mentalmente para la madrugada que viene.</div>
+              <div class="act-tags"><span class="act-tag info">Trayecto largo — aprovecha para descansar</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada a Cemoro Lawang</div>
+              <div class="act-desc">Cemoro Lawang es un pequeño pueblo situado justo en el borde de la caldera de Tengger, a más de 2.000 metros de altitud, y es el punto de partida habitual para las excursiones al Monte Bromo. Desde la calle principal del pueblo ya se divisan las primeras vistas del cono humeante del Bromo asomando sobre el "mar de arena" que rodea la caldera. El aire aquí es notablemente más fresco que en Yogyakarta — un cambio de temperatura que conviene tener en cuenta a la hora de vestirse.</div>
+              <div class="act-tags"><span class="act-tag green">Altitud: +2.000m — hace frío de noche</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Preparación para la madrugada</div>
+              <div class="act-desc">Cena temprana y descanso son imprescindibles, porque el jeep hacia el mirador de Penanjakan suele salir entre las 3:00 y las 4:00 de la madrugada para llegar a tiempo de ver el amanecer sobre el Bromo. Es buen momento para repasar el equipo: ropa de abrigo en capas (la temperatura puede bajar a pocos grados), linterna o frontal, batería cargada para la cámara y algo de agua y comida ligera para el trayecto. Acuéstate pronto — la recompensa de la mañana siguiente merece el sacrificio del sueño.</div>
+              <div class="act-tags"><span class="act-tag info">Salida del jeep: 3:00-4:00h</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DÍAS 5-8 -->
+    <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+      <h2 class="section-heading" id="h-dia5">Días 5–8</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">5–8</div>
+          <div><div class="day-title">Monte Bromo + Kawah Ijen + Regreso</div><div class="day-subtitle">El mar de arena, el fuego azul y el vuelo de regreso</div></div>
+          <div class="day-meta"><span>🌅 Mirador Penanjakan</span><span>🔥 Fuego azul Ijen</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">Día 5</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Amanecer en el Monte Bromo</div>
+              <div class="act-desc">Antes del alba, un convoy de jeeps 4x4 sube por pistas de tierra hacia el mirador del Monte Penanjakan, donde decenas de viajeros se reúnen para ver salir el sol sobre los volcanes Bromo, Batok y Semeru alineados entre un mar de nubes. La imagen —tres conos volcánicos emergiendo de la niebla bajo un cielo que pasa del azul oscuro al naranja y dorado— es una de las más icónicas de todo el Sudeste Asiático. Después, el jeep desciende hasta el "mar de arena" (Segara Wedi), una vasta llanura de ceniza volcánica gris que rodea la base del Bromo, para cruzarla a pie o a caballo y subir la escalinata hasta el borde del cráter, donde se puede asomarse a la caldera humeante del volcán activo.</div>
+              <div class="act-tags"><span class="act-tag">Jeep compartido + entrada al parque</span><span class="act-tag green">Vista de Bromo, Batok y Semeru</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">Día 6</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado a Ijen</div>
+              <div class="act-desc">Tras el madrugón del Bromo, el día se dedica a viajar hacia la zona de Ijen, en el extremo oriental de Java, cerca de la costa que mira hacia Bali. El trayecto atraviesa paisajes cada vez más verdes, con plantaciones de café y cacao en las laderas de las montañas. Al llegar, la tarde es para descansar: comer bien, ducharse e intentar dormir algunas horas antes de la medianoche, porque el trekking al cráter Ijen empieza de madrugada y exige estar lo más fresco posible.</div>
+              <div class="act-tags"><span class="act-tag info">Descanso obligado antes del trekking nocturno</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">Día 7</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Trekking nocturno al Kawah Ijen</div>
+              <div class="act-desc">Sobre la 1:00-2:00 de la madrugada comienza la ascensión al volcán Ijen, una caminata de una a dos horas en completa oscuridad, iluminada solo por las linternas frontales de los caminantes. El objetivo es llegar al borde del cráter antes del amanecer para presenciar el fenómeno del fuego azul: un resplandor de color azul eléctrico que surge de la combustión del gas sulfúrico al entrar en contacto con el oxígeno, visible únicamente de noche y solo en un puñado de lugares del mundo. Cuando empieza a clarear, el espectáculo cambia: el sol ilumina el lago Ijen, el lago de cráter más ácido y de mayor tamaño del planeta, de un intenso color turquesa que contrasta con las paredes grises y amarillas de azufre del cráter.</div>
+              <div class="act-tags"><span class="act-tag">Salida: 1:00-2:00h · Máscara de gas recomendada</span><span class="act-tag green">Fuego azul + lago ácido turquesa</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">Día 8</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado a Surabaya o Yogyakarta y vuelo internacional de regreso</div>
+              <div class="act-desc">El último día se dedica al traslado desde la zona de Ijen hacia Surabaya o de vuelta a Yogyakarta, dependiendo de dónde tengas la conexión de vuelo internacional. Surabaya, la segunda ciudad más grande de Indonesia, suele ofrecer más opciones de vuelos directos hacia Yakarta y conexiones internacionales. Es un buen momento para hacer las últimas compras de batik, café indonesio o artesanía local en el aeropuerto antes de emprender el regreso, con la mochila llena de imágenes de templos milenarios, mares de arena volcánica y llamas azules que parecen sacadas de otro planeta.</div>
+              <div class="act-tags"><span class="act-tag info">Surabaya ofrece más conexiones internacionales</span></div>
+            </div>
+          </div>
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;color:#c9a96e;margin:24px 0 10px">Dónde dormir — Bromo / Ijen</h3>
+          <div class="hotel-grid">
+            <div class="hotel-card">
+              <div class="hotel-tier">💎 Premium</div>
+              <div class="hotel-name">Plataran Bromo Cottages</div>
+              <div class="hotel-zone">Cerca del borde de la caldera</div>
+              <div class="hotel-price">Desde €55/noche</div>
+              <ul class="hotel-features"><li>Cabañas boutique con vistas al cráter</li><li>Ambiente tranquilo en plena naturaleza</li><li>Desayuno con vistas al Bromo</li><li>Organiza excursiones al mirador</li></ul>
+              <a href="https://www.booking.com/searchresults.html?ss=Plataran+Bromo+Cottages+Bromo" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐ Recomendado</div>
+              <div class="hotel-name">Cafe Lava Hostel</div>
+              <div class="hotel-zone">Cemoro Lawang — cerca del mirador</div>
+              <div class="hotel-price">Desde €25/noche</div>
+              <ul class="hotel-features"><li>Hotel popular entre viajeros del Bromo</li><li>A pocos pasos del punto de partida de jeeps</li><li>Restaurante con vistas al volcán</li><li>Habitaciones con agua caliente</li></ul>
+              <a href="https://www.booking.com/searchresults.html?ss=Cafe+Lava+Hostel+Bromo" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">💵 Económico</div>
+              <div class="hotel-name">Homestay local en Cemoro Lawang</div>
+              <div class="hotel-zone">Cemoro Lawang — pueblo local</div>
+              <div class="hotel-price">Desde €10/noche</div>
+              <ul class="hotel-features"><li>Alojamiento familiar y económico</li><li>Trato cercano con anfitriones locales</li><li>Ambiente auténtico de pueblo de montaña</li><li>Fácil organización del jeep al amanecer</li></ul>
+              <a href="https://www.booking.com/searchresults.html?ss=Homestay+Cemoro+Lawang+Bromo" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOP 10 -->
+    <section id="top10" class="itin-section" aria-labelledby="h-top10">
+      <h2 class="section-heading" id="h-top10">Top 10 experiencias</h2>
+      <div class="top10-item"><div class="top10-num">01</div><div class="top10-content"><h4>Amanecer en Borobudur</h4><p>Subir al templo budista más grande del mundo antes del alba y ver la niebla flotar entre los volcanes Merapi y Merbabu mientras la luz dorada ilumina las estupas de piedra. Una experiencia inolvidable.</p></div></div>
+      <div class="top10-item"><div class="top10-num">02</div><div class="top10-content"><h4>Prambanan al atardecer</h4><p>Las altísimas agujas de piedra del complejo hindú más grande de Indonesia se recortan contra un cielo encendido de naranjas y dorados. El contraste entre arquitectura milenaria y luz del atardecer es sobrecogedor.</p></div></div>
+      <div class="top10-item"><div class="top10-num">03</div><div class="top10-content"><h4>Amanecer en el Monte Bromo desde Penanjakan</h4><p>Ver los volcanes Bromo, Batok y Semeru emerger de un mar de nubes al amanecer es una de las imágenes más icónicas de Indonesia. Vale la pena cada minuto de la madrugada.</p></div></div>
+      <div class="top10-item"><div class="top10-num">04</div><div class="top10-content"><h4>Fuego azul del Kawah Ijen</h4><p>Caminar de noche para ver las llamas eléctricas azules del cráter Ijen, un fenómeno que solo existe en muy pocos lugares del planeta. Uno de los espectáculos naturales más extraordinarios de Asia.</p></div></div>
+      <div class="top10-item"><div class="top10-num">05</div><div class="top10-content"><h4>Kraton, el palacio del Sultán de Yogyakarta</h4><p>Recorrer el palacio real en activo, con sus pabellones de madera tallada y actuaciones de gamelán y danza javanesa, es sumergirse en una monarquía viva con siglos de historia.</p></div></div>
+      <div class="top10-item"><div class="top10-num">06</div><div class="top10-content"><h4>Paseo en becak por Malioboro Street</h4><p>Recorrer la avenida más animada de Yogyakarta en triciclo-taxi al anochecer, entre puestos de batik, comida callejera y música en directo, es pura vida javanesa.</p></div></div>
+      <div class="top10-item"><div class="top10-num">07</div><div class="top10-content"><h4>Goa Jomblang, la cueva del rayo de luz</h4><p>Descender en rappel a una cueva vertical y ver cómo un haz de luz dorada ilumina el fondo cubierto de vegetación es una de las experiencias más fotogénicas de Java.</p></div></div>
+      <div class="top10-item"><div class="top10-num">08</div><div class="top10-content"><h4>Taller de batik tradicional</h4><p>Aprender la técnica de teñido por reserva de cera reconocida por la UNESCO, de la mano de artesanos locales, y llevarte tu propia pieza pintada a mano.</p></div></div>
+      <div class="top10-item"><div class="top10-num">09</div><div class="top10-content"><h4>Mar de arena del Bromo</h4><p>Cruzar la vasta llanura de ceniza volcánica gris que rodea el Bromo, a pie o a caballo, con el volcán humeante al fondo, es como caminar sobre la superficie de otro planeta.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Mercado de Beringharjo</h4><p>El mercado tradicional más grande de Yogyakarta, repleto de telas de batik, especias, frutas tropicales y artesanía local — el lugar perfecto para vivir el ambiente y comprar recuerdos auténticos.</p></div></div>
+    </section>
+
+    <!-- GASTRONOMÍA -->
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Plato icónico de Yogyakarta</div><div class="gastro-title">Gudeg</div><div class="gastro-desc">El plato emblemático de Yogyakarta: jaca verde cocinada a fuego lento durante horas en leche de coco y azúcar de palma, hasta adquirir un color marrón oscuro y un sabor dulce y salado a la vez. Se suele servir con arroz, huevo cocido, pollo y un chile picante llamado sambal krecek. Cada familia tiene su receta y su puesto de confianza.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Brochetas</div><div class="gastro-title">Sate</div><div class="gastro-desc">Brochetas de pollo o cabra a la brasa, marinadas y servidas con una salsa de cacahuete espesa o salsa de soja con chile picado y chalotas. Se encuentran en cualquier warung o puesto ambulante, normalmente acompañadas de arroz comprimido (lontong) o ketupat. Un clásico que nunca falla.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Café tradicional</div><div class="gastro-title">Kopi Joss</div><div class="gastro-desc">Una especialidad callejera de Yogyakarta: café negro muy fuerte servido en un vaso al que se le añade un trozo de carbón ardiendo directamente, que chisporrotea al contacto con el líquido. Se dice que el carbón suaviza la acidez del café. Una experiencia tan visual como gustativa, típica de los puestos nocturnos junto a las vías del tren.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Dulce típico</div><div class="gastro-title">Bakpia</div><div class="gastro-desc">Pequeños pastelitos horneados rellenos de pasta dulce de judía mung, con una textura suave y un dulzor delicado. Es el souvenir gastronómico más clásico de Yogyakarta — se venden en cajas en casi cualquier tienda de la ciudad y son perfectos para llevar de vuelta a casa.</div></div>
+      </div>
+    </section>
+
+    <!-- CONSEJOS -->
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Visa on arrival / e-VOA (35 USD).</strong> Tramitable online antes de viajar en evisa.imigrasi.go.id, agiliza mucho la llegada. Tener el justificante listo en el móvil o impreso evita colas en el aeropuerto.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Mejor época: abril-octubre.</strong> Temporada seca, mejores condiciones para ver el amanecer en Bromo y el fuego azul de Ijen. Fuera de esta época, las nubes y la lluvia pueden arruinar tanto el amanecer como la visibilidad del fuego azul.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>El trekking al Ijen empieza de madrugada.</strong> 1-2h de subida en la oscuridad con linterna frontal — llevar máscara de gas para los vapores sulfúricos, que pueden ser intensos cerca del cráter y dificultan la respiración.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Combina Bromo e Ijen en un mismo tour.</strong> La mayoría de agencias ofrecen el paquete conjunto con transporte nocturno incluido, lo que ahorra tiempo y dinero frente a organizar cada tramo por separado.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Vestimenta modesta en templos.</strong> Sarong o pareo (a menudo se presta en la entrada) para visitar Borobudur y Prambanan. Hombros y rodillas cubiertos son señal de respeto en estos lugares sagrados.</div></div>
+    </section>
+
+    <!-- FRASES -->
+    <section id="frases" class="itin-section" aria-labelledby="h-frases">
+      <h2 class="section-heading" id="h-frases">Frases en indonesio</h2>
+      <div class="phrases-grid">
+        <div class="phrase-card"><div class="phrase-es">Hola</div><div class="phrase-local">Selamat pagi</div><div class="phrase-pron">se-la-mat pa-gi</div></div>
+        <div class="phrase-card"><div class="phrase-es">Gracias</div><div class="phrase-local">Terima kasih</div><div class="phrase-pron">te-ri-ma ka-sih</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Cuánto cuesta?</div><div class="phrase-local">Berapa harganya?</div><div class="phrase-pron">be-ra-pa har-ga-nya</div></div>
+        <div class="phrase-card"><div class="phrase-es">Delicioso</div><div class="phrase-local">Enak!</div><div class="phrase-pron">e-nak</div></div>
+        <div class="phrase-card"><div class="phrase-es">Sí/No</div><div class="phrase-local">Ya / Tidak</div><div class="phrase-pron">ya / ti-dak</div></div>
+        <div class="phrase-card"><div class="phrase-es">Disculpe</div><div class="phrase-local">Permisi</div><div class="phrase-pron">per-mi-si</div></div>
+      </div>
+    </section>
+
+    <!-- EMERGENCIAS -->
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Policía</div><div class="emerg-value">110</div><div class="emerg-note">Policía Nacional de Indonesia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">118</div><div class="emerg-note">Servicio nacional de ambulancias</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Siloam Hospitals Yogyakarta</div><div class="emerg-value">+62 274 442 3400</div><div class="emerg-note">Hospital privado internacional</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada española</div><div class="emerg-value">+62 21 314 2355</div><div class="emerg-note">Embajada de España en Yakarta</div></div>
+      </div>
+    </section>
+
+    <!-- CHECKLIST -->
+    <section id="checklist" class="itin-section" aria-labelledby="h-check">
+      <h2 class="section-heading" id="h-check">Checklist antes de salir</h2>
+      <div class="check-section">
+        <div class="check-section-title">2-3 meses antes</div>
+        <label class="check-item"><div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>Tramitar e-VOA online</label>
+        <label class="check-item"><div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>Comprar vuelos Madrid-Yogyakarta (vía Yakarta)</label>
+        <label class="check-item"><div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>Reservar tour combinado Bromo + Ijen con transporte nocturno</label>
+        <label class="check-item"><div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>Contratar seguro de viaje</label>
+      </div>
+      <div class="check-section">
+        <div class="check-section-title">1 semana antes</div>
+        <label class="check-item"><div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>Cambiar dinero a rupias (IDR) o sacar efectivo de cajeros</label>
+        <label class="check-item"><div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>Ropa de abrigo para la madrugada en Bromo e Ijen (hace frío en altura)</label>
+        <label class="check-item"><div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>Máscara de gas o paño húmedo para los vapores del Ijen</label>
+        <label class="check-item"><div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>Linterna frontal para el trekking nocturno</label>
+      </div>
+    </section>
+
+    <div class="disclosure" role="note">
+      <strong style="color:#edeef2">Aviso:</strong> Algunos enlaces son de afiliados (Booking.com). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Precios orientativos para 2026 — verifica siempre en sitios oficiales.
+    </div>
+  </article>
+</div>
+</main>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html"><img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);"></a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>40)},{passive:true});
+  const links = document.querySelectorAll('.toc-list a');
+  const secs = [];
+  links.forEach(function(l){const id=l.getAttribute('href').replace('#','');const el=document.getElementById(id);if(el)secs.push({el:el,link:l})});
+  function upd(){const y=window.scrollY+120;let cur=null;secs.forEach(function(s){if(s.el.offsetTop-120<=window.scrollY)cur=s});links.forEach(function(l){l.classList.remove('active')});if(cur)cur.link.classList.add('active')}
+  window.addEventListener('scroll',upd,{passive:true});upd();
+  links.forEach(function(l){l.addEventListener('click',function(e){e.preventDefault();const el=document.getElementById(this.getAttribute('href').replace('#',''));if(el)window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-96,behavior:'smooth'})})});
+  document.querySelectorAll('.check-box').forEach(function(b){b.addEventListener('click',function(){const c=this.getAttribute('aria-checked')==='true';this.setAttribute('aria-checked',(!c).toString());this.style.background=!c?'rgba(94,203,138,0.3)':'';this.style.borderColor=!c?'#5ecb8a':''})})
+})();
+</script>
+</body>
+</html>
