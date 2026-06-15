@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mapa Interactivo de España — Routlo</title>
-  <meta name="description" content="Explora el mapa de España con itinerarios de Routlo: Canarias, Península Ibérica y Baleares. Próximamente Madrid, Barcelona, Sevilla y más."/>
+  <meta name="description" content="Explora el mapa interactivo de España con los 81 itinerarios de Routlo: ciudades, costas, parques naturales, rutas de senderismo y escapadas de un día por toda la península, islas y Baleares."/>
   <link rel="stylesheet" href="assets/shared.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
@@ -360,7 +360,7 @@
         </div>
         <div class="sidebar-title">Mapa de España</div>
       </div>
-      <div class="sidebar-sub">Destinos con itinerario completo + próximamente</div>
+      <div class="sidebar-sub">81 itinerarios: ciudades, naturaleza y escapadas</div>
       <!-- Quick nav -->
       <div class="sidebar-quick-nav">
         <button class="quick-btn" onclick="flyToPeninsula()" id="btnPeninsula">🌍 Península</button>
@@ -376,7 +376,7 @@
         Con itinerario <span class="sidebar-tab-count">9</span>
       </button>
       <button class="sidebar-tab" id="tabParques" onclick="switchTab('parques')">
-        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">13</span>
+        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">72</span>
       </button>
       <button class="sidebar-tab" id="tabProximos" onclick="switchTab('proximos')">
         Próximos <span class="sidebar-tab-count">1</span>
@@ -395,8 +395,8 @@
     <!-- Stats -->
     <div class="sidebar-stats" aria-label="Estadísticas">
       <div class="stat-item"><span class="stat-val">9</span><span class="stat-lbl">Activos</span></div>
-      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">3</span><span class="stat-lbl">Parques</span></div>
-      <div class="stat-item"><span class="stat-val">€90</span><span class="stat-lbl">Desde</span></div>
+      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">72</span><span class="stat-lbl">Naturaleza</span></div>
+      <div class="stat-item"><span class="stat-val">81</span><span class="stat-lbl">Itinerarios</span></div>
     </div>
   </aside>
 
@@ -533,6 +533,7 @@ const PARQUES = [
     id: 'donana',
     nombre: 'Doñana',
     region: 'Parque Nacional',
+    zona: 'Andalucía',
     emoji: '🌿',
     dias: 1,
     precio: '€50',
@@ -545,6 +546,7 @@ const PARQUES = [
     id: 'ordesa',
     nombre: 'Ordesa',
     region: 'Parque Nacional',
+    zona: 'Pirineos',
     emoji: '🏔️',
     dias: 1,
     precio: '€40',
@@ -557,6 +559,7 @@ const PARQUES = [
     id: 'montserrat',
     nombre: 'Montserrat',
     region: 'Montaña Sagrada',
+    zona: 'Cataluña',
     emoji: '⛰️',
     dias: 1,
     precio: '€30',
@@ -577,6 +580,7 @@ PARQUES.push(
     id: 'bardenas',
     nombre: 'Bardenas Reales',
     region: 'Navarra · Gratis',
+    zona: 'Navarra',
     emoji: '🏜️',
     dias: 4,
     precio: '€0 actividades',
@@ -590,6 +594,7 @@ PARQUES.push(
     id: 'pueblos-negros',
     nombre: 'Pueblos Negros',
     region: 'Guadalajara · Gratis',
+    zona: 'Castilla-La Mancha',
     emoji: '🪨',
     dias: 3,
     precio: '€0 actividades',
@@ -603,6 +608,7 @@ PARQUES.push(
     id: 'las-medulas',
     nombre: 'Las Médulas & El Bierzo',
     region: 'León · UNESCO Gratis',
+    zona: 'Castilla y León',
     emoji: '⛏️',
     dias: 4,
     precio: '€0 actividades',
@@ -616,6 +622,7 @@ PARQUES.push(
     id: 'picos-europa',
     nombre: 'Picos de Europa',
     region: 'Asturias · Cantabria · Gratis',
+    zona: 'Asturias y Cantabria',
     emoji: '🏔️',
     dias: 4,
     precio: '€0 actividades',
@@ -629,6 +636,7 @@ PARQUES.push(
     id: 'serrania-cuenca',
     nombre: 'Serranía de Cuenca',
     region: 'Cuenca · Gratis',
+    zona: 'Castilla-La Mancha',
     emoji: '🌿',
     dias: 4,
     precio: '€0 actividades',
@@ -642,6 +650,7 @@ PARQUES.push(
     id: 'la-vera',
     nombre: 'La Vera',
     region: 'Cáceres · Gratis',
+    zona: 'Extremadura',
     emoji: '🌶️',
     dias: 3,
     precio: '€0 actividades',
@@ -655,6 +664,7 @@ PARQUES.push(
     id: 'maestrazgo',
     nombre: 'El Maestrazgo',
     region: 'Teruel · Gratis',
+    zona: 'Aragón',
     emoji: '🏰',
     dias: 4,
     precio: '€0 actividades',
@@ -668,6 +678,7 @@ PARQUES.push(
     id: 'las-hurdes',
     nombre: 'Las Hurdes',
     region: 'Cáceres · Gratis',
+    zona: 'Extremadura',
     emoji: '🌊',
     dias: 4,
     precio: '€0 actividades',
@@ -681,6 +692,7 @@ PARQUES.push(
     id: 'sierra-aracena',
     nombre: 'Sierra de Aracena',
     region: 'Huelva · Gratis',
+    zona: 'Andalucía',
     emoji: '🐷',
     dias: 4,
     precio: '€0 actividades',
@@ -694,6 +706,7 @@ PARQUES.push(
     id: 'ribeira-sacra',
     nombre: 'Ribeira Sacra',
     region: 'Ourense · Lugo · Gratis',
+    zona: 'Galicia',
     emoji: '🍇',
     dias: 4,
     precio: '€0 actividades',
@@ -704,6 +717,784 @@ PARQUES.push(
     url: 'itinerarios/ribeira-sacra.html'
   }
 );
+
+// Excursiones, pueblos y rutas adicionales (59 itinerarios cortos)
+PARQUES.push(
+  {
+    id: 'cares',
+    nombre: 'Ruta del Cares',
+    region: 'Picos de Europa',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [43.245, -4.85],
+    desc: 'Sendero tallado en la roca viva a 1.000m sobre el río Cares. El paseo más espectacular de los Picos de Europa, sin apenas desnivel.',
+    gradient: 'linear-gradient(135deg,#040e18 0%,#081e32 100%)',
+    url: 'itinerarios/cares.html'
+  },
+  {
+    id: 'mulhacen',
+    nombre: 'Mulhacén',
+    region: 'Sierra Nevada · Granada',
+    zona: 'Andalucía',
+    emoji: '⛰️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [37.0538, -3.3088],
+    desc: 'El techo de la Península Ibérica. Glaciares fósiles, lagunas alpinas y panorámica al Atlas marroquí en Sierra Nevada.',
+    gradient: 'linear-gradient(135deg,#080610 0%,#140f28 100%)',
+    url: 'itinerarios/mulhacen.html'
+  },
+  {
+    id: 'aiguestortes',
+    nombre: 'Aigüestortes',
+    region: 'Pirineo de Lleida',
+    zona: 'Pirineos',
+    emoji: '🏕️',
+    dias: 2,
+    precio: '€0 actividades',
+    coords: [42.5763, 0.9457],
+    desc: 'El único parque nacional pirenaico: 200 lagos de montaña y refugios de altura en el corazón de los Pirineos catalanes.',
+    gradient: 'linear-gradient(135deg,#040c14 0%,#061826 100%)',
+    url: 'itinerarios/aiguestortes.html'
+  },
+  {
+    id: 'tramuntana',
+    nombre: 'Serra de Tramuntana',
+    region: 'Mallorca',
+    zona: 'Islas Baleares',
+    emoji: '🌊',
+    dias: 2,
+    precio: '€0 actividades',
+    coords: [39.71, 2.623],
+    desc: 'La espina dorsal de Mallorca: olivos milenarios, acantilados y pueblos de piedra en la sierra UNESCO de la isla.',
+    gradient: 'linear-gradient(135deg,#040a12 0%,#061624 100%)',
+    url: 'itinerarios/tramuntana.html'
+  },
+  {
+    id: 'volcanes-lapalma',
+    nombre: 'Ruta de los Volcanes',
+    region: 'La Palma · Canarias',
+    zona: 'Islas Canarias',
+    emoji: '🌋',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [28.509, -17.84],
+    desc: 'Travesía sobre coladas de lava negra entre cráteres y calderas humeantes. El senderismo volcánico más espectacular de Canarias.',
+    gradient: 'linear-gradient(135deg,#100404 0%,#240806 100%)',
+    url: 'itinerarios/volcanes-lapalma.html'
+  },
+  {
+    id: 'garajonay',
+    nombre: 'Garajonay (La Gomera)',
+    region: 'La Gomera · Canarias',
+    zona: 'Islas Canarias',
+    emoji: '🌿',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [28.123, -17.239],
+    desc: 'Bosque de laurisilva del Terciario envuelto en niebla. UNESCO Patrimonio Natural. La isla mágica de Canarias sin masificación.',
+    gradient: 'linear-gradient(135deg,#040e06 0%,#061c0a 100%)',
+    url: 'itinerarios/garajonay.html'
+  },
+  {
+    id: 'grazalema',
+    nombre: 'Pinsapar de Grazalema',
+    region: 'Sierra de Grazalema · Cádiz',
+    zona: 'Andalucía',
+    emoji: '🌲',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [36.7567, -5.3675],
+    desc: 'El bosque más húmedo de Andalucía. Pinsapos endémicos en acceso restringido por cupos. La ruta más exclusiva de la sierra gaditana.',
+    gradient: 'linear-gradient(135deg,#060c04 0%,#0c1a08 100%)',
+    url: 'itinerarios/grazalema.html'
+  },
+  {
+    id: 'penalara',
+    nombre: 'Peñalara',
+    region: 'Sierra de Guadarrama · Madrid',
+    zona: 'Comunidad de Madrid',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [40.8453, -3.9608],
+    desc: 'La cumbre más alta de Madrid. Laguna Grande glaciar, pinares centenarios en el Parque Nacional de Guadarrama, a 1h de la capital.',
+    gradient: 'linear-gradient(135deg,#040a14 0%,#081428 100%)',
+    url: 'itinerarios/penalara.html'
+  },
+  {
+    id: 'cabo-de-gata',
+    nombre: 'Cabo de Gata',
+    region: 'Almería',
+    zona: 'Andalucía',
+    emoji: '🌊',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [36.7206, -2.1928],
+    desc: 'El litoral más virgen de Europa: calas turquesas, acantilados volcánicos y playas sin urbanizar en el único desierto costero europeo.',
+    gradient: 'linear-gradient(135deg,#040a10 0%,#06141e 100%)',
+    url: 'itinerarios/cabo-de-gata.html'
+  },
+  {
+    id: 'medulas',
+    nombre: 'Las Médulas (1 día)',
+    region: 'El Bierzo · León',
+    zona: 'Castilla y León',
+    emoji: '🏛️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.458, -6.772],
+    desc: 'Las mayores minas de oro del Imperio Romano: torres de arcilla rojiza en un paisaje marciano. Patrimonio Mundial UNESCO en El Bierzo.',
+    gradient: 'linear-gradient(135deg,#140804 0%,#281006 100%)',
+    url: 'itinerarios/medulas.html'
+  },
+  {
+    id: 'viguera',
+    nombre: 'Peñas de Viguera',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.327, -2.597],
+    desc: 'Agujas de roca volcánica a 25 km de Logroño. Circular fácil, vistas al Iregua y el pinar perfecto para el picnic. La escapada más cercana de la capital riojana.',
+    gradient: 'linear-gradient(135deg,#000a04 0%,#001408 100%)',
+    url: 'itinerarios/viguera.html'
+  },
+  {
+    id: 'moncalvillo',
+    nombre: 'Hayedo de Moncalvillo',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🍂',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.37, -2.63],
+    desc: 'El hayedo más cercano a Logroño: dorados otoñales, setas, vistas al Ebro y collado a 1.276m. El plan perfecto para un domingo de octubre.',
+    gradient: 'linear-gradient(135deg,#000c04 0%,#00190a 100%)',
+    url: 'itinerarios/moncalvillo.html'
+  },
+  {
+    id: 'torrecilla-cameros',
+    nombre: 'Torrecilla en Cameros',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '💧',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.268, -2.628],
+    desc: 'Pozas de agua cristalina en el cañón del Iregua y pueblo de piedra del s. XVIII. La escapada de verano perfecta a 55 km de Logroño.',
+    gradient: 'linear-gradient(135deg,#000c08 0%,#00160e 100%)',
+    url: 'itinerarios/torrecilla-cameros.html'
+  },
+  {
+    id: 'cebollera',
+    nombre: 'Sierra de Cebollera',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.15, -2.62],
+    desc: 'Laguna glaciar a 1.850m y Pico Cebollera a 2.144m. Parque Natural, abetos y un silencio absoluto. El techo de La Rioja a 80 km de Logroño.',
+    gradient: 'linear-gradient(135deg,#000804 0%,#001008 100%)',
+    url: 'itinerarios/cebollera.html'
+  },
+  {
+    id: 'tolono',
+    nombre: 'Sierra de Toloño',
+    region: 'Rioja Alavesa',
+    zona: 'La Rioja',
+    emoji: '🍷',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.57, -2.82],
+    desc: 'Cresta caliza con vistas aéreas sobre los viñedos de la Rioja Alavesa. Ermita rupestre y cata en bodega al bajar. El picnic más vinícola de España.',
+    gradient: 'linear-gradient(135deg,#0f0800 0%,#190c00 100%)',
+    url: 'itinerarios/tolono.html'
+  },
+  {
+    id: 'san-lorenzo',
+    nombre: 'San Lorenzo & Ezcaray',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🌳',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.235, -2.993],
+    desc: 'Hayedo centenario de Pedroso y cima de 2.271m. La ruta más exigente y más hermosa de La Rioja, con Ezcaray y su gastronomía al pie de la montaña.',
+    gradient: 'linear-gradient(135deg,#0a0500 0%,#140800 100%)',
+    url: 'itinerarios/san-lorenzo.html'
+  },
+  {
+    id: 'laguna-negra',
+    nombre: 'Laguna Negra de Urbión',
+    region: 'Soria',
+    zona: 'Castilla y León',
+    emoji: '🏞️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [41.993, -2.547],
+    desc: 'El circo glaciar que inspiró a Antonio Machado. Aguas oscuras, paredes de granito de 200m y el silencio más profundo a 130 km de Logroño.',
+    gradient: 'linear-gradient(135deg,#000514 0%,#00081e 100%)',
+    url: 'itinerarios/laguna-negra.html'
+  },
+  {
+    id: 'laguardia',
+    nombre: 'Laguardia',
+    region: 'Rioja Alavesa',
+    zona: 'La Rioja',
+    emoji: '🏛️',
+    dias: 1,
+    precio: 'desde €8',
+    coords: [42.552, -2.587],
+    desc: 'Pueblo medieval amurallado con arquitectura de vino: Frank Gehry en Marqués de Riscal y Calatrava en Ysios. La escapada vinícola más elegante desde Logroño.',
+    gradient: 'linear-gradient(135deg,#100008 0%,#1e0010 100%)',
+    url: 'itinerarios/laguardia.html'
+  },
+  {
+    id: 'san-millan',
+    nombre: 'San Millán de la Cogolla',
+    region: 'La Rioja · UNESCO',
+    zona: 'La Rioja',
+    emoji: '📜',
+    dias: 1,
+    precio: 'desde €7',
+    coords: [42.327, -2.858],
+    desc: 'Donde nació el español. Los monasterios de Yuso y Suso guardan las Glosas Emilianenses del s.X, las primeras palabras en castellano. Patrimonio UNESCO desde 1997.',
+    gradient: 'linear-gradient(135deg,#000814 0%,#000c1c 100%)',
+    url: 'itinerarios/san-millan.html'
+  },
+  {
+    id: 'haro',
+    nombre: 'Haro',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🍷',
+    dias: 1,
+    precio: 'desde €8',
+    coords: [42.576, -2.848],
+    desc: 'La mayor concentración de bodegas centenarias de España en un mismo barrio: López de Heredia 1877, CVNE 1879, Muga 1932. Y la Batalla del Vino el 29 de junio.',
+    gradient: 'linear-gradient(135deg,#100004 0%,#180008 100%)',
+    url: 'itinerarios/haro.html'
+  },
+  {
+    id: 'najera',
+    nombre: 'Nájera',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '👑',
+    dias: 1,
+    precio: '~€52',
+    coords: [42.415, -2.733],
+    desc: 'El Monasterio de Santa María la Real guarda el panteón de los reyes de Navarra y Castilla, una cueva legendaria y un casco judío excavado en la roca. A 25 minutos de Logroño.',
+    gradient: 'linear-gradient(135deg,#141004 0%,#1e1808 100%)',
+    url: 'itinerarios/najera.html'
+  },
+  {
+    id: 'clavijo',
+    nombre: 'Clavijo',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '⚔️',
+    dias: 1,
+    precio: '~€33',
+    coords: [42.33, -2.59],
+    desc: 'Las ruinas del castillo donde nació "¡Santiago y cierra, España!". Entrada gratuita, vistas a los Pirineos y la escapada más barata de toda La Rioja.',
+    gradient: 'linear-gradient(135deg,#140800 0%,#1e0e04 100%)',
+    url: 'itinerarios/clavijo.html'
+  },
+  {
+    id: 'briones',
+    nombre: 'Briones',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🏘️',
+    dias: 1,
+    precio: '~€75',
+    coords: [42.544, -2.787],
+    desc: 'Uno de los pueblos más bonitos de España y el Museo Vivanco de la Cultura del Vino, premiado como mejor museo enoturístico del mundo. Casco amurallado sobre el Ebro.',
+    gradient: 'linear-gradient(135deg,#141004 0%,#1e1808 100%)',
+    url: 'itinerarios/briones.html'
+  },
+  {
+    id: 'canon-rio-leza',
+    nombre: 'Cañón del Río Leza',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🏞️',
+    dias: 1,
+    precio: '~€41',
+    coords: [42.32, -2.52],
+    desc: 'Un Grand Canyon de bolsillo a 22 km de Logroño: paredes de roca de hasta 100m, las Cuevas de los Cien Pilares y buitres leonados. La escapada de naturaleza más cercana.',
+    gradient: 'linear-gradient(135deg,#001008 0%,#00180c 100%)',
+    url: 'itinerarios/canon-rio-leza.html'
+  },
+  {
+    id: 'arnedillo',
+    nombre: 'Arnedillo',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '♨️',
+    dias: 1,
+    precio: '~€52',
+    coords: [42.228, -2.244],
+    desc: 'Pozas de agua termal natural junto al río, gratis, y una gran colonia de buitres leonados sobre el pueblo. Relax y naturaleza a 45 minutos de Logroño.',
+    gradient: 'linear-gradient(135deg,#140a00 0%,#1e1004 100%)',
+    url: 'itinerarios/arnedillo.html'
+  },
+  {
+    id: 'san-vicente-sonsierra',
+    nombre: 'San Vicente de la Sonsierra',
+    region: 'Rioja Alavesa',
+    zona: 'La Rioja',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€59',
+    coords: [42.563, -2.757],
+    desc: 'Castillo templario en lo alto de un cerro con vistas al Ebro y a la Rioja Alavesa. Cuna de la singular tradición de los Picaos en Semana Santa.',
+    gradient: 'linear-gradient(135deg,#000814 0%,#000c1c 100%)',
+    url: 'itinerarios/san-vicente-sonsierra.html'
+  },
+  {
+    id: 'cuevas-ortigosa',
+    nombre: 'Cuevas de Ortigosa',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🦇',
+    dias: 1,
+    precio: '~€63',
+    coords: [42.183, -2.417],
+    desc: 'Cavernas cársticas con columnas de hasta 65m y una de las mayores colonias de murciélagos de herradura de Europa, en pleno Parque Natural de la Sierra Cebollera.',
+    gradient: 'linear-gradient(135deg,#000a10 0%,#001018 100%)',
+    url: 'itinerarios/cuevas-ortigosa.html'
+  },
+  {
+    id: 'foz-arbayun',
+    nombre: 'Foz de Arbayún',
+    region: 'Navarra',
+    zona: 'Navarra',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.563, -1.183],
+    desc: 'El Gran Cañón navarro: 500m de paredes verticales con +300 parejas de buitres leonados nidificando. Con parada en la Foz de Lumbier, gratis y apta para niños.',
+    gradient: 'linear-gradient(135deg,#0c0600 0%,#140a00 100%)',
+    url: 'itinerarios/foz-arbayun.html'
+  },
+  {
+    id: 'selva-irati',
+    nombre: 'Selva de Irati',
+    region: 'Navarra',
+    zona: 'Navarra',
+    emoji: '🍂',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.93, -1.083],
+    desc: 'El segundo bosque más grande de Europa Occidental: 17.000 ha de hayas y abetos en los Pirineos navarros. Ochagavía y la Laguna de Irabia como bonus.',
+    gradient: 'linear-gradient(135deg,#000a00 0%,#000f05 100%)',
+    url: 'itinerarios/selva-irati.html'
+  },
+  {
+    id: 'baztan',
+    nombre: 'Valle del Baztán',
+    region: 'Navarra',
+    zona: 'Navarra',
+    emoji: '🧙',
+    dias: 1,
+    precio: 'desde €5',
+    coords: [43.15, -1.5],
+    desc: 'El valle verde más oscuro de Navarra: Elizondo y su arquitectura palaciega, las cuevas de Zugarramurdi donde ardieron las brujas de 1609 y la trilogía de Dolores Redondo.',
+    gradient: 'linear-gradient(135deg,#000804 0%,#000c06 100%)',
+    url: 'itinerarios/baztan.html'
+  },
+  {
+    id: 'gaztelugatxe',
+    nombre: 'San Juan de Gaztelugatxe',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🐉',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [43.457, -2.824],
+    desc: 'El islote de los 241 escalones inmortalizado en Game of Thrones como Rocadragón. Costa brava de Bizkaia y pintxos en el Casco Viejo de Bilbao. Reserva gratuita obligatoria.',
+    gradient: 'linear-gradient(135deg,#000814 0%,#000c1c 100%)',
+    url: 'itinerarios/gaztelugatxe.html'
+  },
+  {
+    id: 'getxo',
+    nombre: 'Getxo',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🌉',
+    dias: 1,
+    precio: '~€24',
+    coords: [43.35, -3.01],
+    desc: 'El Puente Bizkaia, primer puente transbordador del mundo (Patrimonio UNESCO), el Puerto Viejo de Algorta y la playa de Ereaga. A 20 minutos de Bilbao.',
+    gradient: 'linear-gradient(135deg,#000c14 0%,#00121c 100%)',
+    url: 'itinerarios/getxo.html'
+  },
+  {
+    id: 'pagasarri',
+    nombre: 'Pagasarri',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '⛰️',
+    dias: 1,
+    precio: '~€12',
+    coords: [43.27, -2.97],
+    desc: 'El monte que vigila Bilbao: una sencilla ruta de 1h-1h15min hasta los 671m, con vistas de 360° sobre la ría y la costa de Bizkaia. Gratis y a 8 km del centro.',
+    gradient: 'linear-gradient(135deg,#040c04 0%,#081408 100%)',
+    url: 'itinerarios/pagasarri.html'
+  },
+  {
+    id: 'castro-urdiales',
+    nombre: 'Castro Urdiales',
+    region: 'Cantabria',
+    zona: 'País Vasco',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€36',
+    coords: [43.3833, -3.2167],
+    desc: 'Una "catedral" gótica gratuita, un castillo-faro sobre el Cantábrico y rabas en el puerto. El Bilbao marinero de antes de que existiera Bilbao.',
+    gradient: 'linear-gradient(135deg,#140800 0%,#1c0e00 100%)',
+    url: 'itinerarios/castro-urdiales.html'
+  },
+  {
+    id: 'balmaseda',
+    nombre: 'Balmaseda',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🏘️',
+    dias: 1,
+    precio: '~€30',
+    coords: [43.183, -3.167],
+    desc: 'La primera villa de Bizkaia (1199): un Puente Viejo medieval, el Portal de Sopeña y un casco histórico porticado de acceso libre.',
+    gradient: 'linear-gradient(135deg,#140c00 0%,#1c1200 100%)',
+    url: 'itinerarios/balmaseda.html'
+  },
+  {
+    id: 'urkiola',
+    nombre: 'Urkiola',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🐐',
+    dias: 1,
+    precio: '~€21',
+    coords: [43.083, -2.617],
+    desc: 'Picos kársticos como el Anboto, hogar de la diosa vasca Mari, senderos para todos los niveles y pottokas en libertad. Naturaleza pura a 40 km de Bilbao.',
+    gradient: 'linear-gradient(135deg,#020c02 0%,#061406 100%)',
+    url: 'itinerarios/urkiola.html'
+  },
+  {
+    id: 'salto-nervion',
+    nombre: 'Salto del Nervión',
+    region: 'Bizkaia · Burgos',
+    zona: 'País Vasco',
+    emoji: '💧',
+    dias: 1,
+    precio: '~€39',
+    coords: [43.09, -3.117],
+    desc: 'La cascada más alta de la península ibérica: 222 metros de caída en Monte Santiago. Un mirador imprescindible vía Orduña.',
+    gradient: 'linear-gradient(135deg,#00100c 0%,#001812 100%)',
+    url: 'itinerarios/salto-nervion.html'
+  },
+  {
+    id: 'lekeitio',
+    nombre: 'Lekeitio',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🏝️',
+    dias: 1,
+    precio: '~€38',
+    coords: [43.364, -2.506],
+    desc: 'La Isla de San Nicolás aparece con la marea baja, la Basílica de Santa María y un puerto pesquero con sabor a tradición ballenera vasca.',
+    gradient: 'linear-gradient(135deg,#000810 0%,#000c18 100%)',
+    url: 'itinerarios/lekeitio.html'
+  },
+  {
+    id: 'hondarribia',
+    nombre: 'Hondarribia',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '🏘️',
+    dias: 1,
+    precio: '~€22',
+    coords: [43.37, -1.796],
+    desc: 'Un casco histórico amurallado con balconadas de colores, el Castillo de Carlos V y vistas a Francia desde la bahía del Bidasoa.',
+    gradient: 'linear-gradient(135deg,#0f0707 0%,#251210 100%)',
+    url: 'itinerarios/hondarribia.html'
+  },
+  {
+    id: 'pasaia',
+    nombre: 'Pasaia',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '⚓',
+    dias: 1,
+    precio: '~€18',
+    coords: [43.327, -1.927],
+    desc: 'Un pueblo pesquero de una sola calle entre la montaña y el mar, con una barquita que cruza el canal y la casa de Victor Hugo.',
+    gradient: 'linear-gradient(135deg,#070b0f 0%,#101a25 100%)',
+    url: 'itinerarios/pasaia.html'
+  },
+  {
+    id: 'zarautz',
+    nombre: 'Zarautz',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '🏄',
+    dias: 1,
+    precio: '~€20',
+    coords: [43.283, -2.167],
+    desc: 'La playa más larga del País Vasco (2,5 km), cuna del surf vasco y un casco histórico con torres-palacio medievales.',
+    gradient: 'linear-gradient(135deg,#100d07 0%,#261f10 100%)',
+    url: 'itinerarios/zarautz.html'
+  },
+  {
+    id: 'getaria',
+    nombre: 'Getaria',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '⛵',
+    dias: 1,
+    precio: '~€32',
+    coords: [43.305, -2.203],
+    desc: 'El pueblo natal de Juan Sebastián Elcano, famoso por sus anchoas, su pescado a la brasa y el txakoli.',
+    gradient: 'linear-gradient(135deg,#070e0c 0%,#10221d 100%)',
+    url: 'itinerarios/getaria.html'
+  },
+  {
+    id: 'zumaia',
+    nombre: 'Zumaia',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '🐉',
+    dias: 1,
+    precio: '~€35',
+    coords: [43.296, -2.258],
+    desc: 'Los espectaculares acantilados de Flysch, 60 millones de años de historia geológica y el escenario de Rocadragón en Juego de Tronos.',
+    gradient: 'linear-gradient(135deg,#090a0b 0%,#15181c 100%)',
+    url: 'itinerarios/zumaia.html'
+  },
+  {
+    id: 'azpeitia-loiola',
+    nombre: 'Santuario de Loiola',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€20',
+    coords: [43.178, -2.27],
+    desc: 'Una de las basílicas barrocas más grandes de España, construida sobre la torre-fortaleza donde nació San Ignacio de Loyola.',
+    gradient: 'linear-gradient(135deg,#0c070a 0%,#1d1218 100%)',
+    url: 'itinerarios/azpeitia-loiola.html'
+  },
+  {
+    id: 'tolosa',
+    nombre: 'Tolosa',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '🍫',
+    dias: 1,
+    precio: '~€30',
+    coords: [43.137, -2.074],
+    desc: 'El mercado semanal más antiguo de Euskadi, el casco histórico de la antigua capital de Gipuzkoa y la cuna del Carnaval vasco.',
+    gradient: 'linear-gradient(135deg,#0d0907 0%,#1f1510 100%)',
+    url: 'itinerarios/tolosa.html'
+  },
+  {
+    id: 'carmona',
+    nombre: 'Carmona',
+    region: 'Sevilla',
+    zona: 'Andalucía',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€25',
+    coords: [37.471, -5.642],
+    desc: 'La acrópolis de Carmona reúne capas fenicias, romanas, almohades y cristianas: Puerta de Sevilla, Alcázar del Rey Don Pedro y Necrópolis Romana.',
+    gradient: 'linear-gradient(135deg,#160b00 0%,#201200 100%)',
+    url: 'itinerarios/carmona.html'
+  },
+  {
+    id: 'italica',
+    nombre: 'Itálica',
+    region: 'Sevilla',
+    zona: 'Andalucía',
+    emoji: '🏟️',
+    dias: 1,
+    precio: '~€15',
+    coords: [37.443, -6.039],
+    desc: 'El anfiteatro romano y los mosaicos de la Casa del Planetario, en la primera ciudad romana fundada fuera de Italia, cuna de Trajano y Adriano.',
+    gradient: 'linear-gradient(135deg,#140c00 0%,#1c1200 100%)',
+    url: 'itinerarios/italica.html'
+  },
+  {
+    id: 'alcala-guadaira',
+    nombre: 'Alcalá de Guadaíra',
+    region: 'Sevilla',
+    zona: 'Andalucía',
+    emoji: '🌾',
+    dias: 1,
+    precio: '~€16',
+    coords: [37.339, -5.843],
+    desc: 'Castillo almohade de entrada gratuita y una ruta junto a más de una decena de molinos medievales sobre el río Guadaíra.',
+    gradient: 'linear-gradient(135deg,#040c04 0%,#081408 100%)',
+    url: 'itinerarios/alcala-guadaira.html'
+  },
+  {
+    id: 'el-rocio',
+    nombre: 'El Rocío',
+    region: 'Huelva · Doñana',
+    zona: 'Andalucía',
+    emoji: '🐎',
+    dias: 1,
+    precio: '~€35',
+    coords: [37.133, -6.476],
+    desc: 'El único pueblo de España con todas sus calles de arena, la ermita de la Virgen del Rocío y la puerta de entrada al Parque Nacional de Doñana.',
+    gradient: 'linear-gradient(135deg,#140a00 0%,#1c0e00 100%)',
+    url: 'itinerarios/el-rocio.html'
+  },
+  {
+    id: 'ecija',
+    nombre: 'Écija',
+    region: 'Sevilla',
+    zona: 'Andalucía',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€32',
+    coords: [37.541, -5.081],
+    desc: 'El conjunto barroco gratuito más espectacular de Andalucía: once torres de azulejos, Plaza Mayor porticada y Palacio de Peñaflor.',
+    gradient: 'linear-gradient(135deg,#120a00 0%,#1a1000 100%)',
+    url: 'itinerarios/ecija.html'
+  },
+  {
+    id: 'osuna',
+    nombre: 'Osuna',
+    region: 'Sevilla',
+    zona: 'Andalucía',
+    emoji: '🐉',
+    dias: 1,
+    precio: '~€42',
+    coords: [37.238, -5.103],
+    desc: 'Universidad renacentista, Calle San Pedro y la Plaza de Toros que fue escenario de Juego de Tronos, herencia de los Duques de Osuna.',
+    gradient: 'linear-gradient(135deg,#0e0414 0%,#160820 100%)',
+    url: 'itinerarios/osuna.html'
+  },
+  {
+    id: 'cascada-huesnar',
+    nombre: 'Cascada del Huéznar',
+    region: 'Sierra Norte · Sevilla',
+    zona: 'Andalucía',
+    emoji: '💧',
+    dias: 1,
+    precio: '~€35',
+    coords: [37.847, -5.733],
+    desc: 'Una ruta fácil junto a cascadas escalonadas y pozas naturales, en plena Reserva de la Biosfera Sierra Norte de Sevilla.',
+    gradient: 'linear-gradient(135deg,#00100c 0%,#001812 100%)',
+    url: 'itinerarios/cascada-huesnar.html'
+  },
+  {
+    id: 'girona',
+    nombre: 'Girona',
+    region: 'Girona',
+    zona: 'Cataluña',
+    emoji: '🎨',
+    dias: 1,
+    precio: '~€30',
+    coords: [41.9794, 2.8214],
+    desc: 'El Barrio Judío mejor conservado de Europa, las coloridas Cases de l\'Onyar y las escaleras de la Catedral que Juego de Tronos convirtió en Braavos.',
+    gradient: 'linear-gradient(135deg,#0f0a08 0%,#251812 100%)',
+    url: 'itinerarios/girona.html'
+  },
+  {
+    id: 'sitges',
+    nombre: 'Sitges',
+    region: 'Barcelona',
+    zona: 'Cataluña',
+    emoji: '🏖️',
+    dias: 1,
+    precio: '~€25',
+    coords: [41.237, 1.806],
+    desc: 'Playas urbanas de arena fina, la Iglesia de Sant Bartomeu i Santa Tecla sobre el mar y un casco antiguo de mansiones modernistas.',
+    gradient: 'linear-gradient(135deg,#080e0f 0%,#132225 100%)',
+    url: 'itinerarios/sitges.html'
+  },
+  {
+    id: 'tarragona',
+    nombre: 'Tarragona',
+    region: 'Tarragona',
+    zona: 'Cataluña',
+    emoji: '🏛️',
+    dias: 1,
+    precio: '~€28',
+    coords: [41.119, 1.245],
+    desc: 'El conjunto romano de Tarraco (Patrimonio Mundial UNESCO): murallas, anfiteatro junto al mar y acueducto, en su mayoría gratis.',
+    gradient: 'linear-gradient(135deg,#0f0c09 0%,#241d15 100%)',
+    url: 'itinerarios/tarragona.html'
+  },
+  {
+    id: 'vic',
+    nombre: 'Vic',
+    region: 'Barcelona · Osona',
+    zona: 'Cataluña',
+    emoji: '🧀',
+    dias: 1,
+    precio: '~€22',
+    coords: [41.93, 2.254],
+    desc: 'La Plaça Major porticada más grande de Cataluña, un templo romano del siglo II, un puente románico y la tradición de la llonganissa de Vic.',
+    gradient: 'linear-gradient(135deg,#0c0e09 0%,#1d2215 100%)',
+    url: 'itinerarios/vic.html'
+  },
+  {
+    id: 'cardona',
+    nombre: 'Cardona',
+    region: 'Barcelona · Bages',
+    zona: 'Cataluña',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€38',
+    coords: [41.913, 1.68],
+    desc: 'El Castillo de Cardona, hoy Parador Nacional, corona un pueblo de calles empinadas; a sus pies, la Montaña de Sal brilla como si hubiera nevado.',
+    gradient: 'linear-gradient(135deg,#160b00 0%,#201200 100%)',
+    url: 'itinerarios/cardona.html'
+  },
+  {
+    id: 'vilafranca-penedes',
+    nombre: 'Vilafranca del Penedès',
+    region: 'Penedès · Barcelona',
+    zona: 'Cataluña',
+    emoji: '🍷',
+    dias: 1,
+    precio: '~€35',
+    coords: [41.345, 1.699],
+    desc: 'Casco gótico gratuito, bodegas centenarias donde nace el cava desde el siglo XIX y la cuna de los Castells, Patrimonio de la Humanidad.',
+    gradient: 'linear-gradient(135deg,#100004 0%,#180008 100%)',
+    url: 'itinerarios/vilafranca-penedes.html'
+  },
+  {
+    id: 'castellfollit-roca',
+    nombre: 'Castellfollit de la Roca',
+    region: 'Garrotxa · Girona',
+    zona: 'Cataluña',
+    emoji: '🌋',
+    dias: 1,
+    precio: '~€28',
+    coords: [42.221, 2.553],
+    desc: 'Un pueblo construido sobre un acantilado de basalto de 50 metros, en el corazón del Parque Natural de la Zona Volcánica de la Garrotxa.',
+    gradient: 'linear-gradient(135deg,#090b08 0%,#151a13 100%)',
+    url: 'itinerarios/castellfollit-roca.html'
+  }
+);
+
+// Orden geográfico de las zonas para la pestaña "Naturaleza"
+const ZONA_ORDER = [
+  'Andalucía', 'Aragón', 'Asturias y Cantabria', 'Castilla-La Mancha', 'Castilla y León',
+  'Cataluña', 'Comunidad de Madrid', 'Extremadura', 'Galicia', 'Islas Baleares',
+  'Islas Canarias', 'La Rioja', 'Navarra', 'País Vasco', 'Pirineos'
+];
 
 // ── Map init ─────────────────────────────────────────────
 
@@ -943,33 +1734,39 @@ function buildSidebar(q) {
     });
 
   } else if (currentTab === 'parques') {
-    const filtered = PARQUES.filter(d => !q || (d.nombre + d.region).toLowerCase().includes(q));
+    const filtered = PARQUES.filter(d => !q || (d.nombre + d.region + d.zona).toLowerCase().includes(q));
     if (!filtered.length) { list.innerHTML = '<p style="padding:20px 14px;font-size:0.82rem;color:rgba(237,238,242,0.35);text-align:center">Sin resultados</p>'; return; }
 
-    const divHeader = document.createElement('div');
-    divHeader.className = 'region-divider'; divHeader.textContent = 'Parques Naturales';
-    list.appendChild(divHeader);
+    // Group by zona, in a fixed geographic order
+    const byZona = {};
+    filtered.forEach(d => { (byZona[d.zona] = byZona[d.zona] || []).push(d); });
+    const orderedZonas = ZONA_ORDER.filter(z => byZona[z]).concat(Object.keys(byZona).filter(z => !ZONA_ORDER.includes(z)));
 
-    filtered.forEach(d => {
-      const card = document.createElement('div');
-      card.className = 'dest-card'; card.setAttribute('role', 'listitem');
-      const top = document.createElement('div'); top.className = 'dest-card-top';
-      top.innerHTML = `
-        <div class="dest-emoji" style="background:${d.gradient}">${d.emoji}</div>
-        <div class="dest-info">
-          <div class="dest-name">${d.nombre}</div>
-          <div class="dest-meta">${d.region} · ${d.dias} día</div>
-        </div>
-        <div class="dest-price" style="color:rgba(94,203,138,0.9)">${d.precio}</div>`;
-      top.addEventListener('click', () => {
-        map.setView(d.coords, 10, { animate: true, duration: 1 });
-        setTimeout(() => parkMarkers[d.id]?.openPopup(), 700);
+    orderedZonas.forEach(zona => {
+      const div = document.createElement('div');
+      div.className = 'region-divider'; div.textContent = zona;
+      list.appendChild(div);
+      byZona[zona].forEach(d => {
+        const card = document.createElement('div');
+        card.className = 'dest-card'; card.setAttribute('role', 'listitem');
+        const top = document.createElement('div'); top.className = 'dest-card-top';
+        top.innerHTML = `
+          <div class="dest-emoji" style="background:${d.gradient}">${d.emoji}</div>
+          <div class="dest-info">
+            <div class="dest-name">${d.nombre}</div>
+            <div class="dest-meta">${d.region} · ${d.dias} día${d.dias > 1 ? 's' : ''}</div>
+          </div>
+          <div class="dest-price" style="color:rgba(94,203,138,0.9)">${d.precio}</div>`;
+        top.addEventListener('click', () => {
+          map.setView(d.coords, 10, { animate: true, duration: 1 });
+          setTimeout(() => parkMarkers[d.id]?.openPopup(), 700);
+        });
+        const link = document.createElement('a'); link.className = 'dest-card-link'; link.href = d.url;
+        link.style.cssText = 'border-top-color:rgba(94,203,138,0.12)';
+        link.innerHTML = `<span style="color:rgba(94,203,138,0.9)">Ver itinerario completo</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(94,203,138,0.9)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+        card.appendChild(top); card.appendChild(link);
+        list.appendChild(card);
       });
-      const link = document.createElement('a'); link.className = 'dest-card-link'; link.href = d.url;
-      link.style.cssText = 'border-top-color:rgba(94,203,138,0.12)';
-      link.innerHTML = `<span style="color:rgba(94,203,138,0.9)">Ver itinerario completo</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(94,203,138,0.9)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
-      card.appendChild(top); card.appendChild(link);
-      list.appendChild(card);
     });
 
   } else {
