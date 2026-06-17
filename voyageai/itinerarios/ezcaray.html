@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ezcaray — El pueblo de montaña de La Rioja y la Sierra de la Demanda | Routlo</title>
+  <meta name="description" content="65 km desde Logroño: Ezcaray, el pueblo de montaña más bonito de La Rioja, en la Sierra de la Demanda. La Fábrica Real de Tejidos del s. XVIII, la Iglesia de Santa María la Mayor, los hayedos del Río Oja y el restaurante con estrella Michelin donde comer de menú a €18. ~€41 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-mountain { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(74,158,110,0.12); border: 1px solid rgba(74,158,110,0.3); font-size: 0.75rem; font-weight: 600; color: #4a9e6e; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(74,158,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(74,158,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #4a9e6e; border-left-color: #4a9e6e; background: rgba(74,158,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(74,158,110,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #4a9e6e; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(74,158,110,0.3); }
+    .hotel-link:hover { border-color: #4a9e6e; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #4a9e6e; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1551632811-561732d1e306?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,10,4,0.3) 0%,rgba(0,16,8,0.6) 50%,rgba(0,6,2,0.95) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-mountain" style="margin-bottom:0;">⛰️ Sierra de la Demanda</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">65 km de Logroño</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">~55 min en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">~€41 · 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Ezcaray<br><span style="color:#4a9e6e;">El pueblo de montaña de La Rioja</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A 813 metros de altitud en el valle del Oja, a los pies de la Sierra de la Demanda, Ezcaray es el pueblo de montaña más bonito de La Rioja. La Fábrica Real de Tejidos del siglo XVIII (mandada construir por Carlos III), la iglesia gótico-renacentista, los hayedos del río y la posibilidad de comer en un restaurante con estrella Michelin por el precio de un menú del día hacen de Ezcaray una escapada perfecta y asequible.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#fabrica">Fábrica Real e Echaurren</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Ezcaray</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">⛰️ Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">65 km</div><div class="route-info-unit">desde Logroño</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~55 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~€41</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Altitud</div><div class="route-info-value">813 m</div><div class="route-info-unit">sobre el nivel del mar</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Pistas de ski</div><div class="route-info-value">Valdezcaray</div><div class="route-info-unit">nov–marzo</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="fabrica">
+      <h2 class="section-heading">🏭 Fábrica Real e Echaurren</h2>
+      <div class="highlight-box" style="background:linear-gradient(135deg,rgba(74,158,110,0.08) 0%,rgba(0,5,20,0.6) 100%);border:1px solid rgba(74,158,110,0.18);border-radius:16px;padding:24px;margin-bottom:20px;">
+        <h4 style="color:#4a9e6e;">🏭 La Fábrica Real de Tejidos de Ezcaray</h4>
+        <p>Carlos III mandó construir en 1752 la Real Fábrica de Paños de Ezcaray, destinada a producir tejidos de lana para uniformes militares. El edificio neoclásico, uno de los mejores de La Rioja del siglo XVIII, fue durante décadas el motor económico del valle. Hoy es un edificio protegido que puede admirarse desde el exterior: la fachada porticada, el gran patio interior y la noria sobre el río Oja. Actualmente acoge apartamentos rurales.</p>
+      </div>
+      <div class="highlight-box" style="background:linear-gradient(135deg,rgba(74,158,110,0.08) 0%,rgba(0,5,20,0.6) 100%);border:1px solid rgba(74,158,110,0.18);border-radius:16px;padding:24px;margin-bottom:20px;">
+        <h4 style="color:#4a9e6e;">🍴 El Echaurren — 2 estrellas Michelin accesible</h4>
+        <p>El restaurante Echaurren, dirigido por Francis Paniego, ha acumulado 2 estrellas Michelin. Lo que pocos saben es que el bar-restaurante informal del mismo grupo —El Portal del Echaurren— sirve un menú del día por €18-22 que incluye entrantes, plato principal y postre con vino, sin listas de espera. En Ezcaray puedes comer en un restaurante Michelin pagando lo que costaría en cualquier bar de ciudad.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Logroño → Ezcaray · 55 min</div><div class="day-subtitle">LR-111 a Nájera, luego LR-113 por el valle del Oja</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 El valle del Oja hacia la sierra</div>
+            <div class="stop-desc">LR-111 hasta Nájera, luego LR-113 subiendo el valle del Oja. El bosque va apareciendo conforme ganas altitud: robles, hayas y chopos.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento junto al río</div>
+            <div class="stop-desc">Aparcamiento gratuito en el paseo fluvial del pueblo.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Mañana — Fábrica Real e Iglesia</div><div class="day-subtitle">Arquitectura del XVIII entre montañas</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏭 Fábrica Real de Tejidos (exterior, gratis)</div>
+            <div class="stop-desc">El edificio neoclásico de Carlos III sobre el río Oja es el emblema del pueblo. La fachada porticada con arcos de piedra y la chimenea industrial conviven con el agua del Oja que sigue pasando a sus pies. Ideal para fotos.</div>
+            <div class="stop-price">Exterior gratuito</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesia de Santa María la Mayor</div>
+            <div class="stop-desc">La iglesia parroquial renacentista (s. XVI) tiene una portada de piedra muy elaborada y una torre cuadrada visible desde todo el pueblo. El retablo mayor de Juan de Ancheta, una de las mejores piezas del renacimiento riojano, merece el esfuerzo de buscar cuando está abierta.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌊 Ribera del Río Oja (gratis)</div>
+            <div class="stop-desc">El paseo fluvial entre árboles junto al pueblo es muy agradable. En primavera el agua baja cristalina desde los hayedos de la sierra.</div>
+            <div class="stop-price">Gratuito</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Mediodía — Menú en Ezcaray</div><div class="day-subtitle">Estrella Michelin a precio de menú del día</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🍴 El Portal del Echaurren</div>
+            <div class="stop-desc">Menú del día con cocina creativa riojana a precio de bar. Reserva con antelación los fines de semana. La propuesta cambia según temporada: cogollos de Tudela, cardo con almendras, cordero lechal de la Demanda.</div>
+            <div class="stop-price">Menú del día: €18-22/persona · Reserva: 941 35 40 47</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Tarde — Hayedos y regreso</div><div class="day-subtitle">Hayas de 200 años y vuelta a Logroño</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌲 Hayedos de Valdezcaray (gratis, a pie)</div>
+            <div class="stop-desc">Subiendo hacia la estación de ski de Valdezcaray, los hayedos del parque natural se vuelven espectaculares en otoño (mediados de octubre). El merendero a pocos km del pueblo permite un paseo corto entre hayas de 200 años.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Logroño (55 min)</div>
+            <div class="stop-desc">La temporada ideal para el hayedo es la segunda quincena de octubre, cuando las hayas se tiñen de rojo y oro.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida/vuelta, 130 km)</span><span>€13</span></div>
+        <div class="budget-row"><span>🏭 Fábrica Real e iglesia (exterior)</span><span>€0</span></div>
+        <div class="budget-row"><span>🍴 Almuerzo en bar del pueblo</span><span>€24</span></div>
+        <div class="budget-row"><span>☕ Café</span><span>€4</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span style="color:#4a9e6e;">~€41</span></div>
+      </div>
+      <div class="budget-note">Sin la visita al Echaurren el día sale muy económico. Con el menú Michelin sigue siendo una experiencia inigualable a un precio razonable.</div>
+      <p style="font-size:0.82rem;color:rgba(237,238,242,0.5);margin-top:0;line-height:1.6;">El Portal del Echaurren (€18-22/pers) eleva el total a ~€57 pero vale cada euro.</p>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Hayedo en otoño:</strong> La mejor época para el hayedo es la segunda quincena de octubre, con las hayas en rojo y oro.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Ski en invierno:</strong> Ezcaray tiene la estación de Valdezcaray (forfait ~€30/día). Otro plan completamente diferente.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Chuletillas al sarmiento:</strong> El mesón del pueblo sirve chuletillas de cordero lechal al sarmiento —el plato típico de la Sierra de la Demanda— por ~€18 la ración para dos.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Reserva el Echaurren:</strong> El Portal del Echaurren llena los fines de semana. Llama con antelación: 941 35 40 47.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche?</strong> Ezcaray es difícil de visitar en transporte público. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Logro%C3%B1o" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Logroño en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a></div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas de un día desde Logroño?</h3>
+      <p>Rutas de menos de 1 hora y menos de 100€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([42.32,-3.01],13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[42.466,-2.445],label:'Logroño',color:'#5ecb8a',r:9},{coords:[42.319,-3.010],label:'Ezcaray',color:'#4a9e6e',r:13},{coords:[42.319,-3.013],label:'Fábrica Real',color:'#4a9e6e',r:10},{coords:[42.27,-3.04],label:'Valdezcaray (hayedos)',color:'#4a9e6e',r:9}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[42.466,-2.445],[42.319,-3.010],[42.319,-3.013],[42.27,-3.04]],{color:'#4a9e6e',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
