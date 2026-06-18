@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Observatorio Solar Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Fira+Code:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== VARIABLES ===== */
+:root {
+  --bg: #030712;
+  --bg-cosmos: #0A1628;
+  --solar: #FF6B00;
+  --solar-dim: rgba(255,107,0,0.25);
+  --solar-glow: rgba(255,107,0,0.5);
+  --white: #F0F4FF;
+  --white-dim: rgba(240,244,255,0.45);
+  --blue: #1a5fa8;
+  --panel-bg: rgba(10,22,40,0.88);
+  --border: rgba(255,107,0,0.18);
+  --border-bright: rgba(255,107,0,0.5);
+  --font-hud: 'Share Tech Mono', monospace;
+  --font-data: 'Fira Code', monospace;
+  --glow: 0 0 10px rgba(255,107,0,0.55), 0 0 22px rgba(255,107,0,0.25);
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font-hud);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ===== LAYERS ===== */
+#stars-canvas {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
+
+.nebula {
+  position: fixed; border-radius: 50%;
+  filter: blur(90px); z-index: 0; pointer-events: none;
+  animation: nebPulse 9s ease-in-out infinite alternate;
+}
+.nb1 { width: 650px; height: 420px; top: -120px; right: -120px;
+  background: radial-gradient(ellipse, rgba(255,107,0,0.09) 0%, transparent 70%);
+  animation-delay: 0s; }
+.nb2 { width: 520px; height: 520px; bottom: -160px; left: -120px;
+  background: radial-gradient(ellipse, rgba(26,95,168,0.08) 0%, transparent 70%);
+  animation-delay: -3.5s; }
+.nb3 { width: 380px; height: 280px; top: 45%; left: 35%;
+  background: radial-gradient(ellipse, rgba(255,107,0,0.05) 0%, transparent 70%);
+  animation-delay: -6s; }
+
+@keyframes nebPulse {
+  from { opacity: 0.4; transform: scale(1); }
+  to   { opacity: 1;   transform: scale(1.12); }
+}
+
+.scanlines {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.045) 2px, rgba(0,0,0,0.045) 4px);
+}
+
+/* ===== BOOT OVERLAY ===== */
+#boot {
+  position: fixed; inset: 0; z-index: 999;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 22px;
+  transition: opacity 0.6s ease;
+}
+#boot.out { opacity: 0; pointer-events: none; }
+#boot-title { font-size: clamp(16px, 5vw, 26px); color: var(--solar);
+  text-shadow: var(--glow); letter-spacing: 0.2em; }
+#boot-msg { font-size: 11px; letter-spacing: 0.18em; color: var(--white-dim); }
+.boot-track { width: 220px; height: 2px; background: rgba(255,107,0,0.12); }
+#boot-fill { height: 100%; background: var(--solar); box-shadow: var(--glow); width: 0; transition: width 0.12s linear; }
+
+/* ===== APP ===== */
+#app {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  min-height: 100dvh;
+  padding: 0 10px 60px;
+  max-width: 1440px; margin: 0 auto;
+}
+
+/* ===== HEADER ===== */
+header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 14px 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px; gap: 10px;
+}
+.h-left .logo {
+  font-size: clamp(13px, 3.5vw, 20px);
+  color: var(--solar); text-shadow: var(--glow);
+  letter-spacing: 0.1em; display: flex; align-items: center; gap: 7px;
+}
+.h-left .logo svg { width: 18px; height: 18px; flex-shrink: 0; }
+#status { font-size: 9px; color: var(--white-dim); letter-spacing: 0.14em; margin-top: 3px; }
+.h-right { text-align: right; flex-shrink: 0; }
+#clock { font-size: clamp(17px, 4.5vw, 26px); letter-spacing: 0.06em; }
+#dateline { font-size: 9px; color: var(--white-dim); letter-spacing: 0.1em; margin-top: 2px; }
+
+/* ===== PERMISSION BANNER ===== */
+#perm-banner {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+  background: rgba(255,107,0,0.08);
+  border: 1px solid var(--border-bright);
+  border-radius: 2px; padding: 11px 14px; margin-bottom: 14px;
+  font-size: 11px; letter-spacing: 0.04em;
+}
+#perm-banner.gone { display: none; }
+
+/* ===== GRID ===== */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px; flex: 1;
+}
+@media (min-width: 600px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .p-camera { grid-column: 1 / -1; }
+  .p-astro  { grid-column: 1 / -1; }
+}
+@media (min-width: 900px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+  .p-solar   { grid-column: 1; grid-row: 1; }
+  .p-gyro    { grid-column: 1; grid-row: 2; }
+  .p-compass { grid-column: 2; grid-row: 1 / 3; }
+  .p-camera  { grid-column: 3; grid-row: 1 / 3; }
+  .p-astro   { grid-column: 1 / -1; grid-row: 3; }
+}
+@media (min-width: 1200px) {
+  .grid { grid-template-columns: repeat(4, 1fr); }
+  .p-solar   { grid-column: 1; grid-row: 1; }
+  .p-gyro    { grid-column: 1; grid-row: 2; }
+  .p-compass { grid-column: 2; grid-row: 1 / 3; }
+  .p-camera  { grid-column: 3 / 5; grid-row: 1 / 3; }
+  .p-astro   { grid-column: 1 / 3; grid-row: 3; }
+}
+
+/* ===== PANEL ===== */
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  position: relative; overflow: hidden;
+  backdrop-filter: blur(14px);
+  opacity: 0; transform: translateY(18px);
+  transition: opacity 0.45s ease, transform 0.45s ease, border-color 0.25s;
+}
+.panel.show { opacity: 1; transform: translateY(0); }
+.panel:hover { border-color: rgba(255,107,0,0.35); }
+.panel::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--solar), transparent);
+  opacity: 0.55;
+}
+/* HUD corner brackets */
+.panel::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, var(--solar-glow) 1px, transparent 1px) 0 0 / 8px 8px no-repeat,
+    linear-gradient(to bottom, var(--solar-glow) 1px, transparent 1px) 0 0 / 8px 8px no-repeat,
+    linear-gradient(to left, var(--solar-glow) 1px, transparent 1px) 100% 0 / 8px 8px no-repeat,
+    linear-gradient(to bottom, var(--solar-glow) 1px, transparent 1px) 100% 0 / 8px 8px no-repeat,
+    linear-gradient(to right, var(--solar-glow) 1px, transparent 1px) 0 100% / 8px 8px no-repeat,
+    linear-gradient(to top, var(--solar-glow) 1px, transparent 1px) 0 100% / 8px 8px no-repeat,
+    linear-gradient(to left, var(--solar-glow) 1px, transparent 1px) 100% 100% / 8px 8px no-repeat,
+    linear-gradient(to top, var(--solar-glow) 1px, transparent 1px) 100% 100% / 8px 8px no-repeat;
+  opacity: 0.5;
+}
+
+.ph {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 13px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,107,0,0.04);
+}
+.ph-title { font-size: 9px; letter-spacing: 0.16em; color: var(--solar); text-shadow: 0 0 8px rgba(255,107,0,0.4); }
+.ph-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--solar); box-shadow: 0 0 6px var(--solar);
+  animation: blink 2.2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+
+.pb { padding: 13px; }
+
+/* ===== DATA ROWS ===== */
+.dr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 0; gap: 8px;
+  border-bottom: 1px solid rgba(255,107,0,0.07);
+}
+.dr:last-child { border-bottom: none; }
+.lbl { font-size: 9px; color: var(--white-dim); letter-spacing: 0.1em; flex-shrink: 0; }
+.val { font-size: 13px; font-family: var(--font-data); text-align: right; transition: color 0.2s; }
+
+@keyframes flipIn { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:none; } }
+.flip { animation: flipIn 0.15s ease-out; }
+
+/* ===== GYRO PANEL ===== */
+.axes { display: flex; flex-direction: column; gap: 11px; margin-bottom: 14px; }
+.axis { display: flex; align-items: center; gap: 8px; }
+.ax-lbl { font-size: 9px; color: var(--white-dim); letter-spacing: 0.09em; width: 65px; flex-shrink: 0; }
+.ax-track { flex: 1; height: 3px; background: rgba(255,107,0,0.1); border-radius: 2px; overflow: hidden; }
+.ax-bar { height: 100%; background: var(--solar); box-shadow: 0 0 5px var(--solar); border-radius: 2px; transition: width 0.1s ease-out; }
+.ax-val { font-size: 11px; font-family: var(--font-data); width: 42px; text-align: right; flex-shrink: 0; }
+
+.align-box {
+  border: 1px solid var(--border); border-radius: 2px;
+  background: rgba(10,22,40,0.5);
+  padding: 11px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+}
+#align-arrow { font-size: 22px; color: var(--solar); transition: transform 0.3s, color 0.3s; }
+#align-text { font-size: 10px; letter-spacing: 0.14em; color: var(--white-dim); }
+#align-text.ok { color: #00FF88; text-shadow: 0 0 8px rgba(0,255,136,0.6); animation: pg 1s ease-in-out infinite; }
+@keyframes pg { 0%,100%{opacity:1} 50%{opacity:0.55} }
+
+/* ===== COMPASS ===== */
+.compass-body { display: flex; justify-content: center; align-items: center; padding: 8px; }
+#compass-canvas { max-width: 100%; height: auto; display: block; }
+
+/* ===== CAMERA / AR ===== */
+.cam-body { display: flex; flex-direction: column; gap: 9px; }
+.cam-wrap {
+  position: relative; width: 100%; aspect-ratio: 4/3;
+  background: var(--bg-cosmos);
+  border: 1px solid var(--border); border-radius: 2px; overflow: hidden;
+}
+@media (min-width: 900px) { .cam-wrap { aspect-ratio: 16/9; } }
+
+#cam-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover; display: none;
+}
+#cam-static {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover; display: none;
+}
+#ar-svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; z-index: 2; display: none;
+}
+.no-sig {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 7px;
+  color: var(--white-dim); font-size: 10px; letter-spacing: 0.1em;
+  height: 100%; text-align: center;
+}
+.no-sig svg { opacity: 0.3; }
+
+/* ===== ASTRO PANEL (wide) ===== */
+.astro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0;
+}
+.astro-grid .dr { padding: 8px 0; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  background: transparent; border: 1px solid var(--solar);
+  color: var(--solar); font-family: var(--font-hud);
+  font-size: 10px; letter-spacing: 0.14em;
+  padding: 12px 18px; cursor: pointer;
+  min-height: 44px; width: 100%;
+  text-shadow: 0 0 8px rgba(255,107,0,0.35);
+  box-shadow: 0 0 8px rgba(255,107,0,0.08);
+  transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn:hover { background: rgba(255,107,0,0.12); box-shadow: var(--glow); }
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* icon in button */
+.btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- Boot overlay -->
+<div id="boot">
+  <div id="boot-title">&#9728; OBSERVATORIO SOLAR DIGITAL</div>
+  <div id="boot-msg">CARGANDO MÓDULOS...</div>
+  <div class="boot-track"><div id="boot-fill"></div></div>
+</div>
+
+<!-- Background layers -->
+<canvas id="stars-canvas"></canvas>
+<div class="nebula nb1"></div>
+<div class="nebula nb2"></div>
+<div class="nebula nb3"></div>
+<div class="scanlines"></div>
+
+<!-- App -->
+<div id="app">
+
+  <header>
+    <div class="h-left">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.5"/>
+          <line x1="12" y1="2" x2="12" y2="4"/>
+          <line x1="12" y1="20" x2="12" y2="22"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="2" y1="12" x2="4" y2="12"/>
+          <line x1="20" y1="12" x2="22" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        OBSERVATORIO SOLAR DIGITAL
+      </div>
+      <div id="status">INICIANDO SISTEMA...</div>
+    </div>
+    <div class="h-right">
+      <div id="clock" aria-live="polite">--:--:--</div>
+      <div id="dateline">--/--/----</div>
+    </div>
+  </header>
+
+  <!-- Permission banner -->
+  <div id="perm-banner" role="alert">
+    <span>Se requieren permisos de <strong>ubicación</strong>, <strong>cámara</strong> y <strong>giroscopio</strong> para activar todas las funciones.</span>
+    <button class="btn" id="btn-init" style="width:auto;padding:10px 16px" aria-label="Inicializar sistema y solicitar permisos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+      INICIALIZAR SISTEMA
+    </button>
+  </div>
+
+  <main class="grid" id="grid" aria-label="Paneles del observatorio">
+
+    <!-- 1: Solar position -->
+    <div class="panel p-solar" id="p-solar" aria-label="Posición solar">
+      <div class="ph">
+        <span class="ph-title" id="t-solar">&block; POSICIÓN SOLAR</span>
+        <div class="ph-dot" aria-hidden="true"></div>
+      </div>
+      <div class="pb">
+        <div class="dr"><span class="lbl">AZIMUT</span><span class="val" id="v-az">---°</span></div>
+        <div class="dr"><span class="lbl">ELEVACIÓN</span><span class="val" id="v-el">---°</span></div>
+        <div class="dr"><span class="lbl">AMANECER</span><span class="val" id="v-sr">--:--</span></div>
+        <div class="dr"><span class="lbl">ATARDECER</span><span class="val" id="v-ss">--:--</span></div>
+      </div>
+    </div>
+
+    <!-- 2: Gyroscope -->
+    <div class="panel p-gyro" id="p-gyro" aria-label="Orientación del dispositivo">
+      <div class="ph">
+        <span class="ph-title" id="t-gyro">&block; ORIENTACIÓN</span>
+        <div class="ph-dot" aria-hidden="true"></div>
+      </div>
+      <div class="pb">
+        <div class="axes">
+          <div class="axis">
+            <span class="ax-lbl">ALPHA (Z)</span>
+            <div class="ax-track"><div class="ax-bar" id="bar-a" style="width:0%"></div></div>
+            <span class="ax-val" id="val-a">---°</span>
+          </div>
+          <div class="axis">
+            <span class="ax-lbl">BETA (X)</span>
+            <div class="ax-track"><div class="ax-bar" id="bar-b" style="width:50%"></div></div>
+            <span class="ax-val" id="val-b">---°</span>
+          </div>
+          <div class="axis">
+            <span class="ax-lbl">GAMMA (Y)</span>
+            <div class="ax-track"><div class="ax-bar" id="bar-g" style="width:50%"></div></div>
+            <span class="ax-val" id="val-g">---°</span>
+          </div>
+        </div>
+        <div class="align-box">
+          <div id="align-arrow" aria-hidden="true">&#10148;</div>
+          <div id="align-text">ESPERANDO GIROSCOPIO</div>
+        </div>
+        <button id="btn-gyro-ios" class="btn" style="margin-top:9px;display:none" aria-label="Activar giroscopio en iOS">
+          ACTIVAR GIROSCOPIO (iOS)
+        </button>
+      </div>
+    </div>
+
+    <!-- 3: Compass -->
+    <div class="panel p-compass" id="p-compass" aria-label="Brújula solar">
+      <div class="ph">
+        <span class="ph-title" id="t-compass">&block; BRÚJULA SOLAR</span>
+        <div class="ph-dot" aria-hidden="true"></div>
+      </div>
+      <div class="pb compass-body">
+        <canvas id="compass-canvas" width="260" height="260" aria-label="Brújula con posición del sol"></canvas>
+      </div>
+    </div>
+
+    <!-- 4: Camera AR -->
+    <div class="panel p-camera" id="p-camera" aria-label="Vista de realidad aumentada">
+      <div class="ph">
+        <span class="ph-title" id="t-camera">&block; VISTA AR</span>
+        <div class="ph-dot" aria-hidden="true"></div>
+      </div>
+      <div class="pb cam-body">
+        <div class="cam-wrap" id="cam-wrap">
+          <div class="no-sig" id="no-sig">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+            <div>SIN SEÑAL</div>
+            <div style="font-size:8px;opacity:0.5;margin-top:2px">PRESIONA ACTIVAR CÁMARA AR</div>
+          </div>
+          <video id="cam-video" autoplay playsinline muted aria-hidden="true"></video>
+          <img id="cam-static" alt="Cielo de fondo" aria-hidden="true">
+          <!-- AR SVG Overlay -->
+          <svg id="ar-svg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Corner HUD brackets -->
+            <path d="M14 14 L14 38 M14 14 L38 14" stroke="#FF6B00" stroke-width="1.5" fill="none" opacity="0.85"/>
+            <path d="M386 14 L386 38 M386 14 L362 14" stroke="#FF6B00" stroke-width="1.5" fill="none" opacity="0.85"/>
+            <path d="M14 286 L14 262 M14 286 L38 286" stroke="#FF6B00" stroke-width="1.5" fill="none" opacity="0.85"/>
+            <path d="M386 286 L386 262 M386 286 L362 286" stroke="#FF6B00" stroke-width="1.5" fill="none" opacity="0.85"/>
+            <!-- Crosshair -->
+            <line x1="200" y1="118" x2="200" y2="182" stroke="#FF6B00" stroke-width="1" opacity="0.55"/>
+            <line x1="167" y1="150" x2="233" y2="150" stroke="#FF6B00" stroke-width="1" opacity="0.55"/>
+            <!-- Outer rotating ring -->
+            <circle cx="200" cy="150" r="48" fill="none" stroke="#FF6B00" stroke-width="0.8" stroke-dasharray="10 5" opacity="0.4">
+              <animateTransform attributeName="transform" type="rotate" from="0 200 150" to="360 200 150" dur="10s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Inner counter-ring -->
+            <circle cx="200" cy="150" r="22" fill="none" stroke="#1a5fa8" stroke-width="0.8" opacity="0.5">
+              <animateTransform attributeName="transform" type="rotate" from="360 200 150" to="0 200 150" dur="6s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Data HUD box -->
+            <rect x="4" y="4" width="132" height="72" fill="rgba(3,7,18,0.72)" rx="1"/>
+            <text id="ar-az"  x="11" y="21" font-family="Share Tech Mono" font-size="11" fill="#FF6B00">AZ: ---°</text>
+            <text id="ar-el"  x="11" y="38" font-family="Share Tech Mono" font-size="11" fill="#FF6B00">EL: ---°</text>
+            <text id="ar-ts"  x="11" y="55" font-family="Share Tech Mono" font-size="11" fill="#F0F4FF">--:--:--</text>
+            <circle cx="10" cy="68" r="3" fill="#00FF88"/><text x="17" y="72" font-family="Share Tech Mono" font-size="9" fill="#00FF88">EN VIVO</text>
+            <!-- Sun indicator -->
+            <circle id="sun-dot" cx="200" cy="150" r="8" fill="#FF6B00" opacity="0.9">
+              <animate attributeName="r" values="8;13;8" dur="2s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
+            </circle>
+            <circle id="sun-halo" cx="200" cy="150" r="18" fill="none" stroke="#FF6B00" stroke-width="1" opacity="0.28">
+              <animate attributeName="r" values="18;28;18" dur="2s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.28;0;0.28" dur="2s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+        <button id="btn-cam" class="btn" aria-label="Activar cámara para vista AR">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+          ACTIVAR CÁMARA AR
+        </button>
+      </div>
+    </div>
+
+    <!-- 5: Astronomical data -->
+    <div class="panel p-astro" id="p-astro" aria-label="Datos astronómicos">
+      <div class="ph">
+        <span class="ph-title" id="t-astro">&block; DATOS ASTRONÓMICOS</span>
+        <div class="ph-dot" aria-hidden="true"></div>
+      </div>
+      <div class="pb">
+        <div class="astro-grid">
+          <div class="dr"><span class="lbl">DECLINACIÓN SOLAR</span><span class="val" id="v-dec">---°</span></div>
+          <div class="dr"><span class="lbl">HORA SOLAR VERDADERA</span><span class="val" id="v-tst">--:--</span></div>
+          <div class="dr"><span class="lbl">ÍNDICE UV (EST.)</span><span class="val" id="v-uv">--</span></div>
+          <div class="dr"><span class="lbl">FASE LUNAR</span><span class="val" id="v-moon">---</span></div>
+          <div class="dr"><span class="lbl">LATITUD GPS</span><span class="val" id="v-lat">---</span></div>
+          <div class="dr"><span class="lbl">LONGITUD GPS</span><span class="val" id="v-lon">---</span></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+'use strict';
+
+/* ===== STATE ===== */
+const S = { lat: null, lon: null, alpha: null, beta: null, gamma: null, az: null, el: null, camActive: false };
+
+/* ===== HELPERS ===== */
+const $ = id => document.getElementById(id);
+const toRad = d => d * Math.PI / 180;
+const toDeg = r => r * 180 / Math.PI;
+
+function setVal(id, text) {
+  const el = $(id); if (!el || el.textContent === text) return;
+  el.classList.remove('flip'); void el.offsetWidth;
+  el.textContent = text; el.classList.add('flip');
+}
+
+/* ===== STAR FIELD ===== */
+(function initStars() {
+  const cv = $('stars-canvas'), ctx = cv.getContext('2d');
+  let W, H, stars = [];
+  function resize() {
+    W = cv.width = window.innerWidth;
+    H = cv.height = window.innerHeight;
+    stars = Array.from({length: 200}, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.4 + 0.3,
+      o: Math.random() * 0.75 + 0.2,
+      sp: Math.random() * 0.35 + 0.05,
+      ph: Math.random() * Math.PI * 2,
+    }));
+  }
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    stars.forEach(s => {
+      const tw = 0.5 + 0.5 * Math.sin(t * 0.001 * s.sp + s.ph);
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(240,244,255,${(s.o * tw).toFixed(2)})`; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize(); window.addEventListener('resize', resize);
+  requestAnimationFrame(draw);
+})();
+
+/* ===== BOOT SEQUENCE ===== */
+(function boot() {
+  const fill = $('boot-fill'), msg = $('boot-msg');
+  const steps = [[15,'CARGANDO MÓDULOS...'], [30,'INICIANDO RENDERIZADOR...'], [50,'CALIBRANDO SENSORES...'],
+                 [70,'PREPARANDO MOTORES...'], [88,'VERIFICANDO SISTEMAS...'], [100,'SISTEMA LISTO']];
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i >= steps.length) {
+      clearInterval(iv);
+      setTimeout(() => {
+        $('boot').classList.add('out');
+        setTimeout(() => { $('boot').style.display='none'; revealPanels(); }, 620);
+      }, 300);
+      return;
+    }
+    fill.style.width = steps[i][0] + '%'; msg.textContent = steps[i][1]; i++;
+  }, 180);
+})();
+
+function revealPanels() {
+  document.querySelectorAll('.panel').forEach((p, i) => {
+    setTimeout(() => p.classList.add('show'), i * 110);
+  });
+  typewriterAll();
+}
+
+/* ===== TYPEWRITER ===== */
+function typewriter(id, text, delay) {
+  const el = $(id); if (!el) return;
+  el.textContent = '';
+  let i = 0;
+  setTimeout(() => {
+    const iv = setInterval(() => {
+      el.textContent += text[i++];
+      if (i >= text.length) clearInterval(iv);
+    }, 40);
+  }, delay);
+}
+
+function typewriterAll() {
+  typewriter('t-solar',   '█ POSICIÓN SOLAR', 100);
+  typewriter('t-gyro',    '█ ORIENTACIÓN', 250);
+  typewriter('t-compass', '█ BRÚJULA SOLAR', 400);
+  typewriter('t-camera',  '█ VISTA AR', 550);
+  typewriter('t-astro',   '█ DATOS ASTRONÓMICOS', 700);
+}
+
+/* ===== CLOCK ===== */
+function tickClock() {
+  const n = new Date();
+  const pad = v => String(v).padStart(2,'0');
+  $('clock').textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  $('dateline').textContent = `${pad(n.getDate())}/${pad(n.getMonth()+1)}/${n.getFullYear()}`;
+}
+
+/* ===== SOLAR CALCULATIONS (NOAA/Meeus) ===== */
+function julianDay(date) { return date.getTime() / 86400000 + 2440587.5; }
+
+function calcSolar(date, lat, lon) {
+  const JD = julianDay(date);
+  const T = (JD - 2451545.0) / 36525.0;
+
+  // Geometric mean longitude (deg)
+  let L0 = (280.46646 + T * (36000.76983 + T * 0.0003032)) % 360;
+  if (L0 < 0) L0 += 360;
+
+  // Geometric mean anomaly (deg)
+  let M = (357.52911 + T * (35999.05029 - 0.0001537 * T)) % 360;
+  if (M < 0) M += 360;
+  const Mr = toRad(M);
+
+  // Eccentricity
+  const e = 0.016708634 - T * (0.000042037 + 0.0000001267 * T);
+
+  // Equation of center
+  const C = Math.sin(Mr) * (1.914602 - T * (0.004817 + 0.000014 * T))
+           + Math.sin(2*Mr) * (0.019993 - 0.000101 * T)
+           + Math.sin(3*Mr) * 0.000289;
+
+  // Sun true longitude → apparent longitude
+  const theta = L0 + C;
+  const omega = 125.04 - 1934.136 * T;
+  const lambda = theta - 0.00569 - 0.00478 * Math.sin(toRad(omega));
+  const lr = toRad(lambda);
+
+  // Obliquity (corrected)
+  const eps0 = 23 + (26 + (21.448 - T*(46.815 + T*(0.00059 - T*0.001813)))/60)/60;
+  const eps = toRad(eps0 + 0.00256 * Math.cos(toRad(omega)));
+
+  // Declination
+  const sinDec = Math.sin(eps) * Math.sin(lr);
+  const dec = toDeg(Math.asin(sinDec));
+
+  // Equation of time (minutes)
+  const y = Math.tan(eps/2) ** 2;
+  const L0r = toRad(L0);
+  const eot = 4 * toDeg(
+    y*Math.sin(2*L0r) - 2*e*Math.sin(Mr) +
+    4*e*y*Math.sin(Mr)*Math.cos(2*L0r) -
+    0.5*y*y*Math.sin(4*L0r) -
+    1.25*e*e*Math.sin(2*Mr)
+  );
+
+  // True solar time (minutes from midnight UTC)
+  const utcMin = date.getUTCHours()*60 + date.getUTCMinutes() + date.getUTCSeconds()/60;
+  const tst = utcMin + eot + 4 * lon;
+
+  // Hour angle (degrees)
+  const HA = tst/4 - 180;
+  const HAr = toRad(HA);
+
+  // Solar position
+  const latr = toRad(lat), decr = toRad(dec);
+  const cosZ = Math.sin(latr)*Math.sin(decr) + Math.cos(latr)*Math.cos(decr)*Math.cos(HAr);
+  const zenith = toDeg(Math.acos(Math.max(-1, Math.min(1, cosZ))));
+  let elevation = 90 - zenith;
+
+  // Atmospheric refraction
+  if (elevation > -0.575) {
+    const r = 1.0 / Math.tan(toRad(elevation + 10.3/(elevation + 5.11)));
+    elevation += r/3600;
+  }
+
+  // Azimuth
+  const azDen = Math.cos(latr) * Math.sin(toRad(zenith));
+  let azimuth = 0;
+  if (Math.abs(azDen) > 0.001) {
+    let azRaw = (Math.sin(latr)*Math.cos(toRad(zenith)) - Math.sin(decr)) / azDen;
+    azRaw = Math.max(-1, Math.min(1, azRaw));
+    azimuth = 180 - toDeg(Math.acos(azRaw));
+    if (HA > 0) azimuth = -azimuth;
+    azimuth = ((azimuth % 360) + 360) % 360;
+  } else {
+    azimuth = lat > 0 ? 0 : 180;
+  }
+
+  // Sunrise / Sunset
+  const cosSR = (Math.cos(toRad(90.833)) / (Math.cos(latr)*Math.cos(decr))) - Math.tan(latr)*Math.tan(decr);
+  let srStr = 'POLAR', ssStr = 'POLAR';
+  if (Math.abs(cosSR) <= 1) {
+    const hasr = toDeg(Math.acos(cosSR));
+    const off = -date.getTimezoneOffset();
+    const toLocal = m => {
+      let l = ((m + off) % 1440 + 1440) % 1440;
+      return `${String(Math.floor(l/60)).padStart(2,'0')}:${String(Math.floor(l%60)).padStart(2,'0')}`;
+    };
+    srStr = toLocal(720 - 4*(lon + hasr) - eot);
+    ssStr = toLocal(720 - 4*(lon - hasr) - eot);
+  }
+
+  // True solar time display
+  const tstNorm = ((tst % 1440) + 1440) % 1440;
+  const tstStr = `${String(Math.floor(tstNorm/60)).padStart(2,'0')}:${String(Math.floor(tstNorm%60)).padStart(2,'0')}`;
+
+  return { azimuth, elevation, dec, tstStr, srStr, ssStr, eot };
+}
+
+/* ===== LUNAR PHASE ===== */
+function lunarPhase(date) {
+  const refNewMoon = new Date('2000-01-06T18:14:00Z');
+  const cycle = 29.53058867;
+  const elapsed = (date - refNewMoon) / 86400000;
+  const phase = ((elapsed % cycle) + cycle) % cycle / cycle;
+  const names = [
+    [0.0625,'Luna Nueva'], [0.1875,'Creciente Incipiente'], [0.3125,'Cuarto Creciente'],
+    [0.4375,'Gibosa Creciente'], [0.5625,'Luna Llena'], [0.6875,'Gibosa Menguante'],
+    [0.8125,'Cuarto Menguante'], [0.9375,'Creciente Menguante'], [1.0,'Luna Nueva'],
+  ];
+  for (const [max, name] of names) if (phase <= max) return name;
+  return 'Luna Nueva';
+}
+
+/* ===== UV INDEX ===== */
+function uvIndex(el) {
+  if (el <= 0) return '0 (NINGUNO)';
+  const uv = +(12 * Math.pow(Math.sin(toRad(el)), 0.75)).toFixed(1);
+  const cat = uv < 3 ? 'BAJO' : uv < 6 ? 'MODERADO' : uv < 8 ? 'ALTO' : uv < 11 ? 'MUY ALTO' : 'EXTREMO';
+  return `${uv} (${cat})`;
+}
+
+/* ===== UPDATE UI ===== */
+function updateUI() {
+  if (S.lat === null) return;
+  const now = new Date(), pad2 = v => String(v).padStart(2,'0');
+  const sol = calcSolar(now, S.lat, S.lon);
+  S.az = sol.azimuth; S.el = sol.elevation;
+
+  setVal('v-az', sol.azimuth.toFixed(1) + '°');
+  setVal('v-el', sol.elevation.toFixed(1) + '°');
+  setVal('v-sr', sol.srStr);
+  setVal('v-ss', sol.ssStr);
+  setVal('v-dec', sol.dec.toFixed(2) + '°');
+  setVal('v-tst', sol.tstStr);
+  setVal('v-uv', uvIndex(sol.elevation));
+  setVal('v-moon', lunarPhase(now));
+  setVal('v-lat', S.lat.toFixed(5) + '°');
+  setVal('v-lon', S.lon.toFixed(5) + '°');
+
+  // AR overlay text
+  $('ar-az').textContent = `AZ: ${sol.azimuth.toFixed(1)}°`;
+  $('ar-el').textContent = `EL: ${sol.elevation.toFixed(1)}°`;
+  $('ar-ts').textContent = `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+
+  updateSunDot();
+}
+
+/* ===== SUN DOT IN AR OVERLAY ===== */
+function updateSunDot() {
+  if (S.az === null) return;
+  const dot = $('sun-dot'), halo = $('sun-halo');
+  // Relative azimuth from device heading
+  const relAz = S.alpha !== null ? ((S.az - S.alpha + 360) % 360) : S.az;
+  const relAzSigned = relAz > 180 ? relAz - 360 : relAz;
+  // Approximate camera FOV: 60° H, 45° V
+  const fovH = 60, fovV = 45;
+  const x = Math.max(10, Math.min(390, 200 + (relAzSigned / fovH) * 400));
+  // Elevation relative to device tilt
+  const beta = S.beta !== null ? S.beta : 0;
+  const camEl = 90 - Math.abs(beta); // rough camera elevation
+  const relEl = (S.el || 0) - camEl;
+  const y = Math.max(10, Math.min(290, 150 - (relEl / fovV) * 300));
+  dot.setAttribute('cx', x); dot.setAttribute('cy', y);
+  halo.setAttribute('cx', x); halo.setAttribute('cy', y);
+}
+
+/* ===== COMPASS CANVAS ===== */
+(function compassLoop() {
+  const cv = $('compass-canvas'), ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height, cx = W/2, cy = H/2, R = Math.min(cx,cy) - 8;
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const rot = S.alpha ? -toRad(S.alpha) : 0;
+
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot);
+
+    // Outer ring
+    ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(255,107,0,0.3)'; ctx.lineWidth = 1; ctx.stroke();
+
+    // Middle ring
+    ctx.beginPath(); ctx.arc(0, 0, R*0.82, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(255,107,0,0.12)'; ctx.lineWidth = 0.5; ctx.stroke();
+
+    // Tick marks
+    for (let deg = 0; deg < 360; deg += 5) {
+      const a = toRad(deg), isMain = deg%90===0, isSub = deg%45===0;
+      const len = isMain ? 14 : isSub ? 9 : 5;
+      const r1 = R-2, r2 = r1-len;
+      ctx.beginPath();
+      ctx.moveTo(Math.sin(a)*r1, -Math.cos(a)*r1);
+      ctx.lineTo(Math.sin(a)*r2, -Math.cos(a)*r2);
+      ctx.strokeStyle = isMain ? 'rgba(255,107,0,0.85)' : 'rgba(255,107,0,0.3)';
+      ctx.lineWidth = isMain ? 1.5 : 0.5; ctx.stroke();
+    }
+
+    // Cardinal labels (counter-rotated to stay upright)
+    const cards = [['N',0,'#FF6B00'],['E',90,'#F0F4FF'],['S',180,'#F0F4FF'],['O',270,'#F0F4FF']];
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    cards.forEach(([lbl, ang, col]) => {
+      const a = toRad(ang), r = R*0.69;
+      ctx.save(); ctx.translate(Math.sin(a)*r, -Math.cos(a)*r); ctx.rotate(-rot);
+      ctx.font = '13px "Share Tech Mono"'; ctx.fillStyle = col;
+      if (lbl==='N') { ctx.shadowColor='#FF6B00'; ctx.shadowBlur=10; }
+      ctx.fillText(lbl, 0, 0); ctx.shadowBlur=0; ctx.restore();
+    });
+
+    // Sub-cardinal degrees
+    ctx.font = '8px "Share Tech Mono"'; ctx.fillStyle = 'rgba(240,244,255,0.35)';
+    [45,135,225,315].forEach(ang => {
+      const a = toRad(ang), r = R*0.69;
+      ctx.save(); ctx.translate(Math.sin(a)*r, -Math.cos(a)*r); ctx.rotate(-rot);
+      ctx.fillText(ang+'°', 0, 0); ctx.restore();
+    });
+
+    ctx.restore(); // end gyro rotation
+
+    // Sun position (absolute frame - not rotated with compass)
+    if (S.az !== null) {
+      const sa = toRad(S.az), sr = R * 0.54;
+      const sx = cx + Math.sin(sa)*sr, sy = cy - Math.cos(sa)*sr;
+
+      // Dashed line center → sun
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(sx, sy);
+      ctx.strokeStyle = 'rgba(255,107,0,0.38)'; ctx.lineWidth = 1;
+      ctx.setLineDash([4,4]); ctx.stroke(); ctx.setLineDash([]);
+
+      // Pulsing halo
+      const t = Date.now()/1000;
+      const pr = 10 + 4*Math.sin(t*2.2);
+      const grad = ctx.createRadialGradient(sx, sy, 0, sx, sy, pr*2.5);
+      grad.addColorStop(0,'rgba(255,107,0,0.75)');
+      grad.addColorStop(0.4,'rgba(255,107,0,0.2)');
+      grad.addColorStop(1,'rgba(255,107,0,0)');
+      ctx.beginPath(); ctx.arc(sx, sy, pr*2.5, 0, Math.PI*2);
+      ctx.fillStyle = grad; ctx.fill();
+
+      // Sun dot
+      ctx.beginPath(); ctx.arc(sx, sy, 7, 0, Math.PI*2);
+      ctx.fillStyle = '#FF6B00'; ctx.shadowColor='#FF6B00'; ctx.shadowBlur=16; ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // "SOL" label
+      ctx.font = '9px "Share Tech Mono"'; ctx.fillStyle = '#FF6B00';
+      ctx.textAlign = 'center'; ctx.fillText('SOL', sx, sy-15);
+
+      // Elevation indicator ring
+      if (S.el !== null) {
+        const elNorm = Math.max(0, Math.min(90, S.el))/90;
+        const elR = R*(0.12 + 0.18*(1-elNorm));
+        ctx.beginPath(); ctx.arc(cx, cy, elR, 0, Math.PI*2);
+        ctx.strokeStyle = `rgba(255,107,0,${0.08 + elNorm*0.25})`;
+        ctx.lineWidth = 0.5; ctx.stroke();
+      }
+    }
+
+    // Center crosshair
+    ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI*2);
+    ctx.fillStyle='rgba(255,107,0,0.65)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, 2, 0, Math.PI*2);
+    ctx.fillStyle='#F0F4FF'; ctx.fill();
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ===== GEOLOCATION ===== */
+function requestLocation() {
+  if (!navigator.geolocation) { fallbackIP(); return; }
+  $('status').textContent = 'SOLICITANDO GPS...';
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      S.lat = pos.coords.latitude; S.lon = pos.coords.longitude;
+      $('status').textContent = 'GPS ACTIVO • CALCULANDO...';
+      updateUI();
+    },
+    () => fallbackIP(),
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+  navigator.geolocation.watchPosition(
+    pos => { S.lat = pos.coords.latitude; S.lon = pos.coords.longitude; },
+    () => {}, { enableHighAccuracy: true }
+  );
+}
+
+async function fallbackIP() {
+  $('status').textContent = 'USANDO GEOLOC. IP...';
+  try {
+    const r1 = await fetch('https://api.ipify.org?format=json');
+    const { ip } = await r1.json();
+    const r2 = await fetch(`https://ip-api.com/json/${ip}?fields=status,lat,lon`);
+    const geo = await r2.json();
+    if (geo.status === 'success') {
+      S.lat = geo.lat; S.lon = geo.lon;
+      $('status').textContent = 'IP GEOLOC ACTIVA';
+      updateUI(); return;
+    }
+  } catch(e) { /* fall through */ }
+  // Last resort: Madrid
+  S.lat = 40.4168; S.lon = -3.7038;
+  $('status').textContent = 'UBICACIÓN: MADRID (DEFECTO)';
+  updateUI();
+}
+
+/* ===== GYROSCOPE ===== */
+function requestGyro() {
+  if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
+    // iOS 13+: needs explicit permission button
+    $('btn-gyro-ios').style.display = 'block';
+    $('align-text').textContent = 'PERMISO REQUERIDO (iOS)';
+    return;
+  }
+  startGyro();
+}
+
+function startGyro() {
+  window.addEventListener('deviceorientation', e => {
+    S.alpha = e.alpha; S.beta = e.beta; S.gamma = e.gamma;
+    const pad = v => String(Math.round(v)).padStart(4,' ');
+    if (S.alpha !== null) { setVal('val-a', pad(S.alpha)+'°'); $('bar-a').style.width=(S.alpha/360*100)+'%'; }
+    if (S.beta  !== null) { setVal('val-b', pad(S.beta) +'°'); $('bar-b').style.width=((S.beta+180)/360*100)+'%'; }
+    if (S.gamma !== null) { setVal('val-g', pad(S.gamma)+'°'); $('bar-g').style.width=((S.gamma+90)/180*100)+'%'; }
+
+    // Alignment check
+    if (S.az !== null && S.alpha !== null) {
+      let diff = Math.abs(((S.az - S.alpha + 360) % 360));
+      if (diff > 180) diff = 360 - diff;
+      const arrow = $('align-arrow'), text = $('align-text');
+      if (diff <= 15) {
+        text.textContent = '★ ALINEADO CON EL SOL'; text.className = 'ok';
+        arrow.textContent = '☀'; arrow.style.color = '#FF6B00';
+      } else {
+        const turn = (S.az - S.alpha + 360) % 360;
+        arrow.textContent = turn < 180 ? '➡' : '⬅';
+        arrow.style.color = '#F0F4FF';
+        text.textContent = `GIRAR ${Math.round(diff)}° ${turn < 180 ? 'DERECHA' : 'IZQUIERDA'}`;
+        text.className = '';
+      }
+    }
+  }, true);
+}
+
+/* ===== CAMERA ===== */
+$('btn-cam').addEventListener('click', async () => {
+  if (S.camActive) { stopCamera(); return; }
+  const btn = $('btn-cam'); btn.textContent = 'ACTIVANDO...'; btn.disabled = true;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width:{ideal:1280}, height:{ideal:720} }, audio: false
+    });
+    const vid = $('cam-video'); vid.srcObject = stream; vid.style.display = 'block';
+    $('no-sig').style.display = 'none'; $('ar-svg').style.display = 'block';
+    S.camActive = true;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="2"/></svg> DETENER CÁMARA`;
+    btn.disabled = false;
+  } catch(err) {
+    showStaticSky();
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> ACTIVAR CÁMARA AR';
+    btn.disabled = false;
+  }
+});
+
+function stopCamera() {
+  const vid = $('cam-video');
+  if (vid.srcObject) vid.srcObject.getTracks().forEach(t => t.stop());
+  vid.srcObject = null; vid.style.display = 'none';
+  $('ar-svg').style.display = 'none'; $('no-sig').style.display = 'flex';
+  S.camActive = false;
+  $('btn-cam').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> ACTIVAR CÁMARA AR`;
+}
+
+function showStaticSky() {
+  // Generate a starry sky canvas as fallback background
+  const c = document.createElement('canvas'); c.width=400; c.height=300;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0,0,0,300);
+  g.addColorStop(0,'#030712'); g.addColorStop(0.4,'#0A1628'); g.addColorStop(1,'#0d2040');
+  ctx.fillStyle = g; ctx.fillRect(0,0,400,300);
+  for (let i=0;i<60;i++) {
+    ctx.beginPath(); ctx.arc(Math.random()*400, Math.random()*300, Math.random()*1.5+0.4,0,Math.PI*2);
+    ctx.fillStyle=`rgba(240,244,255,${(Math.random()*0.7+0.2).toFixed(2)})`; ctx.fill();
+  }
+  const img = $('cam-static'); img.src = c.toDataURL(); img.style.display = 'block';
+  $('no-sig').style.display = 'none'; $('ar-svg').style.display = 'block';
+  S.camActive = true;
+}
+
+/* ===== iOS GYRO BUTTON ===== */
+$('btn-gyro-ios').addEventListener('click', async () => {
+  try {
+    const perm = await DeviceOrientationEvent.requestPermission();
+    if (perm === 'granted') { startGyro(); $('btn-gyro-ios').style.display = 'none'; }
+  } catch(e) { console.error('Gyro permission denied', e); }
+});
+
+/* ===== INIT BUTTON ===== */
+$('btn-init').addEventListener('click', () => {
+  $('perm-banner').classList.add('gone');
+  $('status').textContent = 'SOLICITANDO PERMISOS...';
+  requestLocation();
+  requestGyro();
+});
+
+/* ===== MAIN LOOP ===== */
+setInterval(() => { tickClock(); updateUI(); }, 1000);
+tickClock();
+</script>
+</body>
+</html>
