@@ -288,12 +288,37 @@
       margin: 8px 0 2px; text-align: right;
     }
 
-    /* Mobile */
+    /* Mobile — bottom sheet */
     @media (max-width: 768px) {
       html, body { overflow: hidden; height: 100dvh; }
-      .map-shell { flex-direction: column; top: 60px; }
-      .map-sidebar { width: 100%; height: 42vh; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); order: 2; }
-      #map { height: 58vh; flex: none; order: 1; }
+      .map-shell { flex-direction: column; top: 60px; position: relative; overflow: hidden; }
+      #map { position: absolute !important; inset: 0; height: 100% !important; flex: none; order: 1; }
+      .map-sidebar {
+        position: fixed; bottom: 0; left: 0; right: 0;
+        width: 100%; height: 88vh; max-height: 88vh;
+        border-right: none; border-top: 1.5px solid rgba(255,255,255,0.1);
+        border-radius: 20px 20px 0 0;
+        transform: translateY(calc(100% - 78px));
+        transition: transform 0.42s cubic-bezier(0.32,0.72,0,1);
+        z-index: 500; overflow: hidden;
+        display: flex; flex-direction: column; order: 2;
+        box-shadow: 0 -12px 48px rgba(0,0,0,0.55);
+        background: #080c18;
+      }
+      .map-sidebar.sheet-half { transform: translateY(calc(100% - 52vh)); }
+      .map-sidebar.sheet-full { transform: translateY(0); }
+      .sheet-handle {
+        display: flex !important; justify-content: center; align-items: center;
+        padding: 10px 0 8px; cursor: grab; flex-shrink: 0; touch-action: none;
+      }
+      .sheet-handle::after {
+        content: ''; width: 38px; height: 4px;
+        background: rgba(255,255,255,0.22); border-radius: 100px;
+        transition: background 0.2s;
+      }
+      .map-sidebar.sheet-half .sheet-handle::after,
+      .map-sidebar.sheet-full .sheet-handle::after { background: rgba(201,169,110,0.5); }
+      .sidebar-list { overflow-y: auto !important; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0; }
     }
   </style>
   <!-- Google Analytics 4 -->
@@ -336,7 +361,8 @@
 <!-- Map + Sidebar -->
 <div class="map-shell">
   <!-- Sidebar -->
-  <aside class="map-sidebar" aria-label="Lista de destinos">
+  <aside class="map-sidebar" aria-label="Lista de destinos" id="mobileSheet">
+    <div class="sheet-handle" id="sheetHandle" aria-hidden="true"></div>
     <div class="sidebar-header">
       <div class="sidebar-title">Destinos con itinerario</div>
       <div class="sidebar-sub">Clic en un destino → ver en mapa · "Ver itinerario" → página completa</div>
@@ -752,6 +778,61 @@ window.addEventListener('resize', () => map.invalidateSize());
   } else {
     authLi.innerHTML = `<a href="login.html" class="nav-login-link">Iniciar sesión</a><a href="registro.html" class="nav-cta">Registrarse</a>`;
   }
+})();
+
+// ── Mobile bottom sheet ─────────────────────────────────────────────────────
+(function(){
+  if (window.innerWidth > 768) return;
+  const sheet = document.getElementById('mobileSheet');
+  const handle = document.getElementById('sheetHandle');
+  if (!sheet || !handle) return;
+
+  const STATES = ['peek', 'half', 'full'];
+  let state = 'peek';
+
+  function applyState(s) {
+    state = s;
+    sheet.classList.remove('sheet-half', 'sheet-full');
+    if (s === 'half') sheet.classList.add('sheet-half');
+    if (s === 'full') sheet.classList.add('sheet-full');
+  }
+
+  handle.addEventListener('click', () => {
+    const i = STATES.indexOf(state);
+    applyState(STATES[(i + 1) % STATES.length]);
+  });
+
+  let startY = 0, startTY = 0, dragging = false;
+
+  function getCurrentTY() {
+    return new DOMMatrix(getComputedStyle(sheet).transform).m42;
+  }
+
+  handle.addEventListener('touchstart', e => {
+    startY = e.touches[0].clientY;
+    startTY = getCurrentTY();
+    dragging = true;
+    sheet.style.transition = 'none';
+  }, { passive: true });
+
+  window.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    sheet.style.transform = `translateY(${Math.max(0, startTY + e.touches[0].clientY - startY)}px)`;
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => {
+    if (!dragging) return;
+    dragging = false;
+    sheet.style.transition = '';
+    const ty = getCurrentTY(), h = sheet.offsetHeight, vh = window.innerHeight;
+    const dists = { peek: Math.abs(ty - (h - 78)), half: Math.abs(ty - (h - vh * 0.52)), full: Math.abs(ty) };
+    applyState(Object.keys(dists).reduce((a, b) => dists[a] <= dists[b] ? a : b));
+  }, { passive: true });
+
+  // Expand when user taps a filter chip
+  document.querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => { if (state === 'peek') applyState('half'); });
+  });
 })();
 </script>
 </body>
