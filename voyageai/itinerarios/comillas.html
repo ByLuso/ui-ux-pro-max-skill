@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comillas desde Santander — El Capricho de Gaudí y el modernismo cántabro | Routlo</title>
+  <meta name="description" content="45 km desde Santander: Comillas, el pueblo más modernista de España fuera de Cataluña. El Capricho de Gaudí (1885), la Pontificia de Domènech i Montaner y el cementerio modernista. ~€48 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c86030; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c86030; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(200,96,48,0.15); border: 1px solid rgba(200,96,48,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c86030; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-main { display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;background:rgba(200,96,48,0.12);border:1px solid rgba(200,96,48,0.3);font-size:0.75rem;font-weight:600;color:#c86030;margin-bottom:12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(200,96,48,0.12) 0%, rgba(4,8,16,0.8) 100%); border: 1px solid rgba(200,96,48,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c86030, #964020); color: #edeef2; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c86030; border-left-color: #c86030; background: rgba(200,96,48,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(200,96,48,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(200,96,48,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #c86030; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(200,96,48,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #c86030; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #c86030; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(200,96,48,0.3); }
+    .hotel-link:hover { border-color: #c86030; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c86030; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c86030,#964020);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#edeef2;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c86030'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c86030'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1583422409516-2895a77efded?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(28,12,4,0.30) 0%,rgba(28,12,4,0.60) 50%,rgba(10,4,0,0.95) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-main" style="margin-bottom:0;">🎨 Gaudí en Cantabria</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">45 km de Santander</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">~45 min en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~€48 · 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Comillas<br><span style="color:#c86030;">La única obra de Gaudí fuera de Cataluña entre palacetes de indianos</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">Comillas es el pueblo más modernista de España fuera de Cataluña. El Capricho de Gaudí (1885), la Pontificia de Comillas (Luis Domènech i Montaner, 1890) y el cementerio modernista (Joan Martorell) forman uno de los conjuntos arquitectónicos más sorprendentes del norte de España, todo en un pueblo de 2.400 habitantes con playa de arena fina.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">Historia de Comillas</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Comillas</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🎨 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">45 km</div><div class="route-info-unit">desde Santander</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~45 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~€48</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Gaudí</div><div class="route-info-value">1885</div><div class="route-info-unit">El Capricho</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Habitantes</div><div class="route-info-value">2.400</div><div class="route-info-unit">pueblo pequeño</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">🎨 Historia de Comillas</h2>
+      <div style="background:linear-gradient(135deg,rgba(200,96,48,0.08) 0%,rgba(0,5,20,0.6) 100%);border:1px solid rgba(200,96,48,0.18);border-radius:16px;padding:24px;margin-bottom:20px;">
+        <h4 style="font-family:'Bodoni Moda',Georgia,serif;font-size:1rem;color:#c86030;margin-bottom:8px;">🎨 El Capricho — la primera obra de Gaudí (1885)</h4>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.6);line-height:1.68;">Antonio Gaudí tenía 33 años cuando construyó El Capricho para el sobrino del Marqués de Comillas (1883-1885). Es su primera obra importante y la única construida fuera de Cataluña. El edificio es una sinfonía de azulejos de girasol, torres orientalistas y celosías moriscas. Gaudí nunca lo visitó en persona: lo diseñó desde Barcelona y lo supervisó a distancia.</p>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(200,96,48,0.08) 0%,rgba(0,5,20,0.6) 100%);border:1px solid rgba(200,96,48,0.18);border-radius:16px;padding:24px;margin-bottom:20px;">
+        <h4 style="font-family:'Bodoni Moda',Georgia,serif;font-size:1rem;color:#c86030;margin-bottom:8px;">🌴 Los Indianos de Comillas — el oro de América</h4>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.6);line-height:1.68;">Los indianos eran emigrantes que hicieron fortuna en Cuba y Puerto Rico (siglos XIX) y volvieron a sus pueblos de origen para construir mansiones de estilo colonial. El Marqués de Comillas (Antonio López, principal armador naviero de España) convirtió el pueblo en un escaparate del poder colonial. Hoy sus palacetes modernistas son el museo al aire libre más insólito de Cantabria.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">El Capricho de Gaudí</div><div class="day-subtitle">La única obra de Gaudí fuera de Cataluña · 1885</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🎨 Capricho de Gaudí (€10/pers)</div>
+            <div class="stop-desc">La única obra de Gaudí fuera de Cataluña. Exterior: azulejos de girasol, torre-minarete, balcones de celosía. Interior: sala de música con acústica especial, comedor con vidriera, distribución asimétrica característica de Gaudí. Exposición permanente sobre la vida y obra del arquitecto. Imprescindible para cualquier seguidor de Gaudí.</div>
+            <div class="stop-price">Entrada: €10/persona · Carnet Joven: €7</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Pontificia de Comillas</div><div class="day-subtitle">Luis Domènech i Montaner · 1890 · Exterior gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Campus universitario neogótico (exterior gratis)</div>
+            <div class="stop-desc">El campus universitario neogótico de Luis Domènech i Montaner (1890) en lo alto del monte. El exterior (paseo libre) tiene torres medievalistas, pináculos y la estatua del Ángel Caído de Lorenzo Coullaut Valera. El jardín romántico con vistas al mar es el mirador más fotogénico de Comillas.</div>
+            <div class="stop-price">Exterior gratuito · Paseo libre</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Cementerio Modernista</div><div class="day-subtitle">Joan Martorell · 1893 · Los panteones de los indianos</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⚰️ Cementerio Modernista de Comillas (€2/pers)</div>
+            <div class="stop-desc">Proyectado por Joan Martorell, el cementerio de Comillas (1893) es uno de los más bellos de España por su arquitectura neogótica y los panteones familiares de los indianos ricos del s. XIX. La estatua del Ángel (Ángel del Silencio) de Martorell es la más reproducida. La guía gratuita en papel (en la entrada) explica los panteones uno a uno.</div>
+            <div class="stop-price">Entrada: €2/persona · Guía en papel gratuita</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Casco histórico y Plaza del Corro</div><div class="day-subtitle">Palacetes indianos · Empanada de maíz</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏘️ Plaza del Corro y palacetes indianos</div>
+            <div class="stop-desc">El centro del pueblo con los palacetes indianos en torno a la plaza. Casas de emigrantes enriquecidos con elementos caribeños: galerías tropicales, colores pastel, palmeras. El bar de la plaza sirve la mejor empanada de maíz de Cantabria.</div>
+            <div class="stop-price">Paseo libre · Empanada: ~€3.50/trozo</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">⑤</div><div><div class="day-title">Playa de Comillas y Oyambre</div><div class="day-subtitle">Arena fina y parque natural · Acceso libre</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏖️ Playa de Comillas + Oyambre (gratis)</div>
+            <div class="stop-desc">La playa urbana de Comillas (500 m, aguas tranquilas) y la vecina Playa de Oyambre (3 km de arena virgen en el Parque Natural, 5 km al este). Ambas acceso libre y gratuito. Oyambre: aparca en el límite del parque y camina 10 min para llegar a la arena.</div>
+            <div class="stop-price">Acceso libre · Parking gratuito</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (90 km ida y vuelta)</span><span>€9</span></div>
+        <div class="budget-row"><span>🎫 Capricho de Gaudí x2</span><span>€20</span></div>
+        <div class="budget-row"><span>🎫 Cementerio Modernista x2</span><span>€4</span></div>
+        <div class="budget-row"><span>🍽️ Empanada + menú del día x2</span><span>€26</span></div>
+        <div class="budget-row"><span>☕ Café</span><span>€4</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span style="color:#c86030;">~€63</span></div>
+      </div>
+      <div class="budget-note">Con Carnet Joven (-26 años) el Capricho baja a €7/pers, dejando el total en ~€57. Sin la entrada al Capricho (solo paseos exteriores y cementerio) el día baja a ~€43 para dos.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Descuento Gaudí:</strong> Con Carnet Joven (-26 años) el Capricho baja a €7/pers. Con la tarjeta museística de Cantabria (€12 anual) la visita es gratuita.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Combinación Santillana-Comillas:</strong> Ambos pueblos están a 15 km entre sí. Visita los dos en un día desde Santander (Santillana por la mañana, Comillas por la tarde).</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Semana del Capricho:</strong> En agosto, el Capricho organiza conciertos nocturnos de cámara en el jardín de Gaudí (precio especial ~€15/pers). Reserva con antelación.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Playa de Oyambre:</strong> La playa virgen del Parque Natural de Oyambre es la más bonita de esta costa. Aparca en el límite del parque y camina 10 min. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Santander" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Santander para visitar Comillas en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a></div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Indianos en el cementerio:</strong> Los panteones del cementerio modernista son una lección de historia del colonialismo en piedra. La guía gratuita en papel (en la entrada) los explica uno a uno.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas desde Santander?</h3>
+      <p>Rutas con mapas detallados, presupuesto desglosado y los mejores rincones de Cantabria.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.39,-4.28],14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[43.462,-3.810],label:'Santander',color:'#5ecb8a',r:9},{coords:[43.389,-4.282],label:'Capricho de Gaudí',color:'#c86030',r:12},{coords:[43.390,-4.280],label:'Pontificia',color:'#c86030',r:10},{coords:[43.386,-4.278],label:'Playa Comillas',color:'#c86030',r:10}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[43.462,-3.810],[43.389,-4.282],[43.390,-4.280],[43.386,-4.278]],{color:'#c86030',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
