@@ -408,7 +408,7 @@
         Con itinerario <span class="sidebar-tab-count">9</span>
       </button>
       <button class="sidebar-tab" id="tabParques" onclick="switchTab('parques')">
-        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">79</span>
+        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">86</span>
       </button>
       <button class="sidebar-tab" id="tabProximos" onclick="switchTab('proximos')">
         Próximos <span class="sidebar-tab-count">1</span>
@@ -427,8 +427,8 @@
     <!-- Stats -->
     <div class="sidebar-stats" aria-label="Estadísticas">
       <div class="stat-item"><span class="stat-val">9</span><span class="stat-lbl">Activos</span></div>
-      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">79</span><span class="stat-lbl">Naturaleza</span></div>
-      <div class="stat-item"><span class="stat-val">88</span><span class="stat-lbl">Itinerarios</span></div>
+      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">86</span><span class="stat-lbl">Naturaleza</span></div>
+      <div class="stat-item"><span class="stat-val">95</span><span class="stat-lbl">Itinerarios</span></div>
     </div>
   </aside>
 
@@ -1613,6 +1613,101 @@ PARQUES.push(
     desc: 'El hotel de titanio de Frank Gehry sobre la bodega Marqués de Riscal (1858) a 25 km de Logroño. Bodega Ysios de Calatrava a 5 km. La Rioja Alavesa entre viñedos centenarios.',
     gradient: 'linear-gradient(135deg,#100204 0%,#160408 100%)',
     url: 'itinerarios/elciego.html'
+  }
+);
+
+// Itinerarios desde Oviedo (7 nuevos)
+PARQUES.push(
+  {
+    id: 'asturias-5-dias',
+    nombre: 'Asturias en 5 días',
+    region: 'Ruta completa · desde Oviedo',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏔️',
+    dias: 5,
+    precio: '~€460',
+    coords: [43.362, -5.849],
+    desc: 'Oviedo, Gijón, Covadonga, Costa Verde y Llanes. La ruta definitiva por Asturias con presupuesto desglosado para dos personas.',
+    gradient: 'linear-gradient(135deg,#001412 0%,#002824 100%)',
+    url: 'itinerarios/asturias-5-dias.html'
+  },
+  {
+    id: 'gijon',
+    nombre: 'Gijón',
+    region: 'Ciudad costera · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '🌊',
+    dias: 1,
+    precio: '~€44',
+    coords: [43.533, -5.661],
+    desc: 'Cimadevilla sobre el mar, Playa de San Lorenzo (3 km), Casa Natal de Jovellanos y sidra escanciada en Calle Begoña a 30 km de Oviedo.',
+    gradient: 'linear-gradient(135deg,#000a14 0%,#001022 100%)',
+    url: 'itinerarios/gijon.html'
+  },
+  {
+    id: 'covadonga',
+    nombre: 'Covadonga y Lagos',
+    region: 'Picos de Europa · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€48',
+    coords: [43.344, -4.998],
+    desc: 'Basílica neorrománica, Cueva Santa con la tumba de Pelayo y los Lagos Enol y Ercina a 1.070 m. Cangas de Onís con su puente medieval.',
+    gradient: 'linear-gradient(135deg,#00120a 0%,#001e10 100%)',
+    url: 'itinerarios/covadonga.html'
+  },
+  {
+    id: 'cudillero',
+    nombre: 'Cudillero',
+    region: 'Costa Verde · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '🎨',
+    dias: 1,
+    precio: '~€48',
+    coords: [43.561, -6.145],
+    desc: 'Casas de colores en anfiteatro sobre el puerto pesquero, el idioma secreto pixueto de los marineros y caldeirada de pescado fresca.',
+    gradient: 'linear-gradient(135deg,#140800 0%,#200e00 100%)',
+    url: 'itinerarios/cudillero.html'
+  },
+  {
+    id: 'llanes',
+    nombre: 'Llanes',
+    region: 'Costa Oriental · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€50',
+    coords: [43.420, -4.752],
+    desc: 'Géiseres naturales en los Bufones de Pría, la cala virgen de Torimbia y la villa amurallada del s. XIII con arquitectura indiana.',
+    gradient: 'linear-gradient(135deg,#000612 0%,#000a1e 100%)',
+    url: 'itinerarios/llanes.html'
+  },
+  {
+    id: 'luarca',
+    nombre: 'Luarca',
+    region: 'Costa Occidental · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '🎣',
+    dias: 1,
+    precio: '~€44',
+    coords: [43.543, -6.531],
+    desc: 'La Perla del Negro: casas blancas sobre acantilados, cementerio marino con la tumba del Nobel Severo Ochoa y mariscos frescos de la lonja.',
+    gradient: 'linear-gradient(135deg,#000810 0%,#000c18 100%)',
+    url: 'itinerarios/luarca.html'
+  },
+  {
+    id: 'somiedo',
+    nombre: 'Somiedo',
+    region: 'Reserva de la Biosfera · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '🐻',
+    dias: 1,
+    precio: '~€42',
+    coords: [43.087, -6.253],
+    desc: 'Parque Natural con la mayor colonia de oso pardo de Europa occidental. Lago del Valle glaciar, brañas vaqueiras y avistamiento al amanecer.',
+    gradient: 'linear-gradient(135deg,#000e06 0%,#001a0a 100%)',
+    url: 'itinerarios/somiedo.html'
   }
 );
 
