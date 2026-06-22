@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gijón desde Oviedo — Playa, sidra y Cimadevilla | Routlo</title>
+  <meta name="description" content="30 km desde Oviedo: Gijón, ciudad costera con Cimadevilla, la Playa de San Lorenzo (3 km urbanos) y la sidra natural de Calle Begoña. ~€44 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    :root { --accent: #4a8abf; --accent-dim: rgba(74,138,191,0.15); --accent-border: rgba(74,138,191,0.3); }
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: var(--accent); line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: var(--accent); margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-roman { display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;background:var(--accent-dim);border:1px solid var(--accent-border);font-size:0.75rem;font-weight:600;color:var(--accent);margin-bottom:12px; }
+    .cta-banner { background: linear-gradient(135deg, var(--accent-dim) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid var(--accent-border); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, var(--accent), #2f6a9a); color: #040810; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-dim); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, var(--accent-dim) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid var(--accent-border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: var(--accent); margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid var(--accent-border); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: var(--accent); font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: var(--accent); text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid var(--accent-border); }
+    .hotel-link:hover { border-color: var(--accent); }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#4a8abf'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#4a8abf'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,12,20,0.30) 0%,rgba(4,16,28,0.60) 50%,rgba(4,8,16,0.95) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-roman" style="margin-bottom:0;">🌊 Ciudad costera</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">30 km de Oviedo</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">~30 min en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~€44 · 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Gijón<br><span style="color:#4a8abf;">Sidra, playa y el alma marinera de Asturias</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">La ciudad más grande de Asturias —y su capital cultural de facto— combina el barrio histórico pesquero de Cimadevilla, los 3 kilómetros de playa urbana de San Lorenzo y la tradición sidrería más auténtica del Cantábrico. A 30 minutos de Oviedo por autopista o en bus cada 15 minutos.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">Historia de Gijón</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Gijón</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🌊 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">30 km</div><div class="route-info-unit">desde Oviedo</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~30 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~€44</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Playa</div><div class="route-info-value">San Lorenzo</div><div class="route-info-unit">3 km urbanos</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Sidra</div><div class="route-info-value">Calle Begoña</div><div class="route-info-unit">templo sidrería</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">⚓ Historia de Gijón</h2>
+      <div class="highlight-box">
+        <h4>🏛️ Gijón: de puerto romano a capital cultural asturiana</h4>
+        <p>Gijón tiene raíces romanas —las Termas Romanas del Campo Valdés (s. I-IV d.C.) son visitables en el centro— pero su identidad la forjó la industrialización del s. XIX: astilleros, minería del carbón asturiano y el mayor puerto de la cornisa cantábrica. Hoy es la ciudad más poblada de Asturias (270.000 hab.), con una oferta cultural de primera —el Museo Barjola, el Elogio del Horizonte de Chillida— y la mejor gastronomía sidrería del norte.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>⛵ Cimadevilla: el corazón pescador que no ha cambiado</h4>
+        <p>El barrio histórico de Cimadevilla se asienta sobre el promontorio romano de Gijón, donde estaba el castro prerromano y después el foro romano. La Colegiata de San Juan Bautista (s. XVII), las calles empedradas medievales y la Plaza Mayor con sus casas de arquitectura indiana forman un conjunto tan auténtico que escenificó varias producciones cinematográficas. Desde la atalaya del Cerro de Santa Catalina, el Elogio del Horizonte de Eduardo Chillida enmarca el Cantábrico con acero cortén.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Llegada a Gijón · 30 min desde Oviedo</div><div class="day-subtitle">A-66 dirección Gijón, aparcamiento junto al Palacio de Deportes</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 La autovía del Cantábrico</div>
+            <div class="stop-desc">A-66 (Autovía de la Plata) dirección norte hasta Gijón, 30 km sin peaje. El paisaje cambia de ciudad interior a costa atlántica en veinte minutos planos. La ría del Piles ya anuncia que el mar está cerca.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento gratuito fines de semana</div>
+            <div class="stop-desc">El aparcamiento junto al Palacio de Deportes (Av. de los Deportes) es gratuito los sábados y domingos. Desde allí, 10 minutos caminando al centro histórico y al paseo marítimo. Entre semana, la zona ORA cuesta €0.75/hora.</div>
+            <div class="stop-price">Sábados y domingos: gratuito</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Cimadevilla — El barrio histórico</div><div class="day-subtitle">Laberinto medieval sobre el mar</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏘️ Calles medievales y atalaya</div>
+            <div class="stop-desc">El barrio histórico de Cimadevilla se recorre por callejas empedradas que suben hacia el Cerro de Santa Catalina. La atalaya en lo alto ofrece una vista de 360° sobre la bahía de Gijón, el puerto deportivo y el Cantábrico abierto. La bajada por las escaleras del puerto devuelve al nivel del mar entre barcas pesqueras.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🗿 Elogio del Horizonte — Chillida</div>
+            <div class="stop-desc">La escultura de acero cortén de Eduardo Chillida (1990) en lo alto del Cerro de Santa Catalina es el símbolo contemporáneo de Gijón. Su estructura enmarca el horizonte del Cantábrico como una ventana al infinito. Acceso libre, abierto las 24 horas.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Plaza Mayor — arquitectura indiana</div>
+            <div class="stop-desc">La Plaza Mayor de Gijón tiene casas con galerías de cristal al estilo asturiano y balconadas de arquitectura indiana (casas construidas por emigrantes retornados de América). El Palacio de Revillagigedo (s. XVIII) cierra la plaza con su torre herreriana.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Paseo marítimo y Playa de San Lorenzo</div><div class="day-subtitle">3 km de arena urbana con bandera azul</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏖️ Playa de San Lorenzo</div>
+            <div class="stop-desc">La playa urbana más larga de Asturias tiene 3 kilómetros de arena fina con bandera azul permanente en verano. El Paseo del Muro bordea toda la orilla con cafeterías, puestos de helado y chiringuitos. El oleaje del Cantábrico es moderado y el fondo arenoso. En julio el agua llega a los 19°C.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚶 Paseo del Muro</div>
+            <div class="stop-desc">El paseo marítimo de Gijón corre paralelo a la playa durante los 3 kilómetros completos. El tramo del Puerto Deportivo a la desembocadura del Piles es el más animado, con las mejores vistas del Cimadevilla sobre el mar. Ideal para un paseo matinal antes de las aglomeraciones veraniegas.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Casa Natal de Jovellanos (€3/pers)</div><div class="day-subtitle">El ilustrado asturiano más importante del s. XVIII</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Museo Jovellanos</div>
+            <div class="stop-desc">Gaspar Melchor de Jovellanos (1744-1811), político ilustrado, reformador agrario y humanista asturiano, nació en este palacio barroco de 1703. El museo documenta su vida, su biblioteca original, su colección de arte y su influencia en la modernización de España del s. XVIII. La visita dura unos 45 minutos.</div>
+            <div class="stop-price">Entrada: €3/persona · Gratis menores de 14</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">⑤</div><div><div class="day-title">Sidra en Calle Begoña · El templo de la sidra asturiana</div><div class="day-subtitle">Decenas de sidrerías desde las 13:00</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🍺 El ritual del escanciado</div>
+            <div class="stop-desc">La Calle Begoña y sus perpendiculares concentran más de treinta sidrerías que escanciando sidra natural asturiana (D.O. Sidra de Asturias) desde las 13:00 hasta medianoche. Pitu de la Vega, El Pote y El Verano son los más auténticos. El ritual es pedir la botella en la barra, que el escanciador la vierta desde altura y beberse el culín antes de que el gas escape.</div>
+            <div class="stop-price">Sidra: ~€1.50/vaso · Botella: €3-4</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🧀 Tapas para acompañar</div>
+            <div class="stop-desc">Con la sidra se pide queso Cabrales (el más intenso de Asturias, madurado en cuevas), chorizo a la sidra, fabes con almejas o cecina de vaca asturiana. Una tabla completa para dos personas sale por €12-15 en cualquier sidrería de la calle.</div>
+            <div class="stop-price">Tabla mixta para 2: €12-15</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (60 km ida y vuelta)</span><span>€6</span></div>
+        <div class="budget-row"><span>🎫 Casa Natal de Jovellanos x2</span><span>€6</span></div>
+        <div class="budget-row"><span>🍽️ Menú del día + sidra x2</span><span>€28</span></div>
+        <div class="budget-row"><span>☕ Café + postre</span><span>€4</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span style="color:#4a8abf;">~€44</span></div>
+      </div>
+      <div class="budget-note">Gijón es de las escapadas más económicas desde Oviedo: la playa, el paseo y Cimadevilla son totalmente gratuitos. El único coste real son la gasolina (o el bus, aún más barato) y la comida.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Escanciar sidra:</strong> El escanciado —verter la sidra desde altura con el brazo extendido— oxigena la bebida y activa sus aromas. Pide que lo hagan en tu mesa y aprende la técnica antes de intentarlo tú. Un culín son unos 50 ml; se bebe rápido antes de que pierda el gas.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Bus Oviedo–Gijón:</strong> ALSA opera buses cada 15 minutos desde la estación de autobuses de Oviedo (Calle Pepe Cosmen). €3.80 ida, 35 minutos. Más cómodo que el coche si quieres beber sidra libremente.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Mercado de El Fontán de Gijón:</strong> El mercado cubierto del centro abre de lunes a sábado hasta las 14:00. La charcutería asturiana, los quesos (Cabrales, Afuega'l Pitu) y las fabas frescas son los mejores regalos gastronómicos para traer de vuelta.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Sunset en Cimadevilla:</strong> El mirador de la atalaya del Cerro de Santa Catalina al atardecer —con el Elogio del Horizonte de Chillida recortado contra el sol que cae sobre el Cantábrico— es uno de los mejores momentos visuales de toda Asturias. Llega 30 min antes del ocaso.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Aparcar gratis:</strong> Los sábados y domingos la zona ORA (zona azul del centro) es gratuita. El aparcamiento del Palacio de Deportes también es libre en fin de semana. Entre semana, el aparcamiento del Puerto Deportivo tiene la tarifa más baja del centro (~€0.80/hora). <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Oviedo" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Oviedo en DiscoverCars" style="display:inline;margin-top:0;">Comparar coches en DiscoverCars</a></div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas de un día desde Oviedo?</h3>
+      <p>Rutas desde la capital asturiana con mapas y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.53,-5.66],13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[43.362,-5.849],label:'Oviedo',color:'#4a8abf',r:9},{coords:[43.533,-5.661],label:'Gijón centro',color:'#4a8abf',r:12},{coords:[43.545,-5.673],label:'Cimadevilla',color:'#4a8abf',r:10},{coords:[43.540,-5.643],label:'Playa San Lorenzo',color:'#4a8abf',r:10}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[43.362,-5.849],[43.533,-5.661],[43.545,-5.673],[43.540,-5.643]],{color:'#4a8abf',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Somiedo desde Oviedo — Osos pardos y brañas de montaña | Routlo</title>
+  <meta name="description" content="70 km desde Oviedo: Somiedo, Reserva de la Biosfera y mayor población de oso pardo de Europa occidental. Lago del Valle, brañas vaqueiras y avistamiento de osos. ~€42 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #4a9a50; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #4a9a50; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(74,154,80,0.15); border: 1px solid rgba(74,154,80,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #4a9a50; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-roman { display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;background:rgba(74,154,80,0.12);border:1px solid rgba(74,154,80,0.3);font-size:0.75rem;font-weight:600;color:#4a9a50;margin-bottom:12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(74,154,80,0.12) 0%, rgba(0,60,20,0.08) 100%); border: 1px solid rgba(74,154,80,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #4a9a50, #2a6a30); color: #fff; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #4a9a50; border-left-color: #4a9a50; background: rgba(74,154,80,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(74,154,80,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(74,154,80,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #4a9a50; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(74,154,80,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #4a9a50; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #4a9a50; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(74,154,80,0.3); }
+    .hotel-link:hover { border-color: #4a9a50; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #4a9a50; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#4a9a50,#2a6a30);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#4a9a50'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#4a9a50'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,16,8,0.30) 0%,rgba(4,20,8,0.60) 50%,rgba(4,8,16,0.95) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-roman" style="margin-bottom:0;">🐻 Parque Natural</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">70 km de Oviedo</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">~1 h en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~€42 · 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Somiedo<br><span style="color:#4a9a50;">Osos pardos y brañas de montaña</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">Reserva de la Biosfera a 70 km de Oviedo, el Parque Natural de Somiedo protege la mayor población de oso pardo de Europa occidental. Lagos glaciares, brañas de los vaqueiros de alzada y una carretera de montaña espectacular hacen de esta escapada la más salvaje y auténtica de Asturias.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">Historia de Somiedo</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Somiedo</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🐻 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">70 km</div><div class="route-info-unit">desde Oviedo</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~1 h</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~€42</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Osos</div><div class="route-info-value">300+</div><div class="route-info-unit">en Cantábrico</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Altitud</div><div class="route-info-value">2.194 m</div><div class="route-info-unit">cota máxima</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">🐻 Historia de Somiedo</h2>
+      <div class="highlight-box">
+        <h4>🐻 Somiedo: Reserva de la Biosfera y osos pardos</h4>
+        <p>El Parque Natural de Somiedo protege la mayor población de oso pardo de Europa occidental (~300 ejemplares en la cordillera Cantábrica). La probabilidad de avistar un oso es mayor al amanecer y al atardecer desde los miradores de Valle del Lago.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🏘️ Las brañas — las aldeas de los vaqueiros de alzada</h4>
+        <p>Los vaqueiros de alzada son una comunidad semi-nómada asturiana que trashumaba entre los puertos de montaña de Somiedo en verano y la costa en invierno. Sus aldeas (brañas) con pallozas circulares de piedra y paja son únicas en Europa.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Pola de Somiedo — Centro del Parque Natural</div><div class="day-subtitle">70 km de Oviedo por la AS-227 · Centro de visitantes gratuito</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🐻 Centro de visitantes del Parque Natural</div>
+            <div class="stop-desc">La capital del concejo de Somiedo, a 70 km de Oviedo por la AS-227 (carretera de montaña espectacular). Centro de visitantes del Parque Natural (gratuito). Información sobre avistamientos de osos en el día.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Valle del Lago — Mirador de osos</div><div class="day-subtitle">Principal punto de avistamiento de oso pardo de España</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🐻 Oso pardo al amanecer y atardecer</div>
+            <div class="stop-desc">El principal punto de avistamiento de oso pardo de España. Con prismáticos (o telescopio desde el aparcamiento), al amanecer/atardecer es habitual ver osos pastando en los praos. La probabilidad en primavera es mayor.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Lago del Valle</div><div class="day-subtitle">3 km de senderismo desde La Riera · Ruta circular 6 km (3h)</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏔️ Lago glaciar a 1.520 m de altitud</div>
+            <div class="stop-desc">Lago glaciar a 1.520 m de altitud. Ruta circular de 6 km (3h) sin dificultad técnica. En verano, las vacas campan libres alrededor del lago. El paisaje es una de las postales más fotografiadas de Asturias.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Braña de Mumián — Aldea vaqueira</div><div class="day-subtitle">Pallozas de piedra del s. XVIII · Acceso libre</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏘️ Aldea de vaqueiros de alzada con pallozas circulares</div>
+            <div class="stop-desc">Pequeña aldea de vaqueiros de alzada con pallozas de piedra. Solo permanecen en activo en verano. Las construcciones más antiguas datan del s. XVIII. Acceso libre y gratuito.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">⑤</div><div><div class="day-title">Almuerzo en Casa Carballo (Pola de Somiedo)</div><div class="day-subtitle">Fabada · Pote asturiano · Queso de Somiedo · Menú ~€14</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🍽️ El restaurante más conocido del Parque</div>
+            <div class="stop-desc">El restaurante más conocido del Parque. Fabada, pote asturiano y el queso de Somiedo curado. Menú del día ~€14 con fabada y postre.</div>
+            <div class="stop-price">Menú del día: ~€14/persona</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (140 km)</span><span>€14</span></div>
+        <div class="budget-row"><span>🍽️ Menú del día x2</span><span>€28</span></div>
+        <div class="budget-row"><span>☕ Café + bollo</span><span>€4</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span style="color:#4a9a50;">~€46</span></div>
+      </div>
+      <div class="budget-note">Somiedo es la escapada de naturaleza más barata y más impresionante desde Oviedo: Reserva de la Biosfera, osos pardos y lagos glaciares a 70 km de la capital.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Amanecer para los osos:</strong> llega a Valle del Lago antes de las 8:00 y espera 30-40 min con prismáticos; es la ventana más fiable para avistar osos.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Carretera de montaña:</strong> la AS-227 desde Cornellana tiene curvas pronunciadas; calcula 1 hora desde Oviedo aunque son 70 km.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Guías de naturaleza:</strong> Somiedo Activo y Naturaleza Activa ofrecen salidas de avistamiento de osos (~€25/pers); mayor probabilidad que en solitario.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Sin cobertura:</strong> en gran parte del parque no hay cobertura móvil; descarga el mapa offline en OsmAnd o Maps.me antes de salir.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Quesería artesanal:</strong> El queso de Somiedo (leche de vaca de montaña) se vende directamente en las queserías del concejo a €8/pieza.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado. Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas de un día desde Oviedo?</h3>
+      <p>Rutas de menos de 2 horas y menos de 100€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.08,-6.25],11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[43.362,-5.849],label:'Oviedo',color:'#5ecb8a',r:9},{coords:[43.087,-6.253],label:'Pola de Somiedo',color:'#4a9a50',r:12},{coords:[43.060,-6.240],label:'Lago del Valle',color:'#4a9a50',r:10},{coords:[43.060,-6.242],label:'Valle del Lago',color:'#4a9a50',r:10}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[43.362,-5.849],[43.087,-6.253],[43.060,-6.240],[43.060,-6.242]],{color:'#4a9a50',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>
