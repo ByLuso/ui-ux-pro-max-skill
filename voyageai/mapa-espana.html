@@ -405,10 +405,10 @@
     <!-- Tabs -->
     <div class="sidebar-tabs">
       <button class="sidebar-tab active" id="tabActivos" onclick="switchTab('activos')">
-        Con itinerario <span class="sidebar-tab-count">9</span>
+        Con itinerario <span class="sidebar-tab-count">12</span>
       </button>
       <button class="sidebar-tab" id="tabParques" onclick="switchTab('parques')">
-        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">100</span>
+        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">97</span>
       </button>
       <button class="sidebar-tab" id="tabProximos" onclick="switchTab('proximos')">
         Próximos <span class="sidebar-tab-count">1</span>
@@ -426,8 +426,8 @@
 
     <!-- Stats -->
     <div class="sidebar-stats" aria-label="Estadísticas">
-      <div class="stat-item"><span class="stat-val">9</span><span class="stat-lbl">Activos</span></div>
-      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">100</span><span class="stat-lbl">Naturaleza</span></div>
+      <div class="stat-item"><span class="stat-val">12</span><span class="stat-lbl">Activos</span></div>
+      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">97</span><span class="stat-lbl">Naturaleza</span></div>
       <div class="stat-item"><span class="stat-val">109</span><span class="stat-lbl">Itinerarios</span></div>
     </div>
   </aside>
@@ -557,6 +557,45 @@ const ACTIVOS = [
     gradient: 'linear-gradient(135deg,#2d1000 0%,#7a2800 100%)',
     img: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/valencia.html'
+  },
+  {
+    id: 'asturias-5-dias',
+    nombre: 'Asturias en 5 días',
+    region: 'Ruta completa · desde Oviedo',
+    emoji: '🏔️',
+    dias: 5,
+    precio: '~€460',
+    coords: [43.362, -5.849],
+    desc: 'Oviedo, Gijón, Covadonga, Costa Verde y Llanes. La ruta definitiva por Asturias con presupuesto desglosado para dos personas.',
+    gradient: 'linear-gradient(135deg,#001412 0%,#002824 100%)',
+    img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/asturias-5-dias.html'
+  },
+  {
+    id: 'galicia-5-dias',
+    nombre: 'Galicia en 5 días',
+    region: 'Ruta circular · desde Santiago',
+    emoji: '🐚',
+    dias: 5,
+    precio: '~€480',
+    coords: [42.880, -8.544],
+    desc: 'Santiago, Costa da Morte, A Coruña (Torre de Hércules), Rías Baixas y Pontevedra. La ruta definitiva por Galicia con presupuesto desglosado.',
+    gradient: 'linear-gradient(135deg,#000e14 0%,#001620 100%)',
+    img: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/galicia-5-dias.html'
+  },
+  {
+    id: 'cantabria-5-dias',
+    nombre: 'Cantabria en 5 días',
+    region: 'Ruta completa · desde Logroño',
+    emoji: '🌊',
+    dias: 5,
+    precio: '~€520',
+    coords: [43.462, -3.810],
+    desc: 'De los Picos de Europa al Cantábrico: Santillana del Mar, Capricho de Gaudí, Valle de Liébana y Castro Urdiales. Base en Santander.',
+    gradient: 'linear-gradient(135deg,#000a12 0%,#00101c 100%)',
+    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/cantabria-5-dias.html'
   }
 ];
 
@@ -1616,21 +1655,8 @@ PARQUES.push(
   }
 );
 
-// Itinerarios desde Santander — Cantabria (7 nuevos)
+// Itinerarios desde Santander — Cantabria (6 escapadas de 1 día)
 PARQUES.push(
-  {
-    id: 'cantabria-5-dias',
-    nombre: 'Cantabria en 5 días',
-    region: 'Ruta completa · desde Logroño',
-    zona: 'Asturias y Cantabria',
-    emoji: '🌊',
-    dias: 5,
-    precio: '~€520',
-    coords: [43.462, -3.810],
-    desc: 'De los Picos de Europa al Cantábrico: Santillana del Mar, Capricho de Gaudí, Valle de Liébana y Castro Urdiales. Base en Santander.',
-    gradient: 'linear-gradient(135deg,#000a12 0%,#00101c 100%)',
-    url: 'itinerarios/cantabria-5-dias.html'
-  },
   {
     id: 'santillana-del-mar',
     nombre: 'Santillana del Mar',
@@ -1711,21 +1737,8 @@ PARQUES.push(
   }
 );
 
-// Itinerarios desde Santiago de Compostela — Galicia (7 nuevos)
+// Itinerarios desde Santiago de Compostela — Galicia (6 escapadas de 1 día)
 PARQUES.push(
-  {
-    id: 'galicia-5-dias',
-    nombre: 'Galicia en 5 días',
-    region: 'Ruta circular · desde Santiago',
-    zona: 'Galicia',
-    emoji: '🐚',
-    dias: 5,
-    precio: '~€480',
-    coords: [42.880, -8.544],
-    desc: 'Santiago, Costa da Morte, A Coruña (Torre de Hércules), Rías Baixas y Pontevedra. La ruta definitiva por Galicia con presupuesto desglosado.',
-    gradient: 'linear-gradient(135deg,#000e14 0%,#001620 100%)',
-    url: 'itinerarios/galicia-5-dias.html'
-  },
   {
     id: 'a-coruna',
     nombre: 'A Coruña',
@@ -1806,21 +1819,8 @@ PARQUES.push(
   }
 );
 
-// Itinerarios desde Oviedo (7 nuevos)
+// Itinerarios desde Oviedo — Asturias (6 escapadas de 1 día)
 PARQUES.push(
-  {
-    id: 'asturias-5-dias',
-    nombre: 'Asturias en 5 días',
-    region: 'Ruta completa · desde Oviedo',
-    zona: 'Asturias y Cantabria',
-    emoji: '🏔️',
-    dias: 5,
-    precio: '~€460',
-    coords: [43.362, -5.849],
-    desc: 'Oviedo, Gijón, Covadonga, Costa Verde y Llanes. La ruta definitiva por Asturias con presupuesto desglosado para dos personas.',
-    gradient: 'linear-gradient(135deg,#001412 0%,#002824 100%)',
-    url: 'itinerarios/asturias-5-dias.html'
-  },
   {
     id: 'gijon',
     nombre: 'Gijón',
