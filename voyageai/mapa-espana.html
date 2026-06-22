@@ -408,7 +408,7 @@
         Con itinerario <span class="sidebar-tab-count">9</span>
       </button>
       <button class="sidebar-tab" id="tabParques" onclick="switchTab('parques')">
-        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">93</span>
+        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">100</span>
       </button>
       <button class="sidebar-tab" id="tabProximos" onclick="switchTab('proximos')">
         Próximos <span class="sidebar-tab-count">1</span>
@@ -427,8 +427,8 @@
     <!-- Stats -->
     <div class="sidebar-stats" aria-label="Estadísticas">
       <div class="stat-item"><span class="stat-val">9</span><span class="stat-lbl">Activos</span></div>
-      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">93</span><span class="stat-lbl">Naturaleza</span></div>
-      <div class="stat-item"><span class="stat-val">102</span><span class="stat-lbl">Itinerarios</span></div>
+      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">100</span><span class="stat-lbl">Naturaleza</span></div>
+      <div class="stat-item"><span class="stat-val">109</span><span class="stat-lbl">Itinerarios</span></div>
     </div>
   </aside>
 
@@ -1613,6 +1613,101 @@ PARQUES.push(
     desc: 'El hotel de titanio de Frank Gehry sobre la bodega Marqués de Riscal (1858) a 25 km de Logroño. Bodega Ysios de Calatrava a 5 km. La Rioja Alavesa entre viñedos centenarios.',
     gradient: 'linear-gradient(135deg,#100204 0%,#160408 100%)',
     url: 'itinerarios/elciego.html'
+  }
+);
+
+// Itinerarios desde Santander — Cantabria (7 nuevos)
+PARQUES.push(
+  {
+    id: 'cantabria-5-dias',
+    nombre: 'Cantabria en 5 días',
+    region: 'Ruta completa · desde Logroño',
+    zona: 'Asturias y Cantabria',
+    emoji: '🌊',
+    dias: 5,
+    precio: '~€520',
+    coords: [43.462, -3.810],
+    desc: 'De los Picos de Europa al Cantábrico: Santillana del Mar, Capricho de Gaudí, Valle de Liébana y Castro Urdiales. Base en Santander.',
+    gradient: 'linear-gradient(135deg,#000a12 0%,#00101c 100%)',
+    url: 'itinerarios/cantabria-5-dias.html'
+  },
+  {
+    id: 'santillana-del-mar',
+    nombre: 'Santillana del Mar',
+    region: 'Villa Medieval · Cantabria',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€30',
+    coords: [43.388, -4.110],
+    desc: 'El casco medieval más intacto de España (s. XII-XVIII), la Colegiata románica y la Neocueva de Altamira con pinturas de 16.500 años.',
+    gradient: 'linear-gradient(135deg,#120c00 0%,#1a1200 100%)',
+    url: 'itinerarios/santillana-del-mar.html'
+  },
+  {
+    id: 'comillas',
+    nombre: 'Comillas',
+    region: 'Gaudí en Cantabria · Modernismo',
+    zona: 'Asturias y Cantabria',
+    emoji: '🎨',
+    dias: 1,
+    precio: '~€48',
+    coords: [43.387, -4.284],
+    desc: 'El Capricho de Gaudí (1885, único fuera de Cataluña), Pontificia de Domènech i Montaner y cementerio modernista entre palacetes de indianos.',
+    gradient: 'linear-gradient(135deg,#120600 0%,#1a0800 100%)',
+    url: 'itinerarios/comillas.html'
+  },
+  {
+    id: 'san-vicente-barquera',
+    nombre: 'San Vicente de la Barquera',
+    region: 'Puerto Medieval · Cantabria',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€38',
+    coords: [43.388, -4.389],
+    desc: 'Castillo del s. XIII y puente de 28 arcos sobre la ría de La Rabia con los Picos al fondo. La postal más fotogénica de Cantabria.',
+    gradient: 'linear-gradient(135deg,#000c08 0%,#001210 100%)',
+    url: 'itinerarios/san-vicente-barquera.html'
+  },
+  {
+    id: 'potes',
+    nombre: 'Potes y el Liébana',
+    region: 'Valle de Liébana · Cantabria',
+    zona: 'Asturias y Cantabria',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€44',
+    coords: [43.154, -4.620],
+    desc: 'Desfiladero de la Hermida, Potes medieval, Monasterio de Santo Toribio (Lignum Crucis más grande del mundo) y orujo gratis en destilería.',
+    gradient: 'linear-gradient(135deg,#040a00 0%,#081000 100%)',
+    url: 'itinerarios/potes.html'
+  },
+  {
+    id: 'laredo',
+    nombre: 'Laredo',
+    region: 'Playa La Salvé · Cantabria',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏖️',
+    dias: 1,
+    precio: '~€36',
+    coords: [43.429, -3.413],
+    desc: 'La Salvé, la playa más larga de Cantabria (5 km), la Puebla Vieja medieval del s. XIII y ferry a Santoña para comprar anchoas en fábrica.',
+    gradient: 'linear-gradient(135deg,#000810 0%,#000c18 100%)',
+    url: 'itinerarios/laredo.html'
+  },
+  {
+    id: 'lierganes',
+    nombre: 'Liérganes',
+    region: 'Termas y Hombre-Pez · Cantabria',
+    zona: 'Asturias y Cantabria',
+    emoji: '💧',
+    dias: 1,
+    precio: '~€26',
+    coords: [43.353, -3.749],
+    desc: 'La leyenda del Hombre-Pez (1673), balneario de Carlos III (1777), puente medieval sobre el río Miera y sobaos pasiegos a 25 km de Santander.',
+    gradient: 'linear-gradient(135deg,#04080e 0%,#060c14 100%)',
+    url: 'itinerarios/lierganes.html'
   }
 );
 
