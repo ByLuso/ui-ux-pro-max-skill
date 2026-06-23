@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vuelos Nupciales de Hormigas — Calendario Interactivo</title>
+
+  <!-- Google Fonts: Exo + Roboto Mono (design system) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Exo:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet 1.9 -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    /* ─── Design Tokens ─────────────────────────────────── */
+    :root {
+      --c-primary:      #15803D;
+      --c-primary-dk:   #14532D;
+      --c-secondary:    #059669;
+      --c-accent:       #D97706;
+      --c-accent-dk:    #92400E;
+      --c-bg:           #F0FDF4;
+      --c-surface:      #FFFFFF;
+      --c-muted:        #F0F7F3;
+      --c-border:       #BBF7D0;
+      --c-text:         #0F172A;
+      --c-text-muted:   #64748B;
+      --c-sky:          #0EA5E9;
+      --c-violet:       #6366F1;
+      --radius-card:    20px;
+      --radius-btn:     14px;
+      --shadow-card:    4px 4px 0 #BBF7D0;
+      --shadow-card-hv: 6px 6px 0 #86EFAC;
+      --transition:     150ms ease-out;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Exo', sans-serif;
+      background: var(--c-bg);
+      color: var(--c-text);
+      line-height: 1.5;
+    }
+
+    /* ─── Claymorphism card ──────────────────────────────── */
+    .card {
+      background: var(--c-surface);
+      border-radius: var(--radius-card);
+      border: 3px solid var(--c-border);
+      box-shadow: var(--shadow-card);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-card-hv); }
+
+    /* ─── Clay button ────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Exo', sans-serif; font-weight: 600; font-size: 13px;
+      padding: 8px 16px;
+      border-radius: var(--radius-btn);
+      background: var(--c-primary); color: #fff;
+      border: 2.5px solid var(--c-primary-dk);
+      box-shadow: 3px 3px 0 var(--c-primary-dk);
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .btn:hover  { transform: translateY(-1px); box-shadow: 4px 4px 0 var(--c-primary-dk); }
+    .btn:active { transform: translateY(1px);  box-shadow: 1px 1px 0 var(--c-primary-dk); }
+    .btn:focus-visible { outline: 3px solid var(--c-primary); outline-offset: 2px; }
+
+    .btn-ghost {
+      background: #fff; color: var(--c-primary);
+      border-color: var(--c-primary);
+      box-shadow: 3px 3px 0 var(--c-border);
+    }
+    .btn-ghost:hover { box-shadow: 4px 4px 0 var(--c-border); }
+
+    .btn.active-tab {
+      background: var(--c-primary); color: #fff;
+      border-color: var(--c-primary-dk);
+    }
+
+    /* ─── Zone pill ──────────────────────────────────────── */
+    .zone-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 999px;
+      border: 2.5px solid var(--c-border);
+      font-family: 'Exo', sans-serif; font-weight: 600; font-size: 12px;
+      background: #fff; color: var(--c-text-muted);
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+    .zone-pill:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,.08); }
+    .zone-pill.active { background: var(--c-primary); color: #fff; border-color: var(--c-primary-dk); }
+    .zone-pill:focus-visible { outline: 3px solid var(--c-primary); outline-offset: 2px; }
+
+    /* ─── Map ────────────────────────────────────────────── */
+    #map {
+      height: 520px;
+      border-radius: 16px;
+      border: 3px solid var(--c-border);
+      overflow: hidden;
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 14px !important;
+      border: 2.5px solid var(--c-border) !important;
+      font-family: 'Exo', sans-serif !important;
+      box-shadow: 4px 4px 0 #86EFAC !important;
+    }
+    .leaflet-popup-tip-container { display: none; }
+
+    /* ─── Species card ───────────────────────────────────── */
+    .sp-card {
+      border-left: 4px solid var(--c-primary);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      box-shadow: 3px 3px 0 #D1FAE5;
+      animation: slideIn 250ms ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(14px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ─── Calendar table ─────────────────────────────────── */
+    .cal-wrap { overflow-x: auto; }
+    .cal-grid {
+      display: grid;
+      gap: 3px;
+      min-width: 700px;
+    }
+    .cal-cell {
+      height: 36px; border-radius: 6px;
+      background: #F0F7F3;
+      transition: background 200ms;
+    }
+    .cal-cell.active { background: var(--c-primary); }
+    .cal-cell.peak   { background: var(--c-accent); }
+    .cal-cell.today-col { outline: 2.5px solid var(--c-text); outline-offset: 1px; }
+
+    /* ─── Month bar (species panel) ──────────────────────── */
+    .mo-bar {
+      display: grid; grid-template-columns: repeat(12, 1fr);
+      gap: 2px; margin-bottom: 4px;
+    }
+    .mo-seg {
+      height: 14px; border-radius: 3px;
+      background: #E2EFE7;
+      transition: background 200ms;
+    }
+    .mo-seg.active { background: var(--c-primary); }
+    .mo-seg.peak   { background: var(--c-accent); }
+    .mo-seg.now    { outline: 2px solid var(--c-text); outline-offset: 1px; }
+
+    /* ─── Stat badge ─────────────────────────────────────── */
+    .stat-num {
+      font-family: 'Roboto Mono', monospace;
+      font-weight: 700; font-size: 2.2rem;
+      line-height: 1;
+    }
+
+    /* ─── Hero ───────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(140deg, #052e16 0%, #14532d 40%, #15803d 75%, #166534 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 85%, rgba(217,119,6,.28) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 15%, rgba(5,150,105,.35) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* ─── "flying now" badge ─────────────────────────────── */
+    .now-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 700;
+      background: #FEF3C7; color: #92400E;
+      border: 1.5px solid #FDE68A;
+    }
+
+    /* ─── Ant SVG icon helper ────────────────────────────── */
+    .ant-svg { width: 20px; height: 20px; }
+
+    /* ─── Walking ant animation ──────────────────────────── */
+    @keyframes antWalk {
+      0%,100% { transform: translateX(0) rotate(0deg); }
+      25%      { transform: translateX(3px) rotate(4deg); }
+      75%      { transform: translateX(-3px) rotate(-4deg); }
+    }
+    .ant-walk { animation: antWalk 1.2s ease-in-out infinite; display: inline-block; }
+
+    /* ─── Scrollbar ──────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 7px; }
+    ::-webkit-scrollbar-track { background: var(--c-muted); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb { background: #86EFAC; border-radius: 8px; }
+
+    /* ─── Responsive ─────────────────────────────────────── */
+    @media (max-width: 1023px) { #map { height: 380px; } }
+    @media (max-width: 639px)  { #map { height: 300px; } }
+
+    /* ─── Table ──────────────────────────────────────────── */
+    table { border-collapse: collapse; width: 100%; }
+    th, td { text-align: left; vertical-align: middle; }
+    tbody tr:hover { background: #F0FDF4 !important; }
+
+    /* ─── Details ────────────────────────────────────────── */
+    details summary { list-style: none; cursor: pointer; }
+    details summary::-webkit-details-marker { display: none; }
+
+    /* Prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════════ -->
+<header class="hero" role="banner">
+  <div style="position:relative;z-index:1; max-width:1280px; margin:0 auto; padding:56px 24px 48px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <span class="ant-walk" aria-hidden="true" style="font-size:2.8rem;">🐜</span>
+      <span style="background:#A7F3D0;color:#065F46;font-size:11px;font-weight:700;padding:4px 12px;border-radius:999px;border:1.5px solid #6EE7B7;">
+        ENTOMOLOGÍA DE CAMPO
+      </span>
+    </div>
+
+    <h1 style="font-size:clamp(2rem,5vw,3.8rem);font-weight:700;color:#fff;line-height:1.15;margin-bottom:16px;text-shadow:2px 2px 0 rgba(0,0,0,.25);">
+      Vuelos Nupciales<br>
+      <span style="color:#86EFAC;">de Hormigas</span>
+    </h1>
+
+    <p style="font-size:clamp(.95rem,2vw,1.2rem);color:#D1FAE5;max-width:580px;font-weight:300;margin-bottom:32px;">
+      Descubre cuándo y dónde ocurren los vuelos nupciales de las hormigas
+      en todo el mundo. Explora el mapa interactivo y el calendario por zonas
+      geográficas.
+    </p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:32px;">
+      <div>
+        <div class="stat-num" style="color:#86EFAC;" id="heroSpecies">45+</div>
+        <div style="color:#A7F3D0;font-size:.85rem;">Especies registradas</div>
+      </div>
+      <div>
+        <div class="stat-num" style="color:#86EFAC;">12</div>
+        <div style="color:#A7F3D0;font-size:.85rem;">Regiones del mundo</div>
+      </div>
+      <div>
+        <div class="stat-num" style="color:#86EFAC;" id="heroActive">—</div>
+        <div style="color:#A7F3D0;font-size:.85rem;">Especies activas hoy</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative ant silhouette -->
+  <div aria-hidden="true" style="position:absolute;right:-20px;bottom:-10px;font-size:200px;opacity:.07;line-height:1;transform:scaleX(-1);pointer-events:none;">🐜</div>
+</header>
+
+<!-- ════════════════════════════════════════════════════════
+     FLYING NOW BANNER
+════════════════════════════════════════════════════════ -->
+<div id="flyingNowBanner" style="background:#FFFBEB;border-bottom:2px solid #FDE68A;padding:10px 24px;">
+  <div style="max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:12px;">
+    <span style="font-weight:700;font-size:13px;color:#92400E;">Volando este mes:</span>
+    <div id="flyingNowTags" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════════════════ -->
+<main style="max-width:1280px;margin:0 auto;padding:32px 20px;">
+
+  <!-- Zone filters -->
+  <section aria-label="Filtros por zona" style="margin-bottom:28px;">
+    <h2 style="font-size:1rem;font-weight:700;color:var(--c-primary);margin-bottom:12px;">Filtrar por zona</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;" id="zoneFilters">
+      <button class="zone-pill active" data-zone="all" onclick="resetView(this)" aria-pressed="true">
+        <svg viewBox="0 0 20 20" class="ant-svg" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-11.25a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5h-1.5zM10 15a1 1 0 110-2 1 1 0 010 2z" clip-rule="evenodd"/></svg>
+        Todas las zonas
+      </button>
+      <!-- Dynamic pills injected by JS -->
+    </div>
+  </section>
+
+  <!-- Map + Species panel -->
+  <div style="display:grid;grid-template-columns:1fr 360px;gap:20px;margin-bottom:32px;align-items:start;" id="mainGrid">
+
+    <!-- Map -->
+    <div class="card" style="padding:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <h2 style="font-size:1.1rem;font-weight:700;color:var(--c-primary);">Mapa Interactivo</h2>
+        <span style="font-size:11px;background:var(--c-muted);color:var(--c-text-muted);border:1.5px solid var(--c-border);border-radius:999px;padding:4px 12px;">
+          Clic en una región · Zoom para ver colonias
+        </span>
+      </div>
+      <div id="map" role="application" aria-label="Mapa interactivo de zonas con vuelos nupciales de hormigas"></div>
+      <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;">
+        <span style="font-size:11px;color:var(--c-text-muted);display:flex;align-items:center;gap:5px;">
+          <span style="width:12px;height:12px;background:var(--c-primary);border-radius:2px;display:inline-block;"></span> Vuelos posibles
+        </span>
+        <span style="font-size:11px;color:var(--c-text-muted);display:flex;align-items:center;gap:5px;">
+          <span style="width:12px;height:12px;background:var(--c-accent);border-radius:2px;display:inline-block;"></span> Pico máximo
+        </span>
+        <span style="font-size:11px;color:var(--c-text-muted);display:flex;align-items:center;gap:5px;">
+          <span style="width:12px;height:12px;background:#E2EFE7;border-radius:2px;display:inline-block;border:1px solid #BBF7D0;"></span> Sin vuelos
+        </span>
+      </div>
+    </div>
+
+    <!-- Species panel -->
+    <div class="card" style="padding:16px;max-height:610px;overflow-y:auto;" id="speciesPanel" aria-live="polite" aria-label="Especies de la zona seleccionada">
+      <h2 style="font-size:1.1rem;font-weight:700;color:var(--c-primary);margin-bottom:12px;">Especies en la zona</h2>
+      <div id="speciesContent">
+        <div style="text-align:center;padding:40px 16px;color:var(--c-text-muted);">
+          <svg viewBox="0 0 64 64" width="56" height="56" fill="none" aria-hidden="true" style="margin:0 auto 12px;display:block;">
+            <circle cx="32" cy="32" r="30" stroke="#BBF7D0" stroke-width="3" fill="#F0FDF4"/>
+            <text x="32" y="43" text-anchor="middle" font-size="26" fill="#86EFAC">🗺</text>
+          </svg>
+          <p style="font-weight:600;font-size:.9rem;">Selecciona una región</p>
+          <p style="font-size:.8rem;margin-top:4px;">Haz clic en el mapa o usa los filtros</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Responsive: stack on mobile -->
+  <style>
+    @media (max-width:900px) {
+      #mainGrid { grid-template-columns: 1fr !important; }
+      #speciesPanel { max-height: 400px !important; }
+    }
+  </style>
+
+  <!-- ──────────────────────────────────────────
+       CALENDAR SECTION
+  ────────────────────────────────────────── -->
+  <section class="card" style="padding:24px;margin-bottom:32px;" aria-label="Calendario anual de vuelos nupciales">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+      <h2 style="font-size:1.4rem;font-weight:700;color:var(--c-primary);">Calendario Anual de Vuelos</h2>
+      <div style="display:flex;align-items:center;gap:12px;font-size:11px;color:var(--c-text-muted);">
+        <span style="display:flex;align-items:center;gap:4px;">
+          <span style="width:14px;height:14px;background:var(--c-primary);border-radius:3px;display:inline-block;"></span> Vuelos posibles
+        </span>
+        <span style="display:flex;align-items:center;gap:4px;">
+          <span style="width:14px;height:14px;background:var(--c-accent);border-radius:3px;display:inline-block;"></span> Pico máximo
+        </span>
+        <span style="display:flex;align-items:center;gap:4px;">
+          <span style="width:14px;height:14px;border-radius:3px;display:inline-block;border:2.5px solid #0F172A;"></span> Mes actual
+        </span>
+      </div>
+    </div>
+
+    <!-- Region tabs -->
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;" id="calTabs" role="tablist" aria-label="Regiones del calendario"></div>
+
+    <!-- Grid -->
+    <div class="cal-wrap">
+      <div id="calContent"></div>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────
+       INFO CARDS
+  ────────────────────────────────────────── -->
+  <section style="margin-bottom:32px;" aria-label="¿Qué es un vuelo nupcial?">
+    <h2 style="font-size:1.4rem;font-weight:700;color:var(--c-primary);margin-bottom:16px;">¿Qué es un vuelo nupcial?</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
+
+      <div class="card" style="padding:22px;">
+        <div aria-hidden="true" style="font-size:2rem;margin-bottom:10px;">
+          <svg viewBox="0 0 40 40" width="40" height="40" fill="none">
+            <circle cx="20" cy="20" r="18" fill="#FEF3C7" stroke="#FDE68A" stroke-width="2"/>
+            <text x="20" y="27" text-anchor="middle" font-size="18" fill="#D97706">🌡</text>
+          </svg>
+        </div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--c-primary);margin-bottom:8px;">Condiciones Climáticas</h3>
+        <p style="font-size:.85rem;color:#475569;line-height:1.6;">
+          Los vuelos ocurren en condiciones precisas: temperatura 18–30 °C, humedad alta
+          (frecuentemente tras lluvias), viento suave y cielos despejados. Cada especie
+          responde a sus propios umbrales ambientales.
+        </p>
+      </div>
+
+      <div class="card" style="padding:22px;">
+        <div aria-hidden="true" style="font-size:2rem;margin-bottom:10px;">
+          <svg viewBox="0 0 40 40" width="40" height="40" fill="none">
+            <circle cx="20" cy="20" r="18" fill="#DCFCE7" stroke="#86EFAC" stroke-width="2"/>
+            <text x="20" y="27" text-anchor="middle" font-size="18" fill="#15803D">👑</text>
+          </svg>
+        </div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--c-primary);margin-bottom:8px;">Reinas y Machos Alados</h3>
+        <p style="font-size:.85rem;color:#475569;line-height:1.6;">
+          Las reinas vírgenes (aladas) y los machos salen en masa del nido, se aparean en vuelo
+          y las reinas fecundadas fundan nuevas colonias. Los machos mueren
+          poco después del vuelo.
+        </p>
+      </div>
+
+      <div class="card" style="padding:22px;">
+        <div aria-hidden="true" style="font-size:2rem;margin-bottom:10px;">
+          <svg viewBox="0 0 40 40" width="40" height="40" fill="none">
+            <circle cx="20" cy="20" r="18" fill="#EDE9FE" stroke="#DDD6FE" stroke-width="2"/>
+            <text x="20" y="27" text-anchor="middle" font-size="18" fill="#6366F1">⏰</text>
+          </svg>
+        </div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--c-primary);margin-bottom:8px;">Sincronización Masiva</h3>
+        <p style="font-size:.85rem;color:#475569;line-height:1.6;">
+          Colonias de la misma especie sincronizan el vuelo usando señales ambientales
+          para maximizar la variabilidad genética. En UK este fenómeno se conoce
+          como <em>"Flying Ant Day"</em>.
+        </p>
+      </div>
+
+      <div class="card" style="padding:22px;">
+        <div aria-hidden="true" style="font-size:2rem;margin-bottom:10px;">
+          <svg viewBox="0 0 40 40" width="40" height="40" fill="none">
+            <circle cx="20" cy="20" r="18" fill="#FFF7ED" stroke="#FED7AA" stroke-width="2"/>
+            <text x="20" y="27" text-anchor="middle" font-size="18" fill="#EA580C">🧬</text>
+          </svg>
+        </div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--c-primary);margin-bottom:8px;">Nueva Colonia</h3>
+        <p style="font-size:.85rem;color:#475569;line-height:1.6;">
+          Una reina puede almacenar esperma durante décadas. Tras el vuelo excava un nido,
+          pone sus primeros huevos y cuida personalmente a las primeras obreras
+          hasta que la colonia es autosuficiente.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────
+       TRIGGERS TABLE
+  ────────────────────────────────────────── -->
+  <section class="card" style="padding:24px;margin-bottom:48px;" aria-label="Tabla de desencadenantes por especie">
+    <h2 style="font-size:1.4rem;font-weight:700;color:var(--c-primary);margin-bottom:16px;">
+      Desencadenantes por Especie
+    </h2>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr style="background:#F0FDF4;">
+            <th style="padding:10px 14px;font-size:12px;font-weight:700;color:var(--c-primary);border-radius:8px 0 0 8px;white-space:nowrap;">Especie</th>
+            <th style="padding:10px 14px;font-size:12px;font-weight:700;color:var(--c-primary);white-space:nowrap;">Región</th>
+            <th style="padding:10px 14px;font-size:12px;font-weight:700;color:var(--c-primary);white-space:nowrap;">Temp. °C</th>
+            <th style="padding:10px 14px;font-size:12px;font-weight:700;color:var(--c-primary);white-space:nowrap;">Desencadenante</th>
+            <th style="padding:10px 14px;font-size:12px;font-weight:700;color:var(--c-primary);border-radius:0 8px 8px 0;white-space:nowrap;">Momento del día</th>
+          </tr>
+        </thead>
+        <tbody id="triggerTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════ -->
+<footer style="background:#052e16;color:#86EFAC;text-align:center;padding:32px 20px;">
+  <div class="ant-walk" aria-hidden="true" style="font-size:2rem;display:inline-block;margin-bottom:8px;">🐜</div>
+  <p style="font-weight:700;font-size:1.1rem;">AntFlight Calendar</p>
+  <p style="color:#A7F3D0;font-size:.85rem;margin-top:6px;">Datos basados en observaciones científicas de campo</p>
+  <p style="color:#4ADE80;font-size:.75rem;margin-top:4px;">Fuentes: AntWeb · GBIF · iNaturalist · literatura entomológica revisada por pares</p>
+</footer>
+
+
+<!-- ════════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════ -->
+<script>
+// ─────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────
+const REGIONS = {
+  na_east: {
+    name: 'América del Norte (Este)', short: 'N. América E.',
+    color: '#15803D', border: '#14532D', icon: '🌲',
+    center: [42, -80], zoom: 4,
+    bounds: [[24,-100],[55,-60]],
+    species: [
+      { id:'lasius_neoniger', sci:'Lasius neoniger', com:'Hormiga negra del jardín E.',
+        months:[7,8,9], peak:[8], color:'#15803D',
+        temp:'22–28', time:'Tarde (14–18 h)',
+        trigger:'Día caluroso tras lluvia de verano',
+        desc:'Una de las más comunes en jardines de América del Norte. Sus vuelos masivos pueden durar varios días consecutivos tras las primeras lluvias de agosto.',
+        fact:'Puede tener múltiples vuelos al año si las condiciones climáticas son favorables.',
+        colonies:1200, workers:'5 000–20 000' },
+      { id:'solenopsis_invicta', sci:'Solenopsis invicta', com:'Hormiga colorada de fuego',
+        months:[3,4,5,6,7,8,9,10], peak:[4,5], color:'#DC2626',
+        temp:'22–35', time:'Mañana (9–12 h)',
+        trigger:'Temperatura > 22 °C, baja humedad',
+        desc:'Especie invasora de alta preocupación. Sus vuelos pueden ocurrir durante meses en el sureste de EE. UU., con picos en primavera.',
+        fact:'Las reinas pueden fundar colonias solas o en grupos (pleometrósis cooperativa).',
+        colonies:3400, workers:'100 000–500 000' },
+      { id:'camponotus_penn', sci:'Camponotus pennsylvanicus', com:'Hormiga carpintera negra',
+        months:[5,6,7], peak:[6], color:'#1D4ED8',
+        temp:'18–26', time:'Noche (21–24 h)',
+        trigger:'Noches cálidas > 18 °C, sin lluvia',
+        desc:'La hormiga carpintera más grande de América del Norte. Vuela principalmente durante las noches cálidas y húmedas de junio.',
+        fact:'Anida en madera muerta o dañada, pero no la consume como alimento.',
+        colonies:850, workers:'3 000–10 000' },
+      { id:'pogonomyrmex_barbatus', sci:'Pogonomyrmex barbatus', com:'Hormiga cosechadora roja',
+        months:[7,8], peak:[7,8], color:'#D97706',
+        temp:'25–32', time:'Mañana (8–11 h)',
+        trigger:'Primera lluvia de monzón del año',
+        desc:'Sus vuelos están perfectamente sincronizados con las lluvias de monzón del suroeste. Todas las colonias de una zona vuelan el mismo día.',
+        fact:'El veneno es seis veces más potente por peso que el de una abeja melífera europea.',
+        colonies:620, workers:'10 000–15 000' }
+    ]
+  },
+  na_west: {
+    name: 'América del Norte (Oeste)', short: 'N. América O.',
+    color: '#7C3AED', border: '#5B21B6', icon: '🌵',
+    center: [38,-118], zoom: 4,
+    bounds: [[24,-130],[55,-100]],
+    species: [
+      { id:'pogonomyrmex_calif', sci:'Pogonomyrmex californicus', com:'Hormiga cosechadora californiana',
+        months:[7,8,9], peak:[8], color:'#D97706',
+        temp:'35–45', time:'Mediodía (9–12 h)',
+        trigger:'Calor extremo > 35 °C, cielos despejados',
+        desc:'Adaptada a los desiertos de California y Nevada. Sus vuelos en pleno verano aprovechan las corrientes de aire caliente para mayor alcance.',
+        fact:'Las reinas pueden vivir hasta 30 años, la mayor longevidad documentada en insectos.',
+        colonies:1400, workers:'2 000–8 000' },
+      { id:'acanthomyops_clav', sci:'Acanthomyops claviger', com:'Hormiga amarilla subterránea',
+        months:[9,10], peak:[9], color:'#CA8A04',
+        temp:'15–22', time:'Noche (19–23 h)',
+        trigger:'Primera lluvia de otoño, > 15 °C',
+        desc:'Raramente vista excepto durante sus vuelos nocturnos de otoño. Emite un característico olor a limón cuando se le perturba.',
+        fact:'Emite compuestos iridoidales cítricos detectables a varios metros de distancia.',
+        colonies:3100, workers:'10 000–50 000' }
+    ]
+  },
+  europe: {
+    name: 'Europa Templada', short: 'Europa',
+    color: '#0EA5E9', border: '#0369A1', icon: '🏔',
+    center: [52,10], zoom: 4,
+    bounds: [[35,-10],[70,40]],
+    species: [
+      { id:'lasius_niger_eu', sci:'Lasius niger', com:'Hormiga negra común',
+        months:[7,8], peak:[7,8], color:'#0F172A',
+        temp:'20–27', time:'Mediodía (11–15 h)',
+        trigger:'Día caluroso tras lluvia, > 20 °C',
+        desc:'Famosa en el Reino Unido como "Flying Ant Day". Millones de hormigas vuelan simultáneamente el mismo día en toda una región.',
+        fact:'Las gaviotas y vencejos detectan el evento y llegan en masa a alimentarse de los alados.',
+        colonies:8500, workers:'5 000–15 000' },
+      { id:'formica_rufa', sci:'Formica rufa', com:'Hormiga roja de los bosques',
+        months:[5,6,7], peak:[6], color:'#DC2626',
+        temp:'18–25', time:'Mediodía (10–14 h)',
+        trigger:'Días soleados consecutivos, > 18 °C',
+        desc:'Especie protegida en muchos países europeos. Sus grandes montículos en bosques de coníferas son inconfundibles e icónicos.',
+        fact:'El montículo actúa como captador solar para calentar el nido durante la primavera.',
+        colonies:4200, workers:'100 000–500 000' },
+      { id:'myrmica_rubra', sci:'Myrmica rubra', com:'Hormiga roja europea',
+        months:[7,8,9], peak:[8], color:'#B91C1C',
+        temp:'16–24', time:'Tarde (15–19 h)',
+        trigger:'Tardes cálidas prolongadas, > 16 °C',
+        desc:'Hormiga con aguijón muy doloroso para su tamaño. Sus vuelos de agosto frecuentemente coinciden con los de Lasius niger.',
+        fact:'Puede tener múltiples reinas fértiles en el mismo nido (poliginia).',
+        colonies:6800, workers:'100–2 000' },
+      { id:'lasius_flavus', sci:'Lasius flavus', com:'Hormiga amarilla de los prados',
+        months:[8,9], peak:[8], color:'#CA8A04',
+        temp:'18–26', time:'Mediodía (11–16 h)',
+        trigger:'Días secos y soleados de agosto',
+        desc:'Vive mayormente bajo tierra cultivando pulgones de raíces. Sus vuelos son menos espectaculares al ser más breves y localizados.',
+        fact:'Nunca sale a la superficie excepto durante los vuelos nupciales anuales.',
+        colonies:7200, workers:'2 000–10 000' }
+    ]
+  },
+  mediterranean: {
+    name: 'Mediterráneo y N. África', short: 'Mediterráneo',
+    color: '#F59E0B', border: '#B45309', icon: '🌊',
+    center: [33,15], zoom: 4,
+    bounds: [[20,-10],[45,40]],
+    species: [
+      { id:'messor_barbarus', sci:'Messor barbarus', com:'Hormiga cosechadora mediterránea',
+        months:[9,10,11], peak:[10], color:'#92400E',
+        temp:'18–24', time:'Mañana (8–12 h)',
+        trigger:'Primeras lluvias de otoño, 18–24 °C',
+        desc:'Especie icónica del Mediterráneo. Sus vuelos de otoño coinciden con las primeras lluvias, cuando el suelo está húmedo para fundar nuevos nidos.',
+        fact:'Las colonias almacenan semillas en cámaras subterráneas que pueden mantener por años.',
+        colonies:3100, workers:'5 000–30 000' },
+      { id:'cataglyphis_bic', sci:'Cataglyphis bicolor', com:'Hormiga del desierto bicolor',
+        months:[4,5,6], peak:[5], color:'#92400E',
+        temp:'30–45', time:'Mediodía extremo (12–14 h)',
+        trigger:'Temperatura > 30 °C, sol directo sin nubes',
+        desc:'Una de las hormigas más resistentes al calor del mundo. Sus vuelos ocurren en las horas más calurosas del día cuando los depredadores están inactivos.',
+        fact:'Navega por polarización de la luz solar con una precisión de décimas de grado.',
+        colonies:1800, workers:'1 000–3 000' },
+      { id:'crematogaster_sc', sci:'Crematogaster scutellaris', com:'Hormiga acróbata',
+        months:[8,9,10], peak:[9], color:'#DC2626',
+        temp:'22–32', time:'Tarde (16–20 h)',
+        trigger:'Tardes calurosas y secas de septiembre',
+        desc:'Reconocible por su abdomen en forma de corazón que levanta al sentirse amenazada. Común en robles y olivos de la cuenca mediterránea.',
+        fact:'El gáster en forma de corazón es una característica única dentro de los mirmicinos.',
+        colonies:2900, workers:'2 000–8 000' }
+    ]
+  },
+  trop_americas: {
+    name: 'Américas Tropicales', short: 'Am. Tropicales',
+    color: '#059669', border: '#065F46', icon: '🌿',
+    center: [0,-65], zoom: 3,
+    bounds: [[-55,-85],[25,-35]],
+    species: [
+      { id:'atta_sexdens', sci:'Atta sexdens', com:'Hormiga cortadora grande',
+        months:[10,11,12], peak:[11], color:'#92400E',
+        temp:'22–28', time:'Noche (19–23 h)',
+        trigger:'Lluvias nocturnas intensas, baja presión',
+        desc:'Sus vuelos masivos son espectaculares. En una sola noche pueden volar millones de alados. Las reinas son las hormigas aladas más grandes de América del Sur.',
+        fact:'Una reina puede vivir más de 20 años y poner 150 millones de huevos a lo largo de su vida.',
+        colonies:2400, workers:'1 000 000–8 000 000' },
+      { id:'acromyrmex_oct', sci:'Acromyrmex octospinosus', com:'Hormiga cortadora espinosa',
+        months:[4,5,9,10], peak:[5,9], color:'#059669',
+        temp:'21–27', time:'Noche (20–24 h)',
+        trigger:'Lluvia fuerte nocturna, vientos calmos',
+        desc:'Pariente de las leafcutters pero más pequeña. Sus ocho espinas dorsales la distinguen fácilmente. Los vuelos ocurren en dos períodos al año.',
+        fact:'Cultivan un hongo específico de su especie que no existe en ningún otro lugar de la naturaleza.',
+        colonies:1900, workers:'100 000–1 000 000' },
+      { id:'paraponera_clav', sci:'Paraponera clavata', com:'Hormiga bala',
+        months:[3,4,5,6,10,11], peak:[4,11], color:'#1D4ED8',
+        temp:'22–27', time:'Noche (20–1 h)',
+        trigger:'Noches lluviosas de temporada húmeda',
+        desc:'Famosa por tener la picadura más dolorosa del reino animal según el índice Schmidt. Sus colonias pequeñas producen pocos alados por evento.',
+        fact:'Tribus indígenas del Amazonas usan guantes tejidos con estas hormigas en rituales de iniciación.',
+        colonies:340, workers:'1 000–3 000' }
+    ]
+  },
+  africa: {
+    name: 'África Subsahariana', short: 'África Subs.',
+    color: '#D97706', border: '#92400E', icon: '🦁',
+    center: [0,25], zoom: 3,
+    bounds: [[-35,-20],[15,50]],
+    species: [
+      { id:'dorylus_wilv', sci:'Dorylus wilverthi', com:'Hormiga driver del Congo',
+        months:[3,4,5,10,11], peak:[4,10], color:'#92400E',
+        temp:'22–30', time:'Noche (22–3 h)',
+        trigger:'Inicio de lluvias, humedad > 85 %',
+        desc:'Los machos alados ("sausage flies") son fuertemente atraídos por la luz artificial. Son tan grandes que se confunden con avispas pequeñas.',
+        fact:'La reina puede poner hasta 1–2 millones de huevos por día, la mayor tasa documentada.',
+        colonies:1200, workers:'1 000 000–22 000 000' },
+      { id:'oecophylla_lon', sci:'Oecophylla longinoda', com:'Hormiga tejedora africana',
+        months:[4,5,6,10,11], peak:[5], color:'#DC2626',
+        temp:'25–35', time:'Mediodía (10–14 h)',
+        trigger:'Días secos y calurosos, final de lluvias',
+        desc:'Construye nidos de hojas cosidas con seda de larvas. Sus vuelos coinciden con la estación seca, cuando el vuelo puede cubrir mayores distancias.',
+        fact:'Las obreras forman cadenas vivas de hasta 20 cm para unir los bordes de las hojas del nido.',
+        colonies:2800, workers:'100 000–500 000' }
+    ]
+  },
+  se_asia: {
+    name: 'Asia del Sureste', short: 'SE Asia',
+    color: '#6366F1', border: '#4338CA', icon: '🌴',
+    center: [5,115], zoom: 4,
+    bounds: [[-10,95],[25,145]],
+    species: [
+      { id:'oecophylla_sma', sci:'Oecophylla smaragdina', com:'Hormiga tejedora asiática',
+        months:[3,4,5,6], peak:[4,5], color:'#DC2626',
+        temp:'26–35', time:'Mediodía (9–13 h)',
+        trigger:'Días secos antes de la monzón de verano',
+        desc:'De color verde brillante a naranja rojizo según la región. Sus nidos de hojas cosidas pueden alcanzar 50 cm. Considerada agente de biocontrol en frutales.',
+        fact:'Se usa como alimento y medicina tradicional en Tailandia, Laos, Vietnam e Indonesia.',
+        colonies:3600, workers:'100 000–500 000' },
+      { id:'camponotus_jap', sci:'Camponotus japonicus', com:'Hormiga carpintera japonesa',
+        months:[5,6,7], peak:[6], color:'#0F172A',
+        temp:'18–26', time:'Noche (20–24 h)',
+        trigger:'Noches cálidas y húmedas de inicio de verano',
+        desc:'La hormiga más grande de Japón. Sus vuelos nocturnos de junio a menudo coinciden con el período del festival del Tanabata.',
+        fact:'Aparece referenciada en haikus y literatura clásica japonesa como símbolo del verano.',
+        colonies:4200, workers:'3 000–12 000' },
+      { id:'polyrhachis_div', sci:'Polyrhachis dives', com:'Hormiga espinada de seda',
+        months:[4,5,6,7], peak:[5,6], color:'#1D4ED8',
+        temp:'24–32', time:'Amanecer (5–9 h)',
+        trigger:'Inicio de temporada de lluvias',
+        desc:'Construye nidos de seda en arbustos. Sus vuelos al amanecer son breves pero intensos, antes de que aumente la actividad de aves insectívoras.',
+        fact:'Usa seda producida por larvas para coser hojas, al igual que las hormigas tejedoras.',
+        colonies:2100, workers:'500–3 000' }
+    ]
+  },
+  australia: {
+    name: 'Australia y Oceanía', short: 'Australia',
+    color: '#F97316', border: '#C2410C', icon: '🦘',
+    center: [-27,135], zoom: 3,
+    bounds: [[-45,110],[-10,155]],
+    species: [
+      { id:'myrmecia_gul', sci:'Myrmecia gulosa', com:'Hormiga toro gigante',
+        months:[11,12,1], peak:[12], color:'#DC2626',
+        temp:'28–38', time:'Mediodía (11–15 h)',
+        trigger:'Días calurosos de verano austral, > 28 °C',
+        desc:'Una de las hormigas más primitivas del mundo. Sus vuelos estivales australes son uno de los espectáculos entomológicos más notables de Oceanía.',
+        fact:'Tiene el ojo compuesto más avanzado de todo el orden Hymenoptera.',
+        colonies:980, workers:'500–2 000' },
+      { id:'iridomyrmex_pur', sci:'Iridomyrmex purpureus', com:'Hormiga carne australiana',
+        months:[11,12,1,2], peak:[12,1], color:'#6366F1',
+        temp:'28–40', time:'Mediodía (10–14 h)',
+        trigger:'Días consecutivos > 30 °C en el outback',
+        desc:'Sus característicos hormigueros de grava son una marca del interior australiano. Los vuelos del verano austral pueden cubrir kilómetros cuadrados.',
+        fact:'Usa compuestos iridoidales para comunicación química, con rastros detectables por días.',
+        colonies:5400, workers:'10 000–300 000' },
+      { id:'camponotus_con', sci:'Camponotus consobrinus', com:'Hormiga azucarera rayada',
+        months:[10,11,12], peak:[11], color:'#0F172A',
+        temp:'22–32', time:'Tarde (17–21 h)',
+        trigger:'Tardes calurosas, cielos despejados',
+        desc:'Una de las pocas hormigas australianas que vuela al atardecer. Su característico patrón rayado la hace inconfundible.',
+        fact:'Los aborígenes australianos la usan tradicionalmente como fuente de azúcar.',
+        colonies:3200, workers:'5 000–15 000' }
+    ]
+  }
+};
+
+const MO_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const MO_FULL  = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+const NOW_MONTH = new Date().getMonth() + 1; // 1-based
+
+// ─────────────────────────────────────────────────────────
+// FLYING NOW BANNER
+// ─────────────────────────────────────────────────────────
+(function buildFlyingNow() {
+  const container = document.getElementById('flyingNowTags');
+  let activeCount = 0;
+  Object.values(REGIONS).forEach(r => {
+    r.species.forEach(s => {
+      if (s.months.includes(NOW_MONTH)) {
+        activeCount++;
+        const isPeak = s.peak.includes(NOW_MONTH);
+        const tag = document.createElement('span');
+        tag.className = 'now-badge';
+        tag.style.cssText = `background:${isPeak?'#FEF3C7':'#DCFCE7'};color:${isPeak?'#92400E':'#065F46'};border-color:${isPeak?'#FDE68A':'#86EFAC'};`;
+        tag.innerHTML = `${isPeak?'🔥':'✅'} <em>${s.sci}</em>`;
+        tag.setAttribute('title', `${r.name} · Pico: ${s.peak.map(m=>MO_SHORT[m-1]).join(', ')}`);
+        container.appendChild(tag);
+      }
+    });
+  });
+  document.getElementById('heroActive').textContent = activeCount;
+})();
+
+// ─────────────────────────────────────────────────────────
+// MAP
+// ─────────────────────────────────────────────────────────
+const map = L.map('map', { center:[20,0], zoom:2, minZoom:2, maxZoom:12, zoomControl:true });
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap · © CARTO',
+  subdomains: 'abcd', maxZoom: 19
+}).addTo(map);
+
+const regionLayers = {};
+const markerLayer = L.layerGroup().addTo(map);
+let activeRegionKey = null;
+
+// Draw region rectangles
+Object.entries(REGIONS).forEach(([key, r]) => {
+  const rect = L.rectangle(r.bounds, {
+    color: r.border, fillColor: r.color,
+    fillOpacity: 0.15, weight: 2.5, dashArray: '6 4'
+  });
+
+  rect.on('mouseover', function(e) {
+    if (activeRegionKey !== key) this.setStyle({ fillOpacity: 0.3 });
+    this.bindTooltip(
+      `<strong style="font-family:Exo,sans-serif;">${r.icon} ${r.name}</strong><br>
+       <small style="color:#64748B;">${r.species.length} especies · clic para explorar</small>`,
+      { direction:'top', sticky:true }
+    ).openTooltip(e.latlng);
+  });
+  rect.on('mouseout', function() {
+    if (activeRegionKey !== key) this.setStyle({ fillOpacity: 0.15 });
+    this.closeTooltip();
+  });
+  rect.on('click', () => selectRegion(key));
+
+  regionLayers[key] = rect;
+  rect.addTo(map);
+});
+
+// Ant-shaped SVG markers
+function antIconSvg(color) {
+  const c = encodeURIComponent(color);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+    <circle cx="16" cy="16" r="14" fill="white" stroke="${c}" stroke-width="2.5"/>
+    <!-- body segments -->
+    <ellipse cx="16" cy="22" rx="5" ry="4" fill="${c}"/>
+    <ellipse cx="16" cy="15" rx="4" ry="3.5" fill="${c}"/>
+    <ellipse cx="16" cy="8.5" rx="3.5" ry="3.5" fill="${c}"/>
+    <!-- legs -->
+    <line x1="12" y1="14" x2="7" y2="11" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="12" y1="16" x2="6.5" y2="16" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="12" y1="18" x2="7" y2="21" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="20" y1="14" x2="25" y2="11" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="20" y1="16" x2="25.5" y2="16" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="20" y1="18" x2="25" y2="21" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- antennae -->
+    <line x1="14" y1="6" x2="10" y2="2" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="18" y1="6" x2="22" y2="2" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/>
+  </svg>`;
+  return svg;
+}
+
+function refreshMarkers(zoom) {
+  markerLayer.clearLayers();
+  if (zoom < 4) return;
+
+  Object.entries(REGIONS).forEach(([key, r]) => {
+    const [[s,w],[n,e]] = r.bounds;
+    r.species.forEach((sp, i) => {
+      // Distribute markers within the region bounds
+      const t = (i + 0.5) / r.species.length;
+      const lat = s + (n - s) * (0.2 + t * 0.6);
+      const lng = w + (e - w) * (0.15 + ((i * 0.37 + 0.2) % 0.8));
+
+      const isNow   = sp.months.includes(NOW_MONTH);
+      const isPeak  = sp.peak.includes(NOW_MONTH);
+      const iconColor = isPeak ? '#D97706' : isNow ? sp.color : '#94A3B8';
+
+      const icon = L.divIcon({
+        html: antIconSvg(iconColor),
+        className: '', iconSize:[32,32], iconAnchor:[16,16]
+      });
+
+      const moBar = Array.from({length:12},(_,idx)=>{
+        const m = idx+1;
+        const bg = sp.peak.includes(m) ? '#D97706' : sp.months.includes(m) ? sp.color : '#E2EFE7';
+        return `<span style="display:inline-block;width:16px;height:10px;border-radius:2px;background:${bg};margin:1px;" title="${MO_SHORT[idx]}"></span>`;
+      }).join('');
+
+      const marker = L.marker([lat,lng], {icon, title: sp.sci, alt: sp.sci});
+      marker.bindPopup(`
+        <div style="font-family:Exo,sans-serif;min-width:200px;padding:4px;">
+          <div style="font-weight:700;font-size:13px;color:${sp.color};font-style:italic;">${sp.sci}</div>
+          <div style="font-size:11px;color:#64748B;margin-bottom:8px;">${sp.com}</div>
+          <div style="font-size:11px;margin-bottom:4px;"><strong>Vuelos:</strong> ${sp.months.map(m=>MO_SHORT[m-1]).join(', ')}</div>
+          <div style="font-size:11px;margin-bottom:6px;"><strong>Temperatura:</strong> ${sp.temp} °C</div>
+          <div style="display:flex;flex-wrap:wrap;">${moBar}</div>
+          <div style="margin-top:8px;">
+            <button onclick="selectRegion('${key}')" style="font-family:Exo,sans-serif;background:#15803D;color:white;border:none;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;">
+              Ver zona completa
+            </button>
+          </div>
+        </div>
+      `, {maxWidth:260});
+
+      markerLayer.addLayer(marker);
+    });
+  });
+}
+
+map.on('zoomend', () => refreshMarkers(map.getZoom()));
+
+// ─────────────────────────────────────────────────────────
+// SELECT REGION
+// ─────────────────────────────────────────────────────────
+function selectRegion(key) {
+  // Reset previous
+  if (activeRegionKey && regionLayers[activeRegionKey]) {
+    regionLayers[activeRegionKey].setStyle({ fillOpacity:0.15, weight:2.5, dashArray:'6 4' });
+  }
+  activeRegionKey = key;
+  const r = REGIONS[key];
+  regionLayers[key].setStyle({ fillOpacity:0.45, weight:3.5, dashArray:null });
+  map.flyToBounds(r.bounds, { duration:1, padding:[30,30] });
+
+  renderSpeciesPanel(key);
+  updateCalendarTab(key);
+
+  // Zone pills
+  document.querySelectorAll('.zone-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.zone === key);
+    p.setAttribute('aria-pressed', p.dataset.zone === key ? 'true' : 'false');
+  });
+}
+
+// ─────────────────────────────────────────────────────────
+// SPECIES PANEL
+// ─────────────────────────────────────────────────────────
+function renderSpeciesPanel(key) {
+  const r = REGIONS[key];
+  const el = document.getElementById('speciesContent');
+
+  const cards = r.species.map(sp => {
+    const isNow  = sp.months.includes(NOW_MONTH);
+    const isPeak = sp.peak.includes(NOW_MONTH);
+    const statusColor  = isPeak ? '#D97706' : isNow ? '#15803D' : '#94A3B8';
+    const statusLabel  = isPeak ? '🔥 Pico ahora' : isNow ? '✅ Activo ahora' : '😴 Sin vuelos';
+
+    const moSegs = Array.from({length:12},(_,i)=>{
+      const m = i+1;
+      const cls = sp.peak.includes(m) ? 'peak' : sp.months.includes(m) ? 'active' : '';
+      const todayCls = m === NOW_MONTH ? 'now' : '';
+      return `<div class="mo-seg ${cls} ${todayCls}" title="${MO_FULL[i]}"></div>`;
+    }).join('');
+
+    return `
+      <article class="sp-card" style="border-left-color:${sp.color};">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:6px;">
+          <div>
+            <div style="font-style:italic;font-size:13px;font-weight:700;color:${sp.color};">${sp.sci}</div>
+            <div style="font-size:11px;color:#64748B;">${sp.com}</div>
+          </div>
+          <span style="font-size:11px;font-weight:700;color:${statusColor};white-space:nowrap;">${statusLabel}</span>
+        </div>
+
+        <div class="mo-bar" role="img" aria-label="Calendario mensual de vuelos para ${sp.sci}">${moSegs}</div>
+        <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:2px;margin-bottom:10px;">
+          ${MO_SHORT.map(m=>`<div style="text-align:center;font-size:8.5px;color:#94A3B8;">${m}</div>`).join('')}
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#475569;margin-bottom:8px;">
+          <span><strong>⏰</strong> ${sp.time}</span>
+          <span><strong>🌡</strong> ${sp.temp} °C</span>
+          <span><strong>⚡</strong> ${sp.trigger}</span>
+        </div>
+
+        <details>
+          <summary style="font-size:11px;color:var(--c-primary);font-weight:600;">
+            Más información ▾
+          </summary>
+          <div style="margin-top:8px;font-size:11px;color:#475569;line-height:1.55;">
+            <p style="margin-bottom:8px;">${sp.desc}</p>
+            <div style="background:#FFFBEB;padding:8px 10px;border-radius:8px;border-left:3px solid #D97706;margin-bottom:8px;">
+              <strong style="color:#D97706;">💡 Curiosidad:</strong> ${sp.fact}
+            </div>
+            <div style="color:#94A3B8;font-size:10.5px;">
+              <span>🏘 Colonias est. en la región: ~${sp.colonies.toLocaleString()}</span><br>
+              <span>👷 Obreras por colonia: ${sp.workers}</span>
+            </div>
+          </div>
+        </details>
+      </article>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div style="margin-bottom:14px;">
+      <h3 style="font-size:1rem;font-weight:700;color:${r.color};margin-bottom:2px;">${r.icon} ${r.name}</h3>
+      <p style="font-size:12px;color:var(--c-text-muted);">${r.species.length} especies · Mes actual: ${MO_FULL[NOW_MONTH-1]}</p>
+    </div>
+    ${cards}`;
+}
+
+// ─────────────────────────────────────────────────────────
+// ZONE FILTER PILLS
+// ─────────────────────────────────────────────────────────
+const filterContainer = document.getElementById('zoneFilters');
+Object.entries(REGIONS).forEach(([key, r]) => {
+  const btn = document.createElement('button');
+  btn.className = 'zone-pill';
+  btn.dataset.zone = key;
+  btn.setAttribute('aria-pressed', 'false');
+  btn.style.cssText = `border-color:${r.color};`;
+  btn.innerHTML = `${r.icon} ${r.short}`;
+  btn.onclick = () => selectRegion(key);
+  filterContainer.appendChild(btn);
+});
+
+function resetView(btn) {
+  if (activeRegionKey && regionLayers[activeRegionKey]) {
+    regionLayers[activeRegionKey].setStyle({ fillOpacity:0.15, weight:2.5, dashArray:'6 4' });
+  }
+  activeRegionKey = null;
+  map.flyTo([20,0], 2, { duration:1.5 });
+  document.querySelectorAll('.zone-pill').forEach(p => {
+    p.classList.remove('active');
+    p.setAttribute('aria-pressed', 'false');
+  });
+  btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
+  document.getElementById('speciesContent').innerHTML = `
+    <div style="text-align:center;padding:40px 16px;color:var(--c-text-muted);">
+      <svg viewBox="0 0 64 64" width="56" height="56" fill="none" aria-hidden="true" style="margin:0 auto 12px;display:block;">
+        <circle cx="32" cy="32" r="30" stroke="#BBF7D0" stroke-width="3" fill="#F0FDF4"/>
+        <text x="32" y="43" text-anchor="middle" font-size="26" fill="#86EFAC">🗺</text>
+      </svg>
+      <p style="font-weight:600;font-size:.9rem;">Selecciona una región</p>
+      <p style="font-size:.8rem;margin-top:4px;">Haz clic en el mapa o usa los filtros</p>
+    </div>`;
+}
+
+// ─────────────────────────────────────────────────────────
+// CALENDAR
+// ─────────────────────────────────────────────────────────
+const calTabsEl = document.getElementById('calTabs');
+const calContent = document.getElementById('calContent');
+
+let activeCalKey = Object.keys(REGIONS)[0];
+
+Object.entries(REGIONS).forEach(([key, r]) => {
+  const btn = document.createElement('button');
+  btn.className = `btn btn-ghost${key === activeCalKey ? ' active-tab' : ''}`;
+  btn.dataset.calZone = key;
+  btn.style.cssText = `font-size:12px;padding:6px 14px;background:white;color:${r.color};border-color:${r.color};box-shadow:3px 3px 0 ${r.border};`;
+  btn.innerHTML = `${r.icon} ${r.short}`;
+  btn.setAttribute('role','tab');
+  btn.setAttribute('aria-selected', key === activeCalKey ? 'true' : 'false');
+  btn.onclick = () => updateCalendarTab(key);
+  calTabsEl.appendChild(btn);
+});
+
+function updateCalendarTab(key) {
+  activeCalKey = key;
+  document.querySelectorAll('[data-cal-zone]').forEach(b => {
+    const isActive = b.dataset.calZone === key;
+    b.classList.toggle('active-tab', isActive);
+    b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    if (isActive) {
+      const r = REGIONS[key];
+      b.style.background = r.color;
+      b.style.color = 'white';
+    } else {
+      const rk = b.dataset.calZone;
+      const rr = REGIONS[rk];
+      b.style.background = 'white';
+      b.style.color = rr.color;
+    }
+  });
+  renderCalendar(key);
+}
+
+function renderCalendar(key) {
+  const r = REGIONS[key];
+  const COL = 220;
+  const colTpl = `${COL}px repeat(12, 1fr)`;
+
+  let html = `
+    <div style="display:grid;grid-template-columns:${colTpl};gap:3px;min-width:700px;" role="table" aria-label="Calendario de vuelos de ${r.name}">
+      <!-- Header -->
+      <div role="rowheader" style="padding:8px;font-size:11px;font-weight:700;color:var(--c-text-muted);">Especie</div>
+      ${MO_SHORT.map((m,i) => `
+        <div role="columnheader" style="text-align:center;padding:8px 2px;font-size:11px;font-weight:700;
+             color:${i+1===NOW_MONTH?'white':'var(--c-text-muted)'};
+             background:${i+1===NOW_MONTH?'var(--c-primary)':'transparent'};
+             border-radius:6px;">${m}</div>
+      `).join('')}
+
+      ${r.species.map(sp => `
+        <div role="cell" style="padding:8px 6px;font-style:italic;font-size:11.5px;
+             font-family:'Roboto Mono',monospace;color:${sp.color};
+             display:flex;align-items:center;line-height:1.3;">
+          ${sp.sci}
+        </div>
+        ${Array.from({length:12},(_,i)=>{
+          const m = i+1;
+          const cls = sp.peak.includes(m) ? 'peak' : sp.months.includes(m) ? 'active' : '';
+          const todayCls = m===NOW_MONTH ? 'today-col' : '';
+          const label = sp.peak.includes(m) ? 'Pico' : sp.months.includes(m) ? 'Activo' : 'Inactivo';
+          return `<div role="cell" class="cal-cell ${cls} ${todayCls}"
+                       title="${MO_FULL[i]}: ${label} — ${sp.sci}"
+                       aria-label="${MO_FULL[i]}: ${label}"></div>`;
+        }).join('')}
+      `).join('')}
+    </div>`;
+
+  calContent.innerHTML = html;
+}
+
+renderCalendar(activeCalKey);
+
+// ─────────────────────────────────────────────────────────
+// TRIGGERS TABLE
+// ─────────────────────────────────────────────────────────
+const tbody = document.getElementById('triggerTableBody');
+const allSp = Object.values(REGIONS).flatMap(r =>
+  r.species.map(s => ({ ...s, rShort: r.short, rColor: r.color }))
+);
+
+tbody.innerHTML = allSp.map((s, i) => {
+  const isNow = s.months.includes(NOW_MONTH);
+  return `
+    <tr style="background:${i%2===0?'white':'#F8FAF8'};">
+      <td style="padding:10px 14px;">
+        <div style="font-style:italic;font-weight:600;font-size:12px;color:${s.color};">${s.sci}</div>
+        <div style="font-size:10.5px;color:#94A3B8;">${s.com}</div>
+        ${isNow ? '<span class="now-badge" style="margin-top:4px;display:inline-flex;">Activo este mes</span>' : ''}
+      </td>
+      <td style="padding:10px 14px;font-size:12px;font-weight:600;color:${s.rColor};">${s.rShort}</td>
+      <td style="padding:10px 14px;font-family:'Roboto Mono',monospace;font-size:12px;font-weight:700;color:var(--c-text);">${s.temp}</td>
+      <td style="padding:10px 14px;font-size:11.5px;color:#475569;">${s.trigger}</td>
+      <td style="padding:10px 14px;font-size:11.5px;color:#475569;">${s.time}</td>
+    </tr>`;
+}).join('');
+
+// ─────────────────────────────────────────────────────────
+// HERO count
+// ─────────────────────────────────────────────────────────
+document.getElementById('heroSpecies').textContent =
+  Object.values(REGIONS).reduce((a,r) => a + r.species.length, 0) + '+';
+</script>
+</body>
+</html>
