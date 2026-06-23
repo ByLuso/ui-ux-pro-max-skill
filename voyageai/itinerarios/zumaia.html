@@ -3,273 +3,844 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Zumaia — Los acantilados de Flysch que fueron Rocadragón en Juego de Tronos | Routlo</title>
-  <meta name="description" content="38 km desde San Sebastián, 40 minutos en coche: los espectaculares acantilados de Flysch, 60 millones de años de historia geológica escritos en la roca, y el escenario de Rocadragón en Juego de Tronos. Gratis de visitar, desde unos 35€ para dos personas con ruta en barco incluida."/>
+  <title>Zumaia — 1 día desde Bilbao | Routlo</title>
+  <meta name="description" content="Itinerario de 1 día en Zumaia desde Bilbao: el Flysch de la Costa Vasca (60 millones de años de historia geológica), Juego de Tronos y pintxos en el puerto."/>
   <link rel="stylesheet" href="../assets/shared.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
-    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    /* ── Nav override ── */
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,8,16,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
     nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+
+    /* ── Aurora ── */
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #1a3a6e 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #2a1a5e 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #0a2d4a 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    /* ── Hero ── */
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #000a10 0%, #001018 40%, #001a24 70%, rgba(201,169,110,0.2) 100%);
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%);
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(4,8,16,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label {
+      font-size: 0.7rem; color: rgba(237,238,242,0.55);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .dest-sum-val {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.2rem; font-weight: 700; color: #c9a96e;
+    }
+
+    /* ── Layout ── */
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title {
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(237,238,242,0.55); margin-bottom: 12px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    /* ── Sections ── */
     .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
-    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
-    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
-    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
-    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
-    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #7a8ea3; line-height: 1; min-width: 60px; }
-    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    /* ── Day Card ── */
+    .day-card {
+      background: #0d1628;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; overflow: hidden; margin-bottom: 28px;
+    }
+    .day-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .day-num {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 2.2rem; font-weight: 700; color: #c9a96e;
+      line-height: 1; min-width: 60px;
+    }
+    .day-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px;
+    }
     .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
     .day-body { padding: 22px; }
-    .stop-list { display: flex; flex-direction: column; gap: 18px; }
-    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
-    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
-    .stop-price { font-size: 0.75rem; color: #7a8ea3; margin-top: 5px; font-weight: 600; }
-    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
-    .tip-num { min-width: 28px; height: 28px; background: rgba(122,142,163,0.15); border: 1px solid rgba(122,142,163,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #7a8ea3; flex-shrink: 0; }
+
+    /* ── Activity ── */
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time {
+      min-width: 55px; font-size: 0.78rem; color: #c9a96e;
+      font-weight: 600; padding-top: 3px; flex-shrink: 0;
+    }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #c9a96e; border: 2px solid #0d1628;
+      flex-shrink: 0; margin-top: 3px;
+    }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag {
+      display: inline-block; padding: 2px 8px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 100px; font-size: 0.67rem; color: #c9a96e;
+    }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    /* ── Meals ── */
+    .meal-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 16px 0 22px; }
+    .meal-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px; transition: border-color 0.2s;
+    }
+    .meal-card:hover { border-color: rgba(201,169,110,0.3); }
+    .meal-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .meal-name { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 4px; }
+    .meal-info { font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.5; margin-bottom: 8px; }
+    .meal-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; }
+
+    /* ── Budget table ── */
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th {
+      text-align: left; padding: 10px 14px; background: #0d1628;
+      color: #c9a96e; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(201,169,110,0.3);
+    }
+    .budget-table td {
+      padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: rgba(237,238,242,0.55); vertical-align: top;
+    }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    /* ── Transport ── */
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 18px;
+    }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    /* ── Tips ── */
+    .tip-item {
+      display: flex; gap: 12px; padding: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .tip-num {
+      min-width: 28px; height: 28px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700;
+      color: #c9a96e; flex-shrink: 0;
+    }
     .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
     .tip-text strong { color: #edeef2; }
-    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(122,142,163,0.12); border: 1px solid rgba(122,142,163,0.3); font-size: 0.75rem; font-weight: 600; color: #7a8ea3; margin-bottom: 12px; }
-    .cta-banner { background: linear-gradient(135deg, rgba(122,142,163,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(122,142,163,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+
+    /* ── Disclosure ── */
+    .disclosure {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 16px 18px;
+      font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65;
+      margin-top: 40px;
+    }
+
+    /* ── CTA banner ── */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%);
+      border: 1px solid rgba(201,169,110,0.3); border-radius: 20px;
+      padding: 32px; text-align: center; margin-bottom: 28px;
+    }
     .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
     .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
-    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #7a8ea3, #5a7088); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px;
+      background: linear-gradient(135deg, #c9a96e, #a07840);
+      color: #0a0a0a; font-weight: 600; font-size: 0.9rem;
+      border-radius: 10px; text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
     .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
-    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
-    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
-    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
-    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
-    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
-    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
-    .toc-list a.active { color: #7a8ea3; border-left-color: #7a8ea3; background: rgba(122,142,163,0.15); }
-    #route-map { position: relative !important; z-index: 50 !important; }
-    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
-    .leaflet-container { background: #1a1e2a !important; }
-    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
-    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
-    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
-    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
-    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
-    .highlight-box { background: linear-gradient(135deg, rgba(122,142,163,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(122,142,163,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
-    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #7a8ea3; margin-bottom: 8px; }
-    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
-    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
-    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
-    .budget-row:last-child { border-bottom: none; }
-    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
-    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(122,142,163,0.3); font-size: 1.02rem; }
-    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
-    .budget-total span:last-child { color: #7a8ea3; font-size: 1.4rem; }
-    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
-    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #7a8ea3; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(122,142,163,0.3); }
-    .hotel-link:hover { border-color: #7a8ea3; }
-    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
-    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
-    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
-    .breadcrumb a:hover { color: #7a8ea3; }
-    .breadcrumb span { color: rgba(237,238,242,0.2); }
-    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .meal-options { grid-template-columns: 1fr; }
+      .transport-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px; }
+      nav[role="navigation"] ul { display: none; }
+      .dest-hero { padding: 100px 16px 40px; }
+      .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
+      .dest-country { font-size: 1.1rem; }
+      .dest-summary-bar { display: grid; grid-template-columns: repeat(3,1fr); border-radius: 12px; }
+      .dest-sum-item { padding: 12px 8px; }
+      .dest-sum-label { font-size: 0.6rem; }
+      .dest-sum-val { font-size: 1rem; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+      .day-num { font-size: 1.8rem; min-width: 44px; }
+      .day-title { font-size: 1rem; }
+      .day-meta { margin-left: 0; flex-direction: row; gap: 8px; width: 100%; }
+      .day-body { padding: 14px 16px; }
+      .act-time { min-width: 44px; font-size: 0.72rem; }
+      .act-title { font-size: 0.88rem; }
+      .section-heading { font-size: 1.3rem; }
+      .budget-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
   </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
 </head>
 <body>
 
-<nav role="navigation" id="main-nav">
-  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
-    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+<!-- Aurora background -->
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<!-- Navigation -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
   </a>
-  <div style="display:flex;align-items:center;gap:24px;">
-    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#7a8ea3'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
-    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#7a8ea3'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
-  </div>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
 
-<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
-  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
-  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-      <span class="badge-royal" style="margin-bottom:0;">🐉 Escapada de un día</span>
-      <span style="font-size:0.78rem;font-weight:600;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;padding:4px 12px;border-radius:100px;">🆓 Entrada gratuita</span>
-      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">38 km · ~40 min en coche desde San Sebastián</span>
-      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~35€ / 2 personas</span>
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <!-- Decorative floating elements -->
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios-espana.html">España</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Zumaia</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Zumaia</h1>
+  <p class="dest-country">Costa Flysch · Gipuzkoa</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      1 día · ida y vuelta
+    </span>
+    <span class="dest-badge" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      2 personas · pareja
+    </span>
+    <span class="dest-badge" role="listitem">Gipuzkoa · España</span>
+    <span class="dest-badge" role="listitem">Flysch · Juego de Tronos · Pintxos</span>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">1 día</div>
     </div>
-    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Zumaia<br><span style="color:#7a8ea3;">Los acantilados que fueron Rocadragón</span></h1>
-    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A 40 minutos de San Sebastián, la playa de Itzurun en Zumaia está flanqueada por los acantilados de Flysch, capas de roca sedimentaria que registran 60 millones de años de historia de la Tierra y que forman parte del Geoparque de la Costa Vasca (Geoparkea). En 2017, esta playa se convirtió en Rocadragón (Dragonstone), el primer destino de Daenerys Targaryen al llegar a Poniente en la séptima temporada de Juego de Tronos.</p>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Origen</div>
+      <div class="dest-sum-val" style="font-size:0.95rem">Bilbao</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Km</div>
+      <div class="dest-sum-val">75 km</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Transporte</div>
+      <div class="dest-sum-val" style="font-size:0.78rem">Coche/Tren</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Estilo</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Naturaleza</div>
+    </div>
   </div>
 </section>
 
-<div class="itin-layout">
-  <aside class="toc">
-    <div class="toc-title">Contenido</div>
-    <ul class="toc-list">
-      <li><a href="#datos">Datos del viaje</a></li>
-      <li><a href="#flysch">El Flysch y Rocadragón</a></li>
-      <li><a href="#mapa-ruta">Mapa</a></li>
-      <li><a href="#ruta">El itinerario</a></li>
-      <li><a href="#presupuesto">Presupuesto</a></li>
-      <li><a href="#consejos">Consejos</a></li>
-    </ul>
-  </aside>
+<!-- Main content -->
+<main id="main-content">
+  <div class="itin-layout">
 
-  <main>
-    <div class="breadcrumb">
-      <a href="../index.html">Routlo</a><span>›</span>
-      <a href="../itinerarios-espana.html">España</a><span>›</span>
-      <span style="color:rgba(237,238,242,0.65);">Zumaia</span>
-    </div>
+    <!-- TOC Sidebar -->
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#jornada">La Jornada</a></li>
+          <li><a href="#comer">Dónde comer</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+        </ul>
+      </nav>
+    </aside>
 
-    <section class="itin-section" id="datos">
-      <h2 class="section-heading">🐉 Datos del viaje</h2>
-      <div class="route-info-bar">
-        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">38 km</div><div class="route-info-unit">desde San Sebastián</div></div>
-        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~40 min</div><div class="route-info-unit">por la N-634/GI-3391</div></div>
-        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~35€</div><div class="route-info-unit">para 2 personas</div></div>
-        <div class="route-info-cell"><div class="route-info-label">Flysch</div><div class="route-info-value">60M</div><div class="route-info-unit">años de historia geológica</div></div>
-        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Todo el año</div><div class="route-info-unit">marea baja recomendable</div></div>
+    <!-- Content -->
+    <article>
+
+      <!-- Resumen -->
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          Zumaia guarda uno de los tesoros naturales más extraordinarios de Europa: el Flysch de la Costa Vasca, donde 60 millones de años de historia geológica de la Tierra quedan expuestos en capas verticales de roca que caen al Cantábrico. Además de ser la localización de Rocadragón en Game of Thrones, Zumaia tiene un puerto pesquero tranquilo, el museo del pintor Zuloaga y una escena de pintxos honesta y sabrosa. A 75 km de Bilbao, es la excursión más visualmente impactante de esta lista.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Empezar gratis
+          </a>
+        </div>
+      </section>
+
+      <!-- Presupuesto -->
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para Zumaia (2 personas)">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Estimado (2 personas)</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Transporte (Bilbao-Zumaia ida/vuelta)</td>
+                <td>€18–25 (coche) o €16 (Euskotren)</td>
+                <td>Gasolina + peaje ~€20 en coche</td>
+              </tr>
+              <tr>
+                <td>Gastronomía (pintxos + almuerzo)</td>
+                <td>€40–60</td>
+                <td>Sidrería ~€30pp o pintxos + restaurante ~€20pp</td>
+              </tr>
+              <tr>
+                <td>Tour en barco (Flysch)</td>
+                <td>€30–40</td>
+                <td>Opcional pero muy recomendado (€18–20 pp)</td>
+              </tr>
+              <tr>
+                <td>Villa Zuloaga</td>
+                <td>€14</td>
+                <td>€7 por persona</td>
+              </tr>
+              <tr>
+                <td>Extras / café</td>
+                <td>€8–10</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><strong>TOTAL</strong></td>
+                <td><strong>~€110–149 (2 personas)</strong></td>
+                <td>Sin transporte y sin barco: ~€42–60</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos para 2026. El tour en barco es estacional (primavera-otoño). Verifica disponibilidad con antelación.</p>
+      </section>
+
+      <!-- Transporte -->
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo llegar</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              En Coche
+            </div>
+            <div class="transport-content">
+              Desde Bilbao por <strong>A-8 dirección Donostia</strong> hasta Deba, luego <strong>GI-638</strong> hasta Zumaia. <strong>75 km, ~1h sin tráfico.</strong><br><br>
+              <strong>Parking en Zumaia:</strong> Parking Itzurun junto a la playa (€1.5/h) o parking gratuito en la zona de Benta Berri a 10 min a pie.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 6V4M16 6V4M2 10h20"/><circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/></svg>
+              Transporte Público
+            </div>
+            <div class="transport-content">
+              <strong>Euskotren</strong> desde Bilbao-Amara hasta Zumaia, ~1h 15min, ~€4. También combinar <strong>Renfe hasta Deba</strong> (~50 min) + bus local hasta Zumaia.<br><br>
+              El Euskotren tiene <strong>vistas espectaculares de la costa.</strong> Muy recomendado.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- La Jornada -->
+      <section id="jornada" class="itin-section" aria-labelledby="h-jornada">
+        <h2 class="section-heading" id="h-jornada">La Jornada</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Zumaia — Flysch, Juego de Tronos y pintxos</div>
+              <div class="day-subtitle">Un día completo en la costa más espectacular del Cantábrico</div>
+            </div>
+            <div class="day-meta">
+              <span>Flysch · UNESCO Geopark</span>
+              <span>Rocadragón (GoT)</span>
+              <span>Puerto · Pintxos</span>
+            </div>
+          </div>
+          <div class="day-body">
+
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada a Zumaia — Mirador de Algorri</div>
+                <div class="act-desc">Primera vista al Flysch desde la carretera: las capas de roca estratificada cayendo verticalmente al mar es una imagen impactante. Parada en el mirador de Algorri para la primera fotografía panorámica.</div>
+                <div class="act-tags">
+                  <span class="act-tag green">Gratuito</span>
+                  <span class="act-tag info">Mejor con luz de mañana</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">09:45</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Playa de Itzurun — Rocadragón (Game of Thrones)</div>
+                <div class="act-desc">La playa más famosa del flysch. Aquí se filmaron las escenas de Rocadragón en Game of Thrones (Temporada 7). La playa está flanqueada por los acantilados de flysch verticales. Espectacular a cualquier hora pero especialmente con marea baja cuando emergen las capas de roca.</div>
+                <div class="act-tags">
+                  <span class="act-tag green">Gratuito</span>
+                  <span class="act-tag info">Mejor con marea baja</span>
+                  <span class="act-tag">Game of Thrones</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Flysch de Zumaia — Ruta a pie por el sendero costero</div>
+                <div class="act-desc">El sendero costero que va desde la Playa de Itzurun hasta el Faro de Guesalaga recorre los mejores cortes del flysch. 60 millones de años de historia de la Tierra en las capas visibles: desde el Cretácico hasta el Eoceno, incluyendo la capa K-Pg (extinción de los dinosaurios, hace 66 millones de años). UNESCO Global Geopark.</div>
+                <div class="act-tags">
+                  <span class="act-tag green">Gratuito</span>
+                  <span class="act-tag">UNESCO Geopark</span>
+                  <span class="act-tag info">~2h a pie ida y vuelta</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Tour en barco por el Flysch (opcional)</div>
+                <div class="act-desc">Desde el puerto de Zumaia salen excursiones en barco para ver los acantilados de flysch desde el mar. El ángulo desde el agua muestra la escala real de los acantilados (hasta 60m de altura). Operadores: Itsaski (~€18 pp, ~1h). En verano hay que reservar el día anterior.</div>
+                <div class="act-tags">
+                  <span class="act-tag">~€15–20 pp</span>
+                  <span class="act-tag info">Opcional — muy recomendado</span>
+                  <span class="act-tag">~1h de excursión</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Villa Zuloaga — Museo del pintor Ignacio Zuloaga</div>
+                <div class="act-desc">La casa-museo del gran pintor vasco del s. XIX-XX. Colección de obras propias y del Greco, Goya, Zurbarán. En un jardín tranquilo con vistas al río Urola. Una visita breve pero de gran calidad artística.</div>
+                <div class="act-tags">
+                  <span class="act-tag">€7 entrada</span>
+                  <span class="act-tag info">~45 min visita</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">14:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Pintxos en la calle San Juan</div>
+                <div class="act-desc">La arteria gastronómica de Zumaia. Bares con pintxos de anchoa, bacalao y marisco local. El txakoli de la comarca gana con el pescado fresco. Ambiente local auténtico, sin turismo masivo.</div>
+                <div class="act-tags">
+                  <span class="act-tag">~€15–20 pp con bebida</span>
+                  <span class="act-tag green">Txakoli de Getaria</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Puerto Pesquero de Zumaia</div>
+                <div class="act-desc">Puerto de barcas de pesca tradicionales. Paseo tranquilo con vistas a la ría del Urola y al flysch al fondo. Ambiente local, tranquilo. El contraste entre la geología monumental de la mañana y la calma del puerto por la tarde es perfecto.</div>
+                <div class="act-tags">
+                  <span class="act-tag green">Gratuito</span>
+                  <span class="act-tag info">Ambiente local</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Iglesia de San Pedro (s. XVI)</div>
+                <div class="act-desc">Iglesia gótica con retablo barroco y piezas de interés artístico. Ubicada en la plaza central de Zumaia. Entrada libre. Un remate cultural tranquilo antes de volver a Bilbao.</div>
+                <div class="act-tags">
+                  <span class="act-tag green">Entrada libre</span>
+                  <span class="act-tag info">Plaza central</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">17:45</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Paseo final y conservas locales</div>
+                <div class="act-desc">Paseo final por la villa y compras de conservas locales: anchoas del Cantábrico, bonito del norte en aceite de oliva. Los mejores souvenirs gastronómicos de la costa vasca.</div>
+                <div class="act-tags">
+                  <span class="act-tag">Tiendas gourmet</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">19:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso a Bilbao</div>
+                <div class="act-desc">Regreso a Bilbao en Euskotren o coche por la A-8. Si volvéis en tren, las vistas del atardecer desde el Euskotren sobre la costa vasca son el broche ideal para el día.</div>
+                <div class="act-tags">
+                  <span class="act-tag info">~1h 15min en Euskotren</span>
+                  <span class="act-tag">~1h en coche</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Dónde comer -->
+      <section id="comer" class="itin-section" aria-labelledby="h-comer">
+        <h2 class="section-heading" id="h-comer">Dónde comer</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:16px">Zumaia tiene una escena gastronómica honesta y sabrosa centrada en el producto local: anchoa, bonito, merluza y marisco del Cantábrico, servidos sin artificios.</p>
+        <div class="meal-options">
+          <div class="meal-card">
+            <div class="meal-tier">Sidrería · Tradicional</div>
+            <div class="meal-name">Bedua Sagardotegia</div>
+            <div class="meal-info">La mejor sidrería de Zumaia, junto al río. Menú de sidrería clásico: tortilla de bacalao, txuleta a la parrilla y queso con membrillo. Sidra txotx directa del tonel. Barrio Bedua, Zumaia.</div>
+            <div class="meal-price">~€25–35 pp menú sidrería</div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-tier">Pintxos · Calle San Juan</div>
+            <div class="meal-name">Bar Txurrut</div>
+            <div class="meal-info">El bar de referencia de la calle San Juan. Pintxos de anchoa, bonito del norte y gamba fresca. Txakoli de Getaria servido muy frío en vaso ancho. San Juan kalea, 5.</div>
+            <div class="meal-price">~€15–20 pp con bebida</div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-tier">Pescado · Puerto</div>
+            <div class="meal-name">Restaurante Arotxa</div>
+            <div class="meal-info">Frente al puerto, carta de pescado fresco de lonja. Merluza en salsa verde, kokotxas al pilpil y vieiras gratinadas. El restaurante más completo de Zumaia. Zuloaga plaza, 1.</div>
+            <div class="meal-price">~€30–40 pp</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Consejos -->
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">5 Consejos para Zumaia</h2>
+
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">1</div>
+          <div class="tip-text"><strong>Consulta las mareas antes de ir.</strong> El Flysch de Zumaia se ve mejor con marea baja: las capas de roca emergen completamente y se puede caminar entre ellas (con precaución, son resbaladizas). Consulta las tablas de mareas antes de planificar la visita en <strong>idealmarea.com</strong>.</div>
+        </div>
+
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">2</div>
+          <div class="tip-text"><strong>Reserva el tour en barco el día anterior.</strong> El tour en barco desde el puerto de Zumaia es la mejor forma de ver la escala real de los acantilados. Operadores: Itsaski (~€18 pp, ~1h). En verano se llena rápido — reserva el día anterior.</div>
+        </div>
+
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">3</div>
+          <div class="tip-text"><strong>La capa K-Pg es visible a simple vista.</strong> El límite Cretácico-Paleógeno donde se extinguieron los dinosaurios hace 66 millones de años es visible en el Flysch de Zumaia. Busca la capa rojiza/arcillosa fina entre estratos claros. El guía del geopark puede señalártela exactamente.</div>
+        </div>
+
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">4</div>
+          <div class="tip-text"><strong>El Centro de Interpretación del Geoparque está en Mutriku.</strong> El Geoparque de la Costa Vasca tiene Centro de Interpretación en Mutriku (20 min de Zumaia). Para profundizar en la geología antes o después del flysch, vale mucho la pena la parada.</div>
+        </div>
+
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">5</div>
+          <div class="tip-text"><strong>Combina con Getaria (5 km).</strong> Getaria, la cuna de Juan Sebastián Elcano y el Museo Balenciaga, está a solo 5 km de Zumaia. Las dos forman un día perfecto en la costa de Gipuzkoa si salís pronto de Bilbao.</div>
+        </div>
+
+      </section>
+
+      <!-- Disclosure -->
+      <div class="disclosure" role="note" aria-label="Aviso legal">
+        <strong style="color:#edeef2">Aviso:</strong> Los precios indicados son orientativos para 2026 y pueden variar según temporada y disponibilidad. Verifica horarios y precios en los sitios oficiales antes de tu visita. El tour en barco del flysch opera principalmente en primavera y verano, sujeto a condiciones meteorológicas. La Villa Zuloaga puede tener horario reducido en invierno — consulta antes.
       </div>
-    </section>
 
-    <section class="itin-section" id="flysch">
-      <h2 class="section-heading">🐉 60 millones de años de historia escritos en la roca (y en Rocadragón)</h2>
-      <div class="highlight-box">
-        <h4>🪨 La geología del Flysch</h4>
-        <p>Las capas de roca visibles en los acantilados de Itzurun y Algorri se formaron durante 60 millones de años de sedimentación marina, entre el Cretácico y el Eoceno. Entre esas capas se encuentra el límite K-T (Cretácico-Terciario), asociado a la extinción de los dinosaurios por el impacto de un asteroide hace 66 millones de años —uno de los pocos lugares del mundo donde este límite es visible a simple vista. La zona forma parte del Geoparque de la Costa Vasca (Geoparkea), reconocido por la UNESCO.</p>
-      </div>
-      <div class="highlight-box">
-        <h4>🐲 Rocadragón en Juego de Tronos</h4>
-        <p>En 2016, durante el rodaje de la séptima temporada de Juego de Tronos, la playa de Itzurun se transformó en la costa de Rocadragón (Dragonstone), donde Daenerys Targaryen desembarca por primera vez en Poniente. Los acantilados y la playa de arena negra son fácilmente reconocibles para los fans de la serie. Si te queda tiempo, el Museo Ignacio Zuloaga (Zuloaga Etxea), una antigua ermita de Santiago convertida en museo dedicado al pintor vasco, ofrece una visita complementaria de entrada de pago opcional.</p>
-      </div>
-    </section>
+    </article>
+  </div>
+</main>
 
-    <section class="itin-section" id="mapa-ruta">
-      <h2 class="section-heading">🗺️ Mapa</h2>
-      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
-    </section>
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html" style="font-family:'Bodoni Moda',serif;font-size:1.2rem;font-weight:700;color:#edeef2;text-decoration:none" aria-label="Routlo — Inicio">
+      <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+    </a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../itinerarios-espana.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">España</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
 
-    <section class="itin-section" id="ruta">
-      <h2 class="section-heading">🗺️ El itinerario</h2>
-
-      <div class="day-card">
-        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">San Sebastián → Zumaia · ~40 min</div><div class="day-subtitle">Por la costa, vía Zarautz y Getaria</div></div></div>
-        <div class="day-body"><div class="stop-list">
-          <div class="stop-item">
-            <div class="stop-name">🚗 La carretera costera</div>
-            <div class="stop-desc">Desde San Sebastián, la N-634 y la GI-3391 siguen la costa hacia el oeste, pasando por Orio, Zarautz y Getaria antes de llegar a Zumaia. Es un trayecto corto pero con vistas constantes al mar, ideal para empezar el día con calma.</div>
-          </div>
-          <div class="stop-item">
-            <div class="stop-name">🅿️ Aparcamiento en Zumaia</div>
-            <div class="stop-desc">Hay aparcamiento junto a la playa de Itzurun y en el casco urbano de Zumaia, a pocos minutos a pie del acceso a la playa. En verano y fines de semana de buen tiempo conviene llegar pronto.</div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card">
-        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Playa de Itzurun y los acantilados de Flysch</div><div class="day-subtitle">Paseo por la playa (marea baja) · Gratis</div></div></div>
-        <div class="day-body"><div class="stop-list">
-          <div class="stop-item">
-            <div class="stop-name">🏖️ La playa de arena negra</div>
-            <div class="stop-desc">Itzurun es una playa de arena oscura flanqueada por imponentes paredes de roca estratificada. Con marea baja se puede caminar por la arena y acercarse a las capas de roca, observando de cerca los pliegues y estratos que documentan millones de años de sedimentación.</div>
-          </div>
-          <div class="stop-item">
-            <div class="stop-name">🐲 El escenario de Rocadragón</div>
-            <div class="stop-desc">Reconocerás al instante el lugar donde Daenerys Targaryen desembarca por primera vez en Poniente en la séptima temporada de Juego de Tronos. Las formaciones rocosas y la disposición de la playa son inconfundibles para cualquier fan de la serie.</div>
-            <div class="stop-price">Acceso y visita: gratis</div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card">
-        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Mirador de Algorri y sendero del Geoparkea</div><div class="day-subtitle">Paseo costero · 45 min - 1h · Gratis</div></div></div>
-        <div class="day-body"><div class="stop-list">
-          <div class="stop-item">
-            <div class="stop-name">🌊 Mirador de Algorri</div>
-            <div class="stop-desc">Un breve paseo costero lleva al mirador de Algorri, desde donde se obtienen vistas panorámicas de los acantilados de Flysch y de la línea de costa hacia Deba. Es uno de los mejores puntos para apreciar la magnitud de las capas de roca desde tierra.</div>
-          </div>
-          <div class="stop-item">
-            <div class="stop-name">🥾 Sendero del Geoparkea</div>
-            <div class="stop-desc">El sendero costero del Geoparque de la Costa Vasca está señalizado con paneles informativos sobre la geología de la zona, explicando la formación del Flysch y su importancia científica internacional.</div>
-            <div class="stop-price">Acceso: gratis</div>
-          </div>
-          <div class="stop-item">
-            <div class="stop-name">🎨 Opcional: Museo Ignacio Zuloaga</div>
-            <div class="stop-desc">Zuloaga Etxea, una antigua ermita de Santiago reconvertida en museo dedicado al pintor vasco Ignacio Zuloaga, ofrece una colección de obra propia y de otros artistas de su entorno. Entrada de pago opcional para quienes quieran completar la visita con algo de arte.</div>
-            <div class="stop-price">Entrada: ~5€/persona (opcional, no incluido en el presupuesto del día)</div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card">
-        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Ruta en barco por el Flysch y regreso</div><div class="day-subtitle">Vista desde el mar + comida + vuelta ~40 min</div></div></div>
-        <div class="day-body"><div class="stop-list">
-          <div class="stop-item">
-            <div class="stop-name">🚤 Ruta en barco por la costa de Flysch</div>
-            <div class="stop-desc">Una ruta en barco recorre la costa entre Zumaia y Deba, permitiendo ver desde el mar la magnitud completa de los acantilados de Flysch —algo que desde tierra solo se aprecia parcialmente. Es además la mejor forma de reconocer los escenarios de Rocadragón y otras localizaciones de Juego de Tronos desde una perspectiva única.</div>
-            <div class="stop-price">Ruta en barco (2 personas): ~20€</div>
-            <a href="https://www.getyourguide.com/s/?q=Zumaia+flysch+Game+of+Thrones&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener" aria-label="Reservar ruta en barco por el Flysch en GetYourGuide">🎫 Reservar ruta en barco en GetYourGuide</a>
-          </div>
-          <div class="stop-item">
-            <div class="stop-name">🍽️ Comida en el pueblo</div>
-            <div class="stop-desc">El casco urbano de Zumaia tiene varios bares y restaurantes con menú del día y pintxos de pescado y marisco, ideales para recuperar fuerzas después del paseo y la ruta en barco.</div>
-          </div>
-          <div class="stop-item">
-            <div class="stop-name">🚗 Regreso a San Sebastián — ~40 min</div>
-            <div class="stop-desc">Vuelta directa por la misma carretera costera. Si te ha sabido a poco, Getaria y Zarautz están a pocos minutos y merecen una parada para otro día.</div>
-          </div>
-        </div></div>
-      </div>
-
-    </section>
-
-    <section class="itin-section" id="presupuesto">
-      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
-      <div class="budget-table">
-        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, ~76 km)</span><span>15€</span></div>
-        <div class="budget-row"><span>🚤 Ruta en barco por el Flysch (GetYourGuide, 2 personas)</span><span>20€</span></div>
-        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~35€</span></div>
-      </div>
-      <div class="budget-note">El Museo Ignacio Zuloaga (~5€/persona) es un extra opcional no incluido en este presupuesto. La playa de Itzurun, los acantilados de Flysch, el mirador de Algorri y el sendero del Geoparkea son gratuitos.</div>
-    </section>
-
-    <section class="itin-section" id="consejos">
-      <h2 class="section-heading">💡 Consejos prácticos</h2>
-      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Consulta la tabla de mareas antes de ir:</strong> con marea baja se puede caminar por la playa y ver mucho mejor las capas de roca del Flysch; con marea alta el acceso a algunas zonas queda cubierto.</div></div>
-      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>La ruta en barco</strong> es la mejor forma de ver la magnitud completa de los acantilados, que desde tierra solo se aprecian parcialmente.</div></div>
-      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Si has visto Juego de Tronos</strong>, reconocerás la playa de Itzurun al instante: es el lugar exacto donde Daenerys pisa Rocadragón por primera vez.</div></div>
-      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Combina la visita con Getaria o Zarautz</strong>, ambos a pocos minutos en coche, para completar un día de costa vasca.</div></div>
-      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en San Sebastián y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=San%20Sebastian" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en San Sebastián en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
-      <div class="disclosure" role="note" aria-label="Aviso de afiliados"><strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (GetYourGuide, DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.</div>
-    </section>
-
-    <div class="cta-banner">
-      <h3>¿Más escapadas gratis desde San Sebastián?</h3>
-      <p>Rutas de menos de 1 hora y menos de 50€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
-      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
-    </div>
-  </main>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-(function(){
-  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.308,-2.12],10);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
-  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
-  [{coords:[43.3183,-1.9812],label:'San Sebastián',color:'#5ecb8a',r:10},{coords:[43.2975,-2.2592],label:'Zumaia',color:'#7a8ea3',r:9}]
-    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}).bindPopup(wp.label));
-  L.polyline([[43.3183,-1.9812],[43.2975,-2.2592]],{color:'#7a8ea3',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+  function toggleMenu() {
+    const nav = document.querySelector('nav[role="navigation"]');
+    nav.classList.toggle('menu-open');
+  }
+
+(function() {
+  'use strict';
+
+  // ── Nav scroll effect ──
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // ── TOC active highlighting ──
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#', '');
+    const el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+
+  function updateTOC() {
+    const scrollY = window.scrollY;
+    const offset = 120;
+    let current = null;
+    sections.forEach(function(s) {
+      if (s.el.offsetTop - offset <= scrollY) {
+        current = s;
+      }
+    });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateTOC, { passive: true });
+  updateTOC();
+
+  // ── Smooth scroll for TOC links ──
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const id = this.getAttribute('href').replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 96;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ── Scroll reveal for day cards and tip items ──
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.day-card, .tip-item').forEach(function(el) {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }
+
 })();
-</script>
-<script>
-window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
-document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
 </script>
 </body>
 </html>
