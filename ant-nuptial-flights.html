@@ -625,17 +625,59 @@ const SP = [
 const SP_MAP = {};
 SP.forEach(s=>{ SP_MAP[s.id]=s; });
 
+// ─── ESPECIES DE LOGROÑO / LA RIOJA (nºs del checklist) ─────
+// Selección basada en distribución conocida: clima mediterráneo-continental,
+// altitud 384 m, entorno de cultivos, pinares, ribera del Ebro y sierras.
+const LOGRONO_NS = new Set([
+  1,4,13,16,18,    // Camponotus: aethiops, cruentatus, piceus, sylvaticus, vagus
+  34,40,41,42,47,48,50,51,52,53, // Formica: cunicularia,fusca,gagates,gerardi,polyctena,pratensis,rufa,rufibarbis,sanguinea,selysi
+  55,58,63,64,65,73,74,76,   // Lasius: alienus,brunneus,emarginatus,flavus,fuliginosus,niger,paralienus,platythorax
+  82,            // Plagiolepis pygmaea
+  86,93,         // Nylanderia jaegerskioeldi, Polyergus rufescens
+  99,103,106,    // Bothriomyrmex atlantis, Dolichoderus quadripunctatus, Tapinoma erraticum
+  117,122,       // Hypoponera abeillei, Ponera coarctata
+  136,137,140,143, // Aphaenogaster: gemella,gibbosa,senilis,subterranea
+  146,           // Cardiocondyla elegans
+  153,156,157,   // Crematogaster: auberti,scutellaris,sordidula
+  158,           // Formicoxenus nitidulus (con Formica)
+  167,169,       // Leptothorax: acervorum,muscorum
+  170,171,177,   // Messor: barbarus,bouvieri,lobicornis
+  183,189,       // Monomorium: carbonarium,subopacum
+  190,           // Myrmecina graminicola
+  201,202,203,204,205, // Myrmica: rubra,ruginodis,sabuleti,scabrinodis,schencki
+  217,219,       // Pheidole pallidula, Solenopsis fugax
+  230,           // Strongylognathus testaceus
+  241,244,245,246,249,250, // Tetramorium: caespitum,forte,immigrans,impurum,meridionale,semilaeve
+  253,262,266,278,283,286,291,293,295  // Temnothorax: affinis,binodis,continentalis,interruptus,naeviventris,nylanderi,recedens,tuberum,unifasciatus
+]);
+SP.forEach(s=>{ if(LOGRONO_NS.has(s.n)) s.logrono=true; });
+
+// Coordenadas dentro de Logroño y alrededores (radio ~40 km)
+const LOGRONO_COORDS = [
+  [42.466,-2.445],[42.461,-2.451],[42.471,-2.438],[42.455,-2.465],[42.478,-2.430],
+  [42.440,-2.500],[42.490,-2.490],[42.408,-2.521],[42.510,-2.420],[42.435,-2.395],
+  [42.565,-2.675],[42.543,-2.300],[42.590,-2.555],[42.502,-2.610],[42.450,-2.745],
+  [42.350,-2.555],[42.380,-2.380],[42.660,-2.795],[42.720,-2.305],[42.800,-2.550],
+  [42.600,-2.390],[42.520,-2.710],[42.680,-2.450],[42.310,-2.540],[42.700,-2.230],
+  [42.420,-2.340],[42.580,-2.200],[42.640,-3.000],[42.450,-2.860],[42.550,-2.800],
+  [42.480,-2.350],[42.510,-2.580],[42.390,-2.610],[42.600,-2.700],[42.720,-2.600]
+];
+
 // ─── ZONAS IBÉRICAS ──────────────────────────────────────────
 const IBERIAN_ZONES = {
+  logrono:{name:'Logroño · La Rioja',short:'Logroño',icon:'📍',color:'#7C3AED',border:'#5B21B6',
+    center:[42.47,-2.45],zoom:10,bounds:[[41.9,-3.6],[43.0,-1.4]],
+    coords:LOGRONO_COORDS,
+    spFilter:s=>s.logrono===true},
   todas:{name:'Toda la Península',short:'Todas',icon:'🗺️',color:'#15803D',border:'#14532D',
     center:[40.1,-3.5],zoom:6,bounds:[[36,-9.5],[44,4]],
     spFilter:()=>true},
   norte:{name:'Norte Atlántico',short:'Norte',icon:'🌧️',color:'#1D4ED8',border:'#1E3A8A',
     center:[43.2,-5.5],zoom:7,bounds:[[42.3,-9],[44,2]],
     spFilter:s=>['Formica','Lasius','Myrmica','Leptothorax','Harpagoxenus','Formicoxenus','Polyergus','Proformica'].includes(s.sci.split(' ')[0])},
-  rioja:{name:'La Rioja & Aragón',short:'La Rioja',icon:'🍇',color:'#7C3AED',border:'#5B21B6',
+  rioja:{name:'La Rioja & Aragón',short:'La Rioja',icon:'🍇',color:'#9333EA',border:'#6B21A8',
     center:[42.0,-1.5],zoom:7,bounds:[[41,-3.5],[43.5,2]],
-    spFilter:s=>['Camponotus','Formica','Lasius','Tetramorium','Temnothorax','Goniomma','Messor','Crematogaster','Pheidole'].includes(s.sci.split(' ')[0])},
+    spFilter:s=>s.logrono||['Camponotus','Goniomma','Messor','Cataglyphis','Aphaenogaster'].includes(s.sci.split(' ')[0])},
   meseta:{name:'Meseta Central',short:'Meseta',icon:'🌾',color:'#D97706',border:'#92400E',
     center:[40.4,-3.7],zoom:7,bounds:[[38.5,-6.5],[41.5,-1]],
     spFilter:s=>['Messor','Aphaenogaster','Pheidole','Crematogaster','Solenopsis','Iberoformica','Tapinoma','Cataglyphis'].includes(s.sci.split(' ')[0])},
@@ -673,22 +715,25 @@ let map, markers=[], logronoMarker=null, activeZone='todas';
 function initMap(){
   map = L.map('mapEl',{zoomControl:true,attributionControl:false,
     maxBounds:[[27,-15],[50,10]],minZoom:5
-  }).setView([40.1,-3.5],6);
+  }).setView([42.47,-2.45],10);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
     maxZoom:18,attribution:'© CartoDB'}).addTo(map);
   L.control.attribution({position:'bottomright'}).addTo(map);
   addLogronoMarker();
   map.on('zoomend moveend',()=>refreshMarkers());
-  selectZone('todas');
+  selectZone('logrono');
 }
 
 function addLogronoMarker(){
-  const html=`<div style="background:#7C3AED;border:3px solid #5B21B6;color:#fff;
-    padding:7px 12px;border-radius:12px;font-family:'Exo',sans-serif;font-weight:700;
-    font-size:11px;box-shadow:3px 3px 0 #5B21B6;white-space:nowrap;pointer-events:none">
-    🍇 Logroño · La Rioja</div>`;
+  const html=`<div onclick="selectZone('logrono')" style="background:#7C3AED;border:3px solid #5B21B6;color:#fff;
+    padding:8px 14px;border-radius:14px;font-family:'Exo',sans-serif;font-weight:700;
+    font-size:12px;box-shadow:4px 4px 0 #5B21B6;white-space:nowrap;cursor:pointer;
+    display:flex;align-items:center;gap:6px">
+    📍 <span>Logroño · La Rioja</span>
+    <span style="background:rgba(255,255,255,.25);border-radius:8px;padding:2px 6px;font-size:10px">${LOGRONO_NS.size} esp.</span>
+  </div>`;
   logronoMarker = L.marker([42.47,-2.45],{
-    icon:L.divIcon({html,className:'',iconSize:[150,36],iconAnchor:[75,36]}),
+    icon:L.divIcon({html,className:'',iconSize:[210,40],iconAnchor:[105,40]}),
     zIndexOffset:1000
   }).addTo(map);
 }
@@ -712,16 +757,16 @@ function refreshMarkers(){
   const z=IBERIAN_ZONES[activeZone];
   if(!z) return;
   const visible=SP.filter(z.spFilter);
-  const show=Math.min(visible.length, zoom>=7?50:30);
-  const coords=IBERIA_COORDS;
-  visible.slice(0,show).forEach((s,i)=>{
-    const [lat,lng]=coords[i%coords.length];
-    // tiny jitter so overlapping coords spread slightly
-    const jLat=lat+(((i*7+3)%11-5)*0.04);
-    const jLng=lng+(((i*13+1)%9-4)*0.06);
+  const coords=z.coords||IBERIA_COORDS;
+  const maxShow=activeZone==='logrono'?visible.length:Math.min(visible.length,zoom>=7?50:30);
+  visible.slice(0,maxShow).forEach((s,i)=>{
+    const base=coords[i%coords.length];
+    // small deterministic jitter
+    const jLat=base[0]+(((i*7+3)%11-5)*0.003);
+    const jLng=base[1]+(((i*13+1)%9-4)*0.005);
     const m=L.marker([jLat,jLng],{
       icon:L.divIcon({html:antMarkerHTML(s),className:'',
-        iconSize:[160,24],iconAnchor:[80,12]})
+        iconSize:[170,22],iconAnchor:[85,11]})
     });
     m.on('click',()=>openSpeciesDetail(s.id));
     m.addTo(map);
@@ -741,9 +786,18 @@ function selectZone(key){
 
 function renderSpPanel(key){
   const z=IBERIAN_ZONES[key];
-  const visible=SP.filter(z.spFilter).slice(0,8);
+  const all=SP.filter(z.spFilter);
+  const nowFlying=all.filter(s=>(s.months||[]).includes(NOW));
   const panel=document.getElementById('spPanel');
-  panel.innerHTML=visible.map(s=>{
+  const header=`<div style="grid-column:1/-1;padding:4px 0 12px">
+    <div style="font-size:13px;font-weight:700;color:var(--c-p)">${z.icon} ${z.name}</div>
+    <div style="font-size:12px;color:var(--c-txm);margin-top:3px">
+      <strong style="color:var(--c-txt)">${all.length}</strong> especies registradas ·
+      <strong style="color:#15803D">${nowFlying.length} vuelan en ${MONTHS_FULL[NOW-1]}</strong>
+      ${key==='logrono'?' · <em style="color:#7C3AED">Área metropolitana y alrededores</em>':''}
+    </div>
+  </div>`;
+  const cards=all.slice(0,8).map(s=>{
     const months=s.months||[];
     const peak=s.peak||[];
     const bars=Array.from({length:12},(_,i)=>{
@@ -766,6 +820,7 @@ function renderSpPanel(key){
       </div>
     </div>`;
   }).join('');
+  panel.innerHTML=header+cards;
 }
 
 // ─── SPECIES GRID VIEW ─────────────────────────────────────
@@ -992,7 +1047,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
   buildFlyingNow();
   buildStats();
   route();
-  renderSpPanel('todas');
 });
 </script>
 </body>
