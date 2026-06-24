@@ -625,120 +625,125 @@ const SP = [
 const SP_MAP = {};
 SP.forEach(s=>{ SP_MAP[s.id]=s; });
 
-// ─── REGIONS (world map) ─────────────────────────────────────
-const REGIONS = {
-  iberia:{name:'Península Ibérica',short:'Iberia',color:'#B91C1C',border:'#7F1D1D',icon:'🦅',
-    center:[40,-3.5],zoom:6,bounds:[[36,-9.5],[44,4]],species:SP},
-  europe:{name:'Europa Central',short:'Europa C.',color:'#1D4ED8',border:'#1E3A8A',icon:'🏔️',
-    center:[50,12],zoom:5,bounds:[[44,0],[58,25]],
-    species:[
-      {n:1,sci:'Lasius niger',com:'Black garden ant',id:'eu_ln',months:[7,8],peak:[8],temp:'20–28 °C',time:'Midday',sub:'Formicinae',trigger:'Warm day after rain'},
-      {n:2,sci:'Formica rufa',com:'Red wood ant',id:'eu_fr',months:[5,6,7],peak:[6],temp:'18–26 °C',time:'Midday',sub:'Formicinae',trigger:'Sunny warm days'},
-      {n:3,sci:'Myrmica rubra',com:'European fire ant',id:'eu_mr',months:[7,8],peak:[8],temp:'16–22 °C',time:'Afternoon',sub:'Myrmicinae',trigger:'Warm humid afternoons'},
-    ]},
-  na_east:{name:'N. America East',short:'NA East',color:'#7C3AED',border:'#5B21B6',icon:'🦅',
-    center:[40,-78],zoom:5,bounds:[[25,-90],[50,-65]],
-    species:[
-      {n:1,sci:'Lasius niger americanus',com:'American black ant',id:'na_ln',months:[7,8],peak:[8],temp:'22–30 °C',time:'Midday',sub:'Formicinae',trigger:'Hot humid day'},
-      {n:2,sci:'Solenopsis invicta',com:'Red imported fire ant',id:'na_si',months:[5,6,7,8,9],peak:[7],temp:'24–34 °C',time:'Afternoon',sub:'Myrmicinae',trigger:'Warm days, post-rain'},
-    ]},
-  trop_americas:{name:'Trópicos América',short:'Trópicos Am.',color:'#065F46',border:'#064E3B',icon:'🌿',
-    center:[0,-60],zoom:4,bounds:[[-20,-90],[15,-35]],
-    species:[
-      {n:1,sci:'Atta cephalotes',com:'Leafcutter ant',id:'ta_ac',months:[4,5,6,7,8,9,10,11],peak:[5,6],temp:'24–34 °C',time:'Night',sub:'Myrmicinae',trigger:'Seasonal rains'},
-      {n:2,sci:'Eciton burchellii',com:'Army ant',id:'ta_eb',months:[1,2,3,4,5,6,7,8,9,10,11,12],peak:[5,6],temp:'24–34 °C',time:'Dawn',sub:'Dorylinae',trigger:'Colony reproduction cycle'},
-    ]},
-  se_asia:{name:'SE Asia',short:'SE Asia',color:'#C2410C',border:'#9A3412',icon:'🌴',
-    center:[5,115],zoom:5,bounds:[[-8,95],[25,140]],
-    species:[
-      {n:1,sci:'Oecophylla smaragdina',com:'Weaver ant',id:'sea_os',months:[4,5,6],peak:[5],temp:'28–38 °C',time:'Morning',sub:'Formicinae',trigger:'Pre-monsoon heat'},
-    ]},
-  africa:{name:'África',short:'África',color:'#D97706',border:'#92400E',icon:'☀️',
-    center:[5,25],zoom:4,bounds:[[-35,-20],[38,55]],
-    species:[
-      {n:1,sci:'Dorylus helvolus',com:'Safari ant',id:'af_dh',months:[4,5,6,7,8,9,10,11],peak:[5,10],temp:'26–38 °C',time:'Dawn/Dusk',sub:'Dorylinae',trigger:'Seasonal transition'},
-    ]},
-  australia:{name:'Australia',short:'Australia',color:'#B45309',border:'#78350F',icon:'🦘',
-    center:[-25,135],zoom:4,bounds:[[-40,110],[-10,155]],
-    species:[
-      {n:1,sci:'Myrmecia gulosa',com:'Bull ant',id:'au_mg',months:[10,11,12,1,2,3],peak:[11,12],temp:'24–34 °C',time:'Morning',sub:'Myrmeciinae',trigger:'Spring-summer warm days'},
-    ]}
+// ─── ZONAS IBÉRICAS ──────────────────────────────────────────
+const IBERIAN_ZONES = {
+  todas:{name:'Toda la Península',short:'Todas',icon:'🗺️',color:'#15803D',border:'#14532D',
+    center:[40.1,-3.5],zoom:6,bounds:[[36,-9.5],[44,4]],
+    spFilter:()=>true},
+  norte:{name:'Norte Atlántico',short:'Norte',icon:'🌧️',color:'#1D4ED8',border:'#1E3A8A',
+    center:[43.2,-5.5],zoom:7,bounds:[[42.3,-9],[44,2]],
+    spFilter:s=>['Formica','Lasius','Myrmica','Leptothorax','Harpagoxenus','Formicoxenus','Polyergus','Proformica'].includes(s.sci.split(' ')[0])},
+  rioja:{name:'La Rioja & Aragón',short:'La Rioja',icon:'🍇',color:'#7C3AED',border:'#5B21B6',
+    center:[42.0,-1.5],zoom:7,bounds:[[41,-3.5],[43.5,2]],
+    spFilter:s=>['Camponotus','Formica','Lasius','Tetramorium','Temnothorax','Goniomma','Messor','Crematogaster','Pheidole'].includes(s.sci.split(' ')[0])},
+  meseta:{name:'Meseta Central',short:'Meseta',icon:'🌾',color:'#D97706',border:'#92400E',
+    center:[40.4,-3.7],zoom:7,bounds:[[38.5,-6.5],[41.5,-1]],
+    spFilter:s=>['Messor','Aphaenogaster','Pheidole','Crematogaster','Solenopsis','Iberoformica','Tapinoma','Cataglyphis'].includes(s.sci.split(' ')[0])},
+  mediterraneo:{name:'Mediterráneo',short:'Mediterráneo',icon:'🌊',color:'#0891B2',border:'#0E7490',
+    center:[39.5,0.5],zoom:7,bounds:[[37.5,-0.5],[42,3.5]],
+    spFilter:s=>['Crematogaster','Tapinoma','Pheidole','Plagiolepis','Linepithema','Cardiocondyla','Tetramorium'].includes(s.sci.split(' ')[0])},
+  andalucia:{name:'Andalucía & Sur',short:'Andalucía',icon:'☀️',color:'#B91C1C',border:'#7F1D1D',
+    center:[37.5,-4.5],zoom:7,bounds:[[36,-7.5],[38.7,-1]],
+    spFilter:s=>['Cataglyphis','Rossomyrmex','Goniomma','Messor','Iberoformica','Proformica','Aphaenogaster'].includes(s.sci.split(' ')[0])}
 };
 
+// Coordenadas distribuidas por la Península Ibérica (para marcadores)
+const IBERIA_COORDS = [
+  [42.47,-2.45],[42.3,-2.1],[42.6,-1.9],[41.9,-2.7],[42.1,-1.6],// La Rioja / Logroño
+  [42.0,-4.5],[41.5,-5.2],[41.8,-3.8],[40.8,-5.0],[41.2,-4.0],[41.0,-4.8],// Castilla León
+  [41.6,-0.5],[42.1,0.2],[41.0,-0.8],[40.5,-0.2],[41.3,0.5],// Aragón
+  [40.4,-3.7],[40.0,-3.2],[39.8,-3.5],[40.5,-3.0],[40.2,-4.2],// Madrid / Guadalajara
+  [39.5,-3.8],[39.0,-2.5],[38.5,-3.0],[38.8,-2.0],[39.2,-3.2],// Castilla La Mancha
+  [39.5,-6.5],[39.0,-6.0],[38.5,-6.5],[38.7,-6.0],[39.8,-7.0],// Extremadura
+  [38.0,-5.0],[37.5,-4.5],[37.8,-3.5],[38.0,-4.0],[37.9,-5.5],// Andalucía norte
+  [37.0,-5.5],[36.8,-4.5],[36.5,-5.5],[36.7,-3.5],[37.2,-5.0],// Andalucía sur
+  [37.6,-1.8],[37.0,-2.0],[36.8,-2.5],[37.3,-1.5],[36.9,-1.9],// Murcia / Almería
+  [39.5,-0.5],[38.8,-0.2],[38.5,-1.0],[39.0,-0.8],[39.8,-0.3],// Valencia
+  [41.5,1.5],[41.8,2.5],[42.2,1.8],[41.2,2.0],[42.0,2.8],// Cataluña
+  [42.5,-8.0],[43.0,-7.5],[42.8,-7.0],[43.3,-8.5],[42.3,-8.5],// Galicia
+  [43.3,-5.5],[43.4,-6.5],[43.5,-5.0],[43.3,-4.0],[43.2,-6.0],// Asturias
+  [43.3,-2.5],[43.1,-1.8],[42.8,-2.8],[43.2,-3.5],[43.4,-3.0],// País Vasco / Cantabria
+  [39.5,-8.0],[40.5,-7.5],[41.5,-7.5],[38.0,-8.0],[37.5,-7.5],// Portugal interior
+  [40.0,-7.0],[41.0,-8.0],[37.0,-7.5],[38.5,-7.2],[39.0,-8.5] // Portugal más
+];
+
 // ─── MAP ─────────────────────────────────────────────────────
-let map, markers=[], activeRegion='iberia';
+let map, markers=[], logronoMarker=null, activeZone='todas';
 
 function initMap(){
-  map = L.map('mapEl',{zoomControl:true,attributionControl:false}).setView([20,0],2);
+  map = L.map('mapEl',{zoomControl:true,attributionControl:false,
+    maxBounds:[[27,-15],[50,10]],minZoom:5
+  }).setView([40.1,-3.5],6);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
     maxZoom:18,attribution:'© CartoDB'}).addTo(map);
   L.control.attribution({position:'bottomright'}).addTo(map);
-  addRegionMarkers();
-  map.on('zoomend',()=>refreshMarkers(map.getZoom()));
-  selectRegion('iberia');
+  addLogronoMarker();
+  map.on('zoomend moveend',()=>refreshMarkers());
+  selectZone('todas');
 }
 
-function regionMarkerHTML(r){
-  return `<div style="background:${r.color};border:3px solid ${r.border};color:#fff;
-    padding:8px 14px;border-radius:12px;font-family:'Exo',sans-serif;font-weight:700;
-    font-size:12px;box-shadow:3px 3px 0 ${r.border};cursor:pointer;white-space:nowrap">
-    ${r.icon} ${r.short}</div>`;
+function addLogronoMarker(){
+  const html=`<div style="background:#7C3AED;border:3px solid #5B21B6;color:#fff;
+    padding:7px 12px;border-radius:12px;font-family:'Exo',sans-serif;font-weight:700;
+    font-size:11px;box-shadow:3px 3px 0 #5B21B6;white-space:nowrap;pointer-events:none">
+    🍇 Logroño · La Rioja</div>`;
+  logronoMarker = L.marker([42.47,-2.45],{
+    icon:L.divIcon({html,className:'',iconSize:[150,36],iconAnchor:[75,36]}),
+    zIndexOffset:1000
+  }).addTo(map);
 }
 
 function antMarkerHTML(s){
-  const col = s.subC||'#15803D';
-  return `<div style="background:${col};color:#fff;padding:5px 10px;border-radius:999px;
-    font-family:'Exo',sans-serif;font-weight:600;font-size:10.5px;font-style:italic;
-    box-shadow:2px 2px 0 rgba(0,0,0,.25);cursor:pointer;white-space:nowrap;
-    border:1.5px solid rgba(255,255,255,.3)">${s.sci}</div>`;
+  const col=s.subC||'#15803D';
+  const isNow=(s.months||[]).includes(NOW);
+  const bg=isNow?'#166534':col;
+  const border=isNow?'#14532D':'rgba(0,0,0,.2)';
+  return `<div style="background:${bg};color:#fff;padding:4px 9px;border-radius:999px;
+    font-family:'Exo',sans-serif;font-weight:600;font-size:10px;font-style:italic;
+    box-shadow:2px 2px 0 ${border};cursor:pointer;white-space:nowrap;
+    border:1.5px solid rgba(255,255,255,.35);line-height:1.2">${s.sci}</div>`;
 }
 
-function addRegionMarkers(){
-  const positions={
-    iberia:[40,-3.5],europe:[50,12],na_east:[40,-78],
-    trop_americas:[0,-60],se_asia:[5,115],africa:[5,25],australia:[-25,135]
-  };
-  Object.entries(REGIONS).forEach(([k,r])=>{
-    const [lat,lng]=positions[k]||[r.center[0],r.center[1]];
-    const m=L.marker([lat,lng],{icon:L.divIcon({html:regionMarkerHTML(r),className:'',iconAnchor:[0,0]})});
-    m.on('click',()=>selectRegion(k));
-    m.addTo(map);
-  });
-}
-
-function refreshMarkers(zoom){
+function refreshMarkers(){
   markers.forEach(m=>m.remove());
   markers=[];
-  if(zoom<5) return;
-  const r=REGIONS[activeRegion];
-  if(!r) return;
-  const bounds=map.getBounds();
-  // show up to 40 species
-  r.species.slice(0,40).forEach((s,i)=>{
-    const lat=r.bounds[0][0]+(r.bounds[1][0]-r.bounds[0][0])*(0.15+Math.sin(i*2.3)*.7);
-    const lng=r.bounds[0][1]+(r.bounds[1][1]-r.bounds[0][1])*(0.15+Math.cos(i*1.7)*.7);
-    if(!bounds.contains([lat,lng])) return;
-    const m=L.marker([lat,lng],{icon:L.divIcon({html:antMarkerHTML(s),className:'',iconAnchor:[0,8]})});
+  const zoom=map.getZoom();
+  if(zoom<6) return;
+  const z=IBERIAN_ZONES[activeZone];
+  if(!z) return;
+  const visible=SP.filter(z.spFilter);
+  const show=Math.min(visible.length, zoom>=7?50:30);
+  const coords=IBERIA_COORDS;
+  visible.slice(0,show).forEach((s,i)=>{
+    const [lat,lng]=coords[i%coords.length];
+    // tiny jitter so overlapping coords spread slightly
+    const jLat=lat+(((i*7+3)%11-5)*0.04);
+    const jLng=lng+(((i*13+1)%9-4)*0.06);
+    const m=L.marker([jLat,jLng],{
+      icon:L.divIcon({html:antMarkerHTML(s),className:'',
+        iconSize:[160,24],iconAnchor:[80,12]})
+    });
     m.on('click',()=>openSpeciesDetail(s.id));
     m.addTo(map);
     markers.push(m);
   });
 }
 
-function selectRegion(key){
-  activeRegion=key;
-  const r=REGIONS[key];
-  if(!r) return;
-  map.flyToBounds(r.bounds,{duration:1,maxZoom:7});
+function selectZone(key){
+  activeZone=key;
+  const z=IBERIAN_ZONES[key];
+  if(!z) return;
+  map.flyToBounds(z.bounds,{duration:0.8,maxZoom:z.zoom||7,padding:[20,20]});
   document.querySelectorAll('.zpill').forEach(p=>p.classList.toggle('active',p.dataset.key===key));
   renderSpPanel(key);
-  refreshMarkers(map.getZoom());
+  setTimeout(()=>refreshMarkers(),900);
 }
 
 function renderSpPanel(key){
-  const r=REGIONS[key];
+  const z=IBERIAN_ZONES[key];
+  const visible=SP.filter(z.spFilter).slice(0,8);
   const panel=document.getElementById('spPanel');
-  panel.innerHTML=r.species.slice(0,8).map(s=>{
+  panel.innerHTML=visible.map(s=>{
     const months=s.months||[];
     const peak=s.peak||[];
     const bars=Array.from({length:12},(_,i)=>{
@@ -929,7 +934,7 @@ function setView(v){
 }
 
 function goView(v){
-  if(v==='map') location.hash='#/mapa';
+  if(v==='map'){ location.hash='#/mapa'; setView('map'); refreshMarkers(); }
   else if(v==='grid'){ location.hash='#/especies'; buildGridView(); }
   else if(v==='cal'){ location.hash='#/calendario'; buildCalendar(); setView('cal'); }
 }
@@ -973,10 +978,9 @@ function buildStats(){
 // ─── ZONE PILLS ─────────────────────────────────────────────
 function buildZonePills(){
   const row=document.getElementById('zoneRow');
-  row.innerHTML=Object.entries(REGIONS).map(([k,r])=>
-    `<button class="zpill${k==='iberia'?' active':''}" data-key="${k}" onclick="selectRegion('${k}')"
-      style="${k==='iberia'?`background:${r.color};color:#fff;border-color:${r.border}`:''}"
-    >${r.icon} ${r.name}</button>`
+  row.innerHTML=Object.entries(IBERIAN_ZONES).map(([k,z])=>
+    `<button class="zpill${k==='todas'?' active':''}" data-key="${k}" onclick="selectZone('${k}')"
+    >${z.icon} ${z.name}</button>`
   ).join('');
 }
 
@@ -988,8 +992,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   buildFlyingNow();
   buildStats();
   route();
-  // re-render iberia panel
-  renderSpPanel('iberia');
+  renderSpPanel('todas');
 });
 </script>
 </body>
