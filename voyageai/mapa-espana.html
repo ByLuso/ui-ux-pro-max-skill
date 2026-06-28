@@ -405,13 +405,13 @@
     <!-- Tabs -->
     <div class="sidebar-tabs">
       <button class="sidebar-tab active" id="tabActivos" onclick="switchTab('activos')">
-        Con itinerario <span class="sidebar-tab-count">12</span>
+        Con itinerario <span class="sidebar-tab-count">14</span>
       </button>
       <button class="sidebar-tab" id="tabParques" onclick="switchTab('parques')">
-        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">103</span>
+        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">106</span>
       </button>
       <button class="sidebar-tab" id="tabProximos" onclick="switchTab('proximos')">
-        Próximos <span class="sidebar-tab-count">1</span>
+        Próximos <span class="sidebar-tab-count">0</span>
       </button>
     </div>
 
@@ -426,9 +426,9 @@
 
     <!-- Stats -->
     <div class="sidebar-stats" aria-label="Estadísticas">
-      <div class="stat-item"><span class="stat-val">12</span><span class="stat-lbl">Activos</span></div>
-      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">103</span><span class="stat-lbl">Naturaleza</span></div>
-      <div class="stat-item"><span class="stat-val">115</span><span class="stat-lbl">Itinerarios</span></div>
+      <div class="stat-item"><span class="stat-val">14</span><span class="stat-lbl">Activos</span></div>
+      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">106</span><span class="stat-lbl">Naturaleza</span></div>
+      <div class="stat-item"><span class="stat-val">120</span><span class="stat-lbl">Itinerarios</span></div>
     </div>
   </aside>
 
@@ -596,6 +596,32 @@ const ACTIVOS = [
     gradient: 'linear-gradient(135deg,#000a12 0%,#00101c 100%)',
     img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=560&h=300&fit=crop&q=80&auto=format',
     url: 'itinerarios/cantabria-5-dias.html'
+  },
+  {
+    id: 'gran-canaria',
+    nombre: 'Gran Canaria',
+    region: 'Islas Canarias',
+    emoji: '🏖️',
+    dias: 5,
+    precio: '~€450',
+    coords: [27.9202, -15.5474],
+    desc: 'Dunas de Maspalomas (UNESCO), Roque Nublo a 1.813 m, Las Palmas colonial y la playa urbana más larga de Europa.',
+    gradient: 'linear-gradient(135deg,#0a1400 0%,#243e00 100%)',
+    img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/gran-canaria.html'
+  },
+  {
+    id: 'lanzarote',
+    nombre: 'Lanzarote',
+    region: 'Islas Canarias',
+    emoji: '🌋',
+    dias: 4,
+    precio: '~€350',
+    coords: [29.0469, -13.5899],
+    desc: 'Timanfaya, Jameos del Agua, Fundación César Manrique y la laguna verde de El Golfo. La isla más artística del Atlántico.',
+    gradient: 'linear-gradient(135deg,#140200 0%,#400e00 100%)',
+    img: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/lanzarote.html'
   }
 ];
 
@@ -641,9 +667,7 @@ const PARQUES = [
   }
 ];
 
-const PROXIMOS = [
-  { id: 'lanzarote', nombre: 'Lanzarote', region: 'Islas Canarias', emoji: '🌴', coords: [29.0469, -13.5899], desc: 'Timanfaya, el Jameos del Agua y astroturismo en las noches más estrelladas del Atlántico.' }
-];
+const PROXIMOS = [];
 
 // Appended to PARQUES after declaration
 PARQUES.push(
@@ -868,6 +892,45 @@ PARQUES.push(
     desc: 'Bosque de laurisilva del Terciario envuelto en niebla. UNESCO Patrimonio Natural. La isla mágica de Canarias sin masificación.',
     gradient: 'linear-gradient(135deg,#040e06 0%,#061c0a 100%)',
     url: 'itinerarios/garajonay.html'
+  },
+  {
+    id: 'fuerteventura-norte',
+    nombre: 'Fuerteventura Norte',
+    region: 'Corralejo · Dunas · Los Lobos',
+    zona: 'Islas Canarias',
+    emoji: '🏄',
+    dias: 1,
+    precio: '~€50',
+    coords: [28.738, -13.864],
+    desc: 'Las dunas saharianas más grandes de Canarias (10 km²), la isla virgen de Los Lobos en ferry y las lagunas de El Cotillo al atardecer.',
+    gradient: 'linear-gradient(135deg,#000a14 0%,#002040 100%)',
+    url: 'itinerarios/fuerteventura-norte.html'
+  },
+  {
+    id: 'fuerteventura-sur',
+    nombre: 'Fuerteventura Sur',
+    region: 'Jandía · Cofete · Sotavento',
+    zona: 'Islas Canarias',
+    emoji: '🌊',
+    dias: 1,
+    precio: '~€52',
+    coords: [28.066, -14.354],
+    desc: 'Playa de Sotavento (20 km virgen, sede del Mundial de Windsurf), la legendaria Playa de Cofete y Villa Winter entre acantilados del Atlántico.',
+    gradient: 'linear-gradient(135deg,#100800 0%,#401e00 100%)',
+    url: 'itinerarios/fuerteventura-sur.html'
+  },
+  {
+    id: 'fuerteventura-interior',
+    nombre: 'Fuerteventura Interior',
+    region: 'Betancuria · Molinos · La Oliva',
+    zona: 'Islas Canarias',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€41',
+    coords: [28.423, -14.058],
+    desc: 'Betancuria (primera capital de Canarias, s. XV), molinos de viento del s. XVIII, iglesia con portada azteca en Pájara y Casa de los Coroneles en La Oliva.',
+    gradient: 'linear-gradient(135deg,#100c00 0%,#302400 100%)',
+    url: 'itinerarios/fuerteventura-interior.html'
   },
   {
     id: 'grazalema',
