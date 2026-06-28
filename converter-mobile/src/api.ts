@@ -1,17 +1,23 @@
-import axios, { AxiosProgressEvent } from 'axios';
 import * as FileSystem from 'expo-file-system';
-import { ConvertFormat } from './types';
+import { ConvertFormat, ServerCapabilities } from './types';
 
 export interface HealthResponse {
-  status:       string;
-  calibre:      boolean;
-  calibre_path: string | null;
+  status:           string;
+  calibre:          boolean;
+  kfx_plugin:       boolean;
+  kindle_previewer: boolean;
+  can_make_kfx:     boolean;
+  supported_input:  string[];
+  supported_output: string[];
 }
 
 export async function checkHealth(serverUrl: string): Promise<HealthResponse> {
   const url = serverUrl.replace(/\/$/, '');
-  const res = await axios.get<HealthResponse>(`${url}/health`, { timeout: 5000 });
-  return res.data;
+  const res = await fetch(`${url}/health`, {
+    signal: AbortSignal.timeout(5000),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json() as Promise<HealthResponse>;
 }
 
 export async function convertFile(
@@ -23,7 +29,6 @@ export async function convertFile(
 ): Promise<string> {
   const base = serverUrl.replace(/\/$/, '');
 
-  // Build multipart form using fetch + XMLHttpRequest for upload progress
   const formData = new FormData();
   formData.append('file', {
     uri:  fileUri,
@@ -38,29 +43,31 @@ export async function convertFile(
     xhr.responseType = 'blob';
 
     xhr.upload.onprogress = (e: ProgressEvent) => {
-      if (e.lengthComputable) onProgress(e.loaded / e.total * 0.5);
+      if (e.lengthComputable) onProgress((e.loaded / e.total) * 0.5);
     };
 
     xhr.onload = async () => {
       if (xhr.status !== 200) {
-        const errText = await new Promise<string>((res) => {
-          const reader = new FileReader();
-          reader.onload = () => res(reader.result as string);
-          reader.readAsText(xhr.response);
-        });
-        let detail = errText;
-        try { detail = JSON.parse(errText).detail ?? errText; } catch {}
-        reject(new Error(detail));
+        const reader = new FileReader();
+        reader.onload = () => {
+          let msg = reader.result as string;
+          try { msg = JSON.parse(msg).detail ?? msg; } catch {}
+          reject(new Error(msg.slice(0, 200)));
+        };
+        reader.readAsText(xhr.response);
         return;
       }
 
       onProgress(0.75);
 
-      // Save blob to device
-      const blob: Blob = xhr.response;
-      const stem    = fileName.replace(/\.[^.]+$/, '');
-      const outName = `${stem}.${format}`;
-      const outPath = `${FileSystem.cacheDirectory}${outName}`;
+      // Detectar si el servidor usó fallback AZW3 en lugar de KFX
+      const fallbackFmt = xhr.getResponseHeader('X-Fallback-Format');
+      const actualFormat = fallbackFmt ?? format;
+
+      const blob: Blob  = xhr.response;
+      const stem        = fileName.replace(/\.[^.]+$/, '');
+      const outName     = `${stem}.${actualFormat}`;
+      const outPath     = `${FileSystem.cacheDirectory}${outName}`;
 
       const reader = new FileReader();
       reader.onload = async () => {
@@ -75,9 +82,9 @@ export async function convertFile(
       reader.readAsDataURL(blob);
     };
 
-    xhr.onerror = () => reject(new Error('Error de red. Verifica la URL del servidor.'));
+    xhr.onerror   = () => reject(new Error('Error de red. Verifica la URL del servidor.'));
     xhr.ontimeout = () => reject(new Error('Tiempo de espera agotado.'));
-    xhr.timeout = 300_000;
+    xhr.timeout   = 300_000;
 
     xhr.send(formData);
   });
