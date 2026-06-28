@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gran Canaria — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 5 días en Gran Canaria: Las Palmas, Dunas de Maspalomas, Roque Nublo, norte arqueológico y playas salvajes. Presupuesto detallado, hoteles y consejos de Routlo."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { line-height: 1.6; min-height: 100vh; }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #1a3a6e 0%, transparent 70%); top: -200px; left: -150px; opacity: 0.5; animation: blob 14s ease-in-out infinite; }
+    .aurora::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #2a1a5e 0%, transparent 70%); bottom: -150px; right: -100px; opacity: 0.45; animation: blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0a2d4a 0%, transparent 70%); top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-60px) scale(1.08); } 66% { transform: translate(-30px,40px) scale(0.94); } }
+    .dest-hero { position: relative; z-index: 1; min-height: 65vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 140px 24px 60px; overflow: hidden; }
+    .dest-hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #0a1400 0%, #162800 40%, #243e00 70%, rgba(201,169,110,0.2) 100%); }
+    .dest-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%); }
+    .dest-hero-deco { position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, #040810 0%, transparent 100%); z-index: 0; }
+    .dest-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); margin-bottom: 20px; position: relative; z-index: 1; }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2; }
+    .dest-country { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; font-style: italic; color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1; }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(4,8,16,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar { display: flex; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 680px; position: relative; z-index: 1; }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.15rem; font-weight: 700; color: #c9a96e; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 5px; color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(201,169,110,0.3); padding-bottom: 1px; }
+    .hotel-link:hover { border-color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .hotel-grid { grid-template-columns: repeat(2,1fr); } .transport-grid { grid-template-columns: 1fr; } .gastro-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .dest-title { font-size: clamp(2rem,10vw,3.2rem); } .dest-country { font-size: 1.1rem; } .dest-sum-item { padding: 12px 8px; } .dest-sum-label { font-size: 0.6rem; } .dest-sum-val { font-size: 1rem; } .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; } .day-num { font-size: 1.8rem; min-width: 44px; } .day-meta { margin-left: 0; flex-direction: row; gap: 8px; width: 100%; } .day-body { padding: 14px 16px; } .section-heading { font-size: 1.3rem; } .hotel-grid { grid-template-columns: 1fr; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } .reveal { opacity: 1; transform: none; transition: none; } }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- Aurora background -->
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<!-- Navigation -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <!-- Decorative floating circles -->
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+  <div class="dest-hero-deco" aria-hidden="true"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Gran Canaria</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Gran Canaria</h1>
+  <p class="dest-country">Islas Canarias</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      5 días / 4 noches
+    </span>
+    <span class="dest-badge" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Pareja
+    </span>
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      €450–800
+    </span>
+    <span class="dest-badge" role="listitem">Canarias · España</span>
+    <span class="dest-badge" role="listitem">Playa + Naturaleza + Ciudad</span>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del viaje">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">5 días</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Viajeros</div>
+      <div class="dest-sum-val">Pareja</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Presupuesto</div>
+      <div class="dest-sum-val">€450-800</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Región</div>
+      <div class="dest-sum-val">Atlántico</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Estilo</div>
+      <div class="dest-sum-val">Aventura</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main content -->
+<div class="itin-layout">
+
+  <!-- TOC Sidebar -->
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <p class="toc-title">Contenido</p>
+    <ul class="toc-list" role="list">
+      <li><a href="#resumen" class="active">Resumen</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#transporte">Transporte</a></li>
+      <li><a href="#dia1">Día 1 — Las Palmas</a></li>
+      <li><a href="#dia2">Día 2 — Maspalomas</a></li>
+      <li><a href="#dia3">Día 3 — Roque Nublo</a></li>
+      <li><a href="#dia4">Día 4 — Norte Arqueológico</a></li>
+      <li><a href="#dia5">Día 5 — Güi Güi</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <!-- Article -->
+  <article>
+
+    <!-- Resumen -->
+    <section class="itin-section" id="resumen" aria-labelledby="heading-resumen">
+      <h2 class="section-heading" id="heading-resumen">Resumen del viaje</h2>
+      <p style="font-size:0.93rem;color:rgba(237,238,242,0.75);line-height:1.75;margin-bottom:24px;">
+        Gran Canaria es el continente en miniatura: dunas saharianas en el sur, bosques de pinos canarios y barrancos en el interior, playas urbanas en Las Palmas y yacimientos arqueológicos aborígenes en el norte. En 5 días se puede ver lo esencial de la isla más diversa del archipiélago, desde el casco histórico del siglo XV de Vegueta hasta la cima del Roque Nublo a 1.813 metros.
+      </p>
+
+      <div class="cta-banner">
+        <h3>Planifica este viaje con IA</h3>
+        <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+        <a href="../index.html#cta" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Empezar gratis
+        </a>
+      </div>
+    </section>
+
+    <!-- Presupuesto -->
+    <section class="itin-section" id="presupuesto" aria-labelledby="heading-presupuesto">
+      <h2 class="section-heading" id="heading-presupuesto">Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr>
+              <th>Concepto</th>
+              <th>Estimado por persona</th>
+              <th>Notas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Vuelos (ida/vuelta)</td>
+              <td>€200–400</td>
+              <td>Desde Madrid/Barcelona, con antelación</td>
+            </tr>
+            <tr>
+              <td>Alquiler coche (5 días)</td>
+              <td>€80–120</td>
+              <td>Recoger en aeropuerto GCX</td>
+            </tr>
+            <tr>
+              <td>Alojamiento (4 noches)</td>
+              <td>€250–400</td>
+              <td>Las Palmas o zona sur según preferencia</td>
+            </tr>
+            <tr>
+              <td>Comida (5 días)</td>
+              <td>€150–250</td>
+              <td>Mix restaurantes y mercados</td>
+            </tr>
+            <tr>
+              <td>Entradas y actividades</td>
+              <td>€30</td>
+              <td>Cueva Pintada, museos, Roque Nublo (gratuito)</td>
+            </tr>
+            <tr>
+              <td>Extras / souvenirs</td>
+              <td>€50</td>
+              <td>Quesos, bienmesabe, recuerdos</td>
+            </tr>
+            <tr>
+              <td>TOTAL</td>
+              <td>€760–1,250</td>
+              <td>Por persona (vuelos incluidos)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.45);margin-top:12px;">* Precios orientativos para 2026. Los vuelos son el componente más variable.</p>
+    </section>
+
+    <!-- Transporte -->
+    <section class="itin-section" id="transporte" aria-labelledby="heading-transporte">
+      <h2 class="section-heading" id="heading-transporte">Cómo moverse</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Alquiler de coche
+          </div>
+          <div class="transport-content">
+            Imprescindible para Gran Canaria. La <strong>GC-1</strong> (autopista norte-sur) conecta Las Palmas con el sur en 40 minutos. Sin coche es imposible visitar Roque Nublo, Güi Güi ni el norte. Recoger en aeropuerto GCX el día 1.<br><br>
+            Precio: <strong>€80–120 los 5 días</strong> (compañías locales más baratas que internacionales: Cicar, Record Go).
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="1" y="5" width="22" height="14" rx="2"/><path d="M1 10h22"/><path d="M7 5v14"/><path d="M17 5v14"/></svg>
+            Transporte público
+          </div>
+          <div class="transport-content">
+            Los <strong>autobuses Global</strong> conectan Las Palmas con la mayoría de municipios. El bus 30 (Las Palmas–Maspalomas, 1h) y el bus 1 (Las Palmas circular) son útiles. Para <strong>Roque Nublo</strong> y zonas rurales del interior el bus es insuficiente.<br><br>
+            App: <strong>Global Gran Canaria</strong> (disponible en iOS y Android).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 1 -->
+    <section class="itin-section" id="dia1" aria-labelledby="heading-dia1">
+      <h2 class="section-heading" id="heading-dia1">Día 1</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Llegada + Las Palmas de Gran Canaria</div>
+            <div class="day-subtitle">La ciudad más cosmopolita de Canarias</div>
+          </div>
+          <div class="day-meta">
+            <span>GCX Aeropuerto</span>
+            <span>Las Palmas</span>
+            <span>Llegada + tarde</span>
+          </div>
+        </div>
+        <div class="day-body">
+
+          <!-- Activity 1 -->
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Aeropuerto GCX → Las Palmas</div>
+              <div class="act-desc">Llegada al aeropuerto Gran Canaria (GCX), recoger coche de alquiler. La autopista GC-1 lleva directamente a Las Palmas en 30 minutos. El tráfico es fluido salvo hora punta (8–9h y 17–19h).</div>
+              <div class="act-tags">
+                <span class="act-tag">Coche alquiler</span>
+                <span class="act-tag">GC-1</span>
+                <span class="act-tag">30 min</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 2 -->
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Vegueta</div>
+              <div class="act-desc">El casco histórico más antiguo de Canarias: trazado urbano del siglo XV, adoquines de basalto negro, la Casa de Colón donde Cristóbal Colón hizo escala en sus viajes a América (hoy museo gratuito), la Catedral de Santa Ana con su fachada de piedra dorada. El barrio más fotogénico de Las Palmas y uno de los conjuntos históricos mejor conservados de España.</div>
+              <div class="act-tags">
+                <span class="act-tag green">Casa Colón gratuita</span>
+                <span class="act-tag">s. XV</span>
+                <span class="act-tag">Catedral</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 3 -->
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Mercado del Puerto</div>
+              <div class="act-desc">El mercado gourmet más completo de las islas: tapas canarias, queso de flor de Guía, mojos de todos los colores, papas arrugadas, langostinos canarios, vino de Gran Canaria. El mejor almuerzo de Las Palmas, sin duda.</div>
+              <div class="act-tags">
+                <span class="act-tag">~€15-20 pp</span>
+                <span class="act-tag">Tapas canarias</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 4 -->
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Playa de Las Canteras</div>
+              <div class="act-desc">Tres kilómetros de arena dorada en pleno corazón de la ciudad, protegida por La Barra (arrecife natural). Las Canteras es consistentemente votada como una de las mejores playas urbanas del mundo: agua a 22°C todo el año, paseo marítimo con restaurantes, mercadillo de artesanía los fines de semana. Sin coche: a pie desde Vegueta (40 min) o taxi (€8).</div>
+              <div class="act-tags">
+                <span class="act-tag green">Gratis</span>
+                <span class="act-tag">Agua 22°C</span>
+                <span class="act-tag">3 km</span>
+                <span class="act-tag">Arrecife natural</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 5 -->
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Triana</div>
+              <div class="act-desc">El barrio art déco de Las Palmas: la Calle Mayor de Triana (peatonal) es el paseo de compras más elegante de las islas, flanqueada por edificios modernistas de principios del siglo XX. El Gabinete Literario (centro cultural en un palacete de 1843), el Pérez Galdós (el escritor canario más universal, nació en este barrio). Para cenar: los restaurantes de la Plaza de Cairasco.</div>
+              <div class="act-tags">
+                <span class="act-tag green">Paseo gratuito</span>
+                <span class="act-tag">Art déco</span>
+                <span class="act-tag">Triana</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hotels -->
+          <h3 style="font-family:'Bodoni Moda',Georgia,serif;font-size:1rem;color:#c9a96e;margin-top:28px;margin-bottom:4px;">Dónde dormir — Noche 1 y 2 (Las Palmas)</h3>
+          <div class="hotel-grid">
+            <div class="hotel-card">
+              <div class="hotel-tier">Premium</div>
+              <div class="hotel-name">Santa Catalina Royal Hideaway</div>
+              <div class="hotel-zone">Las Palmas — Parque Doramas</div>
+              <div class="hotel-price">Desde €180/noche</div>
+              <ul class="hotel-features">
+                <li>Hotel histórico de 1890</li>
+                <li>Piscina y jardines tropicales</li>
+                <li>Spa completo</li>
+                <li>Restaurante gourmet</li>
+              </ul>
+              <a href="https://www.booking.com/" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com →</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">Recomendado</div>
+              <div class="hotel-name">Hotel Astoria</div>
+              <div class="hotel-zone">Las Palmas — Triana</div>
+              <div class="hotel-price">Desde €95/noche</div>
+              <ul class="hotel-features">
+                <li>Ubicación central perfecta</li>
+                <li>A 5 min de Las Canteras</li>
+                <li>Desayuno buffet incluido</li>
+                <li>Parking cercano</li>
+              </ul>
+              <a href="https://www.booking.com/" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com →</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">Económico</div>
+              <div class="hotel-name">Hostel La Quinta</div>
+              <div class="hotel-zone">Las Palmas — Vegueta</div>
+              <div class="hotel-price">Desde €35/noche</div>
+              <ul class="hotel-features">
+                <li>En el casco histórico</li>
+                <li>Ambiente viajero internacional</li>
+                <li>Cocina equipada</li>
+                <li>Wifi y taquillas</li>
+              </ul>
+              <a href="https://www.booking.com/" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com →</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 2 -->
+    <section class="itin-section" id="dia2" aria-labelledby="heading-dia2">
+      <h2 class="section-heading" id="heading-dia2">Día 2</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Dunas de Maspalomas</div>
+            <div class="day-subtitle">Las dunas saharianas del sur y el faro más famoso de Canarias</div>
+          </div>
+          <div class="day-meta">
+            <span>Sur de la isla</span>
+            <span>45 min desde Las Palmas</span>
+            <span>Playa + Dunas</span>
+          </div>
+        </div>
+        <div class="day-body">
+
+          <!-- Activity 1 -->
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Salida hacia el sur por la GC-1</div>
+              <div class="act-desc">Salida desde Las Palmas por la GC-1 hasta Maspalomas. La autopista atraviesa el interior de la isla mostrando los barrancos volcánicos y los municipios del interior a medida que se desciende hacia el sur árido y soleado.</div>
+              <div class="act-tags">
+                <span class="act-tag">GC-1</span>
+                <span class="act-tag">45 min</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 2 -->
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Dunas de Maspalomas</div>
+              <div class="act-desc">Reserva de la Biosfera de la UNESCO: 400 hectáreas de dunas saharianas junto al Atlántico, las más meridionales de Europa. Entrar en las dunas a pie y caminar 2 horas hacia El Oasis (palmeral natural en el corazón del parque) es una experiencia sin precedentes en el territorio europeo. Las dunas cambian de forma constantemente por el viento alisio y crean paisajes diferentes cada día.</div>
+              <div class="act-tags">
+                <span class="act-tag">RB UNESCO</span>
+                <span class="act-tag">400 ha</span>
+                <span class="act-tag green">Gratuito</span>
+                <span class="act-tag info">Calzado cómodo</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 3 -->
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Playa del Inglés + Playa de Maspalomas</div>
+              <div class="act-desc">Los 6 kilómetros consecutivos de playa más famosos de Canarias: del extremo de Maspalomas (junto al faro) hasta el Inglés. Agua a 22°C todo el año, arena dorada, poco oleaje. La zona de Maspalomas junto al faro es más tranquila; el Inglés tiene más servicios y animación.</div>
+              <div class="act-tags">
+                <span class="act-tag">6 km de playa</span>
+                <span class="act-tag">Agua 22°C</span>
+                <span class="act-tag">Servicios completos</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 4 -->
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Faro de Maspalomas (1890) + Playa de Amadores</div>
+              <div class="act-desc">El faro de Maspalomas (1890) junto a la desembocadura de las dunas es el icono fotográfico del sur de Gran Canaria. Desde allí, conducir 20 minutos al oeste hasta la Playa de Amadores: cala artificial de diseño con agua de color turquesa intenso, protegida por escolleras. Una de las playas más fotogénicas de la isla.</div>
+              <div class="act-tags">
+                <span class="act-tag">Faro histórico 1890</span>
+                <span class="act-tag">Amadores +20 min</span>
+                <span class="act-tag">Agua turquesa</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:0.82rem;color:rgba(237,238,242,0.45);margin-top:16px;font-style:italic;">Noche 2 en el mismo alojamiento de Las Palmas (ver Día 1) o cambio a hotel del sur si se prefiere.</p>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 3 -->
+    <section class="itin-section" id="dia3" aria-labelledby="heading-dia3">
+      <h2 class="section-heading" id="heading-dia3">Día 3</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Roque Nublo y el Interior</div>
+            <div class="day-subtitle">El corazón volcánico de Gran Canaria a 1.813 metros</div>
+          </div>
+          <div class="day-meta">
+            <span>Interior isla</span>
+            <span>Roque Nublo 1.813m</span>
+            <span>Trekking suave</span>
+          </div>
+        </div>
+        <div class="day-body">
+
+          <!-- Activity 1 -->
+          <div class="activity">
+            <div class="act-time">08:30</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Salida hacia el interior por la GC-15</div>
+              <div class="act-desc">Salida temprana desde Las Palmas o zona sur por la GC-15 hacia el interior. La carretera sube por barrancos dramáticos ganando altitud rápidamente. A los 40 minutos el paisaje cambia radicalmente: de costa árida a bosques de pinos canarios.</div>
+              <div class="act-tags">
+                <span class="act-tag">GC-15</span>
+                <span class="act-tag">40-50 min al interior</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 2 -->
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Tejeda</div>
+              <div class="act-desc">El pueblo más bello del interior de Gran Canaria: enclavado en el interior de la caldera volcánica a 1.050 metros, rodeado de almendros que en enero-febrero crean el espectáculo del Almendro en Flor (el festival de flores más concurrido de Canarias). Calles estrechas, casas blancas con puertas verdes, vistas al Roque Nublo y Roque Bentayga desde el mirador de la plaza.</div>
+              <div class="act-tags">
+                <span class="act-tag">1.050 m altitud</span>
+                <span class="act-tag">Almendros enero-febrero</span>
+                <span class="act-tag green">Mirador plaza</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 3 -->
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Roque Nublo</div>
+              <div class="act-desc">El monolito volcánico más icónico de Canarias: 80 metros de basalto negro sobre el horizonte a 1.813 metros de altitud. La caminata desde el parking de La Goleta dura 10 minutos (acceso fácil) hasta la base del roque. Con cielo despejado en los meses de invierno se ve perfectamente el Teide nevado en Tenerife. El monolito era lugar sagrado para los aborígenes guanches. Sin entrada, sin restricción de acceso.</div>
+              <div class="act-tags">
+                <span class="act-tag">1.813 m</span>
+                <span class="act-tag info">10 min a pie</span>
+                <span class="act-tag green">Gratis</span>
+                <span class="act-tag">Vista al Teide</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 4 -->
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Tejeda</div>
+              <div class="act-desc">Volver a Tejeda para el almuerzo: restaurantes de cocina canaria del interior en las terrazas con vistas al Nublo. Papas arrugadas con mojo rojo casero, potaje de berros, bienmesabe (crema de almendra y miel local, el dulce más canario) de postre.</div>
+              <div class="act-tags">
+                <span class="act-tag">~€18-22 pp</span>
+                <span class="act-tag">Vistas al Roque Nublo</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 5 -->
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Artenara + Cruz de Tejeda</div>
+              <div class="act-desc">Artenara es el pueblo más alto de Gran Canaria (1.270 m): casas-cueva habitadas desde el siglo XIV talladas en la roca volcánica, iglesia en cueva con la virgen de la Cuevita. Luego Cruz de Tejeda (el mirador central de la isla, señalizado en todas las carreteras): el punto desde donde se ve simultáneamente la costa norte y sur de Gran Canaria.</div>
+              <div class="act-tags">
+                <span class="act-tag">Casas-cueva habitadas</span>
+                <span class="act-tag green">Cruz de Tejeda señalizado</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hotels -->
+          <h3 style="font-family:'Bodoni Moda',Georgia,serif;font-size:1rem;color:#c9a96e;margin-top:28px;margin-bottom:4px;">Dónde dormir — Noche 3</h3>
+          <div class="hotel-grid">
+            <div class="hotel-card">
+              <div class="hotel-tier">Premium</div>
+              <div class="hotel-name">Hotel Rural El Refugio</div>
+              <div class="hotel-zone">Cruz de Tejeda — Interior</div>
+              <div class="hotel-price">Desde €120/noche</div>
+              <ul class="hotel-features">
+                <li>Posada histórica del s. XIX</li>
+                <li>En el mismo Cruz de Tejeda</li>
+                <li>Vistas 360° al atardecer</li>
+                <li>Cocina canaria propia</li>
+              </ul>
+              <a href="https://www.booking.com/" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com →</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">Recomendado</div>
+              <div class="hotel-name">Hotel Parador de Cruz de Tejeda</div>
+              <div class="hotel-zone">Cruz de Tejeda</div>
+              <div class="hotel-price">Desde €95/noche</div>
+              <ul class="hotel-features">
+                <li>Parador histórico nacional</li>
+                <li>Restaurante premiado cocina canaria</li>
+                <li>Terraza panorámica</li>
+                <li>Wi-Fi y parking</li>
+              </ul>
+              <a href="https://www.booking.com/" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com →</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">Económico</div>
+              <div class="hotel-name">Hostel Tejeda</div>
+              <div class="hotel-zone">Tejeda — Casco</div>
+              <div class="hotel-price">Desde €30/noche</div>
+              <ul class="hotel-features">
+                <li>En el casco histórico de Tejeda</li>
+                <li>Vistas al Roque Nublo</li>
+                <li>Cocina compartida</li>
+                <li>Ambiente local auténtico</li>
+              </ul>
+              <a href="https://www.booking.com/" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com →</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 4 -->
+    <section class="itin-section" id="dia4" aria-labelledby="heading-dia4">
+      <h2 class="section-heading" id="heading-dia4">Día 4</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Norte Arqueológico</div>
+            <div class="day-subtitle">Cuevas aborígenes, pinturas guanches y la Venecia canaria</div>
+          </div>
+          <div class="day-meta">
+            <span>Norte isla</span>
+            <span>Arqueología</span>
+            <span>Cenobio + Cueva Pintada</span>
+          </div>
+        </div>
+        <div class="day-body">
+
+          <!-- Activity 1 -->
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Cenobio de Valerón</div>
+              <div class="act-desc">Conjunto de 298 cuevas aborígenes talladas a mano en un acantilado de toba volcánica entre los siglos X y XV: el yacimiento arqueológico más impresionante y menos visitado de Canarias. Su función era granero colectivo y espacio ritual de los guanches. Acceso desde plataforma con vistas al conjunto completo.</div>
+              <div class="act-tags">
+                <span class="act-tag">€3 entrada</span>
+                <span class="act-tag">s. X-XV</span>
+                <span class="act-tag">298 cuevas</span>
+                <span class="act-tag">Guanches</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 2 -->
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Gáldar y Cueva Pintada</div>
+              <div class="act-desc">La antigua capital del reino guanche más importante de Gran Canaria. La Cueva Pintada (Patrimonio de la Humanidad candidato) contiene las pinturas aborígenes geométricas más sofisticadas conservadas de las Canarias: círculos concéntricos, triángulos, líneas onduladas en ocre, rojo y blanco, pintadas en el siglo VIII en las paredes y techos de la cueva. RESERVAR ONLINE con antelación (cupo limitadísimo).</div>
+              <div class="act-tags">
+                <span class="act-tag">€6 entrada</span>
+                <span class="act-tag info">RESERVAR ONLINE</span>
+                <span class="act-tag">s. VIII</span>
+                <span class="act-tag">Candidato UNESCO</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 3 -->
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Puerto de las Nieves</div>
+              <div class="act-desc">Cala pesquera en el extremo noroeste de la isla junto a Los Azulejos: los acantilados más fotogénicos de Gran Canaria, formados por capas de roca volcánica de colores verdes, blancos y ocres producidos por la oxidación de distintos minerales. El pueblo tiene restaurantes de pescado fresco directamente del barco.</div>
+              <div class="act-tags">
+                <span class="act-tag green">Los Azulejos gratuito</span>
+                <span class="act-tag">Pescado fresco</span>
+                <span class="act-tag">Cala auténtica</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 4 -->
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Mogán — La Venecia canaria</div>
+              <div class="act-desc">El pueblo-canal de Gran Canaria: "la Venecia canaria" por sus canales, puentecillos de piedra y bougainvillea cayendo sobre el agua. El mercado artesanal del puerto de Mogán (viernes por la mañana, el más concurrido) y los cafés bajo las pérgolas de flores. El Puerto de Mogán es el destino más bonito y tranquilo del suroeste de la isla.</div>
+              <div class="act-tags">
+                <span class="act-tag">Venecia canaria</span>
+                <span class="act-tag">Mercado viernes</span>
+                <span class="act-tag">Bougainvillea</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hotels -->
+          <h3 style="font-family:'Bodoni Moda',Georgia,serif;font-size:1rem;color:#c9a96e;margin-top:28px;margin-bottom:4px;">Dónde dormir — Noche 4</h3>
+          <div class="hotel-grid">
+            <div class="hotel-card">
+              <div class="hotel-tier">Premium</div>
+              <div class="hotel-name">Radisson Blu Resort</div>
+              <div class="hotel-zone">Gran Canaria — Puerto Rico</div>
+              <div class="hotel-price">Desde €160/noche</div>
+              <ul class="hotel-features">
+                <li>Resort de 5 estrellas</li>
+                <li>Piscinas infinity al mar</li>
+                <li>Spa y hammam</li>
+                <li>Restaurante de autor</li>
+              </ul>
+              <a href="https://www.booking.com/" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com →</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">Recomendado</div>
+              <div class="hotel-name">Hotel Puerto de Mogán</div>
+              <div class="hotel-zone">Puerto de Mogán</div>
+              <div class="hotel-price">Desde €90/noche</div>
+              <ul class="hotel-features">
+                <li>En el centro de la Venecia canaria</li>
+                <li>A pie de los canales</li>
+                <li>Terraza con vistas</li>
+                <li>Ambiente tranquilo</li>
+              </ul>
+              <a href="https://www.booking.com/" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com →</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">Económico</div>
+              <div class="hotel-name">Apartamentos Sol y Mar</div>
+              <div class="hotel-zone">Arguineguín</div>
+              <div class="hotel-price">Desde €45/noche</div>
+              <ul class="hotel-features">
+                <li>Cocina propia equipada</li>
+                <li>A 5 min de Mogán</li>
+                <li>Parking propio</li>
+                <li>Vista al mar</li>
+              </ul>
+              <a href="https://www.booking.com/" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com →</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 5 -->
+    <section class="itin-section" id="dia5" aria-labelledby="heading-dia5">
+      <h2 class="section-heading" id="heading-dia5">Día 5</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Playa Güi Güi o Despedida</div>
+            <div class="day-subtitle">La playa más salvaje de Gran Canaria y regreso al aeropuerto</div>
+          </div>
+          <div class="day-meta">
+            <span>Opciones</span>
+            <span>Aeropuerto GCX</span>
+            <span>Salida</span>
+          </div>
+        </div>
+        <div class="day-body">
+
+          <!-- Activity 1 -->
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Ruta a Güi Güi (opcional, para aventureros)</div>
+              <div class="act-desc">Güi Güi es la playa más inaccesible e indómita de Gran Canaria: solo se llega en barco desde Puerto Rico (barcas locales, €20–30 pp) o tras 3 horas de trekking arduo desde Tasarte por un sendero sin señalizar. Quien llega la tiene casi para sí solo: arena oscura de origen volcánico, acantilados de 300 metros cayendo al Atlántico, sin servicios, sin sonidos artificiales. Solo quienes la merecen llegan. Llevar agua, comida, calzado de trekking y protección solar.</div>
+              <div class="act-tags">
+                <span class="act-tag">Barca €20-30 pp</span>
+                <span class="act-tag info">O trekking 3h</span>
+                <span class="act-tag">Sin servicios</span>
+                <span class="act-tag info">Agua y comida obligatorio</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 2 -->
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Alternativa sin trekking: Playa de Tauro o Puerto Rico</div>
+              <div class="act-desc">Para quien prefiere el último día tranquilo: Playa de Tauro (cala de piedra volcánica negra en Mogán, tranquila y sin masas) o la Playa de Puerto Rico (equipada, agua tranquila, perfecta para snorkel de despedida). El último baño de Gran Canaria antes del vuelo.</div>
+              <div class="act-tags">
+                <span class="act-tag green">Alternativa tranquila</span>
+                <span class="act-tag">Playa Tauro recomendada</span>
+                <span class="act-tag">Snorkel</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity 3 -->
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector">
+              <div class="act-dot"></div>
+              <div class="act-line"></div>
+            </div>
+            <div class="act-content">
+              <div class="act-title">Regreso al aeropuerto GCX</div>
+              <div class="act-desc">Desde la zona sur: 20–25 minutos por la GC-1. Desde Las Palmas: 35–45 minutos. Devolver el coche en el aeropuerto con tiempo suficiente (al menos 2h antes del vuelo). El aeropuerto de Gran Canaria tiene tiendas duty-free con productos locales: ron canario, bienmesabe en tarros, queso de flor de Guía.</div>
+              <div class="act-tags">
+                <span class="act-tag">Sur a GCX: 20 min</span>
+                <span class="act-tag">Las Palmas a GCX: 40 min</span>
+                <span class="act-tag">Duty-free canario</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Gastronomía -->
+    <section class="itin-section" id="gastronomia" aria-labelledby="heading-gastronomia">
+      <h2 class="section-heading" id="heading-gastronomia">Gastronomía de Gran Canaria</h2>
+      <p style="font-size:0.9rem;color:rgba(237,238,242,0.65);line-height:1.7;margin-bottom:22px;">Gran Canaria tiene la cocina más variada de las islas: influencias africanas del sur de Marruecos, cocina pesquera atlántica, dulcería de almendras del interior, quesos de cabra y oveja con denominación propia. El bienmesabe es el dulce más canario: almendra, miel, yema y limón.</p>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Clásico canario</div>
+          <div class="gastro-title">Papas arrugadas con mojo</div>
+          <div class="gastro-desc">El plato más icónico de las islas: papas pequeñas hervidas con mucha sal en poca agua hasta que la piel arruga. Con mojo rojo (pimiento, pimentón) o mojo verde (cilantro, perejil). En cualquier restaurante canario, siempre presentes.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Queso DO</div>
+          <div class="gastro-title">Queso de flor de Guía</div>
+          <div class="gastro-desc">El único queso del mundo elaborado con flor de cardo como cuajo — técnica árabe medieval conservada en el norte de Gran Canaria. Denominación de Origen Protegida desde 1994. Textura cremosa y sabor levemente amargo. Comprar directamente en Guía.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Dulcería interior</div>
+          <div class="gastro-title">Bienmesabe</div>
+          <div class="gastro-desc">La crema más canaria: almendras tostadas y molidas, miel de palma, yemas de huevo, azúcar y ralladura de limón. Se sirve sobre helado, con quesillo (flan canario) o directamente en tarros para untar. El postre definitivo del interior de Gran Canaria.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Cocina pesquera</div>
+          <div class="gastro-title">Lapas a la plancha</div>
+          <div class="gastro-desc">Las lapas canarias son los moluscos más sabrosos del Atlántico: a la plancha con mantequilla, ajo y limón, llegando a la mesa chisporroteando en hierro caliente. En cualquier chiringuito de playa de la isla. Pedir siempre con pan para mojar.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consejos -->
+    <section class="itin-section" id="consejos" aria-labelledby="heading-consejos">
+      <h2 class="section-heading" id="heading-consejos">Consejos para Gran Canaria</h2>
+
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Alquilar el coche el primer día.</strong> Sin coche de alquiler, Gran Canaria se ve solo desde los resorts del sur. El coche abre el acceso al Roque Nublo, Güi Güi, el norte arqueológico y los pueblos del interior. Reservar antes de viajar (compañías locales: Cicar, Record Go — más baratas que multinacionales).</div>
+      </div>
+
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Roque Nublo: madrugar obligatorio.</strong> Las nubes cubren el roque casi todos los días a partir del mediodía en invierno (noviembre-marzo). Salir antes de las 9h desde Las Palmas garantiza cielo despejado. En verano el cielo está más estable pero hace más calor en la caminata.</div>
+      </div>
+
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Güi Güi solo con preparación.</strong> La ruta de trekking a Güi Güi (desde Tasarte, 3h ida) es para personas en buena forma física. El sendero no está señalizado, cruza barrancos con riesgo de resbalones. Llevar mínimo 3L de agua, calzado de trekking, protector solar y un mapa offline (Maps.me).</div>
+      </div>
+
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Maspalomas mejor en la mañana temprana.</strong> Las dunas de Maspalomas al amanecer (antes de las 9h) son un espectáculo sobrenatural. Después de las 11h llegan los autocares de los resorts. La diferencia entre las dos visitas es abismal.</div>
+      </div>
+
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Cueva Pintada: reservar online.</strong> Las visitas a la Cueva Pintada tienen cupo limitadísimo (grupos de 8–10 personas). Reservar online en la web del ayuntamiento de Gáldar con al menos una semana de antelación. Sin reserva no se entra.</div>
+      </div>
+
+      <div class="tip-item">
+        <div class="tip-num">6</div>
+        <div class="tip-text"><strong>Gran Canaria tiene dos costas muy diferentes.</strong> La costa este (Las Palmas, Telde) tiene clima más húmedo y verde. La costa sur (Maspalomas, Puerto Rico) tiene más sol y menos lluvia. En noviembre-marzo el sur siempre está despejado; el norte puede tener nubes y lluvia.</div>
+      </div>
+
+      <div class="disclosure">
+        <strong>Aviso sobre enlaces de afiliados:</strong> Algunos enlaces en esta página son de afiliados (Booking.com, GetYourGuide, Skyscanner). Si realizas una compra a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Esto nos permite mantener el servicio gratuito. Los precios son orientativos para 2026.
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:40px 24px;">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+    <a href="../index.html" aria-label="Routlo inicio">
+      <img src="../assets/routlo-logo.png" alt="Routlo" style="height:32px;border-radius:6px;background:#fff;padding:2px 8px;">
+    </a>
+    <nav aria-label="Footer navigation">
+      <ul style="list-style:none;display:flex;gap:20px;flex-wrap:wrap;">
+        <li><a href="../itinerarios.html" style="font-size:0.85rem;color:rgba(237,238,242,0.55);text-decoration:none;">Todos los itinerarios</a></li>
+        <li><a href="../mapa.html" style="font-size:0.85rem;color:rgba(237,238,242,0.55);text-decoration:none;">Mapa interactivo</a></li>
+      </ul>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.35);">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+function toggleMenu() {
+  const nav = document.querySelector('nav');
+  nav.classList.toggle('menu-open');
+}
+
+(function() {
+  'use strict';
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 40) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }, { passive: true });
+
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#', '');
+    const el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+
+  function updateTOC() {
+    const scrollY = window.scrollY;
+    const offset = 120;
+    let current = null;
+    sections.forEach(function(s) {
+      if (s.el.offsetTop - offset <= scrollY) current = s;
+    });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateTOC, { passive: true });
+  updateTOC();
+
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const id = this.getAttribute('href').replace('#', '');
+      const el = document.getElementById(id);
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 96, behavior: 'smooth' });
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.day-card, .tip-item, .gastro-card').forEach(function(el) {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }
+})();
+</script>
+</body>
+</html>
