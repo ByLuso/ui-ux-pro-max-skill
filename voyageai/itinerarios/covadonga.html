@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Covadonga y los Lagos — Santuario y lagunas glaciares desde Oviedo | Routlo</title>
+  <meta name="description" content="85 km desde Oviedo: Covadonga, santuario del inicio de la Reconquista en 722 d.C., y los Lagos Enol y Ercina a 1.070 m de altitud en los Picos de Europa. ~€45 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    :root { --accent: #5ecb8a; --accent-dim: rgba(94,203,138,0.15); --accent-border: rgba(94,203,138,0.3); }
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: var(--accent); line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: var(--accent); margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-roman { display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;background:var(--accent-dim);border:1px solid var(--accent-border);font-size:0.75rem;font-weight:600;color:var(--accent);margin-bottom:12px; }
+    .cta-banner { background: linear-gradient(135deg, var(--accent-dim) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid var(--accent-border); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, var(--accent), #3aab69); color: #040810; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-dim); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, var(--accent-dim) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid var(--accent-border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: var(--accent); margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid var(--accent-border); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: var(--accent); font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: var(--accent); text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid var(--accent-border); }
+    .hotel-link:hover { border-color: var(--accent); }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#5ecb8a'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#5ecb8a'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,16,8,0.30) 0%,rgba(4,20,12,0.60) 50%,rgba(4,8,16,0.95) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-roman" style="margin-bottom:0;">⛪ Santuario + Lagos</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">85 km de Oviedo</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">~1 h en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~€45 · 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Covadonga<br><span style="color:#5ecb8a;">Santuario, cueva y lagos glaciares en los Picos</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">En el año 722 d.C., el rey Pelayo derrotó a los árabes en este anfiteatro natural de montaña, dando inicio a la Reconquista española. Hoy, el Santuario de Covadonga —con su basílica neorrománica rosa y la Cueva Santa— es el lugar más visitado de Asturias. A 20 km más arriba, los Lagos Enol y Ercina son lagunas glaciares del Cuaternario a 1.070 metros de altitud.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">Historia</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Covadonga y los Lagos</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">⛪ Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">85 km</div><div class="route-info-unit">desde Oviedo</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~1 h</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~€45</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Altitud Lagos</div><div class="route-info-value">1.070 m</div><div class="route-info-unit">sobre el nivel del mar</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Fundación</div><div class="route-info-value">722 d.C.</div><div class="route-info-unit">batalla de Covadonga</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">🏛️ Historia e historia natural</h2>
+      <div class="highlight-box">
+        <h4>⚔️ La batalla de Covadonga, 722 d.C. — inicio de la Reconquista</h4>
+        <p>En el año 711 los árabes cruzaron el estrecho de Gibraltar y en apenas tres años controlaban casi toda la península ibérica. La excepción fue el norte montañoso de Asturias, donde el noble visigodo Pelayo lideró a un grupo de resistentes en las montañas de los Picos de Europa. En el año 722, en el anfiteatro natural de Covadonga, las tropas asturianas derrotaron a un ejército árabe muy superior en número —según la crónica asturiana, con ayuda milagrosa de la Virgen— en el primer triunfo cristiano de la Reconquista. Pelayo fue proclamado rey de Asturias, primer eslabón de la cadena dinástica que llegaría hasta los Reyes Católicos.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🏔️ Los Lagos Glaciares del Pleistoceno</h4>
+        <p>Los Lagos de Covadonga —Enol y Ercina— son lagos de origen glaciar formados hace entre 10.000 y 15.000 años al retirarse los glaciares que cubrían los Picos de Europa durante el Pleistoceno. Se encuentran a 1.070 metros de altitud en una zona de calizas karst, lo que explica su peculiar coloración verde-azulada. El entorno pertenece al Parque Nacional de los Picos de Europa, el primero declarado en España (1918), y está catalogado como Reserva de la Biosfera por la UNESCO. Las vacas asturianas de montaña pastan libremente en las majadas circundantes durante los meses de verano.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Cangas de Onís — Puente Romano</div><div class="day-subtitle">Primera parada · 75 km desde Oviedo</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌉 Puente Medieval del s. XI sobre el Sella</div>
+            <div class="stop-desc">El llamado "Puente Romano" de Cangas de Onís es en realidad medieval del siglo XI, construido sobre pilares romanos anteriores. Su arco ojival sobre el río Sella, con la Cruz de la Victoria colgante —réplica de la original que guarda la Cámara Santa en Oviedo— es uno de los iconos fotográficos más reconocibles de Asturias. La villa tiene una arquitectura indiana preciosa y un mercadillo de artesanía asturiana los domingos.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏘️ Villa de Cangas de Onís</div>
+            <div class="stop-desc">La capital del primer reino de Asturias (años 718-774) conserva la Capilla Prerrománica de Santa Cruz, construida sobre un dólmen funerario del Neolítico. El panteón real asturiano arranca aquí. El casco histórico tiene casas con blasones del s. XVIII y la mejor sidrería natural del concejo.</div>
+            <div class="stop-price">Capilla Santa Cruz: acceso libre</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Santuario de Covadonga (gratis)</div><div class="day-subtitle">El corazón espiritual de Asturias</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛪ Basílica Neorrománica de 1901</div>
+            <div class="stop-desc">La Basílica de Santa Cueva, construida entre 1877 y 1901 en piedra rosa de Piedrafita, domina el anfiteatro natural de Covadonga con sus dos torres de 74 metros. El interior neorrománico guarda una imagen del s. VIII de la Virgen de Covadonga, patrona de Asturias. Los domingos se celebra la misa de peregrinos a las 12:00.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🕌 La Cueva Santa y la tumba de Pelayo</div>
+            <div class="stop-desc">En la cueva natural bajo la basílica se conserva la imagen románica de la Virgen de Covadonga y la tumba del rey Pelayo y su esposa Gaudiosa. La cueva rezuma agua de la montaña y tiene una iluminación dramática que contrasta con el anfiteatro luminoso del exterior. Es el punto más visitado de todo el recinto.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Subida a los Lagos (bus €3/pers en temporada alta)</div><div class="day-subtitle">1.070 m de altitud · Lagos glaciares del Cuaternario</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚌 Bus lanzadera desde el Santuario</div>
+            <div class="stop-desc">En julio y agosto el acceso en coche privado a los Lagos está prohibido de 8:30 a 20:00 para proteger el ecosistema. El autobús lanzadera sale desde el aparcamiento del Santuario cada 15 minutos y tarda 20 minutos en subir los 12 km de carretera de montaña. Fuera de temporada alta, se puede subir en coche propio.</div>
+            <div class="stop-price">Bus: €3/trayecto por persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏞️ Lagos Enol y Ercina</div>
+            <div class="stop-desc">Los dos lagos glaciares del Cuaternario están separados por un kilómetro de pradera alpina. El Lago Enol (a 1.070 m) es el mayor, con aguas verde-azuladas rodeadas de majadas con vacas asturianas. El Lago Ercina (a 1.108 m) está rodeado de roquedales kársticos. Las vistas de los Picos de Europa nevados al fondo son extraordinarias.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Senderismo Lagos — Ruta circular Enol-Ercina</div><div class="day-subtitle">4 km · fácil · 1h30 · sin desnivel significativo</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🥾 Ruta circular Enol-Ercina (4 km, fácil)</div>
+            <div class="stop-desc">La ruta circular entre los dos lagos es el sendero más frecuentado del Parque Nacional. Señalizada con balizas amarillas, discurre por prados alpinos sin desnivel significativo. La duración es de 1h30 caminando tranquilo. Se pueden ver buitres leonados, alimoches y, si hay suerte, rebecos en las roquedas circundantes.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">📸 Mirador de Los Llanos (vistas Picos de Europa)</div>
+            <div class="stop-desc">En el punto más alto del sendero, el Mirador de Los Llanos ofrece una panorámica completa de los macizos occidental y central de los Picos de Europa, con el Torre de Cerredo (2.650 m, el pico más alto de la Cordillera Cantábrica) visible en días despejados. El mejor momento fotográfico es a primera hora de la mañana.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">⑤</div><div><div class="day-title">Regreso por Arriondas — Almuerzo en sidrería</div><div class="day-subtitle">Capital del Descenso del Sella</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏘️ Arriondas — capital del Descenso del Sella</div>
+            <div class="stop-desc">La villa de Arriondas es el punto de salida del Descenso Internacional del Sella —la mayor fiesta fluvial de España, celebrada el primer sábado de agosto— y tiene una concentración de sidrerías en su calle principal que rivalizan con las de Oviedo. Menú del día en cualquier sidrería: €12-13 con fabada incluida. Regreso a Oviedo: 75 km, ~55 min.</div>
+            <div class="stop-price">Menú del día: ~€12-13/persona</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (170 km ida y vuelta)</span><span>€17</span></div>
+        <div class="budget-row"><span>🚌 Bus Lagos Covadonga x2 personas (ida+vuelta)</span><span>€12</span></div>
+        <div class="budget-row"><span>🍽️ Menú del día en Arriondas x2</span><span>€26</span></div>
+        <div class="budget-row"><span>☕ Café + bollo preñao en el camino</span><span>€5</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span style="color:#5ecb8a;">~€60</span></div>
+      </div>
+      <div class="budget-note">El Santuario de Covadonga y los Lagos son gratuitos. El único coste inevitable es la gasolina y, en verano, el bus lanzadera. Si vas fuera de temporada alta (octubre-junio), el bus no es obligatorio y el total baja a ~€48.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Restricción de tráfico:</strong> De julio a septiembre el acceso en coche a los Lagos está prohibido de 8:30 a 20:00. El bus lanzadera sale desde el Santuario cada 15 min (€3/trayecto). Si quieres subir en coche propio, llega al Santuario antes de las 8:15 para tener plaza en el aparcamiento de los Lagos.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Bollo preñao:</strong> El bollo de pan relleno de chorizo asturiano que venden en los puestos del camino al Santuario es la merienda oficial de Asturias —y del senderismo asturiano. Cuesta €1.50-2 y es perfecto para el ascenso a los Lagos.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Mejor época:</strong> Mayo-junio (todo verde, neveros en los Picos, sin aglomeraciones) o septiembre (clima estable, luz dorada, menos gente). Agosto es espectacular pero masificado: el aparcamiento del Santuario se llena antes de las 9:00.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Combina con Arriondas:</strong> La villa tiene el mejor menú del día de la comarca a €12-13 con fabada asturiana. Si quieres hacer el Descenso del Sella en kayak, varias empresas locales alquilan embarcaciones desde €25/persona para el tramo Arriondas-Ribadesella (8 km).</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Ropa de abrigo:</strong> En los Lagos siempre hay 5-10°C menos que en Oviedo, incluso en pleno agosto. Llevar chaqueta impermeable. El tiempo en los Picos de Europa cambia rápidamente: las nieblas pueden cubrirlo todo en 20 minutos. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Oviedo" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Oviedo en DiscoverCars" style="display:inline;margin-top:0;">Comparar coches en DiscoverCars</a></div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas de un día desde Oviedo?</h3>
+      <p>Rutas desde la capital asturiana con mapas y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.33,-5.04],11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[43.362,-5.849],label:'Oviedo',color:'#5ecb8a',r:9},{coords:[43.350,-5.130],label:'Cangas de Onís',color:'#5ecb8a',r:10},{coords:[43.344,-4.998],label:'Covadonga',color:'#5ecb8a',r:12},{coords:[43.278,-4.999],label:'Lagos Enol',color:'#5ecb8a',r:10}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[43.362,-5.849],[43.350,-5.130],[43.344,-4.998],[43.278,-4.999]],{color:'#5ecb8a',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

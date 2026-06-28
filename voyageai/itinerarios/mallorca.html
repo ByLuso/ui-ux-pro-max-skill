@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mallorca — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 5 días en Mallorca: Palma, Serra de Tramuntana, calas secretas y Formentor. Con presupuesto desde €225 hasta €2,500/persona."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Base (fallback si shared.css no carga en file:// / content://) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d2035 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#031520 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d1a1a 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg, #020a10 0%, #051828 35%, #0a3050 65%, rgba(30,180,200,0.18) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* ── Tablet ── */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+    /* ── Mobile ── */
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    /* ── Small mobile ── */
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .alert-box { font-size: 0.8rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .act-desc { font-size: 0.82rem !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+      .disclosure { padding: 12px 14px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(30,180,200,0.1);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(74,127,165,0.1);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Mallorca</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Mallorca</h1>
+  <p class="dest-country">España · Islas Baleares · Mediterráneo · Tramuntana · Calas</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 5 días / 4 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Familia</span>
+    <span class="dest-badge gold" role="listitem">💶 €225–2,500/persona</span>
+    <span class="dest-badge" role="listitem">🌍 España · Baleares</span>
+    <span class="dest-badge" role="listitem">🏖️ Calas + Senderismo + Cultura</span>
+    <a href="https://www.skyscanner.es/transport/flights/MAD/PMI/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">5 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">1 isla</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€225–2,500</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil-Media</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">May–Oct</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Palma</a></li>
+        <li><a href="#dia2">Día 2 · Tramuntana</a></li>
+        <li><a href="#dia3">Día 3 · Calas Sur</a></li>
+        <li><a href="#dia4">Día 4 · Formentor</a></li>
+        <li><a href="#dia5">Día 5 · Coves</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Mallorca es la isla mediterránea perfecta: tiene todo lo que se puede desear en cinco días de verano. La capital Palma, con su catedral gótica sobre el mar y su barrio histórico de palacios mallorquines, es tan buena como cualquier capital europea. La Serra de Tramuntana, Patrimonio de la Humanidad UNESCO, ofrece los pueblos más perfectamente conservados de España —Deià, Valldemossa— en un paisaje de olivos milenarios y acantilados sobre el Mediterráneo. Y las calas: decenas de pequeñas playas de agua turquesa escondidas entre pinos y acantilados, algunas solo accesibles a pie o en barco. Mallorca no es la isla masificada del turismo de los 90; es una isla extraordinariamente diversa que premia a quien va con coche propio y curiosidad.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏛️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Palma histórica</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1 y 5</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">⛰️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Serra de Tramuntana</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 2 y 4</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏖️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Calas secretas</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 3 y 4</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Mochilero</th><th>Estándar</th><th>Lujo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo A/R</td><td>desde €30–80</td><td>€100–160</td><td>€250+ (business)</td></tr>
+            <tr><td>🏨 Alojamiento (4 noches)</td><td>€100 (hostal Palma)</td><td>€520 (hotel boutique)</td><td>€1,600 (finca rural de lujo)</td></tr>
+            <tr><td>🍽️ Comidas (5 días)</td><td>€80</td><td>€200</td><td>€500</td></tr>
+            <tr><td>🚗 Coche alquiler (5 días)</td><td>€100</td><td>€150</td><td>€300 (coche de lujo)</td></tr>
+            <tr><td>🎟️ Entradas y actividades</td><td>€30</td><td>€60</td><td>€150 (snorkel, kayak, visitas guiadas)</td></tr>
+            <tr><td>🚤 Excursión en barco</td><td>€0</td><td>€50</td><td>€200 (barco privado)</td></tr>
+            <tr><td>🔄 Imprevistos</td><td>€31</td><td>€104</td><td>€275</td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€341</strong></td><td><strong>~€1,084</strong></td><td><strong>~€3,025</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo:</strong> Mallorca usa el euro. El mayor gasto variable es el alojamiento en temporada alta (julio-agosto). En mayo, junio o septiembre los precios bajan un 30–40% con el mismo clima. Reserva el coche con mucha antelación en verano — literalmente se agotan en toda la isla.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚗 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Aeropuerto PMI</div>
+          <div class="transport-content">
+            El de mayor tráfico de España en verano (30M pasajeros/año). A <strong>8 km de Palma</strong>. Autobús A1 hasta Plaça d'Espanya (€5, 15 min). Taxi ~€20. Ryanair, Vueling y otras low-cost operan desde casi todas las ciudades españolas.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 Coche imprescindible</div>
+          <div class="transport-content">
+            Mallorca no se entiende sin coche. Las calas secretas no tienen bus. Reserva con anticipación en verano — se agotan. <strong>Europcar, Hertz y Autos Mallorca</strong> son las mejores opciones. Carnet de conducir español válido. GPS esencial en la Tramuntana.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🛵 Moto o scooter</div>
+          <div class="transport-content">
+            Alternativa económica para parejas sin equipaje voluminoso. <strong>~€35/día</strong>. Perfecta para las carreteras de la Tramuntana. Muchos locales alquilan scooters en Palma y en los pueblos costeros. Cuidado con las curvas cerradas de montaña.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">⛵ Barco de alquiler</div>
+          <div class="transport-content">
+            Sin patrón ("bareboat") o con patrón (más caro). Para explorar calas inaccesibles por tierra — la mejor experiencia de Mallorca. Desde <strong>Puerto de Alcúdia o Puerto d'Andratx</strong>. Precio desde €150/día sin patrón con licencia náutica.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Mochilero</div>
+          <div class="hotel-name">Hostal El Loreto</div>
+          <div class="hotel-zone">Palma casco antiguo</div>
+          <div class="hotel-price">~€25/noche</div>
+          <ul class="hotel-features">
+            <li>Ambiente familiar en edificio histórico</li>
+            <li>A 5 min de la Catedral</li>
+            <li>Patio interior tranquilo</li>
+            <li>Ubicación perfecta para explorar a pie</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/hostal-el-loreto.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐⭐ Estándar</div>
+          <div class="hotel-name">Can Cera Boutique Hotel</div>
+          <div class="hotel-zone">Palma casco antiguo</div>
+          <div class="hotel-price">~€130/noche</div>
+          <ul class="hotel-features">
+            <li>Palacio mallorquín del s.XVII restaurado</li>
+            <li>Piscina en azotea con vistas</li>
+            <li>Desayuno de productos mallorquines</li>
+            <li>A pasos de la Lonja y la Catedral</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/can-cera.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Hotel La Residencia</div>
+          <div class="hotel-zone">Deià</div>
+          <div class="hotel-price">~€400/noche</div>
+          <ul class="hotel-features">
+            <li>La dirección más exclusiva de Mallorca</li>
+            <li>En el pueblo de artistas de Deià</li>
+            <li>Piscinas escalonadas en terraza</li>
+            <li>Spa y restaurante El Olivo</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/la-residencia.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Palma: la capital mediterránea</div>
+            <div class="day-subtitle">Catedral La Seu · Almudaina · Santa Catalina · Bellver</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Palma</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Catedral de Mallorca (La Seu) — la catedral gótica sobre el mar</div>
+              <div class="act-desc">La catedral gótica sobre el mar más impresionante de España. La instalación de luz de Miquel Barceló en la Capilla del Santísimo es contemporánea y sorprendente. La fachada al amanecer desde el Parc de la Mar es la mejor vista de Palma. Interior con la roseta gótica más grande de Europa.</div>
+              <div class="act-tags"><span class="act-tag">€8 entrada</span><span class="act-tag info">1.5h</span><span class="act-tag green">Exterior gratis</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Palau de l'Almudaina — el palacio árabe-gótico de los Reyes de Mallorca</div>
+              <div class="act-desc">El palacio árabe-gótico frente a la Catedral. Residencia oficial del Rey de España en Mallorca. Construido sobre una fortaleza árabe del s.X, conserva el arco gótico de la Capilla de Santa Anna y los jardines árabes originales. Visita guiada disponible.</div>
+              <div class="act-tags"><span class="act-tag">€7 entrada</span><span class="act-tag info">1h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en La Llotja — el barrio de tapas más animado de Palma</div>
+              <div class="act-desc">El barrio de La Llotja, junto al edificio gótico de la Lonja, es el centro gastronómico más animado de Palma. Decenas de bares y restaurantes con terrazas sirven tapas mallorquinas, vermut y vinos locales en un ambiente de mezcla de locales y visitantes.</div>
+              <div class="act-tags"><span class="act-tag">Tapas €15–25</span><span class="act-tag info">Ambiente local</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Santa Catalina — el mercado trendy de Palma</div>
+              <div class="act-desc">El barrio más cool de Palma, lleno de bares de aperitivo y restaurantes creativos. El Mercat de Santa Catalina es el corazón, con puestos de comida de todo el mundo y ambientazo de mediodía. Perfecto para un café de especialidad o una cerveza artesanal.</div>
+              <div class="act-tags"><span class="act-tag green">Mercado gratis</span><span class="act-tag info">Ambiente hipster</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Castell de Bellver — el único castillo circular de España</div>
+              <div class="act-desc">El único castillo circular de España (s.XIV), en un pinar sobre Palma. Vistas de 360 grados de la bahía, el Mediterráneo y las montañas de la Tramuntana. Construido como residencia de verano del Rey de Mallorca Jaime II. El pinar que lo rodea es un parque municipal con zonas de picnic.</div>
+              <div class="act-tags"><span class="act-tag">€4 entrada</span><span class="act-tag info">1.5h</span><span class="act-tag green">Vistas 360°</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Aperitivo en Es Jonquet — el barrio de los molinos de viento</div>
+              <div class="act-desc">El barrio de los molinos de viento restaurados, hoy zona de bares con vistas al puerto. Los molinos del s.XIV que molían el grano que llegaba por mar son hoy la postal más romántica de Palma al atardecer. Vermut con sobrasada y aceitunas mallorquinas en las terrazas del puerto.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Atardecer</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">22:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Palma — cocina mallorquina moderna</div>
+              <div class="act-desc">El casco antiguo de Palma tiene una escena gastronómica extraordinaria, con restaurantes que mezclan la tradición mallorquina con técnicas contemporáneas. El barrio de La Llotja y el entorno de la Plaça de la Reina concentran las mejores opciones.</div>
+              <div class="act-tags"><span class="act-tag">Cena €30–60</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Serra de Tramuntana: Valldemossa y Deià</div>
+            <div class="day-subtitle">Valldemossa · Deià · Sóller · Port de Sóller</div>
+          </div>
+          <div class="day-meta"><span>⛰️ Tramuntana</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Consejo:</strong> La Serra de Tramuntana es Patrimonio de la Humanidad UNESCO desde 2011. Las carreteras son estrechas y con muchas curvas — conduce despacio y disfruta del paisaje. La Ma-10 entre Valldemossa y Sóller es una de las carreteras más espectaculares de España.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Valldemossa — el pueblo donde vivieron Chopin y George Sand</div>
+              <div class="act-desc">El pueblo más fotogénico de Mallorca, a 25 min desde Palma. Aquí Chopin y George Sand pasaron el invierno de 1838-39. La Real Cartuja (donde vivieron) es visitable. El pueblo en sí, con sus calles de piedra, macetas de flores y vistas a los olivos, es tan bonito como dice todo el mundo.</div>
+              <div class="act-tags"><span class="act-tag">€12 Cartuja</span><span class="act-tag info">2h</span><span class="act-tag green">Pueblo gratis</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Deià — el pueblo de los artistas internacionales</div>
+              <div class="act-desc">El pueblo de los artistas internacionales. Robert Graves vivió aquí 50 años. Pequeño, caro, extraordinariamente hermoso. Cala de Deià: pequeña cala de piedras con agua turquesa, accesible a pie desde el pueblo (15 min por camino empedrado). Una de las calas más salvajes y bonitas de la Tramuntana.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1.5h</span><span class="act-tag">Cala a 15 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Sóller — el valle de los cítricos</div>
+              <div class="act-desc">Bajada por la carretera de los cítricos hasta el valle de Sóller, rodeado de naranjos y limoneros. La Plaça de Sa Constitució es el corazón de Sóller, con la iglesia modernista y los cafés bajo los porches. Naranjas y limones frescos directamente de los árboles en los mercados locales.</div>
+              <div class="act-tags"><span class="act-tag">Almuerzo €15–25</span><span class="act-tag info">Sóller modernista</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tren histórico de Sóller (1912) — el trayecto más bonito de España</div>
+              <div class="act-desc">El tren de madera de 1912 que baja desde Sóller al Port de Sóller (€8 A/R). Una experiencia de otro tiempo. El Port tiene el puerto más bonito de Mallorca, en forma de herradura protegida por las montañas. Los restaurantes de marisco en el paseo marítimo son los mejores de la Tramuntana.</div>
+              <div class="act-tags"><span class="act-tag">€8 A/R</span><span class="act-tag info">30 min trayecto</span><span class="act-tag green">Patrimonio histórico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Atardecer desde el Mirador de Ses Barques</div>
+              <div class="act-desc">De camino de regreso, el Mirador de Ses Barques (carretera Ma-10) ofrece la vista más dramática del Port de Sóller y la Tramuntana al atardecer. El mar brillando entre los picos de 1.000 metros con la luz dorada es una de las imágenes más memorables de Mallorca.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Atardecer espectacular</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Calas del Sur: Cala Mondragó y Cala Varques</div>
+            <div class="day-subtitle">Cala Mondragó · Porto Petro · Cala Varques · Porto Cristo</div>
+          </div>
+          <div class="day-meta"><span>🏖️ Calas Sur</span><span>Día de playa</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida hacia el sureste de Mallorca</div>
+              <div class="act-desc">Las calas más espectaculares de Mallorca están en el sureste. La autopista Ma-15 desde Palma llega hasta Manacor en 45 min, desde donde son otros 20 min en coche hasta las calas del Parque Natural de Mondragó. Lleva nevera con comida — los chiringuitos en las mejores calas son escasos.</div>
+              <div class="act-tags"><span class="act-tag info">1h desde Palma</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cala Mondragó (Parc Natural) — cala virgen de agua turquesa</div>
+              <div class="act-desc">Cala virgen de aguas turquesas con fondo de arena blanca, protegida como Parque Natural. Doble cala (Sa Font de n'Alis y S'Amarador). Una de las 10 playas más bonitas de España. Aparcamiento limitado — llega antes de las 10h en verano. El parque natural protege los fondos de Posidonia oceanica con peces de colores.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratis</span><span class="act-tag warn">Llegar antes 10h</span><span class="act-tag info">Parque Natural</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Porto Petro — pueblo pesquero auténtico</div>
+              <div class="act-desc">Pequeño pueblo pesquero auténtico a 3 km de Mondragó, sin turismo masivo. El puerto en herradura con los barcos de pesca es una postal perfecta. Los restaurantes de la orilla sirven pescado fresco del día. El Cap Roig (rascacio a la mallorquina) y las gambas de Sóller son la especialidad.</div>
+              <div class="act-tags"><span class="act-tag">Almuerzo €20–35</span><span class="act-tag info">Pescado del día</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cala Varques — la cala más secreta del sur</div>
+              <div class="act-desc">La cala más secreta del sur, solo accesible a pie (30 min) o en kayak desde Porto Cristo. Agua de cristal, rocas cavernosas y sin chiringuito. La experiencia de playa más virgen de Mallorca. El camino de acceso está señalizado desde la carretera de Porto Cristo — sigue los carteles de "Cala Varques".</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">30 min a pie</span><span class="act-tag warn">Sin servicios</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Porto Cristo — el pueblo más auténtico del este</div>
+              <div class="act-desc">El pueblo más auténtico del este de Mallorca, con el puerto más protegido de la isla. Las Coves del Drac están a 3 km. El centro histórico con la iglesia del s.XIII y los restaurantes de marisco del paseo del puerto son perfectos para el aperitivo antes del regreso.</div>
+              <div class="act-tags"><span class="act-tag info">Puerto histórico</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Cap de Formentor y el norte</div>
+            <div class="day-subtitle">Formentor · Playa Formentor · Alcúdia romana · Pollença</div>
+          </div>
+          <div class="day-meta"><span>🏔️ Norte</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box warn">
+            <strong>⚠️ Acceso restringido:</strong> De junio a septiembre hay restricción de acceso privado al Cap de Formentor (8h–21h). Hay bus lanzadera desde Port de Pollença (€3 A/R). La mejor opción: <strong>ir antes de las 8h</strong> para el amanecer — el momento más mágico de todo el itinerario.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">07:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cap de Formentor — los acantilados más fotogénicos de España</div>
+              <div class="act-desc">La punta más septentrional de Mallorca. Los acantilados de 200m sobre el Mediterráneo y el faro histórico de 1863 son la imagen más icónica de Mallorca. Llega antes de las 8h para entrar en coche propio y tener los miradores solos. El Mirador de Mal Pas y el Mirador del Colomer son los más espectaculares.</div>
+              <div class="act-tags"><span class="act-tag warn">Restringido verano 8h-21h</span><span class="act-tag info">Acantilados 200m</span><span class="act-tag green">Gratis</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de Formentor — la playa más elegante de Mallorca</div>
+              <div class="act-desc">La playa más famosa y elegante de Mallorca, con el Hotel Formentor (1929, el más histórico de la isla) al fondo. Pinos hasta la arena, agua cristalina y la montaña de fondo. Equipada con hamacas y chiringuito. Accesible en coche o en el bus lanzadera desde Port de Pollença.</div>
+              <div class="act-tags"><span class="act-tag info">Hotel histórico 1929</span><span class="act-tag">Hamacas €12/día</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Alcúdia — ciudad amurallada romana (Pollentia, s.II a.C.)</div>
+              <div class="act-desc">Ciudad amurallada romana (Pollentia, s.II a.C.) con el anfiteatro romano mejor conservado de España. Las murallas medievales intactas que rodean el casco histórico son las más completas de Baleares. El Museo Monogràfic de Pollentia tiene las piezas arqueológicas más importantes de las Islas.</div>
+              <div class="act-tags"><span class="act-tag">€4 museo</span><span class="act-tag info">Murallas s.XIV</span><span class="act-tag green">Anfiteatro gratis</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de Muro o Can Picafort — playas largas del norte</div>
+              <div class="act-desc">Playas largas y poco profundas del norte, perfectas para familias. La Playa de Muro (9 km de longitud) está dentro del Parc Natural de s'Albufera, con dunas estabilizadas por posidonia y aguas poco profundas de color esmeralda. La mejor playa familiar de Mallorca.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Agua poco profunda</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Pollença — el pueblo más chic del norte</div>
+              <div class="act-desc">El pueblo más chic del norte de Mallorca, lleno de galerías de arte y restaurantes excelentes. La Plaça Major porticada con los cafés de terrace es el escenario perfecto para la cena. El Celler La Parra es el restaurante de cocina mallorquina más recomendado del norte.</div>
+              <div class="act-tags"><span class="act-tag">Cena €25–45</span><span class="act-tag info">Cocina mallorquina</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 5 -->
+      <div class="day-card" id="dia5">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Coves del Drac y regreso</div>
+            <div class="day-subtitle">Coves del Drac · Manacor · Aeropuerto</div>
+          </div>
+          <div class="day-meta"><span>✈️ Salida</span><span>Mañana + vuelo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box warn">
+            <strong>⚠️ Reserva obligatoria:</strong> Las Coves del Drac tienen horario de visitas concertadas (no continuo). El horario incluye el concierto de música clásica en el lago Martel. No hay visita libre. <strong>Reserva online en dracmallorca.com</strong> antes de ir — se agotan en temporada alta.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Coves del Drac — el lago subterráneo más grande del mundo</div>
+              <div class="act-desc">El mayor sistema de cuevas de Europa con 4 lagos subterráneos. El Lago Martel (177m de largo) es el lago subterráneo navegable más grande del mundo. El concierto de música clásica en el lago es único en el planeta — los músicos tocan en barcazas iluminadas mientras flotan. Reserva el pase de mañana para más luz natural en la entrada.</div>
+              <div class="act-tags"><span class="act-tag">€16 adultos</span><span class="act-tag warn">Reservar online</span><span class="act-tag info">1h visita</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Manacor — la capital de las perlas cultivadas de Mallorca</div>
+              <div class="act-desc">La fábrica Majorica hace visitas gratuitas con tienda. Las perlas cultivadas de Mallorca son el souvenir más tradicional de la isla y un negocio centenario. El centro histórico de Manacor tiene la Torre dels Enagistes, el mejor ejemplo de arquitectura medieval del interior de la isla.</div>
+              <div class="act-tags"><span class="act-tag green">Visita fábrica gratis</span><span class="act-tag info">30 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último almuerzo mallorquín — tumbet o frito mallorquín</div>
+              <div class="act-desc">Despídete con los platos más auténticos de la cocina mallorquina: el tumbet (capas de patata, berenjena y pimiento con tomate) o el frito mallorquín (vísceras de cerdo con patatas y hinojo). Cualquier forn de pa (horno de pan) o restaurante de Manacor tiene el menú del día por €12–15.</div>
+              <div class="act-tags"><span class="act-tag">Menú €12–15</span><span class="act-tag info">Cocina tradicional</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Palma y aeropuerto PMI</div>
+              <div class="act-desc">Desde Manacor hasta el aeropuerto de Palma son 60 km y 45 min por autopista. Devuelve el coche en la terminal de alquiler (hay zona específica en el aeropuerto). Añade 2.5h de margen para entregar coche, facturar y pasar los controles. En agosto los controles pueden tardar 45–60 min.</div>
+              <div class="act-tags"><span class="act-tag info">45 min a PMI</span><span class="act-tag warn">Añadir 2.5h de margen</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Cap de Formentor al amanecer</h4><p>Los acantilados más fotogénicos de España con la luz naranja del amanecer sobre el Mediterráneo y el faro de 1863. Sin coches, sin ruidos, solo el viento y el mar a 200 metros abajo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Cala Mondragó: el azul mediterráneo más puro</h4><p>Protegida como Parque Natural, con arena blanca y posidonia que da al agua un color turquesa imposible de creer. Una de las 10 playas más bonitas de España sin discusión.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Deià y Valldemossa: pueblos perfectamente conservados</h4><p>Los dos pueblos con piedra mallorquina, flores en las ventanas y vistas a los olivos y el Mediterráneo que convirtieron a Chopin, George Sand y Robert Graves en enamorados de la isla.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Coves del Drac: concierto en el lago subterráneo</h4><p>Música clásica en barcazas flotando en el lago subterráneo más grande del mundo, con la acústica de una catedral natural. Una experiencia absolutamente única en el planeta.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Tramuntana en coche al atardecer</h4><p>Las curvas de la Ma-10 con olivos milenarios y el sol hundiéndose en el Mediterráneo entre las montañas de 1.400 metros. El paisaje más cinematográfico de España.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Catedral de Palma y la instalación de Miquel Barceló</h4><p>Arte contemporáneo del siglo XXI en el interior de una catedral gótica del siglo XIII sobre el mar. La instalación de barro y luz en la Capella del Santíssim es una obra maestra absoluta.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Tren histórico de Sóller (1912)</h4><p>El trayecto más bonito de España en tren de madera de 1912 bajando por el valle de los cítricos hasta el puerto más hermoso de Mallorca. Una experiencia de otro tiempo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Cala Varques: la cala virgen más secreta</h4><p>Solo accesible a pie por un camino de 30 minutos sin señalizar. Sin hamacas, sin chiringuito, sin turistas en masa. Agua de cristal sobre roca blanca. La Mallorca que existía antes del turismo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Alcúdia: la ciudad amurallada más auténtica de Baleares</h4><p>Murallas medievales intactas del siglo XIV, anfiteatro romano del siglo II a.C. y calles empedradas sin apenas turistas masivos. La historia de Mallorca en piedra.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Vermut en Es Jonquet al atardecer</h4><p>Los molinos de viento del siglo XIV con el sol cayendo sobre el puerto de Palma y la bahía en silencio. La imagen más romántica de la capital de las Baleares.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍲 Gastronomía mallorquina</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Plato emblema · Verduras</div><div class="gastro-title">Tumbet</div><div class="gastro-desc">La escalivada mallorquina. Capas de patata, berenjena, pimiento rojo y tomate fritos por separado y cocinados en terrina con salsa de tomate. Plato de verano perfecto, vegano de origen, hoy a veces con huevo frito encima. Presente en todos los restaurantes del interior.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Embutido · IGP</div><div class="gastro-title">Sobrasada mallorquina</div><div class="gastro-desc">La pasta untable de cerdo negro mallorquín (porc negre) con pimentón rojo. Cremosa, especiada, única. Sobre pan con miel es el desayuno mallorquín. Los cerdos negros son autóctonos de Mallorca. La Sobrasada de Mallorca de Cerdo Negro tiene IGP. Cómprala al vacío para llevar a casa.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Pastelería · IGP</div><div class="gastro-title">Ensaimada mallorquina</div><div class="gastro-desc">El dulce más famoso de España en forma de espiral. Se hace con saïm (manteca de cerdo), harina, huevo y azúcar. Las hay rellenas (cabello de ángel, crema, sobrasada) o solas. Solo las auténticas llevan saïm. Coll, Forn des Teatre y Ca'n Joan de S'Aigo en Palma son los mejores.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Plato principal · Tradicional</div><div class="gastro-title">Frito mallorquín</div><div class="gastro-desc">El guiso de vísceras de cerdo con patatas, pimiento y hinojo. El plato más contundente de la cocina mallorquina tradicional, especialmente en invierno. No para estómagos delicados — pero es la cocina más auténtica de la isla, la que comen los mallorquines.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Vino · DO</div><div class="gastro-title">Vins de Binissalem DO</div><div class="gastro-desc">Los vinos tintos de Mallorca con la uva autóctona Manto Negro. Ligeros, afrutados, perfectos para el sol mediterráneo. Las bodegas José L. Ferrer y Can Majoral son las referencias. La DO Pla i Llevant produce blancos y rosados igualmente interesantes con la uva Prensal Blanc.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Queso · Fresco</div><div class="gastro-title">Formatge mallorquí</div><div class="gastro-desc">El queso fresco de Mallorca, con aceite de oliva y hierbas aromáticas. Se hace con leche de oveja local y se consume fresco o semicurado. Los mercados de Inca (el mayor mercado del interior, jueves) tienen la mejor selección de quesos artesanales de la isla.</div></div>
+      </div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section id="consejos" class="itin-section">
+      <h2 class="section-heading">💡 Consejos insider</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>El coche es imprescindible.</strong> Sin coche, estás limitado a Palma y las playas de bus. Reserva con 3+ semanas en julio-agosto porque literalmente se agotan todos los coches de la isla. Las agencias locales como Autos Mallorca suelen tener mejores precios que las internacionales.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Cap de Formentor: ir antes de las 8h en verano.</strong> De julio a agosto no puedes acceder en coche privado de 8h a 21h. Hay un bus lanzadera desde Port de Pollença (€3 A/R). O ve antes de las 8h para el amanecer desde el Mirador de Mal Pas — el momento más mágico de toda Mallorca.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Coves del Drac: reservar online obligatorio.</strong> Las cuevas tienen visitas concertadas en horarios fijos, con el concierto incluido. No hay visita libre. En julio y agosto se agotan con días de antelación. Reserva en dracmallorca.com antes de tu viaje.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Mallorca en mayo-junio o septiembre-octubre.</strong> En agosto es cara y masificada. En mayo-junio y septiembre-octubre tienes calor, agua caliente, menos gente y precios un 30-40% más bajos. Diciembre-febrero: Palma sola para ti, con los almendros en flor desde febrero.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Calas secretas: llegar antes de las 10h en verano.</strong> Cala Varques (Porto Cristo), Cala Mesquida (norte, sin chiringuito), Cala Torta (Artà) y Cala Agulla son las menos masificadas. Las más accesibles son también las más llenas. Las de acceso solo a pie son siempre las mejores.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">6</div>
+        <div class="tip-text"><strong>Sobrasada y ensaimada: lleva a casa.</strong> Las ensaimadas de panadería local son completamente diferentes a las de aeropuerto. Coll, Forn des Teatre y Ca'n Joan de S'Aigo en Palma son los mejores. La sobrasada al vacío aguanta bien el viaje de regreso.</div>
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos, ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Nacional</div><div class="emerg-value">091</div><div class="emerg-note">Denuncias y robos a turistas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Son Espases</div><div class="emerg-value">+34 971 205 000</div><div class="emerg-note">Urgencias 24h · Palma</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil</div><div class="emerg-value">062</div><div class="emerg-note">Carreteras y zonas rurales</div></div>
+        <div class="emerg-card"><div class="emerg-label">Urgencias marítimas</div><div class="emerg-value">900 202 202</div><div class="emerg-note">Salvamento Marítimo — gratuito</div></div>
+        <div class="emerg-card"><div class="emerg-label">Turismo Mallorca</div><div class="emerg-value">+34 971 173 990</div><div class="emerg-note">Información turística oficial</div></div>
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI español en vigor (destino nacional)</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea (por si acaso)</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje con asistencia médica</div>
+            <div class="check-item"><div class="check-box"></div>Carnet de conducir para el coche de alquiler</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">✈️ Reservas confirmadas</div>
+            <div class="check-item"><div class="check-box"></div>Vuelo a Palma PMI</div>
+            <div class="check-item"><div class="check-box"></div><strong>Coche de alquiler — reservar con 3+ semanas</strong></div>
+            <div class="check-item"><div class="check-box"></div>Alojamiento (4 noches)</div>
+            <div class="check-item"><div class="check-box"></div>Coves del Drac — reservar en dracmallorca.com</div>
+            <div class="check-item"><div class="check-box"></div>Barco opcional (si es temporada)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">🎒 Equipaje</div>
+            <div class="check-item"><div class="check-box"></div>Bañador y toalla de playa</div>
+            <div class="check-item"><div class="check-box"></div>Calzado para caminar en calas (chanclas + zapatillas)</div>
+            <div class="check-item"><div class="check-box"></div>Protector solar factor 50 (en verano)</div>
+            <div class="check-item"><div class="check-box"></div>Nevera de viaje para calas sin servicio</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta sin comisiones (Revolut, N26)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">📱 Apps esenciales</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps — descarga offline Mallorca</div>
+            <div class="check-item"><div class="check-box"></div>Ctrip / Booking.com — reservas de coche</div>
+            <div class="check-item"><div class="check-box"></div>Wikiloc — rutas de senderismo en la Tramuntana</div>
+            <div class="check-item"><div class="check-box"></div>Windy — previsión del mar para salidas en barco</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para Mallorca?</h3>
+      <p>Dinos tus fechas, presupuesto y estilo de viaje. Routlo IA te crea un plan a medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a Mallorca
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com, Skyscanner y operadores de actividades pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos en euros y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.5);text-decoration:none;font-size:0.85rem;margin-bottom:16px">← Ver todos los itinerarios</a>
+    <div style="font-size:0.78rem;color:rgba(237,238,242,0.3)">© 2026 Routlo · Hecho con IA para viajeros del mundo</div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+    const sections = document.querySelectorAll('.itin-section[id], .day-card[id]');
+    const links = document.querySelectorAll('.toc-list a');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }, { passive: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zanzíbar, Tanzania — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 5 días en Zanzíbar: Stone Town Patrimonio UNESCO, playas de Nungwi, Spice Tour, bosque Jozani y sandbank privado. Presupuesto detallado y consejos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,8,16,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #051a1a 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #0d3a3a 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #1a5a4a 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #051a1a 0%, #0d3a3a 40%, #1a5a4a 70%, rgba(0,180,160,0.15) 100%),
+        url('https://images.unsplash.com/photo-1586861203927-800a5acdcc4d?w=1400&q=80') center/cover no-repeat;
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%);
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(4,8,16,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .hotel-grid { grid-template-columns: repeat(2,1fr); } .transport-grid { grid-template-columns: 1fr; } .gastro-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .hotel-grid { grid-template-columns: 1fr; } .emerg-grid { grid-template-columns: 1fr; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span>África</span>
+    <span aria-hidden="true">›</span>
+    <span>Zanzíbar</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Zanzíbar</h1>
+  <p class="dest-country">Tanzania</p>
+  <div class="dest-meta">
+    <span class="dest-badge">✈️ ~11h desde Madrid (con escala)</span>
+    <span class="dest-badge gold">5 días</span>
+    <span class="dest-badge">💰 ~€1,500/persona</span>
+    <span class="dest-badge">🌊 Océano Índico todo el año</span>
+  </div>
+  <div class="dest-summary-bar" role="region" aria-label="Resumen del viaje">
+    <div class="dest-sum-item"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">5 días</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€1,500</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Mejor época</div><div class="dest-sum-val">Jun–Oct</div></div>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#alojamiento">Alojamiento</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#transporte">Transporte</a></li>
+      <li><a href="#dia1">Día 1 — Stone Town</a></li>
+      <li><a href="#dia2">Día 2 — Nungwi + Mnemba</a></li>
+      <li><a href="#dia3">Día 3 — Spice Tour + Forodhani</a></li>
+      <li><a href="#dia4">Día 4 — Jozani + Paje</a></li>
+      <li><a href="#dia5">Día 5 — Sandbank + partida</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <!-- Alojamiento -->
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Alojamiento</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">Económico</div>
+          <div class="hotel-name">Guesthouse Stone Town</div>
+          <div class="hotel-zone">Stone Town, Zanzíbar</div>
+          <div class="hotel-price">~€25/noche</div>
+          <ul class="hotel-features">
+            <li>En el corazón de la medina histórica</li>
+            <li>Desayuno swahili incluido</li>
+            <li>Decoración árabe auténtica</li>
+          </ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Intermedio</div>
+          <div class="hotel-name">Zanzibar Beach Resort</div>
+          <div class="hotel-zone">Nungwi, norte de la isla</div>
+          <div class="hotel-price">~€90/noche</div>
+          <ul class="hotel-features">
+            <li>Acceso directo a playa de arena blanca</li>
+            <li>Piscina infinita con vistas al océano</li>
+            <li>Media pensión disponible</li>
+          </ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Lujo</div>
+          <div class="hotel-name">Baraza Resort &amp; Spa</div>
+          <div class="hotel-zone">Bwejuu, costa este</div>
+          <div class="hotel-price">~€350/noche</div>
+          <ul class="hotel-features">
+            <li>Villas privadas con piscina propia</li>
+            <li>Spa de referencia en el Índico</li>
+            <li>Restaurante con cocina swahili de autor</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Presupuesto -->
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead><tr><th>Concepto</th><th>Coste</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Vuelo ida y vuelta</td><td>€700–1,100</td><td>Madrid–ZNZ con escala (Nairobi, Doha o Addis Abeba)</td></tr>
+            <tr><td>Alojamiento (5 noches)</td><td>€125–700</td><td>Según categoría elegida (guesthouse a resort de lujo)</td></tr>
+            <tr><td>Comidas</td><td>€100–160</td><td>Restaurantes locales + mercado nocturno Forodhani</td></tr>
+            <tr><td>Transporte local</td><td>€50–80</td><td>Dala-dala + tuk-tuk + traslados en speedboat</td></tr>
+            <tr><td>Actividades</td><td>€80–120</td><td>Spice Tour, snorkeling Mnemba, Jozani, kitesurf intro</td></tr>
+            <tr><td><strong>TOTAL</strong></td><td><strong>€1,055–2,160</strong></td><td>Por persona (vuelos incluidos)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos 2026. La temporada alta (julio–agosto) puede encarecer los vuelos hasta un 30%. Evitar viajar en los meses de lluvias torrenciales (masika: marzo–mayo).</p>
+    </section>
+
+    <!-- Transporte -->
+    <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+      <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+            Desde el aeropuerto
+          </div>
+          <div class="transport-content">
+            <strong>Aeropuerto Abeid Amani Karume (ZNZ)</strong> — a 7 km de Stone Town.<br><br>
+            <strong>Taxi oficial</strong> — ~$15–20 (~€14–18). Negociar precio antes de subir; los taxis de la parada oficial son más seguros.<br><br>
+            <strong>Minibús del hotel</strong> — muchos alojamientos ofrecen recogida gratuita si se reserva con antelación.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 6V4M16 6V4M2 10h20"/></svg>
+            Movilidad en la isla
+          </div>
+          <div class="transport-content">
+            <strong>Dala-dala</strong> — minibuses compartidos, la opción más auténtica y barata. ~500 TZS (~€0.20) por trayecto urbano.<br><br>
+            <strong>Tuk-tuk</strong> — rápido para Stone Town. ~2,000–5,000 TZS (~€1–2). Negociar siempre antes.<br><br>
+            <strong>Moto-taxi (bodaboda)</strong> — recomendado para tramos cortos fuera de la ciudad. Usar casco.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+            Apps y conectividad
+          </div>
+          <div class="transport-content">
+            <strong>Bolt</strong> — funciona en Stone Town, bastante fiable. Tarifas más transparentes que los taxis de la calle.<br><br>
+            <strong>SIM local</strong> — comprar una SIM de Vodacom Tanzania en el aeropuerto (~€5 con datos). La cobertura es buena en la costa norte.<br><br>
+            <strong>Google Maps</strong> — funciona para Stone Town; fuera de la ciudad los mapas offline de Maps.me son más detallados.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Ferry y excursiones marítimas
+          </div>
+          <div class="transport-content">
+            <strong>Ferry Dar es Salaam – Zanzíbar</strong> — 2h en catamarán rápido (~€30 ida). Varias salidas diarias con Azam Marine y Kilimanjaro Fast Ferry.<br><br>
+            <strong>Speedboat a Mnemba</strong> — ~€25–35 por persona según operador. Reservar con el hotel o en el puerto de Nungwi.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 1 -->
+    <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+      <h2 class="section-heading" id="h-dia1">Día 1</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Stone Town — Patrimonio UNESCO</div>
+            <div class="day-subtitle">El alma árabe-swahili de la isla de las especias</div>
+          </div>
+          <div class="day-meta">
+            <span>🏛️ Casa de las Maravillas</span>
+            <span>🌙 Mercado Darajani</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada y check-in en Stone Town</div>
+              <div class="act-desc">Aterriza en el aeropuerto Abeid Amani Karume y toma un taxi al centro histórico. Stone Town es Patrimonio de la Humanidad por la UNESCO desde el año 2000: un laberinto de callejuelas estrechas con puertas de madera talladas, balcones de coral y mezquitas del siglo XIX. El primer contacto con los aromas de clavo, cardamomo y canela que impregnan el aire es completamente diferente a cualquier otro destino.</div>
+              <div class="act-tags"><span class="act-tag info">Taxi oficial recomendado</span><span class="act-tag">~€15 desde aeropuerto</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Casa de las Maravillas (Beit el-Ajaib)</div>
+              <div class="act-desc">El edificio más icónico de Stone Town, construido en 1883 por el sultán Barghash como primer palacio con electricidad y ascensor en África oriental. Hoy es el Museo de Historia y Cultura de Zanzíbar. Cuatro plantas con colecciones de puertas talladas, armas, instrumentos musicales taarab y objetos del comercio de esclavos que marcó la isla durante siglos.</div>
+              <div class="act-tags"><span class="act-tag">€5 entrada</span><span class="act-tag green">Patrimonio UNESCO</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado Darajani — el corazón de la isla</div>
+              <div class="act-desc">El mayor mercado de Zanzíbar, en funcionamiento desde el siglo XIX. Puestos de especias apiladas en montañas de color, pescado fresco del océano Índico, mangos, jackfruit y el bullicio comercial más auténtico de la isla. Regatear es parte de la experiencia; el precio inicial suele ser tres veces el justo.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag">Imprescindible al atardecer</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en la terraza del Emerson Spice</div>
+              <div class="act-desc">Cena con música taarab en vivo en las terrazas de este riad histórico con vistas a los tejados de Stone Town. La cocina mezcla influencias árabes, indias y africanas: langosta a la parrilla, pilau de cordero y halua de azafrán de postre. La experiencia más evocadora de la primera noche.</div>
+              <div class="act-tags"><span class="act-tag">~€25 pp con bebidas</span><span class="act-tag">Reservar con antelación</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 2 -->
+    <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+      <h2 class="section-heading" id="h-dia2">Día 2</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Nungwi + Mnemba Atoll Snorkeling</div>
+            <div class="day-subtitle">Las aguas más turquesas del Índico occidental</div>
+          </div>
+          <div class="day-meta">
+            <span>🏖️ Playa de Nungwi</span>
+            <span>🐠 Arrecife de Mnemba</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado a Nungwi — norte de la isla</div>
+              <div class="act-desc">Toma un dala-dala o taxi compartido hacia la punta norte de la isla (1h desde Stone Town). Nungwi es la playa más popular de Zanzíbar: arena blanca de grano fino, palmeras que rozan el agua y dhows de pesca pintados a mano varados en la orilla. A diferencia de la costa este, la marea no descubre bancos de arena aquí, lo que permite nadar todo el día.</div>
+              <div class="act-tags"><span class="act-tag info">Dala-dala ~€1.50</span><span class="act-tag">Taxi compartido ~€10</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Snorkeling en el atolón de Mnemba</div>
+              <div class="act-desc">El atolón de Mnemba, a 3 km de la costa noreste, alberga uno de los arrecifes de coral más ricos del Índico occidental. Speedboat desde Nungwi o Matemwe (30–45 min). En las aguas cristalinas se avistan tortugas verdes, delfines nariz de botella, peces loro, rayas y, con suerte, dugongos. Los operadores incluyen equipo de snorkel, guía marino y lunch a bordo.</div>
+              <div class="act-tags"><span class="act-tag">€35–50 pp</span><span class="act-tag green">Tortugas garantizadas</span><span class="act-tag info">Reservar la tarde anterior</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tarde libre en Nungwi + sunset dhow</div>
+              <div class="act-desc">Regreso a la playa y tarde de descanso bajo la palmera. Al atardecer, muchos operadores ofrecen excursiones en dhow tradicional con música, bebidas y las mejores vistas del sol cayendo sobre el Índico. Una de las experiencias más fotogénicas de Zanzíbar.</div>
+              <div class="act-tags"><span class="act-tag">Dhow sunset ~€15 pp</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 3 -->
+    <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+      <h2 class="section-heading" id="h-dia3">Día 3</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Spice Tour + Forodhani Gardens</div>
+            <div class="day-subtitle">La isla más aromática del planeta</div>
+          </div>
+          <div class="day-meta">
+            <span>🌿 Plantaciones de especias</span>
+            <span>🌙 Mercado nocturno</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Spice Tour — plantaciones del interior</div>
+              <div class="act-desc">Zanzíbar fue el mayor productor mundial de clavo durante el siglo XIX, y hoy sigue siendo "la isla de las especias". El Spice Tour lleva a las plantaciones del interior (zona de Kizimbani y Kidichi) donde guías locales muestran cómo crecen el clavo, la canela, la vainilla, la nuez moscada, el cardamomo y la pimienta. Podrás tocar, oler y probar los frutos directamente del árbol. Incluye almuerzo con curri de coco cocinado en el campo.</div>
+              <div class="act-tags"><span class="act-tag">€20–25 pp con lunch</span><span class="act-tag green">Auténtico y educativo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Baños persas de Kidichi (Hamam del Sultán)</div>
+              <div class="act-desc">De regreso hacia Stone Town, parada en los Kidichi Persian Baths, construidos en 1850 por el sultán Seyyid Said para su esposa iraní. Son los únicos hammam de estilo persa de toda África oriental. Aunque ya no están en uso, la arquitectura con cúpulas y arcos es fascinante y el entorno de plantaciones de clavo es hermoso.</div>
+              <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">Cerca de las plantaciones</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Forodhani Gardens — mercado nocturno</div>
+              <div class="act-desc">El jardín frente al mar de Stone Town se transforma cada noche en el mercado de comida callejera más vibrante de Tanzania. Más de 30 puestos iluminados ofrecen brochetas de marisco a la brasa, pizza zanzibarí (chapati relleno de carne y huevo), zumo de caña fresco y el famoso urojo (sopa de la isla). Comer en la orilla del océano Índico mientras los pescadores regresan con sus dhows al atardecer.</div>
+              <div class="act-tags"><span class="act-tag">Cena completa ~€6–10 pp</span><span class="act-tag green">Auténtico imprescindible</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 4 -->
+    <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+      <h2 class="section-heading" id="h-dia4">Día 4</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title">Jozani Forest + Paje Kitesurf</div>
+            <div class="day-subtitle">Colobos endémicos y vientos del Índico</div>
+          </div>
+          <div class="day-meta">
+            <span>🐒 Colobos rojos de Zanzíbar</span>
+            <span>🪁 Kitesurf en Paje</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bosque Jozani — los únicos colobos rojos del mundo</div>
+              <div class="act-desc">El Parque Nacional Jozani-Chwaka Bay es el único bosque primario que queda en Zanzíbar y hogar del colobo rojo de Zanzíbar (Piliocolobus kirkii), una especie en peligro crítico encontrada únicamente en esta isla. Grupos de 50–100 individuos con su característica capa blanca-rojiza y cola en penacho blanco se acercan a menos de 2 metros de los visitantes. El bosque también alberga mangles marinos y duikers de isla. Guía incluido en la entrada.</div>
+              <div class="act-tags"><span class="act-tag">€8 entrada parque</span><span class="act-tag green">Especie endémica</span><span class="act-tag info">Llegar temprano, menos calor</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado a Paje — costa sureste</div>
+              <div class="act-desc">De Jozani a Paje en taxi compartido (20 min). Paje es un pueblo de pescadores que se ha convertido en el epicentro mundial del kitesurf gracias a los vientos constantes del Índico y las aguas poco profundas de la laguna. La playa de arena blanca infinita y el ambiente relajado lo hacen perfecto para el almuerzo en chiringuito.</div>
+              <div class="act-tags"><span class="act-tag info">Taxi compartido ~€8</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Clase introductoria de kitesurf en Paje</div>
+              <div class="act-desc">Escuelas como Aquaholics Zanzibar o Kite Centre Paje ofrecen clases para principiantes en las aguas tranquilas de la laguna. El viento del Índico sopla con fuerza regular de 15–25 nudos, ideal para aprender. Una clase de 3 horas incluye teoría, manejo de cometa y primeras sesiones con la tabla sobre el agua. Aunque no te conviertas en kitesurfer, el ambiente y la playa justifican la parada.</div>
+              <div class="act-tags"><span class="act-tag">€60–80 clase 3h</span><span class="act-tag">Equipo incluido</span><span class="act-tag green">Apto principiantes</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 5 -->
+    <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+      <h2 class="section-heading" id="h-dia5">Día 5</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div>
+            <div class="day-title">Sandbank privado + partida</div>
+            <div class="day-subtitle">Una franja de arena en mitad del océano</div>
+          </div>
+          <div class="day-meta">
+            <span>🏝️ Sandbank privado</span>
+            <span>✈️ Regreso</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Excursión al sandbank privado</div>
+              <div class="act-desc">Una de las experiencias más surrealistas de Zanzíbar: los bancos de arena que emergen del océano Índico al bajar la marea. Los operadores de Nungwi, Kendwa o Stone Town llevan en speedboat a bancos de arena de 200–300 metros de largo rodeados completamente de agua turquesa. Champán al amanecer, buceo libre alrededor del banco y la sensación de estar solos en el Índico. La excursión dura 3–4 horas y regresa para el check-out.</div>
+              <div class="act-tags"><span class="act-tag">€40–60 pp</span><span class="act-tag green">Experiencia única</span><span class="act-tag info">Depende de las mareas — consultar horario</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último urojo y salida al aeropuerto</div>
+              <div class="act-desc">Regreso al hotel para check-out. Un último bowl de urojo (la sopa picante de Zanzíbar con patata y fideos) en el Forodhani o en algún restaurante de Stone Town, y después taxi al aeropuerto (15 min). La isla de las especias te habrá impregnado de algo difícil de olvidar: los aromas, el ritmo swahili y el azul imposible del Índico.</div>
+              <div class="act-tags"><span class="act-tag">~€4 el urojo</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gastronomía -->
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía zanzibarí</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Arroz de las especias</div>
+          <div class="gastro-title">Pilau</div>
+          <div class="gastro-desc">Arroz cocinado con una mezcla de comino, clavo, cardamomo, canela y pimienta negra, junto con carne de cordero o pollo. El plato nacional de Zanzíbar y Tanzania. Se sirve en bodas, celebraciones y festividades del Ramadán. El aroma cuando se abre la cazuela es absolutamente fascinante.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Pescado en salsa de coco</div>
+          <div class="gastro-title">Samaki wa Kupaka</div>
+          <div class="gastro-desc">Pez de roca o pargo a la brasa marinado en leche de coco, tamarindo y especias zanzibarís. La piel crujiente de la parrilla contrasta con la cremosidad de la salsa de coco. Se sirve con ugali (polenta de maíz) y ensalada de papaya verde. Disponible en cualquier restaurante de pescado de Stone Town o en las playas del norte.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Herencia árabe</div>
+          <div class="gastro-title">Biryani zanzibarí</div>
+          <div class="gastro-desc">Variante local del biryani indio adaptada con especias africanas: arroz basmati con cordero, langosta o gambas, azafrán, canela en rama, agua de rosas y pasas sultanas. Más aromático y dulce que el biryani continental. Los mejores se encuentran en los restaurantes árabes de la calle Mkunazini en Stone Town.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Comida callejera swahili</div>
+          <div class="gastro-title">Chipsi Mayai</div>
+          <div class="gastro-desc">Literalmente "patatas y huevos": una tortilla esponjosa con patatas fritas integradas dentro, servida con chili sauce y kachumbari (ensalada de tomate y cebolla). El fast-food zanzibarí más popular, vendido en puestos callejeros por €1–2. Desayuno de campeones en cualquier mercado de la isla.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consejos -->
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Vestimenta en Stone Town:</strong> Zanzíbar es de mayoría musulmana. En Stone Town cubre hombros y rodillas para visitar mercados y mezquitas. En las playas la ropa de baño es aceptada, pero al alejarte del agua lleva un pareo o camiseta. El respeto es la mejor llave para conectar con los locales.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Moneda y pagos:</strong> el chelín tanzano (TZS) es la moneda oficial, pero el dólar americano es ampliamente aceptado. Los cajeros de Barclays y CRDB en Stone Town dan TZS a buenas tasas. Lleva efectivo para mercados, dala-dalas y propinas.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Malaria y vacunas:</strong> Zanzíbar es zona de malaria. Consulta con tu médico la profilaxis (atovaquona/proguanil o mefloquina). Usa repelente con DEET al atardecer. Asegúrate de tener al día las vacunas de fiebre amarilla (exigida si vienes de país endémico), hepatitis A y tifoidea.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Mareas en la costa este:</strong> las playas de Paje, Bwejuu y Matemwe tienen mareas extremas que pueden dejar 300–500 metros de arena seca. Consulta los horarios de marea antes de planificar actividades acuáticas en la costa este. La costa norte (Nungwi, Kendwa) no tiene este problema.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Regateo y precios:</strong> en mercados y con taxis de la calle, el precio inicial para turistas suele ser 3–5 veces el precio real. Regatear con buen humor es parte de la cultura y no ofende. Investiga precios de referencia antes de comprar especias o artesanía.</div></div>
+    </section>
+
+    <!-- Emergencias -->
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Policía Tanzania</div><div class="emerg-value">112</div><div class="emerg-note">Emergencias policiales en toda Tanzania</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">114</div><div class="emerg-note">Servicio de urgencias médicas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital de Zanzíbar</div><div class="emerg-value">+255 24 223-0382</div><div class="emerg-note">Mnazi Mmoja Hospital, Stone Town</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España (Dar es Salaam)</div><div class="emerg-value">+255 22 266-8409</div><div class="emerg-note">Consulado en Tanzania continental</div></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede adaptar el itinerario a tus fechas, presupuesto y preferencias en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos para 2026 y pueden variar según temporada y disponibilidad. Los enlaces de actividades son externos; Routlo no se responsabiliza de cambios en terceros. Consulta siempre las recomendaciones de seguridad del Ministerio de Asuntos Exteriores antes de viajar a Tanzania.
+    </div>
+  </main>
+</div>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div>
+      <div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div>
+      <p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">África</div>
+      <nav aria-label="Destinos África">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li><a href="cairo.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">El Cairo</a></li>
+          <li><a href="marrakech.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Marrakech</a></li>
+          <li><a href="cape-town.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ciudad del Cabo</a></li>
+          <li><a href="zanzibar.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Zanzíbar</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Otros destinos</div>
+      <nav aria-label="Otros destinos populares">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li><a href="tokio.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Tokio</a></li>
+          <li><a href="rio-de-janeiro.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Río de Janeiro</a></li>
+          <li><a href="vietnam.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Vietnam</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Destinos España">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li>
+          <li><a href="barcelona.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Barcelona</a></li>
+          <li><a href="sevilla.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Sevilla</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, {passive:true});
+
+  function toggleMenu() {
+    const ul = nav.querySelector('ul');
+    ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex';
+  }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+})();
+</script>
+</body>
+</html>

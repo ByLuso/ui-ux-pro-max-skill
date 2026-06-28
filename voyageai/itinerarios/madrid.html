@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Madrid — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 5 días en Madrid: Museo del Prado, Retiro, La Latina, tapas y excursión a Toledo. Presupuesto desde mochilero hasta lujo."/>
+  <meta property="og:title" content="Madrid — 5 días | Routlo"/>
+  <meta property="og:description" content="El mejor plan para 5 días en Madrid: Prado, Retiro, tapas en La Latina, Toledo y los barrios más auténticos de la capital de España."/>
+  <meta property="og:type" content="article"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+
+    /* Aurora — red tones for Madrid */
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#3d0d0d 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0808 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#2a0d0d 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg, #0d0000 0%, #2d0000 35%, #7a0000 65%, rgba(201,169,110,0.2) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(122,0,0,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* ── Tablet ── */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+    /* ── Mobile ── */
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    /* ── Small mobile ── */
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(122,0,0,0.15);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Madrid</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Madrid</h1>
+  <p class="dest-country">España · La Capital · Arte · Gastronomía</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 5 días / 4 noches</span>
+    <span class="dest-badge" role="listitem">👥 Solo / Pareja / Familia</span>
+    <span class="dest-badge gold" role="listitem">💶 €175–2,100/persona</span>
+    <span class="dest-badge" role="listitem">🌍 España · Madrid</span>
+    <span class="dest-badge" role="listitem">🏛️ Arte + Historia + Tapas</span>
+    <a href="https://www.skyscanner.es/transport/flights/es/mad/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">5 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">1 destino</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€175–2,100</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Todo el año</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Sol y Retiro</a></li>
+        <li><a href="#dia2">Día 2 · Museos</a></li>
+        <li><a href="#dia3">Día 3 · Malasaña</a></li>
+        <li><a href="#dia4">Día 4 · Toledo</a></li>
+        <li><a href="#dia5">Día 5 · Salamanca</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Madrid es la capital más vibrante de Europa del sur: una ciudad que nunca duerme, que concentra los tres mejores museos de arte del continente en un solo paseo (el Prado, el Reina Sofía y el Thyssen), que tiene los tapas bars más auténticos del mundo en el barrio de La Latina y que puede presumir de tener el restaurante más antiguo del planeta, fundado en 1725. En cinco días descubrirás el kilómetro cero de España, el parque del Retiro con sus 305 hectáreas en el corazón de la ciudad, los barrios bohemios de Malasaña y Chueca, y una excursión imprescindible a Toledo, la ciudad de las tres culturas medievales a 70 km. Madrid es, además, el mejor punto de entrada a España: desde aquí, el AVE de alta velocidad conecta en 2.5 horas con Barcelona, 2 horas con Sevilla y 4 horas con Valencia.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏛️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Triángulo del Arte</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 2</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🍷</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Tapas y barrios</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1, 3 y 5</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏰</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Toledo medieval</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 4</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Mochilero</th><th>Estándar</th><th>Lujo</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo A/R desde otras ciudades</td><td>€30–80</td><td>€120–200</td><td>€300+</td><td>AVE desde Barcelona 2.5h o Vueling/Iberia</td></tr>
+            <tr><td>🏨 Alojamiento (4 noches)</td><td>€80</td><td>€480</td><td>€1,400</td><td>Hostal céntrico · hotel 4★ · palace 5★</td></tr>
+            <tr><td>🍽️ Comidas (5 días)</td><td>€75</td><td>€200</td><td>€500</td><td>Tapas €2–4 cada una</td></tr>
+            <tr><td>🚇 Transporte local</td><td>€15</td><td>€25</td><td>€60</td><td>Metro 24h pass €8.40</td></tr>
+            <tr><td>🎟️ Entradas museos</td><td>€35</td><td>€65</td><td>€100</td><td>Prado €15, Reina Sofía €12</td></tr>
+            <tr><td>🚌 Toledo excursión</td><td>€12</td><td>€30</td><td>€80</td><td>Bus desde Autobuses Sur</td></tr>
+            <tr><td>🔄 Imprevistos (10%)</td><td>€22</td><td>€90</td><td>€244</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€230</strong></td><td><strong>~€890</strong></td><td><strong>~€2,100</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Ventaja Madrid:</strong> Madrid es sorprendentemente asequible comparada con París, Londres o Roma. Los menús del día (3 platos + bebida + café) cuestan €12–15 en bares de barrio. Los museos estatales (Prado, Reina Sofía, Thyssen) tienen entrada gratuita los últimas horas del día, salvo el Prado que tiene entrada gratuita de lunes a sábado de 18h a 20h y domingos de 17h a 19h.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚇 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Cómo llegar</div>
+          <div class="transport-content">
+            <strong>Aeropuerto Adolfo Suárez-Barajas (MAD)</strong>, a 20 km del centro. Metro línea 8 directa al centro (€4.50 + €3 suplemento, 30 min). AVE desde Barcelona 2h30min desde €35. No necesitas coche en Madrid — el metro llega a todas partes.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚇 Metro de Madrid</div>
+          <div class="transport-content">
+            La red más completa de España, <strong>12 líneas</strong>. Abono de 10 viajes €12.20 (zona A). La tarjeta multi funciona en metro, autobús y Cercanías. El <strong>bono turístico</strong> de 1 día €8.40, 3 días €18.40, 7 días €35.40. Opera de 6h a 1:30h (madrugada siguiente).
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Autobús nocturno (búho)</div>
+          <div class="transport-content">
+            Funciona de <strong>00h a 6h</strong> cuando el metro cierra. Imprescindible para volver de fiesta sin gastar en taxi. Líneas N1–N27. €1.50 por trayecto. Salen desde la Puerta del Sol y la Cibeles. La app EMT Madrid tiene horarios en tiempo real.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 Taxi / Cabify / Uber</div>
+          <div class="transport-content">
+            Madrid tiene taxistas honestos y la <strong>app TaxiMadrid</strong>. Para distancias largas (aeropuerto) suele salir €25–35. Cabify y Uber también operan con tarifas más predecibles. Evita los taxis del aeropuerto que se ofrecen sin taxímetro.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Mochilero</div>
+          <div class="hotel-name">Generator Madrid</div>
+          <div class="hotel-zone">Barrio de las Letras</div>
+          <div class="hotel-price">~€25/noche</div>
+          <ul class="hotel-features">
+            <li>Hostel de diseño muy bien ubicado</li>
+            <li>Terraza con vistas espectaculares</li>
+            <li>Ambiente social, bar con cócteles</li>
+            <li>A 5 min de la Puerta del Sol</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/generator-madrid.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐⭐ Estándar</div>
+          <div class="hotel-name">Hotel Unico Madrid</div>
+          <div class="hotel-zone">Barrio de Salamanca</div>
+          <div class="hotel-price">~€160/noche</div>
+          <ul class="hotel-features">
+            <li>Diseño exquisito en palacio del s.XIX</li>
+            <li>Jardín interior con piscina</li>
+            <li>Rest. Ramón Freixa (2 estrellas Michelin)</li>
+            <li>El mejor servicio del Eixample</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/unico-madrid.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">The Westin Palace Madrid</div>
+          <div class="hotel-zone">Plaza de las Cortes</div>
+          <div class="hotel-price">~€350/noche</div>
+          <ul class="hotel-features">
+            <li>Inaugurado en 1912, frente al Congreso</li>
+            <li>La cúpula de cristal Art Nouveau icónica</li>
+            <li>Spa y restaurante La Rotonda</li>
+            <li>A 2 min del Museo del Prado</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/westin-palace.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS DEL ITINERARIO ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Sol, Retiro y La Latina</div>
+            <div class="day-subtitle">Puerta del Sol · Parque del Retiro · Tapas en La Latina</div>
+          </div>
+          <div class="day-meta"><span>🌆 Centro</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Puerta del Sol — el kilómetro cero de España</div>
+              <div class="act-desc">La Puerta del Sol es el centro neurálgico y simbólico de Madrid y de toda España: aquí está la placa del kilómetro 0 desde donde se miden todas las carreteras nacionales. El oso y el madroño, escultura del siglo XV convertida en símbolo de la ciudad, preside la plaza. La Comunidad de Madrid tiene su sede aquí, en el antiguo edificio de Correos del siglo XVIII. El reloj de la torre marca las campanadas de fin de año más famosas del país.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">20 min</span><span class="act-tag">Centro de Madrid</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Parque del Retiro — el pulmón verde de Madrid</div>
+              <div class="act-desc">Con 305 hectáreas en pleno centro de la ciudad, el Retiro es el parque urbano más grande y hermoso de España. La terraza del Palacio de Cristal (gratis), el Estanque Grande con barcas de remos (€6/45 min), los jardines de Cecilio Rodríguez y el Parterre francés son sus puntos más fotogénicos. Los domingos el parque se llena de familias madrileñas, músicos callejeros y pintores: es la experiencia más auténticamente local de Madrid.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratis</span><span class="act-tag">Barca €6/45min</span><span class="act-tag info">2h mínimo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado de San Miguel — el mejor mercado gourmet de España</div>
+              <div class="act-desc">El Mercado de San Miguel (1916) es el mercado más elegante de Madrid, con 33 puestos de producto de primera calidad bajo una espectacular estructura de hierro forjado junto a la Plaza Mayor. Conservas de mejillones, jamón ibérico de bellota cortado a mano, ostras, croquetas artesanas y vinos en copa. Ideal para un almuerzo de pie probando cosas diferentes. Precios más altos que los mercados de barrio, pero la calidad y el ambiente lo justifican.</div>
+              <div class="act-tags"><span class="act-tag">Tapas €2–6/unidad</span><span class="act-tag info">Estructura 1916</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de La Latina — el mejor barrio de tapas de España</div>
+              <div class="act-desc">La Latina es el alma gastronómica de Madrid: calles empedradas del Madrid de los Austrias donde cada portal esconde una taberna centenaria. La Calle Cava Baja concentra en 300 metros los mejores bares de tapas del país. Los patios interiores con vino y boquerones fritos son lo más madrileño que existe. El mercado del Rastro (solo domingos por la mañana) llena las calles del barrio con vendedores de antigüedades, ropa vintage y artesanía.</div>
+              <div class="act-tags"><span class="act-tag">Tapas desde €2</span><span class="act-tag green">El barrio más auténtico</span><span class="act-tag info">Calle Cava Baja</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Aperitivo en Taberna de la Villa o El Almendro 13</div>
+              <div class="act-desc">El vermut de La Latina es el aperitivo madrileño por excelencia. La Taberna de la Villa, fundada en 1938, sirve el mejor vermut de barril del barrio con aceitunas y boquerones en vinagre. El Almendro 13 tiene el cocido más auténtico de Madrid y es famoso por sus huevos rotos. Llega pronto — las mesas se llenan sin reserva.</div>
+              <div class="act-tags"><span class="act-tag">Vermut €3–5</span><span class="act-tag info">Ambiente madrileño auténtico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">22:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Restaurante Botín o casa de comidas local</div>
+              <div class="act-desc">El Restaurante Sobrino de Botín (1725) es el restaurante más antiguo del mundo según el Libro Guinness de los Récords. Su cochinillo asado al horno de leña de encina y el cordero churro llevan siendo los mismos platos desde que Goya trabajó aquí como friegaplatos en su juventud. Reserva imprescindible. Si prefieres algo más económico, cualquier casa de comidas de La Latina con carta escrita a mano es la alternativa perfecta.</div>
+              <div class="act-tags"><span class="act-tag">Botín ~€45</span><span class="act-tag warn">Reservar con días de antelación</span><span class="act-tag info">Desde 1725</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Casa Lucio</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Calle Cava Baja, La Latina</span></td><td>Huevos rotos con jamón ibérico. El plato más pedido de Madrid en un clásico sin pretensiones.</td><td>~€18</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Dstage</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Barrio de las Letras · 2 Michelin</span></td><td>Menú degustación de cocina española de vanguardia. Diego Guerrero, exjefe de El Club Allard.</td><td>~€95</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Restaurante Botín</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Cuchilleros 17 · desde 1725</span></td><td>Cochinillo asado al horno de leña. El más antiguo del mundo según Guinness.</td><td>~€45</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">El Prado y los Museos</div>
+            <div class="day-subtitle">Museo del Prado · Reina Sofía · Paseo del Arte · Malasaña</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Arte</span><span>Día cultural</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Consejo:</strong> Reserva el Museo del Prado online con al menos 48h de antelación en temporada alta. Las colas a las 11h pueden ser de 45 minutos. Compra la entrada combinada Paseo del Arte (Prado + Reina Sofía + Thyssen) por €32 — ahorra respecto a entrar por separado y no hay limitación de horarios entre museos.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Museo del Prado — Las Meninas y Goya</div>
+              <div class="act-desc">El Museo del Prado es uno de los tres mejores museos de arte del mundo (junto al Louvre y los Uffizi), con más de 8.000 obras en exposición permanente. Imprescindibles: Las Meninas de Velázquez (la obra más estudiada de la historia del arte), El jardín de las delicias del Bosco, los Cartones para tapices de Goya, las Pinturas Negras y El Caballero de la Mano en el Pecho del Greco. Dedica al menos 3 horas y no intentes verlo todo: elige una sala y profundiza.</div>
+              <div class="act-tags"><span class="act-tag">€15 entrada</span><span class="act-tag warn">Reservar online</span><span class="act-tag info">3–4h mínimo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en el barrio de las Letras</div>
+              <div class="act-desc">El barrio de las Letras (Huertas) es el barrio más literario de Madrid: aquí vivieron Cervantes, Lope de Vega y Quevedo. La Calle de las Huertas tiene terrazas perfectas para descansar entre museos. Los restaurantes de la zona tienen buenos menús del día por €13–16 con mucho producto de mercado.</div>
+              <div class="act-tags"><span class="act-tag">Menú del día €13–16</span><span class="act-tag info">Barrio literario</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Museo Reina Sofía — el Guernica de Picasso</div>
+              <div class="act-desc">El Guernica (1937), pintado por Picasso en respuesta al bombardeo de la ciudad vasca durante la Guerra Civil española, es la obra de arte político más importante del siglo XX. Mide 3.49m x 7.76m y en su sala la emoción que genera en el espectador es difícilmente describible. El Reina Sofía también tiene la mejor colección de arte español contemporáneo: Miró, Dalí, Juan Gris. La ampliación de Jean Nouvel añadió en 2005 un edificio de cristal que dobla su superficie.</div>
+              <div class="act-tags"><span class="act-tag">€12 entrada</span><span class="act-tag info">Guernica obligatorio</span><span class="act-tag">2h mínimo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Paseo del Prado hacia la Gran Vía</div>
+              <div class="act-desc">El Paseo del Prado, Patrimonio de la Humanidad UNESCO (junto con el Buen Retiro), es el boulevard más elegante de Madrid: la fuente de Cibeles, la Fuente de Neptuno, el Hotel Ritz y el Palacio de Comunicaciones (ahora Centro Cultural CentroCentro con terraza panorámica gratuita) puntúan el recorrido. Al llegar a la Gran Vía el ambiente cambia radicalmente: las luces, los teatros y el ruido de la ciudad cobran protagonismo.</div>
+              <div class="act-tags"><span class="act-tag green">Paseo gratis</span><span class="act-tag info">Patrimonio UNESCO</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena y cervecería en Malasaña</div>
+              <div class="act-desc">Malasaña es el barrio más auténtico de la movida madrileña, convertido hoy en epicentro de bares con buena cerveza artesanal, restaurantes de cocina de mercado y librerías de segunda mano. La Plaza del 2 de Mayo (donde el 2 de mayo de 1808 el pueblo de Madrid se levantó contra las tropas napoleónicas) es el centro del barrio y el mejor lugar para cenar en terraza.</div>
+              <div class="act-tags"><span class="act-tag">Cerveza artesanal €4–6</span><span class="act-tag info">Plaza del 2 de Mayo</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bar El 2de Mayo</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Plaza del 2 de Mayo</span></td><td>Tapas clásicas madrileñas en el corazón de Malasaña. Croquetas y boquerones.</td><td>~€15</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Taberna La Bola</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">C/ Bola · desde 1870</span></td><td>El cocido madrileño definitivo. Solo a mediodía. Tres vuelcos: caldo, garbanzos y carnes.</td><td>~€30</td></tr>
+                <tr><td>👑 Premium</td><td><strong>El Club Allard</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Ferraz · 2 Michelin</span></td><td>Alta cocina española contemporánea. Una de las mejores mesas de Madrid.</td><td>~€110</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Madrid auténtica: Malasaña y Chueca</div>
+            <div class="day-subtitle">Palacio Real · Lavapiés · Malasaña vintage · Chueca vibrante</div>
+          </div>
+          <div class="day-meta"><span>🎨 Barrios</span><span>Día de barrio</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Palacio Real y Plaza de Oriente</div>
+              <div class="act-desc">El Palacio Real de Madrid es el más grande de Europa Occidental (con 3.418 habitaciones, aunque solo unas 50 están abiertas al público). Construido entre 1738 y 1764 por Felipe V en sustitución del Alcázar que ardió en Nochebuena de 1734. Hoy es residencia oficial de los reyes de España (pero no se usa como vivienda). La Armería Real, la Farmacia y la Sala de Porcelana del Buen Retiro son sus joyas. La Plaza de Oriente con las estatuas de los reyes godos y visigodos es un descanso espléndido.</div>
+              <div class="act-tags"><span class="act-tag">€12 entrada</span><span class="act-tag info">2h visita</span><span class="act-tag">El mayor de Europa Occidental</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado de San Fernando en Lavapiés</div>
+              <div class="act-desc">El barrio de Lavapiés es el más multicultural de Madrid, con comunidades marroquí, china, india, senegalesa y latinoamericana conviviendo en sus calles. El Mercado de San Fernando (1944, reformado en 2009) es el mercado gourmet más auténtico de Madrid: sin turistas, con precios locales, bares con cerveza artesanal y tapas de cocina de fusión extraordinarias. La taberna de Los Compadres tiene las mejores cañas del mercado.</div>
+              <div class="act-tags"><span class="act-tag green">Sin turistas</span><span class="act-tag">Precios locales</span><span class="act-tag info">Lavapiés multicultural</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Malasaña: librerías vintage y ropa de segunda mano</div>
+              <div class="act-desc">Malasaña es el corazón cultural alternativo de Madrid: librerías de viejo en la Calle de los Libreros, tiendas de ropa vintage en la Calle del Espíritu Santo, bares de vinilo en la Calle Velarde. La Corredera Baja de San Pablo y la calle Fuencarral son las arterias comerciales con marcas emergentes. El barrio sigue siendo auténtico y local a pesar de su creciente popularidad.</div>
+              <div class="act-tags"><span class="act-tag">Tiendas vintage</span><span class="act-tag info">Calle Fuencarral</span><span class="act-tag green">Ambiente local</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Chueca — el más vibrante y colorido de Madrid</div>
+              <div class="act-desc">Chueca es el barrio LGBT+ más activo de España y uno de los más dinámicos de Europa. La Plaza de Chueca con sus bares de terraza, las tiendas de diseño emergente y los restaurantes de cocina de fusión hacen del barrio el punto más cosmopolita de la ciudad. La Calle Hortaleza y la Calle Pelayo concentran la mejor oferta. Los sábados y domingos por la tarde el ambiente es eléctrico.</div>
+              <div class="act-tags"><span class="act-tag">Barrio más colorido</span><span class="act-tag info">Plaza de Chueca</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vermut en El Pez Gordo y cena en La Pepita</div>
+              <div class="act-desc">El Pez Gordo (Calle del Pez, Malasaña) es el mejor bar de vermut artesanal de Madrid, con más de 40 referencias de vermuts nacionales e importados. La Pepita (Calle de la Ballesta) es imprescindible para las rabas (calamares a la romana en tiras), reconocidas como las mejores de Madrid. La mezcla de ambos en la misma noche es la velada perfecta del viajero que ya conoce los secretos de la ciudad.</div>
+              <div class="act-tags"><span class="act-tag">Vermut €5</span><span class="act-tag info">Rabas de La Pepita</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>La Pepita</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Calle de la Ballesta · Malasaña</span></td><td>Rabas con alioli casero y croquetas de jamón ibérico. Las mejores de Madrid a precio asequible.</td><td>~€16</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Sacha</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Juan Hurtado de Mendoza</span></td><td>La mejor cocina de mercado de Madrid, sin pretensiones. Los arroces y el pescado son extraordinarios.</td><td>~€45</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Coque</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Marqués del Riscal · 2 Michelin</span></td><td>Menú degustación de alta cocina española con bodega de 40.000 referencias. Reservar con meses.</td><td>~€150</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Excursión a Toledo</div>
+            <div class="day-subtitle">Catedral Primada · Tres Culturas · Alcázar · Panorámica del Tajo</div>
+          </div>
+          <div class="day-meta"><span>🏰 Toledo</span><span>Excursión de día</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Toledo en bus:</strong> El bus Alsa desde la Estación Sur de Madrid (metro Plaza de Elíptica) tarda 1h y cuesta €6 de ida. Sale con frecuencia. El tren AVE llega al centro de Toledo pero la frecuencia es menor. El bus deja en la estación de autobuses de Toledo, a 10 minutos del casco histórico en subida.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">07:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida desde Estación Sur — Bus Alsa a Toledo</div>
+              <div class="act-desc">Salir pronto es clave: Toledo recibe miles de turistas en excursión y los grupos organizados llegan a partir de las 10h. Si estás allí a las 9h, tendrás la ciudad casi para ti. El trayecto en bus dura 1 hora, es cómodo y parte cada 30 minutos aproximadamente desde la estación de Autobuses del Sur (metro Plaza Elíptica, línea 6).</div>
+              <div class="act-tags"><span class="act-tag">€6 ida</span><span class="act-tag info">1h trayecto</span><span class="act-tag warn">Salir temprano</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Toledo: la ciudad de las tres culturas</div>
+              <div class="act-desc">Toledo fue durante la Edad Media la ciudad más importante de la Península Ibérica: capital visigoda, luego taifa árabe, luego ciudad cristiana, pero siempre con convivencia (no siempre pacífica) de las tres culturas del Mediterráneo. La Catedral Primada, la Sinagoga del Tránsito y la Mezquita del Cristo de la Luz, separadas por apenas 300 metros, son el símbolo visible de esa historia única. La ciudad amurallada sobre el río Tajo fue declarada Patrimonio de la Humanidad en 1986.</div>
+              <div class="act-tags"><span class="act-tag info">Patrimonio UNESCO 1986</span><span class="act-tag">Tres culturas medievales</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Catedral Primada de Toledo — el interior más rico de España</div>
+              <div class="act-desc">La Catedral de Santa María de Toledo (s.XIII–XV) es la sede del Cardenal Primado de España y la catedral más rica del país en términos de tesoro artístico: El Transparente de Narciso Tomé (un altar barroco iluminado por un óculo en la bóveda es uno de los juegos de luz más espectaculares del arte español), pinturas de El Greco, Goya y Van Dyck, y una custodia de procesión de Enrique de Arfe que pesa 185 kilos de plata. Dedica 1.5 horas.</div>
+              <div class="act-tags"><span class="act-tag">€12.50 entrada</span><span class="act-tag info">1.5h visita</span><span class="act-tag">La más rica de España</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Toledo: carcamusa, cuchifrito y mazapán</div>
+              <div class="act-desc">La cocina toledana es contundente y tradicional. La carcamusa (guiso de cerdo con verduras en salsa de tomate picante) es el plato local por excelencia. El cuchifrito (menudillos de cordero fritos) es la tapa de los bares de la ciudad vieja. El mazapán de Toledo (almendra y azúcar, Indicación Geográfica Protegida) es el postre obligatorio: el de Santo Tomé o el de Casa Telesforo son los más auténticos.</div>
+              <div class="act-tags"><span class="act-tag">Carcamusa €9</span><span class="act-tag">Mazapán IGP</span><span class="act-tag info">Cocina toledana</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Alcázar de Toledo y panorámica sobre el río Tajo</div>
+              <div class="act-desc">El Alcázar (fortaleza romana, árabe, cristiana y luego palacio imperial de Carlos V) domina la ciudad desde lo alto. Hoy alberga el Museo del Ejército, que narra la historia militar de España desde los romanos hasta hoy. La vista desde la terraza sobre el río Tajo que rodea la ciudad por tres flancos es uno de los panoramas más dramáticos de España. El mirador del Valle, fuera de las murallas, ofrece la imagen clásica de Toledo al atardecer.</div>
+              <div class="act-tags"><span class="act-tag">€5 museo</span><span class="act-tag info">Mirador del Valle al atardecer</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Madrid en bus y cena tranquila</div>
+              <div class="act-desc">El último bus de Toledo a Madrid suele salir alrededor de las 22h. Si regresas a las 19–20h llegas a Madrid para una cena tranquila sin prisa. Esta noche descansa — mañana es el último día y conviene tener energía para el barrio de Salamanca y el Bernabéu.</div>
+              <div class="act-tags"><span class="act-tag">€6 vuelta</span><span class="act-tag info">Último bus ~22h</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bar La Abadía</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Casco histórico Toledo</span></td><td>Carcamusa y vino de la tierra. El mejor bar de tapas del casco histórico con precios locales.</td><td>~€14</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Restaurante Locum</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Locum 6 · Toledo</span></td><td>Cocina toledana de mercado. El perdiz estofado con verduras es el plato estrella.</td><td>~€30</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Adolfo Restaurante</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Toledo · referencia de la ciudad</span></td><td>Alta cocina toledana con el mejor chuletón y la perdiz escabechada de la ciudad. Vista al Tajo.</td><td>~€65</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 5 -->
+      <div class="day-card" id="dia5">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Salamanca, Bernabéu y cierre</div>
+            <div class="day-subtitle">Barrio Salamanca · Bernabéu · Jardín Botánico · Despedida</div>
+          </div>
+          <div class="day-meta"><span>⚽ Despedida</span><span>Última jornada</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Salamanca — el barrio más elegante de Madrid</div>
+              <div class="act-desc">El Barrio de Salamanca es el Eixample de Madrid: el trazado cuadriculado más elegante de la ciudad, con las calles Serrano (el equivalente madrileño de la Quinta Avenida), Goya y Velázquez flanqueadas por boutiques internacionales, galerías de arte y los mejores restaurantes de la ciudad. El Mercado de la Paz (1882) en la Calle Ayala es el mercado gourmet del barrio, frecuentado por chefs y amas de casa del barrio alto.</div>
+              <div class="act-tags"><span class="act-tag">Shopping premium</span><span class="act-tag info">Calle Serrano</span><span class="act-tag green">Mercado de la Paz</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Estadio Santiago Bernabéu — tour opcional</div>
+              <div class="act-desc">El Santiago Bernabéu (1947, ampliado en 2023 con la nueva cubierta retráctil) es el estadio más visitado de Europa, con más de 2 millones de visitantes anuales. El tour incluye los vestuarios, el campo, el palco presidencial, la sala de trofeos (15 Copas de Europa / Champions League) y la nueva zona multifuncional. La experiencia es impactante incluso para los no futboleros: el estadio es una obra de ingeniería extraordinaria.</div>
+              <div class="act-tags"><span class="act-tag">Tour €30</span><span class="act-tag warn">Reservar online</span><span class="act-tag info">2h visita</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Brunch de despedida en el Barrio del Retiro</div>
+              <div class="act-desc">Los alrededores del Retiro tienen algunos de los mejores brunchs y terrazas de domingo de Madrid. La Calle Doctor Castelo y la Calle Menéndez Pelayo concentran restaurantes con terraza que sirven desde las 10h. Un brunch tranquilo con vista a los árboles del Retiro es el cierre perfecto del viaje.</div>
+              <div class="act-tags"><span class="act-tag">Brunch €18–25</span><span class="act-tag info">Junto al Retiro</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Jardín Botánico o CaixaForum Madrid</div>
+              <div class="act-desc">El Real Jardín Botánico (€6), fundado en 1755 por Fernando VI, tiene más de 90.000 plantas en 8 hectáreas adyacentes al Prado. Es el descanso perfecto después de días intensos. La alternativa cultural es el CaixaForum Madrid (Paseo del Prado 36), un edificio de Herzog & de Meuron con una fachada de vegetación vertical de Patrick Blanc. Las exposiciones temporales suelen ser de primer nivel mundial.</div>
+              <div class="act-tags"><span class="act-tag">Botánico €6</span><span class="act-tag">CaixaForum €6</span><span class="act-tag green">Cierre tranquilo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Compras de última hora y vuelta al barrio</div>
+              <div class="act-desc">El El Corte Inglés de Callao y la Calle Preciados para regalos y recuerdos. Para productos gourmet: jamón ibérico, aceite de oliva virgen extra y vinos de la Ribera del Duero en el supermercado del Corte Inglés de Goya. Los precios de productos alimenticios de calidad en Madrid son sensiblemente más bajos que en tiendas de aeropuerto.</div>
+              <div class="act-tags"><span class="act-tag">Calle Preciados</span><span class="act-tag info">Gourmet Corte Inglés</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bar Cervecería Alemana</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Plaza de Santa Ana</span></td><td>La cervecería favorita de Hemingway. Tapas clásicas en una plaza con terraza impresionante.</td><td>~€16</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Lhardy</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Carrera de San Jerónimo · desde 1839</span></td><td>El restaurante más histórico de Madrid (1839). El cocido madrileño y el consommé son leyenda.</td><td>~€40</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Santceloni</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Hotel Hesperia · 2 Michelin</span></td><td>La cena de despedida perfecta. Menú degustación con los mejores productos españoles de temporada.</td><td>~€130</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Museo del Prado — Las Meninas y Goya</h4><p>El tercero mejor museo de arte del mundo. Las Meninas de Velázquez es la obra más estudiada y debatida de la historia del arte. Los muros enteros de Pinturas Negras de Goya no se olvidan jamás.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Toledo en excursión — las tres culturas medievales</h4><p>La ciudad más importante de la España medieval concentra en 400 metros una catedral gótica, una sinagoga y una mezquita. Un viaje en el tiempo a una convivencia única en el mundo occidental.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Tapas en La Latina — Calle Cava Baja</h4><p>Los 300 metros de la Calle Cava Baja son el mejor bar de tapas de España. Boquerones en vinagre, patatas bravas, croquetas de jamón y vermut de barril en tabernas que no han cambiado en décadas.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Parque del Retiro — barca en el estanque</h4><p>El único parque urbano de Europa donde puedes alquilar una barca de remos en el corazón de una capital. Los domingos el parque es la sala de estar de toda Madrid: músicos, familias y pintores.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Estadio Bernabéu — el templo del fútbol mundial</h4><p>Con 15 Champions League, el Santiago Bernabéu es el estadio más laureado de la historia del deporte. La nueva cubierta retráctil lo convierte en la infraestructura deportiva más avanzada de Europa.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Guernica en el Reina Sofía — la obra más impactante del s.XX</h4><p>Verlo en persona es completamente diferente a verlo en fotografía. Los 7.76 metros de angustia y denuncia de Picasso te envuelven. Una sala que te deja en silencio.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Vermut de barril en taberna centenaria de Malasaña</h4><p>El rito del vermut de los sábados (de 12h a 14h): copa corta, aceitunas, boquerones, y la conversación madrileña inagotable. El Pez Gordo y la Bodega de la Ardosa son las referencias.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Palacio Real — el más grande de Europa Occidental</h4><p>3.418 habitaciones, la Armería Real más completa del mundo y colecciones de Velázquez, Caravaggio, Goya y Rubens. Todo ello en un palacio borbónico del s.XVIII donde viven oficialmente los reyes de España.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Mercado de San Miguel — el mejor mercado gourmet de España</h4><p>La estructura de hierro forjado de 1916 alberga los mejores productos gastronómicos de España: jamón ibérico, ostras, conservas y vinos en un espacio que mezcla mercado y bar con elegancia.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Amanecer en la Gran Vía completamente vacía (6h de la madrugada)</h4><p>La arteria más cinematográfica de Madrid, la que inspiró a Pedro Almodóvar y a miles de artistas, completamente desierta con la primera luz del día. Una imagen que no se repite pasadas las 8h.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍽️ Gastronomía madrileña</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Tapas · Bocadillo</div>
+          <div class="gastro-title">Bocadillo de calamares</div>
+          <div class="gastro-desc">El bocadillo más madrileño del mundo: calamares a la romana (aros rebozados y fritos) en pan de barra crujiente con alioli o mahonesa. En los bares de la Plaza Mayor y La Latina cuestan €3–5. Imprescindible al menos una vez.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Cocido · Plato contundente</div>
+          <div class="gastro-title">Cocido madrileño</div>
+          <div class="gastro-desc">El plato más contundente y ceremonial de la capital: tres vuelcos (caldo de fideos, garbanzos con verduras y las carnes). Solo se sirve a mediodía, entre octubre y abril. La Bola y La Daniela son los templos del cocido auténtico en Madrid.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Tapas · Polémicas</div>
+          <div class="gastro-title">Patatas bravas</div>
+          <div class="gastro-desc">Las patatas fritas más polémicas de España: Madrid reivindica su versión con salsa brava picante propia, a diferencia del alioli catalán. El debate entre madrileños sobre quién tiene las mejores (Bar La Mejillonera, Las Bravas, El Tigre) es eterno e insoluble.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Carne · Tradición castellana</div>
+          <div class="gastro-title">Cochinillo asado</div>
+          <div class="gastro-desc">Tradición castellana que se come en Madrid como en ningún sitio: cochinillo de menos de 3 semanas asado en horno de leña a 200°C. La piel queda crujiente como cristal. En el Restaurante Botín lo cortan con el borde de un plato para demostrar que no necesita cuchillo.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Postre · Desayuno nocturno</div>
+          <div class="gastro-title">Churros con chocolate</div>
+          <div class="gastro-desc">El desayuno madrileño definitivo, pero también el cierre nocturno de las noches largas. La Chocolatería San Ginés (Pasadizo de San Ginés, desde 1894) atiende 24 horas y a las 4h de la madrugada está llena de trasnochadores mojando churros en chocolate espeso.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida · Ritual del aperitivo</div>
+          <div class="gastro-title">Vermut de barril</div>
+          <div class="gastro-desc">El aperitivo madrileño ritual: los sábados y domingos de "vermouth time" de 12h a 14h, copa corta de vermut de barril (Martini, Cinzano o de elaboración propia), con aceitunas, boquerones y una anchoa. El vermut en Madrid no es una bebida: es un rito social.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section id="consejos" class="itin-section">
+      <h2 class="section-heading">💡 Consejos de Routlo</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Reserva el Museo del Prado</strong> para las 9:30 (apertura) y llega 15 min antes. Las colas a las 11h son enormes en temporada alta. La entrada online anticipa también el acceso. Recuerda que la <strong>entrada es gratuita</strong> de lunes a sábado de 18h a 20h y domingos de 17h a 19h.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>La Tarjeta Multi del metro</strong> se recarga en máquinas de todas las estaciones. Para 5 días compra un <strong>abono mensual turístico (~€35 zona A)</strong> si piensas moverte mucho. El bono de 10 viajes (€12.20) es lo más flexible para uso moderado.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>El horario de comidas en Madrid</strong> es diferente al resto de Europa: almuerzo 14h–16h, cena 21h–23h. Llegar a un restaurante a las 13h o a las 19h para comer es señal inequívoca de turista. Respeta los horarios y la experiencia gastronómica mejora drásticamente.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>La excursión a Toledo:</strong> ve en bus Alsa (más conveniente). Sale de la Estación Sur (metro Plaza de Elíptica). El bus deja en la estación de autobuses de Toledo, a 10 min del casco a pie. Sube caminando por la Cuesta de las Armas — la vista desde arriba merece el esfuerzo.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>El Parque del Retiro los domingos</strong> es la experiencia más madrileña posible: familias, músicos callejeros, artistas, pintores. Si puedes, alquila una barca en el estanque (€6/45 min). Llega a las 10h para aparcar la barca antes de que se agoten.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Para escapar del turismo:</strong> compra en el <strong>Mercado de Vallehermoso</strong> (Chamberí) o el <strong>Mercado de Maravillas</strong> (Cuatro Caminos), igual de buenos que San Miguel pero sin turistas y con precios locales. El mejor jamón de Madrid se corta a mano en la Jamonería Fermín de la Calle de Toledo.</div></div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos y ambulancia (24h)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Nacional</div><div class="emerg-value">091</div><div class="emerg-note">Denuncias y urgencias policiales</div></div>
+        <div class="emerg-card"><div class="emerg-label">Urgencias médicas</div><div class="emerg-value">061</div><div class="emerg-note">Solo emergencias sanitarias graves</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital La Paz</div><div class="emerg-value">+34 917 277 000</div><div class="emerg-note">Urgencias 24h · Paseo de la Castellana 261</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Local Madrid</div><div class="emerg-value">092</div><div class="emerg-note">Incidencias urbanas y tráfico</div></div>
+        <div class="emerg-card"><div class="emerg-label">Farmacia de guardia</div><div class="emerg-value">Cruz verde parpadeando</div><div class="emerg-note">App FarmaciasGuardiaMadrid disponible</div></div>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>✅ Ventaja España:</strong> Madrid es España — tu tarjeta sanitaria europea (EHIC) cubre asistencia médica de urgencias de forma gratuita en cualquier hospital público. No necesitas seguro de viaje específico, aunque es recomendable para actividades de riesgo o viajes de larga duración.
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea (EHIC)</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta de crédito/débito sin comisiones</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje (opcional pero recomendable)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">💻 Tecnología</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps offline de Madrid</div>
+            <div class="check-item"><div class="check-box"></div>App Metro de Madrid (TMadrid)</div>
+            <div class="check-item"><div class="check-box"></div>App TaxiMadrid o Cabify</div>
+            <div class="check-item"><div class="check-box"></div>Reservas del Prado y Reina Sofía online</div>
+            <div class="check-item"><div class="check-box"></div>Reserva Restaurante Botín (si aplica)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">👕 Ropa</div>
+            <div class="check-item"><div class="check-box"></div>Calzado cómodo para caminar mucho</div>
+            <div class="check-item"><div class="check-box"></div>Chaqueta (noches frescas todo el año)</div>
+            <div class="check-item"><div class="check-box"></div>Ropa elegante si reservas restaurante Michelin</div>
+            <div class="check-item"><div class="check-box"></div>Protector solar (el sol de Madrid en verano pica)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">🎟️ Visitas</div>
+            <div class="check-item"><div class="check-box"></div>Museo del Prado — reservar online</div>
+            <div class="check-item"><div class="check-box"></div>Museo Reina Sofía (Guernica)</div>
+            <div class="check-item"><div class="check-box"></div>Palacio Real (opcional)</div>
+            <div class="check-item"><div class="check-box"></div>Tour Bernabéu — reservar online</div>
+            <div class="check-item"><div class="check-box"></div>Bus Toledo A/R (no necesita reserva)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">🍷 Gastronomía</div>
+            <div class="check-item"><div class="check-box"></div>Churros en San Ginés (24h, cualquier día)</div>
+            <div class="check-item"><div class="check-box"></div>Vermut de barril en La Latina un sábado a las 12h</div>
+            <div class="check-item"><div class="check-box"></div>Bocadillo de calamares en Plaza Mayor</div>
+            <div class="check-item"><div class="check-box"></div>Cocido madrileño (solo a mediodía)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para Madrid?</h3>
+      <p>Dinos tus fechas, presupuesto y estilo de viaje. Routlo IA te crea un plan a medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a Madrid
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com y otras plataformas pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos (mayo 2026) y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px">
+    <div>
+      <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px">
+        <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+      </a>
+      <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.7;max-width:280px">Itinerarios de viaje generados por inteligencia artificial. Personalizados para cada viajero.</p>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">España</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="madrid.html" style="font-size:0.875rem;color:#c9a96e;text-decoration:none">Madrid</a></li>
+        <li><a href="barcelona.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Barcelona</a></li>
+        <li><a href="tenerife.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Tenerife</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Europa</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="budapest.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Budapest</a></li>
+        <li><a href="roma.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Roma</a></li>
+        <li><a href="paris.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">París</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Más</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="tokio.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Tokio</a></li>
+        <li><a href="marrakech.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Marrakech</a></li>
+        <li><a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Ver todos →</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.8rem;color:rgba(237,238,242,0.55)">
+    <span>© 2026 Routlo · Todos los derechos reservados</span>
+    <span>Generado con ❤️ e IA</span>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.querySelector('nav').classList.toggle('menu-open');
+  }
+  window.addEventListener('scroll', function() {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50);
+  });
+  // TOC active link on scroll
+  const sections = document.querySelectorAll('.itin-section');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    tocLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  });
+</script>
+</body>
+</html>

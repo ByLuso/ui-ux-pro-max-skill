@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vietnam — Hanói, Halong y Hội An | 8 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 8 días en Vietnam: Hanói, Bahía de Halong en crucero y el encanto de Hội An. Presupuesto detallado, hoteles y consejos exclusivos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #1a0500 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    /* ── Nav override ── */
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(26,5,0,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(26,5,0,0.95); }
+
+    /* ── Aurora ── */
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #8b2000 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #4a1000 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #c9700a 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.25; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    /* ── Hero ── */
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #1a0500 0%, #4a1000 40%, #8b2000 70%, rgba(201,112,10,0.2) 100%),
+        url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1400&h=700&fit=crop&q=80&auto=format');
+      background-size: cover; background-position: center;
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #1a0500 0%, rgba(26,5,0,0.5) 50%, rgba(26,5,0,0.2) 100%);
+    }
+    .dest-hero-deco {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+      background: linear-gradient(to top, #1a0500 0%, transparent 100%);
+      z-index: 0;
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(26,5,0,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #2a0a00; padding: 16px; text-align: center; }
+    .dest-sum-label {
+      font-size: 0.7rem; color: rgba(237,238,242,0.55);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .dest-sum-val {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.2rem; font-weight: 700; color: #c9a96e;
+    }
+
+    /* ── Layout ── */
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title {
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(237,238,242,0.55); margin-bottom: 12px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    /* ── Sections ── */
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    /* ── Day Card ── */
+    .day-card {
+      background: #2a0a00;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; overflow: hidden; margin-bottom: 28px;
+    }
+    .day-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .day-num {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 2.2rem; font-weight: 700; color: #c9a96e;
+      line-height: 1; min-width: 60px;
+    }
+    .day-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px;
+    }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    /* ── Activity ── */
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time {
+      min-width: 55px; font-size: 0.78rem; color: #c9a96e;
+      font-weight: 600; padding-top: 3px; flex-shrink: 0;
+    }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #c9a96e; border: 2px solid #2a0a00;
+      flex-shrink: 0; margin-top: 3px;
+    }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag {
+      display: inline-block; padding: 2px 8px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 100px; font-size: 0.67rem; color: #c9a96e;
+    }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    /* ── Hotels ── */
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px; transition: border-color 0.2s;
+    }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600;
+      border-bottom: 1px solid rgba(201,169,110,0.3); padding-bottom: 1px;
+    }
+    .hotel-link:hover { border-color: #c9a96e; }
+
+    /* ── Budget table ── */
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th {
+      text-align: left; padding: 10px 14px; background: #2a0a00;
+      color: #c9a96e; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(201,169,110,0.3);
+    }
+    .budget-table td {
+      padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: rgba(237,238,242,0.55); vertical-align: top;
+    }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #2a0a00; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    /* ── Transport ── */
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 18px;
+    }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    /* ── Tips ── */
+    .tip-item {
+      display: flex; gap: 12px; padding: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .tip-num {
+      min-width: 28px; height: 28px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700;
+      color: #c9a96e; flex-shrink: 0;
+    }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    /* ── Phrases ── */
+    .phrases-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .phrase-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .phrase-es { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 4px; }
+    .phrase-local { font-size: 0.88rem; font-weight: 600; color: #edeef2; margin-bottom: 2px; }
+    .phrase-pron { font-size: 0.74rem; color: #c9a96e; font-style: italic; }
+
+    /* ── Emergency ── */
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+
+    /* ── Gastronomy ── */
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 16px;
+    }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    /* ── Disclosure ── */
+    .disclosure {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 16px 18px;
+      font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65;
+      margin-top: 40px;
+    }
+
+    /* ── CTA banner ── */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(139,32,0,0.08) 100%);
+      border: 1px solid rgba(201,169,110,0.3); border-radius: 20px;
+      padding: 32px; text-align: center; margin-bottom: 28px;
+    }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px;
+      background: linear-gradient(135deg, #c9a96e, #a07840);
+      color: #0a0a0a; font-weight: 600; font-size: 0.9rem;
+      border-radius: 10px; text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .hotel-grid { grid-template-columns: repeat(2,1fr); }
+      .transport-grid { grid-template-columns: 1fr; }
+      .gastro-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px; }
+      nav[role="navigation"] ul { display: none; }
+      .dest-hero { padding: 100px 16px 40px; }
+      .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
+      .dest-country { font-size: 1.1rem; }
+      .hotel-grid { grid-template-columns: 1fr; }
+      .phrases-grid { grid-template-columns: 1fr; }
+      .emerg-grid { grid-template-columns: 1fr; }
+      .section-heading { font-size: 1.3rem; }
+      .budget-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Vietnam</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Vietnam</h1>
+  <p class="dest-country">Hanói · Halong · Hội An</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      8 días / 7 noches
+    </span>
+    <span class="dest-badge gold" role="listitem">~€1,300/persona</span>
+    <span class="dest-badge" role="listitem">Asia · Sudeste Asiático</span>
+    <span class="dest-badge" role="listitem">Naturaleza + Cultura + Gastronomía</span>
+    <a href="https://www.skyscanner.net/transport/flights/MAD/HAN/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      Buscar vuelos
+    </a>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">8 días</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Precio/persona</div>
+      <div class="dest-sum-val">~€1,300</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Mejor época</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Oct–Abr</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Visado</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">E-visa online</div>
+    </div>
+  </div>
+</section>
+
+<main id="main-content">
+  <div class="itin-layout">
+
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#alojamiento">Alojamiento</a></li>
+          <li><a href="#dia1">Día 1</a></li>
+          <li><a href="#dia2">Día 2</a></li>
+          <li><a href="#dia3">Día 3</a></li>
+          <li><a href="#dia4">Día 4</a></li>
+          <li><a href="#dia5">Día 5</a></li>
+          <li><a href="#dia6">Día 6</a></li>
+          <li><a href="#dia7">Día 7</a></li>
+          <li><a href="#dia8">Día 8</a></li>
+          <li><a href="#gastronomia">Gastronomía</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+          <li><a href="#emergencias">Emergencias</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <article>
+
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          Vietnam es uno de los países más fascinantes de Asia: 3.000 kilómetros de costa, 54 etnias, una historia milenaria y una gastronomía considerada entre las mejores del mundo. Este itinerario de 8 días recorre tres joyas: la capital caótica y encantadora de Hanói, el espectáculo geológico de la Bahía de Halong con sus 1.969 islotes calcáreos emergiendo del mar de China Meridional, y el sereno pueblo colonial de Hội An, declarado Patrimonio de la Humanidad por la UNESCO.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Empezar gratis
+          </a>
+        </div>
+      </section>
+
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para Vietnam">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Económico</th>
+                <th>Medio</th>
+                <th>Premium</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>✈️ Vuelos Madrid–Hanói i/v</td>
+                <td>€400–550</td>
+                <td>€550–700</td>
+                <td>€1,200+</td>
+              </tr>
+              <tr>
+                <td>🛳️ Crucero Halong (2 noches)</td>
+                <td>€80–120</td>
+                <td>€180–280</td>
+                <td>€450–700</td>
+              </tr>
+              <tr>
+                <td>🏨 Alojamiento (5 noches hotel)</td>
+                <td>€80–120</td>
+                <td>€180–300</td>
+                <td>€500–900</td>
+              </tr>
+              <tr>
+                <td>🍽️ Alimentación (8 días)</td>
+                <td>€80–120</td>
+                <td>€150–200</td>
+                <td>€300–500</td>
+              </tr>
+              <tr>
+                <td>✈️ Vuelo interno Hanói–Da Nang</td>
+                <td>€40–60</td>
+                <td>€60–90</td>
+                <td>€90–150</td>
+              </tr>
+              <tr>
+                <td>🚌 Transporte local y traslados</td>
+                <td>€30–50</td>
+                <td>€60–100</td>
+                <td>€150–250</td>
+              </tr>
+              <tr>
+                <td>🎫 Entradas y actividades</td>
+                <td>€40–60</td>
+                <td>€60–90</td>
+                <td>€120–200</td>
+              </tr>
+              <tr>
+                <td>🛡️ Seguro de viaje</td>
+                <td>€35–50</td>
+                <td>€35–50</td>
+                <td>€50–80</td>
+              </tr>
+              <tr>
+                <td><strong>TOTAL</strong></td>
+                <td><strong>~€750</strong></td>
+                <td><strong>~€1,300</strong></td>
+                <td><strong>~€2,800</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos por persona para temporada media 2026. E-visa Vietnam: €25, trámite online en 3 días hábiles.</p>
+      </section>
+
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+              Vuelo Madrid–Hanói
+            </div>
+            <div class="transport-content">
+              <strong>Vuelos con escala</strong> vía Doha, Dubái o Bangkok (~14-17h en total). Aerolíneas: Qatar Airways, Emirates, Thai Airways. Reservar con 3 meses de antelación para los mejores precios.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+              Vuelo interno Hanói–Da Nang
+            </div>
+            <div class="transport-content">
+              <strong>VietJet Air o Vietnam Airlines</strong> — 1h 20min, desde €40. Reservar online con semanas de antelación. Alternativa: tren nocturno Hanói–Da Nang (14h) con cama, experiencia única y económica (~€30).
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+              Apps esenciales
+            </div>
+            <div class="transport-content">
+              <strong>Grab</strong> — el Uber de Asia, funciona perfectamente en Vietnam. Imprescindible para no pagar precios de turista en tuk-tuks.<br><br>
+              <strong>Google Maps + Maps.me offline</strong> para callejas del casco antiguo de Hội An.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              En Hanói y Hội An
+            </div>
+            <div class="transport-content">
+              <strong>Moto-taxi (xe om)</strong> para trayectos cortos en Hanói. Grab moto es la versión segura con precio fijado. En Hội An, todo a pie o en bicicleta de alquiler (~€2/día). El caos del tráfico de Hanói hay que cruzarlo con calma, sin parar.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+        <h2 class="section-heading" id="h-alojamiento">Alojamiento recomendado</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:16px">Hoteles seleccionados por zona y precio. El crucero de Halong incluye alojamiento a bordo.</p>
+        <div class="hotel-grid">
+          <div class="hotel-card">
+            <div class="hotel-tier">💎 Premium — Hanói</div>
+            <div class="hotel-name">Sofitel Legend Metropole</div>
+            <div class="hotel-zone">Hanói — Casco Histórico</div>
+            <div class="hotel-price">Desde €180/noche</div>
+            <ul class="hotel-features">
+              <li>Hotel colonial de 1901, el más icónico de Vietnam</li>
+              <li>Bunker de la Guerra de Vietnam en el jardín</li>
+              <li>Piscina exterior y spa de lujo</li>
+              <li>Graham Greene escribió aquí "El americano tranquilo"</li>
+            </ul>
+            <a href="https://www.booking.com/hotel/vn/sofitel-legend-metropole-hanoi.html" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+          </div>
+          <div class="hotel-card">
+            <div class="hotel-tier">⭐ Recomendado — Hanói</div>
+            <div class="hotel-name">La Siesta Classic Ma May</div>
+            <div class="hotel-zone">Hanói — Old Quarter</div>
+            <div class="hotel-price">Desde €55/noche</div>
+            <ul class="hotel-features">
+              <li>En el corazón de las 36 calles antiguas</li>
+              <li>Desayuno vietnamita incluido</li>
+              <li>Personal habla español</li>
+              <li>Rooftop bar con vistas</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?ss=La+Siesta+Classic+Ma+May+Hanoi" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+          </div>
+          <div class="hotel-card">
+            <div class="hotel-tier">💵 Económico — Hanói</div>
+            <div class="hotel-name">Hanoi Backpackers Hostel</div>
+            <div class="hotel-zone">Hanói — Old Quarter</div>
+            <div class="hotel-price">Desde €12/noche</div>
+            <ul class="hotel-features">
+              <li>Referencia mochilera de Asia</li>
+              <li>Tours organizados desde el hostel</li>
+              <li>Bar social y ambiente internacional</li>
+              <li>A pie del lago Hoan Kiem</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?ss=Hanoi+Backpackers+Hostel" class="hotel-link" target="_blank" rel="noopener">Ver en Booking.com</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Días 1-2: Hanói -->
+      <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+        <h2 class="section-heading" id="h-dia1">Día 1</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Llegada a Hanói</div>
+              <div class="day-subtitle">El lago Hoan Kiem y el Old Quarter</div>
+            </div>
+            <div class="day-meta">
+              <span>🛬 Aeropuerto Noi Bai</span>
+              <span>🏯 Old Quarter</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">Tarde</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada Aeropuerto Noi Bai — Grab al hotel</div>
+                <div class="act-desc">Descarga Grab antes de llegar. El taxi oficial desde el aeropuerto cuesta ~€8-12 al centro. Evitar taxi sin taxímetro o acuerdos informales. Check-in y descanso — el vuelo desde España suele llegar al día siguiente tras escala.</div>
+                <div class="act-tags"><span class="act-tag info">Grab desde aeropuerto: ~€8</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">18:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Lago Hoan Kiem al atardecer</div>
+                <div class="act-desc">El corazón espiritual de Hanói. En el lago vive (o vivía) una tortuga gigante considerada divina. La Pagoda Ngoc Son sobre el lago conectada por el puente rojo Huc es la imagen más icónica de la ciudad. El barrio alrededor se llena de vida al caer la tarde.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito pasear</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">20:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena: Bún Chả en Ta Hien Street</div>
+                <div class="act-desc">Ta Hien Street es la "calle de la cerveza" — mesas de plástico en la acera, bia hoi (cerveza artesanal fresca a €0,25 el vaso), bún chả (fideos con albóndigas de cerdo a la brasa). Barack Obama y Anthony Bourdain comieron bún chả en Hanói en 2016. Ahora tú.</div>
+                <div class="act-tags"><span class="act-tag">Cena completa ~€4</span><span class="act-tag green">Experiencia auténtica</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+        <h2 class="section-heading" id="h-dia2">Día 2</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">02</div>
+            <div>
+              <div class="day-title">Hanói — Cultura y Gastronomía</div>
+              <div class="day-subtitle">Temple of Literature, 36 calles antiguas y street food tour</div>
+            </div>
+            <div class="day-meta">
+              <span>🏛️ Templo Literatura</span>
+              <span>🍜 Street food tour</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Desayuno: Phở en local tradicional</div>
+                <div class="act-desc">El phở bo (con ternera) o phở gà (con pollo) es el desayuno nacional vietnamita. Busca el local donde solo hay lugareños sentados en taburetes bajos. Caldo cocinado 12 horas, fideos de arroz, hierbas frescas. El phở auténtico cuesta €1,50.</div>
+                <div class="act-tags"><span class="act-tag">~€1,50 el bol</span><span class="act-tag green">Desayuno de campeones</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">09:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Temple of Literature — Van Mieu</div>
+                <div class="act-desc">La primera universidad de Vietnam, fundada en 1070, dedicada a Confucio. Cinco patios con estanques, pabellones y las famosas tortuga-estelas con los nombres de los mejores estudiantes del país. Un oasis de paz en el caos de Hanói. El ejemplo más bello de arquitectura confuciana del sudeste asiático.</div>
+                <div class="act-tags"><span class="act-tag">€2 entrada</span><span class="act-tag info">Abre 8:30–17:00h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Old Quarter — Las 36 calles antiguas</div>
+                <div class="act-desc">El barrio más antiguo de Hanói: cada calle lleva el nombre del gremio que la ocupaba hace siglos (calle de la seda, del papel, de los colchones, de las lámparas). Perderse entre motos, puestos de fruta, talleres de artesanos y templos escondidos en portales. El presente y el pasado conviviendo en el mismo metro cuadrado.</div>
+                <div class="act-tags"><span class="act-tag green">Exploración libre</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo: Bành Mì en la panadería Bánh Mì 25</div>
+                <div class="act-desc">El bánh mì es la síntesis perfecta de la fusión francovietnamnita: baguette crujiente con paté, jamón, verduras encurtidas, cilantro y jalapeños. El de Bánh Mì 25 en Hàng Bè es el favorito de los foodistas de toda Asia. €0,80 el bocadillo.</div>
+                <div class="act-tags"><span class="act-tag">€0,80</span><span class="act-tag green">El mejor sándwich de Asia</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Street Food Tour nocturno por el Old Quarter</div>
+                <div class="act-desc">Los mejores tours de comida de Hanói cuestan €25-35 y recorren 6-8 puestos en 3 horas: chả cá (pescado con cúrcuma), nem cuon (rollitos frescos), cà phê trứng (café con yema de huevo — la especialidad de Hanói). Una experiencia gastronómica sin igual.</div>
+                <div class="act-tags"><span class="act-tag">€25-35 tour completo</span><span class="act-tag info">Reservar online</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+        <h2 class="section-heading" id="h-dia3">Días 3–4</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">03</div>
+            <div>
+              <div class="day-title">Bahía de Halong — Crucero</div>
+              <div class="day-subtitle">Islotes calcáreos, kayak en cuevas y atardecer sobre el mar</div>
+            </div>
+            <div class="day-meta">
+              <span>🛳️ Crucero 2 noches</span>
+              <span>🚣 Kayak</span>
+              <span>🌅 Atardecer</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">07:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Bus desde Hanói al puerto de Ha Long (3h)</div>
+                <div class="act-desc">Los cruceros incluyen recogida en el hotel de Hanói. Salida temprano para aprovechar la tarde en la bahía. El trayecto de 3 horas atraviesa el delta del Río Rojo — arrozales, búfalos, vida rural vietnamita.</div>
+                <div class="act-tags"><span class="act-tag info">Incluido en el crucero</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Embarco + Almuerzo en cubierta</div>
+                <div class="act-desc">Almuerzo mientras el barco navega entre los 1.969 islotes de la bahía. La Bahía de Halong ("donde el dragón descendió al mar" en vietnamita) tiene 1.553 km² de agua y fue declarada Patrimonio Mundial UNESCO en 1994. Cada islote tiene su nombre y forma única.</div>
+                <div class="act-tags"><span class="act-tag green">Almuerzo incluido</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Kayak en las cuevas y lagunas interiores</div>
+                <div class="act-desc">En kayak se accede a lagunas escondidas dentro de los islotes — entrar remando bajo un arco de piedra para llegar a una laguna interior rodeada de acantilados de 200 metros es uno de los momentos más mágicos de Asia. También: visita a la cueva Hang Sung Sot (Cueva de la Sorpresa), con formaciones que brillan con luz artificial.</div>
+                <div class="act-tags"><span class="act-tag">Kayak incluido</span><span class="act-tag green">Experiencia única</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Atardecer desde la cubierta + Cena a bordo</div>
+                <div class="act-desc">El sol cae entre los islotes pintando el mar de naranja y rojo. Con una cerveza Huda en mano, este es el momento más fotográfico del viaje. Cena incluida con mariscos frescos, curry verde, verduras salteadas y el indefectible arroz blanco vietnamita.</div>
+                <div class="act-tags"><span class="act-tag green">Cena incluida</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">Día 4</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Visita a pueblo flotante + Tai Chi al amanecer</div>
+                <div class="act-desc">Clase de Tai Chi en cubierta al amanecer (6:30h) con el sol saliendo entre los islotes. Visita a una aldea flotante donde familias llevan generaciones viviendo sobre el agua: casas en balsas, piscifactorías, escuelas flotantes. Una forma de vida que desaparece lentamente. Regreso a Hanói por la tarde.</div>
+                <div class="act-tags"><span class="act-tag info">Tai Chi incluido 6:30h</span><span class="act-tag">Aldea flotante incluida</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+        <h2 class="section-heading" id="h-dia4">Día 4</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">04</div>
+            <div>
+              <div class="day-title">Regreso de Halong</div>
+              <div class="day-subtitle">Tarde libre en Hanói — mercado Dong Xuan</div>
+            </div>
+            <div class="day-meta">
+              <span>🛳️ Desembarco</span>
+              <span>🛒 Mercado Dong Xuan</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso a Hanói — Mercado Dong Xuan</div>
+                <div class="act-desc">El mayor mercado cubierto de Hanói: 3 plantas de textiles, especias, artesanía, ropa, electrónica y productos locales. El mejor lugar para comprar souvenirs sin pagar precio de turista (regatear es obligatorio y esperado). La planta de comida en la parte trasera tiene puestos auténticos y baratos.</div>
+                <div class="act-tags"><span class="act-tag green">Precios locales con regateo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Última noche en Hanói — Cà phê trứng</div>
+                <div class="act-desc">El café de huevo de Hanói es una de las grandes rarezas gastronómicas del mundo: espresso fuerte con una crema de yema de huevo montada encima, servida caliente o fría. La Cafetería Giang Café, fundada en 1946, es la inventora de esta bebida. Un símbolo de Hanói.</div>
+                <div class="act-tags"><span class="act-tag">€1,50 el café</span><span class="act-tag green">Invento de 1946</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+        <h2 class="section-heading" id="h-dia5">Día 5</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">05</div>
+            <div>
+              <div class="day-title">Vuelo a Da Nang — Llegada a Hội An</div>
+              <div class="day-subtitle">Del norte al centro: el pueblo de los farolillos</div>
+            </div>
+            <div class="day-meta">
+              <span>✈️ Hanói → Da Nang</span>
+              <span>🏮 Hội An</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Vuelo Hanói–Da Nang (1h 20min)</div>
+                <div class="act-desc">VietJet Air o Vietnam Airlines. El vuelo sobrevuela la costa central de Vietnam — con buen tiempo se ven las playas desde el avión. Traslado desde Da Nang a Hội An en taxi (~30 min, €8-12) o autobús público (~€1,50).</div>
+                <div class="act-tags"><span class="act-tag info">Vuelo desde €40</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Primera impresión de Hội An</div>
+                <div class="act-desc">Hội An fue el mayor puerto comercial del sudeste asiático entre los siglos XV y XIX. Hoy es un pueblo de 90.000 habitantes con un casco histórico extraordinariamente preservado: casas de madera de teca amarilla, puente japonés cubierto, templos chinos, capillas vietnamitas. Todo el centro es Patrimonio UNESCO.</div>
+                <div class="act-tags"><span class="act-tag info">Entrada casco histórico: €4 (incluye 5 atracciones)</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">20:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Noche de los farolillos — Casco Histórico</div>
+                <div class="act-desc">Cada noche el casco histórico se ilumina con miles de farolillos de seda de colores. El río Thu Bon refleja las luces. Los restaurantes sacan mesas a la calle. Los barcos de madera con farolillos navegan por el río. Hội An de noche es una de las experiencias más bellas de Asia. Los farolillos de papel para lanzar al río cuestan €1.</div>
+                <div class="act-tags"><span class="act-tag green">Farolillos: €1</span><span class="act-tag">Magia pura</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia6" class="itin-section" aria-labelledby="h-dia6">
+        <h2 class="section-heading" id="h-dia6">Día 6</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">06</div>
+            <div>
+              <div class="day-title">Hội An — Templos Cham de My Son</div>
+              <div class="day-subtitle">El Angkor Wat vietnamita y las playas de An Bang</div>
+            </div>
+            <div class="day-meta">
+              <span>🛕 My Son</span>
+              <span>🏖️ An Bang Beach</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">07:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">My Son — Santuario Cham (Patrimonio UNESCO)</div>
+                <div class="act-desc">Los templos hindúes del reino Champa (siglos IV–XIII), escondidos en un valle selvático a 40km de Hội An. Ir temprano (7h) antes de los grupos organizados. Las torres de ladrillo rojo con bajorrelieves de divinidades hindúes son una de las grandes maravillas arqueológicas de Asia. El bombardeo de 1969 destruyó parte del conjunto — las ruinas tienen una poesía extra.</div>
+                <div class="act-tags"><span class="act-tag">€7 entrada</span><span class="act-tag info">Tour desde Hội An: €15-20</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en Hội An — Cao Lầu</div>
+                <div class="act-desc">El cao lầu es el plato emblema de Hội An: fideos de arroz gruesos con cerdo asado, verduras y crujientes chicharrones, servido con un caldo mínimo. Solo puede hacerse auténticamente con el agua de un pozo específico de Hội An. Imposible de replicar fuera.</div>
+                <div class="act-tags"><span class="act-tag">~€3 el plato</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Playa de An Bang — Tarde de playa</div>
+                <div class="act-desc">La playa más cercana a Hội An (4km en bicicleta), con arena blanca, aguas azules y chiringuitos con hamacas bajo palmeras. Aguas más tranquilas que las famosas playas de China Beach. Una tarde perfecta antes de la última noche en Hội An.</div>
+                <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag info">Bici de alquiler: €2/día</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia7" class="itin-section" aria-labelledby="h-dia7">
+        <h2 class="section-heading" id="h-dia7">Día 7</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">07</div>
+            <div>
+              <div class="day-title">Hội An — Día Libre y Talleres</div>
+              <div class="day-subtitle">Cocina vietnamita, costura a medida y el río Thu Bon</div>
+            </div>
+            <div class="day-meta">
+              <span>👩‍🍳 Cooking class</span>
+              <span>🧵 Sastre a medida</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Clase de cocina vietnamita (Morning Glory)</div>
+                <div class="act-desc">Las clases de cocina de Morning Glory son famosas en todo el mundo de los viajeros: empiezan con visita al mercado para comprar los ingredientes y terminan cocinando y comiendo 5-6 platos. Aprendes a hacer phở, bánh xèo (crepe crujiente), gỏi cuốn y white rose dumplings. €30-40 pp con almuerzo incluido.</div>
+                <div class="act-tags"><span class="act-tag">€30-40 con almuerzo</span><span class="act-tag info">Reservar con días de antelación</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Sastre a medida — Traje o vestido en 24h</div>
+                <div class="act-desc">Hội An es famosa mundialmente por sus sastres: en 24-48h, un sastre de medida confecciona un traje, vestido o camisa con cualquier tela elegida. El precio de un traje completo empieza en €80. La calle Tran Hung Dao es el centro de la confección. Elegir un taller con referencias verificadas (Yaly Couture o A Dong Silk son los más reputados).</div>
+                <div class="act-tags"><span class="act-tag">Traje desde €80</span><span class="act-tag green">Entrega en 24h</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena de despedida: Mì Quảng en White Rose</div>
+                <div class="act-desc">Los white rose dumplings (bánh vạc) son los dumplings de seda blanca rellenos de gambas, exclusivos de Hội An — solo dos familias guardan la receta original. Combinados con mì quảng (fideos con cúrcuma y mariscos). Una última cena perfecta en el pueblo más bonito de Vietnam.</div>
+                <div class="act-tags"><span class="act-tag">Cena ~€8 por persona</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia8" class="itin-section" aria-labelledby="h-dia8">
+        <h2 class="section-heading" id="h-dia8">Día 8</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">08</div>
+            <div>
+              <div class="day-title">Vuelta a Hanói y vuelo de regreso</div>
+              <div class="day-subtitle">Últimas compras y despedida de Vietnam</div>
+            </div>
+            <div class="day-meta">
+              <span>✈️ Da Nang → Madrid</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">Mañana</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Recogida de ropa a medida + Últimas compras</div>
+                <div class="act-desc">Recoger el encargo del sastre. Últimas compras en el mercado central de Hội An: linternas de seda (€3-8), pinturas en seda, café vietnamita en grano robusta (el mejor del mundo para cafe filtrado), especias.</div>
+                <div class="act-tags"><span class="act-tag">Souvenirs: €20-40</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">Tarde</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Traslado Da Nang — Vuelo internacional</div>
+                <div class="act-desc">Taxi Hội An–Aeropuerto Da Nang (~30 min, €8). Vuelo de regreso a España vía escala. Llevar el maravilloso caos de Vietnam en la memoria para siempre.</div>
+                <div class="act-tags"><span class="act-tag info">Aeropuerto Da Nang: 30 min de Hội An</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+        <h2 class="section-heading" id="h-gastro">Gastronomía vietnamita</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:20px">La cocina vietnamita es considerada una de las más sanas y equilibradas del mundo: poca grasa, muchas hierbas frescas, fermentados y caldos largos. Cada región tiene sus platos identitarios.</p>
+        <div class="gastro-grid">
+          <div class="gastro-card">
+            <div class="gastro-cat">Sopa Nacional</div>
+            <div class="gastro-title">Phở (Hanói)</div>
+            <div class="gastro-desc">Caldo de huesos cocido 12h, fideos de arroz, ternera o pollo, hierbas frescas (menta, albahaca tailandesa), brotes de soja y lima. El desayuno y la cena de millones de vietnamitas. €1,50 en local de barrio.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Bocadillo de Fusión</div>
+            <div class="gastro-title">Bánh Mì</div>
+            <div class="gastro-desc">Baguette vietnamita (herencia francesa) rellena de paté, embutidos, verduras encurtidas, cilantro y jalapeños. Hay versiones vegetarianas excelentes. El street food más conocido de Vietnam. €0,80–2.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Plato de Hanói</div>
+            <div class="gastro-title">Bún Chả</div>
+            <div class="gastro-desc">Albóndigas y lonchas de cerdo asadas a la brasa, servidas con fideos de arroz, caldo dulce-agrio y hierbas frescas. El plato que hizo famoso Obama en su visita a Vietnam con Bourdain en 2016. €2–3.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Pescado con Cúrcuma</div>
+            <div class="gastro-title">Chả Cá Lã Vọng</div>
+            <div class="gastro-desc">Plato exclusivo de Hanói: filetes de pez gato marinados en cúrcuma y pasta de camarones, salteados en la mesa con eneldo y cebolletas. Servido con fideos, cacahuetes y salsa mắm tôm. El restaurante Chả Cá Lã Vọng lleva 150 años sirviendo solo este plato.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Café Especial</div>
+            <div class="gastro-title">Cà Phê Trứng (Egg Coffee)</div>
+            <div class="gastro-desc">Invención de Hanói de 1946: espresso fuerte con una crema de yema de huevo, azúcar y leche condensada montada hasta formar una mousse. Servido caliente o frío. Imprescindible en Cafetería Giang Cà Phê, fundada por el inventor. €1,50.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Fresh Rolls</div>
+            <div class="gastro-title">Gỏi Cuốn</div>
+            <div class="gastro-desc">Rollitos frescos de papel de arroz con gambas, cerdo, vermicelli, hierbas frescas y lechuga. Sin freír, ligerísimos, con salsa de cacahuete. El aperitivo más refrescante de Vietnam. €0,50 la unidad en mercados.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">10 Consejos para Vietnam</h2>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">1</div>
+          <div class="tip-text"><strong>E-visa obligatoria para españoles:</strong> Tramítala online en evisa.xuatnhapcanh.gov.vn. Cuesta €25, se aprueba en 3 días hábiles y vale 90 días. No la dejes para el último momento.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">2</div>
+          <div class="tip-text"><strong>Usa Grab siempre</strong> para taxis y motos — el precio se fija antes de salir. Los taxi sin taxímetro en Hanói suelen doblar el precio a turistas. Con Grab pagas precio local.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">3</div>
+          <div class="tip-text"><strong>Para cruzar la calle en Hanói:</strong> camina lento, constante y sin correr. Las motos van sorteándote. Si corres, la cagas. El flujo del tráfico se adapta a ti si te mueves con decisión y velocidad constante.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">4</div>
+          <div class="tip-text"><strong>El crucero de Halong:</strong> elige crucero de al menos 2 noches (mejor que 1). Los cruceros muy baratos (menos de €60/noche) suelen tener muchos grupos y poca personalidad. Medio (~€100-150/noche) es el mejor precio-calidad.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">5</div>
+          <div class="tip-text"><strong>La mejor época es noviembre–marzo</strong> para el norte y el sur. El centro (Hội An) tiene lluvias en octubre-noviembre pero la temporada de farolillos es en noviembre. Consultar el tiempo por región, no solo por "Vietnam".</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">6</div>
+          <div class="tip-text"><strong>Regatear en mercados es normal y esperado</strong> — pero siempre con sonrisa y buen humor. El precio inicial suele ser 3-5x el real. Una negociación típica: ellos dicen €10, tú dices €3, llegáis a €5. Todo con buena cara.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">7</div>
+          <div class="tip-text"><strong>Come en los locales sin menú en inglés</strong> — son los mejores. Señala lo que tiene el vecino o di "lo mismo que él". La barrera del idioma es parte de la experiencia.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">8</div>
+          <div class="tip-text"><strong>Vacunación recomendada:</strong> hepatitis A, fiebre tifoidea, y consulta con tu médico sobre malaria según las zonas. En las ciudades principales (Hanói, Hội An) el riesgo de malaria es mínimo.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">9</div>
+          <div class="tip-text"><strong>El dong vietnamita (VND)</strong> confunde al principio — 1€ = ~27.000 VND. Saca efectivo en cajeros del banco local (Vietcombank, BIDV). Las tarjetas de crédito se aceptan en hoteles pero no siempre en restaurantes de calle.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">10</div>
+          <div class="tip-text"><strong>Lleva ropa de manga larga</strong> para templos y sitios religiosos — cubrir hombros y rodillas es señal de respeto. Un pañuelo ligero de seda o lino (€2 en cualquier mercado) soluciona todo.</div>
+        </div>
+      </section>
+
+      <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+        <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+        <div class="emerg-grid">
+          <div class="emerg-card">
+            <div class="emerg-label">Policía</div>
+            <div class="emerg-value">113</div>
+            <div class="emerg-note">Emergencias policiales Vietnam</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Ambulancia</div>
+            <div class="emerg-value">115</div>
+            <div class="emerg-note">Emergencias médicas</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Bomberos</div>
+            <div class="emerg-value">114</div>
+            <div class="emerg-note">Incendios y rescate</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Hospital Internacional Hanói</div>
+            <div class="emerg-value" style="font-size:0.85rem">+84-24-3574-3556</div>
+            <div class="emerg-note">SOS International Clinic — 24h, inglés</div>
+          </div>
+          <div class="emerg-card" style="grid-column:1/-1">
+            <div class="emerg-label">Embajada de España en Hanói</div>
+            <div class="emerg-value" style="font-size:0.85rem">+84-24-3771-5207</div>
+            <div class="emerg-note">Calle Lieu Giai 16, Ba Dinh, Hanói — Emergencias consulares</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="disclosure" role="note">
+        <strong style="color:#edeef2">Aviso sobre enlaces de afiliados:</strong> Algunos enlaces en esta página son de afiliados (Booking.com, GetYourGuide, Skyscanner, IATI Seguros). Si realizas una compra a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Los precios son orientativos para 2026 y pueden variar. Siempre verifica en los sitios oficiales antes de reservar.
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#2a0a00">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html" style="font-family:'Bodoni Moda',serif;font-size:1.2rem;font-weight:700;color:#edeef2;text-decoration:none" aria-label="Routlo — Inicio"><img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);"></a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+(function() {
+  'use strict';
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#', '');
+    const el = document.getElementById(id);
+    if (el) sections.push({ id, el, link });
+  });
+
+  function updateTOC() {
+    const scrollY = window.scrollY;
+    let current = null;
+    sections.forEach(function(s) {
+      if (s.el.offsetTop - 120 <= scrollY) current = s;
+    });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateTOC, { passive: true });
+  updateTOC();
+
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const el = document.getElementById(this.getAttribute('href').replace('#', ''));
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 96, behavior: 'smooth' });
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.day-card, .tip-item').forEach(function(el) {
+      el.classList.add('reveal'); observer.observe(el);
+    });
+  }
+})();
+</script>
+</body>
+</html>

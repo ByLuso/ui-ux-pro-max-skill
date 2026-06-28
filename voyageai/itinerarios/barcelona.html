@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Barcelona — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo 5 días en Barcelona: Sagrada Família, Gaudí, Barrio Gótico, Barceloneta y Montserrat. Tres presupuestos: desde €320 hasta €2,700."/>
+  <meta property="og:title" content="Barcelona — 5 días | Routlo"/>
+  <meta property="og:description" content="Itinerario completo 5 días en Barcelona: Sagrada Família, Gaudí, Barrio Gótico, Barceloneta y Montserrat."/>
+  <meta property="og:type" content="article"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+    /* Aurora — blue Mediterranean tones for Barcelona */
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d2040 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#041020 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1a30 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg, #020a1a 0%, #051830 35%, #0a3060 65%, rgba(201,169,110,0.2) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(10,48,96,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(10,48,96,0.2);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Barcelona</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Barcelona</h1>
+  <p class="dest-country">España · Cataluña · Modernismo · Mediterráneo</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 5 días / 4 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Amigos / Familia</span>
+    <span class="dest-badge gold" role="listitem">💶 €320–2,700/persona</span>
+    <span class="dest-badge" role="listitem">🌍 España · Cataluña</span>
+    <span class="dest-badge" role="listitem">🏛️ Gaudí + Playa + Gastronomía</span>
+    <a href="https://www.skyscanner.es/transport/flights/es/bcn/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">5 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">1 ciudad</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€320–2,700</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Abr–Jun / Sep–Oct</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Gótico</a></li>
+        <li><a href="#dia2">Día 2 · Gaudí</a></li>
+        <li><a href="#dia3">Día 3 · Park Güell</a></li>
+        <li><a href="#dia4">Día 4 · Montserrat</a></li>
+        <li><a href="#dia5">Día 5 · Poblenou</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Barcelona es la ciudad más internacional de España y una de las más visitadas del mundo: una metrópoli mediterránea que combina el genio visionario de Antoni Gaudí con un barrio medieval de origen romano, playas urbanas en primera línea, la gastronomía catalana entre las más creativas de Europa y barrios tan distintos entre sí como el gótico Barri Gòtic, el bohemio Gràcia o el hipster Poblenou. En cinco días descubrirás la Sagrada Família —la obra arquitectónica en construcción más ambiciosa del planeta—, el mundo de mosaicos de Park Güell, el mercado más espectacular de España en La Boqueria y una excursión imprescindible al macizo de Montserrat, a 60 km de la ciudad. Barcelona es, además, perfectamente accesible desde Madrid en AVE en 2h30 o en avión desde cualquier ciudad de España.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏛️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Gaudí y modernismo</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 2 y 3</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏖️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Barrios y playa</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1 y 5</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">⛰️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Montserrat</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 4</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Mochilero</th><th>Estándar</th><th>Lujo</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo/AVE A/R</td><td>AVE Madrid 2h30 €35-70</td><td>€100-150</td><td>€220+</td><td>AVE o Vueling/Iberia desde muchas ciudades</td></tr>
+            <tr><td>🏨 Alojamiento (4 noches)</td><td>€110</td><td>€560</td><td>€1,600</td><td>Hostel Gótico / Hotel Eixample / 5★ Barceloneta</td></tr>
+            <tr><td>🍽️ Comidas (5 días)</td><td>€90</td><td>€220</td><td>€600</td><td>Menú del día €12-15 · Bodega €45 · Michelin €150+</td></tr>
+            <tr><td>🚇 Transporte local</td><td>€20</td><td>€30</td><td>€80</td><td>T-Casual 10 viajes €11.35</td></tr>
+            <tr><td>🎟️ Entradas</td><td>€60</td><td>€90</td><td>€130</td><td>Sagrada Família €26 obligatorio, Park Güell €10</td></tr>
+            <tr><td>🚌 Montserrat excursión</td><td>€20</td><td>€40</td><td>€80</td><td>FGC + cremallera desde Plaça Espanya</td></tr>
+            <tr><td>🔄 Imprevistos (10%)</td><td>€33</td><td>€114</td><td>€263</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€333</strong></td><td><strong>~€1,054</strong></td><td><strong>~€2,973</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo Sagrada Família:</strong> La Sagrada Família recibe 4,5 millones de visitantes al año. En temporada alta (julio-agosto) las entradas se agotan con semanas de antelación. Reserva en <a href="https://sagradafamilia.org" target="_blank" rel="noopener" style="color:#c9a96e">sagradafamilia.org</a> en cuanto confirmes las fechas. La entrada básica (€26) da acceso al interior; con torres (€32-38) subes a ver la ciudad desde arriba — vale la pena.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚇 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Aeropuerto El Prat (BCN)</div>
+          <div class="transport-content">
+            A <strong>12 km del centro</strong>. AEROBUS al Passeig de Gràcia en 35 min (€5.90). Metro <strong>L9 Sud</strong> (€4.50 + €3 suplemento aeropuerto) en 40 min hasta la Zona Universitaria. Taxi oficial con tarifa fija <strong>~€39</strong> al centro. El AVE llega a la Estación de Sants (metro L3 y L5).
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚇 Metro y FGC</div>
+          <div class="transport-content">
+            <strong>T-Casual 10 viajes €11.35</strong>, válido para metro, bus y FGC. El FGC (Ferrocarrils de la Generalitat) lleva a Montserrat (R5 desde Plaça Espanya) y a la zona alta (Tibidabo). Líneas L1–L5 cubren todo el centro histórico. El metro opera hasta las 2h entre semana y 24h los viernes y sábados.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚲 Bicicleta y patinete</div>
+          <div class="transport-content">
+            <strong>220 km de carril bici</strong>. Alquiler desde €10/día en La Barceloneta. Nunca en Las Ramblas — multa y peligro. Ideal para el frente marítimo (Barceloneta-Poblenou) y el Born. Bicing (préstamo público) requiere suscripción semanal €15. Lime y otros patinetes eléctricos también disponibles.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">⚠️ Seguridad en el transporte</div>
+          <div class="transport-content">
+            Las Ramblas y Barceloneta son <strong>zona de alta incidencia de carteristas</strong>. Mochila por delante, nunca el teléfono sobre mesas de terraza. El bolsillo trasero del pantalón es una invitación al robo. En el metro, mantén la mochila en el pecho en horas punta. Los carteristas trabajan especialmente en la L1 y la L3.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Mochilero</div>
+          <div class="hotel-name">Sant Jordi Hostels Rock Palace</div>
+          <div class="hotel-zone">Barrio Gótico</div>
+          <div class="hotel-price">~€28/noche</div>
+          <ul class="hotel-features">
+            <li>Mejor hostel de Barcelona según Hostelworld</li>
+            <li>Terraza con vistas al barrio gótico</li>
+            <li>A 2 min de Las Ramblas</li>
+            <li>Ambiente social, fiestas semanales</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/sant-jordi-hostels-rock-palace.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐⭐ Estándar</div>
+          <div class="hotel-name">Hotel Praktik Rambla</div>
+          <div class="hotel-zone">Eixample</div>
+          <div class="hotel-price">~€140/noche</div>
+          <ul class="hotel-features">
+            <li>Edificio modernista renovado en el Eixample</li>
+            <li>A 5 min a pie de la Sagrada Família</li>
+            <li>Desayuno incluido, terraza</li>
+            <li>Excelente relación calidad-precio</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/praktik-rambla.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Hotel Arts Barcelona</div>
+          <div class="hotel-zone">Barceloneta</div>
+          <div class="hotel-price">~€400/noche</div>
+          <ul class="hotel-features">
+            <li>Torre Mapfre de 44 pisos · piscina planta 43</li>
+            <li>Dos restaurantes Michelin</li>
+            <li>Primera línea de playa</li>
+            <li>El hotel más icónico de Barcelona</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/arts-barcelona.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS DEL ITINERARIO ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">El corazón medieval: Barrio Gótico y Las Ramblas</div>
+            <div class="day-subtitle">Barri Gòtic · Las Ramblas · La Boqueria · Barceloneta · El Born</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Centro histórico</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barri Gòtic — el barrio medieval más grande de Europa</div>
+              <div class="act-desc">Catedral de Barcelona (gótico s.XIII-XV), Pont del Bisbe, Plaça de Sant Jaume con el Ayuntamiento y la Generalitat. El barrio romano con las columnas del Templo de Augusto (s.I a.C.) visibles en el MUHBA (€7). Las calles del Call (barrio judío medieval) y los callejones del Gòtic esconden plazas silenciosas donde la ciudad lleva 2.000 años de historia acumulada.</div>
+              <div class="act-tags"><span class="act-tag">MUHBA €7</span><span class="act-tag green">Exterior gratis</span><span class="act-tag info">2h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Las Ramblas — el paseo más famoso de España</div>
+              <div class="act-desc">Bajar el paseo desde Plaça de Catalunya hasta el Mirador de Colón. El Palau de la Virreina (exposiciones gratuitas) y el Mercado de La Boqueria a mitad. Las Ramblas concentran lo mejor y lo peor de Barcelona: el ambiente y las terrazas junto a los carteristas y los restaurantes trampa. Baja por las Ramblas una vez para vivirla, luego evítala para comer.</div>
+              <div class="act-tags"><span class="act-tag green">Paseo gratis</span><span class="act-tag warn">Ojo carteristas</span><span class="act-tag info">45 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado de La Boqueria — el más espectacular de España</div>
+              <div class="act-desc">El más espectacular visualmente de España. Para comer, las barras de barra son caras y mediocres; usa el mercado solo para ver y comprar embutidos, quesos o fruta fresca. Los puestos de zumos (€1 en la parte trasera del mercado, lejos de la entrada) son los más baratos y frescos. La estructura de hierro de 1914 y los mosaicos del suelo merecen la visita aunque no compres nada.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratis</span><span class="act-tag warn">No comer en barra</span><span class="act-tag info">30 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barceloneta y frente marítimo</div>
+              <div class="act-desc">La playa urbana más conocida de Europa. Paseo en bici por el carril del Born al Poblenou. El Port Olímpic (construido para los JJ.OO. de 1992) con el pez dorado de Frank Gehry. El barrio de la Barceloneta conserva sus casas de pescadores del s.XVIII y el ambiente más auténtico de toda la franja costera. El paseo marítimo hasta el Born es de los más agradables de la ciudad.</div>
+              <div class="act-tags"><span class="act-tag green">Playa gratuita</span><span class="act-tag info">JJ.OO. 1992</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vermut en El Xampanyet — bar de cava desde 1929</div>
+              <div class="act-desc">El Xampanyet (Carrer de Montcada, El Born) es el bar más antiguo del barrio y uno de los más auténticos de Barcelona. Cava de la casa por copas (€2.50), anchoas en salazón, conservas de calidad. La barra siempre llena de locales y viajeros curtidos. La calle de Montcada, donde está ubicado, es la más medieval y fotogénica del Born.</div>
+              <div class="act-tags"><span class="act-tag">Cava €2.50</span><span class="act-tag info">Desde 1929</span><span class="act-tag green">Ambiente auténtico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en El Born — el barrio gastronómico más auténtico</div>
+              <div class="act-desc">El Born es el barrio gastronómico más auténtico de Barcelona: sin los excesos turísticos de Las Ramblas y con una calidad culinaria muy superior. Las calles de Montcada, Rec y Parlament concentran restaurantes de cocina catalana y creativa. La Basílica de Santa Maria del Mar (s.XIV, el ejemplo más puro del gótico catalán) iluminada de noche es uno de los rincones más hermosos de la ciudad.</div>
+              <div class="act-tags"><span class="act-tag">Cena ~€25-35</span><span class="act-tag info">El Born gastronómico</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Llamber</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">El Born</span></td><td>Cocina española creativa a precio razonable, menú del día €14. Frecuentado por locales del Born.</td><td>~€14</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Bar del Pla</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">El Born</span></td><td>Patatas bravas y croquetas de jamón legendarias. El mejor bar de tapas del Born.</td><td>~€25</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Disfrutar</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Eixample · 3 Michelin</span></td><td>Menú degustación de cocina creativa catalana. El mejor restaurante de España en 2024.</td><td>~€240</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Gaudí: Sagrada Família y el Eixample</div>
+            <div class="day-subtitle">Sagrada Família · Manzana de la Discordia · La Pedrera · Gràcia</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Modernismo</span><span>Día cultural</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box warn">
+            <strong>⚠️ Reserva obligatoria:</strong> La Sagrada Família requiere reserva online en <a href="https://sagradafamilia.org" target="_blank" rel="noopener" style="color:#c9a96e">sagradafamilia.org</a>. Las entradas se agotan con semanas de antelación en temporada alta. La entrada básica (€26) da acceso al interior; con torres recomendada (€32-38). Compra la entrada para las 9h — la luz de la mañana por las vidrieras es incomparable.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Sagrada Família RESERVADA — luz de mañana por las vidrieras</div>
+              <div class="act-desc">Entrar en la apertura para ver la luz de mañana por las vidrieras del lado del Evangelio (naranjas y rojas, orientadas al este). Interior + torres: 2-3 horas. La fachada de la Pasión (Subirachs, geométrica y angulosa) y la de la Natividad (Gaudí, orgánica y exuberante) son radicalmente diferentes entre sí. La cripta donde está enterrado Gaudí está incluida en la entrada. En construcción desde 1882 — la fecha prevista de terminación es 2026.</div>
+              <div class="act-tags"><span class="act-tag">€26-38</span><span class="act-tag warn">Reservar online antes de viajar</span><span class="act-tag info">2-3h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Passeig de Gràcia — la Manzana de la Discordia</div>
+              <div class="act-desc">El bulevar más elegante de Barcelona concentra en su manzana más famosa tres obras maestras del modernismo de tres arquitectos diferentes: Casa Lleó Morera (Domènech i Montaner), Casa Amatller (Puig i Cadafalch) y Casa Batlló (Gaudí). La visita inmersiva de Casa Batlló (€35) es la más innovadora de Barcelona — experiencia audiovisual en el edificio más fantástico de Gaudí.</div>
+              <div class="act-tags"><span class="act-tag">Casa Batlló €35</span><span class="act-tag info">Exterior gratis</span><span class="act-tag">Manzana de la Discordia</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Cervecería Catalana</div>
+              <div class="act-desc">La mejor terraza del Eixample para un almuerzo de tapas catalanas: patatas bravas, croquetas, montaditos de jamón ibérico y tortillas en todas sus variantes. Cola habitual de 15-20 minutos pero vale la pena. Alternativa cercana: Tapas 24 de Carles Abellán (cocina catalana contemporánea, ~€30).</div>
+              <div class="act-tags"><span class="act-tag">~€20-25</span><span class="act-tag info">Terraza Eixample</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Casa Milà (La Pedrera) — el modernismo más experimental</div>
+              <div class="act-desc">El modernismo más experimental de Gaudí. El ático con chimeneas de guerrero y las terrazas onduladas son de otro mundo — una escultura habitable que Gaudí concibió como una sola forma orgánica. El interior del piso noble amueblado reconstruye la vida burguesa de principios del s.XX. Visita €25. Al atardecer, las sombras en las terrazas crean un paisaje irreal.</div>
+              <div class="act-tags"><span class="act-tag">€25</span><span class="act-tag info">Terrazas al atardecer</span><span class="act-tag">Patrimonio UNESCO</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Gràcia — el más bohemio de Barcelona</div>
+              <div class="act-desc">El barrio más bohemio de Barcelona, con las plazas más animadas de la ciudad (Plaça del Sol, Plaça de la Vila de Gràcia, Plaça de la Virreina). Ambiente local auténtico, terrazas con precios mucho más bajos que el centro, librerías independientes, bares de autor y mercado de artesanía los fines de semana. En agosto, durante la Fiesta Mayor de Gràcia, las calles se decoran de forma artística durante una semana.</div>
+              <div class="act-tags"><span class="act-tag green">Ambiente local</span><span class="act-tag info">Plazas animadas</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Park Güell, Montjuïc y El Raval</div>
+            <div class="day-subtitle">Park Güell · Búnkers del Carmel · Montjuïc · MACBA · El Raval</div>
+          </div>
+          <div class="day-meta"><span>🌿 Miradores y arte</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Park Güell:</strong> La zona monumental (escalinata del dragón, mosaicos, Sala Hipóstila) requiere entrada (€10) y aforo limitado. Reservar en <a href="https://parkguell.barcelona" target="_blank" rel="noopener" style="color:#c9a96e">parkguell.barcelona</a> con semanas de antelación en temporada alta. El parque natural alrededor es completamente gratuito.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Park Güell RESERVADO — el mosaico más fotogénico del mundo</div>
+              <div class="act-desc">Zona monumental con acceso limitado (€10, reservar online). Mejor con luz de mañana antes de las 11h para evitar masificación. Los mosaicos del Pati de les Bugades (la gran terraza con serpentina multicolor de trencadís) y la Sala Hipóstila con sus 86 columnas dóricas son el modernismo más colorido del mundo. La casa-museo de Gaudí (donde vivió de 1906 a 1926) cuesta €6 adicionales.</div>
+              <div class="act-tags"><span class="act-tag">€10 zona monumental</span><span class="act-tag warn">Reservar online</span><span class="act-tag green">Parque alrededor gratis</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Búnkers del Carmel — el mirador más alto y menos turístico</div>
+              <div class="act-desc">El mirador más alto y menos turístico de Barcelona. Ruinas de baterías antiaéreas de la Guerra Civil española con vista 360° desde 262m de altitud. El Eixample cuadriculado, la Sagrada Família, el Tibidabo, el Mediterráneo y el puerto en una sola panorámica. Gratis. Acceso a pie desde Park Güell (20 min) o en taxi desde el metro Guinardó.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Vista 360°</span><span class="act-tag">Guerra Civil 1938</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Gràcia</div>
+              <div class="act-desc">Almuerzo en el barrio de Gràcia con el menú del día de cualquier restaurante de las calles interiores (Carrer de Verdi, Travessera de Gràcia): 3 platos + bebida + café por €12-14. El bar Nou Candanxu en Plaça del Sol tiene el mejor menú del barrio.</div>
+              <div class="act-tags"><span class="act-tag">Menú del día €12-14</span><span class="act-tag green">Sin turistas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Montjuïc: Fundació Joan Miró y Pavelló Mies van der Rohe</div>
+              <div class="act-desc">Fundació Joan Miró (€14): la colección más completa del universo plástico de Joan Miró en un edificio racionalista de Josep Lluís Sert. Pavelló Mies van der Rohe (€5): el paradigma de la arquitectura racional del s.XX, construido para la Exposición Internacional de 1929 y reconstruido fielmente en 1986. El estanque de agua, el Ónix verde y la figura de Georg Kolbe son las imágenes fundacionales del diseño moderno.</div>
+              <div class="act-tags"><span class="act-tag">Miró €14</span><span class="act-tag">Mies €5</span><span class="act-tag info">Arte s.XX</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">MACBA y El Raval — arte contemporáneo y ciudad multicultural</div>
+              <div class="act-desc">El MACBA (Museu d'Art Contemporani de Barcelona) y su plaza exterior son el punto de encuentro de skaters más famoso de España. El edificio de Richard Meier (1995) con su fachada de vidrio y aluminio es el icono arquitectónico de la Barcelona post-olímpica. El Raval circundante es el barrio más multicultural de la ciudad, con las mejores panaderías árabes y tiendas de especias de Barcelona.</div>
+              <div class="act-tags"><span class="act-tag">MACBA €12</span><span class="act-tag info">Skaters famosos</span><span class="act-tag green">Plaza gratis</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Excursión a Montserrat</div>
+            <div class="day-subtitle">Monestir de Montserrat · La Moreneta · Escolania · Sant Joan</div>
+          </div>
+          <div class="day-meta"><span>⛰️ Excursión</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Cómo llegar a Montserrat:</strong> FGC línea R5 desde Plaça Espanya (salida a primera hora de la mañana) hasta Monistrol de Montserrat (1h). Desde allí cremallera (rack railway) hasta el monasterio en 15 min. Billete integrado FGC + cremallera + funiculares disponible en la estación de Plaça Espanya (~€30 ida y vuelta con acceso a funiculares). Es el transporte más cómodo y espectacular.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">FGC desde Plaça Espanya — R5 dirección Monistrol</div>
+              <div class="act-desc">Salir a las 8h desde Plaça Espanya para llegar antes de que lleguen los grupos organizados. El trayecto de 1 hora en tren ofrece vistas progresivas del macizo de Montserrat — los picos de conglomerado emergen del llano catalán de forma completamente sobrenatural. En los meses de verano, llegar a las 9h es la diferencia entre disfrutar del monasterio con calma o sufrir las colas.</div>
+              <div class="act-tags"><span class="act-tag">€30 A/R con funiculares</span><span class="act-tag info">1h trayecto</span><span class="act-tag warn">Salir temprano</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Monestir de Montserrat — La Moreneta (Virgen Negra)</div>
+              <div class="act-desc">Visitar la Basílica y reverenciar La Moreneta (Virgen Negra del s.XII), la patrona de Cataluña. La talla policromada del s.XII fue declarada patrona de Cataluña en 1881. El Museu de Montserrat (€7) tiene una colección de pintura sorprendente que incluye obras de El Greco, Caravaggio y Monet. El conjunto monástico benedictino lleva 1.000 años habitado sobre estos picos imposibles.</div>
+              <div class="act-tags"><span class="act-tag green">Basílica gratis</span><span class="act-tag">Museo €7</span><span class="act-tag info">Patrona de Cataluña</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Escolania — el coro benedictino más antiguo de Europa</div>
+              <div class="act-desc">A las 13h la Escolania de Montserrat (el coro de niños benedictinos más antiguo de Europa, s.XIV) canta el Virolai en la Basílica. Llegar 20 min antes para conseguir sitio. Las voces blancas en la acústica de la Basílica de piedra son una experiencia de una belleza extraordinaria. La Escolania actúa también a las 12h y 18:45h según temporada — consultar horarios en montserratvisita.com.</div>
+              <div class="act-tags"><span class="act-tag">13h y 18:45h</span><span class="act-tag green">Gratis</span><span class="act-tag info">S.XIV — más antiguo de Europa</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en el restaurante del monasterio</div>
+              <div class="act-desc">El restaurante del monasterio sirve cocina catalana clásica a precios razonables para estar en un destino turístico. El menú del día (€16-20) incluye croquetas de escudella, botifarra a la brasa y crema catalana. También hay un self-service más económico junto a las tiendas del monasterio para el viajero con menos tiempo o presupuesto.</div>
+              <div class="act-tags"><span class="act-tag">Menú €16-20</span><span class="act-tag info">Cocina catalana</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Funicular de Sant Joan + ruta a la Ermita</div>
+              <div class="act-desc">El funicular de Sant Joan (incluido en el billete combinado) sube 250m adicionales en 5 minutos. Desde la estación superior, la ruta a la Ermita de Sant Joan (30 min, 1.5 km) ofrece vistas hacia los Pirineos al norte y el Mediterráneo al sur en los días claros. Los picos de conglomerado más cercanos crean un paisaje de otro planeta. El camino es accesible para todos los niveles.</div>
+              <div class="act-tags"><span class="act-tag">Incluido en billete combinado</span><span class="act-tag info">30 min ruta</span><span class="act-tag green">Vistas Pirineos-Mediterráneo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Barcelona — cena tranquila en El Born</div>
+              <div class="act-desc">Regreso a Barcelona en tren FGC. Cena tranquila en El Born tras el día de excursión. Los bares de tapas del Born tienen los mejores pintxos de Barcelona fuera del País Vasco: el Bar del Pla y el Espai Mescladís son imprescindibles. Una copa de cava en El Xampanyet cierra la noche perfectamente.</div>
+              <div class="act-tags"><span class="act-tag">Cena €20-30</span><span class="act-tag info">El Born noche</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 5 -->
+      <div class="day-card" id="dia5">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Poblenou, playas y despedida</div>
+            <div class="day-subtitle">Poblenou · Playas · Can Majó · Pedralbes · Passeig de Gràcia</div>
+          </div>
+          <div class="day-meta"><span>🏖️ Playas y barrios</span><span>Día final</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Poblenou — el SoHo barcelonés</div>
+              <div class="act-desc">El antiguo barrio industrial de Barcelona, transformado desde los JJ.OO. en el más creativo de la ciudad. La Rambla del Poblenou (la más tranquila y auténtica de Barcelona), murales de arte urbano en el 22@ (el barrio tecnológico), espacios de coworking en antiguas fábricas y el Mercat dels Encants (el mercado de las pulgas con cubierta de espejos de Fermín Vázquez, una obra de arte en sí misma).</div>
+              <div class="act-tags"><span class="act-tag green">Arte urbano gratis</span><span class="act-tag info">Barrio tech 22@</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de Bogatell o Nova Icaria</div>
+              <div class="act-desc">Playas mucho menos masificadas que la Barceloneta pero igual de bien equipadas. La playa de Bogatell tiene la mejor calidad de agua y menos turistas. La playa de Nova Icaria, junto a la zona del Port Olímpic, tiene más ambiente y servicios. Para quienes buscan mayor tranquilidad, la playa de Badalona (15 min en metro L2) tiene aguas igualmente limpias con ambiente completamente local.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Menos masificadas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo de despedida — fideuà en Can Majó</div>
+              <div class="act-desc">Can Majó (Barceloneta, junto al mar) es uno de los restaurantes de marisco y arroces más auténticos de la ciudad. La fideuà con alioli casero y el arroz caldoso de langosta son las especialidades. Comer mirando al Mediterráneo con los barcos al fondo es la despedida perfecta de Barcelona. Reservar con antelación o llegar antes de las 13:30h.</div>
+              <div class="act-tags"><span class="act-tag">~€35-45/persona</span><span class="act-tag info">Fideuà auténtica</span><span class="act-tag warn">Reservar</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Monestir de Pedralbes — el gótico más tranquilo</div>
+              <div class="act-desc">El Monestir de Pedralbes (s.XIV, gótico) es el más tranquilo y mejor conservado de Barcelona. El claustro de tres pisos con sus columnas octogonales y las pinturas murales de Ferrer Bassa (1346, el ejemplo más temprano de pintura italiana en Catalunya) son de una delicadeza extraordinaria. Lejos del circuito turístico habitual. Entrada €6.</div>
+              <div class="act-tags"><span class="act-tag">€6</span><span class="act-tag green">Sin turistas</span><span class="act-tag info">S.XIV</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Paseo final por el Passeig de Gràcia al atardecer</div>
+              <div class="act-desc">La Manzana de la Discordia iluminada al atardecer es una de las escenas más hermosas de Barcelona. Las fachadas de Casa Batlló y Casa Amatller encendidas con luz cálida transforman el Passeig de Gràcia en un escaparate del modernismo sin parangón. Copa final de cava en El Xampanyet (El Born) — el cierre más auténtico posible para cinco días en Barcelona.</div>
+              <div class="act-tags"><span class="act-tag green">Paseo gratis</span><span class="act-tag info">Mejor al atardecer</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 de Barcelona</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Sagrada Família interior con luz de mañana</h4><p>Las vidrieras del lado del Evangelio crean un bosque de colores naranjas y rojos en el interior de la nave más ambiciosa de la arquitectura contemporánea.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Park Güell zona monumental</h4><p>El mosaico de trencadís más fotogénico del mundo. Los colores imposibles de la serpentina de cerámica rota sobre la terraza con vistas al Eixample.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>La Pedrera (Casa Milà) terrazas al atardecer</h4><p>Las chimeneas de guerrero de Gaudí proyectan sombras sobre el suelo ondulado mientras el sol cae sobre el Mediterráneo. Una escultura habitable sin igual.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Montserrat al amanecer</h4><p>Los picos de conglomerado que emergen entre la niebla del llano catalán con el monasterio benedictino a 720m de altitud. Un paisaje de una belleza sobrenatural.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Búnkers del Carmel</h4><p>El mejor mirador de Barcelona fuera de los folletos turísticos. La vista 360° desde las ruinas de la Guerra Civil sobre toda la ciudad iluminada.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Passeig de Gràcia de noche</h4><p>La Manzana de la Discordia iluminada con las tres fachadas modernistas diferentes resplandeciendo sobre el bulevar más elegante de España.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>El Born de noche</h4><p>Historia medieval y gastronomía moderna perfectamente mezcladas en las calles empedradas alrededor de Santa Maria del Mar.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Barceloneta a las 8h de la mañana</h4><p>Solo locales haciendo ejercicio, pescadores en el paseo y el Mediterráneo en calma. La playa más auténtica antes de que lleguen los turistas.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>La Boqueria a primera hora</h4><p>El espectáculo de colores y aromas del mercado antes de las 10h, cuando aún tiene más vendedores que turistas y los precios son los reales.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Cava en El Xampanyet</h4><p>El bar más antiguo del Born, abierto desde 1929, sin cambiar un mueble ni una botella de la pared. El lugar más auténtico de toda Barcelona.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍽️ Gastronomía catalana</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Desayuno · Identidad catalana</div>
+          <div class="gastro-title">Pan con tomate (pa amb tomàquet)</div>
+          <div class="gastro-desc">El desayuno catalán universal. Pan de payés tostado, frotado con tomate fresco maduro, regado con aceite de oliva virgen extra. Con embutido o solo. Más sencillo imposible, más sabroso tampoco. Se pide en cualquier bar de Barcelona y es siempre la opción más barata y más buena del desayuno.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Arroz · Herencia marinera</div>
+          <div class="gastro-title">Fideuà</div>
+          <div class="gastro-desc">La respuesta barcelonesa a la paella. Fideos finos en caldo rico de marisco, con alioli de ajo y aceite batido a mano. Menos turística que la paella y más auténtica en los restaurantes del frente marítimo. El mejor en Can Majó (Barceloneta) o en La Mar Salada (Port Vell).</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Tapa · Tapas creativas</div>
+          <div class="gastro-title">Croquetas de jamón ibérico</div>
+          <div class="gastro-desc">Las mejores en El Born y en el Mercat de Santa Caterina (la alternativa menos turística de La Boqueria). Bechamel cremosa interior, pan crujiente exterior, jamón ibérico auténtico. En Barcelona se sirven más cremosas y líquidas que en el resto de España.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Espacio · Gastronomía monumental</div>
+          <div class="gastro-title">Tapas en El Nacional</div>
+          <div class="gastro-desc">El espacio más impresionante de Barcelona para comer. Cuatro restaurantes, cuatro bares, bajo la bóveda de un edificio del s.XIX en el Passeig de Gràcia. Cada rincón tiene cocina diferente: catalana, vasca, galega y mediterránea. Precios de gama media-alta pero la experiencia del espacio no tiene precio.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Aperitivo · Ritual del domingo</div>
+          <div class="gastro-title">Vermut con anchoas</div>
+          <div class="gastro-desc">El aperitivo barcelonés del domingo a mediodía. Bar Calders en el Eixample (con aceitunas gordales y boquerones en vinagre) o El Xampanyet en El Born (con anchoas del Cantábrico en conserva). El vermut de Barcelona se bebe con cava — no con soda — y siempre a las 12h del mediodía.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Postre · Origen medieval catalán</div>
+          <div class="gastro-title">Crema catalana</div>
+          <div class="gastro-desc">La madre de todas las cremas. Yema de huevo, canela, piel de limón y corteza de azúcar quemada con hierro candente. Se distingue de la crème brûlée francesa en las especias y en el origen medieval catalán (s.XIV). En cualquier restaurante de cocina catalana auténtica es el postre obligatorio.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section id="consejos" class="itin-section">
+      <h2 class="section-heading">💡 Consejos de Routlo</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Reserva la Sagrada Família con 2+ semanas</strong> en temporada alta (junio-septiembre). Entradas con torres (€32-38) son las más completas — ves el interior y la ciudad desde arriba. La primera hora de la mañana tiene la mejor luz y menos gente.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>El T-Casual 10 viajes (€11.35)</strong> es lo más económico para moverse: metro, bus y FGC. Si solo haces 1-2 viajes al día, el bono de 1 día (€10.50) puede salir bien. La T-Casual funciona para varios viajeros — se puede usar de forma no simultánea.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Las mejores playas:</strong> Bogatell y Nova Icaria (menos turistas), Mar Bella (nudista), Barceloneta (la más conocida y llena). Para descansar sin turistas, ve a Badalona (15 min en metro L2) — misma calidad de agua y ambiente completamente local.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Park Güell:</strong> la zona monumental (escalinata del dragón, mosaicos) requiere entrada (€10). El parque natural alrededor es gratuito. Reserva en <a href="https://parkguell.barcelona" target="_blank" rel="noopener" style="color:#c9a96e">parkguell.barcelona</a> con semanas de antelación. Las entradas de las 9h son las que tienen mejor luz y menos colas.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Para comer bien y barato:</strong> busca el "menú del día" martes-viernes en el Eixample y Gràcia. 3 platos + bebida + café por €12-15. Evita las terrazas de Las Ramblas y el Puerto Olímpico — precios el doble y calidad la mitad.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>El Tibidabo (512m)</strong> vale por las vistas más que por las atracciones. FGC hasta Peu del Funicular + tranvía azul histórico (€4) + funicular (€8 A/R). Ve a última hora de la tarde para el atardecer sobre el mar. El parque de atracciones es caro (€30) y mejor evitar con presupuesto ajustado.</div></div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos y ambulancia (24h)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Nacional</div><div class="emerg-value">091</div><div class="emerg-note">Denuncias y urgencias policiales</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Local (Mossos)</div><div class="emerg-value">088</div><div class="emerg-note">Mossos d'Esquadra · policía de Cataluña</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Clínic</div><div class="emerg-value">+34 932 275 400</div><div class="emerg-note">Urgencias 24h · Carrer de Villarroel 170</div></div>
+        <div class="emerg-card"><div class="emerg-label">Urgencias médicas</div><div class="emerg-value">061</div><div class="emerg-note">Solo emergencias sanitarias graves</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Local Barcelona</div><div class="emerg-value">092</div><div class="emerg-note">Guardia Urbana de Barcelona</div></div>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>✅ Ventaja España:</strong> Tu tarjeta sanitaria europea (EHIC) cubre asistencia médica de urgencias de forma gratuita en cualquier hospital público de Cataluña. En caso de robo, denuncia en la Guardia Urbana (092) o en las comisarías del Passeig de Gràcia o Las Ramblas, que tienen servicio de atención a turistas en varios idiomas.
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea (EHIC)</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta de crédito sin comisiones</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje (recomendable)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">💻 Tecnología</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps offline de Barcelona</div>
+            <div class="check-item"><div class="check-box"></div>App TMB (transporte Barcelona)</div>
+            <div class="check-item"><div class="check-box"></div>Entradas Sagrada Família reservadas</div>
+            <div class="check-item"><div class="check-box"></div>Entradas Park Güell reservadas</div>
+            <div class="check-item"><div class="check-box"></div>Billete FGC Montserrat (web o estación)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">👕 Ropa</div>
+            <div class="check-item"><div class="check-box"></div>Calzado muy cómodo (mucho adoquín)</div>
+            <div class="check-item"><div class="check-box"></div>Bañador y toalla (playas en 5 min)</div>
+            <div class="check-item"><div class="check-box"></div>Protector solar (sol mediterráneo fuerte)</div>
+            <div class="check-item"><div class="check-box"></div>Chaqueta ligera (noches frescas en Montserrat)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">🎟️ Visitas a reservar</div>
+            <div class="check-item"><div class="check-box"></div>Sagrada Família — reservar online obligatorio</div>
+            <div class="check-item"><div class="check-box"></div>Park Güell zona monumental</div>
+            <div class="check-item"><div class="check-box"></div>La Pedrera (recomendable online)</div>
+            <div class="check-item"><div class="check-box"></div>Casa Batlló (si se visita)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">🍽️ Gastronomía</div>
+            <div class="check-item"><div class="check-box"></div>Pa amb tomàquet en un bar del Eixample</div>
+            <div class="check-item"><div class="check-box"></div>Cava en El Xampanyet (El Born)</div>
+            <div class="check-item"><div class="check-box"></div>Fideuà en Can Majó (Barceloneta)</div>
+            <div class="check-item"><div class="check-box"></div>Menú del día en Gràcia un mediodía</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para Barcelona?</h3>
+      <p>Dinos tus fechas, presupuesto y estilo de viaje. Routlo IA te crea un plan a medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a Barcelona
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com y otras plataformas pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos (mayo 2026) y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px">
+    <div>
+      <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px">
+        <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+      </a>
+      <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.7;max-width:280px">Itinerarios de viaje generados por inteligencia artificial. Personalizados para cada viajero.</p>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">España</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="madrid.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Madrid</a></li>
+        <li><a href="barcelona.html" style="font-size:0.875rem;color:#c9a96e;text-decoration:none">Barcelona</a></li>
+        <li><a href="san-sebastian.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">San Sebastián</a></li>
+        <li><a href="valencia.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Valencia</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Europa</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="budapest.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Budapest</a></li>
+        <li><a href="roma.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Roma</a></li>
+        <li><a href="paris.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">París</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Más</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="tokio.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Tokio</a></li>
+        <li><a href="marrakech.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Marrakech</a></li>
+        <li><a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Ver todos →</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.8rem;color:rgba(237,238,242,0.55)">
+    <span>© 2026 Routlo · Todos los derechos reservados</span>
+    <span>Generado con ❤️ e IA</span>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() { document.querySelector('nav').classList.toggle('menu-open'); }
+  window.addEventListener('scroll', function() { document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50); });
+  const sections = document.querySelectorAll('.itin-section');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    tocLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  });
+</script>
+</body>
+</html>

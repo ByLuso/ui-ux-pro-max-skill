@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Berlín — 4 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 4 días en Berlín para 5 jóvenes con presupuesto de 700€: historia del Muro, East Side Gallery, Kreuzberg, Mauerpark y la mejor vida nocturna de Europa. Generado por Routlo."/>
+  <meta property="og:title" content="Berlín — 4 días | Routlo"/>
+  <meta property="og:description" content="Berlín en 4 días para 5 jóvenes: Checkpoint Charlie, East Side Gallery, Kreuzberg, Mauerpark flea market y la vida nocturna más icónica de Europa. Solo 700€ por persona."/>
+  <meta property="og:type" content="article"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #040810; color: #edeef2; font-family: 'Jost', system-ui, sans-serif; line-height: 1.6; }
+
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.96); }
+
+    /* Aurora — industrial steel blue for Berlin */
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0e1830 0%, transparent 70%); top: -200px; left: -150px; opacity: 0.7; animation: blob 14s ease-in-out infinite; }
+    .aurora::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0a1520 0%, transparent 70%); bottom: -150px; right: -100px; opacity: 0.5; animation: blob 14s ease-in-out infinite -7s; }
+    .aurora-mid { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #162238 0%, transparent 70%); top: 40%; left: 50%; opacity: 0.4; animation: blob-mid 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+    @keyframes blob-mid { 0%,100%{transform:translate(-50%,-50%) scale(1)} 33%{transform:translate(calc(-50% + 40px),calc(-50% - 60px)) scale(1.08)} 66%{transform:translate(calc(-50% - 30px),calc(-50% + 40px)) scale(0.94)} }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-mid { animation: none; } }
+
+    /* Hero */
+    .dest-hero { position: relative; z-index: 1; min-height: 65vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 140px 24px 60px; overflow: hidden; }
+    .dest-hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #060812 0%, #0d1422 35%, #162238 65%, rgba(56,100,168,0.18) 100%); }
+    .dest-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); margin-bottom: 20px; position: relative; z-index: 1; }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(2.5rem,6vw,5rem); font-weight: 700; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2; }
+    .dest-country { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(1.2rem,3vw,2rem); font-weight: 400; font-style: italic; color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1; }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge { padding: 6px 14px; background: rgba(4,8,16,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-badge.highlight { border-color: rgba(94,203,138,0.3); color: #5ecb8a; }
+    .sum-bar { display: flex; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 660px; position: relative; z-index: 1; }
+    .sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+
+    /* Layout */
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; font-size: 0.82rem; }
+    .toc-list a:hover { color: #c9a96e; border-left-color: rgba(201,169,110,0.4); background: rgba(201,169,110,0.05); }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+
+    /* Day card */
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 56px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-sub { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-metas { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta { font-size: 0.74rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    /* Activity */
+    .activity { display: flex; gap: 14px; margin-bottom: 20px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; flex-shrink: 0; padding-top: 3px; }
+    .act-conn { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .act-tag.blue { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.warn { background: rgba(220,80,80,0.1); border-color: rgba(220,80,80,0.25); color: #e07070; }
+
+    /* Highlight box */
+    .must-box { background: rgba(94,203,138,0.06); border: 1px solid rgba(94,203,138,0.2); border-radius: 14px; padding: 16px 18px; margin: 16px 0; display: flex; gap: 12px; align-items: flex-start; }
+    .must-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+    .must-text { font-size: 0.86rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .must-text strong { color: #5ecb8a; }
+
+    /* Meals */
+    .meal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 14px; }
+    .meal-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .meal-type { font-size: 0.67rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 5px; }
+    .meal-name { font-weight: 700; font-size: 0.88rem; color: #edeef2; margin-bottom: 3px; }
+    .meal-desc { font-size: 0.78rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; line-height: 1.5; }
+    .meal-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; }
+
+    /* Hotels */
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 14px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 5px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 5px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; }
+    .hotel-feats { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-feats li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-feats li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .hotel-link:hover { border-color: #c9a96e; }
+
+    /* Budget */
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { color: #c9a96e; font-weight: 700; font-size: 1rem; border-bottom: none; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+    /* Transport */
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    /* Tips */
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    /* Phrases */
+    .phrases-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .phrase-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .phrase-es { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 4px; }
+    .phrase-local { font-size: 0.88rem; font-weight: 600; color: #edeef2; margin-bottom: 2px; }
+    .phrase-pron { font-size: 0.74rem; color: #c9a96e; font-style: italic; }
+
+    /* Emergency */
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+
+    /* Checklist */
+    .check-section { margin-bottom: 20px; }
+    .check-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 10px; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); cursor: pointer; user-select: none; }
+    .check-item:last-child { border-bottom: none; }
+    .check-item.done { color: rgba(237,238,242,0.3); text-decoration: line-through; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .check-item.done .check-box { background: #5ecb8a; border-color: #5ecb8a; }
+    .check-item.done .check-box::after { content: '✓'; font-size: 10px; color: #040810; font-weight: 700; }
+
+    /* Top 10 */
+    .top10-item { display: flex; gap: 16px; padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .top10-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.8rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 36px; }
+    .top10-content h4 { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .top10-content p { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.55; }
+
+    /* Gastronomy */
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; transition: border-color 0.2s; }
+    .gastro-card:hover { border-color: rgba(201,169,110,0.3); }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    /* Disclosure */
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+
+    /* CTA Banner */
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg,#c9a96e,#a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .hotel-grid { grid-template-columns: repeat(2,1fr); }
+      .transport-grid { grid-template-columns: 1fr; }
+      .gastro-grid { grid-template-columns: 1fr; }
+      .meal-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px; }
+      nav[role="navigation"] ul { display: none; }
+      .dest-hero { padding: 100px 16px 40px; }
+      .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
+      .dest-country { font-size: 1.1rem; }
+      .sum-bar { display: grid; grid-template-columns: repeat(3,1fr); border-radius: 12px; }
+      .sum-item { padding: 12px 8px; }
+      .sum-label { font-size: 0.6rem; }
+      .sum-val { font-size: 1rem; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+      .day-num { font-size: 1.8rem; min-width: 44px; }
+      .day-title { font-size: 1rem; }
+      .day-metas { margin-left: 0; flex-direction: row; gap: 8px; width: 100%; }
+      .day-body { padding: 14px 16px; }
+      .act-time { min-width: 44px; font-size: 0.72rem; }
+      .act-title { font-size: 0.88rem; }
+      .hotel-grid { grid-template-columns: 1fr; }
+      .phrases-grid { grid-template-columns: 1fr; }
+      .emerg-grid { grid-template-columns: 1fr; }
+      .section-heading { font-size: 1.3rem; }
+      .must-box { flex-direction: column; gap: 8px; }
+      .budget-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 520px; }
+      .check-section { margin-bottom: 16px; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><div class="aurora-mid"></div></div>
+
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">/</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">Berlín</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Berlín</h1>
+  <p class="dest-country">La Capital de lo Imposible</p>
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">🐻 Alemania · Berlín</span>
+    <span class="dest-badge" role="listitem">4 días · 5 jóvenes</span>
+    <span class="dest-badge highlight" role="listitem">🧱 Muro de Berlín</span>
+    <span class="dest-badge highlight" role="listitem">🎶 Nightlife legendaria</span>
+    <span class="dest-badge" role="listitem">💰 700€/persona</span>
+  </div>
+  <div class="sum-bar" role="list">
+    <div class="sum-item" role="listitem"><div class="sum-label">Duración</div><div class="sum-val">4 días</div></div>
+    <div class="sum-item" role="listitem"><div class="sum-label">Grupo</div><div class="sum-val">5 jóvenes</div></div>
+    <div class="sum-item" role="listitem"><div class="sum-label">Budget/persona</div><div class="sum-val">~700€</div></div>
+    <div class="sum-item" role="listitem"><div class="sum-label">Budget total</div><div class="sum-val">~3.500€</div></div>
+    <div class="sum-item" role="listitem"><div class="sum-label">Dificultad</div><div class="sum-val">Fácil</div></div>
+  </div>
+</section>
+
+<!-- Main layout -->
+<div class="itin-layout">
+  <!-- TOC -->
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <p class="toc-title">Contenidos</p>
+    <ul class="toc-list" role="list">
+      <li><a href="#dias" class="toc-link">Itinerario día a día</a></li>
+      <li><a href="#dia1" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 1 — Mitte histórico</a></li>
+      <li><a href="#dia2" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 2 — El Muro y la memoria</a></li>
+      <li><a href="#dia3" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 3 — Kreuzberg & Mauerpark</a></li>
+      <li><a href="#dia4" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 4 — Prenzlauer Berg</a></li>
+      <li><a href="#presupuesto" class="toc-link">Presupuesto</a></li>
+      <li><a href="#transporte" class="toc-link">Transporte</a></li>
+      <li><a href="#top10" class="toc-link">Top 10 imprescindibles</a></li>
+      <li><a href="#gastronomia" class="toc-link">Gastronomía berlinesa</a></li>
+      <li><a href="#frases" class="toc-link">Frases en alemán</a></li>
+      <li><a href="#emergencias" class="toc-link">Emergencias</a></li>
+      <li><a href="#checklist" class="toc-link">Checklist pre-viaje</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main content -->
+  <main id="main-content">
+
+    <!-- ── ITINERARY ── -->
+    <section class="itin-section" id="dias" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">🗓️ Itinerario día a día</h2>
+
+      <!-- Día 1 -->
+      <article class="day-card" id="dia1" aria-labelledby="h-dia1">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title" id="h-dia1">Mitte histórico — El corazón de Berlín</div>
+            <div class="day-sub">Llegada · Checkpoint Charlie · DDR Museum · Berliner Dom · Noche en Mitte</div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">✈️ Llegada BER</div>
+            <div class="day-meta">🏛️ Centro histórico</div>
+          </div>
+        </div>
+        <div class="day-body">
+
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada a BER (Berlín Brandenburg) y check-in hostel</div>
+              <div class="act-desc">El aeropuerto BER está a 30 minutos del centro en S-Bahn (líneas S9 y S45, ~3,80€ con billete AB+C). Bajad en Ostkreuz o Hauptbahnhof según la ubicación del hostel. Dejad las mochilas, comed algo rápido en la zona y empezad la ruta. Los hostels de Berlín son de los mejores de Europa — suelen tener cocina compartida, bar propio y ambiente muy social.</div>
+              <div class="act-tags"><span class="act-tag blue">S-Bahn 30 min desde BER</span><span class="act-tag">~3,80€ tren</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">14:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Checkpoint Charlie y el Museo del Muro</div>
+              <div class="act-desc">El antiguo paso fronterizo entre los sectores americano y soviético es el símbolo más reconocible de la Guerra Fría en Berlín. La caseta de control original fue sustituida por una réplica (la original está en el Alliierten Museum). El Mauermuseum aquí sí merece la visita: exhibe las ingeniosas formas en que los berlineses del Este escapaban al Oeste — coches modificados, túneles, avionetas ultraligeras. Imprescindible para entender la historia de la ciudad.</div>
+              <div class="act-tags"><span class="act-tag">15€/entrada museo</span><span class="act-tag warn">Zona muy turística</span><span class="act-tag green">Historia fascinante</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">DDR Museum — La vida cotidiana en la Alemania del Este</div>
+              <div class="act-desc">El museo más interactivo de Berlín: puedes sentarte en un Trabant original, ver un apartamento típico de la RDA completo con muebles de la época, escuchar conversaciones interceptadas por la Stasi y probarte la ropa de los años 70 del Este. Todo es táctil, sin vitrina. Para jóvenes es probablemente el museo más entretenido de la ciudad. Está a orillas del Spree frente al Berliner Dom.</div>
+              <div class="act-tags"><span class="act-tag">15€/persona</span><span class="act-tag green">Muy interactivo</span><span class="act-tag blue">Orillas del Spree</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Berliner Dom y paseo por la Isla de los Museos</div>
+              <div class="act-desc">La catedral protestante de Berlín domina la orilla del Spree con su cúpula verde. La entrada cuesta 9€ pero subir a la cúpula con vistas panorámicas al atardecer merece la pena. La Museumsinsel (Isla de los Museos) es Patrimonio UNESCO — no hace falta entrar a todos los museos, el paseo al atardecer entre la catedral y el Altes Museum es impresionante. El Neues Museum tiene la famosa escultura de Nefertiti (reserva online si queréis entrar, 18€).</div>
+              <div class="act-tags"><span class="act-tag">9€ cúpula Berliner Dom</span><span class="act-tag blue">UNESCO</span><span class="act-tag">📷 Atardecer espectacular</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">20:30</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena y primera noche berlinesa — Hackescher Markt</div>
+              <div class="act-desc">Hackescher Markt es el epicentro de la vida nocturna de Mitte. Cenad en uno de los restaurantes de la zona y tomad las primeras cervezas en los bares de las Hackesche Höfe (patios de estilo art nouveau reconvertidos en espacio cultural con bares y galerías). Para el primer día es suficiente con un recorrido por los bares de la zona — el ritmo intenso de las noches de Berlín lo dejad para los días 2 y 3.</div>
+              <div class="act-tags"><span class="act-tag">🍺 Bier 3–5€</span><span class="act-tag green">Buen ambiente</span></div>
+            </div>
+          </div>
+
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;margin:20px 0 10px;color:#edeef2">🍽️ Opciones de cena — Día 1</h3>
+          <div class="meal-grid">
+            <div class="meal-card"><div class="meal-type">Street food</div><div class="meal-name">Mustafa's Gemüse Kebap</div><div class="meal-desc">El döner más famoso de Berlín en Mehringdamm. Cola habitual de 30–45 min pero vale la pena. Döner vegetariano con queso feta y verduras asadas.</div><div class="meal-price">~5€ por döner</div></div>
+            <div class="meal-card"><div class="meal-type">Intermedio</div><div class="meal-name">Zur Letzten Instanz</div><div class="meal-desc">El restaurante más antiguo de Berlín (1621). Cocina alemana clásica: Eisbein (codillo), Sauerbraten, Kartoffelpuffer. Ambiente histórico auténtico.</div><div class="meal-price">~18€/persona</div></div>
+            <div class="meal-card"><div class="meal-type">Moderno</div><div class="meal-name">Mogg Deli (Mitte)</div><div class="meal-desc">Deli judío-berlinés en una antigua escuela de Mitte. Pastrami casero, reuben sandwich y cheesecake de New York. Favorito de locales.</div><div class="meal-price">~20€/persona</div></div>
+          </div>
+
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;margin:20px 0 10px;color:#edeef2">🏨 Alojamiento recomendado — Grupo 5 jóvenes</h3>
+          <div class="hotel-grid">
+            <div class="hotel-card">
+              <div class="hotel-tier">💰 Ultra-budget</div>
+              <div class="hotel-name">Generator Berlin Mitte</div>
+              <div class="hotel-zone">Oranienburger Str. · Mitte</div>
+              <div class="hotel-price">~18–22€/persona/noche</div>
+              <ul class="hotel-feats"><li>Dormitorios mixtos de 6–8 personas</li><li>Bar en planta baja con happy hour</li><li>WiFi gratuito y lockers</li></ul>
+              <a href="https://www.booking.com/hotel/de/generator-berlin-mitte.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐⭐⭐ Confort</div>
+              <div class="hotel-name">A&O Berlin Mitte</div>
+              <div class="hotel-zone">Köpenicker Str. · Mitte</div>
+              <div class="hotel-price">~25–35€/persona/noche</div>
+              <ul class="hotel-feats"><li>Habitación privada para 5 disponible</li><li>Desayuno buffet opcional (+7€)</li><li>Ambiente joven y animado</li></ul>
+              <a href="https://www.booking.com/hotel/de/aoberlinhausvogteiplatz.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">🏆 Mejor relación calidad-precio</div>
+              <div class="hotel-name">Wombat's Berlin</div>
+              <div class="hotel-zone">Alte Schönhauser Str. · Mitte</div>
+              <div class="hotel-price">~28–38€/persona/noche</div>
+              <ul class="hotel-feats"><li>Mejor hostel de Berlín (Hostelworld)</li><li>Bar rooftop y zona social</li><li>Lockers gigantes para 5 personas</li></ul>
+              <a href="https://www.booking.com/hotel/de/wombats-city-hostel-berlin.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Día 2 -->
+      <article class="day-card" id="dia2" aria-labelledby="h-dia2">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title" id="h-dia2">🧱 El Muro y la memoria histórica</div>
+            <div class="day-sub">East Side Gallery · Memorial Holocausto · Puerta de Brandeburgo · Tiergarten · Nightlife</div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">🧱 Historia esencial</div>
+            <div class="day-meta">🌃 Primera noche de clubs</div>
+          </div>
+        </div>
+        <div class="day-body">
+
+          <div class="must-box">
+            <div class="must-icon">🧱</div>
+            <div class="must-text"><strong>East Side Gallery es el tramo más largo conservado del Muro de Berlín:</strong> 1,3 km de murales pintados por artistas de 21 países en 1990, justo tras la caída. Es al mismo tiempo monumento histórico y la galería de arte al aire libre más larga del mundo. El mural "El beso fraternal" (Brézhnev y Honecker) y "Test the Best" (el Trabant atravesando el Muro) son iconos mundiales. Entrada gratuita, 24h.</div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Desayuno en Markthalle Neun (o Vollpension)</div>
+              <div class="act-desc">Markthalle Neun en Kreuzberg es un mercado cubierto art nouveau de 1891 con puestos de brunch increíbles los fines de semana (sábado y domingo 10:00–17:00). Entre semana, Vollpension en Mitte sirve el mejor desayuno vienés-berlinés de la ciudad (café y tostadas enorme, 6–10€). Empezad con energía — el día es intenso.</div>
+              <div class="act-tags"><span class="act-tag green">6–10€ desayuno</span><span class="act-tag">🧇 Brunch berlinés</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">East Side Gallery — 1,3 km de murales históricos</div>
+              <div class="act-desc">Cogéis el U-Bahn hasta Warschauer Str. y caminéis hacia el oeste a lo largo del Muro pintado, siguiendo el Spree. El tramo completo lleva ~45 minutos a ritmo tranquilo con fotos. El punto de entrada sur está junto al Oberbaumbrücke, el puente más fotogénico de Berlín con sus torres neogóticas. La East Side Gallery termina justo frente a Mercedes-Benz Arena.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis · 24h abierto</span><span class="act-tag">📷 Foto icónica: beso Brézhnev-Honecker</span><span class="act-tag blue">1,3 km a pie</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Friedrichshain — Barrio del East</div>
+              <div class="act-desc">Friedrichshain es el barrio más cool del Berlín del Este: lleno de bares alternativos, graffiti monumental y restaurantes baratos. Simon-Dach-Straße es la calle principal, conocida como "la calle de los bares". Almuerzas por menos de 8€ en cualquier Imbiss (puesto de comida rápida) o restaurante vietnamita de la zona.</div>
+              <div class="act-tags"><span class="act-tag">~8€ almuerzo</span><span class="act-tag green">Barrio alternativo</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Memorial del Holocausto y Puerta de Brandeburgo</div>
+              <div class="act-desc">El Memorial del Holocausto (Peter Eisenman, 2005) es uno de los espacios más impactantes de Europa: 2.711 estelas de hormigón gris de diferentes alturas que crean un laberinto opresivo. La experiencia es diferente para cada persona — algunos lo visitan en silencio, otros se sienten perdidos (que es exactamente la intención). Está a 5 minutos a pie de la Puerta de Brandeburgo, el símbolo más icónico de la reunificación alemana.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag">2.711 estelas de hormigón</span><span class="act-tag blue">UNESCO</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tiergarten y Siegessäule (Columna de la Victoria)</div>
+              <div class="act-desc">El Tiergarten es el pulmón verde de Berlín (210 hectáreas en el centro). La ruta a pie hasta la Siegessäule por los senderos arbolados es refrescante después de toda la historia. La Columna de la Victoria (67 m) se puede subir por 4€ — desde arriba se ve toda la ciudad y el Reichstag. En verano el parque es el lugar favorito de los berlineses para hacer barbacoas y tocar música.</div>
+              <div class="act-tags"><span class="act-tag">4€ subir Siegessäule</span><span class="act-tag green">210 ha de parque</span><span class="act-tag">☀️ Ideal en verano</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">18:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Reichstag — Cúpula con vistas panorámicas (reserva obligatoria)</div>
+              <div class="act-desc">La cúpula de cristal del Bundestag diseñada por Norman Foster es gratuita pero requiere registro online con días de antelación. Si tenéis la reserva, la visita nocturna (20:00–22:00) ofrece las mejores vistas de Berlín con los edificios gubernamentales iluminados. Sin reserva, el exterior y el Platz der Republik ya son impresionantes al atardecer.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis (con reserva previa)</span><span class="act-tag warn">Registrar en bundestag.de con antelación</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">22:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Primera noche de clubs — Watergate o Ritter Butzke</div>
+              <div class="act-desc">Para iniciarse en la vida nocturna berlinesa sin la presión de Berghain, Watergate (Friedrichshain) y Ritter Butzke (Kreuzberg) son los spots perfectos. Watergate tiene dos pisos con vista al Spree y una terraza flotante espectacular. Entrada ~12€. Vestid casual-oscuro, dejad los jerséis blancos en el hostel. Los clubs abren tarde — llegar antes de medianoche los miércoles o jueves evita colas largas.</div>
+              <div class="act-tags"><span class="act-tag">~12€ entrada</span><span class="act-tag warn">Vestimenta: dark/casual</span><span class="act-tag blue">Techno/House</span></div>
+            </div>
+          </div>
+
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;margin:20px 0 10px;color:#edeef2">🍽️ Opciones de cena — Día 2</h3>
+          <div class="meal-grid">
+            <div class="meal-card"><div class="meal-type">Street food</div><div class="meal-name">Currywurst en Curry 36</div><div class="meal-desc">La currywurst es el plato más berlinés: salchicha con salsa de ketchup especiado y curry en polvo. Curry 36 en Mehringdamm es el más famoso desde 1980.</div><div class="meal-price">~3,50€</div></div>
+            <div class="meal-card"><div class="meal-type">Intermedio</div><div class="meal-name">Restaurant Reinstoff</div><div class="meal-desc">Cocina alemana moderna en un patio de Mitte. Buena relación calidad-precio para un sitio con estrella Michelin — menú del día más asequible.</div><div class="meal-price">~22€/persona</div></div>
+            <div class="meal-card"><div class="meal-type">Rápido</div><div class="meal-name">Döner en Imren Grill</div><div class="meal-desc">El mejor döner de Friedrichshain según los locales. Döner de pollo con verduras frescas, yogur y especias. Perfecto para reponer fuerzas antes del club.</div><div class="meal-price">~5€</div></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Día 3 -->
+      <article class="day-card" id="dia3" aria-labelledby="h-dia3">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title" id="h-dia3">🎨 Kreuzberg, Mauerpark y la contracultura berlinesa</div>
+            <div class="day-sub">Mauerpark Flea Market · Kreuzberg · Tempelhof · Street Art · Berghain</div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">🎪 Día más alternativo</div>
+            <div class="day-meta">🎶 Noche épica</div>
+          </div>
+        </div>
+        <div class="day-body">
+
+          <div class="must-box">
+            <div class="must-icon">🎪</div>
+            <div class="must-text"><strong>El Mauerpark los domingos</strong> es la experiencia más berlinesa posible: mercadillo hipster gigante donde los locales venden ropa vintage, vinilos y curiosidades de la RDA, karaoke masivo al aire libre en el anfiteatro (Bearpit Karaoke, donde pueden cantar hasta 1000 personas), músicos callejeros de nivel profesional y barbacoas improvisadas a lo largo del antiguo "pasillo de la muerte" del Muro. Imprescindible si viajáis en domingo.</div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mauerpark Sunday Flea Market y Bearpit Karaoke</div>
+              <div class="act-desc">Llegad antes de las 10:30 para pillar los mejores puestos. El mercadillo tiene unos 200 vendedores y es el mejor lugar para comprar recuerdos con personalidad berlinesa: chaquetas de cuero de la RDA, pins del Muro, vinilos de Bowie (vivió en Berlín y grabó aquí su "Trilogía de Berlín"), cámaras analógicas. El Bearpit Karaoke empieza hacia las 13:00 — cualquiera puede apuntarse en el lista. El ambiente es totalmente libre y los berlineses animan a todo el mundo.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis (solo domingos)</span><span class="act-tag">🎤 Bearpit Karaoke 13:00</span><span class="act-tag blue">Mejor plan de Berlín</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Prenzlauer Berg — El barrio más cool</div>
+              <div class="act-desc">Prenzlauer Berg limita con el Mauerpark y es el barrio más hipster y residencial de Berlín. Kastanienallee ("Kastanie Allee", la calle de los castaños) está llena de cafés, biergartens y restaurantes para todos los presupuestos. La Prater Biergarten es el más antiguo de Berlín (1837) — cerveza de barril, salchichas y ambiente de jardín de cerveza bajo los castaños.</div>
+              <div class="act-tags"><span class="act-tag">Prater Biergarten desde 1837</span><span class="act-tag green">Preis 6–12€/persona</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tempelhofer Feld — La antigua pista de aterrizaje como parque urbano</div>
+              <div class="act-desc">Tempelhof es el ex-aeropuerto más grande del mundo (300 hectáreas en el centro de Berlín), cerrado en 2008 y convertido en parque público. La gente va en bici, en patines en línea, hace cometas y juega al fútbol en la antigua pista de aterrizaje. Los hangares del aeropuerto siguen en pie con toda su arquitectura nazi de los años 30. Un sitio absolutamente único en cualquier ciudad del mundo. Alquilad patines o bicis en la entrada sur (5€/h).</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag">300 ha en el centro</span><span class="act-tag blue">🚲 Alquiler bici 5€/h</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Kreuzberg — Street art, Görlitzer Park y Kottbusser Tor</div>
+              <div class="act-desc">Kreuzberg es el barrio multicultural de Berlín (gran comunidad turca) y el epicentro del arte urbano. La calle Oranienstraße tiene decenas de tiendas vintage, estudios de tatuajes y bares alternativos. Görlitzer Park al atardecer es el punto de encuentro informal de los kreuzbergers (jóvenes de clase trabajadora, artistas, migrantes). Kottbusser Tor es el nexo caótico y vibrante del barrio — la plaza más "real" de Berlín.</div>
+              <div class="act-tags"><span class="act-tag">🎨 Street art world-class</span><span class="act-tag green">Barrio auténtico</span><span class="act-tag warn">Evitad el parque de noche solos</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena y preparación para la noche grande</div>
+              <div class="act-desc">Cenad bien — la noche puede ser larga. Comida étnica asequible en Kreuzberg: buffet turco (~8€), ramen japonés (~12€) o un döner de pie. Recuperad fuerzas antes del plato fuerte de la noche.</div>
+              <div class="act-tags"><span class="act-tag">~8-12€ cena</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">00:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">🎶 Berghain / Panorama Bar — La noche más icónica de Europa</div>
+              <div class="act-desc">Berghain es considerado el mejor club del mundo desde hace más de una década. Está en una antigua central eléctrica soviética entre Friedrichshain y Kreuzberg. El puerta (Sven Marquardt) es famoso por su política de entrada selectiva — rechaza grupos que van exclusivamente a "la experiencia", prefieren locales y gente que de verdad viene a bailar. <strong>Consejos de entrada:</strong> llegad solos o en parejas (grupos de 5 tienen menos posibilidades), vestimenta oscura/sport, evitad teléfonos en mano en la cola, no habléis español en la fila, parecéd relajados y sobrios. El sonido técnico de raw techno es el mejor del mundo. Entrada ~20€.</div>
+              <div class="act-tags"><span class="act-tag warn">Grupos de 5 = difícil entrar</span><span class="act-tag">~20€ entrada</span><span class="act-tag blue">El mejor club del mundo</span></div>
+            </div>
+          </div>
+
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;margin:20px 0 10px;color:#edeef2">🎶 Alternativas si no entráis en Berghain</h3>
+          <div class="hotel-grid">
+            <div class="hotel-card">
+              <div class="hotel-tier">🏠 Plan B garantizado</div>
+              <div class="hotel-name">Tresor</div>
+              <div class="hotel-zone">Mitte · ex-central eléctrica</div>
+              <div class="hotel-price">~12€ entrada</div>
+              <ul class="hotel-feats"><li>Bunker subterráneo icónico</li><li>Techno industrial hardcore</li><li>Apertura desde 1991</li></ul>
+              <a href="https://www.getyourguide.com/berlin-l17/?partner_id=ABC123" target="_blank" rel="noopener" class="hotel-link">Info en GetYourGuide ↗</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">🌊 Ambiente relajado</div>
+              <div class="hotel-name">Watergate</div>
+              <div class="hotel-zone">Friedrichshain · orillas del Spree</div>
+              <div class="hotel-price">~12€ entrada</div>
+              <ul class="hotel-feats"><li>Terraza flotante sobre el Spree</li><li>House y Techno accesible</li><li>Buena para grupos grandes</li></ul>
+              <a href="https://www.getyourguide.com/berlin-l17/?partner_id=ABC123" target="_blank" rel="noopener" class="hotel-link">Info en GetYourGuide ↗</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">🔥 Más accesible</div>
+              <div class="hotel-name">Sisyphos</div>
+              <div class="hotel-zone">Rummelsburg · nave industrial</div>
+              <div class="hotel-price">~10€ entrada</div>
+              <ul class="hotel-feats"><li>Rave al aire libre en verano</li><li>Varios escenarios (techno, disco)</li><li>Fácil de entrar en grupo</li></ul>
+              <a href="https://www.getyourguide.com/berlin-l17/?partner_id=ABC123" target="_blank" rel="noopener" class="hotel-link">Info en GetYourGuide ↗</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Día 4 -->
+      <article class="day-card" id="dia4" aria-labelledby="h-dia4">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title" id="h-dia4">🌿 Prenzlauer Berg, compras y despedida</div>
+            <div class="day-sub">Desayuno lento · Hackesche Höfe · Alexanderplatz · Vuelo de regreso</div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">😴 Día tranquilo</div>
+            <div class="day-meta">✈️ Vuelo tarde</div>
+          </div>
+        </div>
+        <div class="day-body">
+
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Brunch lento en Prenzlauer Berg</div>
+              <div class="act-desc">Después de dos noches de clubs, el cuarto día es para regenerarse. Prenzlauer Berg tiene la mayor concentración de cafés-brunch de Berlín. Café Liebling o Anna Blume en Schönhauser Allee son los favoritos locales para un desayuno completo sin prisas: Frühstücksteller (bandeja de desayuno alemán) con Brötchen (bollitos), embutido, queso, huevos y Kaffee. Presupuesto: 8–14€/persona.</div>
+              <div class="act-tags"><span class="act-tag green">8–14€ brunch completo</span><span class="act-tag">☕ Ritmo tranquilo</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Hackesche Höfe y shopping vintage en Mitte</div>
+              <div class="act-desc">Las Hackesche Höfe son 8 patios interconectados de estilo art nouveau (Jugendstil) con tiendas de diseño, galerías y restaurantes. Es el barrio de las compras con personalidad berlinesa: nada de H&M, sino tiendas de cerámica, libreros, tiendas de vinilo y ropa de diseñadores locales. Goed (Rosenthaler Str.) tiene los mejores souvenirs de Berlín sin ser cutre: totes con ilustraciones de la ciudad, mapas artísticos, fotografía de artistas berlineses.</div>
+              <div class="act-tags"><span class="act-tag blue">Art Nouveau 1906</span><span class="act-tag">🛍️ Diseño local</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Alexanderplatz — Fernsehturm y último paseo por Berlín</div>
+              <div class="act-desc">La TV Tower (Fernsehturm) de 368m es el edificio más alto de Alemania. Construida por la RDA en 1969 para demostrar el poder socialista, hoy es el símbolo de Berlín. Subid si tenéis tiempo y reserva (21,50€, sin colas con reserva online). En Alexanderplatz mismo: el Weltzeituhr (reloj mundial con las horas de todas las ciudades), un regalo perfecto para la foto de despedida del grupo.</div>
+              <div class="act-tags"><span class="act-tag">21,50€ Fernsehturm</span><span class="act-tag blue">368 m · el más alto de Alemania</span><span class="act-tag warn">Reservar online para evitar colas</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado al aeropuerto BER — Despedida</div>
+              <div class="act-desc">BER está a 30 minutos del centro en S-Bahn (S9 desde Ostbahnhof o S45 desde Südkreuz). Salid con 2 horas de antelación. Si vuestro vuelo es de noche, Berlín tiene una ventaja única: muchos clubs abren el domingo noche también — podéis alargar la aventura hasta el último momento.</div>
+              <div class="act-tags"><span class="act-tag blue">S-Bahn 30 min · 3,80€</span><span class="act-tag warn">Llegad 2h antes del vuelo</span></div>
+            </div>
+          </div>
+
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;margin:20px 0 10px;color:#edeef2">🍽️ Almuerzo de despedida — Día 4</h3>
+          <div class="meal-grid">
+            <div class="meal-card"><div class="meal-type">Clásico berlinés</div><div class="meal-name">Eisbein mit Sauerkraut</div><div class="meal-desc">Codillo de cerdo con chucrut y puré de guisantes. Plato tradicional de Berlín en cualquier Gaststätte (taberna). Contundente y barato.</div><div class="meal-price">~12€/persona</div></div>
+            <div class="meal-card"><div class="meal-type">Rápido y barato</div><div class="meal-name">Burrito en California Burrito</div><div class="meal-desc">Cadena berlinesa de burritos enormes. Perfecto para el último día con presupuesto ajustado. Ubicaciones en Mitte y Prenzlauer Berg.</div><div class="meal-price">~8€/persona</div></div>
+            <div class="meal-card"><div class="meal-type">Mercado</div><div class="meal-name">Arkonaplatz Markt</div><div class="meal-desc">Mercadillo dominical en Prenzlauer Berg con puestos de comida internacional. Comida étnica de toda Europa por 5–8€. Ideal si viajáis en domingo.</div><div class="meal-price">~6€/persona</div></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section class="itin-section" id="presupuesto" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">💰 Presupuesto estimado (4 días · por persona)</h2>
+      <div class="budget-wrap">
+        <table class="budget-table" aria-label="Tabla de presupuesto">
+          <thead><tr><th>Categoría</th><th>Precio/persona</th><th>Total (5 pers.)</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Vuelo A/R desde España</td><td>80–140€</td><td>400–700€</td><td>Ryanair/EasyJet/Vueling desde Madrid, Barcelona o Valencia. Reserva con 3–6 semanas.</td></tr>
+            <tr><td>Alojamiento hostel (4 noches)</td><td>80–140€</td><td>400–700€</td><td>Dorm 6 pers.: ~20€/noche. Hab. privada: ~35€/noche. Generator, Wombat's o A&amp;O.</td></tr>
+            <tr><td>Berlin WelcomeCard AB (5 días)</td><td>38€</td><td>190€</td><td>Transporte ilimitado A+B + descuentos en museos (15–50%). Obligatoria para grupos.</td></tr>
+            <tr><td>Museos y actividades</td><td>55–80€</td><td>275–400€</td><td>DDR Museum 15€ + Mauermuseum 15€ + Berliner Dom 9€ + Fernsehturm 21,50€ + otros.</td></tr>
+            <tr><td>Comida (4 días)</td><td>100–140€</td><td>500–700€</td><td>Street food 5–8€ por comida. Restaurante: 12–22€. Döner y currywurst abundan.</td></tr>
+            <tr><td>Vida nocturna (2–3 noches)</td><td>80–150€</td><td>400–750€</td><td>Entrada clubs 10–20€ + copas 10–20€/noche. Berlín es más barato que Madrid o Barcelona.</td></tr>
+            <tr><td>Souvenirs y varios</td><td>40–60€</td><td>200–300€</td><td>Mauerpark flea market + recuerdos + imprevistos.</td></tr>
+            <tr><td><strong>Total por persona</strong></td><td><strong>~480–750€</strong></td><td><strong>~2.400–3.750€</strong></td><td>700€ es el objetivo — muy factible viajando smart.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.8rem;color:rgba(237,238,242,0.55);margin-top:12px">💡 Berlín es una de las capitales europeas más baratas: el döner cuesta 4–5€, la cerveza 3€ y el transporte público es eficiente y económico. Con la WelcomeCard AB ahorráis en cada desplazamiento y en la mayoría de museos.</p>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section class="itin-section" id="transporte" aria-labelledby="h-transporte">
+      <h2 class="section-heading" id="h-transporte">🚇 Transporte en Berlín</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">🚇 U-Bahn y S-Bahn</div>
+          <div class="transport-content">La red de metro y tren de Berlín es enorme y funciona 24h los fines de semana. <strong>Berlin WelcomeCard AB 5 días (38€)</strong> cubre toda la ciudad (zonas A y B) con viajes ilimitados en U-Bahn, S-Bahn, tram y bus + descuentos en 200 atracciones. Es la mejor compra del viaje. Compradla en las máquinas de BER al llegar. Los billetes individuales son 3,20€/viaje o 9,80€/día.</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚲 Bicicleta</div>
+          <div class="transport-content">Berlín es una ciudad plana y ciclista. <strong>Nextbike</strong> (app) tiene estaciones por toda la ciudad (~1,50€/30 min). Para un día completo en Tempelhof o el Tiergarten, alquilar una bici en el hostel (~10–15€/día) es la opción más cómoda. Las carriles bici están separados del tráfico en la mayoría de calles principales.</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Tram y Bus nocturnos</div>
+          <div class="transport-content">Los tranvías (Straßenbahn) operan principalmente en el antiguo Berlín Este. Las líneas M1 y M10 son las más útiles — conectan Prenzlauer Berg con Mitte. Los buses nocturnos (N-lines) funcionan toda la noche cuando el U-Bahn cierra (días laborables de 01:00 a 04:00). Con la WelcomeCard todos incluidos.</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">✈️ Aeropuerto BER</div>
+          <div class="transport-content">BER (Berlín Brandenburg) está en Schönefeld, al sureste. <strong>S9</strong> (hacia Ostbahnhof/Ostkreuz) y <strong>S45</strong> (hacia Südkreuz/Gesundbrunnen) conectan en 30 minutos. Precio: 3,80€ con billete AB+C (la WelcomeCard no cubre la zona C del aeropuerto — hay que pagar suplemento o comprar billete ABC). Taxi: ~35–45€ al centro.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section class="itin-section" id="top10" aria-labelledby="h-top10">
+      <h2 class="section-heading" id="h-top10">🏆 Top 10 imprescindibles de Berlín</h2>
+
+      <div class="top10-item">
+        <div class="top10-num">1</div>
+        <div class="top10-content">
+          <h4>East Side Gallery — El Muro pintado</h4>
+          <p>El tramo más largo conservado del Muro (1,3 km) convertido en galería de arte al aire libre con murales de artistas de todo el mundo. El símbolo más poderoso del fin de la Guerra Fría. Gratuito, 24h.</p>
+        </div>
+      </div>
+      <div class="top10-item">
+        <div class="top10-num">2</div>
+        <div class="top10-content">
+          <h4>Mauerpark Domingo — El plan más berlinés</h4>
+          <p>Mercadillo hipster, karaoke masivo al aire libre (Bearpit Karaoke), músicos callejeros y barbacoas en el antiguo "pasillo de la muerte". La experiencia más auténtica de la ciudad moderna. Solo domingos, gratis.</p>
+        </div>
+      </div>
+      <div class="top10-item">
+        <div class="top10-num">3</div>
+        <div class="top10-content">
+          <h4>Memorial del Holocausto — El espacio más impactante de Europa</h4>
+          <p>2.711 estelas de hormigón que crean un laberinto opresivo diseñado por Peter Eisenman. Una experiencia sin palabras que todo viajero debería vivir. Gratuito, junto a la Puerta de Brandeburgo.</p>
+        </div>
+      </div>
+      <div class="top10-item">
+        <div class="top10-num">4</div>
+        <div class="top10-content">
+          <h4>Tempelhofer Feld — La pista de aterrizaje como parque</h4>
+          <p>300 hectáreas de ex-aeropuerto en el centro de la ciudad. Único en el mundo: patines, cometas, barbacoas y fútbol en la antigua pista. La idea más genial del urbanismo europeo reciente.</p>
+        </div>
+      </div>
+      <div class="top10-item">
+        <div class="top10-num">5</div>
+        <div class="top10-content">
+          <h4>Berliner Dom y la Isla de los Museos al atardecer</h4>
+          <p>La catedral protestante más grande de Alemania y su cúpula dorada frente al Spree. La Museumsinsel es Patrimonio UNESCO con 5 museos de clase mundial. El paseo al atardecer es gratuito y espectacular.</p>
+        </div>
+      </div>
+      <div class="top10-item">
+        <div class="top10-num">6</div>
+        <div class="top10-content">
+          <h4>DDR Museum — El museo más interactivo de Europa</h4>
+          <p>Apartamento de la RDA completo, Trabant para conducir, conversaciones de la Stasi: todo táctil. La mejor forma de entender la Alemania del Este sin aburrirse. 15€, muy recomendado para jóvenes.</p>
+        </div>
+      </div>
+      <div class="top10-item">
+        <div class="top10-num">7</div>
+        <div class="top10-content">
+          <h4>Kreuzberg — La energía de la Berlín real</h4>
+          <p>Barrio multicultural turco-alemán con el mejor street art, mercados turcos, bares alternativos y la gastronomía más diversa de la ciudad. Görlitzer Park, Kottbusser Tor y Oranienstraße son imprescindibles.</p>
+        </div>
+      </div>
+      <div class="top10-item">
+        <div class="top10-num">8</div>
+        <div class="top10-content">
+          <h4>Fernsehturm — Berlín a vista de pájaro</h4>
+          <p>368 metros. Construida por la RDA para demostrar el poderío socialista. Hoy es el símbolo más reconocible de Berlín. Las vistas desde la bola de cristal son las mejores de la ciudad. 21,50€ con reserva online.</p>
+        </div>
+      </div>
+      <div class="top10-item">
+        <div class="top10-num">9</div>
+        <div class="top10-content">
+          <h4>Mustafa's Gemüse Kebap — El döner más famoso del mundo</h4>
+          <p>Cola habitual de 45 minutos en Mehringdamm que vale completamente la pena. Döner con queso feta, verduras asadas y hierbas frescas. 5€. El mejor döner que comeréis en vuestra vida — los berlineses hacen cola semanalmente.</p>
+        </div>
+      </div>
+      <div class="top10-item">
+        <div class="top10-num">10</div>
+        <div class="top10-content">
+          <h4>La vida nocturna — La mejor de Europa sin discusión</h4>
+          <p>Berghain, Tresor, Watergate, Sisyphos, Ritter Butzke, KitKat... Berlín tiene más clubs de referencia mundial en un radio de 5 km que cualquier otra ciudad del planeta. Copas baratas (3–5€), entrada razonable (10–20€), horarios sin límite (abren viernes y no cierran hasta el lunes).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section class="itin-section" id="gastronomia" aria-labelledby="h-gastronomia">
+      <h2 class="section-heading" id="h-gastronomia">🥨 Gastronomía berlinesa</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato icónico</div>
+          <div class="gastro-title">Döner Kebap</div>
+          <div class="gastro-desc">Berlín inventó el döner turco-alemán moderno en los años 70. No es el döner que conocéis de España — es infinitamente mejor: pan fresco, carne asada al momento, queso feta, verduras encurtidas y especias. 4–5€. Mustafa's en Mehringdamm y Imren Grill en Friedrichshain son los mejores.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Street food clásico</div>
+          <div class="gastro-title">Currywurst</div>
+          <div class="gastro-desc">La salchicha berlinesa cortada en rodajas con ketchup especiado y curry en polvo. Inventada en 1949 por Herta Heuwer en Charlottenburg. Curry 36 en Kreuzberg es el templo. Solo 3,50€ y se come de pie. El Currywurst Museum en Mitte está dedicado enteramente a este plato.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Panadería alemana</div>
+          <div class="gastro-title">Brötchen y pan de centeno</div>
+          <div class="gastro-desc">Los alemanes son los mejores panaderos del mundo — 300 tipos de pan registrados como patrimonio cultural. El Brötchen (bollito de desayuno), el Pumpernickel (pan negro denso) y el Roggenbrot (centeno) son básicos. Cada panadería local tiene su propio mix. Desayunar en una Bäckerei es la experiencia más auténtica de Berlín.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato tradicional</div>
+          <div class="gastro-title">Eisbein mit Sauerkraut</div>
+          <div class="gastro-desc">El codillo de cerdo glaseado sobre chucrut (repollo fermentado) con puré de guisantes es el plato más berlín-alemán posible. Contundente, barato (~12€) y delicioso. Zur Letzten Instanz (el restaurante más antiguo de Berlín, 1621) lo tiene en carta desde siempre.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Biergarten</div>
+          <div class="gastro-title">Cerveza berlinesa</div>
+          <div class="gastro-desc">La Berliner Weiße (cerveza de trigo ácida servida con sirope de frambuesa o woodruff) es única de Berlín. La pinta de Pils cuesta 3–4€ en cualquier bar. El Prater Biergarten (Prenzlauer Berg, desde 1837) bajo los castaños es la experiencia de Biergarten más auténtica de la ciudad.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Mercado gastronómico</div>
+          <div class="gastro-title">Markthalle Neun</div>
+          <div class="gastro-desc">Mercado cubierto de 1891 en Kreuzberg con productores locales. El Street Food Thursday (jueves 17:00–22:00) es el evento gastronómico más popular de Berlín: 40+ puestos con comida del mundo entero. 5–10€ por plato, ambiente joven e internacional. Los sábados hay Frühstücksmarkt (mercado de desayuno).</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FRASES ── -->
+    <section class="itin-section" id="frases" aria-labelledby="h-frases">
+      <h2 class="section-heading" id="h-frases">🗣️ Frases básicas en alemán</h2>
+      <div class="phrases-grid">
+        <div class="phrase-card"><div class="phrase-es">Hola / Buenos días</div><div class="phrase-local">Hallo / Guten Morgen</div><div class="phrase-pron">"Hálo / Gúten Mórgen"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Hablas inglés?</div><div class="phrase-local">Sprichst du Englisch?</div><div class="phrase-pron">"Spriijtch du Ínglish?"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Una cerveza, por favor</div><div class="phrase-local">Ein Bier, bitte</div><div class="phrase-pron">"Ain Bír, bíte"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Cuánto cuesta?</div><div class="phrase-local">Was kostet das?</div><div class="phrase-pron">"Vas kóstet das?"</div></div>
+        <div class="phrase-card"><div class="phrase-es">La cuenta, por favor</div><div class="phrase-local">Die Rechnung, bitte</div><div class="phrase-pron">"Di Réjnung, bíte"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Dónde está...?</div><div class="phrase-local">Wo ist...?</div><div class="phrase-pron">"Vo ist...?"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Gracias</div><div class="phrase-local">Danke schön</div><div class="phrase-pron">"Dánke shön"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Perdona / Lo siento</div><div class="phrase-local">Entschuldigung</div><div class="phrase-pron">"Entshúldigunk"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Salud (al beber)</div><div class="phrase-local">Prost!</div><div class="phrase-pron">"¡Prost!"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Chao (informal)</div><div class="phrase-local">Tschüss!</div><div class="phrase-pron">"¡Chüs!"</div></div>
+      </div>
+      <p style="font-size:0.8rem;color:rgba(237,238,242,0.55);margin-top:14px">💡 Berlín es muy anglófona — casi todos los jóvenes hablan inglés fluido. No os preocupéis por el alemán, pero los locales aprecian el esfuerzo de pronunciar "Bitte" y "Danke".</p>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section class="itin-section" id="consejos" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">💡 Consejos para jóvenes en Berlín</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Comprad la WelcomeCard el primer día en BER.</strong> Las máquinas del aeropuerto tienen la opción de 5 días AB (38€) que cubre todo el transporte y da descuentos en museos. Ahorraréis fácilmente 40–50€ por persona entre transporte y entradas.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Los clubs no empiezan hasta tarde.</strong> En Berlín llegar a un club antes de la 1:00 es ir pronto — antes de las 23:30 solo hay turistas. El mejor momento para entrar en Berghain son las 2:00–3:00 del sábado por la mañana. Si llegáis muy temprano os rechazarán seguro.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Para entrar en Berghain, dividíos en grupos de 2.</strong> El puerta rechaza grupos grandes que parecen ir "de turismo nocturno". Llegad de 2 en 2, vestimenta dark/deportiva, sin mochilas de trekking. No habléis español en la cola. Parecéd locales que vienen a bailar.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>El Mauerpark solo es los domingos.</strong> Si vuestro viaje incluye un domingo, estructurad el itinerario para que el Día 3 (Kreuzberg/Mauerpark) caiga ese día. El Bearpit Karaoke empieza hacia las 13:00 y el mercadillo a las 10:00 — llegad temprano para los mejores puestos vintage.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Berlín es una ciudad de efectivo.</strong> Más que otras capitales europeas, muchos bares, clubs y tiendas alternativas solo aceptan efectivo (Bargeld). Sacad €100–150 en efectivo al llegar — los cajeros (Geldautomat) son fáciles de encontrar y sin comisión con cuentas europeas como Revolut o N26.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Calzado cómodo obligatorio.</strong> Berlín se recorre principalmente a pie — el Día 2 (East Side Gallery + Memorial + Tiergarten + Reichstag) puede superar los 18–20 km caminando. Zapatillas de running o senderismo ligero son imprescindibles. Evitad zapatos nuevos.</div></div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section class="itin-section" id="emergencias" aria-labelledby="h-emergencias">
+      <h2 class="section-heading" id="h-emergencias">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">112</div><div class="emerg-note">Ambulancia, bomberos, policía — funciona en toda la UE desde cualquier teléfono</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía (Polizei)</div><div class="emerg-value">110</div><div class="emerg-note">Número de policía directo en Alemania</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada española en Berlín</div><div class="emerg-value">+49 30 254 0070</div><div class="emerg-note">Lichtensteinallee 1, 10787 Berlín</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Charité (urgencias)</div><div class="emerg-value">+49 30 450 50</div><div class="emerg-note">El mejor hospital de Alemania, varios campus en Berlín</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil turista (CAT)</div><div class="emerg-value">+34 902 102 112</div><div class="emerg-note">Servicio para ciudadanos españoles en el extranjero</div></div>
+        <div class="emerg-card"><div class="emerg-label">Tarjeta bloqueada (CaixaBank)</div><div class="emerg-value">+34 900 40 40 90</div><div class="emerg-note">O llamad al número al dorso de vuestra tarjeta desde el +34</div></div>
+      </div>
+      <div class="tip-item" style="margin-top:14px"><div class="tip-num">!</div><div class="tip-text"><strong>Tarjeta sanitaria europea (TSJE):</strong> Es gratuita y os cubre la sanidad pública alemana. Solicitadla antes del viaje en el INSS o la app del SEPE. Sin ella, una visita a urgencias puede costar 300€+.</div></div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section class="itin-section" id="checklist" aria-labelledby="h-checklist">
+      <h2 class="section-heading" id="h-checklist">✅ Checklist pre-viaje</h2>
+      <div class="check-section">
+        <div class="check-title">📋 Documentos y dinero</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>DNI o pasaporte en vigor (Alemania es zona Schengen)</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Tarjeta sanitaria europea (TSJE) — gratuita, INSS o app SEPE</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Seguro de viaje (IATI Estudiantes o similar)</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Sacar 150€ en efectivo (Berlín es ciudad de cash)</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Tarjeta sin comisiones en el extranjero (Revolut/N26)</div>
+      </div>
+      <div class="check-section">
+        <div class="check-title">✈️ Reservas y entradas</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Vuelos comprados (Ryanair/EasyJet — equipaje de cabina 40x20x25 cm gratis)</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Hostel reservado (Generator, Wombat's o A&O)</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Cúpula Reichstag registrada en bundestag.de (gratis, obligatorio)</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Fernsehturm reservado online (sin colas con reserva: 21,50€)</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Markthalle Neun — comprobar si el día es jueves (Street Food Thursday)</div>
+      </div>
+      <div class="check-section">
+        <div class="check-title">🎒 Equipo y ropa</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Calzado deportivo cómodo (18–20 km/día posibles)</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Ropa oscura para clubs (camiseta negra + pantalón oscuro/cargo)</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Chaqueta (Berlín puede ser frío incluso en verano por las noches)</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Power bank para los días largos</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Adaptador europeo (el enchufe alemán Schuko es el mismo que en España)</div>
+      </div>
+      <div class="check-section">
+        <div class="check-title">📱 Apps instaladas</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>BVG Fahrinfo — app oficial del transporte público berlinés</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Nextbike — alquiler de bicicletas por la ciudad</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Google Maps con Berlín descargado offline</div>
+        <div class="check-item" onclick="this.classList.toggle('done')"><div class="check-box"></div>Duolingo con alemán básico (o DeepL Translate)</div>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <div class="cta-banner">
+      <h3>¿Querés un itinerario personalizado?</h3>
+      <p>Routlo genera itinerarios detallados para cualquier destino, duración y presupuesto. Con rutas optimizadas, restaurantes locales y los mejores precios.</p>
+      <a href="../index.html#generar" class="cta-btn">Generar mi itinerario ✨</a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Nota de transparencia:</strong> Algunos enlaces de reserva en esta página son de afiliados (Booking.com, GetYourGuide). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin ningún coste adicional para ti. Esta política no influye en las recomendaciones — incluimos únicamente lugares que recomendaríamos de todas formas.
+    </div>
+
+  </main>
+</div>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.08);padding:32px 24px;text-align:center">
+  <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.55);text-decoration:none;font-size:0.875rem;transition:color 0.2s" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">← Todos los itinerarios</a>
+  <p style="margin-top:16px;font-size:0.8rem;color:rgba(237,238,242,0.3)">© 2025 Routlo · Itinerarios generados por IA</p>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const sections = document.querySelectorAll('.itin-section, .day-card');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

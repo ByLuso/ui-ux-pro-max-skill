@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mapa Interactivo de España — Routlo</title>
+  <meta name="description" content="Explora el mapa interactivo de España con los 81 itinerarios de Routlo: ciudades, costas, parques naturales, rutas de senderismo y escapadas de un día por toda la península, islas y Baleares."/>
+  <link rel="stylesheet" href="assets/shared.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+
+    /* Aurora — Spanish crimson/gold */
+    .aurora::before { background: radial-gradient(circle, #5c0808 0%, transparent 70%) !important; }
+    .aurora::after  { background: radial-gradient(circle, #3a1500 0%, transparent 70%) !important; }
+    .aurora span    { background: radial-gradient(circle, #2a0d0a 0%, transparent 70%) !important; }
+
+    .map-shell {
+      position: fixed;
+      top: 72px; left: 0; right: 0; bottom: 0;
+      display: flex; z-index: 1;
+    }
+
+    /* ── Sidebar ── */
+    .map-sidebar {
+      width: 320px; flex-shrink: 0;
+      background: rgba(4,8,16,0.95);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-right: 1px solid rgba(255,255,255,0.08);
+      display: flex; flex-direction: column;
+      overflow: hidden; z-index: 10;
+    }
+
+    .sidebar-back {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 16px;
+      background: rgba(255,255,255,0.025);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      text-decoration: none;
+      color: rgba(237,238,242,0.45); font-size: 0.76rem;
+      transition: color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .sidebar-back:hover { color: rgba(237,238,242,0.8); background: rgba(255,255,255,0.04); }
+    .sidebar-back svg { width:12px; height:12px; flex-shrink:0; }
+
+    .sidebar-header {
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .sidebar-flag-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
+    }
+    .spain-flag {
+      width: 28px; height: 20px; border-radius: 3px; flex-shrink: 0; overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+      display: flex; flex-direction: column;
+    }
+    .spain-flag-red { flex: 1; background: #c60b1e; }
+    .spain-flag-yellow { flex: 1.4; background: #ffc400; }
+    .sidebar-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.08rem; font-weight: 700; color: #edeef2;
+    }
+    .sidebar-sub { font-size: 0.74rem; color: rgba(237,238,242,0.5); }
+
+    .sidebar-quick-nav {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 12px;
+    }
+    .quick-btn {
+      padding: 7px 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 9px;
+      color: rgba(237,238,242,0.65);
+      font-family: 'Jost', sans-serif; font-size: 0.77rem; font-weight: 500;
+      cursor: pointer; text-align: center;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .quick-btn:hover {
+      background: rgba(201,169,110,0.1);
+      border-color: rgba(201,169,110,0.3);
+      color: #c9a96e;
+    }
+    .quick-btn.active-view {
+      background: rgba(201,169,110,0.12);
+      border-color: rgba(201,169,110,0.35);
+      color: #c9a96e;
+    }
+
+    /* ── Tabs ── */
+    .sidebar-tabs {
+      display: flex; border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .sidebar-tab {
+      flex: 1; padding: 10px 12px;
+      font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 500;
+      color: rgba(237,238,242,0.45);
+      background: none; border: none; border-bottom: 2px solid transparent;
+      cursor: pointer; text-align: center;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .sidebar-tab.active { color: #c9a96e; border-bottom-color: #c9a96e; }
+    .sidebar-tab-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.2);
+      font-size: 0.62rem; font-weight: 700; color: #c9a96e;
+      margin-left: 5px; vertical-align: middle;
+    }
+
+    /* ── Search ── */
+    .sidebar-search { position: relative; padding: 10px 8px 0; flex-shrink: 0; }
+    .sidebar-search input {
+      width: 100%; padding: 8px 12px 8px 34px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 9px; color: #edeef2;
+      font-family: 'Jost', sans-serif; font-size: 0.84rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .sidebar-search input:focus { border-color: rgba(201,169,110,0.4); }
+    .sidebar-search input::placeholder { color: rgba(237,238,242,0.3); }
+    .sidebar-search svg { position: absolute; left: 17px; top: 50%; transform: translateY(-50%); color: rgba(237,238,242,0.4); pointer-events: none; }
+
+    /* ── List ── */
+    .sidebar-list {
+      overflow-y: auto; flex: 1; padding: 8px 8px 16px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+
+    .region-divider {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.15em;
+      text-transform: uppercase; color: rgba(201,169,110,0.5);
+      padding: 10px 6px 4px; display: flex; align-items: center; gap: 8px;
+    }
+    .region-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+
+    /* Destination card */
+    .dest-card {
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.03);
+      margin-bottom: 5px; overflow: hidden;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .dest-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+    .dest-card.active { background: rgba(201,169,110,0.08); border-color: rgba(201,169,110,0.3); }
+
+    .dest-card-top {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px 8px; cursor: pointer;
+    }
+    .dest-emoji {
+      width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .dest-info { flex: 1; min-width: 0; }
+    .dest-name { font-weight: 600; font-size: 0.87rem; color: #edeef2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dest-meta { font-size: 0.71rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .dest-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; flex-shrink: 0; }
+
+    .dest-card-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 12px 8px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-decoration: none;
+    }
+    .dest-card-link span { font-size: 0.74rem; color: #c9a96e; font-weight: 600; font-family: 'Jost', sans-serif; }
+    .dest-card-link svg { color: #c9a96e; }
+    .dest-card.active .dest-card-link { border-top-color: rgba(201,169,110,0.15); }
+
+    /* Coming soon card */
+    .dest-card.soon { opacity: 0.65; }
+    .dest-card.soon:hover { opacity: 0.85; }
+    .soon-badge {
+      font-size: 0.66rem; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 2px 8px; border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(237,238,242,0.4);
+      flex-shrink: 0; white-space: nowrap;
+    }
+
+    /* Stats strip */
+    .sidebar-stats {
+      display: flex; gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .stat-item {
+      flex: 1; padding: 8px 4px;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-val { display: block; font-size: 0.95rem; font-weight: 700; color: #c9a96e; font-family: 'Bodoni Moda', serif; line-height: 1.1; }
+    .stat-lbl { font-size: 0.63rem; color: rgba(237,238,242,0.4); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ── Map ── */
+    #map { flex: 1; height: 100%; background: #040810; }
+    .leaflet-container { background: #040810 !important; font-family: 'Jost', sans-serif !important; }
+    .leaflet-tile { filter: brightness(0.82) contrast(0.88) saturate(0.55) hue-rotate(190deg); }
+    .tile-osm-es { filter: grayscale(0.25) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg); }
+    .leaflet-control-zoom { border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 10px !important; overflow: hidden; }
+    .leaflet-control-zoom a { background: rgba(4,8,16,0.9) !important; color: rgba(237,238,242,0.7) !important; border-color: rgba(255,255,255,0.08) !important; }
+    .leaflet-control-zoom a:hover { background: rgba(13,22,40,0.97) !important; color: #c9a96e !important; }
+    .leaflet-control-attribution { background: rgba(4,8,16,0.7) !important; color: rgba(237,238,242,0.3) !important; font-size: 10px !important; }
+    .leaflet-control-attribution a { color: rgba(237,238,242,0.4) !important; }
+
+    /* Spain boundary hint */
+    .map-region-label {
+      background: rgba(4,8,16,0.8) !important;
+      border: 1px solid rgba(201,169,110,0.25) !important;
+      border-radius: 20px; padding: 3px 10px;
+      font-family: 'Jost', sans-serif; font-size: 0.7rem;
+      color: rgba(201,169,110,0.7); font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      white-space: nowrap; box-shadow: none !important;
+    }
+    .map-region-label::before { display: none !important; }
+    .leaflet-tooltip.map-region-label { background: rgba(4,8,16,0.85) !important; border: 1px solid rgba(201,169,110,0.25) !important; box-shadow: none !important; }
+
+    /* ── Active (gold) map pin ── */
+    .map-pin {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #c9a96e 0%, #a07840 100%);
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(201,169,110,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .map-pin:hover, .map-pin.open {
+      transform: rotate(-45deg) scale(1.15);
+      box-shadow: 0 6px 24px rgba(201,169,110,0.75);
+    }
+    .map-pin-emoji { transform: rotate(45deg); font-size: 15px; line-height: 1; }
+
+    /* ── Coming soon (grey) pin ── */
+    .map-pin-soon {
+      width: 28px; height: 28px;
+      background: rgba(50,55,65,0.75);
+      border: 1.5px dashed rgba(255,255,255,0.2);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .map-pin-soon:hover { transform: rotate(-45deg) scale(1.12); background: rgba(70,75,85,0.85); }
+    .map-pin-soon-inner { transform: rotate(45deg); font-size: 11px; opacity: 0.55; }
+
+    /* ── Popups ── */
+    .leaflet-popup-content-wrapper {
+      background: rgba(7,13,26,0.98) !important;
+      border: 1px solid rgba(201,169,110,0.35) !important;
+      border-radius: 16px !important;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.75) !important;
+      padding: 0 !important; overflow: hidden;
+    }
+    .leaflet-popup-tip-container { display: none !important; }
+    .leaflet-popup-close-button { color: rgba(237,238,242,0.5) !important; font-size: 20px !important; top: 8px !important; right: 10px !important; z-index: 10; }
+    .leaflet-popup-close-button:hover { color: #edeef2 !important; }
+    .leaflet-popup-content { margin: 0 !important; width: 280px !important; }
+
+    .popup-wrap { font-family: 'Jost', sans-serif; overflow: hidden; border-radius: 16px; }
+    .popup-hero { height: 150px; position: relative; overflow: hidden; }
+    .popup-hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.4s ease; }
+    .popup-wrap:hover .popup-hero-bg { transform: scale(1.05); }
+    .popup-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(7,13,26,0.92) 0%, transparent 60%); }
+    .popup-badges { position: absolute; top: 9px; left: 9px; right: 36px; display: flex; gap: 6px; }
+    .popup-badge { padding: 2px 9px; background: rgba(4,8,16,0.7); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.63rem; color: #c9a96e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .popup-badge.muted { border-color: rgba(255,255,255,0.1); color: rgba(237,238,242,0.5); }
+    .popup-body { padding: 12px 14px 14px; }
+    .popup-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 5px; }
+    .popup-desc { font-size: 0.78rem; color: rgba(237,238,242,0.55); line-height: 1.55; margin-bottom: 12px; }
+    .popup-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .popup-price { font-size: 0.78rem; color: rgba(237,238,242,0.5); }
+    .popup-price strong { color: #c9a96e; font-size: 0.95rem; font-weight: 700; }
+    .popup-cta { display: inline-flex; align-items: center; gap: 5px; padding: 7px 14px; background: linear-gradient(135deg, #c9a96e, #a07840); border-radius: 8px; font-size: 0.78rem; font-weight: 700; color: #0a0a0a; text-decoration: none; transition: opacity 0.2s, transform 0.15s; }
+    .popup-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* Coming-soon popup */
+    .popup-soon { font-family: 'Jost', sans-serif; padding: 20px 20px 22px; text-align: center; }
+    .popup-soon-emoji { font-size: 2.6rem; margin-bottom: 10px; display: block; }
+    .popup-soon-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.12rem; font-weight: 700; color: #edeef2; margin-bottom: 6px; }
+    .popup-soon-sub { font-size: 0.77rem; color: rgba(237,238,242,0.5); line-height: 1.6; margin-bottom: 14px; }
+    .popup-soon-pill { display: inline-flex; align-items: center; gap: 5px; padding: 5px 13px; background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.25); border-radius: 20px; font-size: 0.72rem; font-weight: 600; color: #c9a96e; }
+    .popup-soon-cta { display: block; margin-top: 12px; font-size: 0.75rem; color: rgba(237,238,242,0.35); text-decoration: none; }
+    .popup-soon-cta:hover { color: rgba(237,238,242,0.6); }
+
+    /* Mobile — bottom sheet */
+    @media (max-width: 768px) {
+      html, body { overflow: hidden; height: 100dvh; }
+      /* map-shell keeps position:fixed from desktop, just adjust top */
+      .map-shell { top: 60px; flex-direction: row; }
+      /* map fills all remaining flex space (sidebar is out of flow) */
+      #map { flex: 1; width: 100%; height: 100%; }
+      /* sidebar floats as a fixed bottom sheet, independent of map-shell */
+      .map-sidebar {
+        position: fixed !important; bottom: 0; left: 0; right: 0;
+        width: 100%; height: 88vh; max-height: 88vh;
+        border-right: none; border-top: 1.5px solid rgba(255,255,255,0.1);
+        border-radius: 20px 20px 0 0;
+        transform: translateY(calc(100% - 78px));
+        transition: transform 0.42s cubic-bezier(0.32,0.72,0,1);
+        z-index: 500; overflow: hidden;
+        display: flex; flex-direction: column;
+        box-shadow: 0 -12px 48px rgba(0,0,0,0.55);
+        background: #080c18;
+      }
+      .map-sidebar.sheet-half { transform: translateY(calc(100% - 52vh)); }
+      .map-sidebar.sheet-full { transform: translateY(0); }
+      .sheet-handle {
+        display: flex !important; justify-content: center; align-items: center;
+        padding: 10px 0 8px; cursor: grab; flex-shrink: 0; touch-action: none;
+      }
+      .sheet-handle::after {
+        content: ''; width: 38px; height: 4px;
+        background: rgba(255,255,255,0.22); border-radius: 100px;
+        transition: background 0.2s;
+      }
+      .map-sidebar.sheet-half .sheet-handle::after,
+      .map-sidebar.sheet-full .sheet-handle::after { background: rgba(201,169,110,0.5); }
+      .sidebar-back { display: none !important; }
+      .sidebar-list { overflow-y: auto !important; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0; }
+      .sidebar-stats { flex-shrink: 0; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span></span></div>
+
+<!-- Navbar -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="itinerarios.html">Itinerarios</a></li>
+    <li><a href="itinerarios-espana.html" class="active">España</a></li>
+    <li><a href="mapa.html">Mapa Mundial</a></li>
+    <li><a href="chatbot.html">Chatbot IA</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Menú" onclick="
+    const ul=document.querySelector('.nav-links');
+    ul.classList.toggle('mobile-open');
+    ul.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>ul.classList.remove('mobile-open'),{once:true}));
+  ">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<div class="map-shell">
+  <!-- ── Sidebar ── -->
+  <aside class="map-sidebar" aria-label="Destinos en España" id="mobileSheet">
+    <!-- Drag handle (only visible on mobile) -->
+    <div class="sheet-handle" id="sheetHandle" aria-hidden="true"></div>
+    <!-- Back to world map -->
+    <a href="mapa.html" class="sidebar-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Mapa Mundial
+    </a>
+
+    <!-- Header -->
+    <div class="sidebar-header">
+      <div class="sidebar-flag-row">
+        <div class="spain-flag" aria-hidden="true">
+          <div class="spain-flag-red"></div>
+          <div class="spain-flag-yellow"></div>
+          <div class="spain-flag-red"></div>
+        </div>
+        <div class="sidebar-title">Mapa de España</div>
+      </div>
+      <div class="sidebar-sub">81 itinerarios: ciudades, naturaleza y escapadas</div>
+      <!-- Quick nav -->
+      <div class="sidebar-quick-nav">
+        <button class="quick-btn" onclick="flyToPeninsula()" id="btnPeninsula">🌍 Península</button>
+        <button class="quick-btn active-view" onclick="flyToCanarias()" id="btnCanarias">🏝️ Canarias</button>
+        <button class="quick-btn" onclick="flyToBaleares()" id="btnBaleares">⛵ Baleares</button>
+        <button class="quick-btn" onclick="flyToAll()" id="btnAll">🗺️ Ver todo</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="sidebar-tabs">
+      <button class="sidebar-tab active" id="tabActivos" onclick="switchTab('activos')">
+        Con itinerario <span class="sidebar-tab-count">14</span>
+      </button>
+      <button class="sidebar-tab" id="tabParques" onclick="switchTab('parques')">
+        Naturaleza <span class="sidebar-tab-count" style="background:rgba(94,203,138,0.15);border-color:rgba(94,203,138,0.25);color:rgba(94,203,138,0.9);">106</span>
+      </button>
+      <button class="sidebar-tab" id="tabProximos" onclick="switchTab('proximos')">
+        Próximos <span class="sidebar-tab-count">0</span>
+      </button>
+    </div>
+
+    <!-- Search -->
+    <div class="sidebar-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="sidebarSearch" placeholder="Buscar destino..." aria-label="Buscar destino en España" oninput="filterSidebar()"/>
+    </div>
+
+    <!-- List -->
+    <div class="sidebar-list" id="sidebarList" role="list"></div>
+
+    <!-- Stats -->
+    <div class="sidebar-stats" aria-label="Estadísticas">
+      <div class="stat-item"><span class="stat-val">14</span><span class="stat-lbl">Activos</span></div>
+      <div class="stat-item"><span class="stat-val" style="color:rgba(94,203,138,0.9)">106</span><span class="stat-lbl">Naturaleza</span></div>
+      <div class="stat-item"><span class="stat-val">120</span><span class="stat-lbl">Itinerarios</span></div>
+    </div>
+  </aside>
+
+  <!-- ── Map ── -->
+  <div id="map" role="application" aria-label="Mapa interactivo de España"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── Data ────────────────────────────────────────────────
+
+const ACTIVOS = [
+  {
+    id: 'tenerife',
+    nombre: 'Tenerife',
+    region: 'Islas Canarias',
+    emoji: '🌋',
+    dias: 3,
+    precio: '€800',
+    coords: [28.2916, -16.6291],
+    desc: 'Delfines en libertad frente a Los Gigantes, ruta por el Teide y arena volcánica negra.',
+    gradient: 'linear-gradient(160deg,#0d0806 0%,#2e1005 50%,#7a2d00 100%)',
+    img: 'https://images.unsplash.com/photo-1513197278454-a5f3ceb56f66?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/tenerife.html'
+  },
+  {
+    id: 'fuerteventura',
+    nombre: 'Fuerteventura',
+    region: 'Islas Canarias',
+    emoji: '🏖️',
+    dias: 5,
+    precio: '€650',
+    coords: [28.3587, -14.0537],
+    desc: 'Dunas de arena blanca, playa virgen de Cofete de 14km, kitesurf y el mejor queso del mundo.',
+    gradient: 'linear-gradient(160deg,#080600 0%,#1a1200 50%,#4a3400 100%)',
+    img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/fuerteventura.html'
+  },
+  {
+    id: 'madrid',
+    nombre: 'Madrid',
+    region: 'Comunidad de Madrid',
+    emoji: '🏟️',
+    dias: 5,
+    precio: '€230',
+    coords: [40.4168, -3.7038],
+    desc: 'El Prado, Retiro, tapas en La Latina y la mejor vida nocturna de Europa.',
+    gradient: 'linear-gradient(135deg,#2d0000 0%,#7a0000 100%)',
+    img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/madrid.html'
+  },
+  {
+    id: 'barcelona',
+    nombre: 'Barcelona',
+    region: 'Cataluña',
+    emoji: '🏛️',
+    dias: 5,
+    precio: '€320',
+    coords: [41.3851, 2.1734],
+    desc: 'Gaudí, playas mediterráneas y la gastronomía más creativa de España.',
+    gradient: 'linear-gradient(135deg,#0a2040 0%,#1a4080 100%)',
+    img: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/barcelona.html'
+  },
+  {
+    id: 'sevilla',
+    nombre: 'Sevilla',
+    region: 'Andalucía',
+    emoji: '🌹',
+    dias: 4,
+    precio: '€200',
+    coords: [37.3891, -5.9845],
+    desc: 'Flamenco, Alcázar nazarí y las mejores tapas del sur bajo el sol andaluz.',
+    gradient: 'linear-gradient(135deg,#3d1200 0%,#803000 100%)',
+    img: 'https://images.unsplash.com/photo-1508848575493-4e96e3f44e08?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/sevilla.html'
+  },
+  {
+    id: 'granada',
+    nombre: 'Granada',
+    region: 'Andalucía',
+    emoji: '🏰',
+    dias: 3,
+    precio: '€145',
+    coords: [37.1773, -3.5986],
+    desc: 'La Alhambra, el Albaicín y un sistema de tapas gratuitas único en el mundo.',
+    gradient: 'linear-gradient(135deg,#250015 0%,#6b0035 100%)',
+    img: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/granada.html'
+  },
+  {
+    id: 'mallorca',
+    nombre: 'Mallorca',
+    region: 'Islas Baleares',
+    emoji: '⛵',
+    dias: 5,
+    precio: '€340',
+    coords: [39.5696, 2.6502],
+    desc: 'Calas de aguas turquesas, la Serra de Tramuntana y Palma histórica.',
+    gradient: 'linear-gradient(135deg,#051828 0%,#0a3050 100%)',
+    img: 'https://images.unsplash.com/photo-1552083375-1447ce886485?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/mallorca.html'
+  },
+  {
+    id: 'sansebastian',
+    nombre: 'San Sebastián',
+    region: 'País Vasco',
+    emoji: '🐟',
+    dias: 3,
+    precio: '€225',
+    coords: [43.3183, -1.9812],
+    desc: 'La mayor densidad de estrellas Michelin del mundo y los pintxos más creativos.',
+    gradient: 'linear-gradient(135deg,#082018 0%,#154535 100%)',
+    img: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/san-sebastian.html'
+  },
+  {
+    id: 'valencia',
+    nombre: 'Valencia',
+    region: 'Comunitat Valenciana',
+    emoji: '🟡',
+    dias: 4,
+    precio: '€200',
+    coords: [39.4699, -0.3763],
+    desc: 'La paella original, la Ciudad de las Artes de Calatrava y Las Fallas en marzo.',
+    gradient: 'linear-gradient(135deg,#2d1000 0%,#7a2800 100%)',
+    img: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/valencia.html'
+  },
+  {
+    id: 'asturias-5-dias',
+    nombre: 'Asturias en 5 días',
+    region: 'Ruta completa · desde Oviedo',
+    emoji: '🏔️',
+    dias: 5,
+    precio: '~€460',
+    coords: [43.362, -5.849],
+    desc: 'Oviedo, Gijón, Covadonga, Costa Verde y Llanes. La ruta definitiva por Asturias con presupuesto desglosado para dos personas.',
+    gradient: 'linear-gradient(135deg,#001412 0%,#002824 100%)',
+    img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/asturias-5-dias.html'
+  },
+  {
+    id: 'galicia-5-dias',
+    nombre: 'Galicia en 5 días',
+    region: 'Ruta circular · desde Santiago',
+    emoji: '🐚',
+    dias: 5,
+    precio: '~€480',
+    coords: [42.880, -8.544],
+    desc: 'Santiago, Costa da Morte, A Coruña (Torre de Hércules), Rías Baixas y Pontevedra. La ruta definitiva por Galicia con presupuesto desglosado.',
+    gradient: 'linear-gradient(135deg,#000e14 0%,#001620 100%)',
+    img: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/galicia-5-dias.html'
+  },
+  {
+    id: 'cantabria-5-dias',
+    nombre: 'Cantabria en 5 días',
+    region: 'Ruta completa · desde Logroño',
+    emoji: '🌊',
+    dias: 5,
+    precio: '~€520',
+    coords: [43.462, -3.810],
+    desc: 'De los Picos de Europa al Cantábrico: Santillana del Mar, Capricho de Gaudí, Valle de Liébana y Castro Urdiales. Base en Santander.',
+    gradient: 'linear-gradient(135deg,#000a12 0%,#00101c 100%)',
+    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/cantabria-5-dias.html'
+  },
+  {
+    id: 'gran-canaria',
+    nombre: 'Gran Canaria',
+    region: 'Islas Canarias',
+    emoji: '🏖️',
+    dias: 5,
+    precio: '~€450',
+    coords: [27.9202, -15.5474],
+    desc: 'Dunas de Maspalomas (UNESCO), Roque Nublo a 1.813 m, Las Palmas colonial y la playa urbana más larga de Europa.',
+    gradient: 'linear-gradient(135deg,#0a1400 0%,#243e00 100%)',
+    img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/gran-canaria.html'
+  },
+  {
+    id: 'lanzarote',
+    nombre: 'Lanzarote',
+    region: 'Islas Canarias',
+    emoji: '🌋',
+    dias: 4,
+    precio: '~€350',
+    coords: [29.0469, -13.5899],
+    desc: 'Timanfaya, Jameos del Agua, Fundación César Manrique y la laguna verde de El Golfo. La isla más artística del Atlántico.',
+    gradient: 'linear-gradient(135deg,#140200 0%,#400e00 100%)',
+    img: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/lanzarote.html'
+  }
+];
+
+const PARQUES = [
+  {
+    id: 'donana',
+    nombre: 'Doñana',
+    region: 'Parque Nacional',
+    zona: 'Andalucía',
+    emoji: '🌿',
+    dias: 1,
+    precio: '€50',
+    coords: [37.1289, -6.4742],
+    desc: 'El lince ibérico en libertad y los flamencos del mayor humedal de Europa occidental.',
+    gradient: 'linear-gradient(135deg,#062010 0%,#0d4020 100%)',
+    url: 'itinerarios/donana.html'
+  },
+  {
+    id: 'ordesa',
+    nombre: 'Ordesa',
+    region: 'Parque Nacional',
+    zona: 'Pirineos',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€40',
+    coords: [42.6209, -0.0981],
+    desc: 'El cañón más espectacular de los Pirineos y el quebrantahuesos en vuelo.',
+    gradient: 'linear-gradient(135deg,#091828 0%,#142e55 100%)',
+    url: 'itinerarios/ordesa.html'
+  },
+  {
+    id: 'montserrat',
+    nombre: 'Montserrat',
+    region: 'Montaña Sagrada',
+    zona: 'Cataluña',
+    emoji: '⛰️',
+    dias: 1,
+    precio: '€30',
+    coords: [41.5931, 1.8353],
+    desc: 'El monasterio benedictino más visitado de España y vistas desde 1.236 metros.',
+    gradient: 'linear-gradient(135deg,#2a1500 0%,#5a3000 100%)',
+    url: 'itinerarios/montserrat.html'
+  }
+];
+
+const PROXIMOS = [];
+
+// Appended to PARQUES after declaration
+PARQUES.push(
+  {
+    id: 'bardenas',
+    nombre: 'Bardenas Reales',
+    region: 'Navarra · Gratis',
+    zona: 'Navarra',
+    emoji: '🏜️',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [42.2050, -1.5030],
+    desc: 'El desierto español: badlands de arcilla roja, Castildetierra y cielos sin contaminación lumínica. Solo gasolina y comida.',
+    gradient: 'linear-gradient(135deg,#1a0a00 0%,#3a1800 100%)',
+    img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/bardenas.html'
+  },
+  {
+    id: 'pueblos-negros',
+    nombre: 'Pueblos Negros',
+    region: 'Guadalajara · Gratis',
+    zona: 'Castilla-La Mancha',
+    emoji: '🪨',
+    dias: 3,
+    precio: '€0 actividades',
+    coords: [41.1350, -3.0580],
+    desc: 'Arquitectura de pizarra medieval a 100 km de Madrid. Hayedo más austral de Europa y el pueblo abandonado de Umbralejo.',
+    gradient: 'linear-gradient(135deg,#050f05 0%,#0d200d 100%)',
+    img: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/pueblos-negros.html'
+  },
+  {
+    id: 'las-medulas',
+    nombre: 'Las Médulas & El Bierzo',
+    region: 'León · UNESCO Gratis',
+    zona: 'Castilla y León',
+    emoji: '⛏️',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [42.4580, -6.7720],
+    desc: 'Las mayores minas de oro del Imperio Romano, el Valle del Silencio y Ponferrada templaria. Patrimonio UNESCO de acceso libre.',
+    gradient: 'linear-gradient(135deg,#1a0800 0%,#3a1000 100%)',
+    img: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/las-medulas.html'
+  },
+  {
+    id: 'picos-europa',
+    nombre: 'Picos de Europa',
+    region: 'Asturias · Cantabria · Gratis',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏔️',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [43.1732, -4.8264],
+    desc: 'Ruta del Cares (12 km gratis), Lagos de Covadonga, Potes medieval y Fuente Dé. El Parque Nacional más visitado de España.',
+    gradient: 'linear-gradient(135deg,#021008 0%,#042018 100%)',
+    img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/picos-de-europa.html'
+  },
+  {
+    id: 'serrania-cuenca',
+    nombre: 'Serranía de Cuenca',
+    region: 'Cuenca · Gratis',
+    zona: 'Castilla-La Mancha',
+    emoji: '🌿',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [40.4800, -1.9500],
+    desc: 'Hoz de Beteta, Nacimiento del Río Cuervo, La Chincha, Fuente de los Tilos, Cañizares y Las Torcas. A 2 h de Madrid.',
+    gradient: 'linear-gradient(135deg,#021006 0%,#041a0c 100%)',
+    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/serrania-cuenca.html'
+  },
+  {
+    id: 'la-vera',
+    nombre: 'La Vera',
+    region: 'Cáceres · Gratis',
+    zona: 'Extremadura',
+    emoji: '🌶️',
+    dias: 3,
+    precio: '€0 actividades',
+    coords: [40.1200, -5.6800],
+    desc: 'Garganta la Olla con puertas azules medievales únicas en España, Monasterio de Yuste y Pimentón DOP ahumado.',
+    gradient: 'linear-gradient(135deg,#041004 0%,#082008 100%)',
+    img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/la-vera.html'
+  },
+  {
+    id: 'maestrazgo',
+    nombre: 'El Maestrazgo',
+    region: 'Teruel · Gratis',
+    zona: 'Aragón',
+    emoji: '🏰',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [40.5500, -0.2800],
+    desc: 'Mirambel y sus murallas del s. XIV intactas, Cantavieja, queso Tronchón del Quijote y Puertos de Beceite con cabras hispánicas.',
+    gradient: 'linear-gradient(135deg,#06060e 0%,#101020 100%)',
+    img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/maestrazgo.html'
+  },
+  {
+    id: 'las-hurdes',
+    nombre: 'Las Hurdes',
+    region: 'Cáceres · Gratis',
+    zona: 'Extremadura',
+    emoji: '🌊',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [40.3500, -6.3500],
+    desc: 'La tierra de Buñuel: El Gasco, Chorro de la Meancera de 100 m, aldeas de pizarra negra y miel de castañar sin agroquímicos.',
+    gradient: 'linear-gradient(135deg,#020a02 0%,#041404 100%)',
+    img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/las-hurdes.html'
+  },
+  {
+    id: 'sierra-aracena',
+    nombre: 'Sierra de Aracena',
+    region: 'Huelva · Gratis',
+    zona: 'Andalucía',
+    emoji: '🐷',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [37.9000, -6.5700],
+    desc: 'Jabugo ibérico de bellota, Alájar, Fuenteheridos con sus 12 caños y la dehesa donde pasta el jamón más caro del mundo.',
+    gradient: 'linear-gradient(135deg,#0e0600 0%,#1e0e00 100%)',
+    img: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/sierra-aracena.html'
+  },
+  {
+    id: 'ribeira-sacra',
+    nombre: 'Ribeira Sacra',
+    region: 'Ourense · Lugo · Gratis',
+    zona: 'Galicia',
+    emoji: '🍇',
+    dias: 4,
+    precio: '€0 actividades',
+    coords: [42.4000, -7.4500],
+    desc: 'Cañón del Sil de 500 m, viñedos verticales de mencía que solo se vendimian a mano, monasterios románicos y termas gratis de Ourense.',
+    gradient: 'linear-gradient(135deg,#040810 0%,#060e18 100%)',
+    img: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=560&h=300&fit=crop&q=80&auto=format',
+    url: 'itinerarios/ribeira-sacra.html'
+  }
+);
+
+// Excursiones, pueblos y rutas adicionales (59 itinerarios cortos)
+PARQUES.push(
+  {
+    id: 'cares',
+    nombre: 'Ruta del Cares',
+    region: 'Picos de Europa',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [43.245, -4.85],
+    desc: 'Sendero tallado en la roca viva a 1.000m sobre el río Cares. El paseo más espectacular de los Picos de Europa, sin apenas desnivel.',
+    gradient: 'linear-gradient(135deg,#040e18 0%,#081e32 100%)',
+    url: 'itinerarios/cares.html'
+  },
+  {
+    id: 'mulhacen',
+    nombre: 'Mulhacén',
+    region: 'Sierra Nevada · Granada',
+    zona: 'Andalucía',
+    emoji: '⛰️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [37.0538, -3.3088],
+    desc: 'El techo de la Península Ibérica. Glaciares fósiles, lagunas alpinas y panorámica al Atlas marroquí en Sierra Nevada.',
+    gradient: 'linear-gradient(135deg,#080610 0%,#140f28 100%)',
+    url: 'itinerarios/mulhacen.html'
+  },
+  {
+    id: 'aiguestortes',
+    nombre: 'Aigüestortes',
+    region: 'Pirineo de Lleida',
+    zona: 'Pirineos',
+    emoji: '🏕️',
+    dias: 2,
+    precio: '€0 actividades',
+    coords: [42.5763, 0.9457],
+    desc: 'El único parque nacional pirenaico: 200 lagos de montaña y refugios de altura en el corazón de los Pirineos catalanes.',
+    gradient: 'linear-gradient(135deg,#040c14 0%,#061826 100%)',
+    url: 'itinerarios/aiguestortes.html'
+  },
+  {
+    id: 'tramuntana',
+    nombre: 'Serra de Tramuntana',
+    region: 'Mallorca',
+    zona: 'Islas Baleares',
+    emoji: '🌊',
+    dias: 2,
+    precio: '€0 actividades',
+    coords: [39.71, 2.623],
+    desc: 'La espina dorsal de Mallorca: olivos milenarios, acantilados y pueblos de piedra en la sierra UNESCO de la isla.',
+    gradient: 'linear-gradient(135deg,#040a12 0%,#061624 100%)',
+    url: 'itinerarios/tramuntana.html'
+  },
+  {
+    id: 'volcanes-lapalma',
+    nombre: 'Ruta de los Volcanes',
+    region: 'La Palma · Canarias',
+    zona: 'Islas Canarias',
+    emoji: '🌋',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [28.509, -17.84],
+    desc: 'Travesía sobre coladas de lava negra entre cráteres y calderas humeantes. El senderismo volcánico más espectacular de Canarias.',
+    gradient: 'linear-gradient(135deg,#100404 0%,#240806 100%)',
+    url: 'itinerarios/volcanes-lapalma.html'
+  },
+  {
+    id: 'garajonay',
+    nombre: 'Garajonay (La Gomera)',
+    region: 'La Gomera · Canarias',
+    zona: 'Islas Canarias',
+    emoji: '🌿',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [28.123, -17.239],
+    desc: 'Bosque de laurisilva del Terciario envuelto en niebla. UNESCO Patrimonio Natural. La isla mágica de Canarias sin masificación.',
+    gradient: 'linear-gradient(135deg,#040e06 0%,#061c0a 100%)',
+    url: 'itinerarios/garajonay.html'
+  },
+  {
+    id: 'fuerteventura-norte',
+    nombre: 'Fuerteventura Norte',
+    region: 'Corralejo · Dunas · Los Lobos',
+    zona: 'Islas Canarias',
+    emoji: '🏄',
+    dias: 1,
+    precio: '~€50',
+    coords: [28.738, -13.864],
+    desc: 'Las dunas saharianas más grandes de Canarias (10 km²), la isla virgen de Los Lobos en ferry y las lagunas de El Cotillo al atardecer.',
+    gradient: 'linear-gradient(135deg,#000a14 0%,#002040 100%)',
+    url: 'itinerarios/fuerteventura-norte.html'
+  },
+  {
+    id: 'fuerteventura-sur',
+    nombre: 'Fuerteventura Sur',
+    region: 'Jandía · Cofete · Sotavento',
+    zona: 'Islas Canarias',
+    emoji: '🌊',
+    dias: 1,
+    precio: '~€52',
+    coords: [28.066, -14.354],
+    desc: 'Playa de Sotavento (20 km virgen, sede del Mundial de Windsurf), la legendaria Playa de Cofete y Villa Winter entre acantilados del Atlántico.',
+    gradient: 'linear-gradient(135deg,#100800 0%,#401e00 100%)',
+    url: 'itinerarios/fuerteventura-sur.html'
+  },
+  {
+    id: 'fuerteventura-interior',
+    nombre: 'Fuerteventura Interior',
+    region: 'Betancuria · Molinos · La Oliva',
+    zona: 'Islas Canarias',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€41',
+    coords: [28.423, -14.058],
+    desc: 'Betancuria (primera capital de Canarias, s. XV), molinos de viento del s. XVIII, iglesia con portada azteca en Pájara y Casa de los Coroneles en La Oliva.',
+    gradient: 'linear-gradient(135deg,#100c00 0%,#302400 100%)',
+    url: 'itinerarios/fuerteventura-interior.html'
+  },
+  {
+    id: 'grazalema',
+    nombre: 'Pinsapar de Grazalema',
+    region: 'Sierra de Grazalema · Cádiz',
+    zona: 'Andalucía',
+    emoji: '🌲',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [36.7567, -5.3675],
+    desc: 'El bosque más húmedo de Andalucía. Pinsapos endémicos en acceso restringido por cupos. La ruta más exclusiva de la sierra gaditana.',
+    gradient: 'linear-gradient(135deg,#060c04 0%,#0c1a08 100%)',
+    url: 'itinerarios/grazalema.html'
+  },
+  {
+    id: 'penalara',
+    nombre: 'Peñalara',
+    region: 'Sierra de Guadarrama · Madrid',
+    zona: 'Comunidad de Madrid',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [40.8453, -3.9608],
+    desc: 'La cumbre más alta de Madrid. Laguna Grande glaciar, pinares centenarios en el Parque Nacional de Guadarrama, a 1h de la capital.',
+    gradient: 'linear-gradient(135deg,#040a14 0%,#081428 100%)',
+    url: 'itinerarios/penalara.html'
+  },
+  {
+    id: 'cabo-de-gata',
+    nombre: 'Cabo de Gata',
+    region: 'Almería',
+    zona: 'Andalucía',
+    emoji: '🌊',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [36.7206, -2.1928],
+    desc: 'El litoral más virgen de Europa: calas turquesas, acantilados volcánicos y playas sin urbanizar en el único desierto costero europeo.',
+    gradient: 'linear-gradient(135deg,#040a10 0%,#06141e 100%)',
+    url: 'itinerarios/cabo-de-gata.html'
+  },
+  {
+    id: 'medulas',
+    nombre: 'Las Médulas (1 día)',
+    region: 'El Bierzo · León',
+    zona: 'Castilla y León',
+    emoji: '🏛️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.458, -6.772],
+    desc: 'Las mayores minas de oro del Imperio Romano: torres de arcilla rojiza en un paisaje marciano. Patrimonio Mundial UNESCO en El Bierzo.',
+    gradient: 'linear-gradient(135deg,#140804 0%,#281006 100%)',
+    url: 'itinerarios/medulas.html'
+  },
+  {
+    id: 'viguera',
+    nombre: 'Peñas de Viguera',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.327, -2.597],
+    desc: 'Agujas de roca volcánica a 25 km de Logroño. Circular fácil, vistas al Iregua y el pinar perfecto para el picnic. La escapada más cercana de la capital riojana.',
+    gradient: 'linear-gradient(135deg,#000a04 0%,#001408 100%)',
+    url: 'itinerarios/viguera.html'
+  },
+  {
+    id: 'moncalvillo',
+    nombre: 'Hayedo de Moncalvillo',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🍂',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.37, -2.63],
+    desc: 'El hayedo más cercano a Logroño: dorados otoñales, setas, vistas al Ebro y collado a 1.276m. El plan perfecto para un domingo de octubre.',
+    gradient: 'linear-gradient(135deg,#000c04 0%,#00190a 100%)',
+    url: 'itinerarios/moncalvillo.html'
+  },
+  {
+    id: 'torrecilla-cameros',
+    nombre: 'Torrecilla en Cameros',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '💧',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.268, -2.628],
+    desc: 'Pozas de agua cristalina en el cañón del Iregua y pueblo de piedra del s. XVIII. La escapada de verano perfecta a 55 km de Logroño.',
+    gradient: 'linear-gradient(135deg,#000c08 0%,#00160e 100%)',
+    url: 'itinerarios/torrecilla-cameros.html'
+  },
+  {
+    id: 'cebollera',
+    nombre: 'Sierra de Cebollera',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.15, -2.62],
+    desc: 'Laguna glaciar a 1.850m y Pico Cebollera a 2.144m. Parque Natural, abetos y un silencio absoluto. El techo de La Rioja a 80 km de Logroño.',
+    gradient: 'linear-gradient(135deg,#000804 0%,#001008 100%)',
+    url: 'itinerarios/cebollera.html'
+  },
+  {
+    id: 'tolono',
+    nombre: 'Sierra de Toloño',
+    region: 'Rioja Alavesa',
+    zona: 'La Rioja',
+    emoji: '🍷',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.57, -2.82],
+    desc: 'Cresta caliza con vistas aéreas sobre los viñedos de la Rioja Alavesa. Ermita rupestre y cata en bodega al bajar. El picnic más vinícola de España.',
+    gradient: 'linear-gradient(135deg,#0f0800 0%,#190c00 100%)',
+    url: 'itinerarios/tolono.html'
+  },
+  {
+    id: 'san-lorenzo',
+    nombre: 'San Lorenzo & Ezcaray',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🌳',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.235, -2.993],
+    desc: 'Hayedo centenario de Pedroso y cima de 2.271m. La ruta más exigente y más hermosa de La Rioja, con Ezcaray y su gastronomía al pie de la montaña.',
+    gradient: 'linear-gradient(135deg,#0a0500 0%,#140800 100%)',
+    url: 'itinerarios/san-lorenzo.html'
+  },
+  {
+    id: 'laguna-negra',
+    nombre: 'Laguna Negra de Urbión',
+    region: 'Soria',
+    zona: 'Castilla y León',
+    emoji: '🏞️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [41.993, -2.547],
+    desc: 'El circo glaciar que inspiró a Antonio Machado. Aguas oscuras, paredes de granito de 200m y el silencio más profundo a 130 km de Logroño.',
+    gradient: 'linear-gradient(135deg,#000514 0%,#00081e 100%)',
+    url: 'itinerarios/laguna-negra.html'
+  },
+  {
+    id: 'laguardia',
+    nombre: 'Laguardia',
+    region: 'Rioja Alavesa',
+    zona: 'La Rioja',
+    emoji: '🏛️',
+    dias: 1,
+    precio: 'desde €8',
+    coords: [42.552, -2.587],
+    desc: 'Pueblo medieval amurallado con arquitectura de vino: Frank Gehry en Marqués de Riscal y Calatrava en Ysios. La escapada vinícola más elegante desde Logroño.',
+    gradient: 'linear-gradient(135deg,#100008 0%,#1e0010 100%)',
+    url: 'itinerarios/laguardia.html'
+  },
+  {
+    id: 'san-millan',
+    nombre: 'San Millán de la Cogolla',
+    region: 'La Rioja · UNESCO',
+    zona: 'La Rioja',
+    emoji: '📜',
+    dias: 1,
+    precio: 'desde €7',
+    coords: [42.327, -2.858],
+    desc: 'Donde nació el español. Los monasterios de Yuso y Suso guardan las Glosas Emilianenses del s.X, las primeras palabras en castellano. Patrimonio UNESCO desde 1997.',
+    gradient: 'linear-gradient(135deg,#000814 0%,#000c1c 100%)',
+    url: 'itinerarios/san-millan.html'
+  },
+  {
+    id: 'haro',
+    nombre: 'Haro',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🍷',
+    dias: 1,
+    precio: 'desde €8',
+    coords: [42.576, -2.848],
+    desc: 'La mayor concentración de bodegas centenarias de España en un mismo barrio: López de Heredia 1877, CVNE 1879, Muga 1932. Y la Batalla del Vino el 29 de junio.',
+    gradient: 'linear-gradient(135deg,#100004 0%,#180008 100%)',
+    url: 'itinerarios/haro.html'
+  },
+  {
+    id: 'najera',
+    nombre: 'Nájera',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '👑',
+    dias: 1,
+    precio: '~€52',
+    coords: [42.415, -2.733],
+    desc: 'El Monasterio de Santa María la Real guarda el panteón de los reyes de Navarra y Castilla, una cueva legendaria y un casco judío excavado en la roca. A 25 minutos de Logroño.',
+    gradient: 'linear-gradient(135deg,#141004 0%,#1e1808 100%)',
+    url: 'itinerarios/najera.html'
+  },
+  {
+    id: 'clavijo',
+    nombre: 'Clavijo',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '⚔️',
+    dias: 1,
+    precio: '~€33',
+    coords: [42.33, -2.59],
+    desc: 'Las ruinas del castillo donde nació "¡Santiago y cierra, España!". Entrada gratuita, vistas a los Pirineos y la escapada más barata de toda La Rioja.',
+    gradient: 'linear-gradient(135deg,#140800 0%,#1e0e04 100%)',
+    url: 'itinerarios/clavijo.html'
+  },
+  {
+    id: 'briones',
+    nombre: 'Briones',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🏘️',
+    dias: 1,
+    precio: '~€75',
+    coords: [42.544, -2.787],
+    desc: 'Uno de los pueblos más bonitos de España y el Museo Vivanco de la Cultura del Vino, premiado como mejor museo enoturístico del mundo. Casco amurallado sobre el Ebro.',
+    gradient: 'linear-gradient(135deg,#141004 0%,#1e1808 100%)',
+    url: 'itinerarios/briones.html'
+  },
+  {
+    id: 'canon-rio-leza',
+    nombre: 'Cañón del Río Leza',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🏞️',
+    dias: 1,
+    precio: '~€41',
+    coords: [42.32, -2.52],
+    desc: 'Un Grand Canyon de bolsillo a 22 km de Logroño: paredes de roca de hasta 100m, las Cuevas de los Cien Pilares y buitres leonados. La escapada de naturaleza más cercana.',
+    gradient: 'linear-gradient(135deg,#001008 0%,#00180c 100%)',
+    url: 'itinerarios/canon-rio-leza.html'
+  },
+  {
+    id: 'arnedillo',
+    nombre: 'Arnedillo',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '♨️',
+    dias: 1,
+    precio: '~€52',
+    coords: [42.228, -2.244],
+    desc: 'Pozas de agua termal natural junto al río, gratis, y una gran colonia de buitres leonados sobre el pueblo. Relax y naturaleza a 45 minutos de Logroño.',
+    gradient: 'linear-gradient(135deg,#140a00 0%,#1e1004 100%)',
+    url: 'itinerarios/arnedillo.html'
+  },
+  {
+    id: 'san-vicente-sonsierra',
+    nombre: 'San Vicente de la Sonsierra',
+    region: 'Rioja Alavesa',
+    zona: 'La Rioja',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€59',
+    coords: [42.563, -2.757],
+    desc: 'Castillo templario en lo alto de un cerro con vistas al Ebro y a la Rioja Alavesa. Cuna de la singular tradición de los Picaos en Semana Santa.',
+    gradient: 'linear-gradient(135deg,#000814 0%,#000c1c 100%)',
+    url: 'itinerarios/san-vicente-sonsierra.html'
+  },
+  {
+    id: 'cuevas-ortigosa',
+    nombre: 'Cuevas de Ortigosa',
+    region: 'La Rioja',
+    zona: 'La Rioja',
+    emoji: '🦇',
+    dias: 1,
+    precio: '~€63',
+    coords: [42.183, -2.417],
+    desc: 'Cavernas cársticas con columnas de hasta 65m y una de las mayores colonias de murciélagos de herradura de Europa, en pleno Parque Natural de la Sierra Cebollera.',
+    gradient: 'linear-gradient(135deg,#000a10 0%,#001018 100%)',
+    url: 'itinerarios/cuevas-ortigosa.html'
+  },
+  {
+    id: 'foz-arbayun',
+    nombre: 'Foz de Arbayún',
+    region: 'Navarra',
+    zona: 'Navarra',
+    emoji: '🏔️',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.563, -1.183],
+    desc: 'El Gran Cañón navarro: 500m de paredes verticales con +300 parejas de buitres leonados nidificando. Con parada en la Foz de Lumbier, gratis y apta para niños.',
+    gradient: 'linear-gradient(135deg,#0c0600 0%,#140a00 100%)',
+    url: 'itinerarios/foz-arbayun.html'
+  },
+  {
+    id: 'selva-irati',
+    nombre: 'Selva de Irati',
+    region: 'Navarra',
+    zona: 'Navarra',
+    emoji: '🍂',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [42.93, -1.083],
+    desc: 'El segundo bosque más grande de Europa Occidental: 17.000 ha de hayas y abetos en los Pirineos navarros. Ochagavía y la Laguna de Irabia como bonus.',
+    gradient: 'linear-gradient(135deg,#000a00 0%,#000f05 100%)',
+    url: 'itinerarios/selva-irati.html'
+  },
+  {
+    id: 'baztan',
+    nombre: 'Valle del Baztán',
+    region: 'Navarra',
+    zona: 'Navarra',
+    emoji: '🧙',
+    dias: 1,
+    precio: 'desde €5',
+    coords: [43.15, -1.5],
+    desc: 'El valle verde más oscuro de Navarra: Elizondo y su arquitectura palaciega, las cuevas de Zugarramurdi donde ardieron las brujas de 1609 y la trilogía de Dolores Redondo.',
+    gradient: 'linear-gradient(135deg,#000804 0%,#000c06 100%)',
+    url: 'itinerarios/baztan.html'
+  },
+  {
+    id: 'gaztelugatxe',
+    nombre: 'San Juan de Gaztelugatxe',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🐉',
+    dias: 1,
+    precio: '€0 actividades',
+    coords: [43.457, -2.824],
+    desc: 'El islote de los 241 escalones inmortalizado en Game of Thrones como Rocadragón. Costa brava de Bizkaia y pintxos en el Casco Viejo de Bilbao. Reserva gratuita obligatoria.',
+    gradient: 'linear-gradient(135deg,#000814 0%,#000c1c 100%)',
+    url: 'itinerarios/gaztelugatxe.html'
+  },
+  {
+    id: 'getxo',
+    nombre: 'Getxo',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🌉',
+    dias: 1,
+    precio: '~€24',
+    coords: [43.35, -3.01],
+    desc: 'El Puente Bizkaia, primer puente transbordador del mundo (Patrimonio UNESCO), el Puerto Viejo de Algorta y la playa de Ereaga. A 20 minutos de Bilbao.',
+    gradient: 'linear-gradient(135deg,#000c14 0%,#00121c 100%)',
+    url: 'itinerarios/getxo.html'
+  },
+  {
+    id: 'pagasarri',
+    nombre: 'Pagasarri',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '⛰️',
+    dias: 1,
+    precio: '~€12',
+    coords: [43.27, -2.97],
+    desc: 'El monte que vigila Bilbao: una sencilla ruta de 1h-1h15min hasta los 671m, con vistas de 360° sobre la ría y la costa de Bizkaia. Gratis y a 8 km del centro.',
+    gradient: 'linear-gradient(135deg,#040c04 0%,#081408 100%)',
+    url: 'itinerarios/pagasarri.html'
+  },
+  {
+    id: 'castro-urdiales',
+    nombre: 'Castro Urdiales',
+    region: 'Cantabria',
+    zona: 'País Vasco',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€36',
+    coords: [43.3833, -3.2167],
+    desc: 'Una "catedral" gótica gratuita, un castillo-faro sobre el Cantábrico y rabas en el puerto. El Bilbao marinero de antes de que existiera Bilbao.',
+    gradient: 'linear-gradient(135deg,#140800 0%,#1c0e00 100%)',
+    url: 'itinerarios/castro-urdiales.html'
+  },
+  {
+    id: 'balmaseda',
+    nombre: 'Balmaseda',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🏘️',
+    dias: 1,
+    precio: '~€30',
+    coords: [43.183, -3.167],
+    desc: 'La primera villa de Bizkaia (1199): un Puente Viejo medieval, el Portal de Sopeña y un casco histórico porticado de acceso libre.',
+    gradient: 'linear-gradient(135deg,#140c00 0%,#1c1200 100%)',
+    url: 'itinerarios/balmaseda.html'
+  },
+  {
+    id: 'urkiola',
+    nombre: 'Urkiola',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🐐',
+    dias: 1,
+    precio: '~€21',
+    coords: [43.083, -2.617],
+    desc: 'Picos kársticos como el Anboto, hogar de la diosa vasca Mari, senderos para todos los niveles y pottokas en libertad. Naturaleza pura a 40 km de Bilbao.',
+    gradient: 'linear-gradient(135deg,#020c02 0%,#061406 100%)',
+    url: 'itinerarios/urkiola.html'
+  },
+  {
+    id: 'salto-nervion',
+    nombre: 'Salto del Nervión',
+    region: 'Bizkaia · Burgos',
+    zona: 'País Vasco',
+    emoji: '💧',
+    dias: 1,
+    precio: '~€39',
+    coords: [43.09, -3.117],
+    desc: 'La cascada más alta de la península ibérica: 222 metros de caída en Monte Santiago. Un mirador imprescindible vía Orduña.',
+    gradient: 'linear-gradient(135deg,#00100c 0%,#001812 100%)',
+    url: 'itinerarios/salto-nervion.html'
+  },
+  {
+    id: 'lekeitio',
+    nombre: 'Lekeitio',
+    region: 'Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🏝️',
+    dias: 1,
+    precio: '~€38',
+    coords: [43.364, -2.506],
+    desc: 'La Isla de San Nicolás aparece con la marea baja, la Basílica de Santa María y un puerto pesquero con sabor a tradición ballenera vasca.',
+    gradient: 'linear-gradient(135deg,#000810 0%,#000c18 100%)',
+    url: 'itinerarios/lekeitio.html'
+  },
+  {
+    id: 'hondarribia',
+    nombre: 'Hondarribia',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '🏘️',
+    dias: 1,
+    precio: '~€22',
+    coords: [43.37, -1.796],
+    desc: 'Un casco histórico amurallado con balconadas de colores, el Castillo de Carlos V y vistas a Francia desde la bahía del Bidasoa.',
+    gradient: 'linear-gradient(135deg,#0f0707 0%,#251210 100%)',
+    url: 'itinerarios/hondarribia.html'
+  },
+  {
+    id: 'pasaia',
+    nombre: 'Pasaia',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '⚓',
+    dias: 1,
+    precio: '~€18',
+    coords: [43.327, -1.927],
+    desc: 'Un pueblo pesquero de una sola calle entre la montaña y el mar, con una barquita que cruza el canal y la casa de Victor Hugo.',
+    gradient: 'linear-gradient(135deg,#070b0f 0%,#101a25 100%)',
+    url: 'itinerarios/pasaia.html'
+  },
+  {
+    id: 'zarautz',
+    nombre: 'Zarautz',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '🏄',
+    dias: 1,
+    precio: '~€20',
+    coords: [43.283, -2.167],
+    desc: 'La playa más larga del País Vasco (2,5 km), cuna del surf vasco y un casco histórico con torres-palacio medievales.',
+    gradient: 'linear-gradient(135deg,#100d07 0%,#261f10 100%)',
+    url: 'itinerarios/zarautz.html'
+  },
+  {
+    id: 'getaria',
+    nombre: 'Getaria',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '⛵',
+    dias: 1,
+    precio: '~€32',
+    coords: [43.305, -2.203],
+    desc: 'El pueblo natal de Juan Sebastián Elcano, famoso por sus anchoas, su pescado a la brasa y el txakoli.',
+    gradient: 'linear-gradient(135deg,#070e0c 0%,#10221d 100%)',
+    url: 'itinerarios/getaria.html'
+  },
+  {
+    id: 'zumaia',
+    nombre: 'Zumaia',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '🐉',
+    dias: 1,
+    precio: '~€35',
+    coords: [43.296, -2.258],
+    desc: 'Los espectaculares acantilados de Flysch, 60 millones de años de historia geológica y el escenario de Rocadragón en Juego de Tronos.',
+    gradient: 'linear-gradient(135deg,#090a0b 0%,#15181c 100%)',
+    url: 'itinerarios/zumaia.html'
+  },
+  {
+    id: 'azpeitia-loiola',
+    nombre: 'Santuario de Loiola',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€20',
+    coords: [43.178, -2.27],
+    desc: 'Una de las basílicas barrocas más grandes de España, construida sobre la torre-fortaleza donde nació San Ignacio de Loyola.',
+    gradient: 'linear-gradient(135deg,#0c070a 0%,#1d1218 100%)',
+    url: 'itinerarios/azpeitia-loiola.html'
+  },
+  {
+    id: 'tolosa',
+    nombre: 'Tolosa',
+    region: 'Gipuzkoa',
+    zona: 'País Vasco',
+    emoji: '🍫',
+    dias: 1,
+    precio: '~€30',
+    coords: [43.137, -2.074],
+    desc: 'El mercado semanal más antiguo de Euskadi, el casco histórico de la antigua capital de Gipuzkoa y la cuna del Carnaval vasco.',
+    gradient: 'linear-gradient(135deg,#0d0907 0%,#1f1510 100%)',
+    url: 'itinerarios/tolosa.html'
+  },
+  {
+    id: 'bilbao',
+    nombre: 'Bilbao',
+    region: 'Capital · Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🏛️',
+    dias: 1,
+    precio: '~€48',
+    coords: [43.263, -2.935],
+    desc: 'Guggenheim de titanio, Casco Viejo medieval, Mercado de la Ribera y la mejor ruta de pintxos del norte. 5 min desde Etxebarri en metro.',
+    gradient: 'linear-gradient(135deg,#0a0010 0%,#2d0050 100%)',
+    url: 'itinerarios/bilbao.html'
+  },
+  {
+    id: 'vitoria-gasteiz',
+    nombre: 'Vitoria-Gasteiz',
+    region: 'Capital Vasca · Álava',
+    zona: 'País Vasco',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€45',
+    coords: [42.846, -2.674],
+    desc: 'Casco medieval con soportales, Catedral de Santa María (s. XIV), pintxos en la Plaza de la Virgen Blanca y museos gratuitos de Álava.',
+    gradient: 'linear-gradient(135deg,#0a1a0a 0%,#2d5a2d 100%)',
+    url: 'itinerarios/vitoria-gasteiz.html'
+  },
+  {
+    id: 'gernika',
+    nombre: 'Gernika-Lumo',
+    region: 'Símbolo Vasco · Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🌳',
+    dias: 1,
+    precio: '~€38',
+    coords: [43.314, -2.682],
+    desc: 'El Árbol de Gernika (Roble de la Libertad), Casa de Juntas, Museo de la Paz y el mercado de los lunes más antiguo de Euskadi.',
+    gradient: 'linear-gradient(135deg,#1a0a0a 0%,#5a2a10 100%)',
+    url: 'itinerarios/gernika.html'
+  },
+  {
+    id: 'mundaka',
+    nombre: 'Mundaka',
+    region: 'Reserva Biosfera · Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🏄',
+    dias: 1,
+    precio: '~€42',
+    coords: [43.406, -2.698],
+    desc: 'La mejor ola izquierda de Europa, el estuario del Urdaibai Reserva de la Biosfera y el pintoresco puerto pesquero entre dunas.',
+    gradient: 'linear-gradient(135deg,#000a14 0%,#002040 100%)',
+    url: 'itinerarios/mundaka.html'
+  },
+  {
+    id: 'durango-bizkaia',
+    nombre: 'Durango',
+    region: 'Villa Foral · Bizkaia',
+    zona: 'País Vasco',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€35',
+    coords: [43.218, -2.634],
+    desc: 'Basílica de Santa María de Uribarri (s. XV), Portal de Kurutziaga gótico, mercado semanal y puerta de entrada al Parque Natural de Urkiola.',
+    gradient: 'linear-gradient(135deg,#08100a 0%,#1e3020 100%)',
+    url: 'itinerarios/durango.html'
+  },
+  {
+    id: 'ondarroa',
+    nombre: 'Ondarroa',
+    region: 'Puerto Pesquero · Bizkaia',
+    zona: 'País Vasco',
+    emoji: '🐟',
+    dias: 1,
+    precio: '~€40',
+    coords: [43.319, -2.416],
+    desc: 'El 2º mayor puerto atunero de España, puente medieval del s. XV sobre el Artibai, casas de colores y el marmitako más auténtico del Cantábrico.',
+    gradient: 'linear-gradient(135deg,#000810 0%,#001830 100%)',
+    url: 'itinerarios/ondarroa.html'
+  },
+  {
+    id: 'carmona',
+    nombre: 'Carmona',
+    region: 'Sevilla',
+    zona: 'Andalucía',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€25',
+    coords: [37.471, -5.642],
+    desc: 'La acrópolis de Carmona reúne capas fenicias, romanas, almohades y cristianas: Puerta de Sevilla, Alcázar del Rey Don Pedro y Necrópolis Romana.',
+    gradient: 'linear-gradient(135deg,#160b00 0%,#201200 100%)',
+    url: 'itinerarios/carmona.html'
+  },
+  {
+    id: 'italica',
+    nombre: 'Itálica',
+    region: 'Sevilla',
+    zona: 'Andalucía',
+    emoji: '🏟️',
+    dias: 1,
+    precio: '~€15',
+    coords: [37.443, -6.039],
+    desc: 'El anfiteatro romano y los mosaicos de la Casa del Planetario, en la primera ciudad romana fundada fuera de Italia, cuna de Trajano y Adriano.',
+    gradient: 'linear-gradient(135deg,#140c00 0%,#1c1200 100%)',
+    url: 'itinerarios/italica.html'
+  },
+  {
+    id: 'alcala-guadaira',
+    nombre: 'Alcalá de Guadaíra',
+    region: 'Sevilla',
+    zona: 'Andalucía',
+    emoji: '🌾',
+    dias: 1,
+    precio: '~€16',
+    coords: [37.339, -5.843],
+    desc: 'Castillo almohade de entrada gratuita y una ruta junto a más de una decena de molinos medievales sobre el río Guadaíra.',
+    gradient: 'linear-gradient(135deg,#040c04 0%,#081408 100%)',
+    url: 'itinerarios/alcala-guadaira.html'
+  },
+  {
+    id: 'el-rocio',
+    nombre: 'El Rocío',
+    region: 'Huelva · Doñana',
+    zona: 'Andalucía',
+    emoji: '🐎',
+    dias: 1,
+    precio: '~€35',
+    coords: [37.133, -6.476],
+    desc: 'El único pueblo de España con todas sus calles de arena, la ermita de la Virgen del Rocío y la puerta de entrada al Parque Nacional de Doñana.',
+    gradient: 'linear-gradient(135deg,#140a00 0%,#1c0e00 100%)',
+    url: 'itinerarios/el-rocio.html'
+  },
+  {
+    id: 'ecija',
+    nombre: 'Écija',
+    region: 'Sevilla',
+    zona: 'Andalucía',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€32',
+    coords: [37.541, -5.081],
+    desc: 'El conjunto barroco gratuito más espectacular de Andalucía: once torres de azulejos, Plaza Mayor porticada y Palacio de Peñaflor.',
+    gradient: 'linear-gradient(135deg,#120a00 0%,#1a1000 100%)',
+    url: 'itinerarios/ecija.html'
+  },
+  {
+    id: 'osuna',
+    nombre: 'Osuna',
+    region: 'Sevilla',
+    zona: 'Andalucía',
+    emoji: '🐉',
+    dias: 1,
+    precio: '~€42',
+    coords: [37.238, -5.103],
+    desc: 'Universidad renacentista, Calle San Pedro y la Plaza de Toros que fue escenario de Juego de Tronos, herencia de los Duques de Osuna.',
+    gradient: 'linear-gradient(135deg,#0e0414 0%,#160820 100%)',
+    url: 'itinerarios/osuna.html'
+  },
+  {
+    id: 'cascada-huesnar',
+    nombre: 'Cascada del Huéznar',
+    region: 'Sierra Norte · Sevilla',
+    zona: 'Andalucía',
+    emoji: '💧',
+    dias: 1,
+    precio: '~€35',
+    coords: [37.847, -5.733],
+    desc: 'Una ruta fácil junto a cascadas escalonadas y pozas naturales, en plena Reserva de la Biosfera Sierra Norte de Sevilla.',
+    gradient: 'linear-gradient(135deg,#00100c 0%,#001812 100%)',
+    url: 'itinerarios/cascada-huesnar.html'
+  },
+  {
+    id: 'girona',
+    nombre: 'Girona',
+    region: 'Girona',
+    zona: 'Cataluña',
+    emoji: '🎨',
+    dias: 1,
+    precio: '~€30',
+    coords: [41.9794, 2.8214],
+    desc: 'El Barrio Judío mejor conservado de Europa, las coloridas Cases de l\'Onyar y las escaleras de la Catedral que Juego de Tronos convirtió en Braavos.',
+    gradient: 'linear-gradient(135deg,#0f0a08 0%,#251812 100%)',
+    url: 'itinerarios/girona.html'
+  },
+  {
+    id: 'sitges',
+    nombre: 'Sitges',
+    region: 'Barcelona',
+    zona: 'Cataluña',
+    emoji: '🏖️',
+    dias: 1,
+    precio: '~€25',
+    coords: [41.237, 1.806],
+    desc: 'Playas urbanas de arena fina, la Iglesia de Sant Bartomeu i Santa Tecla sobre el mar y un casco antiguo de mansiones modernistas.',
+    gradient: 'linear-gradient(135deg,#080e0f 0%,#132225 100%)',
+    url: 'itinerarios/sitges.html'
+  },
+  {
+    id: 'tarragona',
+    nombre: 'Tarragona',
+    region: 'Tarragona',
+    zona: 'Cataluña',
+    emoji: '🏛️',
+    dias: 1,
+    precio: '~€28',
+    coords: [41.119, 1.245],
+    desc: 'El conjunto romano de Tarraco (Patrimonio Mundial UNESCO): murallas, anfiteatro junto al mar y acueducto, en su mayoría gratis.',
+    gradient: 'linear-gradient(135deg,#0f0c09 0%,#241d15 100%)',
+    url: 'itinerarios/tarragona.html'
+  },
+  {
+    id: 'vic',
+    nombre: 'Vic',
+    region: 'Barcelona · Osona',
+    zona: 'Cataluña',
+    emoji: '🧀',
+    dias: 1,
+    precio: '~€22',
+    coords: [41.93, 2.254],
+    desc: 'La Plaça Major porticada más grande de Cataluña, un templo romano del siglo II, un puente románico y la tradición de la llonganissa de Vic.',
+    gradient: 'linear-gradient(135deg,#0c0e09 0%,#1d2215 100%)',
+    url: 'itinerarios/vic.html'
+  },
+  {
+    id: 'cardona',
+    nombre: 'Cardona',
+    region: 'Barcelona · Bages',
+    zona: 'Cataluña',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€38',
+    coords: [41.913, 1.68],
+    desc: 'El Castillo de Cardona, hoy Parador Nacional, corona un pueblo de calles empinadas; a sus pies, la Montaña de Sal brilla como si hubiera nevado.',
+    gradient: 'linear-gradient(135deg,#160b00 0%,#201200 100%)',
+    url: 'itinerarios/cardona.html'
+  },
+  {
+    id: 'vilafranca-penedes',
+    nombre: 'Vilafranca del Penedès',
+    region: 'Penedès · Barcelona',
+    zona: 'Cataluña',
+    emoji: '🍷',
+    dias: 1,
+    precio: '~€35',
+    coords: [41.345, 1.699],
+    desc: 'Casco gótico gratuito, bodegas centenarias donde nace el cava desde el siglo XIX y la cuna de los Castells, Patrimonio de la Humanidad.',
+    gradient: 'linear-gradient(135deg,#100004 0%,#180008 100%)',
+    url: 'itinerarios/vilafranca-penedes.html'
+  },
+  {
+    id: 'castellfollit-roca',
+    nombre: 'Castellfollit de la Roca',
+    region: 'Garrotxa · Girona',
+    zona: 'Cataluña',
+    emoji: '🌋',
+    dias: 1,
+    precio: '~€28',
+    coords: [42.221, 2.553],
+    desc: 'Un pueblo construido sobre un acantilado de basalto de 50 metros, en el corazón del Parque Natural de la Zona Volcánica de la Garrotxa.',
+    gradient: 'linear-gradient(135deg,#090b08 0%,#151a13 100%)',
+    url: 'itinerarios/castellfollit-roca.html'
+  }
+);
+
+// Nuevas escapadas desde Logroño en pareja (7 itinerarios)
+PARQUES.push(
+  {
+    id: 'calahorra',
+    nombre: 'Calahorra',
+    region: 'Ciudad Romana · La Rioja Baja',
+    zona: 'La Rioja',
+    emoji: '🏛️',
+    dias: 1,
+    precio: '~€47',
+    coords: [42.302, -1.965],
+    desc: 'Fundada en 179 a.C. como Calagurris Nasica, ciudad natal de Quintiliano. Museo de la Romanización, Catedral Gótica del s. XIII y tapeo en el casco histórico.',
+    gradient: 'linear-gradient(135deg,#140c00 0%,#281800 100%)',
+    url: 'itinerarios/calahorra.html'
+  },
+  {
+    id: 'santo-domingo-calzada',
+    nombre: 'Santo Domingo de la Calzada',
+    region: 'Camino de Santiago · La Rioja',
+    zona: 'La Rioja',
+    emoji: '🐓',
+    dias: 1,
+    precio: '~€47',
+    coords: [42.441, -2.952],
+    desc: 'La catedral medieval con el gallo y la gallina vivos dentro, la leyenda del peregrino ahorcado que resucitó y el casco histórico más intacto del Camino Francés en La Rioja.',
+    gradient: 'linear-gradient(135deg,#140a00 0%,#201200 100%)',
+    url: 'itinerarios/santo-domingo-calzada.html'
+  },
+  {
+    id: 'navarrete',
+    nombre: 'Navarrete',
+    region: 'Pueblo Alfarero · La Rioja',
+    zona: 'La Rioja',
+    emoji: '🏺',
+    dias: 1,
+    precio: '~€22',
+    coords: [42.433, -2.563],
+    desc: 'Solo 12 km de Logroño: el portal gótico del Hospital de Peregrinos trasladado al cementerio, talleres de cerámica con barro riojano y el Camino Francés a pie de calle.',
+    gradient: 'linear-gradient(135deg,#120600 0%,#1c0a00 100%)',
+    url: 'itinerarios/navarrete.html'
+  },
+  {
+    id: 'ezcaray',
+    nombre: 'Ezcaray',
+    region: 'Sierra de la Demanda · La Rioja',
+    zona: 'La Rioja',
+    emoji: '⛰️',
+    dias: 1,
+    precio: '~€41',
+    coords: [42.319, -3.010],
+    desc: 'La Fábrica Real de Tejidos del s. XVIII, la iglesia renacentista, los hayedos de Valdezcaray y el menú del día del restaurante Echaurren (2 estrellas Michelin) por €18.',
+    gradient: 'linear-gradient(135deg,#000a04 0%,#001008 100%)',
+    url: 'itinerarios/ezcaray.html'
+  },
+  {
+    id: 'enciso',
+    nombre: 'Enciso',
+    region: 'Dinosaurios · La Rioja Baja',
+    zona: 'La Rioja',
+    emoji: '🦕',
+    dias: 1,
+    precio: '~€38',
+    coords: [42.100, -2.080],
+    desc: 'Más de 10.000 icnitas fosilizadas del Jurásico Superior incrustadas en la roca viva del Cidacos. Se tocan, se fotografían. Centro Paleontológico y rutas de huellas libres.',
+    gradient: 'linear-gradient(135deg,#100400 0%,#180800 100%)',
+    url: 'itinerarios/enciso.html'
+  },
+  {
+    id: 'alfaro',
+    nombre: 'Alfaro',
+    region: 'Cigüeñas Guinness · La Rioja',
+    zona: 'La Rioja',
+    emoji: '🦢',
+    dias: 1,
+    precio: '~€46',
+    coords: [42.174, -1.746],
+    desc: 'La mayor colonia urbana de cigüeñas blancas del mundo: 150+ nidos en los campanarios de la Colegiata de San Miguel. Récord Guinness, completamente gratuito.',
+    gradient: 'linear-gradient(135deg,#000a12 0%,#001018 100%)',
+    url: 'itinerarios/alfaro.html'
+  },
+  {
+    id: 'elciego',
+    nombre: 'Elciego & Marqués de Riscal',
+    region: 'Rioja Alavesa · Álava',
+    zona: 'País Vasco',
+    emoji: '🍷',
+    dias: 1,
+    precio: '~€55',
+    coords: [42.558, -2.602],
+    desc: 'El hotel de titanio de Frank Gehry sobre la bodega Marqués de Riscal (1858) a 25 km de Logroño. Bodega Ysios de Calatrava a 5 km. La Rioja Alavesa entre viñedos centenarios.',
+    gradient: 'linear-gradient(135deg,#100204 0%,#160408 100%)',
+    url: 'itinerarios/elciego.html'
+  }
+);
+
+// Itinerarios desde Santander — Cantabria (6 escapadas de 1 día)
+PARQUES.push(
+  {
+    id: 'santillana-del-mar',
+    nombre: 'Santillana del Mar',
+    region: 'Villa Medieval · Cantabria',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€30',
+    coords: [43.388, -4.110],
+    desc: 'El casco medieval más intacto de España (s. XII-XVIII), la Colegiata románica y la Neocueva de Altamira con pinturas de 16.500 años.',
+    gradient: 'linear-gradient(135deg,#120c00 0%,#1a1200 100%)',
+    url: 'itinerarios/santillana-del-mar.html'
+  },
+  {
+    id: 'comillas',
+    nombre: 'Comillas',
+    region: 'Gaudí en Cantabria · Modernismo',
+    zona: 'Asturias y Cantabria',
+    emoji: '🎨',
+    dias: 1,
+    precio: '~€48',
+    coords: [43.387, -4.284],
+    desc: 'El Capricho de Gaudí (1885, único fuera de Cataluña), Pontificia de Domènech i Montaner y cementerio modernista entre palacetes de indianos.',
+    gradient: 'linear-gradient(135deg,#120600 0%,#1a0800 100%)',
+    url: 'itinerarios/comillas.html'
+  },
+  {
+    id: 'san-vicente-barquera',
+    nombre: 'San Vicente de la Barquera',
+    region: 'Puerto Medieval · Cantabria',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€38',
+    coords: [43.388, -4.389],
+    desc: 'Castillo del s. XIII y puente de 28 arcos sobre la ría de La Rabia con los Picos al fondo. La postal más fotogénica de Cantabria.',
+    gradient: 'linear-gradient(135deg,#000c08 0%,#001210 100%)',
+    url: 'itinerarios/san-vicente-barquera.html'
+  },
+  {
+    id: 'potes',
+    nombre: 'Potes y el Liébana',
+    region: 'Valle de Liébana · Cantabria',
+    zona: 'Asturias y Cantabria',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€44',
+    coords: [43.154, -4.620],
+    desc: 'Desfiladero de la Hermida, Potes medieval, Monasterio de Santo Toribio (Lignum Crucis más grande del mundo) y orujo gratis en destilería.',
+    gradient: 'linear-gradient(135deg,#040a00 0%,#081000 100%)',
+    url: 'itinerarios/potes.html'
+  },
+  {
+    id: 'laredo',
+    nombre: 'Laredo',
+    region: 'Playa La Salvé · Cantabria',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏖️',
+    dias: 1,
+    precio: '~€36',
+    coords: [43.429, -3.413],
+    desc: 'La Salvé, la playa más larga de Cantabria (5 km), la Puebla Vieja medieval del s. XIII y ferry a Santoña para comprar anchoas en fábrica.',
+    gradient: 'linear-gradient(135deg,#000810 0%,#000c18 100%)',
+    url: 'itinerarios/laredo.html'
+  },
+  {
+    id: 'lierganes',
+    nombre: 'Liérganes',
+    region: 'Termas y Hombre-Pez · Cantabria',
+    zona: 'Asturias y Cantabria',
+    emoji: '💧',
+    dias: 1,
+    precio: '~€26',
+    coords: [43.353, -3.749],
+    desc: 'La leyenda del Hombre-Pez (1673), balneario de Carlos III (1777), puente medieval sobre el río Miera y sobaos pasiegos a 25 km de Santander.',
+    gradient: 'linear-gradient(135deg,#04080e 0%,#060c14 100%)',
+    url: 'itinerarios/lierganes.html'
+  }
+);
+
+// Itinerarios desde Santiago de Compostela — Galicia (6 escapadas de 1 día)
+PARQUES.push(
+  {
+    id: 'a-coruna',
+    nombre: 'A Coruña',
+    region: 'Torre de Hércules · Galicia',
+    zona: 'Galicia',
+    emoji: '🗼',
+    dias: 1,
+    precio: '~€48',
+    coords: [43.362, -8.412],
+    desc: 'El faro romano del s. II más antiguo en activo del mundo (UNESCO), galerías blancas del paseo marítimo más largo de Europa y Playa de Riazor.',
+    gradient: 'linear-gradient(135deg,#000812 0%,#000e1c 100%)',
+    url: 'itinerarios/a-coruna.html'
+  },
+  {
+    id: 'fisterra',
+    nombre: 'Cabo Fisterra',
+    region: 'Fin del mundo · Costa da Morte',
+    zona: 'Galicia',
+    emoji: '🌊',
+    dias: 1,
+    precio: '~€42',
+    coords: [42.886, -9.280],
+    desc: 'El promontorio más occidental de Europa, Km 0 del Camino de Santiago. Faro de 1853, playa de Langosteira virgen y puesta de sol en el Atlántico.',
+    gradient: 'linear-gradient(135deg,#080412 0%,#10081e 100%)',
+    url: 'itinerarios/fisterra.html'
+  },
+  {
+    id: 'pontevedra-ciudad',
+    nombre: 'Pontevedra',
+    region: 'Ciudad peatonal · Galicia',
+    zona: 'Galicia',
+    emoji: '🏛️',
+    dias: 1,
+    precio: '~€38',
+    coords: [42.431, -8.648],
+    desc: 'Primera ciudad española sin coches en el centro (1999), referente mundial en movilidad. Ruinas de Santo Domingo, Museo Provincial gratuito y casco de granito.',
+    gradient: 'linear-gradient(135deg,#100a00 0%,#180e00 100%)',
+    url: 'itinerarios/pontevedra.html'
+  },
+  {
+    id: 'cambados',
+    nombre: 'Cambados',
+    region: 'Albariño · Rías Baixas',
+    zona: 'Galicia',
+    emoji: '🍾',
+    dias: 1,
+    precio: '~€46',
+    coords: [42.513, -8.819],
+    desc: 'Capital del Albariño DO Rías Baixas, cata en Bodega Martín Códax y hórreos de piedra del s. XVIII de Combarro reflejados sobre la ría de Pontevedra.',
+    gradient: 'linear-gradient(135deg,#040e00 0%,#081600 100%)',
+    url: 'itinerarios/cambados.html'
+  },
+  {
+    id: 'lugo-ciudad',
+    nombre: 'Lugo',
+    region: 'Muralla Romana UNESCO · Galicia',
+    zona: 'Galicia',
+    emoji: '🏛️',
+    dias: 1,
+    precio: '~€42',
+    coords: [43.010, -7.556],
+    desc: 'La única muralla romana completa del mundo (2.266 m, s. III d.C., UNESCO). Tapeo con pincho gratuito con cada caña — la barra más generosa de Galicia.',
+    gradient: 'linear-gradient(135deg,#100804 0%,#180c06 100%)',
+    url: 'itinerarios/lugo.html'
+  },
+  {
+    id: 'cedeira',
+    nombre: 'Cedeira & Cabo Ortegal',
+    region: 'Rías Altas · Galicia',
+    zona: 'Galicia',
+    emoji: '🌊',
+    dias: 1,
+    precio: '~€50',
+    coords: [43.656, -8.048],
+    desc: 'Acantilados de 600 m en Cabo Ortegal donde el Atlántico abraza el Cantábrico. Playa de Vilarrube virgen (5 km) y percebe gallego a precio de lonja.',
+    gradient: 'linear-gradient(135deg,#000e0c 0%,#001614 100%)',
+    url: 'itinerarios/cedeira.html'
+  }
+);
+
+// Itinerarios desde Oviedo — Asturias (6 escapadas de 1 día)
+PARQUES.push(
+  {
+    id: 'gijon',
+    nombre: 'Gijón',
+    region: 'Ciudad costera · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '🌊',
+    dias: 1,
+    precio: '~€44',
+    coords: [43.533, -5.661],
+    desc: 'Cimadevilla sobre el mar, Playa de San Lorenzo (3 km), Casa Natal de Jovellanos y sidra escanciada en Calle Begoña a 30 km de Oviedo.',
+    gradient: 'linear-gradient(135deg,#000a14 0%,#001022 100%)',
+    url: 'itinerarios/gijon.html'
+  },
+  {
+    id: 'covadonga',
+    nombre: 'Covadonga y Lagos',
+    region: 'Picos de Europa · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '⛪',
+    dias: 1,
+    precio: '~€48',
+    coords: [43.344, -4.998],
+    desc: 'Basílica neorrománica, Cueva Santa con la tumba de Pelayo y los Lagos Enol y Ercina a 1.070 m. Cangas de Onís con su puente medieval.',
+    gradient: 'linear-gradient(135deg,#00120a 0%,#001e10 100%)',
+    url: 'itinerarios/covadonga.html'
+  },
+  {
+    id: 'cudillero',
+    nombre: 'Cudillero',
+    region: 'Costa Verde · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '🎨',
+    dias: 1,
+    precio: '~€48',
+    coords: [43.561, -6.145],
+    desc: 'Casas de colores en anfiteatro sobre el puerto pesquero, el idioma secreto pixueto de los marineros y caldeirada de pescado fresca.',
+    gradient: 'linear-gradient(135deg,#140800 0%,#200e00 100%)',
+    url: 'itinerarios/cudillero.html'
+  },
+  {
+    id: 'llanes',
+    nombre: 'Llanes',
+    region: 'Costa Oriental · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '🏰',
+    dias: 1,
+    precio: '~€50',
+    coords: [43.420, -4.752],
+    desc: 'Géiseres naturales en los Bufones de Pría, la cala virgen de Torimbia y la villa amurallada del s. XIII con arquitectura indiana.',
+    gradient: 'linear-gradient(135deg,#000612 0%,#000a1e 100%)',
+    url: 'itinerarios/llanes.html'
+  },
+  {
+    id: 'luarca',
+    nombre: 'Luarca',
+    region: 'Costa Occidental · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '🎣',
+    dias: 1,
+    precio: '~€44',
+    coords: [43.543, -6.531],
+    desc: 'La Perla del Negro: casas blancas sobre acantilados, cementerio marino con la tumba del Nobel Severo Ochoa y mariscos frescos de la lonja.',
+    gradient: 'linear-gradient(135deg,#000810 0%,#000c18 100%)',
+    url: 'itinerarios/luarca.html'
+  },
+  {
+    id: 'somiedo',
+    nombre: 'Somiedo',
+    region: 'Reserva de la Biosfera · Asturias',
+    zona: 'Asturias y Cantabria',
+    emoji: '🐻',
+    dias: 1,
+    precio: '~€42',
+    coords: [43.087, -6.253],
+    desc: 'Parque Natural con la mayor colonia de oso pardo de Europa occidental. Lago del Valle glaciar, brañas vaqueiras y avistamiento al amanecer.',
+    gradient: 'linear-gradient(135deg,#000e06 0%,#001a0a 100%)',
+    url: 'itinerarios/somiedo.html'
+  }
+);
+
+// Orden geográfico de las zonas para la pestaña "Naturaleza"
+const ZONA_ORDER = [
+  'Andalucía', 'Aragón', 'Asturias y Cantabria', 'Castilla-La Mancha', 'Castilla y León',
+  'Cataluña', 'Comunidad de Madrid', 'Extremadura', 'Galicia', 'Islas Baleares',
+  'Islas Canarias', 'La Rioja', 'Navarra', 'País Vasco', 'Pirineos'
+];
+
+// ── Map init ─────────────────────────────────────────────
+
+const map = L.map('map', {
+  zoomControl: false,
+  minZoom: 4,
+  maxZoom: 14,
+  maxBounds: [[25.5, -22], [45, 6.5]],
+  maxBoundsViscosity: 0.85,
+  worldCopyJump: false
+});
+
+const _userLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+const _isEs = _userLang.startsWith('es');
+
+// Visitante hispanohablante → OSM (etiquetas en español: "Castilla y León", etc.) + filtro oscuro
+// Otros visitantes         → CartoDB dark (etiquetas en inglés)
+L.tileLayer(
+  _isEs
+    ? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  {
+    attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>' +
+      (_isEs ? ' contributors' : ' © <a href="https://carto.com/attributions">CARTO</a>'),
+    subdomains: _isEs ? 'abc' : 'abcd',
+    maxZoom: 20,
+    className: _isEs ? 'tile-osm-es' : ''
+  }
+).addTo(map);
+
+L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+// Fit to show all of Spain (peninsula + Canaries)
+map.fitBounds([[27.0, -19.5], [43.8, 5.0]], { padding: [20, 20] });
+
+// ── Navigation helpers ────────────────────────────────────
+
+function updateQuickBtns(active) {
+  ['btnPeninsula','btnCanarias','btnBaleares','btnAll'].forEach(id => {
+    document.getElementById(id)?.classList.remove('active-view');
+  });
+  if (active) document.getElementById(active)?.classList.add('active-view');
+}
+
+function flyToPeninsula() {
+  map.flyTo([40.4, -3.7], 6, { duration: 1.2 });
+  updateQuickBtns('btnPeninsula');
+}
+function flyToCanarias() {
+  map.flyTo([28.3, -15.7], 8, { duration: 1.2 });
+  updateQuickBtns('btnCanarias');
+}
+function flyToBaleares() {
+  map.flyTo([39.7, 2.9], 9, { duration: 1.2 });
+  updateQuickBtns('btnBaleares');
+}
+function flyToAll() {
+  map.fitBounds([[27.0, -19.5], [43.8, 5.0]], { padding: [20, 20], animate: true, duration: 1.2 });
+  updateQuickBtns('btnAll');
+}
+
+// ── Markers ──────────────────────────────────────────────
+
+const activeMarkers = {};
+const soonMarkers = {};
+let activeId = null;
+
+// Active gold pins
+ACTIVOS.forEach(d => {
+  const icon = L.divIcon({
+    className: '',
+    html: `<div class="map-pin"><span class="map-pin-emoji">${d.emoji}</span></div>`,
+    iconSize: [36, 36], iconAnchor: [18, 36], popupAnchor: [0, -42]
+  });
+  const popup = L.popup({ maxWidth: 280, minWidth: 280 }).setContent(`
+    <div class="popup-wrap">
+      <div class="popup-hero">
+        <div class="popup-hero-bg" style="background:${d.gradient};background-image:url('${d.img}');background-size:cover;background-position:center"></div>
+        <div class="popup-hero-overlay"></div>
+        <div class="popup-badges">
+          <span class="popup-badge">${d.region}</span>
+          <span class="popup-badge muted">${d.dias} días</span>
+        </div>
+      </div>
+      <div class="popup-body">
+        <div class="popup-title">${d.nombre}</div>
+        <div class="popup-desc">${d.desc}</div>
+        <div class="popup-footer">
+          <div class="popup-price">Desde <strong>${d.precio}</strong></div>
+          <a href="${d.url}" class="popup-cta">
+            Ver itinerario
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>`);
+
+  const marker = L.marker(d.coords, { icon, title: d.nombre })
+    .bindPopup(popup).addTo(map);
+  marker.on('click', () => setActive(d.id));
+  marker.on('popupclose', () => { if (activeId === d.id) setActive(null); });
+  activeMarkers[d.id] = marker;
+});
+
+// Coming soon grey pins
+PROXIMOS.forEach(d => {
+  const icon = L.divIcon({
+    className: '',
+    html: `<div class="map-pin-soon"><span class="map-pin-soon-inner">${d.emoji}</span></div>`,
+    iconSize: [28, 28], iconAnchor: [14, 28], popupAnchor: [0, -34]
+  });
+  const popup = L.popup({ maxWidth: 260, minWidth: 260 }).setContent(`
+    <div class="popup-soon">
+      <span class="popup-soon-emoji">${d.emoji}</span>
+      <div class="popup-soon-title">${d.nombre}</div>
+      <div class="popup-soon-sub">${d.desc}</div>
+      <div class="popup-soon-pill">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        Itinerario próximamente
+      </div>
+      <a href="chatbot.html" class="popup-soon-cta">Planifica ${d.nombre} con IA →</a>
+    </div>`);
+
+  const marker = L.marker(d.coords, { icon, title: d.nombre + ' (próximamente)' })
+    .bindPopup(popup).addTo(map);
+  soonMarkers[d.id] = marker;
+});
+
+// Green park pins
+function createGreenIcon(emoji) {
+  return L.divIcon({
+    className: '',
+    html: `<div class="map-pin-park" style="width:32px;height:32px;background:rgba(94,203,138,0.2);border:2px solid rgba(94,203,138,0.6);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;">${emoji}</div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -16]
+  });
+}
+
+const parkMarkers = {};
+PARQUES.forEach(d => {
+  const icon = createGreenIcon(d.emoji);
+  const popup = L.popup({ maxWidth: 280, minWidth: 280 }).setContent(`
+    <div class="popup-wrap">
+      <div class="popup-hero">
+        <div class="popup-hero-bg" style="background:${d.gradient};background-size:cover;background-position:center"></div>
+        <div class="popup-hero-overlay"></div>
+        <div class="popup-badges">
+          <span class="popup-badge" style="border-color:rgba(94,203,138,0.4);color:rgba(94,203,138,0.9);">${d.region}</span>
+          <span class="popup-badge muted">${d.dias} día</span>
+        </div>
+      </div>
+      <div class="popup-body">
+        <div class="popup-title">${d.nombre}</div>
+        <div class="popup-desc">${d.desc}</div>
+        <div class="popup-footer">
+          <div class="popup-price">Desde <strong style="color:rgba(94,203,138,0.9)">${d.precio}</strong></div>
+          <a href="${d.url}" class="popup-cta" style="background:linear-gradient(135deg,rgba(94,203,138,0.8),rgba(46,160,100,0.9));">
+            Ver itinerario
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>`);
+
+  const marker = L.marker(d.coords, { icon, title: d.nombre })
+    .bindPopup(popup).addTo(map);
+  parkMarkers[d.id] = marker;
+});
+
+// ── Active state ──────────────────────────────────────────
+
+function setActive(id) {
+  activeId = id;
+  ACTIVOS.forEach(d => {
+    const el = activeMarkers[d.id]?.getElement();
+    if (el) el.querySelector('.map-pin')?.classList.toggle('open', d.id === id);
+  });
+  document.querySelectorAll('.dest-card[data-active-id]').forEach(el => {
+    el.classList.toggle('active', el.dataset.activeId === id);
+  });
+  if (id) {
+    const el = document.querySelector(`.dest-card[data-active-id="${id}"]`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+// ── Sidebar rendering ─────────────────────────────────────
+
+let currentTab = 'activos';
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tabActivos').classList.toggle('active', tab === 'activos');
+  document.getElementById('tabParques').classList.toggle('active', tab === 'parques');
+  document.getElementById('tabProximos').classList.toggle('active', tab === 'proximos');
+  buildSidebar(document.getElementById('sidebarSearch').value.toLowerCase().trim());
+}
+
+function buildSidebar(q) {
+  const list = document.getElementById('sidebarList');
+  list.innerHTML = '';
+
+  if (currentTab === 'activos') {
+    const filtered = ACTIVOS.filter(d => !q || (d.nombre + d.region).toLowerCase().includes(q));
+    if (!filtered.length) { list.innerHTML = '<p style="padding:20px 14px;font-size:0.82rem;color:rgba(237,238,242,0.35);text-align:center">Sin resultados</p>'; return; }
+
+    // Group by region
+    const byRegion = {};
+    filtered.forEach(d => { (byRegion[d.region] = byRegion[d.region] || []).push(d); });
+    Object.entries(byRegion).forEach(([region, items]) => {
+      const div = document.createElement('div');
+      div.className = 'region-divider'; div.textContent = region;
+      list.appendChild(div);
+      items.forEach(d => {
+        const card = document.createElement('div');
+        card.className = 'dest-card'; card.dataset.activeId = d.id;
+        card.setAttribute('role', 'listitem');
+        const top = document.createElement('div'); top.className = 'dest-card-top';
+        top.innerHTML = `
+          <div class="dest-emoji" style="background:${d.gradient}">${d.emoji}</div>
+          <div class="dest-info">
+            <div class="dest-name">${d.nombre}</div>
+            <div class="dest-meta">${d.region} · ${d.dias} días</div>
+          </div>
+          <div class="dest-price">${d.precio}</div>`;
+        top.addEventListener('click', () => {
+          map.setView(d.coords, 9, { animate: true, duration: 1 });
+          setTimeout(() => activeMarkers[d.id]?.openPopup(), 700);
+          setActive(d.id);
+        });
+        const link = document.createElement('a'); link.className = 'dest-card-link'; link.href = d.url;
+        link.innerHTML = `<span>Ver itinerario completo</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+        card.appendChild(top); card.appendChild(link);
+        list.appendChild(card);
+      });
+    });
+
+  } else if (currentTab === 'parques') {
+    const filtered = PARQUES.filter(d => !q || (d.nombre + d.region + d.zona).toLowerCase().includes(q));
+    if (!filtered.length) { list.innerHTML = '<p style="padding:20px 14px;font-size:0.82rem;color:rgba(237,238,242,0.35);text-align:center">Sin resultados</p>'; return; }
+
+    // Group by zona, in a fixed geographic order
+    const byZona = {};
+    filtered.forEach(d => { (byZona[d.zona] = byZona[d.zona] || []).push(d); });
+    const orderedZonas = ZONA_ORDER.filter(z => byZona[z]).concat(Object.keys(byZona).filter(z => !ZONA_ORDER.includes(z)));
+
+    orderedZonas.forEach(zona => {
+      const div = document.createElement('div');
+      div.className = 'region-divider'; div.textContent = zona;
+      list.appendChild(div);
+      byZona[zona].forEach(d => {
+        const card = document.createElement('div');
+        card.className = 'dest-card'; card.setAttribute('role', 'listitem');
+        const top = document.createElement('div'); top.className = 'dest-card-top';
+        top.innerHTML = `
+          <div class="dest-emoji" style="background:${d.gradient}">${d.emoji}</div>
+          <div class="dest-info">
+            <div class="dest-name">${d.nombre}</div>
+            <div class="dest-meta">${d.region} · ${d.dias} día${d.dias > 1 ? 's' : ''}</div>
+          </div>
+          <div class="dest-price" style="color:rgba(94,203,138,0.9)">${d.precio}</div>`;
+        top.addEventListener('click', () => {
+          map.setView(d.coords, 10, { animate: true, duration: 1 });
+          setTimeout(() => parkMarkers[d.id]?.openPopup(), 700);
+        });
+        const link = document.createElement('a'); link.className = 'dest-card-link'; link.href = d.url;
+        link.style.cssText = 'border-top-color:rgba(94,203,138,0.12)';
+        link.innerHTML = `<span style="color:rgba(94,203,138,0.9)">Ver itinerario completo</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(94,203,138,0.9)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+        card.appendChild(top); card.appendChild(link);
+        list.appendChild(card);
+      });
+    });
+
+  } else {
+    const filtered = PROXIMOS.filter(d => !q || (d.nombre + d.region).toLowerCase().includes(q));
+    if (!filtered.length) { list.innerHTML = '<p style="padding:20px 14px;font-size:0.82rem;color:rgba(237,238,242,0.35);text-align:center">Sin resultados</p>'; return; }
+
+    const byRegion = {};
+    filtered.forEach(d => {
+      const r = d.region.includes('Andalucía') ? 'Andalucía' : d.region.includes('Madrid') ? 'Centro' : d.region.includes('Canarias') ? 'Islas Canarias' : d.region.includes('Baleares') ? 'Islas Baleares' : d.region;
+      (byRegion[r] = byRegion[r] || []).push(d);
+    });
+
+    Object.entries(byRegion).forEach(([region, items]) => {
+      const div = document.createElement('div'); div.className = 'region-divider'; div.textContent = region;
+      list.appendChild(div);
+      items.forEach(d => {
+        const card = document.createElement('div');
+        card.className = 'dest-card soon'; card.setAttribute('role', 'listitem');
+        const top = document.createElement('div'); top.className = 'dest-card-top';
+        top.innerHTML = `
+          <div class="dest-emoji" style="background:rgba(40,45,55,0.9)">${d.emoji}</div>
+          <div class="dest-info">
+            <div class="dest-name">${d.nombre}</div>
+            <div class="dest-meta">${d.region}</div>
+          </div>
+          <span class="soon-badge">Pronto</span>`;
+        top.addEventListener('click', () => {
+          map.setView(d.coords, 9, { animate: true, duration: 1 });
+          setTimeout(() => soonMarkers[d.id]?.openPopup(), 700);
+        });
+        card.appendChild(top);
+        list.appendChild(card);
+      });
+    });
+  }
+}
+
+function filterSidebar() {
+  const q = document.getElementById('sidebarSearch').value.toLowerCase().trim();
+  buildSidebar(q);
+}
+
+buildSidebar('');
+
+// ── Map ready ─────────────────────────────────────────────
+
+setTimeout(() => map.invalidateSize(), 200);
+window.addEventListener('resize', () => map.invalidateSize());
+
+// ── Nav auth ──────────────────────────────────────────────
+
+(function initNav() {
+  const token = localStorage.getItem('routlo_token');
+  const user  = JSON.parse(localStorage.getItem('routlo_user') || 'null');
+  const authLi = document.getElementById('navAuth');
+  if (!authLi) return;
+  if (token && user) {
+    authLi.innerHTML = `<a href="chatbot.html" class="nav-cta">Planificador</a><a href="chatbot.html" class="nav-user-badge" title="${user.name}">${user.name[0].toUpperCase()}</a>`;
+  } else {
+    authLi.innerHTML = `<a href="login.html" class="nav-login-link">Iniciar sesión</a><a href="registro.html" class="nav-cta">Registrarse</a>`;
+  }
+})();
+
+// ── Mobile bottom sheet ─────────────────────────────────────────────────────
+(function(){
+  if (window.innerWidth > 768) return;
+  const sheet = document.getElementById('mobileSheet');
+  const handle = document.getElementById('sheetHandle');
+  if (!sheet || !handle) return;
+
+  const STATES = ['peek', 'half', 'full'];
+  let state = 'peek';
+
+  function applyState(s) {
+    state = s;
+    sheet.classList.remove('sheet-half', 'sheet-full');
+    if (s === 'half') sheet.classList.add('sheet-half');
+    if (s === 'full') sheet.classList.add('sheet-full');
+  }
+
+  // Tap handle → cycle peek → half → full → peek
+  handle.addEventListener('click', () => {
+    const i = STATES.indexOf(state);
+    applyState(STATES[(i + 1) % STATES.length]);
+  });
+
+  // Drag to resize
+  let startY = 0, startTY = 0, dragging = false;
+
+  function getCurrentTY() {
+    const m = new DOMMatrix(getComputedStyle(sheet).transform);
+    return m.m42;
+  }
+
+  handle.addEventListener('touchstart', e => {
+    startY = e.touches[0].clientY;
+    startTY = getCurrentTY();
+    dragging = true;
+    sheet.style.transition = 'none';
+  }, { passive: true });
+
+  window.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    const dy = e.touches[0].clientY - startY;
+    const next = Math.max(0, startTY + dy);
+    sheet.style.transform = `translateY(${next}px)`;
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => {
+    if (!dragging) return;
+    dragging = false;
+    sheet.style.transition = '';
+    const ty = getCurrentTY();
+    const h = sheet.offsetHeight;
+    const vh = window.innerHeight;
+    // Snap thresholds
+    const peekTY = h - 78;
+    const halfTY = h - vh * 0.52;
+    const fullTY = 0;
+    const dists = { peek: Math.abs(ty - peekTY), half: Math.abs(ty - halfTY), full: Math.abs(ty - fullTY) };
+    applyState(Object.keys(dists).reduce((a, b) => dists[a] <= dists[b] ? a : b));
+  }, { passive: true });
+
+  // Also expand when user taps a tab
+  document.querySelectorAll('.sidebar-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (state === 'peek') applyState('half');
+    });
+  });
+})();
+</script>
+</body>
+</html>

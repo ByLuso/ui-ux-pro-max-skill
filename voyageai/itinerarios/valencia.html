@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Valencia — 4 días | Routlo</title>
+  <meta name="description" content="Itinerario completo 4 días en Valencia: Ciudad de las Artes, paella en la Albufera, Mercado Central y Las Fallas. Presupuesto desde €200 hasta €1,940."/>
+  <meta property="og:title" content="Valencia — 4 días | Routlo"/>
+  <meta property="og:description" content="Itinerario completo 4 días en Valencia: Ciudad de las Artes, paella en la Albufera, Mercado Central y Las Fallas."/>
+  <meta property="og:type" content="article"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+    /* Aurora — warm orange tones for Valencia */
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#2d1000 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0800 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#201000 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg, #100500 0%, #2d1000 35%, #7a2800 65%, rgba(230,140,0,0.2) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(122,40,0,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(122,40,0,0.2);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Valencia</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Valencia</h1>
+  <p class="dest-country">España · Comunitat Valenciana · Paella · Calatrava · Mediterráneo</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 4 días / 3 noches</span>
+    <span class="dest-badge" role="listitem">👥 Familia / Pareja / Amigos</span>
+    <span class="dest-badge gold" role="listitem">💶 €200–1,940/persona</span>
+    <span class="dest-badge" role="listitem">🌍 España · Valencia</span>
+    <span class="dest-badge" role="listitem">🥘 Paella + Arte + Playas</span>
+    <a href="https://www.skyscanner.es/transport/flights/es/vlc/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">4 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">1 ciudad</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€200–1,940</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Todo el año</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · CACSA y Turia</a></li>
+        <li><a href="#dia2">Día 2 · Casco histórico</a></li>
+        <li><a href="#dia3">Día 3 · Albufera</a></li>
+        <li><a href="#dia4">Día 4 · Cabanyal</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Valencia es la tercera ciudad más grande de España y la que más ha transformado su imagen en las últimas décadas: de ciudad industrial portuaria a destino de referencia mundial gracias al conjunto futurista de la Ciudad de las Artes y las Ciencias de Santiago Calatrava, la paella valenciana auténtica (creada aquí en las huertas que rodean la Albufera), el Mercado Central más hermoso de Europa inaugurado en 1928 y Las Fallas, el espectáculo pirotécnico más impresionante del mundo (19 de marzo). En cuatro días descubrirás el barrio del Carmen (el casco histórico medieval con arte urbano), la huerta y lago de la Albufera donde nació la paella y las playas del Mediterráneo con el barrio marinero del Cabanyal. Valencia es, además, perfectamente accesible en AVE desde Madrid (1h35) y desde Barcelona (3h).
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏛️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Ciudad de las Artes</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 1</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🥘</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Paella Albufera</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 3</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏖️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Cabanyal y playas</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 4</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Mochilero</th><th>Estándar</th><th>Lujo</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo/AVE A/R</td><td>AVE Madrid 1h35 €20-50</td><td>€80-120</td><td>€180+</td><td>AVE o Vueling/Iberia desde muchas ciudades</td></tr>
+            <tr><td>🏨 Alojamiento (3 noches)</td><td>€60</td><td>€300</td><td>€900</td><td>Hostel El Carmen / Hotel diseño / Palacete histórico</td></tr>
+            <tr><td>🍽️ Comidas (4 días)</td><td>€65</td><td>€170</td><td>€450</td><td>Menú del día €13 · paella €25 · Michelin €120</td></tr>
+            <tr><td>🚌 Transporte</td><td>€15</td><td>€25</td><td>€60</td><td>EMT €1.50/viaje · bono 10 viajes €8.50</td></tr>
+            <tr><td>🎟️ Entradas</td><td>€25</td><td>€50</td><td>€90</td><td>Oceanogràfic €32 · Lonja €2 · IVAM €4</td></tr>
+            <tr><td>🚣 Excursión Albufera</td><td>€15</td><td>€25</td><td>€60</td><td>Bus + barca + paella en El Palmar</td></tr>
+            <tr><td>🔄 Imprevistos (10%)</td><td>€20</td><td>€57</td><td>€180</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€200</strong></td><td><strong>~€627</strong></td><td><strong>~€1,940</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Las Fallas (12-19 marzo):</strong> Si visitas Valencia durante Las Fallas, todos los precios se multiplican por 2-3. Los hoteles se agotan con meses de antelación. La experiencia vale totalmente la pena — la Cremà del 19 de marzo (quema simultánea de todos los monumentos de cartón) es el espectáculo más impresionante de España. Reserva hotel en cuanto sepas las fechas.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚇 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Aeropuerto VLC</div>
+          <div class="transport-content">
+            A <strong>8 km del centro</strong>. Metro <strong>L3</strong> (€3.90 + €1.50 suplemento aeropuerto, 20 min) hasta Colón o Xàtiva. Taxi oficial ~€20. El aeropuerto tiene vuelos directos desde 50+ ciudades europeas. Ryanair y Vueling tienen la mayor frecuencia de rutas nacionales.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚆 AVE — Estación Joaquín Sorolla</div>
+          <div class="transport-content">
+            La nueva estación del AVE está junto a la histórica Estación del Norte. <strong>Desde Madrid 1h35</strong> (desde €20), desde Barcelona 3h. Conexión al centro en metro L5. Valencia es uno de los destinos con AVE más económico de España — reservar con antelación en Renfe para tarifas básicas.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚲 Jardín del Turia en bici</div>
+          <div class="transport-content">
+            <strong>9 km de parque lineal</strong> en el antiguo cauce del río Turia, reconvertido tras la riada de 1957 en el parque urbano más largo de España. La forma más bonita de moverse de norte a sur. Alquiler desde €10/día. <strong>Valenbisi</strong> (préstamo público): €13.30/semana, 150+ estaciones.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 EMT Valencia</div>
+          <div class="transport-content">
+            Billete sencillo <strong>€1.50</strong>, bono 10 viajes <strong>€8.50</strong>. La línea 13 conecta la Estación del Norte con el Barrio del Carmen. El metro (Metrovalencia) cubre el área metropolitana con 9 líneas. Para la Albufera: autobús 25 desde Neptuno o Xàtiva hasta El Palmar (€2/trayecto).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Mochilero</div>
+          <div class="hotel-name">HomeConnect Valencia Youth Hostel</div>
+          <div class="hotel-zone">Barrio del Carmen</div>
+          <div class="hotel-price">~€20/noche</div>
+          <ul class="hotel-features">
+            <li>Barrio más animado de Valencia</li>
+            <li>A 10 min a pie del Mercado Central</li>
+            <li>Ambiente social, terraza</li>
+            <li>Mejor ubicación precio-calidad</li>
+          </ul>
+          <a href="https://www.booking.com/searchresults.es.html?city=-376873" target="_blank" rel="noopener" class="hotel-link">Buscar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐⭐ Estándar</div>
+          <div class="hotel-name">Hotel Balneari Vichy Catalan Valencia</div>
+          <div class="hotel-zone">Eixample</div>
+          <div class="hotel-price">~€100/noche</div>
+          <ul class="hotel-features">
+            <li>Hotel de diseño moderno</li>
+            <li>Spa y piscina interior</li>
+            <li>A 5 min de la Estación del Norte</li>
+            <li>Ideal para visitar el centro a pie</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/balneari-vichy-catalan-valencia.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Caro Hotel</div>
+          <div class="hotel-zone">Barrio del Carmen</div>
+          <div class="hotel-price">~€250/noche</div>
+          <ul class="hotel-features">
+            <li>Palacete del s.XIX sobre restos romanos visibles</li>
+            <li>Restaurante Sucede (1 estrella Michelin)</li>
+            <li>Solo 26 habitaciones · servicio exclusivo</li>
+            <li>El hotel más histórico del Carmen</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/caro.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS DEL ITINERARIO ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">La Ciudad de las Artes y el Jardín del Turia</div>
+            <div class="day-subtitle">CACSA · Jardín del Turia · Paella mediodía · Russafa · Aperitivo</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Arquitectura</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ciudad de las Artes y las Ciencias — Calatrava en el agua</div>
+              <div class="act-desc">El conjunto futurista más ambicioso construido en España: el Palau de les Arts (ópera, casco de 75m de altura con láminas de mosaico blanco), el Hemisfèric (IMAX en forma de ojo con pupila de agua), el Museu de les Ciències (como el esqueleto de un ser prehistórico) y el Oceanogràfic (el acuario más grande de Europa con 42.000 animales de 500 especies). El exterior es completamente gratuito y ya justifica el viaje. El reflejo de los edificios en los canales al amanecer es la imagen más icónica de la nueva Valencia.</div>
+              <div class="act-tags"><span class="act-tag green">Exterior gratis</span><span class="act-tag">Oceanogràfic €32</span><span class="act-tag info">Calatrava 2000-2009</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Jardín del Turia — 9 km de parque verde urbano</div>
+              <div class="act-desc">9 km de parque lineal en el antiguo cauce del Turia, el río desviado tras la catastrófica riada de 1957. El Parque Gulliver (tobogán humano de 70m en forma de gigante acostado, gratis) y los jardines botánicos. En bici es perfecto para recorrer el parque de norte a sur en 30 minutos. Es el pulmón verde más grande del centro de Valencia y el espacio donde los valencianos hacen deporte, pasean y se reúnen.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">9 km parque</span><span class="act-tag">Gulliver gratis</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Paella de mediodía — SOLO a mediodía, nunca por la noche</div>
+              <div class="act-desc">La paella valenciana auténtica se come SOLO a mediodía — los valencianos nunca la comen en la cena. La Pepica (frente al mar, favorita de Hemingway cuando vivió en Valencia), Restaurante La Riua (Eixample, la más auténtica sin vistas al mar) o El Palmar en la Albufera (Día 3). La paella auténtica lleva: pollo, conejo, judías verdes, garrofón, tomate, pimentón y azafrán. NUNCA con mariscos.</div>
+              <div class="act-tags"><span class="act-tag warn">SOLO a mediodía</span><span class="act-tag">~€25/persona</span><span class="act-tag info">Sin mariscos</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Russafa — el más cool de Valencia</div>
+              <div class="act-desc">El barrio más creativo de Valencia, transformado en la última década de zona de inmigración marroquí en centro de galerías de arte contemporáneo, cafés de especialidad, restaurantes creativos y tiendas de diseño emergente. La Calle de Cuba y la Avenida del Reino de Valencia concentran la mejor oferta gastronómica. El Mercado de Russafa (reformado, muy animado los sábados) es el mercado más auténtico de la ciudad.</div>
+              <div class="act-tags"><span class="act-tag green">Sin masificación turística</span><span class="act-tag info">Barrio creativo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Aperitivo en el Mercado de Russafa</div>
+              <div class="act-desc">El Mercado de Russafa tiene bares de aperitivo con vermouth casero, croquetas y conservas de calidad a precios de barrio. El aperitivo valenciano es una tradición seria: vermut con aceitunas, boquerones en vinagre y una mezcla (vermut + soda + aceitunas) a las 13h del mediodía o las 20h del aperitivo vespertino.</div>
+              <div class="act-tags"><span class="act-tag">Vermut ~€3</span><span class="act-tag info">Ambiente local</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Russafa o El Carmen</div>
+              <div class="act-desc">Russafa y El Carmen ofrecen la mejor relación calidad-precio de toda Valencia para la cena. Los restaurantes de cocina mediterránea contemporánea, fusion valenciana y cocina internacional de calidad están concentrados en estas dos zonas, con precios significativamente más bajos que las áreas turísticas del frente marítimo o la zona de la CACSA.</div>
+              <div class="act-tags"><span class="act-tag">€20-35</span><span class="act-tag info">Mejor calidad-precio</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bar Central Russafa</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Russafa</span></td><td>Menú del día valenciano completo: arròs al forn, carne a la brasa, postre.</td><td>~€13</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Restaurante La Riua</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Eixample · a mediodía</span></td><td>Paella valenciana auténtica, la más reconocida del centro de Valencia.</td><td>~€25</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Sucede</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Caro Hotel · 1 Michelin</span></td><td>Menú degustación de cocina valenciana contemporánea. El mejor de la ciudad.</td><td>~€120</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">El casco histórico: Mercado Central y La Lonja</div>
+            <div class="day-subtitle">Mercado Central · La Lonja UNESCO · Catedral · Barrio del Carmen · IVAM</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Historia</span><span>Día cultural</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado Central de Valencia — el modernista más grande de Europa</div>
+              <div class="act-desc">El mercado modernista más grande de Europa (8.000 m²), inaugurado en 1928 tras décadas de construcción. Cúpulas de cristal y hierro, azulejos de cerámica valenciana, 1.200 puestos con la huerta valenciana en toda su diversidad: naranjas de Alzira, tomates del terreno, arroces de la Albufera, embutidos de Requena y el mejor pescado del Mediterráneo. Llegar antes de las 10h para ver el mercado en plena actividad antes de que lleguen los turistas del mediodía.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratis</span><span class="act-tag info">8.000 m² · 1928</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">La Lonja de la Seda — Patrimonio UNESCO</div>
+              <div class="act-desc">El Salón de Contrataciones del s.XV es el ejemplo más hermoso del gótico civil valenciano y uno de los edificios más espectaculares de toda España. Sus columnas helicoidales que ascienden hasta la bóveda nervada sin ningún capitel son únicas en la arquitectura mundial. Declarada Patrimonio de la Humanidad UNESCO en 1996. El Salón Dorado y el Patio de los Naranjos son igualmente magníficos. Entrada €2.</div>
+              <div class="act-tags"><span class="act-tag">€2</span><span class="act-tag info">Patrimonio UNESCO 1996</span><span class="act-tag">Columnas helicoidales s.XV</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Catedral de Valencia — el Santo Grial y el Miguelete</div>
+              <div class="act-desc">La Catedral de Valencia (iniciada en 1262) conserva el Santo Grial: un cáliz de ágata del s.I d.C. que la Iglesia Católica reconoce como el auténtico cáliz utilizado por Jesucristo en la Última Cena. La capilla del Santo Cáliz tiene una bóveda estrellada de gran belleza. El Miguelete (torre octogonal, 207 escalones, €2) ofrece las mejores vistas sobre los tejados del casco histórico. La mezcla de estilos románico, gótico, barroco y neoclásico en un mismo edificio es el reflejo de 800 años de historia.</div>
+              <div class="act-tags"><span class="act-tag">€8 catedral</span><span class="act-tag">Miguelete €2</span><span class="act-tag info">Santo Grial s.I a.C.</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Horchata con fartons en Horchatería El Siglo</div>
+              <div class="act-desc">La horchata fresca de chufa con fartons (bizcocho esponjoso alargado para mojar) es la bebida más refrescante y auténtica de Valencia. Horchatería El Siglo (frente al Mercado Central, desde 1836) es la más histórica y auténtica del centro. Solo en verano la horchata se sirve fría; en invierno en granizada. La horchata industrial embotellada no se parece en nada a la fresca artesanal.</div>
+              <div class="act-tags"><span class="act-tag">Horchata €2.50</span><span class="act-tag info">IGP Alboraya</span><span class="act-tag green">Bebida típica</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio del Carmen — arte urbano medieval</div>
+              <div class="act-desc">El barrio más antiguo de Valencia, con calles del perímetro amurallado árabe (s.X) y el trazado romano bajo ellas. La Iglesia de Santos Juanes (barroca, fachada del s.XVII sobre una antigua mezquita), el Muro de Serranos (Torres medievales del s.XIV, €2) y los murales de arte urbano de artistas internacionales en las paredes del barrio crean una mezcla única de historia y modernidad. Los bares de tapas de la Calle Caballeros y la Plaza de la Virgen son los más auténticos.</div>
+              <div class="act-tags"><span class="act-tag">Torres Serranos €2</span><span class="act-tag green">Arte urbano gratis</span><span class="act-tag info">Barrio medieval</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">IVAM — el segundo museo de arte contemporáneo de España</div>
+              <div class="act-desc">El Instituto Valenciano de Arte Moderno (IVAM, 1989) es el segundo museo de arte contemporáneo más importante de España después del Reina Sofía. La colección permanente con 11.000 obras incluye piezas fundamentales de Julio González (el escultor valenciano más internacional), Calder, Warhol y los principales artistas españoles del s.XX. Las exposiciones temporales son de alto nivel internacional. Entrada €4 (gratis domingos de 17h a 20h).</div>
+              <div class="act-tags"><span class="act-tag">€4 (dom. gratis)</span><span class="act-tag info">2º museo contemporáneo España</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">La Albufera: paella en el lago</div>
+            <div class="day-subtitle">Parque Natural Albufera · Barca de llauds · Paella El Palmar · Playa El Saler · Horchata Alboraya</div>
+          </div>
+          <div class="day-meta"><span>🥘 Excursión</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 La Albufera:</strong> A 11 km del centro en autobús 25 desde la Plaza de la Reina o Neptuno (€2, 30 min). Alternativamente, alquiler de bicicleta y ruta por el carril bici del frente marítimo (45 min en bici). La Albufera es el origen histórico de la paella — el arroz se cultivó aquí durante siglos antes de extenderse al resto de España.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Parque Natural de la Albufera — el lago más grande de España</div>
+              <div class="act-desc">El lago más grande de España (21.000 ha), Parque Natural con una diversidad de aves acuáticas extraordinaria. El aiguamoll (humedal) concentra las arrozeras que rodean el lago — el arroz de la Albufera tiene denominación de origen propia y es el que se usa en todas las paellas valencianas auténticas. Las garzas, flamencos y patos salvajes son habituales en los canales del Parque durante todo el año.</div>
+              <div class="act-tags"><span class="act-tag green">Parque Natural gratuito</span><span class="act-tag info">21.000 ha</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Paseo en barca de llauds — por los cañaverales del lago</div>
+              <div class="act-desc">Los llauds son las barcas tradicionales planas de la Albufera, manejadas por barqueros locales con pértiga. El paseo de 30-45 min por los cañaverales (€6/persona), los filtros naturales de agua y los arrozales inundados es la forma más auténtica de conocer el Parque. El espejo del agua al amanecer con las montañas al fondo crea un paisaje de una serenidad extraordinaria.</div>
+              <div class="act-tags"><span class="act-tag">€6/persona</span><span class="act-tag info">30-45 min</span><span class="act-tag green">Barca tradicional</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Paella en El Palmar — la paella más auténtica de España</div>
+              <div class="act-desc">El Palmar es el pueblo de pescadores en el centro de la Albufera donde se cocinó la primera paella. Solo paella valenciana auténtica: pollo, conejo, judías verdes (bajoqueta), garrofón (judía blanca grande), tomate, pimentón dulce, azafrán y arroz de la Albufera. Cocinada en paellera sobre fuego de leña de naranjo. NUNCA con mariscos — la paella con marisco es una adaptación turística que los valencianos consideran una herética mezcla. Restaurantes Casa Montaña y El Pescador son los más reconocidos.</div>
+              <div class="act-tags"><span class="act-tag warn">NUNCA con mariscos</span><span class="act-tag">~€20-25/persona</span><span class="act-tag info">Leña de naranjo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de El Saler — dunas de pino y Mediterráneo</div>
+              <div class="act-desc">La playa del Parque Natural de la Albufera, protegida por dunas de pino mediterráneo y aguas más tranquilas y limpias que las playas urbanas de Valencia. La pinada (bosque de pinos sobre las dunas) crea microclimas de sombra perfectos para la siesta post-paella. A diferencia de las playas de la ciudad, El Saler tiene muy poca masificación excepto en agosto.</div>
+              <div class="act-tags"><span class="act-tag green">Playa gratuita</span><span class="act-tag info">Menos masificada</span><span class="act-tag">Dunas de pino</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Horchata artesanal en Alboraya</div>
+              <div class="act-desc">Alboraya es el pueblo donde se cultiva la chufa (el tubérculo de la que se hace la horchata) y donde la horchata artesanal es completamente diferente a la industrial. La Horchatería Daniel y la Horchatería Teresa en la misma plaza del pueblo sirven la horchata más fresca de la Comunitat. Con fartons calientes sacados del horno es la merienda más valenciana posible. IGP Chufa de Valencia.</div>
+              <div class="act-tags"><span class="act-tag">Horchata €2</span><span class="act-tag info">IGP Chufa de Valencia</span><span class="act-tag green">Artesanal auténtica</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Las playas y el Cabanyal</div>
+            <div class="day-subtitle">Malvarrosa · Barrio del Cabanyal · Arròs al forn · Bioparc · Despedida</div>
+          </div>
+          <div class="day-meta"><span>🏖️ Playas y barrios</span><span>Día final</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de la Malvarrosa — la playa urbana de Valencia</div>
+              <div class="act-desc">La playa urbana principal de Valencia, a 4 km del centro en metro o bici por el Jardín del Turia. El Paseo Marítimo (passeig marítim) con sus restaurantes de arroces y mariscos y su ambiente mediterráneo es el corazón del verano valenciano. La playa tiene 1.800 metros de arena fina, servicio de socorristas y todas las instalaciones. La mañana temprana es cuando está más tranquila y con mejor luz.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1.800m de arena</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio del Cabanyal — fachadas de azulejo únicas</div>
+              <div class="act-desc">El barrio marinero más auténtico de Valencia, con casas de fachada cubierta de azulejo policromo (algunos del s.XIX) que crean el paisaje urbano más fotogénico de la ciudad. La cuadrícula perfecta de calles perpendiculares al mar, los bares de pescadores con almuerzo de calamares y boquerones fritos y las tiendas de cerámica artesanal. Desayuno en los bares de pescadores del barrio para el desayuno más auténtico de Valencia.</div>
+              <div class="act-tags"><span class="act-tag green">Sin entrada</span><span class="act-tag info">Azulejo s.XIX</span><span class="act-tag">El más fotogénico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último almuerzo — arròs al forn o arroz a banda</div>
+              <div class="act-desc">Arròs al forn (arroz al horno en cazuela de barro con garbanzos, costillas de cerdo, morcilla y pimiento rojo) es el plato del domingo de las familias valencianas, diferente a la paella pero igual de auténtico. O el arroz a banda (arroz cocinado en el caldo de pescado y servido con alioli) — el precursor de la paella en la gastronomía marinera. Cualquier restaurante del Cabanyal o del Paseo Marítimo lo sirve a mediodía.</div>
+              <div class="act-tags"><span class="act-tag">~€18-25</span><span class="act-tag info">Arròs al forn o a banda</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bioparc Valencia — la experiencia de fauna africana</div>
+              <div class="act-desc">El Bioparc de Valencia (2008) es uno de los parques zoológicos más innovadores de Europa: los espacios están diseñados para eliminar todas las barreras visibles entre animales y visitantes, creando la ilusión de estar en el hábitat africano. Gorilas, elefantes, rinocerontes y chimpancés en espacios enormes y naturales. Si viaja con niños es imprescindible (€24). Alternativa si no hay niños: Palau de la Música si hay concierto.</div>
+              <div class="act-tags"><span class="act-tag">€24 adulto</span><span class="act-tag info">Innovador diseño sin barreras</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso al hotel y salida</div>
+              <div class="act-desc">Última horchata en la Horchatería de Santa Catalina (Plaza de Santa Catalina, desde 1836, la más antigua de la ciudad). O copa de Agua de Valencia (cava + zumo de naranja + vodka + ginebra) en el Café Madrid (la bebida que inventaron aquí en 1959). Cierre perfecto de cuatro días en la capital del Mediterráneo español.</div>
+              <div class="act-tags"><span class="act-tag">Agua de Valencia €6</span><span class="act-tag info">Inventada aquí en 1959</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 de Valencia</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Ciudad de las Artes y las Ciencias al atardecer</h4><p>Calatrava reflejado en el agua con la luz dorada del Mediterráneo. El conjunto futurista más ambicioso construido en España en el s.XXI.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Mercado Central a las 9h</h4><p>El mercado modernista más hermoso de Europa en plena actividad antes de los turistas: 1.200 puestos, cúpulas de cristal y la huerta valenciana en todo su esplendor.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Paella valenciana auténtica en El Palmar (Albufera)</h4><p>La paella original en el lugar donde nació: sobre el lago donde crece el arroz, cocinada en paellera sobre leña de naranjo. La experiencia gastronómica más importante de España.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>La Lonja de la Seda: el gótico civil más refinado de España</h4><p>Las columnas helicoidales del Salón de Contrataciones del s.XV son únicas en la arquitectura mundial. Patrimonio UNESCO y la joya oculta más subestimada de Valencia.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Paseo en barca por la Albufera al amanecer</h4><p>El silencio del lago, los cañaverales, las garzas y el reflejo del cielo en el agua con las barracas valencianas al fondo. El Valencia más auténtico.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Horchata con fartons en verano</h4><p>La bebida española más refrescante: horchata artesanal de chufa fría con fartons calientes del horno en la Horchatería El Siglo o en Alboraya directamente.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Las Fallas (12-19 marzo)</h4><p>El espectáculo pirotécnico más impresionante del mundo. La Cremà del 19 de marzo quema monumentos de hasta 30m en toda la ciudad simultáneamente. Imprescindible una vez en la vida.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Barrio del Cabanyal: fachadas de azulejo</h4><p>El paisaje urbano más fotogénico de Valencia: casas de pescadores con fachadas cubiertas de azulejo policromo del s.XIX en un barrio que sobrevivió al especulador.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Santo Grial en la Catedral</h4><p>El cáliz de ágata del s.I d.C. reconocido por la Iglesia Católica como el auténtico cáliz de la Última Cena. La reliquia más importante que se puede visitar en España.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Jardín del Turia en bicicleta</h4><p>9 km de parque verde lineal en el antiguo cauce del río que atraviesa Valencia de norte a sur. La forma más bonita y sana de moverse por la ciudad.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍽️ Gastronomía valenciana</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Arroz · Origen de la paella</div>
+          <div class="gastro-title">La paella valenciana original</div>
+          <div class="gastro-desc">Pollo, conejo, judías verdes (bajoqueta), garrofón (judía blanca grande), tomate, pimentón, azafrán y arroz de la Albufera. SOLO a mediodía. NUNCA con mariscos. Cocinada en paellera de hierro sobre fuego de leña de naranjo. La relación del socarrat (la capa de arroz tostada en el fondo) con la calidad de la paella es directa.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Arroz · Tradición del domingo</div>
+          <div class="gastro-title">Arròs al forn (arroz al horno)</div>
+          <div class="gastro-desc">Con costillas de cerdo, garbanzos, morcilla valenciana (blanquet) y pimiento rojo en cazuela de barro. El plato del domingo de las familias valencianas desde el s.XIX. Se hornea a temperatura muy alta para que el arroz absorba todo el caldo de la cocción de las carnes. En cualquier casa de comidas del centro.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida · IGP Alboraya</div>
+          <div class="gastro-title">Horchata de chufa</div>
+          <div class="gastro-desc">Hecha con chufa (tubérculo, no nuez) con IGP de Alboraya. En verano fría y líquida, en invierno granizada. Con fartons (bizcocho esponjoso para mojar). La horchata industrial embotellada (de supermercado) no tiene nada que ver con la artesanal fresca. Temporada junio-septiembre para la mejor calidad.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Fiesta · Espectáculo pirotécnico</div>
+          <div class="gastro-title">Las Fallas</div>
+          <div class="gastro-desc">Los monumentos de cartón piedra de hasta 30m que se erigen en cada barrio durante semanas y se queman el 19 de marzo a la 1h en La Cremà simultánea en toda la ciudad. La Crida (apertura), los mascletà (pirotecnia diurna estruendosa) y la nit del foc (castillo de fuegos artificiales del 18 de marzo) son los eventos más espectaculares. 17 de marzo: la ofrenda de flores a la Virgen de los Desamparados.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Dulce · Fallas y Todos los Santos</div>
+          <div class="gastro-title">Buñuelos de calabaza</div>
+          <div class="gastro-desc">Fritos con chocolate caliente espeso. Típicos de Las Fallas (marzo) y Todos los Santos (noviembre) pero las buñolerías del Mercado Central y del barrio del Carmen los sirven todo el año. Crujientes por fuera, esponjosos por dentro, con azúcar glaseado. El chocolate debe ser espeso y caliente — el castellano con leche no es lo mismo.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida · Inventada en 1959</div>
+          <div class="gastro-title">Agua de Valencia</div>
+          <div class="gastro-desc">Cava valenciano + zumo de naranja fresco + vodka + ginebra. Inventado en 1959 por Constante Gil en el Café Madrid (Plaza del Ayuntamiento). Dulce, afrutado, potente y peligroso — la graduación real no se nota en el sabor. Se sirve en jarras grandes para compartir. El Café Madrid sigue siendo el lugar donde pedirla.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section id="consejos" class="itin-section">
+      <h2 class="section-heading">💡 Consejos de Routlo</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>La paella auténtica SOLO se come a mediodía.</strong> Si te sirven paella por la noche, es trampa turística. Los valencianos nunca comen paella en la cena — es un plato de celebración de mediodía que requiere digestión larga. Los mejores restaurantes de paella solo la sirven hasta las 16h.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Las Fallas (12-19 marzo):</strong> el espectáculo más impresionante de España. El 19 de marzo a la 1h La Cremà quema todos los monumentos simultáneamente. Hoteles agotados con meses de antelación y precios triplicados. Vale totalmente la pena — reserva hotel en cuanto sepas las fechas.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>La horchata fresca artesanal</strong> es completamente diferente a la industrial embotellada. Los mejores: Horchatería Santa Catalina (centro, desde 1836), El Siglo (frente al Mercado Central) o ir directamente a Alboraya (metro L3 hasta Alboraya, pueblo de la chufa).</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>El Oceanogràfic</strong> (el más grande de Europa con 42.000 animales): imprescindible con niños. Reserva online anticipa el acceso y tiene precio ligeramente inferior (€32 vs €34). Llega a la apertura (10h) para ver a los animales más activos. Los tiburones del acuario central son únicos en Europa.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Para moverte:</strong> Valencia tiene <strong>150 km de carril bici</strong>. Alquilar bici por €10-15/día es más rápido que el bus, más económico que el taxi y sin problemas de aparcamiento. El Jardín del Turia en bici de norte a sur es uno de los paseos urbanos más bonitos de España.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Russafa vs turístico:</strong> para cenar, Russafa y El Carmen ofrecen mucho mejor calidad-precio que la Malvarrosa o la zona de la CACSA. Los precios son más bajos, la cocina más creativa y el ambiente más auténtico. La diferencia de precio puede ser del 40-50% con la misma calidad.</div></div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos y ambulancia (24h)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Nacional</div><div class="emerg-value">091</div><div class="emerg-note">Denuncias y urgencias policiales</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital La Fe</div><div class="emerg-value">+34 961 244 000</div><div class="emerg-note">Urgencias 24h · Av. Fernando Abril Martorell 106</div></div>
+        <div class="emerg-card"><div class="emerg-label">Urgencias médicas</div><div class="emerg-value">061</div><div class="emerg-note">Solo emergencias sanitarias graves</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Local</div><div class="emerg-value">092</div><div class="emerg-note">Guardia Urbana de Valencia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Salvamento marítimo</div><div class="emerg-value">900 202 202</div><div class="emerg-note">Emergencias en playas y mar</div></div>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>✅ Tarjeta sanitaria:</strong> Tu tarjeta sanitaria europea (EHIC) cubre asistencia médica de urgencias en el Hospital La Fe de Valencia. En caso de robo, denuncia en la Comisaría de la Policía Nacional de la Calle Amadeo de Saboya 5 (metro Serrería), que tiene servicio de atención a turistas con traducción.
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea (EHIC)</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta de crédito sin comisiones</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje (recomendable)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">💻 Tecnología</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps offline de Valencia</div>
+            <div class="check-item"><div class="check-box"></div>App Metrovalencia (transporte)</div>
+            <div class="check-item"><div class="check-box"></div>Reserva Restaurante paella (si aplica)</div>
+            <div class="check-item"><div class="check-box"></div>Entradas Oceanogràfic online</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">👕 Ropa</div>
+            <div class="check-item"><div class="check-box"></div>Calzado cómodo (adoquín en El Carmen)</div>
+            <div class="check-item"><div class="check-box"></div>Bañador (playas todo el año)</div>
+            <div class="check-item"><div class="check-box"></div>Protector solar (sol mediterráneo)</div>
+            <div class="check-item"><div class="check-box"></div>Chaqueta ligera (noches de otoño)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">🥘 Gastronomía</div>
+            <div class="check-item"><div class="check-box"></div>Paella auténtica a mediodía (no por la noche)</div>
+            <div class="check-item"><div class="check-box"></div>Horchata con fartons en Alboraya o El Siglo</div>
+            <div class="check-item"><div class="check-box"></div>Agua de Valencia en el Café Madrid</div>
+            <div class="check-item"><div class="check-box"></div>Buñuelos con chocolate en el Mercado</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">🎟️ Visitas</div>
+            <div class="check-item"><div class="check-box"></div>Oceanogràfic — reservar online</div>
+            <div class="check-item"><div class="check-box"></div>La Lonja de la Seda (€2, mañana)</div>
+            <div class="check-item"><div class="check-box"></div>Catedral con Miguelete (€8+€2)</div>
+            <div class="check-item"><div class="check-box"></div>Barca en la Albufera (€6)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para Valencia?</h3>
+      <p>Dinos tus fechas, presupuesto y estilo de viaje. Routlo IA te crea un plan a medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a Valencia
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com y otras plataformas pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos (mayo 2026) y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px">
+    <div>
+      <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px">
+        <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+      </a>
+      <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.7;max-width:280px">Itinerarios de viaje generados por inteligencia artificial. Personalizados para cada viajero.</p>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">España</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="madrid.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Madrid</a></li>
+        <li><a href="barcelona.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Barcelona</a></li>
+        <li><a href="san-sebastian.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">San Sebastián</a></li>
+        <li><a href="valencia.html" style="font-size:0.875rem;color:#c9a96e;text-decoration:none">Valencia</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Europa</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="budapest.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Budapest</a></li>
+        <li><a href="roma.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Roma</a></li>
+        <li><a href="paris.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">París</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Más</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="tokio.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Tokio</a></li>
+        <li><a href="marrakech.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Marrakech</a></li>
+        <li><a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Ver todos →</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.8rem;color:rgba(237,238,242,0.55)">
+    <span>© 2026 Routlo · Todos los derechos reservados</span>
+    <span>Generado con ❤️ e IA</span>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() { document.querySelector('nav').classList.toggle('menu-open'); }
+  window.addEventListener('scroll', function() { document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50); });
+  const sections = document.querySelectorAll('.itin-section');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    tocLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  });
+</script>
+</body>
+</html>

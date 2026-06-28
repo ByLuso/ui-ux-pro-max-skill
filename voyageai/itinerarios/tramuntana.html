@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GR-221 Serra de Tramuntana — Mallorca — de Port d'Andratx a Valldemossa | Routlo</title>
+  <meta name="description" content="La Ruta de Piedra en Seco. Patrimonio UNESCO que atraviesa la sierra más bella del Mediterráneo. Ruta completa, mapa interactivo, presupuesto y consejos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    /* Map dark tiles / shared.css isolation */
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#1a3055 70%,rgba(201,169,110,0.15) 100%),url('https://images.unsplash.com/photo-1552083375-1447ce886485?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.5) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html" class="active">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios-espana.html">España</a>
+    <span aria-hidden="true">›</span><span>Mallorca · Islas Baleares</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">GR-221 Serra de Tramuntana</h1>
+  <p class="dest-country">Mallorca — de Port d'Andratx a Valldemossa</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Mallorca · Islas Baleares</span>
+    <span class="dest-badge gold">2 días</span>
+    <span class="dest-badge">📏 35 km (2 etapas)</span>
+    <span class="dest-badge">⛰️ +1.400 m / -1.400 m</span>
+    <span class="dest-badge">🥾 Moderada</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos-tecnicos">Datos técnicos</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#recorrido">Por secciones</a></li>
+      <li><a href="#llevar">Qué llevar</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <!-- Datos técnicos -->
+    <section id="datos-tecnicos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos técnicos</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Distancia</div><div class="route-info-val">35 km (2 etapas)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Desnivel</div><div class="route-info-val">+1.400 m / -1.400 m</div></div>
+        <div class="route-info-item"><div class="route-info-label">Dificultad</div><div class="route-info-val">Moderada</div></div>
+        <div class="route-info-item"><div class="route-info-label">Tiempo</div><div class="route-info-val">2 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Mar–May · Sep–Nov</div></div>
+      </div>
+    </section>
+
+    <!-- Mapa del recorrido -->
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:440px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Inicio</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Puntos clave</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#e05a5a;"></span>Final</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:24px;height:3px;background:#c9a96e;border-radius:2px;"></span>Recorrido</span>
+      </div>
+    </section>
+
+    <!-- Recorrido por secciones -->
+    <section id="recorrido" class="itin-section" aria-labelledby="h-recorrido">
+      <h2 class="section-heading" id="h-recorrido">Recorrido por secciones</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Día 1: Port d'Andratx → Estellencs (18 km)</div>
+          </div>
+        </div>
+        <div class="day-body" style="font-size:0.88rem;color:rgba(237,238,242,0.65);line-height:1.75;">Las paredes de piedra en seco que dan nombre a la ruta (Dry Stone Route) aparecen desde el primer kilómetro. Construidas por esclavos y campesinos durante siglos para contener las terrazas agrícolas. El sendero sube y baja por crestas con vistas al mar Mediterráneo. Estellencs (500 habitantes) tiene dos bares y un alojamiento rural donde recuperarse.</div>
+      </div>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Día 2: Estellencs → Valldemossa (17 km)</div>
+          </div>
+        </div>
+        <div class="day-body" style="font-size:0.88rem;color:rgba(237,238,242,0.65);line-height:1.75;">Banyalbufar — el pueblo de bancales más espectacular de España — marca el ecuador del día. Las terrazas descienden en cascada hasta el mar. Valldemossa es el destino final: el monasterio donde Chopin y George Sand pasaron el invierno de 1838–39 es hoy uno de los lugares más visitados de Mallorca.</div>
+      </div>
+    </section>
+
+    <!-- Qué llevar -->
+    <section id="llevar" class="itin-section" aria-labelledby="h-llevar">
+      <h2 class="section-heading" id="h-llevar">Qué llevar</h2>
+      <div class="day-card"><div class="day-body">
+      <div class="check-item"><div class="check-box"></div>Bastones de trekking (mucho terreno irregular de piedra seca)</div>
+      <div class="check-item"><div class="check-box"></div>Protector solar alto (sol mediterráneo intenso en las crestas)</div>
+      <div class="check-item"><div class="check-box"></div>Agua mínimo 2L (pocas fuentes entre Estellencs y Banyalbufar)</div>
+      <div class="check-item"><div class="check-box"></div>Reserva de alojamiento en Estellencs (Casa de Huéspedes Can Pau, plazas limitadas)</div>
+      <div class="check-item"><div class="check-box"></div>Botiquín básico</div>
+      <div class="check-item"><div class="check-box"></div>Cámara — el paisaje lo requiere</div>
+      </div></div>
+    </section>
+
+    <!-- Gastronomía -->
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía local</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-title">Pa amb oli</div>
+          <div class="gastro-desc">El bocadillo balear: pan moreno con aceite de oliva mallorquín, tomate y sal. Con sobrasada o queso mahonés se convierte en el desayuno de los dioses mediterráneos.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-title">Tumbet</div>
+          <div class="gastro-desc">Lasaña mallorquina vegetariana: capas de berenjenas, pimientos, patatas y salsa de tomate. Plato de temporada cuando las verduras están en su punto.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-title">Ensaimada</div>
+          <div class="gastro-desc">El dulce icónico de Mallorca: espiral de masa hojaldrada con manteca de cerdo. La versión con sobrasada o cabello de ángel es la más local.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-title">Hierbas mallorquinas</div>
+          <div class="gastro-desc">Licor artesanal elaborado con más de 30 plantas aromáticas de la sierra. Se bebe frío después de comer. El digestivo más fragante del Mediterráneo.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consejos -->
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text">Evitar junio, julio y agosto por el calor extremo (35–40°C en las crestas con poco sombra).</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text">La ruta completa son 8 etapas — esta selección es el tramo más espectacular.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text">Comprar agua en los pueblos — en verano las fuentes están secas.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text">El alojamiento en Estellencs es muy limitado. Reservar con semanas de antelación.</div></div>
+    </section>
+
+    <!-- Emergencias -->
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias</div><div class="emerg-value">112</div><div class="emerg-note"></div></div>
+        <div class="emerg-card"><div class="emerg-label">Consell de Mallorca (GR-221)</div><div class="emerg-value">+34 971 219 111</div><div class="emerg-note">Info ruta y alojamientos</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil Andratx</div><div class="emerg-value">+34 971 136 008</div><div class="emerg-note"></div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Son Espases</div><div class="emerg-value">+34 871 205 000</div><div class="emerg-note">Palma, 40 km</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres planificar este viaje?</h3>
+      <p>Nuestro chatbot IA puede ayudarte con alojamiento, transporte y personalización del recorrido.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Las rutas y distancias son orientativas. Las condiciones de montaña pueden cambiar — consultar siempre el parte meteorológico y el estado del sendero antes de salir. Lleva siempre seguro de asistencia en montaña (rescate en helicóptero puede costar €3.000+).
+    </div>
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Senderismo España</div>
+      <nav aria-label="Rutas senderismo"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="cares.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ruta del Cares</a></li>
+        <li><a href="mulhacen.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Mulhacén</a></li>
+        <li><a href="aiguestortes.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Aigüestortes</a></li>
+        <li><a href="penalara.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Peñalara</a></li>
+      </ul></nav>
+    </div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios-espana.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios de España</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  // Nav scroll
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+
+  // TOC
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  // Leaflet route map
+  const routeCoords = [[39.543, 2.387], [39.56, 2.402], [39.58, 2.421], [39.6, 2.441], [39.62, 2.46], [39.64, 2.482], [39.66, 2.508], [39.682, 2.534], [39.707, 2.563]];
+  const waypoints = [{"latlng": [39.543, 2.387], "label": "Port d'Andratx (0m)"}, {"latlng": [39.59, 2.432], "label": "Es Grau \u2014 coll paso"}, {"latlng": [39.636, 2.484], "label": "Estellencs (150m) \u2014 pernocta"}, {"latlng": [39.66, 2.508], "label": "Banyalbufar (100m)"}, {"latlng": [39.707, 2.563], "label": "Valldemossa (400m)"}];
+  const center = [39.63, 2.47];
+
+  const map = L.map('route-map', { zoomControl: true, attributionControl: false })
+    .setView(center, 11);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap © CARTO', maxZoom: 19
+  }).addTo(map);
+
+  // Fit to route
+  const bounds = L.latLngBounds(routeCoords).pad(0.15);
+  map.fitBounds(bounds);
+
+  // Route polyline
+  L.polyline(routeCoords, { color: '#c9a96e', weight: 4, opacity: 0.9, lineJoin: 'round' }).addTo(map);
+
+  // Start marker
+  L.circleMarker(routeCoords[0], {
+    radius: 9, fillColor: '#5ecb8a', color: '#fff', weight: 2.5, fillOpacity: 1
+  }).bindTooltip(waypoints[0].label, { permanent: false, direction: 'top' }).addTo(map);
+
+  // End marker
+  L.circleMarker(routeCoords[routeCoords.length - 1], {
+    radius: 9, fillColor: '#e05a5a', color: '#fff', weight: 2.5, fillOpacity: 1
+  }).bindTooltip(waypoints[waypoints.length - 1].label, { permanent: false, direction: 'top' }).addTo(map);
+
+  // Intermediate waypoints
+  waypoints.slice(1, -1).forEach(wp => {
+    L.circleMarker(wp.latlng, {
+      radius: 7, fillColor: '#c9a96e', color: '#fff', weight: 2, fillOpacity: 1
+    }).bindTooltip(wp.label, { permanent: false, direction: 'top' }).addTo(map);
+  });
+
+  // Attribution
+  L.control.attribution({ prefix: false }).addAttribution('© <a href="https://openstreetmap.org">OpenStreetMap</a>').addTo(map);
+  setTimeout(() => map.invalidateSize(), 100);
+})();
+</script>
+</body>
+</html>

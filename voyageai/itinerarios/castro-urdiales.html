@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Castro Urdiales — El Bilbao junto al mar antes de que existiera Bilbao | Routlo</title>
+  <meta name="description" content="35 km desde Bilbao, 35 minutos por la A-8: una villa marinera con una 'catedral' gótica gratuita, un castillo-faro sobre el Cantábrico, puente medieval y rabas en el puerto. Una escapada de un día casi gratis, ~36€ para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #e0935c; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #e0935c; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(224,147,92,0.15); border: 1px solid rgba(224,147,92,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #e0935c; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(224,147,92,0.12); border: 1px solid rgba(224,147,92,0.3); font-size: 0.75rem; font-weight: 600; color: #e0935c; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(224,147,92,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(224,147,92,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #e0935c, #a05a2c); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #e0935c; border-left-color: #e0935c; background: rgba(224,147,92,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(224,147,92,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(224,147,92,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #e0935c; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(224,147,92,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #e0935c; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #e0935c; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(224,147,92,0.3); }
+    .hotel-link:hover { border-color: #e0935c; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #e0935c; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#e0935c'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#e0935c'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1504279807002-09854ccc9b6c?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">⛪🏖️ Villa marinera</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🚗 35 km · 35 min desde Bilbao</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~36€ / 2 personas</span>
+      <span style="font-size:0.78rem;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;padding:4px 12px;border-radius:100px;">🆓 Entrada gratuita</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Castro Urdiales<br><span style="color:#e0935c;">El Bilbao junto al mar, antes de que existiera Bilbao</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A 35 minutos de Bilbao por la A-8, esta villa marinera cántabra esconde una "catedral" gótica gratuita, un castillo-faro asomado al Cantábrico, un puente medieval y un puerto pesquero donde sirven las mejores rabas de la costa. Todo el casco histórico se recorre sin pagar una entrada —y aun así, sobra presupuesto para comer de lujo. ~36€ para dos.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">El Bilbao antes de Bilbao</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Castro Urdiales</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">⛵ Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">35 km</div><div class="route-info-unit">desde Bilbao</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">35 min</div><div class="route-info-unit">por la A-8</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~36€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Casco histórico</div><div class="route-info-value">100%</div><div class="route-info-unit">gratuito</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Todo el año</div><div class="route-info-unit">evita agosto al mediodía</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">🐋 El Bilbao antes de Bilbao</h2>
+      <div class="highlight-box">
+        <h4>🐋 La villa ballenera que rivalizaba con Bilbao</h4>
+        <p>Mucho antes de que Bilbao se convirtiera en la gran urbe industrial del Cantábrico, Castro Urdiales ya era un puerto de referencia. Fundada sobre la antigua ciudad romana de Flaviobriga, recibió fuero de villa en 1163 —más de un siglo antes que Bilbao (1300)— y durante la Edad Media fue uno de los puertos balleneros y comerciales más importantes del norte de España, con flotas que llegaban hasta Terranova en busca de ballenas y bacalao. Su privilegiada posición natural, con una bahía resguardada y un promontorio defendible, la convirtió en una plaza estratégica que disputaron Castilla y los reinos vecinos durante siglos.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🐚 Parada en el Camino de Santiago de la Costa</h4>
+        <p>Castro Urdiales es también una etapa clásica del Camino de Santiago por la costa (Camino del Norte), la ruta que seguían los peregrinos que llegaban en barco o que preferían evitar las montañas del interior. Aún hoy es habitual cruzarse con peregrinos con la concha de vieira en la mochila atravesando el casco histórico camino del puente medieval, el mismo que han pisado viajeros durante más de 800 años.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Bilbao → Castro Urdiales · 35 min</div><div class="day-subtitle">Por la A-8 dirección Santander, salida hacia el centro de Castro Urdiales</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 Una autopista con vistas al mar</div>
+            <div class="stop-desc">La A-8 sale de Bilbao bordeando la ría y, ya en Cantabria, ofrece tramos con vistas abiertas al Cantábrico. El trayecto es corto y cómodo —apenas 35 km— ideal como primera escapada para quien se aloja en Bilbao y quiere ver "cómo era" la zona antes de la gran ciudad.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento</div>
+            <div class="stop-desc">Castro Urdiales tiene varias zonas de aparcamiento gratuito algo alejadas del centro (junto al Paseo Marítimo y en las calles más alejadas del casco), y zona azul de pago en el entorno inmediato del puerto y la playa de Brazomar. Si vas en fin de semana o en verano, llega antes de las 11h para encontrar sitio gratis a 10-15 minutos a pie del casco histórico.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">La "Catedral del Cantábrico" y el Castillo-faro de Santa Ana</div><div class="day-subtitle">Visita libre · 45 min - 1h · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesia de Santa María de la Asunción</div>
+            <div class="stop-desc">Construida entre los siglos XIII y XIV en estilo gótico, esta iglesia es tan monumental —con sus contrafuertes, su rosetón y sus tres naves— que recibe el sobrenombre informal de "la Catedral del Cantábrico", aunque nunca fue sede episcopal. Se puede admirar gratis por fuera, rodeándola para apreciar sus arbotantes asomados al mar, y a menudo tiene acceso libre al interior en horario diurno, donde sorprende su escala casi catedralicia para un pueblo de este tamaño.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏰 Castillo-faro de Santa Ana</div>
+            <div class="stop-desc">Justo al lado de la iglesia, sobre el mismo promontorio rocoso que protege el puerto, se alza el castillo-faro de Santa Ana: una fortificación medieval reconvertida en faro en el siglo XIX. El conjunto —iglesia, castillo, faro y murallas— ofrece uno de los miradores más espectaculares de toda la costa cántabra, con vistas a 180º sobre el puerto, la villa y el océano abierto. La entrada al recinto exterior es gratuita.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌧️ Alternativa si llueve</div>
+            <div class="stop-desc">Si el día acompaña poco, refúgiate dentro de la iglesia (cuando esté abierta) para apreciar su altura de bóvedas, o aprovecha para empezar antes de tiempo con las rabas en alguno de los bares con ventanales al puerto: se disfrutan igual con lluvia que con sol.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Puente medieval, paseo marítimo y casco antiguo</div><div class="day-subtitle">Paseo a pie · 1h - 1h 30min · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌉 El puente medieval sobre la ría</div>
+            <div class="stop-desc">Bajando desde el castillo hacia el puerto, cruzarás el puente medieval (conocido también como puente romano, aunque su fábrica actual es bajomedieval) que une el casco antiguo con el barrio de la Cuesta. Desde aquí se obtienen algunas de las mejores fotos de la villa, con las casas de pescadores reflejadas en el agua y el castillo-faro de fondo.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⚓ Puerto pesquero y paseo marítimo</div>
+            <div class="stop-desc">El puerto sigue siendo un puerto pesquero activo, con barcos amarrados y lonja de pescado. El paseo marítimo que lo rodea está lleno de terrazas y casas de colores típicas de los pueblos marineros cántabros. Es la zona ideal para pasear sin rumbo, ver entrar las barcas y sentarse a tomar algo con vistas.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏘️ Calles del casco histórico</div>
+            <div class="stop-desc">El entramado de calles estrechas y empinadas del casco antiguo conserva la traza medieval, con soportales, balconadas de madera y pequeñas plazas. Merece la pena perderse sin mapa: en pocos minutos aparecen miradores inesperados sobre los tejados y el mar.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏖️ Playa de Brazomar y Ermita del Rosario</div>
+            <div class="stop-desc">A un paso del centro está la playa urbana de Brazomar, perfecta para un baño rápido o simplemente para sentarse en la arena con el casco histórico de fondo. Siguiendo el paseo hacia el oeste se llega a la Ermita de la Virgen del Rosario y a varios miradores sobre acantilados, con la playa de Ostende —más salvaje y menos concurrida— un poco más allá para quien quiera alargar el paseo.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Rabas, marmita y regreso</div><div class="day-subtitle">Cocina marinera cántabra · Vuelta directa 35 min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🦑 Rabas, el plato estrella</div>
+            <div class="stop-desc">Castro Urdiales es uno de los templos de las "rabas" —calamares rebozados y fritos, gruesos y jugosos— que se sirven como tapa o ración en prácticamente todos los bares del puerto y del casco. Acompáñalas de unas sardinas a la parrilla si es temporada, o de una marmita, el guiso marinero de pescado (normalmente bonito o atún con patata) típico de los puertos cántabros.</div>
+            <div class="stop-price">Ración de rabas: ~9-12€ · Menú o media ración + bebida: ~15-18€/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Bilbao — 35 min</div>
+            <div class="stop-desc">Vuelta directa por la A-8. Si quieres alargar el día, la costa hacia Cantabria sigue con pueblos como Laredo o Santoña a poca distancia —otra excusa para volver con Routlo otro día.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, 70 km)</span><span>8€</span></div>
+        <div class="budget-row"><span>🅿️ Parking (si no encuentras gratis)</span><span>3€</span></div>
+        <div class="budget-row"><span>🦑 Rabas y raciones para compartir</span><span>20€</span></div>
+        <div class="budget-row"><span>☕ Café o helado en el paseo marítimo</span><span>5€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~36€</span></div>
+      </div>
+      <div class="budget-note">Todo el patrimonio de la villa —iglesia, castillo-faro, puente, paseo marítimo y playas— es gratuito, así que prácticamente todo el presupuesto va a parar a comer bien. Si quieres ampliar la visita con un menú completo de mediodía en lugar de raciones, súmale entre 15-20€ más por persona.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Mejor época:</strong> Castro Urdiales es agradable casi todo el año. En verano, especialmente en agosto, el casco histórico y el aparcamiento se llenan al mediodía —llega temprano o ven a media tarde para disfrutarlo con más calma.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Qué llevar:</strong> calzado cómodo para las calles empedradas y cuestas del casco antiguo, y un cortavientos —el mirador del castillo-faro suele tener bastante viento aunque el día esté soleado.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Parking gratuito:</strong> busca las zonas de aparcamiento libre algo alejadas del puerto (hacia el Paseo Marítimo o las calles del extrarradio) y camina 10-15 minutos; en el centro la mayoría es zona azul de pago.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Error a evitar:</strong> no te quedes solo en el puerto. La mejor vista del conjunto —iglesia, castillo y faro juntos— es desde el puente medieval o subiendo al propio promontorio del castillo, no se aprecia igual desde abajo.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Bilbao y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Bilbao" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Bilbao en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados"><strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.</div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Bilbao?</h3>
+      <p>Rutas de menos de 1 hora y presupuestos ajustados para dos personas, con mapas detallados y desglose de gastos.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.324,-3.075],10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[43.263,-2.935],label:'Bilbao',color:'#5ecb8a',r:10},{coords:[43.3853,-3.2150],label:'Castro Urdiales',color:'#e0935c',r:9},{coords:[43.3855,-3.2135],label:'Iglesia de Santa María y Castillo-faro de Santa Ana',color:'#e0b44a',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[43.263,-2.935],[43.3853,-3.2150]],{color:'#e0935c',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

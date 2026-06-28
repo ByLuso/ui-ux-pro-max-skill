@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laguardia & Rioja Alavesa — Vino, arquitectura y viñedos medievales | Routlo</title>
+  <meta name="description" content="45 km desde Logroño: Laguardia amurallada, las bodegas de Frank Gehry y Santiago Calatrava, catas de Rioja Alavesa y el pueblo medieval mejor conservado de Álava. Una jornada entre arte y vino."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .trail-easy { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.3); font-size: 0.75rem; font-weight: 600; color: #c9a96e; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(201,169,110,0.08) 0%, rgba(20,8,0,0.6) 100%); border: 1px solid rgba(201,169,110,0.2); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #c9a96e; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c9a96e; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.55; }
+    .checklist li::before { content: '□'; color: #c9a96e; font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(16,0,8,0.25) 0%,rgba(20,0,10,0.55) 50%,rgba(10,0,6,0.93) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="trail-easy" style="margin-bottom:0;">🍷 Vino & Cultura</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">45 km de Logroño</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🏰 Ciudad Medieval · Álava</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Laguardia<br><span style="color:#c9a96e;">La catedral del vino riojano</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">Murallas medievales intactas del s. XIII, calles de piedra con bodegas subterráneas bajo cada casa y dos obras de arquitectura de autor: la bodega de Frank Gehry (Marqués de Riscal) y la de Santiago Calatrava (Ysios).</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#vino">Las bodegas</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Laguardia · Rioja Alavesa</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🍷 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">45 km</div><div class="route-info-unit">desde Logroño</div></div>
+        <div class="route-info-cell"><div class="route-info-label">A pie en Laguardia</div><div class="route-info-value">3 km</div><div class="route-info-unit">casco histórico</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~50€</div><div class="route-info-unit">por persona</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Dificultad</div><div class="route-info-value">Muy fácil</div><div class="route-info-unit">sin senderismo</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Todo el año</div><div class="route-info-unit">sep: vendimia</div></div>
+      </div>
+      <div class="highlight-box">
+        <h4>🏰 La ciudad más antigua de Álava</h4>
+        <p>Laguardia fue fundada en el año 908 como plaza fuerte por el rey Sancho Abarca de Navarra. Sus murallas medievales, completamente intactas, encierran un casco histórico que parece detenido en el siglo XIV. Bajo cada casa hay una bodega excavada en roca, algunas con hasta 6 km de galerías subterráneas. La Rioja Alavesa tiene su denominación de origen propia —y muchos dicen que sus vinos son los mejores de toda la D.O. Rioja.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:380px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Mañana: Bodega Marqués de Riscal (Elciego)</div><div class="day-subtitle">Frank Gehry · 1999–2006 · El Guggenheim del vino</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏗️ Bodega Marqués de Riscal — arquitectura Frank Gehry</div>
+            <div class="stop-desc">El edificio más fotografiado de La Rioja: cintas de titanio dorado y morado que ondean sobre la histórica bodega de 1858. Gehry proyectó este "City of Wine" para que las curvas de metal evocasen el movimiento del vino en la copa. La visita incluye recorrido por las bodegas centenarias y cata de 2 vinos.</div>
+            <div class="stop-price">Visita + cata 2 vinos: ~18€ · Cata premium 4 vinos: ~35€ · Reserva obligatoria online</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍷 Desayuno o aperitivo en El Ciego</div>
+            <div class="stop-desc">El pequeño pueblo de Elciego tiene bares con terraza frente a las viñas. El aperitivo matutino con vino del año y pintxos es una costumbre local que no debes saltarte. El hotel Marqués de Riscal (5*) tiene una terraza pública con las mejores vistas del edificio Gehry.</div>
+            <div class="stop-price">Aperitivo pintxos + vino: ~8–12€</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Mediodía: Bodega Ysios (Laguardia)</div><div class="day-subtitle">Santiago Calatrava · 2001 · arquitectura orgánica entre viñedos</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌊 Bodega Ysios — la ola de Calatrava</div>
+            <div class="stop-desc">A 10 minutos de Elciego, la bodega Ysios de Calatrava imita la ondulación de la Sierra de Toloño con su cubierta de aluminio. Un edificio que parece surgir del viñedo. La visita incluye las modernas instalaciones de vinificación —tecnología de última generación dentro de una obra de arte.</div>
+            <div class="stop-price">Visita + cata 3 vinos: ~22€ · Reserva recomendada</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Tarde: Laguardia medieval</div><div class="day-subtitle">Casco histórico amurallado · s. XIII · bodegas subterráneas</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏰 Murallas y Puerta de San Juan</div>
+            <div class="stop-desc">Entra por la Puerta de San Juan —la mejor conservada de las siete puertas medievales. Las murallas del s. XIII rodean el casco casi íntegramente. El paseo de ronda da vistas a 360° sobre el mar de viñas. Subir a la Torre Abacial (s. XII) vale 2€ y la panorámica justifica cada céntimo.</div>
+            <div class="stop-price">Torre Abacial: 2€</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesia de Santa María de los Reyes</div>
+            <div class="stop-desc">La joya escondida de Laguardia: una portada gótica policromada del s. XIV con la policromía original intacta —algo rarísimo en toda España. Los colores azules, rojos y dorados de las figuras se han conservado porque una puerta de madera los protegió durante siglos. Solo visitable con guía local (2€).</div>
+            <div class="stop-price">Visita guiada portada: 2€</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍷 Cata + pintxos en bodega subterránea</div>
+            <div class="stop-desc">Muchas casas del casco tienen bodega excavada en la roca bajo sus cimientos. Varias ofrecen catas privadas: Bodegas Ontañón, Bodegas El Fabulista. Una copa de Rioja Alavesa cosechero directo en una cueva de piedra del s. XII —imposible de superar.</div>
+            <div class="stop-price">Cata bodega subterránea: ~10–15€ · Pintxos: ~2–3€/unidad</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌇 Atardecer desde el mirador del Collado</div>
+            <div class="stop-desc">El mirador del Collado, junto a la muralla este, ofrece las vistas más dramáticas: el mar de viñas extendiéndose hasta el horizonte con la Sierra de Cantabria detrás. En otoño el viñedo amarillea y rojea —uno de los paisajes más hermosos de España.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="vino">
+      <h2 class="section-heading">🍾 Las bodegas imprescindibles</h2>
+      <div class="highlight-box">
+        <h4>🍷 Rioja Alavesa: la otra Rioja</h4>
+        <p>La Rioja Alavesa produce solo el 12% del vino de la D.O. Rioja pero sus vinos figuran entre los más valorados. El microclima atlántico-mediterráneo, los suelos arcillo-calizos y las parcelas pequeñas de viticultores independientes producen vinos más frescos y minerales que los de La Rioja Alta. Hay más de 60 bodegas en menos de 30 km². La mayoría acepta visitas sin reserva entre semana.</p>
+      </div>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Marqués de Riscal (Elciego)</strong> — la bodega más famosa, edificio de Gehry. Cata clásica desde 18€. Reserva con antelación, especialmente en verano.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Ysios (Laguardia)</strong> — arquitectura de Calatrava, vinos de autor. Cata desde 22€. Precio alto pero el espacio es espectacular.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Bodegas El Fabulista (Laguardia)</strong> — bodega subterránea del s. XII bajo el casco histórico. Cata + historia medieval desde 8€. La más auténtica y asequible.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Señorío de Arana (Moreda de Álava)</strong> — bodega familiar a 10 minutos de Laguardia. Sin reserva entre semana, precios muy razonables (8€ cata 3 vinos). La opción para conocer el vino sin marketing.</div></div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Reserva las bodegas principales con antelación</strong> —Marqués de Riscal e Ysios se llenan rápido en fin de semana. Reserva online al menos una semana antes.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>No conduzcas si vas a catar</strong> — designa a un conductor o contrata un taxi entre bodegas. En Laguardia hay servicio de taxi bodega-a-bodega. Una multa por alcohol al volante arruina el día.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Vendimia en septiembre</strong> — la primera quincena de septiembre es la más activa. Los viticultores recogen a mano, el olor a mosto llena el pueblo y muchas bodegas ofrecen actividades especiales de pisado de uvas.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Parking:</strong> fuera de las murallas, parking gratuito ilimitado junto a la Puerta de Paganos. El casco está peatonalizado —no intentes entrar en coche.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>La temperatura en las bodegas</strong> es constante a 12–14°C todo el año. Lleva una capa ligera aunque fuera haga calor.</div></div>
+    </section>
+
+    <section class="itin-section" id="checklist">
+      <h2 class="section-heading">🎒 Qué llevar</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div><div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.4);margin-bottom:10px;">Esencial</div>
+          <ul class="checklist"><li>Reserva de bodegas impresa o en móvil</li><li>Zapatillas cómodas (adoquines)</li><li>Capa ligera (bodegas frías)</li><li>Efectivo (algunas bodegas no aceptan tarjeta)</li><li>Cámara para el atardecer</li></ul></div>
+        <div><div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.4);margin-bottom:10px;">Si vas a comprar vino</div>
+          <ul class="checklist"><li>Bolsa de tela resistente</li><li>Presupuesto extra: ~20–40€ por botella premium</li><li>Caja de plástico en el coche para no romper</li><li>Lista de vinos que quieres probar</li></ul></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas por La Rioja, País Vasco y Navarra?</h3>
+      <p>Tenemos 7 rutas en esta región con mapas, itinerarios detallados y consejos de experto.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map = L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([42.54,-2.60],11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  const wps=[
+    {coords:[42.466,-2.445],label:'Logroño',color:'#5ecb8a',r:10},
+    {coords:[42.530,-2.634],label:'Elciego · Marqués de Riscal (Gehry)',color:'#c9a96e',r:11},
+    {coords:[42.559,-2.593],label:'Bodega Ysios (Calatrava)',color:'#c9a96e',r:9},
+    {coords:[42.555,-2.583],label:'Laguardia — casco medieval',color:'#e0b44a',r:13},
+  ];
+  wps.forEach(wp=>{L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'});});
+  L.polyline([[42.466,-2.445],[42.530,-2.634],[42.559,-2.593],[42.555,-2.583]],{color:'#c9a96e',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{const n=document.getElementById('main-nav');n.classList.toggle('scrolled',window.scrollY>60);});
+const tocLinks=document.querySelectorAll('.toc-list a'),sections=document.querySelectorAll('.itin-section');
+new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){tocLinks.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(sections[0]||document.body);
+sections.forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){tocLinks.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

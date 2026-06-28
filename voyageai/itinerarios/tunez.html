@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Túnez — 5 días: Sidi Bou Said, desierto del Sahara, Tozeur y los escenarios de Star Wars | Routlo</title>
+  <meta name="description" content="5 días en Túnez: Cartago y Sidi Bou Said azul y blanco, el desierto de Tozeur en 4WD, los trogloditas de Matmata y las ruinas de Tataouine donde se rodó Star Wars. Bajo €750 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d0800 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#201000 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#180a00 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#1a0800 0%,#3a1800 40%,#6a3000 70%,rgba(201,169,110,0.18) 100%),url('https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>África · Túnez</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Túnez</h1>
+  <p class="dest-country">Cartago · Sahara · Star Wars · Bajo €750 para dos</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Norte de África · Túnez</span>
+    <span class="dest-badge gold">5 días · Desierto + costa + medina</span>
+    <span class="dest-badge gold">💶 ~720 € dos personas (vuelos incluidos)</span>
+    <span class="dest-badge">🌞 Mar · Abr · Oct · Nov</span>
+    <span class="dest-badge">✈️ Vuelo directo desde Madrid/Barcelona</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">5 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~720 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo directo</div></div>
+        <div class="route-info-item"><div class="route-info-label">Distancia</div><div class="route-info-val">~2h vuelo</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Mar · Abr · Oct</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Túnez capital (inicio/fin)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Llegada a Túnez — Medina UNESCO y Sidi Bou Said</div>
+            <div class="day-subtitle">La medina más grande del Magreb · El pueblo azul y blanco · Café Sidi Chabaane</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">La Medina de Túnez — Patrimonio UNESCO desde 1979</div>
+              <div class="stop-desc">El vuelo desde Madrid o Barcelona dura algo menos de 2 horas (Tunisair, Transavia o Vueling tienen rutas frecuentes). Desde el aeropuerto Tunis-Carthage al centro son 20 minutos en taxi (~8 TND ≈ €2,50). La medina de Túnez es la más antigua y mejor conservada del norte de África: 700 monumentos medievales dentro de murallas del siglo VII, laberinto de zocos donde cada calle vende un gremio diferente (perfumistas, tejedores de seda, herreros, especieros). Entra por Bab el-Bhar (la puerta del mar), recorre la Gran Mezquita de la Zitouna (s.VII, no visitable por no musulmanes pero se puede ver el patio central) y piérdete en el souk des Etoffes.</div>
+              <div class="stop-price">Vuelo Madrid/Barcelona → Túnez (ida y vuelta, con antelación): €80–180/persona</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Sidi Bou Said — El pueblo azul y blanco más fotografiado de África</div>
+              <div class="stop-desc">A 20 km de Túnez capital (tren TGM desde Tunis Marine: 30 min, 0,90 TND ≈ €0,27), Sidi Bou Said es un pueblo de casas blancas con puertas azules cobalto colgado sobre el Mediterráneo. Fundado en el siglo XIII por ermitaños sufíes, el azul de puertas y ventanas fue estandarizado por ley en 1915 por el barón d'Erlanger (un aristócrata franco-tunecino enamorado del lugar). El Café Sidi Chabaane —encaramado en un acantilado con vista a 180°— sirve el té con pino del que Picasso y Simone de Beauvoir eran habituales. La puesta de sol desde aquí no tiene igual.</div>
+              <div class="stop-price">Tren Túnez → Sidi Bou Said: 0,90 TND ≈ €0,27 · Té con pino: 3–5 TND ≈ €0,90–1,50</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Cartago + Bardo — El Imperio más temido de Roma</div>
+            <div class="day-subtitle">Las ruinas de Aníbal · Los mejores mosaicos romanos del mundo · Termas de Antonino</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Cartago — la ciudad que desafió a Roma durante 200 años</div>
+              <div class="stop-desc">Cartago fue durante 600 años la ciudad más poderosa del Mediterráneo occidental: fundada en 814 a.C. por la reina fenicia Dido, se convirtió en una talasocrácia de 300 ciudades tributarias que controlaba el comercio desde España hasta Oriente Próximo. Aníbal Barca cruzó los Alpes con elefantes (218 a.C.) para invadir Roma directamente. Cuando Roma la destruyó finalmente en 146 a.C. (Tercera Guerra Púnica), la quemó durante 17 días y aró la tierra con sal. El resultado de esa destrucción sistemática son las ruinas que quedan: fragmentadas, dispersas por varios colinas, pero con una densidad de historia por metro cuadrado que supera casi cualquier lugar de Europa. Las Termas de Antonino (los baños romanos más grandes fuera de Roma: 3.000 personas/día, 145 d.C.) son la mejor parada del sitio.</div>
+              <div class="stop-price">Entrada a las ruinas de Cartago: 8 TND ≈ €2,50</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Museo del Bardo — la colección de mosaicos romanos más grande del mundo</div>
+              <div class="stop-desc">El Bardo, instalado en un palacio beylical del siglo XVI, alberga la mayor colección de mosaicos romanos del planeta: más de 3.000 piezas, algunas de 200 m². El mosaico de Virgilio (s.III d.C.) muestra al poeta flanqueado por las musas Clío y Melpómene con tanta precisión de detalle que se puede leer la inscripción. El famoso mosaico de Ulises y las Sirenas (s.II d.C., Dougga) tiene una perspectiva y un dominio del color que la fotografía no transmite. El Bardo es de esos museos que obligan a revisar lo que sabes sobre arte.</div>
+              <div class="stop-price">Entrada al Bardo: 11 TND ≈ €3,40</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Tozeur y el desierto del Sahara en 4WD</div>
+            <div class="day-subtitle">Oasis con palmeras datileras · Cañón de Chebika · Dunas del Sahara al atardecer</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Viaje a Tozeur — la puerta del Sahara tunecino</div>
+              <div class="stop-desc">Hay vuelo interno Túnez-Tozeur (Tunisair, ~1h, desde €40 ida) o bus nocturno desde la Gare Routière Sud (7-8h, ~25 TND ≈ €7,70). Tozeur es una ciudad-oasis de 350.000 palmeras datileras junto al Chott el-Jerid, el lago salado más grande de África del Norte. La arquitectura local (ladrillos de color arena con relieves geométricos en fachadas) es única en el norte de África. El zoco de dátiles es el más surtido del país: la variedad Deglet Nour de Tozeur está protegida con denominación de origen.</div>
+              <div class="stop-price">Vuelo interno Túnez-Tozeur: ~€40/persona · Bus: €7,70/persona · Alojamiento Tozeur (hotel oasis): €30–60 la noche doble</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Chebika, Tamerza y Mides — los cañones de la montaña</div>
+              <div class="stop-desc">A 90 km de Tozeur, los tres oasis de montaña en el borde del Atlas tunecino son paradas obligatorias. Chebika (el "mercado de sol") tiene una cascada que cae directamente al palmeral desde 30 metros. Tamerza es la ciudad fantasma de adobe más grande de Túnez: abandonada tras las lluvias torrenciales de 1969, sus casas de barro están medio derruidas pero perfectamente conservadas. Mides tiene el cañón más fotogénico: paredes de 50 metros de roca naranja brillante con un río en el fondo. La excursión en 4WD de día completo cuesta ~€35-50 por persona desde Tozeur, incluyendo Chott el-Jerid.</div>
+              <div class="stop-price">Excursión 4WD Tozeur-Chebika-Tamerza-Mides-Chott: €35–50/persona</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Dunas del Sahara al atardecer</div>
+              <div class="stop-desc">El Chott el-Jerid (el lago salado que cruza la carretera P16 en un dique de 30 km) tiene el mejor espejo de sal del mundo: en invierno, cuando hay una lámina de agua de pocos centímetros, el cielo se refleja perfectamente sobre el blanco. En verano, los espejismos sobre la sal seca producen un efecto visual que el cerebro no puede interpretar correctamente. Las dunas del Erg de Khbira (a 20 km de Tozeur) son el punto más accesible para ver las arenas del Sahara. Subir la primera duna al atardecer para ver el sol rojo hundirse sobre el naranja de la arena: el momento del viaje.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title">Matmata y Tataouine — los escenarios de Star Wars</div>
+            <div class="day-subtitle">Casas trogloditas del siglo I · Tatooine de George Lucas · Ksar Ouled Soltane</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Matmata — los trogloditas que inspiraron Tatooine</div>
+              <div class="stop-desc">A 45 km al sur de Gabès, Matmata es una comunidad bereber que construyó sus casas bajo tierra: pozos circulares de 10-15 metros de diámetro excavados en la roca, con habitaciones abiertas al patio central subterráneo. La técnica tiene al menos 2.000 años y fue la respuesta local a un clima donde el suelo mantiene temperatura constante de 20°C mientras afuera hay 45°C. George Lucas rodó aquí en 1976 las escenas de la granja de Lars en Star Wars: el Hotel Sidi Driss, donde vivía Luke Skywalker, sigue funcionando como hotel (puedes alojarte en el mismo patio donde se rodó la película). La mayoría de habitantes todavía viven en casas subterráneas activas.</div>
+              <div class="stop-price">Entrada a casas trogloditas privadas: 3–5 TND ≈ €0,90–1,50 · Hotel Sidi Driss (habitación doble): ~€25</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Ksar Ouled Soltane — el ksar más espectacular de Túnez</div>
+              <div class="stop-desc">A 25 km al sur de Tataouine, el Ksar Ouled Soltane es una fortaleza de graneros (ghorfas) de cuatro plantas construida en el siglo XIV-XV. El patio central —con las ghorfas apiladas formando un cilindro de piedra— tiene exactamente la misma geometría que los graneros de Star Wars (Lucas rodó aquí también). A diferencia de muchos ksour tunecinos, Ouled Soltane está en buen estado de conservación y todavía es usado parcialmente para almacenamiento. La luz de la tarde que entra por las ventanas rectangulares crea sombras de una geometría perfecta.</div>
+              <div class="stop-price">Entrada Ksar Ouled Soltane: 5 TND ≈ €1,55</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>Tatooine = Tataouine:</strong> El nombre del planeta donde vivía Luke Skywalker en Star Wars no es casualidad: George Lucas lo tomó directamente de la ciudad de Tataouine, donde rodó en 1976. El nombre "Tataouine" en bereber significa literalmente "las fuentes" o "los ojos de agua". Lucas rodó también en Ajim, Tozeur, Ksar Medenine y Matmata. Hoy hay un tour oficial "Star Wars en Túnez" con ruta completa que visita todos los escenarios en 2-3 días.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div>
+            <div class="day-title">Regreso a Túnez — último bazar y vuelo de vuelta</div>
+            <div class="day-subtitle">Souvenirs en el souk de las alfombras · Hammam histórico · Vuelo de regreso</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Souk des Chechias y hammam El-Kachachine</div>
+              <div class="stop-desc">La chechia es el gorro rojo de fieltro que ha definido la identidad norteafricana y otomana durante siglos. El souk de las chechias en la medina de Túnez tiene talleres activos donde se fabrican desde el siglo XIII: el proceso (lavar, teñir, secar al sol, enrollar y dar forma) dura 40 pasos y varios días. El hammam El-Kachachine (s.XVIII) es el más antiguo de la medina y uno de los pocos auténticos que quedan: entrada separada por género, masajista incluido, toallas propias de algodón. Una sesión cuesta ~8 TND ≈ €2,50. Es lo último que debes hacer antes de coger el taxi al aeropuerto.</div>
+              <div class="stop-price">Hammam completo con masaje: 8–15 TND ≈ €2,50–4,65</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto detallado</h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Detalle</th><th>2 personas</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida y vuelta</td><td>Madrid/BCN → Túnez (vuelo directo)</td><td>€120–280</td></tr>
+          <tr><td>Vuelo interno</td><td>Túnez → Tozeur (opcional, o bus)</td><td>€40–80 (opc.)</td></tr>
+          <tr><td>Alojamiento (5 noches)</td><td>Hoteles 2-3★ en Túnez, Tozeur y sur</td><td>€120–220</td></tr>
+          <tr><td>Transporte tierra</td><td>Taxis, trenes, buses, 4WD tour</td><td>€80–140</td></tr>
+          <tr><td>Comidas (5 días)</td><td>Restaurantes locales + mercados</td><td>€60–110</td></tr>
+          <tr><td>Entradas y tours</td><td>Bardo, Cartago, ksour, hammam</td><td>€40–70</td></tr>
+          <tr><td>Imprevistos</td><td>Agua, souvenirs, propinas</td><td>€20–40</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <div class="budget-total-label">Total estimado (2 personas, 5 días)</div>
+        <div class="budget-total-value">€480–940</div>
+      </div>
+      <div class="highlight-box" style="margin-top:16px;">
+        <strong>¿Por qué Túnez es tan barato?</strong> El dinar tunecino (TND) tiene una tasa de cambio muy favorable para el euro (1 €  ≈ 3,25 TND en 2025). Un menú completo cuesta 8–12 TND (€2,50–3,70). El transporte público es casi gratuito. Los precios del alojamiento para turistas europeos son muy competitivos. El mayor gasto es el vuelo: si se reserva con 6-8 semanas de antelación, los vuelos directos bajan de €80-100/persona.
+      </div>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Dónde dormir</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Hotel en la Medina de Túnez — riad auténtico:</strong> Varios riads dentro de la medina UNESCO. Precios: €30–80 la noche doble. El Dar Ben Gacem o el Hotel Majestic (exterior de la medina, época colonial, escalinata art-déco) son opciones con carácter. Busca en Booking filtrando por "Medina de Túnez".</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Hotel Sidi Driss (Matmata) — dormir en Star Wars:</strong> El mismo hotel donde se rodó Tatooine sigue funcionando. Habitaciones en las cuevas originales, muy básicas, a €20–25 la noche doble. No esperes lujo: es la experiencia, no el confort.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Tozeur — hotel oasis o dar:</strong> Los hoteles con jardín de palmeras en Tozeur son de los mejores por precio/calidad de África del Norte: €30–60 la noche doble con piscina y desayuno. El Dar Hi (diseño contemporáneo en adobe) o el Hotel Résidence Warda son buenas opciones.</div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato nacional</div>
+          <div class="gastro-title">Brik — el crujiente tunecino</div>
+          <div class="gastro-price">~2–3 TND ≈ €0,60–0,90</div>
+          <div class="gastro-desc">Masa frita de hoja (malsouka) rellena de huevo entero, atún, alcaparras y perejil. El truco es comerlo en un solo bocado antes de que el huevo líquido caiga. Es el snack omnipresente de Túnez, vendido en cada freidora callejera de la medina.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Favorito local</div>
+          <div class="gastro-title">Lablabi — sopa de garbanzos callejera</div>
+          <div class="gastro-price">~3–5 TND ≈ €0,90–1,55</div>
+          <div class="gastro-desc">Caldo de garbanzos sobre trozos de pan del día anterior, aliñado con harissa, comino, limón, aceite de oliva y huevo escalfado. Se sirve en un cuenco de cerámica y se come a primera hora de la mañana. Los tunecinos lo desayunan antes de ir al trabajo. Es el plato más barato y más reconfortante del país.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Dulce</div>
+          <div class="gastro-title">Makroudh — dátil y sémola fritos</div>
+          <div class="gastro-price">~1 TND ≈ €0,30/pieza</div>
+          <div class="gastro-desc">Pastel de sémola relleno de pasta de dátil (Deglet Nour de Tozeur) aromatizada con agua de rosas y naranja, frito y bañado en miel. La especialidad de Kairouan: se vende en las pastelerías de la medina envueltos en papel de periódico. Caliente y recién hecho es impresionante.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Condimento</div>
+          <div class="gastro-title">Harissa — el alma picante de Túnez</div>
+          <div class="gastro-price">~5–10 TND ≈ €1,55–3,10 (tarro grande)</div>
+          <div class="gastro-desc">La pasta de pimiento rojo seco, ajo, comino y cilantro que acompaña literalmente a todo en Túnez. La harissa de Nabeul está registrada como Patrimonio Inmaterial UNESCO (2022). Compra un tarro en el mercado central de Túnez: el de La Rose (marca local) es mejor que los de exportación. Ideal como souvenir.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos prácticos</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Mejor época:</strong> <strong>Marzo-abril y octubre-noviembre</strong> son ideales: temperaturas de 20–25°C en el norte y 25–30°C en el sur. El verano (junio-agosto) es muy caluroso en el interior (45°C en Tozeur). En invierno (dic-feb) el norte es templado pero el sur puede ser frío por las noches.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Visado:</strong> Los ciudadanos de la UE no necesitan visado para Túnez (entrada libre hasta 90 días). Solo pasaporte vigente con al menos 6 meses de validez.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Dinero:</strong> El dinar tunecino (TND) no se puede comprar fuera de Túnez. Saca efectivo en cajeros del aeropuerto o del centro de Túnez (los del banco STB y BNA tienen mejores tasas). Lleva euros en efectivo como respaldo. La mayoría de restaurantes y hoteles locales solo aceptan TND en efectivo.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Transporte:</strong> Para el sur (Tozeur, Matmata, Tataouine) lo más flexible es alquilar un coche pequeño en Túnez capital (~€30–45/día). La red de carreteras principales está en buen estado. Los buses largos (SNTRI) son muy baratos pero lentos. Los taxis de larga distancia (louages) son más rápidos y van cuando se llenan.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Vestimenta:</strong> Túnez es uno de los países más laicos del mundo árabe pero la vestimenta discreta (hombros cubiertos, rodillas cubiertas en mezquitas y medinas) es la norma correcta. En playas y zonas turísticas, sin restricciones.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">6</div>
+        <div class="tip-text"><strong>Regateo:</strong> En los zocos, el precio inicial es siempre negociable. El protocolo: acepta el té, hace preguntas sobre la mercancía, ofrece el 40% del precio pedido, acepta en el 60-70%. Si no llevas interés real en comprar, no empieces a regatear: es un compromiso social.</div>
+      </div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-checklist">
+      <h2 class="section-heading" id="h-checklist">Qué llevar</h2>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Protector solar SPF50 y sombrero de ala ancha (sol intenso en el sur)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Ropa ligera + capa media para noches en el desierto (puede bajar a 10-15°C)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Ropa que cubra hombros y rodillas para medinas y mezquitas</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Efectivo en euros para cambiar en el aeropuerto + algo en TND</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Botella de agua reutilizable (el agua del grifo no es potable en el sur)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Pañuelo/fular grande (para el frío nocturno del desierto y para mezquitas)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Crema labial con protección solar (el viento seco del Sahara reseca la piel)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Pastillas de rehidratación oral (por si el calor pasa factura)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Tarjeta de crédito Visa/Mastercard para cajeros (no AMEX)</span></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">197</div><div class="emerg-note">Guardia Nacional Túnez</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">190</div><div class="emerg-note">SAMU Túnez</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España en Túnez</div><div class="emerg-value">+216 71 788 101</div><div class="emerg-note">Embajada de España · Túnez capital</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Turística</div><div class="emerg-value">+216 71 340 966</div><div class="emerg-note">Policía Turística · Medina de Túnez</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres combinar Túnez con Marruecos o Egipto?</h3>
+      <p>Usa el chatbot de Routlo para diseñar una ruta del norte de África adaptada a tu presupuesto.</p>
+      <a href="../chatbot.html" class="cta-btn">Planificar mi viaje →</a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios indicados son estimaciones basadas en datos de viajeros independientes (2024–2025). El tipo de cambio TND/EUR puede variar. Los vuelos directos Madrid/Barcelona-Túnez fluctúan: se recomienda reservar con 6-8 semanas de antelación. Routlo no recibe comisiones por los servicios mencionados.
+    </div>
+
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;background:#040810;border-top:1px solid rgba(255,255,255,0.06);padding:48px 24px 32px;text-align:center;">
+  <a href="../index.html" style="display:inline-block;margin-bottom:20px;">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:36px;border-radius:8px;background:#fff;padding:3px 10px;opacity:0.7;">
+  </a>
+  <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;font-size:0.85rem;">
+    <a href="../itinerarios.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Itinerarios</a>
+    <a href="../mapa.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Mapa</a>
+    <a href="../chatbot.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Chatbot IA</a>
+    <a href="../itinerarios-espana.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">España</a>
+  </div>
+  <p style="font-size:0.78rem;color:rgba(237,238,242,0.25);margin:0;">© 2025 Routlo · Guías de viaje independientes · Todos los derechos reservados</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../assets/shared.js"></script>
+<script>
+(function(){
+  const isEs = navigator.language.startsWith('es');
+  const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false }).setView([33.5, 9.5], 6);
+  if (isEs) {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      className: 'tile-osm-es'
+    }).addTo(map);
+    const style = document.createElement('style');
+    style.textContent = '.tile-osm-es { filter: grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg); }';
+    document.head.appendChild(style);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB'
+    }).addTo(map);
+  }
+
+  const gold = { radius: 7, fillColor: '#c9a96e', color: '#a07840', weight: 2, opacity: 1, fillOpacity: 0.9 };
+  const green = { radius: 9, fillColor: '#5ecb8a', color: '#3aaa66', weight: 2, opacity: 1, fillOpacity: 0.95 };
+
+  const waypoints = [
+    [36.819, 10.166],
+    [36.868, 10.348],
+    [36.852, 10.329],
+    [33.919, 8.130],
+    [33.543, 9.968],
+    [32.932, 10.452]
+  ];
+
+  L.polyline(waypoints, { color: '#c9a96e', weight: 3, opacity: 0.7, dashArray: '6,5' }).addTo(map);
+
+  const stops = [
+    { coords: [36.819, 10.166], label: 'Túnez capital', opts: green },
+    { coords: [36.868, 10.348], label: 'Sidi Bou Said', opts: gold },
+    { coords: [36.852, 10.329], label: 'Cartago', opts: gold },
+    { coords: [33.919, 8.130], label: 'Tozeur (Sahara)', opts: gold },
+    { coords: [33.543, 9.968], label: 'Matmata (Star Wars)', opts: gold },
+    { coords: [32.932, 10.452], label: 'Tataouine + Ksar Ouled Soltane', opts: gold }
+  ];
+
+  stops.forEach(s => {
+    L.circleMarker(s.coords, s.opts).addTo(map)
+      .bindPopup(`<strong style="color:#c9a96e">${s.label}</strong>`);
+  });
+})();
+</script>
+</body>
+</html>

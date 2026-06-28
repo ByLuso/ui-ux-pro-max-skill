@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jordania — 6 días: Petra, Wadi Rum y el Mar Muerto bajo €900 para dos | Routlo</title>
+  <meta name="description" content="6 días en Jordania: la ciudad nabatea de Petra tallada en roca rosada, el desierto lunar de Wadi Rum bajo las estrellas, flotar en el Mar Muerto y Amán. Bajo €900 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0a00 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#150800 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#200d00 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#1a0800 0%,#3a1200 40%,#5a2500 70%,rgba(201,169,110,0.2) 100%),url('https://images.unsplash.com/photo-1549880338-65ddcdfd017b?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Oriente Próximo · Jordania</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Jordania</h1>
+  <p class="dest-country">Petra · Wadi Rum · Mar Muerto · Bajo €900 para dos</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Oriente Próximo · Jordania</span>
+    <span class="dest-badge gold">6 días · Los mayores monumentos del mundo</span>
+    <span class="dest-badge gold">💶 ~860 € dos personas (vuelos incluidos)</span>
+    <span class="dest-badge">🌅 Mar · Abr · Oct · Nov</span>
+    <span class="dest-badge">✈️ Vuelo directo desde Madrid a Amán</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">6 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~860 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo directo</div></div>
+        <div class="route-info-item"><div class="route-info-label">Vuelo</div><div class="route-info-val">~4h 30min</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Mar · Abr · Oct</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Amán (inicio/fin)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Llegada a Amán — La ciudad de las siete colinas</div>
+            <div class="day-subtitle">Ciudadela · Teatro Romano · Souq Al-Bukharia · Primera noche hachemita</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">La Ciudadela de Amán (Jabal al-Qal'a)</div>
+              <div class="stop-desc">Sobre la colina más alta de Amán, la Ciudadela acumula 9.000 años de historia: el Templo de Hércules romano (siglo II d.C.), el Palacio Omeya del siglo VIII, y las murallas de la Edad de Bronce. Desde la terraza, panorámica de Amán toda blanca de piedra caliza extendiéndose por ocho colinas. El Museo Arqueológico guarda los Rollos del Mar Muerto.</div>
+              <div class="stop-price">Entrada ciudadela + museo: ~€6/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Teatro Romano del siglo II d.C.</div>
+              <div class="stop-desc">Tallado en la roca en el siglo II bajo el gobierno de Marco Aurelio, este teatro aforo 6.000 personas y tiene una acústica perfecta. Los nikkos (pequeños nichos para las estatuas) y la orchestra aún se conservan. Abajo, la plaza del Hashimiyya con sus cafés de narguilé y vendedores de zumo de granada.</div>
+              <div class="stop-price">Entrada: ~€4/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Cena en Rainbow Street</div>
+              <div class="stop-desc">La calle más hipster de Amán: galerías de arte, cafés con terraza, restaurantes de mezze árabes y tiendas de diseño jordano. Cena en Sufra o Hashem (el falafel y hummus más famoso de Amán, abierto 24h, plato por €2). Mejor ambiente nocturno de la ciudad.</div>
+              <div class="stop-price">Cena completa: €6-12/pax</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Jerash y Castillo de Ajloun</div>
+            <div class="day-subtitle">Pompeya del Oriente · Arco de Adriano · Fortaleza árabe en el bosque</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Jerash — La ciudad romana mejor preservada fuera de Italia</div>
+              <div class="stop-desc">A solo 48 km de Amán, Jerash (la antigua Gerasa) es la ciudad romana mejor conservada de Oriente Próximo y una de las mejor preservadas del mundo: el Arco Triunfal de Adriano (129 d.C.), el Foro Oval único en el mundo romano, el Templo de Artemisa, el Ninfeo, el Hipódromo con carreras de cuadrigas los fines de semana. Calcles, columnatas, mosaicos: todo in situ.</div>
+              <div class="stop-price">Entrada Jerash: ~€12/pax · Taxi Amán–Jerash: €25-30</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Castillo de Ajloun (Qal'at Ar-Rabad)</div>
+              <div class="stop-desc">Fortaleza islámica del siglo XII construida por Saladino para frenar las Cruzadas, incrustada en un bosque de pinos y encinas a 1.250 metros de altitud. La vista desde las torres sobre el Valle del Jordán y, en días claros, el Mar de Galilea en Israel es sobrecogedora. El bosque de Ajloun huele a pino mediterráneo, casi como la sierra madrileña.</div>
+              <div class="stop-price">Entrada: ~€4/pax</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Petra — La ciudad rosa de los nabateos (día 1)</div>
+            <div class="day-subtitle">El Siq · El Tesoro · Calle de las Fachadas · Tumba del Urn</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">El Siq — El desfiladero de 1,2 km</div>
+              <div class="stop-desc">La entrada a Petra es por el Siq, un desfiladero de 1,2 km de largo y 80 metros de profundidad excavado por el río durante millones de años. Las paredes de arenisca rosa, naranja y lila ondulante crean una experiencia casi mística. Al final del desfiladero, el primer destello del Tesoro aparece entre las rocas: uno de los momentos más emocionantes de cualquier viaje.</div>
+              <div class="stop-price">Entrada Petra 1 día: ~€75/pax (incluido en Jordan Pass)</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Al-Khazneh — El Tesoro nabateo</div>
+              <div class="stop-desc">El monumento más icónico de Jordania: fachada tallada en roca rosada de 43 metros de altura, construida como mausoleo real nabateo en el siglo I a.C. Los nabateos fueron maestros del comercio en la Ruta de la Seda y el Incienso. La fachada helenística (columnas corintias, frisos griegos) en pleno desierto árabe es la síntesis perfecta de una civilización de cruce de culturas.</div>
+              <div class="stop-price">Incluida en entrada Petra</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Calle de las Fachadas y Gran Templo</div>
+              <div class="stop-desc">La calle principal de la ciudad nabatea: 80 tumbas talladas en la roca en distintos estilos (asirio, helenístico, romano), el Teatro Nabateo (con capacidad para 7.000 personas), el Gran Templo excavado por arqueólogos de Brown University desde 1993. Al atardecer, las paredes de arenisca cambian de color cada 15 minutos: del rosa pálido al naranja fuego.</div>
+              <div class="stop-price">Incluida en entrada Petra</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Petra — El Monasterio y Wadi Rum de noche</div>
+            <div class="day-subtitle">Al-Deir (El Monasterio) · Wadi Rum · Noche bajo las estrellas en campamento beduino</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Al-Deir — El Monasterio (800 escalones)</div>
+              <div class="stop-desc">El monumento más impresionante de Petra y el menos visitado por su acceso: 800 peldaños tallados en la roca durante 45 minutos de subida. Al-Deir es más grande que el Tesoro (50m de alto, 45m de ancho), más austero y más sagrado: usado como iglesia por los primeros cristianos nabateos. La vista desde la terraza frente al Monasterio sobre el desierto de piedra es interminable.</div>
+              <div class="stop-price">Incluida en entrada Petra</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Traslado a Wadi Rum (1h 30min)</div>
+              <div class="stop-desc">El "Valle de la Luna": desierto de arenisca y granito rojo-naranja de 720 km² declarado Patrimonio de la Humanidad por la UNESCO. El paisaje es tan lunar que la NASA lo usó como escenario de entrenamiento. Ha sido set de rodaje de Lawrence de Arabia (1962), The Martian (2015) y Rogue One (2016). Los beduinos viven aquí desde hace 2.000 años.</div>
+              <div class="stop-price">Taxi Petra–Wadi Rum: ~€30</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Safari en 4WD y noche en campamento beduino</div>
+              <div class="stop-desc">Tour de 4x4 al atardecer por el desierto: Las Siete Columnas de Sabiduría (donde Lawrence estuvo), el puente de roca de Burdah, las pinturas rupestres del Neolítico y el Jebel Rum (1.754m). Noche en jaima beduina con cena de zarb (cordero cocido bajo la arena) y cielo estrellado: con 0% de contaminación lumínica, la Vía Láctea es visible a simple vista.</div>
+              <div class="stop-price">Safari + noche en camp: ~€60-80/pax</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Mar Muerto — El punto más bajo de la Tierra</div>
+            <div class="day-subtitle">-430m bajo el nivel del mar · Baño flotante · Lodo mineral · Costa jordana</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Carretera del Rey y Wadi Mujib</div>
+              <div class="stop-desc">La Carretera del Rey (ruta bíblica de los Reyes) serpentea por los cañones más espectaculares de Jordania. El Wadi Mujib, el "Gran Cañón de Jordania", cae 900 metros hasta el Mar Muerto. La panorámica desde el puente de Wadi Mujib sobre el abismo es uno de los paisajes más sobrecogedores de todo Oriente Próximo.</div>
+              <div class="stop-price">Coche de alquiler o taxi compartido: €25-40</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Baño en el Mar Muerto (-430m)</div>
+              <div class="stop-desc">El lago más salado del mundo (34% de salinidad, 10 veces el océano) y el punto más bajo de la superficie terrestre a -430 metros. La flotabilidad es tan extrema que es físicamente imposible hundirse: el cuerpo sale disparado hacia la superficie. El lodo negro mineral del fondo se aplica como mascarilla facial (rico en magnesio, calcio y potasio). Experiencia única e irrepetible.</div>
+              <div class="stop-price">Playa pública gratuita o resort privado ~€15/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Monte Nebo — Donde Moisés vio la Tierra Prometida</div>
+              <div class="stop-desc">Según la tradición bíblica, aquí murió Moisés después de contemplar la Tierra Prometida que no pisaría. A 817 metros de altitud con vistas simultáneas al Mar Muerto, al Valle del Jordán, a Jericó y a Jerusalén (en días claros). El serpentino de bronce es réplica del original símbolo bíblico. Atardecer épico.</div>
+              <div class="stop-price">Entrada: ~€3/pax</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">06</div>
+          <div>
+            <div class="day-title">Amán y regreso</div>
+            <div class="day-subtitle">Mercado de Souq Jara · Barrio de Jabal Amman · Vuelo de regreso</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Souq Jara (viernes y sábados, en temporada)</div>
+              <div class="stop-desc">El mercadillo cultural más pintoresco de Amán, en el corazón del barrio de Primera Circunvalación: artesanía jordana, joyas de plata con turquesas, cerámicas de Hebron, aceites de oliva y jabones del Mar Muerto. Ambiente local entre músicos, pintores callejeros y cafés con terraza. Solo existe en la "calle del viernes".</div>
+              <div class="stop-price">Entrada libre</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Mansaf de despedida</div>
+              <div class="stop-desc">El plato nacional de Jordania: cordero entero cocido en jameed (suero de leche fermentado y seco de oveja) sobre arroz con almendras y piñones tostados. Se sirve en una fuente enorme y se come de pie alrededor de la mesa. Símbolo de hospitalidad jordana y declarado Patrimonio Cultural Inmaterial por la UNESCO.</div>
+              <div class="stop-price">~€12-18/pax en restaurante local</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Aeropuerto Queen Alia</div>
+              <div class="stop-desc">El aeropuerto internacional de Amán está a 30 km del centro (45 min). Vuelos directos con Royal Jordanian e Iberia desde Madrid-Barajas. También opciones más económicas con EasyJet, Ryanair y Turkish Airlines vía Estambul.</div>
+              <div class="stop-price">Taxi centro–aeropuerto: ~€15-18</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto detallado</h2>
+      <div class="highlight-box">
+        <strong>Clave del ahorro: Jordan Pass</strong><br>
+        El Jordan Pass (~€85/pax) incluye el visado de entrada + Petra 2 días + más de 40 atracciones del país. Si visitas Petra al menos 2 días, el Jordan Pass sale más barato que pagar todo por separado. Compra siempre antes de llegar al aeropuerto.
+      </div>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Detalle</th><th>2 personas</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida y vuelta</td><td>Madrid ↔ Amán · Iberia/RJ/EasyJet</td><td>€300–440</td></tr>
+          <tr><td>Jordan Pass (visa + Petra)</td><td>Incluye visado + Petra 2 días + 40 sitios</td><td>€170</td></tr>
+          <tr><td>Alojamiento</td><td>3n Amán + 1n Petra + 1n Wadi Rum camp</td><td>€120–160</td></tr>
+          <tr><td>Transporte interno</td><td>Taxis, marshrutkas, coche alquiler 1 día</td><td>€80–110</td></tr>
+          <tr><td>Comidas (12 comidas)</td><td>Hummus, mansaf, zarb beduino, shawarma</td><td>€60–85</td></tr>
+          <tr><td>Safari Wadi Rum</td><td>4x4 + noche en campamento beduino</td><td>€120–160</td></tr>
+          <tr><td>Extras y souvenirs</td><td>Lodo Mar Muerto, artesanía, jabones</td><td>€30–50</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado (2 pax, 6 días)</span>
+        <span class="budget-total-value">€880 – €1.175</span>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.45);margin-top:10px;">Temporada baja (dic–feb) los vuelos pueden bajar a €200 pp. Evitar agosto (calor extremo de 40ºC+).</p>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Dónde dormir</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Amán: Barrio de Weibdeh o Primera Circunvalación</strong> — Los barrios más auténticos y bien comunicados. Jordan Tower Hostel: habitación doble desde €20/noche, desayuno incluido, terraza con vistas a la ciudadela. También recomendado: The Nomads Hostel.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Petra: alojarse en Wadi Musa</strong> — El pueblo pegado a la entrada de Petra. Rocky Mountain Hotel (€25-35 doble) y Petra Guest House (€40-50, justo en la puerta del yacimiento) son los más valorados. Reservar siempre con antelación.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Wadi Rum: campamento beduino</strong> — Los campamentos van desde los básicos (jaima tradicional con colchoneta, €25/pax con cena) hasta los "bubble tents" de lujo bajo las estrellas (€80-120/pax). Para la experiencia auténtica, elegir los gestionados por beduinos locales (Wadi Rum Bedouin Camp, Rahayeb Camp).</div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía jordana</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato nacional</div>
+          <div class="gastro-title">Mansaf</div>
+          <div class="gastro-price">€12–18/pax</div>
+          <div class="gastro-desc">Cordero con arroz y jameed (suero fermentado de oveja). Patrimonio UNESCO. Símbolo máximo de hospitalidad jordana. Se come de pie alrededor de la fuente con la mano derecha.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Cocina beduina</div>
+          <div class="gastro-title">Zarb</div>
+          <div class="gastro-price">€15-20/pax en camp</div>
+          <div class="gastro-desc">Cordero y verduras enterrados y cocidos 4 horas bajo la arena del desierto en un horno de leña subterráneo. Tradición beduina de siglos. Solo en Wadi Rum. Sabor ahumado e incomparable.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Street food</div>
+          <div class="gastro-title">Falafel de Hashem</div>
+          <div class="gastro-price">€1.50–2/pax</div>
+          <div class="gastro-desc">El restaurante Hashem de Amán lleva desde 1952 haciendo el mejor falafel del país. Abierto 24 horas, frecuentado por el rey Abdullah. Plato de falafel + hummus + pan de pita: €2.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Postre</div>
+          <div class="gastro-title">Knafeh</div>
+          <div class="gastro-price">€2–3 ración</div>
+          <div class="gastro-desc">Pastel crujiente de fideos de sémola relleno de queso fresco con sirope de agua de rosas y azahar, cubierto de pistachos. El postre árabe más famoso. En Amán, la mejor versión está en Habibah Sweets.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos imprescindibles</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Jordan Pass es casi obligatorio.</strong> Si visitas Petra (€75 por 1 día o €80 por 2 días), el Jordan Pass (~€85) incluye el visado de llegada (~€28) + Petra + 40 atracciones más. Sale mucho más barato y se compra online antes de viajar en jordanpass.jo</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Petra requiere al menos 2 días.</strong> El yacimiento tiene 264 km² y los turistas solo ven el 5% caminando por las rutas principales. El Monasterio Al-Deir, el punto más alto y más impresionante, se queda fuera del itinerario de quien solo viene 1 día.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Ropa respetuosa.</strong> Jordania es uno de los países árabes más abiertos y seguros para turistas, pero se agradece llevar hombros y rodillas cubiertos fuera de la playa del Mar Muerto. Especialmente en mezquitas y mercados tradicionales.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Evitar Petra en verano.</strong> En julio y agosto la temperatura en el cañón supera los 40ºC. La mejor época es marzo-abril (flores silvestres) y octubre-noviembre (luz dorada y temperatura perfecta). En invierno hay riesgo de flash floods en el Siq.</div>
+      </div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-checklist">
+      <h2 class="section-heading" id="h-checklist">Qué llevar</h2>
+      <div class="check-item"><div class="check-box"></div><span>Jordan Pass descargado en el móvil (jordanpass.jo)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Ropa cómoda para caminar (Petra: 10-15 km diarios sobre terreno irregular)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Bañador para el Mar Muerto y ropa que no importe manchar de lodo</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Crema solar y sombrero (sol del desierto intensísimo)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Dinares jordanos en efectivo (JOD) para mercados y taxis</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Adaptador tipo G (enchufes británicos en Jordania)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Pañuelo o bufanda (protección de arena en Wadi Rum)</span></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias y datos útiles</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias</div><div class="emerg-value">911</div><div class="emerg-note">Policía · Bomberos · Ambulancia jordana</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital</div><div class="emerg-value">+962 6 560 7001</div><div class="emerg-note">Jordan Hospital, Amán · Privado, inglés</div></div>
+        <div class="emerg-card"><div class="emerg-label">Moneda</div><div class="emerg-value">Dinar jordano</div><div class="emerg-note">JOD · 1 JOD = ~€1.28 (2025)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Idioma</div><div class="emerg-value">Árabe</div><div class="emerg-note">Inglés muy extendido en turismo</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Listo para explorar Jordania?</h3>
+      <p>Planifica tu ruta por Petra, Wadi Rum y el Mar Muerto con inteligencia artificial y encuentra los mejores precios.</p>
+      <a href="../chatbot.html" class="cta-btn">Planificar con Routlo IA →</a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios indicados son estimaciones orientativas en temporada media (marzo-abril / octubre-noviembre 2025-2026). Vuelos con Royal Jordanian/Iberia/EasyJet desde Madrid. Jordan Pass adquirido online antes del viaje. Este contenido es informativo y no constituye una oferta comercial.
+    </div>
+
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;background:rgba(4,8,16,0.95);border-top:1px solid rgba(255,255,255,0.08);padding:40px 24px;text-align:center;">
+  <a href="../index.html" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:20px;">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:32px;border-radius:6px;background:#fff;padding:2px 8px;">
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;color:#edeef2;font-weight:700;">Routlo</span>
+  </a>
+  <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-bottom:16px;">Itinerarios de viaje con inteligencia artificial · Jordania y más de 100 destinos</p>
+  <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;font-size:0.8rem;">
+    <a href="../itinerarios.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Itinerarios</a>
+    <a href="../mapa.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Mapa</a>
+    <a href="../chatbot.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Chatbot IA</a>
+  </div>
+  <p style="font-size:0.72rem;color:rgba(237,238,242,0.25);margin-top:20px;">© 2025 Routlo · Todos los derechos reservados</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../assets/shared.js"></script>
+<script>
+(function(){
+  const isEs = navigator.language.startsWith('es');
+  const tileUrl = isEs
+    ? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+  const tileAttr = isEs
+    ? '© OpenStreetMap contributors'
+    : '© OpenStreetMap © CARTO';
+
+  const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false }).setView([31.0, 36.5], 7);
+  const tileLayer = L.tileLayer(tileUrl, { attribution: tileAttr, maxZoom: 18 }).addTo(map);
+
+  if (isEs) {
+    tileLayer.getContainer && tileLayer.once('load', function() {
+      const c = tileLayer.getContainer();
+      if (c) c.style.cssText += 'filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';
+    });
+  }
+
+  const waypoints = [
+    { latlng: [31.956, 35.945], label: 'Amán', color: '#5ecb8a', start: true },
+    { latlng: [32.274, 35.900], label: 'Jerash', color: '#c9a96e' },
+    { latlng: [30.328, 35.479], label: 'Petra', color: '#c9a96e' },
+    { latlng: [29.573, 35.418], label: 'Wadi Rum', color: '#c9a96e' },
+    { latlng: [31.559, 35.471], label: 'Mar Muerto', color: '#c9a96e' },
+    { latlng: [31.776, 35.726], label: 'Monte Nebo', color: '#c9a96e' }
+  ];
+
+  const line = L.polyline(waypoints.map(w => w.latlng), { color: '#c9a96e', weight: 3, opacity: 0.75 }).addTo(map);
+
+  waypoints.forEach(function(wp) {
+    const icon = L.divIcon({
+      className: '',
+      html: '<div style="width:12px;height:12px;border-radius:50%;background:' + wp.color + ';border:2px solid #fff;box-shadow:0 0 6px rgba(0,0,0,0.5);"></div>',
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
+    });
+    L.marker(wp.latlng, { icon: icon }).addTo(map).bindPopup('<strong>' + wp.label + '</strong>');
+  });
+})();
+
+window.addEventListener('scroll', function() {
+  const nav = document.querySelector('nav[role="navigation"]');
+  if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+(function() {
+  const links = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('active'); });
+        const id = e.target.getAttribute('id');
+        const a = document.querySelector('.toc-list a[href="#' + id + '"]');
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  document.querySelectorAll('.itin-section[id]').forEach(function(s) { observer.observe(s); });
+})();
+</script>
+</body>
+</html>
