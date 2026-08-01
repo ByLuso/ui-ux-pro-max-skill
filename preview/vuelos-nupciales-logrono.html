@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0f3d24">
+<meta name="description" content="Probabilidad de vuelos nupciales de hormigas en Logroño según temperatura, humedad, viento, lluvia reciente y presión atmosférica.">
+<title>Vuelos Nupciales · Logroño</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root {
+    --color-primary: #15803D;
+    --color-primary-dark: #0F3D24;
+    --color-secondary: #059669;
+    --color-accent: #B45309;
+    --color-medium: #B45309;
+    --color-low: #6B7563;
+    --color-bg: #F4F7F0;
+    --color-surface: #FFFFFF;
+    --color-surface-alt: #EEF3E7;
+    --color-border: #DCE6D6;
+    --color-foreground: #14231A;
+    --color-muted-foreground: #4B5D53;
+    --color-destructive: #B42318;
+    --color-ring: #15803D;
+    --radius-shell: 28px;
+    --radius-card: 20px;
+    --radius-btn: 14px;
+    --shadow-card: 0 1px 2px rgba(20, 35, 26, 0.06), 0 8px 24px -8px rgba(20, 35, 26, 0.16);
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --duration-fast: 180ms;
+    --duration-med: 320ms;
+    --font-display: 'Lora', Georgia, serif;
+    --font-body: 'Raleway', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-primary: #4ADE80;
+      --color-primary-dark: #052E16;
+      --color-secondary: #34D399;
+      --color-accent: #F59E0B;
+      --color-medium: #F59E0B;
+      --color-low: #94A399;
+      --color-bg: #0B1710;
+      --color-surface: #12211A;
+      --color-surface-alt: #182B21;
+      --color-border: #24392C;
+      --color-foreground: #EAF3EC;
+      --color-muted-foreground: #A9BBAE;
+      --color-destructive: #F87171;
+      --color-ring: #4ADE80;
+      --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -8px rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background:
+      radial-gradient(60% 50% at 15% 0%, rgba(21,128,61,0.16), transparent 60%),
+      radial-gradient(50% 40% at 100% 10%, rgba(180,83,9,0.10), transparent 60%),
+      var(--color-bg);
+    font-family: var(--font-body);
+    color: var(--color-foreground);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: -999px;
+    top: auto;
+    background: var(--color-primary);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 0 0 10px 0;
+    z-index: 1000;
+  }
+  .skip-link:focus {
+    left: 0;
+    top: 0;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+  .icon-fill { fill: currentColor; stroke: none; }
+  .icon-sm { width: 16px; height: 16px; }
+  .icon-lg { width: 28px; height: 28px; }
+
+  .app-shell {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100dvh;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .app-shell {
+      max-width: 720px;
+      margin: var(--space-5) auto;
+      min-height: calc(100dvh - 48px);
+      border-radius: var(--radius-shell);
+      overflow: hidden;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .app-shell { max-width: 980px; }
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 130%);
+    color: #F3FAF3;
+    padding: var(--space-4) var(--space-5);
+    overflow: hidden;
+  }
+
+  header::before {
+    content: "";
+    position: absolute;
+    inset: -20% -10% auto auto;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    position: relative;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .brand h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.2px;
+  }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    cursor: pointer;
+    transition: background var(--duration-fast) ease, transform var(--duration-fast) ease;
+  }
+  .icon-btn:hover { background: rgba(255,255,255,0.22); }
+  .icon-btn:active { transform: scale(0.96); }
+
+  .location-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+    font-size: 0.82rem;
+    color: #DDEFE0;
+    position: relative;
+  }
+  .location-row .icon { width: 15px; height: 15px; }
+
+  .time-row {
+    margin-top: 2px;
+    font-size: 0.72rem;
+    color: rgba(243,250,243,0.75);
+    display: flex;
+    gap: var(--space-3);
+    position: relative;
+  }
+
+  main {
+    flex: 1;
+    padding: var(--space-4);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    align-content: start;
+  }
+
+  @media (min-width: 768px) {
+    main {
+      grid-template-columns: 1fr 1fr;
+      padding: var(--space-5);
+      gap: var(--space-5);
+    }
+    .span-2 { grid-column: 1 / -1; }
+  }
+
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-card);
+  }
+
+  .card h2, .card h3 {
+    margin: 0 0 var(--space-3) 0;
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    color: var(--color-primary-dark);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  @media (prefers-color-scheme: dark) {
+    .card h2, .card h3 { color: var(--color-primary); }
+  }
+
+  .card h2 .icon, .card h3 .icon { color: var(--color-secondary); }
+
+  /* Hero / probability gauge */
+  .hero-card {
+    background:
+      radial-gradient(120% 100% at 0% 0%, rgba(21,128,61,0.10), transparent 60%),
+      var(--color-surface-alt);
+    text-align: center;
+  }
+
+  .gauge-wrap {
+    display: flex;
+    justify-content: center;
+    margin: var(--space-2) 0;
+  }
+
+  .gauge { width: 168px; height: 168px; }
+  .gauge-bg { fill: none; stroke: var(--color-border); stroke-width: 12; }
+  .gauge-value {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 900ms cubic-bezier(.22,.9,.32,1);
+  }
+  .gauge-high { stroke: var(--color-primary); }
+  .gauge-medium { stroke: var(--color-medium); }
+  .gauge-low { stroke: var(--color-low); }
+  .gauge-number {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    fill: var(--color-foreground);
+    font-variant-numeric: tabular-nums;
+  }
+  .gauge-caption { font-size: 9px; fill: var(--color-muted-foreground); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .hero-status {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: var(--space-2) 0 var(--space-1);
+  }
+  .hero-sub { color: var(--color-muted-foreground); font-size: 0.88rem; margin: 0; }
+
+  .condition-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: var(--space-3);
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .weather-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+  .weather-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+  .weather-item .icon { color: var(--color-secondary); margin-bottom: 4px; }
+  .weather-item span {
+    display: block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-top: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+  .weather-item small { color: var(--color-muted-foreground); font-size: 0.68rem; }
+
+  /* Factor breakdown */
+  .factor-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  .factor-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: 14px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-alt);
+  }
+  .factor-icon { color: var(--color-primary); margin-top: 2px; }
+  .factor-body { flex: 1; min-width: 0; }
+  .factor-top { display: flex; justify-content: space-between; gap: var(--space-2); align-items: baseline; }
+  .factor-label { font-weight: 600; font-size: 0.86rem; }
+  .factor-value { font-weight: 700; font-size: 0.86rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .factor-note { margin: 2px 0 0; font-size: 0.76rem; color: var(--color-muted-foreground); line-height: 1.35; }
+  .factor-status { margin-top: 2px; }
+  .factor-good .factor-status { color: var(--color-primary); }
+  .factor-neutral .factor-status { color: var(--color-medium); }
+  .factor-bad .factor-status { color: var(--color-destructive); }
+
+  /* Map */
+  .map-card { display: flex; flex-direction: column; }
+  #probabilityMap {
+    width: 100%;
+    height: 240px;
+    border-radius: 14px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-alt);
+    z-index: 0;
+  }
+  @media (min-width: 768px) { #probabilityMap { height: 300px; } }
+
+  .map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    font-size: 0.76rem;
+    color: var(--color-muted-foreground);
+  }
+  .map-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .map-summary { margin: var(--space-3) 0 0; font-size: 0.8rem; color: var(--color-muted-foreground); }
+  .map-fallback {
+    padding: var(--space-4);
+    border-radius: 14px;
+    border: 1px dashed var(--color-border);
+    color: var(--color-muted-foreground);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  .pin-marker svg { width: 32px; height: 32px; color: var(--color-primary-dark); filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); }
+  @media (prefers-color-scheme: dark) { .pin-marker svg { color: var(--color-primary); } }
+
+  /* Hourly */
+  .hourly-list { display: flex; flex-direction: column; gap: var(--space-2); }
+  .hour-row {
+    display: grid;
+    grid-template-columns: 52px 1fr auto;
+    align-items: center;
+    gap: var(--space-3);
+    background: var(--color-surface-alt);
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--color-border);
+  }
+  .hour-time { font-weight: 700; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+  .hour-data { display: flex; gap: var(--space-3); color: var(--color-muted-foreground); font-size: 0.72rem; flex-wrap: wrap; }
+  .hour-data span { display: inline-flex; align-items: center; gap: 3px; font-variant-numeric: tabular-nums; }
+  .hour-data .icon { width: 14px; height: 14px; }
+  .hour-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .badge-high { background: rgba(21,128,61,0.14); color: var(--color-primary); }
+  .badge-medium { background: rgba(180,83,9,0.14); color: var(--color-medium); }
+  .badge-low { background: rgba(107,117,99,0.16); color: var(--color-low); }
+  .hour-badge .icon { width: 14px; height: 14px; }
+
+  /* Species */
+  .species-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  @media (min-width: 640px) { .species-gallery { grid-template-columns: repeat(4, 1fr); } }
+  .species-card {
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .species-img-wrap { aspect-ratio: 4 / 3; overflow: hidden; background: var(--color-border); }
+  .species-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .species-info { padding: 10px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .species-common { font-weight: 700; font-size: 0.78rem; }
+  .species-sci { font-style: italic; color: var(--color-secondary); font-size: 0.7rem; }
+  .species-desc { font-size: 0.7rem; color: var(--color-muted-foreground); line-height: 1.35; }
+  .species-trigger { font-size: 0.68rem; color: var(--color-primary-dark); background: rgba(21,128,61,0.10); border-radius: 8px; padding: 5px 6px; line-height: 1.3; }
+  @media (prefers-color-scheme: dark) { .species-trigger { color: var(--color-primary); background: rgba(74,222,128,0.10); } }
+  .species-credit { font-size: 0.6rem; color: var(--color-muted-foreground); opacity: 0.75; }
+
+  .tips-card { background: var(--color-surface-alt); }
+  .tips-card p { margin: 0 0 var(--space-2); font-size: 0.85rem; line-height: 1.5; color: var(--color-foreground); }
+  .tips-card p:last-child { margin-bottom: 0; }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(160deg, var(--color-primary) 0%, var(--color-primary-dark) 130%);
+    color: #fff;
+    border: none;
+    min-height: 48px;
+    padding: 12px var(--space-4);
+    border-radius: var(--radius-btn);
+    width: 100%;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    box-shadow: 0 6px 16px -4px rgba(15,61,36,0.45);
+    transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  }
+  .btn-primary:hover { box-shadow: 0 8px 20px -4px rgba(15,61,36,0.55); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--color-surface);
+    color: var(--color-primary-dark);
+    border: 1px solid var(--color-border);
+    min-height: 44px;
+    padding: 10px 14px;
+    border-radius: var(--radius-btn);
+    font-weight: 600;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+  @media (prefers-color-scheme: dark) { .btn-secondary { color: var(--color-primary); } }
+
+  footer {
+    padding: var(--space-4) var(--space-5) var(--space-5);
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--color-muted-foreground);
+    line-height: 1.6;
+  }
+  footer a { color: var(--color-secondary); }
+
+  /* Loading skeleton */
+  .skeleton-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-4);
+  }
+  .skeleton-line, .skeleton-block {
+    background: linear-gradient(90deg, var(--color-surface-alt) 25%, var(--color-border) 37%, var(--color-surface-alt) 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+    border-radius: 8px;
+  }
+  .skeleton-line { height: 12px; margin-bottom: 10px; }
+  .skeleton-block { height: 140px; }
+  @keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+  .status-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 0.78rem;
+    color: var(--color-muted-foreground);
+    justify-content: center;
+    padding: var(--space-2) 0;
+  }
+
+  .error-card { text-align: center; border-color: rgba(180,35,24,0.35); }
+  .error-card .icon-lg { color: var(--color-destructive); margin-bottom: var(--space-2); }
+  .error-card p { color: var(--color-muted-foreground); font-size: 0.86rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+<div class="app-shell">
+  <header>
+    <div class="header-row">
+      <div class="brand">
+        <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20c8-1 13-6 15-14-8 1-13 6-15 14Z"/><path d="M6 18c3-4 6-7 11-11"/></svg>
+        <h1>Vuelos Nupciales</h1>
+      </div>
+      <button type="button" id="refreshIconBtn" class="icon-btn" aria-label="Actualizar datos meteorológicos">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.2M20 12a8 8 0 0 1-14 5.2"/><path d="M18 3v4h-4"/><path d="M6 21v-4h4"/></svg>
+      </button>
+    </div>
+    <div class="location-row">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg>
+      <span id="locationLabel">Localizando biotopo…</span>
+    </div>
+    <div class="time-row">
+      <span id="localClock"></span>
+      <span id="updatedLabel"></span>
+    </div>
+  </header>
+
+  <main id="main">
+    <div id="mainContent" class="span-2" style="display:contents">
+      <div class="skeleton-card span-2" role="status" aria-live="polite">
+        <span class="sr-only">Cargando datos meteorológicos y calculando probabilidad de vuelo nupcial…</span>
+        <div class="skeleton-line" style="width:60%"></div>
+        <div class="skeleton-block" aria-hidden="true"></div>
+        <div class="skeleton-line" style="width:40%"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Datos meteorológicos: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> ·
+    Mapa: © colaboradores de <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> ·
+    Fotografías: <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a> (CC BY-SA)<br>
+    Herramienta orientativa e informal, sin validez científica. Observa sin molestar a las colonias.
+  </footer>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'ANT_FLIGHT_LOGRONO_NATURE_V4';
+  var CACHE_TTL_MS = 30 * 60 * 1000;
+  var DEFAULT_LOCATION = { lat: 42.4658, lon: -2.4456, name: 'Logroño (Valle del Ebro)' };
+  var HOTSPOT_RADIUS_KM = 15;
+
+  var LOGRONO_HOTSPOTS = [
+    { name: 'Parque del Ebro', lat: 42.4699, lon: -2.4379 },
+    { name: 'Parque de la Ribera', lat: 42.4737, lon: -2.4318 },
+    { name: 'La Grajera', lat: 42.4459, lon: -2.5104 },
+    { name: 'Parque del río Iregua', lat: 42.4386, lon: -2.4245 }
+  ];
+
+  var SPECIES = [
+    {
+      common: 'Hormiga negra de jardín',
+      sci: 'Lasius niger',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Lasius_Niger_winged_queen.jpg?width=400',
+      alt: 'Reina alada de Lasius niger, hormiga negra de jardín, vista de perfil',
+      habitat: 'Céspedes, aceras y parques urbanos. La especie con vuelos más masivos en España.',
+      trigger: 'Tardes cálidas y húmedas, 24-48h después de una tormenta de verano.'
+    },
+    {
+      common: 'Hormiga cosechadora',
+      sci: 'Messor barbarus',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Messor_barbarus_princess.jpg?width=400',
+      alt: 'Hembra reproductora alada de Messor barbarus, hormiga cosechadora',
+      habitat: 'Suelos abiertos, cultivos y caminos de tierra del valle del Ebro.',
+      trigger: 'Mañanas o atardeceres cálidos tras las primeras lluvias de primavera u otoño.'
+    },
+    {
+      common: 'Hormiga carpintera ibérica',
+      sci: 'Camponotus cruentatus',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Camponotus_cruentatus_1.jpg?width=400',
+      alt: 'Ejemplar de Camponotus cruentatus, hormiga carpintera ibérica, sobre corteza',
+      habitat: 'Troncos viejos, zonas arboladas y bordes de bosque mediterráneo.',
+      trigger: 'Reinas grandes en tardes cálidas de transición, con viento en calma.'
+    },
+    {
+      common: 'Hormiga de cabeza grande',
+      sci: 'Pheidole pallidula',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Pheidole_pallidula_casent0080858_profile_1.jpg?width=400',
+      alt: 'Obrera de Pheidole pallidula, hormiga de cabeza grande, vista de perfil',
+      habitat: 'Grietas de aceras, jardines y suelos secos mediterráneos.',
+      trigger: 'Vuelos masivos y sincronizados en las horas de más calor tras tormentas estivales.'
+    }
+  ];
+
+  var WMO_LABELS = {
+    0: 'Cielo despejado', 1: 'Mayormente despejado', 2: 'Parcialmente nublado', 3: 'Cubierto',
+    45: 'Niebla', 48: 'Niebla escarchada',
+    51: 'Llovizna ligera', 53: 'Llovizna', 55: 'Llovizna densa',
+    61: 'Lluvia ligera', 63: 'Lluvia', 65: 'Lluvia intensa',
+    71: 'Nevada ligera', 73: 'Nevada', 75: 'Nevada intensa',
+    80: 'Chubascos ligeros', 81: 'Chubascos', 82: 'Chubascos fuertes',
+    95: 'Tormenta', 96: 'Tormenta con granizo', 99: 'Tormenta fuerte'
+  };
+
+  var MONTH_NAMES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+  var ICONS = {
+    leaf: '<path d="M4 20c8-1 13-6 15-14-8 1-13 6-15 14Z"/><path d="M6 18c3-4 6-7 11-11"/>',
+    thermometer: '<path d="M12 14V5a2 2 0 1 0-4 0v9a4 4 0 1 0 4 0Z"/><path d="M10 8h2"/>',
+    droplet: '<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"/>',
+    wind: '<path d="M3 8h11a2.5 2.5 0 1 0-2.5-2.5"/><path d="M3 12h15a2.5 2.5 0 1 1-2.5 2.5"/><path d="M3 16h8a2 2 0 1 1-2 2"/>',
+    gauge: '<circle cx="12" cy="13" r="7"/><path d="M12 13l3-3"/><path d="M9 3h6"/>',
+    clock: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+    mappin: '<path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/>',
+    refresh: '<path d="M4 12a8 8 0 0 1 14-5.2M20 12a8 8 0 0 1-14 5.2"/><path d="M18 3v4h-4"/><path d="M6 21v-4h4"/>',
+    alert: '<path d="M12 3 2 20h20L12 3Z"/><path d="M12 9v5"/><circle cx="12" cy="17" r="0.6" class="icon-fill"/>',
+    check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/>',
+    x: '<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
+    minus: '<circle cx="12" cy="12" r="9"/><path d="M8 12h8"/>',
+    cloudrain: '<path d="M7 15a4.5 4.5 0 0 1 .5-9 6 6 0 0 1 11.4 1.6A4 4 0 0 1 18 15H7Z"/><path d="M8 19l-1 2M12 19l-1 2M16 19l-1 2"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19"/>',
+    cloud: '<path d="M7 17a4.5 4.5 0 0 1 .5-9 6 6 0 0 1 11.4 1.6A4 4 0 0 1 18 17H7Z"/>',
+    target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>'
+  };
+
+  function icon(name, cls) {
+    return '<svg class="icon ' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
+  }
+
+  var el = {
+    mainContent: document.getElementById('mainContent'),
+    locationLabel: document.getElementById('locationLabel'),
+    localClock: document.getElementById('localClock'),
+    updatedLabel: document.getElementById('updatedLabel'),
+    refreshIconBtn: document.getElementById('refreshIconBtn')
+  };
+
+  var clockTimer = null;
+  var map = null, circleLayer = null, userMarker = null, hotspotLayer = null;
+
+  function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+  function round1(v) { return Math.round(v * 10) / 10; }
+  function haversineKm(lat1, lon1, lat2, lon2) {
+    var R = 6371, toRad = Math.PI / 180;
+    var dLat = (lat2 - lat1) * toRad, dLon = (lon2 - lon1) * toRad;
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+  function conditionFor(code) {
+    if (code === 0 || code === 1) return { label: WMO_LABELS[code] || 'Despejado', icon: 'sun' };
+    if (code === 2 || code === 3) return { label: WMO_LABELS[code] || 'Nublado', icon: 'cloud' };
+    if (WMO_LABELS[code] !== undefined && (code >= 51 && code <= 99)) return { label: WMO_LABELS[code], icon: 'cloudrain' };
+    return { label: WMO_LABELS[code] || 'Variable', icon: 'cloud' };
+  }
+
+  function init() {
+    el.refreshIconBtn.addEventListener('click', function () { getLocationAndWeather(); });
+    loadCachedOrFetch();
+  }
+
+  function loadCachedOrFetch() {
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) { saved = null; }
+    if (saved && (Date.now() - saved.timestamp) < CACHE_TTL_MS) {
+      renderApp(saved);
+      return;
+    }
+    getLocationAndWeather();
+  }
+
+  function getLocationAndWeather() {
+    el.locationLabel.textContent = 'Localizando biotopo…';
+    if (!navigator.geolocation) {
+      fetchWeatherData(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lon, DEFAULT_LOCATION.name);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      function (pos) { reverseGeocode(pos.coords.latitude, pos.coords.longitude); },
+      function () { fetchWeatherData(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lon, DEFAULT_LOCATION.name); },
+      { timeout: 8000, maximumAge: 60000 }
+    );
+  }
+
+  function reverseGeocode(lat, lon) {
+    fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lon + '&zoom=10&accept-language=es')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var a = data.address || {};
+        var name = a.city || a.town || a.village || a.municipality || a.county || 'Ubicación actual';
+        fetchWeatherData(lat, lon, name);
+      })
+      .catch(function () { fetchWeatherData(lat, lon, 'Ubicación GPS'); });
+  }
+
+  function fetchWeatherData(lat, lon, locationName) {
+    var url = 'https://api.open-meteo.com/v1/forecast'
+      + '?latitude=' + lat + '&longitude=' + lon
+      + '&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,surface_pressure'
+      + '&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,wind_speed_10m,surface_pressure,weather_code'
+      + '&past_days=1&forecast_days=2&timezone=auto';
+
+    fetch(url)
+      .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
+      .then(function (apiData) {
+        var processed = processWeatherData(apiData, lat, lon, locationName);
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(processed)); } catch (e) {}
+        renderApp(processed);
+      })
+      .catch(function () {
+        showError('No se pudo conectar con el servicio meteorológico. Comprueba tu conexión e inténtalo de nuevo.');
+      });
+  }
+
+  function computeScore(ctx) {
+    var factors = [];
+
+    function mk(iconName, label, valueText, points, max, note) {
+      var ratio = max > 0 ? points / max : 0;
+      var status = ratio >= 0.66 ? 'good' : ratio >= 0.33 ? 'neutral' : 'bad';
+      factors.push({ icon: iconName, label: label, valueText: valueText, points: points, max: max, status: status, note: note });
+    }
+
+    var tempPts = clamp(25 - Math.abs(ctx.temp - 26) * 2.3, 0, 25);
+    mk('thermometer', 'Temperatura', round1(ctx.temp) + '°C', tempPts, 25, 'Ideal entre 22-30°C, óptimo cerca de 26°C.');
+
+    var humPts = clamp((ctx.humidity - 40) * 0.5, 0, 20);
+    mk('droplet', 'Humedad relativa', Math.round(ctx.humidity) + '%', humPts, 20, 'La humedad alta tras la lluvia sincroniza los vuelos.');
+
+    var windPts = clamp(15 - ctx.wind * 1.1, 0, 15);
+    mk('wind', 'Viento', round1(ctx.wind) + ' km/h', windPts, 15, 'El viento en calma (por debajo de 10 km/h) es imprescindible.');
+
+    var rainPts = 0, rainNote = 'Sin lluvias recientes registradas.';
+    if (ctx.rainLast24h > 1 && ctx.precipNow < 0.3) {
+      rainPts = clamp(20 * Math.min(1, ctx.rainLast24h / 8), 0, 20);
+      rainNote = round1(ctx.rainLast24h) + ' mm en las últimas 24h: el suelo húmedo favorece la emergencia.';
+    } else if (ctx.precipNow >= 0.3) {
+      rainNote = 'Está lloviendo ahora mismo, lo que retrasa el vuelo.';
+    }
+    mk('cloudrain', 'Lluvia reciente', ctx.rainLast24h > 0 ? round1(ctx.rainLast24h) + ' mm/24h' : 'Sin lluvia', rainPts, 20, rainNote);
+
+    var pressurePts, pressureNote;
+    if (ctx.pressureTrend > 0.5) { pressurePts = 10; pressureNote = 'La presión sube tras un mínimo: buena señal para el vuelo.'; }
+    else if (ctx.pressureTrend < -1) { pressurePts = 0; pressureNote = 'La presión está cayendo: puede acercarse una tormenta.'; }
+    else { pressurePts = 5; pressureNote = 'Presión estable.'; }
+    mk('gauge', 'Presión atmosférica', (ctx.pressureTrend >= 0 ? '+' : '') + round1(ctx.pressureTrend) + ' hPa/3h', pressurePts, 10, pressureNote);
+
+    var seasonFactor = ctx.month >= 5 && ctx.month <= 9 ? 1 : (ctx.month === 4 || ctx.month === 10 ? 0.5 : 0.1);
+    var seasonPts = 6 * seasonFactor;
+    var hourPts = (ctx.hour >= 11 && ctx.hour <= 21) ? 4 : (ctx.hour >= 8 && ctx.hour < 11 ? 2 : 0);
+    mk('clock', 'Época y hora', MONTH_NAMES[ctx.month - 1] + ', ' + String(ctx.hour).padStart(2, '0') + ':00', seasonPts + hourPts, 10,
+      'La temporada principal va de mayo a septiembre, en horas cálidas del día.');
+
+    var penalty = ctx.precipProbNear > 70 ? 15 * (ctx.precipProbNear - 70) / 30 : 0;
+    var raw = factors.reduce(function (s, f) { return s + f.points; }, 0) - penalty;
+    var score = clamp(Math.round(raw), 5, 98);
+    var tier = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
+    return { score: score, tier: tier, factors: factors };
+  }
+
+  function processWeatherData(apiData, lat, lon, locationName) {
+    var current = apiData.current;
+    var hourly = apiData.hourly;
+
+    var currentHourKey = current.time.slice(0, 13);
+    var idx = hourly.time.findIndex(function (t) { return t.slice(0, 13) === currentHourKey; });
+    if (idx === -1) idx = 0;
+
+    var pIdx = Math.max(0, idx - 3);
+    var pressureTrend = (hourly.surface_pressure[idx] != null && hourly.surface_pressure[pIdx] != null)
+      ? hourly.surface_pressure[idx] - hourly.surface_pressure[pIdx] : 0;
+
+    var rainStart = Math.max(0, idx - 24);
+    var rainLast24h = 0;
+    for (var i = rainStart; i < idx; i++) rainLast24h += (hourly.precipitation[i] || 0);
+
+    var precipProbNear = 0, cnt = 0;
+    for (var j = idx; j < Math.min(hourly.time.length, idx + 3); j++) { precipProbNear += (hourly.precipitation_probability[j] || 0); cnt++; }
+    precipProbNear = cnt ? precipProbNear / cnt : 0;
+
+    var now = new Date(current.time);
+    var currentScore = computeScore({
+      temp: current.temperature_2m, humidity: current.relative_humidity_2m, wind: current.wind_speed_10m,
+      rainLast24h: rainLast24h, precipNow: current.precipitation, precipProbNear: precipProbNear,
+      pressureTrend: pressureTrend, hour: now.getHours(), month: now.getMonth() + 1
+    });
+
+    var hourlyList = [];
+    for (var h = idx; h < idx + 10 && h < hourly.time.length; h++) {
+      var hDate = new Date(hourly.time[h]);
+      var hScore = computeScore({
+        temp: hourly.temperature_2m[h], humidity: hourly.relative_humidity_2m[h], wind: hourly.wind_speed_10m[h],
+        rainLast24h: rainLast24h, precipNow: hourly.precipitation[h] || 0, precipProbNear: hourly.precipitation_probability[h] || 0,
+        pressureTrend: pressureTrend, hour: hDate.getHours(), month: hDate.getMonth() + 1
+      });
+      hourlyList.push({
+        time: hourly.time[h].slice(11, 16),
+        temp: hourly.temperature_2m[h], humidity: hourly.relative_humidity_2m[h], wind: hourly.wind_speed_10m[h],
+        code: hourly.weather_code[h], score: hScore.score, tier: hScore.tier
+      });
+    }
+
+    return {
+      locationName: locationName, lat: lat, lon: lon,
+      timestamp: Date.now(), utcOffsetSeconds: apiData.utc_offset_seconds || 0,
+      current: {
+        temp: current.temperature_2m, humidity: current.relative_humidity_2m, wind: current.wind_speed_10m,
+        apparent: current.apparent_temperature, code: current.weather_code,
+        score: currentScore.score, tier: currentScore.tier, factors: currentScore.factors
+      },
+      hourly: hourlyList
+    };
+  }
+
+  function tierLabel(tier) {
+    return tier === 'high' ? 'Alta actividad nupcial esperada' : tier === 'medium' ? 'Condiciones moderadas, mantente atento' : 'Actividad improbable ahora mismo';
+  }
+  function tierColor(tier) {
+    return tier === 'high' ? getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()
+      : tier === 'medium' ? getComputedStyle(document.documentElement).getPropertyValue('--color-medium').trim()
+      : getComputedStyle(document.documentElement).getPropertyValue('--color-low').trim();
+  }
+
+  function gaugeSvg(score, tier) {
+    var r = 52, c = 2 * Math.PI * r;
+    var offset = c * (1 - score / 100);
+    return '<svg class="gauge" viewBox="0 0 120 120" role="img" aria-label="Probabilidad de vuelo nupcial: ' + score + ' por ciento. ' + tierLabel(tier) + '.">'
+      + '<circle class="gauge-bg" cx="60" cy="60" r="' + r + '"/>'
+      + '<circle class="gauge-value gauge-' + tier + '" cx="60" cy="60" r="' + r + '" stroke-dasharray="' + c + '" stroke-dashoffset="' + offset + '" transform="rotate(-90 60 60)"/>'
+      + '<text x="60" y="58" text-anchor="middle" class="gauge-number">' + score + '%</text>'
+      + '<text x="60" y="77" text-anchor="middle" class="gauge-caption">probabilidad</text>'
+      + '</svg>';
+  }
+
+  function statusIconFor(status) { return status === 'good' ? 'check' : status === 'neutral' ? 'minus' : 'x'; }
+  function statusLabelFor(status) { return status === 'good' ? 'Favorable' : status === 'neutral' ? 'Neutro' : 'Poco favorable'; }
+
+  function factorItemHtml(f) {
+    return '<li class="factor-item factor-' + f.status + '">'
+      + '<span class="factor-icon">' + icon(f.icon) + '</span>'
+      + '<div class="factor-body">'
+      + '<div class="factor-top"><span class="factor-label">' + f.label + '</span><span class="factor-value">' + f.valueText + '</span></div>'
+      + '<p class="factor-note">' + f.note + '</p>'
+      + '</div>'
+      + '<span class="factor-status" title="' + statusLabelFor(f.status) + '">' + icon(statusIconFor(f.status)) + '<span class="sr-only">' + statusLabelFor(f.status) + '</span></span>'
+      + '</li>';
+  }
+
+  function hourRowHtml(h) {
+    var cond = conditionFor(h.code);
+    var badgeCls = h.tier === 'high' ? 'badge-high' : h.tier === 'medium' ? 'badge-medium' : 'badge-low';
+    return '<div class="hour-row">'
+      + '<span class="hour-time">' + h.time + '</span>'
+      + '<div class="hour-data">'
+      + '<span>' + icon(cond.icon, 'icon-sm') + round1(h.temp) + '°C</span>'
+      + '<span>' + icon('droplet', 'icon-sm') + Math.round(h.humidity) + '%</span>'
+      + '<span>' + icon('wind', 'icon-sm') + round1(h.wind) + ' km/h</span>'
+      + '</div>'
+      + '<span class="hour-badge ' + badgeCls + '">' + icon(statusIconFor(h.tier === 'high' ? 'good' : h.tier === 'medium' ? 'neutral' : 'bad')) + h.score + '%</span>'
+      + '</div>';
+  }
+
+  function speciesCardHtml(s) {
+    return '<div class="species-card">'
+      + '<div class="species-img-wrap"><img src="' + s.img + '" alt="' + s.alt + '" loading="lazy" decoding="async" width="400" height="300"></div>'
+      + '<div class="species-info">'
+      + '<div class="species-common">' + s.common + '</div>'
+      + '<div class="species-sci">' + s.sci + '</div>'
+      + '<div class="species-desc">' + s.habitat + '</div>'
+      + '<div class="species-trigger">' + icon('leaf', 'icon-sm') + ' ' + s.trigger + '</div>'
+      + '<div class="species-credit">Foto: Wikimedia Commons</div>'
+      + '</div></div>';
+  }
+
+  function renderApp(data) {
+    el.locationLabel.textContent = data.locationName;
+    el.updatedLabel.textContent = 'Actualizado ' + formatLocalTime(data.utcOffsetSeconds, data.timestamp);
+    startClock(data.utcOffsetSeconds);
+
+    var cur = data.current;
+    var cond = conditionFor(cur.code);
+    var radius = cur.tier === 'high' ? 1200 : cur.tier === 'medium' ? 800 : 500;
+
+    var factorsHtml = cur.factors.map(factorItemHtml).join('');
+    var hourlyHtml = data.hourly.map(hourRowHtml).join('');
+    var speciesHtml = SPECIES.map(speciesCardHtml).join('');
+
+    el.mainContent.innerHTML =
+      '<section class="card hero-card span-2" aria-live="polite">'
+      + '<h2>' + icon('target') + 'Probabilidad de vuelo</h2>'
+      + '<div class="gauge-wrap">' + gaugeSvg(cur.score, cur.tier) + '</div>'
+      + '<p class="hero-status">' + tierLabel(cur.tier) + '</p>'
+      + '<p class="hero-sub">Basado en temperatura, humedad, viento, lluvia reciente y presión.</p>'
+      + '<span class="condition-chip">' + icon(cond.icon, 'icon-sm') + cond.label + ', ' + round1(cur.temp) + '°C (sensación ' + round1(cur.apparent) + '°C)</span>'
+      + '<div class="weather-grid">'
+      + '<div class="weather-item">' + icon('thermometer') + '<span>' + round1(cur.temp) + '°C</span><small>Temperatura</small></div>'
+      + '<div class="weather-item">' + icon('droplet') + '<span>' + Math.round(cur.humidity) + '%</span><small>Humedad</small></div>'
+      + '<div class="weather-item">' + icon('wind') + '<span>' + round1(cur.wind) + ' km/h</span><small>Viento</small></div>'
+      + '</div></section>'
+
+      + '<section class="card">'
+      + '<h3>' + icon('gauge') + 'Factores del vuelo</h3>'
+      + '<ul class="factor-list">' + factorsHtml + '</ul>'
+      + '</section>'
+
+      + '<section class="card map-card">'
+      + '<h3>' + icon('mappin') + 'Zona orientativa</h3>'
+      + '<div id="probabilityMap" role="img" aria-label="Mapa con un círculo que señala la zona orientativa de mayor probabilidad alrededor de la ubicación"></div>'
+      + '<div class="map-legend">'
+      + '<span><span class="legend-dot" style="background:' + tierColor('high') + '"></span>Alta</span>'
+      + '<span><span class="legend-dot" style="background:' + tierColor('medium') + '"></span>Media</span>'
+      + '<span><span class="legend-dot" style="background:' + tierColor('low') + '"></span>Baja</span>'
+      + '</div>'
+      + '<p class="map-summary">Círculo de ~' + radius + ' m alrededor de tu ubicación, en tono ' + (cur.tier === 'high' ? 'verde (alta probabilidad)' : cur.tier === 'medium' ? 'ámbar (probabilidad media)' : 'gris (probabilidad baja)') + '. Zona indicativa, no una predicción exacta.</p>'
+      + '</section>'
+
+      + '<section class="card span-2">'
+      + '<h3>' + icon('clock') + 'Próximas horas</h3>'
+      + '<div class="hourly-list">' + hourlyHtml + '</div>'
+      + '</section>'
+
+      + '<section class="card span-2">'
+      + '<h3>' + icon('leaf') + 'Especies frecuentes en Logroño</h3>'
+      + '<div class="species-gallery">' + speciesHtml + '</div>'
+      + '</section>'
+
+      + '<section class="card tips-card span-2">'
+      + '<h3>' + icon('leaf') + 'Consejo de campo</h3>'
+      + '<p>Revisa parques junto al Ebro y zonas arboladas al caer la tarde, sobre todo el día después de una tormenta de verano. Busca suelo desnudo, bordes de césped y montículos de tierra removida.</p>'
+      + '<p>Observa desde una distancia prudente y evita pisar o remover los hormigueros: las reinas necesitan encontrar refugio para fundar su colonia.</p>'
+      + '</section>'
+
+      + '<button type="button" class="btn-primary span-2" id="refreshBtn">' + icon('refresh') + 'Actualizar estado del biotopo</button>';
+
+    document.getElementById('refreshBtn').addEventListener('click', getLocationAndWeather);
+    renderMap(data.lat, data.lon, cur.tier, radius);
+  }
+
+  function renderMap(lat, lon, tier, radius) {
+    var mapEl = document.getElementById('probabilityMap');
+    if (typeof L === 'undefined' || !mapEl) {
+      if (mapEl) mapEl.outerHTML = '<div class="map-fallback">' + icon('mappin') + ' No se pudo cargar el mapa interactivo. Ubicación: ' + round1(lat) + ', ' + round1(lon) + ' · radio orientativo ' + radius + ' m.</div>';
+      return;
+    }
+    var color = tierColor(tier);
+
+    try {
+      if (!map) {
+        map = L.map(mapEl, { scrollWheelZoom: false }).setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+      } else {
+        map.setView([lat, lon], 13);
+      }
+
+      if (circleLayer) circleLayer.remove();
+      circleLayer = L.circle([lat, lon], { radius: radius, color: color, fillColor: color, fillOpacity: 0.18, weight: 2 })
+        .addTo(map).bindPopup('Zona orientativa de mayor probabilidad (~' + radius + ' m)');
+
+      var userIcon = L.divIcon({ className: 'user-location-icon', html: '<span class="pin-marker">' + icon('mappin') + '</span>', iconSize: [32, 32], iconAnchor: [16, 30] });
+      if (userMarker) userMarker.remove();
+      userMarker = L.marker([lat, lon], { icon: userIcon }).addTo(map).bindPopup('Tu ubicación');
+
+      if (hotspotLayer) { hotspotLayer.remove(); hotspotLayer = null; }
+      if (haversineKm(lat, lon, DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lon) <= HOTSPOT_RADIUS_KM) {
+        hotspotLayer = L.layerGroup(LOGRONO_HOTSPOTS.map(function (h) {
+          return L.circleMarker([h.lat, h.lon], { radius: 7, color: '#059669', fillColor: '#059669', fillOpacity: 0.85, weight: 2 }).bindPopup(h.name);
+        })).addTo(map);
+      }
+      setTimeout(function () { map.invalidateSize(); }, 200);
+    } catch (e) {
+      mapEl.outerHTML = '<div class="map-fallback">' + icon('mappin') + ' No se pudo cargar el mapa interactivo. Ubicación: ' + round1(lat) + ', ' + round1(lon) + ' · radio orientativo ' + radius + ' m.</div>';
+    }
+  }
+
+  function formatLocalTime(utcOffsetSeconds, ts) {
+    var d = new Date(ts + utcOffsetSeconds * 1000);
+    return d.toISOString().slice(11, 16);
+  }
+
+  function startClock(utcOffsetSeconds) {
+    if (clockTimer) clearInterval(clockTimer);
+    function tick() {
+      var d = new Date(Date.now() + utcOffsetSeconds * 1000);
+      el.localClock.textContent = 'Hora local ' + d.toISOString().slice(11, 16);
+    }
+    tick();
+    clockTimer = setInterval(tick, 30000);
+  }
+
+  function showError(msg) {
+    el.mainContent.innerHTML =
+      '<div class="card error-card span-2" role="alert">'
+      + icon('alert', 'icon-lg')
+      + '<h3 style="justify-content:center">Aviso del bosque</h3>'
+      + '<p>' + msg + '</p>'
+      + '<button type="button" class="btn-secondary" id="retryBtn">' + icon('refresh', 'icon-sm') + ' Reintentar</button>'
+      + '</div>';
+    document.getElementById('retryBtn').addEventListener('click', getLocationAndWeather);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
