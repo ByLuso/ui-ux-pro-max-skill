@@ -404,6 +404,49 @@
   .pin-marker svg { width: 32px; height: 32px; color: var(--color-primary-dark); filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); }
   @media (prefers-color-scheme: dark) { .pin-marker svg { color: var(--color-primary); } }
 
+  /* Regional scan */
+  .region-intro { text-align: left; margin: 0 0 var(--space-3); }
+  #regionResults:empty { display: none; }
+  .region-list { list-style: none; margin: var(--space-4) 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  .region-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: 14px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-alt);
+  }
+  .region-rank {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .region-body { flex: 1; min-width: 0; }
+  .region-top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); }
+  .region-name { font-weight: 700; font-size: 0.88rem; }
+  .region-meta { font-size: 0.74rem; color: var(--color-muted-foreground); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .region-reason { display: flex; align-items: center; gap: 4px; font-size: 0.74rem; color: var(--color-primary-dark); margin-top: 4px; }
+  @media (prefers-color-scheme: dark) { .region-reason { color: var(--color-primary); } }
+  #regionMap {
+    width: 100%;
+    height: 260px;
+    border-radius: 14px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-alt);
+    z-index: 0;
+  }
+  @media (min-width: 768px) { #regionMap { height: 320px; } }
+
   /* Hourly */
   .hourly-list { display: flex; flex-direction: column; gap: var(--space-2); }
   .hour-row {
@@ -598,6 +641,7 @@
   'use strict';
 
   var STORAGE_KEY = 'ANT_FLIGHT_LOGRONO_NATURE_V4';
+  var REGION_STORAGE_KEY = 'ANT_FLIGHT_RIOJA_REGION_V1';
   var CACHE_TTL_MS = 30 * 60 * 1000;
   var DEFAULT_LOCATION = { lat: 42.4658, lon: -2.4456, name: 'Logroño (Valle del Ebro)' };
   var HOTSPOT_RADIUS_KM = 15;
@@ -607,6 +651,30 @@
     { name: 'Parque de la Ribera', lat: 42.4737, lon: -2.4318 },
     { name: 'La Grajera', lat: 42.4459, lon: -2.5104 },
     { name: 'Parque del río Iregua', lat: 42.4386, lon: -2.4245 }
+  ];
+
+  var REGION_POINTS = [
+    { name: 'Logroño', zone: 'Valle del Ebro', lat: 42.4658, lon: -2.4456 },
+    { name: 'Calahorra', zone: 'Rioja Baja', lat: 42.3020, lon: -1.9656 },
+    { name: 'Arnedo', zone: 'Rioja Baja', lat: 42.2263, lon: -2.0993 },
+    { name: 'Alfaro', zone: 'Rioja Baja', lat: 42.1817, lon: -1.7489 },
+    { name: 'Cervera del Río Alhama', zone: 'Rioja Baja', lat: 42.0228, lon: -1.9527 },
+    { name: 'Autol', zone: 'Rioja Baja', lat: 42.2167, lon: -1.9832 },
+    { name: 'Rincón de Soto', zone: 'Rioja Baja', lat: 42.2445, lon: -1.8461 },
+    { name: 'Aldeanueva de Ebro', zone: 'Rioja Baja', lat: 42.1908, lon: -1.9186 },
+    { name: 'Haro', zone: 'Rioja Alta', lat: 42.5763, lon: -2.8477 },
+    { name: 'Nájera', zone: 'Rioja Alta', lat: 42.4157, lon: -2.7326 },
+    { name: 'Santo Domingo de la Calzada', zone: 'Rioja Alta', lat: 42.4403, lon: -2.9538 },
+    { name: 'Sajazarra', zone: 'Rioja Alta', lat: 42.5947, lon: -2.9423 },
+    { name: 'San Vicente de la Sonsierra', zone: 'Rioja Alta', lat: 42.5628, lon: -2.7645 },
+    { name: 'Cenicero', zone: 'Rioja Media', lat: 42.4789, lon: -2.6321 },
+    { name: 'Fuenmayor', zone: 'Rioja Media', lat: 42.4728, lon: -2.5714 },
+    { name: 'Ezcaray', zone: 'Sierra de la Demanda', lat: 42.3241, lon: -3.0007 },
+    { name: 'Torrecilla en Cameros', zone: 'Sierra de Cameros', lat: 42.2681, lon: -2.6333 },
+    { name: 'Villoslada de Cameros', zone: 'Sierra de Cameros', lat: 42.1656, lon: -2.6167 },
+    { name: 'Ortigosa de Cameros', zone: 'Sierra de Cameros', lat: 42.2911, lon: -2.6039 },
+    { name: 'Cornago', zone: 'Sierra (Cidacos)', lat: 42.0866, lon: -2.0920 },
+    { name: 'Enciso', zone: 'Sierra (Cidacos)', lat: 42.1573, lon: -2.2660 }
   ];
 
   var SPECIES = [
@@ -689,6 +757,7 @@
 
   var clockTimer = null;
   var map = null, circleLayer = null, userMarker = null, hotspotLayer = null;
+  var regionMap = null, regionMarkersLayer = null;
 
   function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
   function round1(v) { return Math.round(v * 10) / 10; }
@@ -810,11 +879,9 @@
     return { score: score, tier: tier, factors: factors };
   }
 
-  function processWeatherData(apiData, lat, lon, locationName) {
-    var current = apiData.current;
-    var hourly = apiData.hourly;
-
-    var currentHourKey = current.time.slice(0, 13);
+  function forecastContext(apiLoc) {
+    var hourly = apiLoc.hourly;
+    var currentHourKey = apiLoc.current.time.slice(0, 13);
     var idx = hourly.time.findIndex(function (t) { return t.slice(0, 13) === currentHourKey; });
     if (idx === -1) idx = 0;
 
@@ -830,12 +897,27 @@
     for (var j = idx; j < Math.min(hourly.time.length, idx + 3); j++) { precipProbNear += (hourly.precipitation_probability[j] || 0); cnt++; }
     precipProbNear = cnt ? precipProbNear / cnt : 0;
 
+    return { idx: idx, rainLast24h: rainLast24h, pressureTrend: pressureTrend, precipProbNear: precipProbNear };
+  }
+
+  function scoreForLocation(apiLoc) {
+    var ctx = forecastContext(apiLoc);
+    var current = apiLoc.current;
     var now = new Date(current.time);
-    var currentScore = computeScore({
+    return computeScore({
       temp: current.temperature_2m, humidity: current.relative_humidity_2m, wind: current.wind_speed_10m,
-      rainLast24h: rainLast24h, precipNow: current.precipitation, precipProbNear: precipProbNear,
-      pressureTrend: pressureTrend, hour: now.getHours(), month: now.getMonth() + 1
+      rainLast24h: ctx.rainLast24h, precipNow: current.precipitation, precipProbNear: ctx.precipProbNear,
+      pressureTrend: ctx.pressureTrend, hour: now.getHours(), month: now.getMonth() + 1
     });
+  }
+
+  function processWeatherData(apiData, lat, lon, locationName) {
+    var current = apiData.current;
+    var hourly = apiData.hourly;
+
+    var fctx = forecastContext(apiData);
+    var idx = fctx.idx, rainLast24h = fctx.rainLast24h, pressureTrend = fctx.pressureTrend;
+    var currentScore = scoreForLocation(apiData);
 
     var hourlyList = [];
     for (var h = idx; h < idx + 10 && h < hourly.time.length; h++) {
@@ -967,6 +1049,13 @@
       + '</section>'
 
       + '<section class="card span-2">'
+      + '<h3>' + icon('target') + 'Explorar La Rioja</h3>'
+      + '<p class="hero-sub region-intro">Compara ahora mismo la probabilidad de vuelo en ' + REGION_POINTS.length + ' localidades de toda la comunidad autónoma, de la Rioja Alta a la Sierra.</p>'
+      + '<button type="button" class="btn-secondary" id="regionScanBtn" style="width:100%">' + icon('target', 'icon-sm') + ' Buscar en toda La Rioja</button>'
+      + '<div id="regionResults"></div>'
+      + '</section>'
+
+      + '<section class="card span-2">'
       + '<h3>' + icon('clock') + 'Próximas horas</h3>'
       + '<div class="hourly-list">' + hourlyHtml + '</div>'
       + '</section>'
@@ -986,6 +1075,104 @@
 
     document.getElementById('refreshBtn').addEventListener('click', getLocationAndWeather);
     renderMap(data.lat, data.lon, cur.tier, radius);
+
+    document.getElementById('regionScanBtn').addEventListener('click', runRegionalScan);
+    var cachedRegion = null;
+    try { cachedRegion = JSON.parse(localStorage.getItem(REGION_STORAGE_KEY) || 'null'); } catch (e) { cachedRegion = null; }
+    if (cachedRegion && (Date.now() - cachedRegion.timestamp) < CACHE_TTL_MS) {
+      renderRegionResults(cachedRegion.points);
+    }
+  }
+
+  function runRegionalScan() {
+    var btn = document.getElementById('regionScanBtn');
+    var resultsEl = document.getElementById('regionResults');
+    btn.disabled = true;
+    btn.innerHTML = icon('refresh', 'icon-sm') + ' Explorando la comunidad…';
+    resultsEl.innerHTML = '<div class="skeleton-line" style="width:70%;margin-top:16px"></div><div class="skeleton-block"></div>';
+
+    var lats = REGION_POINTS.map(function (p) { return p.lat; }).join(',');
+    var lons = REGION_POINTS.map(function (p) { return p.lon; }).join(',');
+    var url = 'https://api.open-meteo.com/v1/forecast'
+      + '?latitude=' + lats + '&longitude=' + lons
+      + '&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation,surface_pressure'
+      + '&hourly=precipitation,precipitation_probability,surface_pressure&past_days=1&forecast_days=1&timezone=auto';
+
+    fetch(url)
+      .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
+      .then(function (apiList) {
+        var points = REGION_POINTS.map(function (p, i) {
+          var loc = apiList[i];
+          var s = scoreForLocation(loc);
+          return {
+            name: p.name, zone: p.zone, lat: p.lat, lon: p.lon,
+            score: s.score, tier: s.tier, factors: s.factors,
+            temp: loc.current.temperature_2m, humidity: loc.current.relative_humidity_2m, wind: loc.current.wind_speed_10m
+          };
+        });
+        points.sort(function (a, b) { return b.score - a.score; });
+        try { localStorage.setItem(REGION_STORAGE_KEY, JSON.stringify({ timestamp: Date.now(), points: points })); } catch (e) {}
+        renderRegionResults(points);
+      })
+      .catch(function () {
+        btn.disabled = false;
+        btn.innerHTML = icon('target', 'icon-sm') + ' Reintentar búsqueda regional';
+        resultsEl.innerHTML = '<p class="hero-sub region-intro" style="color:var(--color-destructive)" role="alert">No se pudo completar la búsqueda en La Rioja. Comprueba tu conexión e inténtalo de nuevo.</p>';
+      });
+  }
+
+  function renderRegionResults(points) {
+    var btn = document.getElementById('regionScanBtn');
+    btn.disabled = false;
+    btn.innerHTML = icon('refresh', 'icon-sm') + ' Actualizar búsqueda regional';
+
+    var top = points.slice(0, 6);
+    var listHtml = top.map(function (p, i) {
+      var badgeCls = p.tier === 'high' ? 'badge-high' : p.tier === 'medium' ? 'badge-medium' : 'badge-low';
+      var topFactor = p.factors.slice().sort(function (a, b) { return (b.points / b.max) - (a.points / a.max); })[0];
+      return '<li class="region-item">'
+        + '<span class="region-rank">' + (i + 1) + '</span>'
+        + '<div class="region-body">'
+        + '<div class="region-top"><span class="region-name">' + p.name + '</span>'
+        + '<span class="hour-badge ' + badgeCls + '">' + icon(statusIconFor(p.tier === 'high' ? 'good' : p.tier === 'medium' ? 'neutral' : 'bad')) + p.score + '%</span></div>'
+        + '<div class="region-meta">' + p.zone + ' · ' + round1(p.temp) + '°C · ' + Math.round(p.humidity) + '% hum. · ' + round1(p.wind) + ' km/h</div>'
+        + '<div class="region-reason">' + icon('leaf', 'icon-sm') + 'Favorece: ' + topFactor.label.toLowerCase() + ' (' + topFactor.valueText + ')</div>'
+        + '</div></li>';
+    }).join('');
+
+    document.getElementById('regionResults').innerHTML =
+      '<ul class="region-list">' + listHtml + '</ul>'
+      + '<div id="regionMap" role="img" aria-label="Mapa de La Rioja con puntos coloreados según la probabilidad de vuelo nupcial en cada localidad"></div>'
+      + '<p class="map-summary">Estimación por localidad de referencia dentro de cada comarca; el microclima local puede variar el resultado real.</p>';
+
+    renderRegionMap(points);
+  }
+
+  function renderRegionMap(points) {
+    var mapEl = document.getElementById('regionMap');
+    if (typeof L === 'undefined' || !mapEl) {
+      if (mapEl) mapEl.outerHTML = '<div class="map-fallback">' + icon('mappin') + ' No se pudo cargar el mapa regional.</div>';
+      return;
+    }
+    try {
+      if (!regionMap) {
+        regionMap = L.map(mapEl, { scrollWheelZoom: false }).setView([42.32, -2.55], 9);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '&copy; OpenStreetMap'
+        }).addTo(regionMap);
+      }
+      if (regionMarkersLayer) regionMarkersLayer.remove();
+      regionMarkersLayer = L.layerGroup(points.map(function (p, i) {
+        var color = tierColor(p.tier);
+        return L.circleMarker([p.lat, p.lon], {
+          radius: i < 3 ? 11 : 6, color: color, fillColor: color, fillOpacity: 0.8, weight: i < 3 ? 3 : 1.5
+        }).bindPopup('<b>' + p.name + '</b> (' + p.zone + ')<br>' + p.score + '% · ' + round1(p.temp) + '°C · ' + Math.round(p.humidity) + '% hum.');
+      })).addTo(regionMap);
+      setTimeout(function () { regionMap.invalidateSize(); }, 200);
+    } catch (e) {
+      mapEl.outerHTML = '<div class="map-fallback">' + icon('mappin') + ' No se pudo cargar el mapa regional.</div>';
+    }
   }
 
   function renderMap(lat, lon, tier, radius) {
