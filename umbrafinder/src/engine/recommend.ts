@@ -67,11 +67,18 @@ export async function computeRecommendations(
     point: p,
     circ: getLocalCircumstances(eclipse, p),
   }))
-  const halfWidth = eclipse.pathWidthKm / 2
-  const inBand = withCirc.filter(
-    (c) => Math.abs(c.circ.perpendicularDistanceKm) <= halfWidth,
-  )
-  const candidateBases = inBand.length > 0 ? inBand : withCirc
+  // Only score points actually within the (approximated) totality corridor.
+  // No fallback to the unfiltered grid here on purpose: recommending sites
+  // outside the corridor would be wrong (they never see totality), and
+  // scoring every raw grid point regardless of distance from the path
+  // blows up API call volume for no benefit when the search center is far
+  // from the corridor.
+  const candidateBases = withCirc.filter((c) => c.circ.withinModeledCorridor)
+
+  if (candidateBases.length === 0) {
+    onProgress?.('done', 1)
+    return { candidates: [], center, radiusKm }
+  }
 
   onProgress?.('elevation', 0.1)
 
