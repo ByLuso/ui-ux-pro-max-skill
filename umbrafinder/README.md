@@ -12,6 +12,9 @@ built, tested, and verified end-to-end in this environment. Every data
 source, formula, and constraint from the brief is implemented for real —
 nothing here is a mockup.
 
+**Live demo:** https://byluso.github.io/ui-ux-pro-max-skill/ (deployed via
+GitHub Actions on every push — see `.github/workflows/deploy-umbrafinder-pages.yml`).
+
 ## Quick start
 
 ```bash
