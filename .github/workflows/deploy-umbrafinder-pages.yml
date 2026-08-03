@@ -55,9 +55,11 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # Deliberately not scoped to the "github-pages" Environment: that
+    # Environment defaults to a deployment-branch restriction (default
+    # branch only), which blocks deploys from a feature branch until
+    # someone manually widens it in Settings -> Environments. Omitting it
+    # here avoids that manual step; deploy-pages doesn't require it.
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
