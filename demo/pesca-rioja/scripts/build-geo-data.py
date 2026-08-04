@@ -32,9 +32,14 @@ DATA_JS = os.path.join(os.path.dirname(__file__), "..", "js", "data.js")
 
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 
-# Real permit-request URL quoted in the Orden ("Se puede consultar la
-# disponibilidad en tiempo real en www.larioja.org/permisosdepesca").
-PERMISOS_URL = "https://www.larioja.org/permisosdepesca"
+# The Orden's own text ("consulta en www.larioja.org/permisosdepesca") does
+# NOT resolve -- confirmed broken (government CMS error page), not just an
+# automated-tool block. Point instead at the stable "Trámites de pesca" hub
+# page, found via live search and indexed by Google, from which the current
+# season's specific procedure (permit lottery, license, etc.) is reachable.
+# A category hub is far less likely to rot year-to-year than a proc=NNNNN
+# deep link into the yearly-recreated e-office procedure.
+PERMISOS_URL = "https://www.larioja.org/medio-ambiente/es/caza-pesca/pesca-rioja/tramites-pesca"
 
 RIVERS_QUERY = """
 [out:json][timeout:50];
