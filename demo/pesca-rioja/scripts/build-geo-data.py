@@ -32,6 +32,10 @@ DATA_JS = os.path.join(os.path.dirname(__file__), "..", "js", "data.js")
 
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 
+# Real permit-request URL quoted in the Orden ("Se puede consultar la
+# disponibilidad en tiempo real en www.larioja.org/permisosdepesca").
+PERMISOS_URL = "https://www.larioja.org/permisosdepesca"
+
 RIVERS_QUERY = """
 [out:json][timeout:50];
 area["ISO3166-2"="ES-RI"]["admin_level"="4"]->.a;
@@ -45,8 +49,8 @@ WATER_QUERY = """
 [out:json][timeout:80];
 area["ISO3166-2"="ES-RI"]["admin_level"="4"]->.a;
 (
-  way["natural"="water"]["name"](area.a);
-  way["water"="reservoir"]["name"](area.a);
+  way["natural"="water"](area.a);
+  way["water"="reservoir"](area.a);
 );
 out geom;
 """
@@ -82,6 +86,24 @@ def haversine_km(a, b):
     dlambda = math.radians(lon2 - lon1)
     h = math.sin(dphi / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlambda / 2) ** 2
     return 2 * R * math.asin(math.sqrt(h))
+
+
+def polygon_area_m2(points):
+    """Shoelace formula on an equirectangular approximation -- fine for small ponds."""
+    if len(points) < 3:
+        return 0.0
+    R = 6371000.0
+    lat0 = math.radians(points[0][0])
+    xy = [
+        (R * math.cos(lat0) * math.radians(lon - points[0][1]), R * math.radians(lat - points[0][0]))
+        for lat, lon in points
+    ]
+    s = 0.0
+    for i in range(len(xy)):
+        x1, y1 = xy[i]
+        x2, y2 = xy[(i + 1) % len(xy)]
+        s += x1 * y2 - x2 * y1
+    return abs(s) / 2
 
 
 def points_equal(a, b, tol=1e-4):
@@ -733,7 +755,8 @@ def main():
                         "id": chunk_id, "nombre": rich["nombre"], "municipio": rich["municipio"],
                         "km": length_km, "tipo": rich["tipo"], "modalidad": rich["modalidad"],
                         "cupo": rich["cupo"], "tallaMinima": rich["tallaMinima"], "veda": rich["veda"],
-                        "precio": rich["precio"], "permisoUrl": "https://www.larioja.org/pesca",
+                        "precio": rich["precio"],
+                        "permisoUrl": PERMISOS_URL if rich["tipo"] in ("coto", "intensivo") else None,
                         "especies": rich["especies"], "caudalM3s": rich["caudalM3s"],
                         "tempAguaC": rich["tempAguaC"], "transparencia": rich["transparencia"],
                         "accesoDificultad": rich["accesoDificultad"], "vadeable": rich["vadeable"],
@@ -747,7 +770,8 @@ def main():
                         "municipio": town, "km": length_km, "tipo": auto["tipo"],
                         "modalidad": auto["modalidad"], "cupo": auto["cupo"],
                         "tallaMinima": auto["tallaMinima"], "veda": auto["veda"], "precio": auto["precio"],
-                        "permisoUrl": "https://www.larioja.org/pesca", "especies": auto["especies"],
+                        "permisoUrl": PERMISOS_URL if auto["tipo"] in ("coto", "intensivo") else None,
+                        "especies": auto["especies"],
                         "caudalM3s": auto["caudalM3s"], "tempAguaC": auto["tempAguaC"],
                         "transparencia": auto["transparencia"], "accesoDificultad": auto["accesoDificultad"],
                         "vadeable": auto["vadeable"], "nombradoEnOrden": False, "coords": chunk_pts,
@@ -766,18 +790,30 @@ def main():
         especies=["barbo-iberico", "anguila", "tenca"],
     )
     seen_slugs = {}
+    MIN_UNNAMED_AREA_M2 = 2500  # skip tiny farm puddles with no name at all
+    unnamed_counter = 0
     for el in water_raw["elements"]:
-        name = el.get("tags", {}).get("name")
-        if not name or name in WATER_EXCLUDE_NAMES:
+        raw_name = el.get("tags", {}).get("name")
+        if raw_name and raw_name in WATER_EXCLUDE_NAMES:
             continue
         pts = [(round(p["lat"], 6), round(p["lon"], 6)) for p in el["geometry"]]
         if len(pts) < 4:
             continue
-        sel = WATER_SELECTION.get(name, GENERIC_WATER_DEFAULTS)
+        if not raw_name and polygon_area_m2(pts) < MIN_UNNAMED_AREA_M2:
+            continue
+
         mid = pts[len(pts) // 2]
         town = nearest_town(mid)
+        if raw_name:
+            name = raw_name
+            sel = WATER_SELECTION.get(name, GENERIC_WATER_DEFAULTS)
+        else:
+            unnamed_counter += 1
+            name = f"Masa de agua sin nombre — {town}"
+            sel = GENERIC_WATER_DEFAULTS
+
         defaults = TIPO_DEFAULTS.get(sel["tipo"], GENERIC_WATER_DEFAULTS)
-        base_slug = slugify(name)
+        base_slug = slugify(name) if raw_name else f"agua-sin-nombre-{el['id']}"
         slug = base_slug
         if base_slug in seen_slugs:
             seen_slugs[base_slug] += 1
@@ -790,11 +826,13 @@ def main():
             "modalidad": sel.get("modalidad", defaults["modalidad"]), "cupo": sel.get("cupo", defaults["cupo"]),
             "tallaMinima": sel.get("talla", defaults["tallaMinima"]), "veda": defaults["veda"],
             "precio": sel.get("precio", defaults["precio"]),
-            "permisoUrl": "https://www.larioja.org/pesca", "especies": sel["especies"],
+            "permisoUrl": PERMISOS_URL if sel["tipo"] in ("coto", "intensivo") else None,
+            "especies": sel["especies"],
             "caudalM3s": None, "tempAguaC": pseudo_random(name + str(el["id"]) + "-temp", 10.0, 18.0),
             "transparencia": "Media", "accesoDificultad": "Fácil", "vadeable": False,
             "nombradoEnOrden": sel.get("confirmado", sel is not GENERIC_WATER_DEFAULTS), "coords": pts,
         })
+    print(f"Waterbodies: {len(waterbodies_out)} ({unnamed_counter} unnamed, area-filtered)")
 
     total_tramos = sum(len(r["tramos"]) for r in rivers_out)
     print(f"Rivers: {len(rivers_out)}, tramos: {total_tramos}, waterbodies: {len(waterbodies_out)}")

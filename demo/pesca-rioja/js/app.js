@@ -439,12 +439,18 @@
       </div>
       <div class="sheet-meta" style="margin-top:-6px;">Datos de caudal/temperatura simulados (integración real: SAIH Ebro / CHE)</div>
 
+      <div class="section-title" style="margin-top:16px;">${t('normativaTitle')}</div>
       <div class="info-row"><span class="info-label">${t('tramoSheetModalidad')}</span><span class="info-value">${tramo.modalidad.join(', ')}</span></div>
       <div class="info-row"><span class="info-label">${t('tramoSheetCupo')}</span><span class="info-value">${tramo.cupo}</span></div>
       <div class="info-row"><span class="info-label">${t('tramoSheetTalla')}</span><span class="info-value">${tramo.tallaMinima}</span></div>
       <div class="info-row"><span class="info-label">${t('tramoSheetVeda')}</span><span class="info-value">${tramo.veda}</span></div>
       <div class="info-row"><span class="info-label">${t('tramoSheetPrecio')}</span><span class="info-value">${tramo.precio}</span></div>
       <div class="info-row"><span class="info-label">${t('tramoSheetAccess')}</span><span class="info-value">${tramo.accesoDificultad}${tramo.vadeable ? ` · ${t('wadeable')}` : ''}</span></div>
+      ${tramo.permisoUrl ? `
+      <a class="btn-primary" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;" target="_blank" rel="noopener" href="${tramo.permisoUrl}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3h7v7M21 3l-9 9M19 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        ${t('solicitarPermiso')}
+      </a>` : ''}
 
       <div class="section-title">${t('tramoSheetSpecies')}</div>
       <div class="species-chip-row" id="tramoSpeciesRow"></div>
