@@ -125,7 +125,7 @@
   // MAP INIT
   // ---------------------------------------------------------------------
   let map, layerStandard, layerSatellite, layerTopo;
-  const tramoLayers = new Map(); // tramoId -> L.Polyline
+  const featureLayers = new Map(); // id -> { layer, data, isWaterbody }
   const poiMarkers = [];
   let userMarker = null;
 
@@ -144,6 +144,7 @@
     });
 
     renderTramos();
+    renderWaterbodies();
     renderPois();
   }
 
@@ -162,7 +163,24 @@
       line.on('mouseover', () => line.setStyle({ weight: tramoWeight(tramo.tipo) + 2 }));
       line.on('mouseout', () => line.setStyle({ weight: tramoWeight(tramo.tipo) }));
 
-      tramoLayers.set(tramo.id, { line, tramo });
+      featureLayers.set(tramo.id, { layer: line, data: tramo, isWaterbody: false });
+    });
+  }
+
+  function renderWaterbodies() {
+    allWaterbodies().forEach((wb) => {
+      const color = TRAMO_TYPES[wb.tipo].color;
+      const poly = L.polygon(wb.coords, {
+        color, weight: 2, opacity: 0.9, fillColor: color, fillOpacity: 0.32,
+        dashArray: wb.tipo === 'vedado' ? '2 8' : null,
+      }).addTo(map);
+
+      poly.bindTooltip(wb.nombre, { className: 'tramo-tooltip', sticky: true });
+      poly.on('click', () => openTramoSheet(wb.id));
+      poly.on('mouseover', () => poly.setStyle({ fillOpacity: 0.5 }));
+      poly.on('mouseout', () => poly.setStyle({ fillOpacity: 0.32 }));
+
+      featureLayers.set(wb.id, { layer: poly, data: wb, isWaterbody: true });
     });
   }
 
@@ -272,13 +290,13 @@
 
   function applyFilters() {
     let visibleCount = 0;
-    tramoLayers.forEach(({ line, tramo }) => {
-      const matchTipo = state.filters.tipo.size === 0 || state.filters.tipo.has(tramo.tipo);
-      const matchEspecie = state.filters.especie.size === 0 || tramo.especies.some((s) => state.filters.especie.has(s));
-      const matchDif = state.filters.dificultad.size === 0 || state.filters.dificultad.has(normalizeDifficulty(tramo.accesoDificultad));
+    featureLayers.forEach(({ layer, data }) => {
+      const matchTipo = state.filters.tipo.size === 0 || state.filters.tipo.has(data.tipo);
+      const matchEspecie = state.filters.especie.size === 0 || data.especies.some((s) => state.filters.especie.has(s));
+      const matchDif = state.filters.dificultad.size === 0 || state.filters.dificultad.has(normalizeDifficulty(data.accesoDificultad));
       const visible = matchTipo && matchEspecie && matchDif;
-      if (visible) { if (!map.hasLayer(line)) line.addTo(map); visibleCount++; }
-      else if (map.hasLayer(line)) map.removeLayer(line);
+      if (visible) { if (!map.hasLayer(layer)) layer.addTo(map); visibleCount++; }
+      else if (map.hasLayer(layer)) map.removeLayer(layer);
     });
     toast(`${visibleCount} ${t('tramosVisible')}`);
   }
@@ -301,8 +319,8 @@
   searchInput.addEventListener('input', () => {
     const q = foldAccents(searchInput.value.trim());
     if (!q) { searchResults.hidden = true; return; }
-    const matches = allTramos().filter((t) =>
-      foldAccents(t.nombre).includes(q) || foldAccents(t.municipio).includes(q) || foldAccents(t.rioNombre).includes(q)
+    const matches = allInteractables().filter((t) =>
+      foldAccents(t.nombre).includes(q) || foldAccents(t.municipio).includes(q) || foldAccents(t.rioNombre || '').includes(q)
     ).slice(0, 8);
     searchResults.innerHTML = '';
     if (matches.length === 0) {
@@ -312,7 +330,7 @@
         const item = document.createElement('div');
         item.className = 'search-result-item';
         item.tabIndex = 0;
-        item.innerHTML = `${m.nombre}<small>${m.rioNombre} · ${m.municipio}</small>`;
+        item.innerHTML = `${m.nombre}<small>${m.rioNombre ? m.rioNombre + ' · ' : ''}${m.municipio}</small>`;
         item.addEventListener('click', () => {
           searchResults.hidden = true; searchInput.value = m.nombre;
           flyToTramo(m.id); openTramoSheet(m.id);
@@ -327,8 +345,8 @@
   });
 
   function flyToTramo(id) {
-    const entry = tramoLayers.get(id);
-    if (entry) map.fitBounds(entry.line.getBounds(), { padding: [60, 60], maxZoom: 14 });
+    const entry = featureLayers.get(id);
+    if (entry) map.fitBounds(entry.layer.getBounds(), { padding: [60, 60], maxZoom: 14 });
   }
 
   // ---------------------------------------------------------------------
@@ -353,7 +371,7 @@
         userMarker = L.marker(latlng, {
           icon: L.divIcon({ className: '', html: '<span class="user-location-dot"></span>', iconSize: [16, 16], iconAnchor: [8, 8] }),
         }).addTo(map);
-        const nearest = allTramos()
+        const nearest = allInteractables()
           .map((tr) => ({ tr, d: Math.min(...tr.coords.map((c) => haversine(latlng, c))) }))
           .sort((a, b) => a.d - b.d)[0];
         map.setView(latlng, 12);
@@ -386,28 +404,32 @@
   }
 
   function openTramoSheet(tramoId) {
-    const tramo = tramoById(tramoId);
+    const tramo = tramoById(tramoId) || waterbodyById(tramoId);
     if (!tramo) return;
     state.activeTramoId = tramoId;
     const def = TRAMO_TYPES[tramo.tipo];
     const reviews = loadReviews(tramoId);
     const avgStars = reviews.length ? (reviews.reduce((s, r) => s + r.estrellas, 0) / reviews.length).toFixed(1) : '—';
 
+    const statCards = [
+      tramo.km != null ? { label: t('tramoSheetLength'), value: `${tramo.km} km` } : null,
+      tramo.caudalM3s != null ? { label: t('flow'), value: `${tramo.caudalM3s} m³/s` } : null,
+      { label: t('waterTemp'), value: `${tramo.tempAguaC} °C` },
+      { label: t('clarity'), value: tramo.transparencia },
+    ].filter(Boolean);
+
     $('#tramoSheetContent').innerHTML = `
       <div class="sheet-header">
         <div>
           <span class="tramo-badge" style="background:${def.color}">${def.label[state.lang] || def.label.es}</span>
           <h2 id="tramoSheetTitle">${tramo.nombre}</h2>
-          <div class="sheet-meta">${tramo.rioNombre} · ${tramo.municipio}</div>
+          <div class="sheet-meta">${tramo.rioNombre ? tramo.rioNombre + ' · ' : ''}${tramo.municipio}</div>
         </div>
         <button class="sheet-close" data-close-sheet aria-label="${t('close')}">×</button>
       </div>
 
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-label">${t('tramoSheetLength')}</div><div class="stat-value">${tramo.km} km</div></div>
-        <div class="stat-card"><div class="stat-label">${t('flow')}</div><div class="stat-value">${tramo.caudalM3s} m³/s</div></div>
-        <div class="stat-card"><div class="stat-label">${t('waterTemp')}</div><div class="stat-value">${tramo.tempAguaC} °C</div></div>
-        <div class="stat-card"><div class="stat-label">${t('clarity')}</div><div class="stat-value">${tramo.transparencia}</div></div>
+        ${statCards.map((s) => `<div class="stat-card"><div class="stat-label">${s.label}</div><div class="stat-value">${s.value}</div></div>`).join('')}
       </div>
       <div class="sheet-meta" style="margin-top:-6px;">Datos de caudal/temperatura simulados (integración real: SAIH Ebro / CHE)</div>
 
@@ -619,7 +641,7 @@
 
   function renderLogbookSelects() {
     const tramoSel = $('#logbookTramo'); const spSel = $('#logbookSpecies');
-    tramoSel.innerHTML = allTramos().map((t2) => `<option value="${t2.id}">${t2.nombre}</option>`).join('');
+    tramoSel.innerHTML = allInteractables().map((t2) => `<option value="${t2.id}">${t2.nombre}</option>`).join('');
     spSel.innerHTML = SPECIES.map((s) => `<option value="${s.id}">${s.nombre[state.lang] || s.nombre.es}</option>`).join('');
   }
   function renderLogbookEntries() {
@@ -627,7 +649,7 @@
     const wrap = $('#logbookEntries');
     if (entries.length === 0) { wrap.innerHTML = `<p class="sheet-meta">Sin capturas registradas todavía.</p>`; return; }
     wrap.innerHTML = entries.slice().reverse().map((e) => {
-      const tramo = tramoById(e.tramoId); const sp = speciesById(e.speciesId);
+      const tramo = tramoById(e.tramoId) || waterbodyById(e.tramoId); const sp = speciesById(e.speciesId);
       return `<div class="logbook-entry"><span>${sp ? (sp.nombre[state.lang] || sp.nombre.es) : '—'} · ${tramo ? tramo.nombre : '—'}</span><span>${e.weight ? e.weight + ' kg · ' : ''}${e.date}</span></div>`;
     }).join('');
   }
@@ -650,7 +672,7 @@
     if (entries.length === 0) { toast('No hay capturas que exportar'); return; }
     const win = window.open('', '_blank');
     const rows = entries.map((e) => {
-      const tramo = tramoById(e.tramoId); const sp = speciesById(e.speciesId);
+      const tramo = tramoById(e.tramoId) || waterbodyById(e.tramoId); const sp = speciesById(e.speciesId);
       return `<tr><td>${e.date}</td><td>${sp ? (sp.nombre.es) : ''}</td><td>${tramo ? tramo.nombre : ''}</td><td>${e.weight || '—'}</td></tr>`;
     }).join('');
     win.document.write(`
