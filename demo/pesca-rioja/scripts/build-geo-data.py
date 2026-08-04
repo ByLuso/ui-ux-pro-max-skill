@@ -453,6 +453,69 @@ def pseudo_random(seed_str, lo, hi):
     return round(lo + frac * (hi - lo), 1)
 
 
+WESTERN_RIVERS = {"oja", "tiron", "najerilla", "iregua"}
+EASTERN_RIVERS = {"jubera", "cidacos", "alhama", "linares"}
+
+
+def ecological_species(river_id, frac):
+    """Real species-by-river-position, from Zaldívar Ezquerro, C. "Los peces
+    de La Rioja o la historia interminable" (fish survey article, credited
+    source). `frac` is position along the river 0=headwater, 1=mouth, used
+    as an altitude proxy since rivers descend monotonically. Endangered/
+    near-extinct species (colmilleja, lamprehuela, fraile, bagre, zaparda)
+    and non-target species (esturión, salvelino -- both locally extinct;
+    gambusia, pez rojo/carpín -- minor) are intentionally left out of the
+    fishing-guide species set; see scripts/NORMATIVA_FUENTES.md."""
+    if river_id == "ebro":
+        # "En él habitan casi todas las especies... excepto la trucha común
+        # y el barbo colirrojo" -- natives + the full exotic assemblage.
+        return ["barbo-iberico", "loina", "gobio", "lobo-de-rio", "anguila", "tenca",
+                "black-bass", "lucio", "siluro", "pez-gato", "alburno"]
+
+    if river_id in WESTERN_RIVERS:
+        if frac < 0.30:
+            return ["trucha-comun", "piscardo"]
+        if frac < 0.45:
+            return ["trucha-comun", "piscardo", "barbo-colirrojo"]
+        if frac < 0.75:
+            return ["trucha-comun", "barbo-colirrojo", "barbo-iberico", "loina", "gobio", "lobo-de-rio"]
+        especies = ["barbo-iberico", "loina", "gobio", "lobo-de-rio", "anguila"]
+        if river_id == "najerilla":
+            # "Las truchas de los afluentes trucheros del Ebro ya no llegan
+            # hasta él, excepto en el río Najerilla."
+            especies = ["trucha-comun"] + especies
+        return especies
+
+    if river_id == "leza":
+        # Leza marks the transition: only a couple of headwater streams
+        # still hold trucha común; the rest behaves like the eastern rivers.
+        if frac < 0.15:
+            return ["trucha-comun", "barbo-colirrojo"]
+        if frac < 0.40:
+            return ["barbo-colirrojo", "bermejuela", "lobo-de-rio"]
+        return ["barbo-iberico", "loina", "gobio", "lobo-de-rio", "anguila"]
+
+    if river_id in EASTERN_RIVERS:
+        has_lobo = river_id != "alhama"  # "abundante... excepto el Alhama"
+        if frac < 0.40:
+            especies = ["barbo-colirrojo", "bermejuela"]
+            if has_lobo:
+                especies.append("lobo-de-rio")
+            return especies
+        especies = ["barbo-iberico", "loina", "gobio"]
+        if has_lobo:
+            especies.append("lobo-de-rio")
+        if frac >= 0.70:
+            especies.append("anguila")
+        if river_id == "cidacos":
+            # "ni la trucha común -excepto si se mantiene artificialmente
+            # como en el río Cidacos-"
+            especies.append("trucha-comun")
+        return especies
+
+    return ["barbo-iberico"]
+
+
 def water_kind_at(river_id, frac_along_chain, midpoint):
     meta = RIVER_META[river_id]
     if meta["kind"] != "trout_split":
@@ -469,6 +532,7 @@ def classify_auto_chunk(river_id, chunk_id, idx, total, midpoint):
     caudal_base = {"cyprinid": 45.0, "trout": 2.5, "unmanaged": 2.0}[kind]
     caudal = pseudo_random(chunk_id + "-caudal", caudal_base * 0.6, caudal_base * 1.6)
     temp = pseudo_random(chunk_id + "-temp", 8.0, 17.0)
+    especies = ecological_species(river_id, frac)
 
     if kind == "trout":
         # Real talla override: upstream of the Anguiano coto (Najerilla) /
@@ -481,18 +545,16 @@ def classify_auto_chunk(river_id, chunk_id, idx, total, midpoint):
             viguera = next(t for t in TOWNS if t[0] == "Viguera")
             talla = "21 cm (cabecera)" if haversine_km(midpoint, RIVER_META[river_id]["mouth_ref"]) > haversine_km((viguera[1], viguera[2]), RIVER_META[river_id]["mouth_ref"]) else "25 cm (aguas abajo del coto de Viguera)"
         return {
-            "tipo": "libre", "especies": ["trucha-comun"], "caudalM3s": caudal, "tempAguaC": temp,
+            "tipo": "libre", "especies": especies, "caudalM3s": caudal, "tempAguaC": temp,
             "transparencia": "Alta", "accesoDificultad": "Difícil" if frac < 0.2 else "Media", "vadeable": True,
             "modalidad": ["mosca", "spinning", "cebo natural"], "cupo": "3 truchas/día",
             "tallaMinima": talla, "veda": TROUT_SEASON, "precio": "Gratuito",
         }
     if kind == "cyprinid":
-        # General legal species list for aguas ciprinícolas per the Orden
-        # ("Especies pescables: Anguila, barbo común... tenca..."); invasive
-        # species (black-bass, lucioperca, etc.) are only pescable in
-        # specific authorized eradication zones we don't have a confirmed
-        # list for, so they're not added here to avoid overclaiming.
-        especies = ["barbo-iberico", "anguila", "tenca"]
+        # Cupo/talla text only covers the species the Orden gives explicit
+        # numbers for (barbo, anguila, tenca); the fuller ecological species
+        # list (loína, gobio, lobo de río, exotics...) shows separately in
+        # "Especies presentes" without fabricated legal limits for each.
         return {
             "tipo": "libre", "especies": especies, "caudalM3s": caudal, "tempAguaC": temp,
             "transparencia": "Media", "accesoDificultad": "Fácil", "vadeable": False,
@@ -501,7 +563,7 @@ def classify_auto_chunk(river_id, chunk_id, idx, total, midpoint):
         }
     # unmanaged (Alhama, Linares, Jubera): no coto/vedado designation found in the Orden
     return {
-        "tipo": "libre", "especies": ["barbo-iberico", "anguila", "tenca"], "caudalM3s": caudal, "tempAguaC": temp,
+        "tipo": "libre", "especies": especies, "caudalM3s": caudal, "tempAguaC": temp,
         "transparencia": "Media", "accesoDificultad": "Media", "vadeable": True,
         "modalidad": ["cebo natural", "spinning"], "cupo": "Normativa general de aguas ciprinícolas",
         "tallaMinima": "35 cm (barbo), 25 cm (anguila), 15 cm (tenca)",
@@ -658,34 +720,42 @@ RICH_TRAMOS = [
 # taken from the Orden where confirmed; entries marked "sin dato confirmado"
 # use the general trout-embalse rule as a placeholder, not a verified figure.
 WATER_SELECTION = {
-    "Embalse de Mansilla": dict(tipo="coto", especies=["trucha-comun", "trucha-arcoiris"],
+    # Embalses de cabecera: "merodean trucha común, piscardo y barbo de
+    # montaña... a las que se han ido uniendo madrilla, gobio, anguila o la
+    # colmilleja, y también trucha arco-iris, pez rojo o carpa" (Zaldívar).
+    "Embalse de Mansilla": dict(tipo="coto", especies=["trucha-comun", "trucha-arcoiris", "piscardo", "loina", "gobio", "carpa"],
                                  talla="30 cm", cupo="3 truchas/día",
                                  precio="Hábil 9 marzo–30 septiembre, todos los días, pesca tradicional"),
-    "Embalse González-Lacasa": dict(tipo="coto", especies=["trucha-comun", "trucha-arcoiris"],
+    "Embalse González-Lacasa": dict(tipo="coto", especies=["trucha-comun", "trucha-arcoiris", "piscardo", "loina", "carpa"],
                                      talla="30 cm", cupo="3 truchas/día",
                                      precio="Hábil 9 marzo–30 septiembre, todos los días, pesca tradicional"),
-    "Embalse de Pajares": dict(tipo="coto", especies=["trucha-arcoiris"],
+    "Embalse de Pajares": dict(tipo="coto", especies=["trucha-comun", "trucha-arcoiris", "piscardo", "carpa"],
                                 talla="30 cm", cupo="3 truchas/día",
                                 precio="Embalse truchero acotado — sin dato de fechas confirmado, consulta sede electrónica"),
-    "Embalse de Leiva": dict(tipo="coto", especies=["trucha-arcoiris"],
+    "Embalse de Leiva": dict(tipo="coto", especies=["trucha-comun", "trucha-arcoiris", "piscardo", "carpa"],
                               talla="30 cm", cupo="3 truchas/día",
                               precio="Embalse truchero acotado — sin dato de fechas confirmado, consulta sede electrónica"),
     "Embalse de Cornago": dict(tipo="coto", especies=["trucha-arcoiris"], confirmado=False,
                                 talla="30 cm (sin dato confirmado)", cupo="3 truchas/día (sin dato confirmado)",
                                 precio="Consulta sede electrónica — datos de este embalse no confirmados en la fuente consultada"),
-    "Pantano de La Grajera": dict(tipo="intensivo", especies=["trucha-arcoiris", "tenca", "anguila", "black-bass"],
+    "Pantano de La Grajera": dict(tipo="intensivo", especies=["trucha-arcoiris", "tenca", "anguila", "black-bass", "carpa", "pez-sol"],
                                    talla="23 cm (trucha), 15 cm (tenca), 25 cm (anguila)", cupo="4/día según especie y periodo",
                                    precio="Periodo truchero 23 feb–15 jun; periodo ciprínidos oct–feb. Área de Medio Ambiente, Ayto. Logroño"),
-    "Embalse de Enciso": dict(tipo="coto", especies=["trucha-arcoiris"],
+    "Embalse de Enciso": dict(tipo="coto", especies=["trucha-comun", "trucha-arcoiris", "piscardo", "carpa"],
                                talla="30 cm", cupo="3 truchas/día",
                                precio="Hábil 9 marzo–30 septiembre, todos los días, pesca tradicional"),
     "Embalse de Yalde": dict(tipo="coto", especies=["trucha-arcoiris"], confirmado=False,
                               talla="30 cm (sin dato confirmado)", cupo="3 truchas/día (sin dato confirmado)",
                               precio="Consulta sede electrónica — datos de este embalse no confirmados en la fuente consultada"),
-    "Embalse de Piarrejas": dict(tipo="coto", especies=["trucha-arcoiris"],
+    "Embalse de Piarrejas": dict(tipo="coto", especies=["trucha-comun", "trucha-arcoiris", "piscardo", "carpa"],
                                   talla="30 cm", cupo="3 truchas/día",
                                   precio="Hábil 6 abril–31 julio; lunes y jueves solo captura y suelta"),
-    "Pantano de Valbornedo": dict(tipo="sinMuerte", especies=["barbo-iberico", "anguila", "tenca"],
+    # Embalses del valle del Ebro: "especies más intensamente introducidas
+    # son las exóticas carpa, pez rojo, perca americana, pez sol, lucio, pez
+    # gato, siluro y la lucioperca... también trucha arco-iris, tencas y
+    # anguilas" (Zaldívar).
+    "Pantano de Valbornedo": dict(tipo="sinMuerte",
+                                   especies=["barbo-iberico", "anguila", "tenca", "carpa", "black-bass", "lucioperca"],
                                    talla="No aplica", cupo="0 (captura y suelta obligatoria de ciprínidos autóctonos)",
                                    precio="Gratuito — exóticas se sacrifican tras su captura; reservado para competición varios días al año"),
     # Balsas de riego explícitamente listadas como lugar PROHIBIDO para pescar
@@ -792,7 +862,7 @@ def main():
         tipo="libre", modalidad=["cebo natural", "spinning"], cupo="Normativa general de aguas ciprinícolas",
         tallaMinima="35 cm (barbo), 25 cm (anguila), 15 cm (tenca)", veda=CYPRINID_SEASON,
         precio="Sin información específica en las fuentes consultadas — consulta la Orden vigente",
-        especies=["barbo-iberico", "anguila", "tenca"],
+        especies=["barbo-iberico", "anguila", "tenca", "carpa"],
     )
     seen_slugs = {}
     MIN_UNNAMED_AREA_M2 = 2500  # skip tiny farm puddles with no name at all

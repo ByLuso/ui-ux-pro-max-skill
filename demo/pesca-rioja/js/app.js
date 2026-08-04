@@ -540,9 +540,10 @@
     const nombre = sp.nombre[state.lang] || sp.nombre.es;
     $('#speciesSheetContent').innerHTML = `
       ${state.speciesReturnTramo ? `<button class="back-link" id="btnBackToTramo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>${t('speciesBack')}</button>` : ''}
+      ${sp.foto ? `<div class="species-photo"><img src="${sp.foto}" alt="${nombre} (${sp.cientifico})" loading="lazy" /><span class="species-photo-credit">Foto: Eduardo Ruiz Baltanás — Gobierno de La Rioja</span></div>` : ''}
       <div class="sheet-header">
         <div class="species-hero">
-          <span class="species-hero-icon" style="background:${sp.color}">${fishSvg()}</span>
+          <span class="species-hero-icon" style="background:${sp.color}">${sp.foto ? `<img src="${sp.foto}" alt="" />` : fishSvg()}</span>
           <div>
             <h2 id="speciesSheetTitle">${nombre}</h2>
             <div class="sci-name">${sp.cientifico}</div>
