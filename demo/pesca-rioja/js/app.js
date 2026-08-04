@@ -658,9 +658,11 @@
       <style>body{font-family:sans-serif;padding:24px;} table{border-collapse:collapse;width:100%;} td,th{border:1px solid #ccc;padding:8px;font-size:14px;text-align:left;}</style>
       </head><body><h1>Cuaderno de capturas — Pesca Rioja</h1>
       <table><thead><tr><th>Fecha</th><th>Especie</th><th>Tramo</th><th>Peso (kg)</th></tr></thead><tbody>${rows}</tbody></table>
-      <script>window.print();</script></body></html>
+      </body></html>
     `);
     win.document.close();
+    win.focus();
+    win.print();
   });
 
   // ---- ACCESSIBILITY ----
