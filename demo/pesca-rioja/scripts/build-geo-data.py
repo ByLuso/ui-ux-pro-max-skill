@@ -460,21 +460,25 @@ def classify_auto_chunk(river_id, chunk_id, idx, total, midpoint):
             "tallaMinima": talla, "veda": TROUT_SEASON, "precio": "Gratuito",
         }
     if kind == "cyprinid":
-        especies = ["barbo-iberico"]
-        if frac > 0.5:
-            especies = especies + ["black-bass"]
+        # General legal species list for aguas ciprinícolas per the Orden
+        # ("Especies pescables: Anguila, barbo común... tenca..."); invasive
+        # species (black-bass, lucioperca, etc.) are only pescable in
+        # specific authorized eradication zones we don't have a confirmed
+        # list for, so they're not added here to avoid overclaiming.
+        especies = ["barbo-iberico", "anguila", "tenca"]
         return {
             "tipo": "libre", "especies": especies, "caudalM3s": caudal, "tempAguaC": temp,
             "transparencia": "Media", "accesoDificultad": "Fácil", "vadeable": False,
-            "modalidad": ["cebo natural", "spinning"], "cupo": "2 barbos + 5 anguilas/día",
-            "tallaMinima": "35 cm (barbo), 25 cm (anguila)", "veda": CYPRINID_SEASON, "precio": "Gratuito",
+            "modalidad": ["cebo natural", "spinning"], "cupo": "2 barbos + 5 anguilas + 5 tencas/día",
+            "tallaMinima": "35 cm (barbo), 25 cm (anguila), 15 cm (tenca)", "veda": CYPRINID_SEASON, "precio": "Gratuito",
         }
     # unmanaged (Alhama, Linares, Jubera): no coto/vedado designation found in the Orden
     return {
-        "tipo": "libre", "especies": ["barbo-iberico"], "caudalM3s": caudal, "tempAguaC": temp,
+        "tipo": "libre", "especies": ["barbo-iberico", "anguila", "tenca"], "caudalM3s": caudal, "tempAguaC": temp,
         "transparencia": "Media", "accesoDificultad": "Media", "vadeable": True,
         "modalidad": ["cebo natural", "spinning"], "cupo": "Normativa general de aguas ciprinícolas",
-        "tallaMinima": "35 cm (barbo)", "veda": "Sin coto ni vedado designado en la Orden vigente",
+        "tallaMinima": "35 cm (barbo), 25 cm (anguila), 15 cm (tenca)",
+        "veda": "Sin coto ni vedado designado en la Orden vigente",
         "precio": "Gratuito",
     }
 
@@ -642,8 +646,8 @@ WATER_SELECTION = {
     "Embalse de Cornago": dict(tipo="coto", especies=["trucha-arcoiris"], confirmado=False,
                                 talla="30 cm (sin dato confirmado)", cupo="3 truchas/día (sin dato confirmado)",
                                 precio="Consulta sede electrónica — datos de este embalse no confirmados en la fuente consultada"),
-    "Pantano de La Grajera": dict(tipo="intensivo", especies=["trucha-arcoiris", "black-bass"],
-                                   talla="23 cm (trucha), 15 cm (tenca)", cupo="4/día según especie y periodo",
+    "Pantano de La Grajera": dict(tipo="intensivo", especies=["trucha-arcoiris", "tenca", "anguila", "black-bass"],
+                                   talla="23 cm (trucha), 15 cm (tenca), 25 cm (anguila)", cupo="4/día según especie y periodo",
                                    precio="Periodo truchero 23 feb–15 jun; periodo ciprínidos oct–feb. Área de Medio Ambiente, Ayto. Logroño"),
     "Embalse de Enciso": dict(tipo="coto", especies=["trucha-arcoiris"],
                                talla="30 cm", cupo="3 truchas/día",
@@ -651,6 +655,31 @@ WATER_SELECTION = {
     "Embalse de Yalde": dict(tipo="coto", especies=["trucha-arcoiris"], confirmado=False,
                               talla="30 cm (sin dato confirmado)", cupo="3 truchas/día (sin dato confirmado)",
                               precio="Consulta sede electrónica — datos de este embalse no confirmados en la fuente consultada"),
+    "Embalse de Piarrejas": dict(tipo="coto", especies=["trucha-arcoiris"],
+                                  talla="30 cm", cupo="3 truchas/día",
+                                  precio="Hábil 6 abril–31 julio; lunes y jueves solo captura y suelta"),
+    "Pantano de Valbornedo": dict(tipo="sinMuerte", especies=["barbo-iberico", "anguila", "tenca"],
+                                   talla="No aplica", cupo="0 (captura y suelta obligatoria de ciprínidos autóctonos)",
+                                   precio="Gratuito — exóticas se sacrifican tras su captura; reservado para competición varios días al año"),
+    # Balsas de riego explícitamente listadas como lugar PROHIBIDO para pescar
+    # en la sección "Lugares prohibidos" de la Orden.
+    "Balsa de Sojuela": dict(tipo="vedado", especies=[], talla="No aplica", cupo="0",
+                              precio="Vedada — balsa de riego, lugar prohibido según la Orden de pesca"),
+    "Balsa de Sorzano": dict(tipo="vedado", especies=[], talla="No aplica", cupo="0",
+                              precio="Vedada — balsa de riego, lugar prohibido según la Orden de pesca"),
+    "Embalse de Regajo": dict(tipo="vedado", especies=[], talla="No aplica", cupo="0",
+                               precio="Vedada — balsa de riego, lugar prohibido según la Orden de pesca"),
+}
+
+# Categorical exclusions: infrastructure that isn't a fishable standing water
+# body (troughs, springs, fountains, swimming pools, irrigation canals,
+# tiny drainage ditches) or duplicate/mistagged OSM elements. Everything
+# else named is included per the user's request that all real water be
+# interactive, even when we have no specific regulation data for it.
+WATER_EXCLUDE_NAMES = {
+    "Abrevadero", "Manantial", "Fuente de Las Abejas", "Piscina municipal",
+    "Río Tirón", "Pilón", "Canal Viejo o Patagallina", "Canal Viejo o de Patagallina",
+    "Arroyo de Enmedio",
 }
 
 
@@ -730,27 +759,41 @@ def main():
         print("WARNING: rich tramos not matched to real geometry:", unused_rich, file=sys.stderr)
 
     waterbodies_out = []
+    GENERIC_WATER_DEFAULTS = dict(
+        tipo="libre", modalidad=["cebo natural", "spinning"], cupo="Normativa general de aguas ciprinícolas",
+        tallaMinima="35 cm (barbo), 25 cm (anguila), 15 cm (tenca)", veda=CYPRINID_SEASON,
+        precio="Sin información específica en las fuentes consultadas — consulta la Orden vigente",
+        especies=["barbo-iberico", "anguila", "tenca"],
+    )
+    seen_slugs = {}
     for el in water_raw["elements"]:
         name = el.get("tags", {}).get("name")
-        if name not in WATER_SELECTION:
+        if not name or name in WATER_EXCLUDE_NAMES:
             continue
-        sel = WATER_SELECTION[name]
         pts = [(round(p["lat"], 6), round(p["lon"], 6)) for p in el["geometry"]]
         if len(pts) < 4:
             continue
+        sel = WATER_SELECTION.get(name, GENERIC_WATER_DEFAULTS)
         mid = pts[len(pts) // 2]
         town = nearest_town(mid)
-        defaults = TIPO_DEFAULTS[sel["tipo"]]
+        defaults = TIPO_DEFAULTS.get(sel["tipo"], GENERIC_WATER_DEFAULTS)
+        base_slug = slugify(name)
+        slug = base_slug
+        if base_slug in seen_slugs:
+            seen_slugs[base_slug] += 1
+            slug = f"{base_slug}-{seen_slugs[base_slug]}"
+        else:
+            seen_slugs[base_slug] = 1
         waterbodies_out.append({
-            "id": slugify(name),
+            "id": slug,
             "nombre": name, "municipio": town, "tipo": sel["tipo"],
-            "modalidad": defaults["modalidad"], "cupo": sel.get("cupo", defaults["cupo"]),
+            "modalidad": sel.get("modalidad", defaults["modalidad"]), "cupo": sel.get("cupo", defaults["cupo"]),
             "tallaMinima": sel.get("talla", defaults["tallaMinima"]), "veda": defaults["veda"],
             "precio": sel.get("precio", defaults["precio"]),
             "permisoUrl": "https://www.larioja.org/pesca", "especies": sel["especies"],
-            "caudalM3s": None, "tempAguaC": pseudo_random(name + "-temp", 10.0, 18.0),
+            "caudalM3s": None, "tempAguaC": pseudo_random(name + str(el["id"]) + "-temp", 10.0, 18.0),
             "transparencia": "Media", "accesoDificultad": "Fácil", "vadeable": False,
-            "nombradoEnOrden": sel.get("confirmado", True), "coords": pts,
+            "nombradoEnOrden": sel.get("confirmado", sel is not GENERIC_WATER_DEFAULTS), "coords": pts,
         })
 
     total_tramos = sum(len(r["tramos"]) for r in rivers_out)
