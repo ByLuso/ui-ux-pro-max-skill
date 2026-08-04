@@ -183,17 +183,29 @@ NAME_MAP = {
     "Río Jubera": "jubera",
 }
 
+# "kind" reflects the REAL water-type classification from the Orden de pesca
+# (aguas trucheras vs ciprinícolas), verified against the official 2025/2026
+# regulation text -- see scripts/NORMATIVA_FUENTES.md for the source quotes.
+#   trout     -> full course is truchera (Oja, Tirón, Najerilla, Iregua)
+#   trout_split -> truchera upstream of split_ref, ciprinícola downstream
+#                  (Leza splits at the Jubera confluence; Cidacos at Arnedo)
+#   cyprinid  -> ciprinícola (Ebro)
+#   unmanaged -> not part of the zoned/permit system per the Orden; no
+#                official coto/vedado/sin-muerte designation was found
+#                (Alhama, Linares, Jubera)
 RIVER_META = {
-    "ebro": {"nombre": "Ebro", "color": "#0369A1", "mouth_ref": (42.18, -1.75), "kind": "main"},
+    "ebro": {"nombre": "Ebro", "color": "#0369A1", "mouth_ref": (42.18, -1.75), "kind": "cyprinid"},
     "oja": {"nombre": "Oja", "color": "#166534", "mouth_ref": (42.576, -2.849), "kind": "trout"},
     "tiron": {"nombre": "Tirón", "color": "#15803D", "mouth_ref": (42.576, -2.849), "kind": "trout"},
     "najerilla": {"nombre": "Najerilla", "color": "#0EA5E9", "mouth_ref": (42.42, -2.55), "kind": "trout"},
     "iregua": {"nombre": "Iregua", "color": "#7C3AED", "mouth_ref": (42.47, -2.42), "kind": "trout"},
-    "leza": {"nombre": "Leza", "color": "#DB2777", "mouth_ref": (42.44, -2.28), "kind": "trout"},
-    "cidacos": {"nombre": "Cidacos", "color": "#EA580C", "mouth_ref": (42.303, -1.965), "kind": "trout"},
-    "alhama": {"nombre": "Alhama", "color": "#78350F", "mouth_ref": (42.18, -1.75), "kind": "trout"},
-    "linares": {"nombre": "Linares", "color": "#4D7C0F", "mouth_ref": (42.20, -2.10), "kind": "trout"},
-    "jubera": {"nombre": "Jubera", "color": "#B45309", "mouth_ref": (42.40, -2.35), "kind": "trout"},
+    "leza": {"nombre": "Leza", "color": "#DB2777", "mouth_ref": (42.44, -2.28), "kind": "trout_split",
+             "split_ref": (42.4029, -2.3247)},  # confluence with Jubera, at Murillo de Río Leza
+    "cidacos": {"nombre": "Cidacos", "color": "#EA580C", "mouth_ref": (42.303, -1.965), "kind": "trout_split",
+                "split_ref": (42.2273, -2.0996)},  # Puente de Francos, Arnedo
+    "alhama": {"nombre": "Alhama", "color": "#78350F", "mouth_ref": (42.18, -1.75), "kind": "unmanaged"},
+    "linares": {"nombre": "Linares", "color": "#4D7C0F", "mouth_ref": (42.20, -2.10), "kind": "unmanaged"},
+    "jubera": {"nombre": "Jubera", "color": "#B45309", "mouth_ref": (42.40, -2.35), "kind": "unmanaged"},
 }
 
 # Gazetteer for nearest-town labeling of auto-generated stretches.
@@ -286,6 +298,7 @@ TOWNS = [
     ('Lagunilla del Jubera', 42.3337, -2.3223),
     ('Lardero', 42.4273, -2.4624),
     ('Ledesma de la Cogolla', 42.3203, -2.7199),
+    ('Logroño', 42.4661, -2.4397),
     ('Leiva', 42.5029, -3.0466),
     ('Leza de Río Leza', 42.3292, -2.4061),
     ('Los Molinos de Ocón', 42.3161, -2.2079),
@@ -380,23 +393,28 @@ def nearest_town(latlon):
     return min(TOWNS, key=lambda t: haversine_km(latlon, (t[1], t[2])))[0]
 
 
-TIPO_CYCLE = ["libre", "libre", "coto", "libre", "sinMuerte", "coto", "libre", "intensivo"]
+# General rules verified against the Orden de pesca de La Rioja (folleto-resumen
+# 2025 + BOR 2026 season dates). Every auto-generated (non hand-matched) stretch
+# uses these -- real coto/sin-muerte/vedado designations only apply where we
+# have a specific named source (see RICH_TRAMOS below); anything else defaults
+# to "tramo libre", which is the correct residual category per the Orden.
+TROUT_SEASON = "29 marzo – 31 agosto 2026 (agosto solo captura y suelta; lunes y jueves no festivos solo captura y suelta)"
+CYPRINID_SEASON = "Todo el año (aguas ciprinícolas; sin veda estacional)"
 
 TIPO_DEFAULTS = {
-    "libre": dict(modalidad=["mosca", "spinning", "cebo natural"], cupo="4 piezas/día",
-                  tallaMinima="21 cm", veda="1 marzo – 3er domingo de agosto", precio="Gratuito"),
     "coto": dict(modalidad=["mosca", "spinning"], cupo="4 piezas/día",
-                 tallaMinima="21 cm", veda="1 marzo – 3er domingo de agosto",
+                 tallaMinima="23 cm", veda=TROUT_SEASON,
                  precio="Consulta permiso en sede electrónica"),
     "sinMuerte": dict(modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
-                       tallaMinima="No aplica", veda="Abierto todo el año", precio="Gratuito"),
-    "intensivo": dict(modalidad=["mosca", "spinning", "cebo natural"], cupo="6 piezas/día (repoblación periódica)",
-                       tallaMinima="Sin talla mínima", veda="1 marzo – 3er domingo de agosto",
+                       tallaMinima="No aplica", veda=TROUT_SEASON, precio="Gratuito"),
+    "intensivo": dict(modalidad=["mosca", "spinning", "cebo natural"], cupo="4 piezas/día (repoblación periódica)",
+                       tallaMinima="23 cm", veda=TROUT_SEASON,
                        precio="Consulta permiso en sede electrónica"),
     "escolar": dict(modalidad=["cebo natural (iniciación)"], cupo="2 piezas/día",
-                     tallaMinima="19 cm", veda="1 marzo – 3er domingo de agosto", precio="Gratuito (zona de iniciación)"),
+                     tallaMinima="19 cm", veda=TROUT_SEASON, precio="Gratuito (zona de iniciación)"),
     "vedado": dict(modalidad=["ninguna — cierre total"], cupo="0",
-                    tallaMinima="No aplica", veda="Cerrado — zona de protección", precio="No disponible"),
+                    tallaMinima="No aplica", veda="Cerrado — zona de protección (rota anualmente, consulta IDERioja)",
+                    precio="No disponible"),
 }
 
 
@@ -408,36 +426,56 @@ def pseudo_random(seed_str, lo, hi):
     return round(lo + frac * (hi - lo), 1)
 
 
+def water_kind_at(river_id, frac_along_chain, midpoint):
+    meta = RIVER_META[river_id]
+    if meta["kind"] != "trout_split":
+        return "trout" if meta["kind"] == "trout" else meta["kind"]
+    # trout upstream of the split landmark, cyprinid downstream of it
+    d_to_mouth = haversine_km(midpoint, meta["mouth_ref"])
+    d_split_to_mouth = haversine_km(meta["split_ref"], meta["mouth_ref"])
+    return "cyprinid" if d_to_mouth < d_split_to_mouth else "trout"
+
+
 def classify_auto_chunk(river_id, chunk_id, idx, total, midpoint):
-    kind = RIVER_META[river_id]["kind"]
     frac = idx / max(total - 1, 1)
-    if idx == 0 and total > 2:
-        tipo = "escolar"
-    else:
-        tipo = TIPO_CYCLE[idx % len(TIPO_CYCLE)]
-    especies = ["trucha-comun"] if kind == "trout" else ["barbo-iberico"]
-    if kind == "trout" and tipo in ("coto", "intensivo"):
-        especies = especies + ["trucha-arcoiris"]
-    if kind == "main":
+    kind = water_kind_at(river_id, frac, midpoint)
+    caudal_base = {"cyprinid": 45.0, "trout": 2.5, "unmanaged": 2.0}[kind]
+    caudal = pseudo_random(chunk_id + "-caudal", caudal_base * 0.6, caudal_base * 1.6)
+    temp = pseudo_random(chunk_id + "-temp", 8.0, 17.0)
+
+    if kind == "trout":
+        # Real talla override: upstream of the Anguiano coto (Najerilla) /
+        # Viguera coto (Iregua) is 21 cm cabecera water; downstream is 25 cm.
+        talla = "23 cm"
+        if river_id == "najerilla":
+            anguiano = next(t for t in TOWNS if t[0] == "Anguiano")
+            talla = "21 cm (cabecera)" if haversine_km(midpoint, RIVER_META[river_id]["mouth_ref"]) > haversine_km((anguiano[1], anguiano[2]), RIVER_META[river_id]["mouth_ref"]) else "25 cm (aguas abajo del coto de Anguiano)"
+        elif river_id == "iregua":
+            viguera = next(t for t in TOWNS if t[0] == "Viguera")
+            talla = "21 cm (cabecera)" if haversine_km(midpoint, RIVER_META[river_id]["mouth_ref"]) > haversine_km((viguera[1], viguera[2]), RIVER_META[river_id]["mouth_ref"]) else "25 cm (aguas abajo del coto de Viguera)"
+        return {
+            "tipo": "libre", "especies": ["trucha-comun"], "caudalM3s": caudal, "tempAguaC": temp,
+            "transparencia": "Alta", "accesoDificultad": "Difícil" if frac < 0.2 else "Media", "vadeable": True,
+            "modalidad": ["mosca", "spinning", "cebo natural"], "cupo": "3 truchas/día",
+            "tallaMinima": talla, "veda": TROUT_SEASON, "precio": "Gratuito",
+        }
+    if kind == "cyprinid":
         especies = ["barbo-iberico"]
-        if tipo in ("coto",):
-            especies = especies + ["lucioperca"]
         if frac > 0.5:
             especies = especies + ["black-bass"]
-    base_caudal = 45.0 if kind == "main" else 2.5
-    caudal = pseudo_random(chunk_id + "-caudal", base_caudal * 0.6, base_caudal * 1.6)
-    temp = pseudo_random(chunk_id + "-temp", 8.0, 17.0)
-    dificultad = "Fácil" if kind == "main" else ("Difícil" if frac < 0.2 else "Media")
-    defaults = TIPO_DEFAULTS[tipo]
+        return {
+            "tipo": "libre", "especies": especies, "caudalM3s": caudal, "tempAguaC": temp,
+            "transparencia": "Media", "accesoDificultad": "Fácil", "vadeable": False,
+            "modalidad": ["cebo natural", "spinning"], "cupo": "2 barbos + 5 anguilas/día",
+            "tallaMinima": "35 cm (barbo), 25 cm (anguila)", "veda": CYPRINID_SEASON, "precio": "Gratuito",
+        }
+    # unmanaged (Alhama, Linares, Jubera): no coto/vedado designation found in the Orden
     return {
-        "tipo": tipo,
-        "especies": especies,
-        "caudalM3s": caudal,
-        "tempAguaC": temp,
-        "transparencia": "Media" if kind == "main" else "Alta",
-        "accesoDificultad": dificultad,
-        "vadeable": kind != "main",
-        **defaults,
+        "tipo": "libre", "especies": ["barbo-iberico"], "caudalM3s": caudal, "tempAguaC": temp,
+        "transparencia": "Media", "accesoDificultad": "Media", "vadeable": True,
+        "modalidad": ["cebo natural", "spinning"], "cupo": "Normativa general de aguas ciprinícolas",
+        "tallaMinima": "35 cm (barbo)", "veda": "Sin coto ni vedado designado en la Orden vigente",
+        "precio": "Gratuito",
     }
 
 
@@ -446,82 +484,173 @@ def classify_auto_chunk(river_id, chunk_id, idx, total, midpoint):
 # to real geometry). anchor = approx (lat, lon) near where it should sit.
 # ---------------------------------------------------------------------------
 
+# Real named stretches, extracted verbatim (boundaries paraphrased) from the
+# official Orden de pesca (folleto-resumen 2025 "ZONIFICACIÓN PISCÍCOLA" +
+# BOR AGM/6/2026 season dates). See scripts/NORMATIVA_FUENTES.md for the
+# source quotes each entry is based on. `anchor` is the nearest identifiable
+# landmark town, used only to snap the entry onto the correct real geometry
+# chunk -- not a literal legal boundary point.
 RICH_TRAMOS = [
-    dict(river="ebro", anchor=(42.5763, -2.8437), nombre="Ebro — Haro a San Vicente", municipio="Haro",
-         tipo="libre", modalidad=["mosca", "spinning", "cebo natural"], cupo="4 piezas/día",
-         tallaMinima="21 cm (trucha), 25 cm (barbo)", veda="1 marzo – 3er domingo de agosto",
-         precio="Gratuito", especies=["barbo-iberico", "trucha-arcoiris"],
-         caudalM3s=42.5, tempAguaC=14.2, transparencia="Media", accesoDificultad="Fácil", vadeable=False),
-    dict(river="ebro", anchor=(42.4627, -2.4449), nombre="Ebro — Tramo urbano Logroño", municipio="Logroño",
-         tipo="sinMuerte", modalidad=["mosca", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
-         tallaMinima="No aplica (devolución obligatoria)", veda="Abierto todo el año, captura y suelta",
-         precio="Gratuito", especies=["barbo-iberico", "black-bass"],
-         caudalM3s=58.1, tempAguaC=15.6, transparencia="Baja", accesoDificultad="Muy fácil (paseo fluvial)", vadeable=False),
-    dict(river="ebro", anchor=(42.1808, -1.7469), nombre="Ebro — Coto de Alfaro", municipio="Alfaro",
-         tipo="coto", modalidad=["cebo natural", "spinning"], cupo="3 piezas/día",
-         tallaMinima="25 cm (barbo)", veda="1 marzo – 3er domingo de agosto",
-         precio="18 €/día — permiso en sede electrónica", especies=["barbo-iberico", "lucioperca"],
-         caudalM3s=63.0, tempAguaC=16.4, transparencia="Media", accesoDificultad="Fácil", vadeable=False),
-    dict(river="oja", anchor=(42.3253, -3.0000), nombre="Oja — Cabecera Ezcaray", municipio="Ezcaray",
-         tipo="vedado", modalidad=["ninguna — cierre total"], cupo="0", tallaMinima="No aplica",
-         veda="Cerrado todo el año — zona de protección de freza", precio="No disponible",
-         especies=["trucha-comun"], caudalM3s=2.1, tempAguaC=9.8, transparencia="Alta",
-         accesoDificultad="Difícil (sendero de montaña)", vadeable=True),
-    dict(river="oja", anchor=(42.4405, -2.9538), nombre="Oja — Santo Domingo de la Calzada", municipio="Santo Domingo de la Calzada",
-         tipo="intensivo", modalidad=["mosca", "spinning", "cebo natural"], cupo="6 piezas/día (repoblación semanal)",
-         tallaMinima="Sin talla mínima", veda="1 marzo – 3er domingo de agosto",
-         precio="12 €/día — permiso en sede electrónica", especies=["trucha-arcoiris", "trucha-comun"],
-         caudalM3s=4.4, tempAguaC=11.5, transparencia="Alta", accesoDificultad="Fácil", vadeable=True),
-    dict(river="tiron", anchor=(42.5150, -2.9280), nombre="Tirón — Tramo medio Cuzcurrita", municipio="Cuzcurrita de Río Tirón",
-         tipo="libre", modalidad=["mosca", "spinning", "cebo natural"], cupo="4 piezas/día",
-         tallaMinima="21 cm", veda="1 marzo – 3er domingo de agosto", precio="Gratuito",
-         especies=["trucha-comun"], caudalM3s=3.2, tempAguaC=10.9, transparencia="Alta",
+    # --- OJA ---------------------------------------------------------
+    dict(river="oja", anchor=(42.3467, -3.0049), nombre="Oja — Tramo sin muerte de Posadas", municipio="Ojacastro",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 6 de abril al 31 de julio", precio="Gratuito",
+         especies=["trucha-comun"], caudalM3s=2.6, tempAguaC=10.5, transparencia="Alta",
          accesoDificultad="Media", vadeable=True),
-    dict(river="najerilla", anchor=(42.2757, -2.7728), nombre="Najerilla — Cabecera / Embalse Mansilla", municipio="Anguiano",
-         tipo="escolar", modalidad=["cebo natural (iniciación)"], cupo="2 piezas/día",
-         tallaMinima="19 cm", veda="1 marzo – 3er domingo de agosto", precio="Gratuito (zona de iniciación)",
-         especies=["trucha-comun"], caudalM3s=2.8, tempAguaC=10.1, transparencia="Alta",
+    dict(river="oja", anchor=(42.548, -2.9111), nombre="Oja — Tramo sin muerte de Casalarreina", municipio="Casalarreina",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de julio (escolleras casco urbano hasta unión con el Tirón)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=4.8, tempAguaC=11.9, transparencia="Media",
          accesoDificultad="Fácil", vadeable=True),
-    dict(river="najerilla", anchor=(42.4159, -2.7325), nombre="Najerilla — Coto de Nájera", municipio="Nájera",
-         tipo="coto", modalidad=["mosca", "spinning"], cupo="4 piezas/día", tallaMinima="21 cm",
-         veda="1 marzo – 3er domingo de agosto", precio="15 €/día — permiso en sede electrónica",
-         especies=["trucha-comun", "trucha-arcoiris"], caudalM3s=5.6, tempAguaC=12.3,
-         transparencia="Media", accesoDificultad="Fácil", vadeable=True),
-    dict(river="iregua", anchor=(42.1652, -2.6395), nombre="Iregua — Alto (Villanueva de Cameros)", municipio="Villanueva de Cameros",
-         tipo="libre", modalidad=["mosca", "cebo natural"], cupo="4 piezas/día", tallaMinima="21 cm",
-         veda="1 marzo – 3er domingo de agosto", precio="Gratuito", especies=["trucha-comun"],
-         caudalM3s=1.9, tempAguaC=9.4, transparencia="Alta", accesoDificultad="Media", vadeable=True),
-    dict(river="iregua", anchor=(42.4020, -2.5250), nombre="Iregua — Bajo urbano", municipio="Islallana / Logroño",
-         tipo="sinMuerte", modalidad=["mosca sin muerte"], cupo="0 (devolución obligatoria)",
-         tallaMinima="No aplica", veda="Abierto todo el año", precio="Gratuito",
-         especies=["trucha-comun", "barbo-iberico"], caudalM3s=3.1, tempAguaC=12.8,
-         transparencia="Media", accesoDificultad="Fácil", vadeable=True),
-    dict(river="leza", anchor=(42.3050, -2.4550), nombre="Leza — Coto Leza de Río Leza", municipio="Leza de Río Leza",
-         tipo="coto", modalidad=["mosca", "spinning"], cupo="4 piezas/día", tallaMinima="21 cm",
-         veda="1 marzo – 3er domingo de agosto", precio="14 €/día — permiso en sede electrónica",
-         especies=["trucha-comun"], caudalM3s=1.6, tempAguaC=10.7, transparencia="Alta",
+    dict(river="oja", anchor=(42.3258, -3.0146), nombre="Oja — Tramo libre Azárrulla–Ojacastro", municipio="Ezcaray",
+         tipo="libre", modalidad=["mosca", "spinning", "cebo natural"], cupo="3 truchas/día",
+         tallaMinima="21 cm", veda="Hábil del 6 de abril al 6 de julio", precio="Gratuito",
+         especies=["trucha-comun"], caudalM3s=1.8, tempAguaC=9.6, transparencia="Alta",
          accesoDificultad="Media", vadeable=True),
-    dict(river="cidacos", anchor=(42.2266, -2.1000), nombre="Cidacos — Arnedillo", municipio="Arnedillo",
-         tipo="libre", modalidad=["mosca", "cebo natural"], cupo="4 piezas/día", tallaMinima="21 cm",
-         veda="1 marzo – 3er domingo de agosto", precio="Gratuito", especies=["trucha-comun", "barbo-iberico"],
-         caudalM3s=2.4, tempAguaC=13.1, transparencia="Media", accesoDificultad="Media", vadeable=True),
-    dict(river="alhama", anchor=(42.0270, -1.9680), nombre="Alhama — Cabecera Cervera", municipio="Cervera del Río Alhama",
+    # --- TIRÓN ---------------------------------------------------------
+    dict(river="tiron", anchor=(42.5769, -2.8467), nombre="Tirón — Tramo sin muerte de Haro", municipio="Haro",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de julio (presa de Arrauri a Fuente del Coto Carrascón)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=3.4, tempAguaC=11.2, transparencia="Media",
+         accesoDificultad="Fácil", vadeable=True),
+    dict(river="tiron", anchor=(42.5021, -3.0196), nombre="Tirón — Vedado Herramélluri–Ochánduri", municipio="Herramélluri",
          tipo="vedado", modalidad=["ninguna — cierre total"], cupo="0", tallaMinima="No aplica",
-         veda="Cerrado todo el año — recuperación de población", precio="No disponible",
-         especies=["trucha-comun"], caudalM3s=0.9, tempAguaC=11.8, transparencia="Alta",
-         accesoDificultad="Difícil", vadeable=True),
+         veda="Vedado esta campaña (los vedados del Tirón rotan cada año; consulta IDERioja)",
+         precio="No disponible", especies=["trucha-comun"], caudalM3s=2.0, tempAguaC=9.9, transparencia="Alta",
+         accesoDificultad="Media", vadeable=True),
+    dict(river="tiron", anchor=(42.5753, -2.9028), nombre="Tirón — Coto Intensivo de Anguciana", municipio="Anguciana",
+         tipo="intensivo", modalidad=["mosca", "spinning", "cebo natural (solo lombriz)"], cupo="4 truchas arcoíris/día",
+         tallaMinima="23 cm", veda="Ene–jun y oct–dic (lunes, miér, jue, vie, sáb, dom y festivos); trucha común debe devolverse",
+         precio="Permiso — Sociedad Riojalteña de Caza y Pesca, Haro", especies=["trucha-arcoiris"],
+         caudalM3s=3.1, tempAguaC=11.8, transparencia="Media", accesoDificultad="Fácil", vadeable=True),
+    # --- NAJERILLA -----------------------------------------------------
+    dict(river="najerilla", anchor=(42.3348, -2.7612), nombre="Najerilla — Tramo sin muerte de Piarrejas", municipio="Baños de Río Tobía",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 6 de abril al 31 de julio (entre los embalses de Mansilla y Piarrejas)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=2.9, tempAguaC=10.3, transparencia="Alta",
+         accesoDificultad="Media", vadeable=True),
+    dict(river="najerilla", anchor=(42.2612, -2.7649), nombre="Najerilla — Tramo sin muerte \"La Bolacha\"", municipio="Anguiano",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de agosto (presa central de Anguiano a desemb. río Brieva)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=3.5, tempAguaC=10.8, transparencia="Alta",
+         accesoDificultad="Fácil", vadeable=True),
+    dict(river="najerilla", anchor=(42.3744, -2.7671), nombre="Najerilla — Tramo sin muerte de Arenzana", municipio="Cárdenas",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de agosto (presa de Mahave a desemb. río Cárdenas)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=4.1, tempAguaC=11.5, transparencia="Media",
+         accesoDificultad="Fácil", vadeable=True),
+    dict(river="najerilla", anchor=(42.4159, -2.7325), nombre="Najerilla — Tramo sin muerte de Nájera", municipio="Nájera",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de agosto (desemb. río Cordovín a puente N-120)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=5.0, tempAguaC=12.4, transparencia="Media",
+         accesoDificultad="Fácil", vadeable=True),
+    dict(river="najerilla", anchor=(42.2612, -2.7649), nombre="Najerilla — Coto de Anguiano", municipio="Anguiano",
+         tipo="coto", modalidad=["mosca", "spinning"], cupo="4 truchas/día", tallaMinima="23 cm",
+         veda="Hábil todo el coto; sub-zona sin muerte del 1 al 31 de agosto",
+         precio="Permiso en sede electrónica (federado/no federado)", especies=["trucha-comun", "trucha-arcoiris"],
+         caudalM3s=3.8, tempAguaC=11.0, transparencia="Media", accesoDificultad="Fácil", vadeable=True),
+    dict(river="najerilla", anchor=(42.498, -2.7499), nombre="Najerilla — Coto de San Asensio", municipio="San Asensio",
+         tipo="coto", modalidad=["mosca", "spinning"], cupo="4 truchas/día", tallaMinima="25 cm",
+         veda="Miércoles, jueves, sábados, domingos y festivos del 30 de marzo al 31 de julio",
+         precio="Permiso en sede electrónica (federado/no federado)", especies=["trucha-comun", "trucha-arcoiris"],
+         caudalM3s=6.2, tempAguaC=13.0, transparencia="Media", accesoDificultad="Fácil", vadeable=False),
+    # --- IREGUA ----------------------------------------------------------
+    dict(river="iregua", anchor=(42.1138, -2.6733), nombre="Iregua — Coto de Lumbreras", municipio="Villoslada de Cameros",
+         tipo="coto", modalidad=["mosca", "spinning"], cupo="4 truchas/día", tallaMinima="23 cm",
+         veda="Miércoles, jueves, sábados, domingos y festivos del 6 de abril al 31 de julio",
+         precio="Permiso en sede electrónica (federado/no federado)", especies=["trucha-comun"],
+         caudalM3s=1.4, tempAguaC=9.0, transparencia="Alta", accesoDificultad="Media", vadeable=True),
+    dict(river="iregua", anchor=(42.1671, -2.6509), nombre="Iregua — Coto de Villanueva", municipio="Villanueva de Cameros",
+         tipo="coto", modalidad=["mosca", "spinning"], cupo="4 truchas/día", tallaMinima="23 cm",
+         veda="Miércoles, jueves, sábados, domingos y festivos del 30 de marzo al 31 de julio",
+         precio="Permiso en sede electrónica (federado/no federado)", especies=["trucha-comun"],
+         caudalM3s=2.1, tempAguaC=10.1, transparencia="Media", accesoDificultad="Fácil", vadeable=True),
+    dict(river="iregua", anchor=(42.2188, -2.6675), nombre="Iregua — Tramo sin muerte de Villanueva", municipio="Nieva de Cameros",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de julio (puente de Mascarán a presa central de Nieva)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=2.4, tempAguaC=10.6, transparencia="Media",
+         accesoDificultad="Fácil", vadeable=True),
+    dict(river="iregua", anchor=(42.2561, -2.6306), nombre="Iregua — Tramo sin muerte de Torrecilla", municipio="Torrecilla en Cameros",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de agosto (zona de Corbalán al puente de Mascarán)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=2.6, tempAguaC=10.9, transparencia="Media",
+         accesoDificultad="Fácil", vadeable=True),
+    dict(river="iregua", anchor=(42.3082, -2.5338), nombre="Iregua — Coto de Viguera", municipio="Viguera",
+         tipo="coto", modalidad=["mosca", "spinning", "cebo natural (hasta 1 mayo)"], cupo="4 truchas/día",
+         tallaMinima="25 cm", veda="Miércoles, jueves, sábados, domingos y festivos del 30 de marzo al 31 de julio",
+         precio="Permiso en sede electrónica (federado/no federado)", especies=["trucha-comun"],
+         caudalM3s=3.3, tempAguaC=11.7, transparencia="Media", accesoDificultad="Fácil", vadeable=True),
+    dict(river="iregua", anchor=(42.3351, -2.4883), nombre="Iregua — Tramo sin muerte de Viguera", municipio="Nalda",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de julio (presa toma de aguas de Logroño a puente de Nalda)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=3.6, tempAguaC=12.0, transparencia="Media",
+         accesoDificultad="Fácil", vadeable=True),
+    dict(river="iregua", anchor=(42.3561, -2.4737), nombre="Iregua — Tramo sin muerte de Albelda", municipio="Albelda de Iregua",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de agosto (presa regadío río Somero a presa Escuelas Pías)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=3.9, tempAguaC=12.4, transparencia="Media",
+         accesoDificultad="Fácil", vadeable=True),
+    dict(river="iregua", anchor=(42.4061, -2.4393), nombre="Iregua — Tramo sin muerte de Alberite", municipio="Alberite",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de agosto (río Mercado a presa del río Varea)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=4.2, tempAguaC=12.8, transparencia="Media",
+         accesoDificultad="Fácil", vadeable=True),
+    dict(river="iregua", anchor=(42.4661, -2.4397), nombre="Iregua — Tramo sin muerte de Logroño", municipio="Logroño",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de agosto (Parque del Iregua en Logroño)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=4.6, tempAguaC=13.2, transparencia="Media",
+         accesoDificultad="Muy fácil (paseo fluvial)", vadeable=True),
+    # --- LEZA / CIDACOS --------------------------------------------------
+    dict(river="leza", anchor=(42.3292, -2.4061), nombre="Leza — Tramo sin muerte del Restauro", municipio="Leza de Río Leza",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de julio (fuentes del Restauro al puente LR-460)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=1.7, tempAguaC=10.4, transparencia="Alta",
+         accesoDificultad="Media", vadeable=True),
+    dict(river="cidacos", anchor=(42.212, -2.2351), nombre="Cidacos — Tramo sin muerte de Arnedillo", municipio="Arnedillo",
+         tipo="sinMuerte", modalidad=["mosca sin muerte", "spinning sin muerte"], cupo="0 (captura y suelta obligatoria)",
+         tallaMinima="No aplica", veda="Hábil del 30 de marzo al 31 de agosto (final coto Peroblasco a puente LR-115)",
+         precio="Gratuito", especies=["trucha-comun"], caudalM3s=2.2, tempAguaC=12.6, transparencia="Media",
+         accesoDificultad="Fácil", vadeable=True),
+    dict(river="cidacos", anchor=(42.16, -2.24), nombre="Cidacos — Coto de Peroblasco", municipio="Arnedillo",
+         tipo="coto", modalidad=["mosca", "spinning"], cupo="4 truchas/día", tallaMinima="23 cm",
+         veda="Miércoles, jueves, sábados, domingos y festivos del 30 de marzo al 31 de agosto",
+         precio="Permiso en sede electrónica (federado/no federado)", especies=["trucha-comun"],
+         caudalM3s=2.0, tempAguaC=12.0, transparencia="Media", accesoDificultad="Media", vadeable=True),
+    dict(river="cidacos", anchor=(42.2273, -2.0996), nombre="Cidacos — Coto Intensivo de Arnedo", municipio="Arnedo",
+         tipo="intensivo", modalidad=["mosca", "spinning", "cebo natural (solo lombriz)"], cupo="4 truchas arcoíris/día",
+         tallaMinima="23 cm", veda="Lun, miér, jue, vie, sáb, dom y festivos entre abril y octubre",
+         precio="Permiso — Sociedad de Pescadores del Cidacos, Arnedo", especies=["trucha-arcoiris"],
+         caudalM3s=2.8, tempAguaC=13.5, transparencia="Media", accesoDificultad="Fácil", vadeable=True),
 ]
 
-# Curated named reservoirs/lakes worth surfacing as fishing spots.
+# Curated named reservoirs/lakes worth surfacing as fishing spots. Talla/cupo
+# taken from the Orden where confirmed; entries marked "sin dato confirmado"
+# use the general trout-embalse rule as a placeholder, not a verified figure.
 WATER_SELECTION = {
-    "Embalse de Mansilla": dict(tipo="coto", especies=["trucha-arcoiris", "black-bass"], precio="Permiso de embalse — consulta sede electrónica"),
-    "Embalse González-Lacasa": dict(tipo="coto", especies=["black-bass", "lucioperca"], precio="Permiso de embalse — consulta sede electrónica"),
-    "Embalse de Pajares": dict(tipo="coto", especies=["trucha-arcoiris"], precio="Permiso de embalse — consulta sede electrónica"),
-    "Embalse de Leiva": dict(tipo="libre", especies=["trucha-comun"], precio="Gratuito"),
-    "Embalse de Cornago": dict(tipo="coto", especies=["trucha-arcoiris", "black-bass"], precio="Permiso de embalse — consulta sede electrónica"),
-    "Pantano de La Grajera": dict(tipo="sinMuerte", especies=["black-bass", "lucioperca"], precio="Gratuito (captura y suelta)"),
-    "Embalse de Enciso": dict(tipo="coto", especies=["black-bass"], precio="Permiso de embalse — consulta sede electrónica"),
-    "Embalse de Yalde": dict(tipo="libre", especies=["trucha-comun"], precio="Gratuito"),
+    "Embalse de Mansilla": dict(tipo="coto", especies=["trucha-comun", "trucha-arcoiris"],
+                                 talla="30 cm", cupo="3 truchas/día",
+                                 precio="Hábil 9 marzo–30 septiembre, todos los días, pesca tradicional"),
+    "Embalse González-Lacasa": dict(tipo="coto", especies=["trucha-comun", "trucha-arcoiris"],
+                                     talla="30 cm", cupo="3 truchas/día",
+                                     precio="Hábil 9 marzo–30 septiembre, todos los días, pesca tradicional"),
+    "Embalse de Pajares": dict(tipo="coto", especies=["trucha-arcoiris"],
+                                talla="30 cm", cupo="3 truchas/día",
+                                precio="Embalse truchero acotado — sin dato de fechas confirmado, consulta sede electrónica"),
+    "Embalse de Leiva": dict(tipo="coto", especies=["trucha-arcoiris"],
+                              talla="30 cm", cupo="3 truchas/día",
+                              precio="Embalse truchero acotado — sin dato de fechas confirmado, consulta sede electrónica"),
+    "Embalse de Cornago": dict(tipo="coto", especies=["trucha-arcoiris"], confirmado=False,
+                                talla="30 cm (sin dato confirmado)", cupo="3 truchas/día (sin dato confirmado)",
+                                precio="Consulta sede electrónica — datos de este embalse no confirmados en la fuente consultada"),
+    "Pantano de La Grajera": dict(tipo="intensivo", especies=["trucha-arcoiris", "black-bass"],
+                                   talla="23 cm (trucha), 15 cm (tenca)", cupo="4/día según especie y periodo",
+                                   precio="Periodo truchero 23 feb–15 jun; periodo ciprínidos oct–feb. Área de Medio Ambiente, Ayto. Logroño"),
+    "Embalse de Enciso": dict(tipo="coto", especies=["trucha-arcoiris"],
+                               talla="30 cm", cupo="3 truchas/día",
+                               precio="Hábil 9 marzo–30 septiembre, todos los días, pesca tradicional"),
+    "Embalse de Yalde": dict(tipo="coto", especies=["trucha-arcoiris"], confirmado=False,
+                              talla="30 cm (sin dato confirmado)", cupo="3 truchas/día (sin dato confirmado)",
+                              precio="Consulta sede electrónica — datos de este embalse no confirmados en la fuente consultada"),
 }
 
 
@@ -553,7 +682,7 @@ def main():
             if haversine_km(chain[0], meta["mouth_ref"]) < haversine_km(chain[-1], meta["mouth_ref"]):
                 chain = list(reversed(chain))
             simplified = rdp(chain, epsilon=0.0004)
-            chunks = chunk_chain(simplified, target_km=5.5, min_km=2.0)
+            chunks = chunk_chain(simplified, target_km=3.0, min_km=1.2)
             total = len(chunks)
             for idx, chunk_pts in enumerate(chunks):
                 seg_counter += 1
@@ -561,14 +690,14 @@ def main():
                 length_km = round(chain_length_km(chunk_pts), 2)
                 mid = chunk_pts[len(chunk_pts) // 2]
 
-                rich = None
+                candidates = []
                 for rt in RICH_TRAMOS:
                     if rt["river"] != rid or rt.get("_used"):
                         continue
                     closest = min(haversine_km(rt["anchor"], p) for p in chunk_pts)
-                    if closest < 6.5:
-                        rich = rt
-                        break
+                    if closest < 4.2:
+                        candidates.append((closest, rt))
+                rich = min(candidates, key=lambda c: c[0])[1] if candidates else None
                 if rich:
                     rich["_used"] = True
                     tramos.append({
@@ -579,7 +708,7 @@ def main():
                         "especies": rich["especies"], "caudalM3s": rich["caudalM3s"],
                         "tempAguaC": rich["tempAguaC"], "transparencia": rich["transparencia"],
                         "accesoDificultad": rich["accesoDificultad"], "vadeable": rich["vadeable"],
-                        "coords": chunk_pts,
+                        "nombradoEnOrden": True, "coords": chunk_pts,
                     })
                 else:
                     auto = classify_auto_chunk(rid, chunk_id, idx, total, mid)
@@ -592,7 +721,7 @@ def main():
                         "permisoUrl": "https://www.larioja.org/pesca", "especies": auto["especies"],
                         "caudalM3s": auto["caudalM3s"], "tempAguaC": auto["tempAguaC"],
                         "transparencia": auto["transparencia"], "accesoDificultad": auto["accesoDificultad"],
-                        "vadeable": auto["vadeable"], "coords": chunk_pts,
+                        "vadeable": auto["vadeable"], "nombradoEnOrden": False, "coords": chunk_pts,
                     })
         rivers_out.append({"id": rid, "nombre": meta["nombre"], "color": meta["color"], "tramos": tramos})
 
@@ -615,13 +744,13 @@ def main():
         waterbodies_out.append({
             "id": slugify(name),
             "nombre": name, "municipio": town, "tipo": sel["tipo"],
-            "modalidad": defaults["modalidad"], "cupo": defaults["cupo"],
-            "tallaMinima": defaults["tallaMinima"], "veda": defaults["veda"],
+            "modalidad": defaults["modalidad"], "cupo": sel.get("cupo", defaults["cupo"]),
+            "tallaMinima": sel.get("talla", defaults["tallaMinima"]), "veda": defaults["veda"],
             "precio": sel.get("precio", defaults["precio"]),
             "permisoUrl": "https://www.larioja.org/pesca", "especies": sel["especies"],
             "caudalM3s": None, "tempAguaC": pseudo_random(name + "-temp", 10.0, 18.0),
             "transparencia": "Media", "accesoDificultad": "Fácil", "vadeable": False,
-            "coords": pts,
+            "nombradoEnOrden": sel.get("confirmado", True), "coords": pts,
         })
 
     total_tramos = sum(len(r["tramos"]) for r in rivers_out)
@@ -649,7 +778,8 @@ def main():
                 f'precio: {js_str(t["precio"])}, permisoUrl: {js_str(t["permisoUrl"])}, '
                 f'especies: {js_list(t["especies"])}, caudalM3s: {t["caudalM3s"]}, tempAguaC: {t["tempAguaC"]}, '
                 f'transparencia: {js_str(t["transparencia"])}, accesoDificultad: {js_str(t["accesoDificultad"])}, '
-                f'vadeable: {"true" if t["vadeable"] else "false"}, coords: {js_coords(t["coords"])} }},'
+                f'vadeable: {"true" if t["vadeable"] else "false"}, '
+                f'nombradoEnOrden: {"true" if t["nombradoEnOrden"] else "false"}, coords: {js_coords(t["coords"])} }},'
             )
         lines.append("  ] },")
     lines.append("];")
@@ -666,6 +796,7 @@ def main():
             f'permisoUrl: {js_str(w["permisoUrl"])}, especies: {js_list(w["especies"])}, caudalM3s: {caudal}, '
             f'tempAguaC: {w["tempAguaC"]}, transparencia: {js_str(w["transparencia"])}, '
             f'accesoDificultad: {js_str(w["accesoDificultad"])}, vadeable: false, esAgua: true, '
+            f'nombradoEnOrden: {"true" if w["nombradoEnOrden"] else "false"}, '
             f'coords: {js_coords(w["coords"])} }},'
         )
     lines.append("];")

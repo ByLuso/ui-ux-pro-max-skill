@@ -428,6 +428,12 @@
         <button class="sheet-close" data-close-sheet aria-label="${t('close')}">×</button>
       </div>
 
+      <div class="sheet-meta" style="margin-top:-8px;margin-bottom:12px;">
+        ${tramo.nombradoEnOrden
+          ? 'Tramo con nombre propio en la Orden de pesca consultada (folleto 2025 / BOR 2026) — verifica fechas exactas de la campaña 2026 antes de salir.'
+          : 'Sin coto/vedado nombrado en las fuentes consultadas — se aplican las reglas generales de este tipo de agua. Verifica siempre la Orden vigente.'}
+      </div>
+
       <div class="stat-grid">
         ${statCards.map((s) => `<div class="stat-card"><div class="stat-label">${s.label}</div><div class="stat-value">${s.value}</div></div>`).join('')}
       </div>
