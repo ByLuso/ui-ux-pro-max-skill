@@ -640,9 +640,10 @@
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'ANT_FLIGHT_LOGRONO_NATURE_V4';
+  var STORAGE_KEY = 'ANT_FLIGHT_LOGRONO_NATURE_V5';
   var REGION_STORAGE_KEY = 'ANT_FLIGHT_RIOJA_REGION_V1';
-  var CACHE_TTL_MS = 30 * 60 * 1000;
+  var CACHE_TTL_MS = 15 * 60 * 1000;
+  var AUTO_REFRESH_MS = 10 * 60 * 1000;
   var DEFAULT_LOCATION = { lat: 42.4658, lon: -2.4456, name: 'Logroño (Valle del Ebro)' };
   var HOTSPOT_RADIUS_KM = 15;
 
@@ -756,6 +757,8 @@
   };
 
   var clockTimer = null;
+  var autoRefreshTimer = null;
+  var lastLocation = null;
   var map = null, circleLayer = null, userMarker = null, hotspotLayer = null;
   var regionMap = null, regionMarkersLayer = null;
 
@@ -777,6 +780,14 @@
 
   function init() {
     el.refreshIconBtn.addEventListener('click', function () { getLocationAndWeather(); });
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState !== 'visible' || !lastLocation) return;
+      var saved = null;
+      try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) { saved = null; }
+      if (!saved || (Date.now() - saved.timestamp) > 5 * 60 * 1000) {
+        fetchWeatherData(lastLocation.lat, lastLocation.lon, lastLocation.name);
+      }
+    });
     loadCachedOrFetch();
   }
 
@@ -817,8 +828,8 @@
   function fetchWeatherData(lat, lon, locationName) {
     var url = 'https://api.open-meteo.com/v1/forecast'
       + '?latitude=' + lat + '&longitude=' + lon
-      + '&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,surface_pressure'
-      + '&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,wind_speed_10m,surface_pressure,weather_code'
+      + '&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_gusts_10m,surface_pressure'
+      + '&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,wind_speed_10m,wind_gusts_10m,surface_pressure,weather_code'
       + '&past_days=1&forecast_days=2&timezone=auto';
 
     fetch(url)
@@ -848,8 +859,16 @@
     var humPts = clamp((ctx.humidity - 40) * 0.5, 0, 20);
     mk('droplet', 'Humedad relativa', Math.round(ctx.humidity) + '%', humPts, 20, 'La humedad alta tras la lluvia sincroniza los vuelos.');
 
-    var windPts = clamp(15 - ctx.wind * 1.1, 0, 15);
-    mk('wind', 'Viento', round1(ctx.wind) + ' km/h', windPts, 15, 'El viento en calma (por debajo de 10 km/h) es imprescindible.');
+    var gust = ctx.gust || 0;
+    var effectiveWind = Math.max(ctx.wind, gust * 0.6);
+    var windPts = clamp(15 - effectiveWind * 1.1, 0, 15);
+    var windValue = round1(ctx.wind) + ' km/h';
+    var windNote = 'El viento en calma (por debajo de 10 km/h) es imprescindible.';
+    if (gust > ctx.wind + 8) {
+      windValue += ' (ráfagas ' + round1(gust) + ')';
+      windNote = 'El viento medio es bajo, pero hay ráfagas de ' + round1(gust) + ' km/h típicas de tormenta que impiden el vuelo.';
+    }
+    mk('wind', 'Viento', windValue, windPts, 15, windNote);
 
     var rainPts = 0, rainNote = 'Sin lluvias recientes registradas.';
     if (ctx.rainLast24h > 1 && ctx.precipNow < 0.3) {
@@ -858,7 +877,9 @@
     } else if (ctx.precipNow >= 0.3) {
       rainNote = 'Está lloviendo ahora mismo, lo que retrasa el vuelo.';
     }
-    mk('cloudrain', 'Lluvia reciente', ctx.rainLast24h > 0 ? round1(ctx.rainLast24h) + ' mm/24h' : 'Sin lluvia', rainPts, 20, rainNote);
+    var rainValue = ctx.precipNow >= 0.3 ? 'Lloviendo ahora (' + round1(ctx.precipNow) + ' mm/h)'
+      : (ctx.rainLast24h > 0 ? round1(ctx.rainLast24h) + ' mm/24h' : 'Sin lluvia');
+    mk('cloudrain', 'Lluvia reciente', rainValue, rainPts, 20, rainNote);
 
     var pressurePts, pressureNote;
     if (ctx.pressureTrend > 0.5) { pressurePts = 10; pressureNote = 'La presión sube tras un mínimo: buena señal para el vuelo.'; }
@@ -905,7 +926,7 @@
     var current = apiLoc.current;
     var now = new Date(current.time);
     return computeScore({
-      temp: current.temperature_2m, humidity: current.relative_humidity_2m, wind: current.wind_speed_10m,
+      temp: current.temperature_2m, humidity: current.relative_humidity_2m, wind: current.wind_speed_10m, gust: current.wind_gusts_10m,
       rainLast24h: ctx.rainLast24h, precipNow: current.precipitation, precipProbNear: ctx.precipProbNear,
       pressureTrend: ctx.pressureTrend, hour: now.getHours(), month: now.getMonth() + 1
     });
@@ -923,13 +944,13 @@
     for (var h = idx; h < idx + 10 && h < hourly.time.length; h++) {
       var hDate = new Date(hourly.time[h]);
       var hScore = computeScore({
-        temp: hourly.temperature_2m[h], humidity: hourly.relative_humidity_2m[h], wind: hourly.wind_speed_10m[h],
+        temp: hourly.temperature_2m[h], humidity: hourly.relative_humidity_2m[h], wind: hourly.wind_speed_10m[h], gust: hourly.wind_gusts_10m[h],
         rainLast24h: rainLast24h, precipNow: hourly.precipitation[h] || 0, precipProbNear: hourly.precipitation_probability[h] || 0,
         pressureTrend: pressureTrend, hour: hDate.getHours(), month: hDate.getMonth() + 1
       });
       hourlyList.push({
         time: hourly.time[h].slice(11, 16),
-        temp: hourly.temperature_2m[h], humidity: hourly.relative_humidity_2m[h], wind: hourly.wind_speed_10m[h],
+        temp: hourly.temperature_2m[h], humidity: hourly.relative_humidity_2m[h], wind: hourly.wind_speed_10m[h], gust: hourly.wind_gusts_10m[h],
         code: hourly.weather_code[h], score: hScore.score, tier: hScore.tier
       });
     }
@@ -938,7 +959,7 @@
       locationName: locationName, lat: lat, lon: lon,
       timestamp: Date.now(), utcOffsetSeconds: apiData.utc_offset_seconds || 0,
       current: {
-        temp: current.temperature_2m, humidity: current.relative_humidity_2m, wind: current.wind_speed_10m,
+        temp: current.temperature_2m, humidity: current.relative_humidity_2m, wind: current.wind_speed_10m, gust: current.wind_gusts_10m,
         apparent: current.apparent_temperature, code: current.weather_code,
         score: currentScore.score, tier: currentScore.tier, factors: currentScore.factors
       },
@@ -988,7 +1009,7 @@
       + '<div class="hour-data">'
       + '<span>' + icon(cond.icon, 'icon-sm') + round1(h.temp) + '°C</span>'
       + '<span>' + icon('droplet', 'icon-sm') + Math.round(h.humidity) + '%</span>'
-      + '<span>' + icon('wind', 'icon-sm') + round1(h.wind) + ' km/h</span>'
+      + '<span>' + icon('wind', 'icon-sm') + round1(h.wind) + (h.gust > h.wind + 8 ? ' (' + round1(h.gust) + ')' : '') + ' km/h</span>'
       + '</div>'
       + '<span class="hour-badge ' + badgeCls + '">' + icon(statusIconFor(h.tier === 'high' ? 'good' : h.tier === 'medium' ? 'neutral' : 'bad')) + h.score + '%</span>'
       + '</div>';
@@ -1008,8 +1029,9 @@
 
   function renderApp(data) {
     el.locationLabel.textContent = data.locationName;
-    el.updatedLabel.textContent = 'Actualizado ' + formatLocalTime(data.utcOffsetSeconds, data.timestamp);
-    startClock(data.utcOffsetSeconds);
+    lastLocation = { lat: data.lat, lon: data.lon, name: data.locationName };
+    startClock(data.utcOffsetSeconds, data.timestamp);
+    scheduleAutoRefresh();
 
     var cur = data.current;
     var cond = conditionFor(cur.code);
@@ -1029,7 +1051,7 @@
       + '<div class="weather-grid">'
       + '<div class="weather-item">' + icon('thermometer') + '<span>' + round1(cur.temp) + '°C</span><small>Temperatura</small></div>'
       + '<div class="weather-item">' + icon('droplet') + '<span>' + Math.round(cur.humidity) + '%</span><small>Humedad</small></div>'
-      + '<div class="weather-item">' + icon('wind') + '<span>' + round1(cur.wind) + ' km/h</span><small>Viento</small></div>'
+      + '<div class="weather-item">' + icon('wind') + '<span>' + round1(cur.wind) + ' km/h</span><small>' + (cur.gust > cur.wind + 8 ? 'Ráfagas ' + round1(cur.gust) : 'Viento') + '</small></div>'
       + '</div></section>'
 
       + '<section class="card">'
@@ -1095,7 +1117,7 @@
     var lons = REGION_POINTS.map(function (p) { return p.lon; }).join(',');
     var url = 'https://api.open-meteo.com/v1/forecast'
       + '?latitude=' + lats + '&longitude=' + lons
-      + '&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation,surface_pressure'
+      + '&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_gusts_10m,precipitation,surface_pressure'
       + '&hourly=precipitation,precipitation_probability,surface_pressure&past_days=1&forecast_days=1&timezone=auto';
 
     fetch(url)
@@ -1214,19 +1236,31 @@
     }
   }
 
-  function formatLocalTime(utcOffsetSeconds, ts) {
-    var d = new Date(ts + utcOffsetSeconds * 1000);
-    return d.toISOString().slice(11, 16);
+  function freshnessLabel(ts) {
+    var mins = Math.round((Date.now() - ts) / 60000);
+    if (mins <= 0) return 'menos de 1 min';
+    if (mins === 1) return '1 min';
+    if (mins < 60) return mins + ' min';
+    var hours = Math.round(mins / 60);
+    return hours + (hours === 1 ? ' hora' : ' horas');
   }
 
-  function startClock(utcOffsetSeconds) {
+  function startClock(utcOffsetSeconds, dataTimestamp) {
     if (clockTimer) clearInterval(clockTimer);
     function tick() {
       var d = new Date(Date.now() + utcOffsetSeconds * 1000);
       el.localClock.textContent = 'Hora local ' + d.toISOString().slice(11, 16);
+      el.updatedLabel.textContent = 'Datos de hace ' + freshnessLabel(dataTimestamp);
     }
     tick();
     clockTimer = setInterval(tick, 30000);
+  }
+
+  function scheduleAutoRefresh() {
+    if (autoRefreshTimer) clearTimeout(autoRefreshTimer);
+    autoRefreshTimer = setTimeout(function () {
+      if (lastLocation) fetchWeatherData(lastLocation.lat, lastLocation.lon, lastLocation.name);
+    }, AUTO_REFRESH_MS);
   }
 
   function showError(msg) {
