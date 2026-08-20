@@ -76,8 +76,12 @@ lib/
 
 ## Ampliar el catálogo de flora
 
-`data/species.ts` es un punto de partida curado con ~60 especies representativas repartidas
-por las 19 regiones (varias son comunes a más de una). Para ampliarlo:
+`data/species.ts` es un punto de partida curado con ~90 especies repartidas por las 19
+regiones (varias son comunes a más de una). **La Rioja** (20 especies: hayedos y melojares de
+la Sierra de la Demanda/Cebollera, ribera del Ebro, viñedos) y **Castilla-La Mancha** (37
+especies: dehesas, pinares de la Serranía de Cuenca y Montes de Toledo, matorral gipsófilo y
+estepario de La Mancha, humedales como las Tablas de Daimiel, y el viñedo manchego) están
+especialmente desarrolladas. Para ampliar cualquier otra región:
 
 - Añade nuevas entradas al array `SPECIES` siguiendo el mismo formato (id, nombre científico,
   nombre común, familia, `regions` con los ids de `data/regions.ts`, descripción y rareza).
