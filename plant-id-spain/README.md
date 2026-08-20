@@ -29,12 +29,18 @@ centrada en la flora española.
    copia tu clave. Se introduce dentro de la app, en la pestaña **Ajustes** (se guarda de
    forma segura en el dispositivo con `expo-secure-store`, nunca se sube a ningún sitio).
 
-> **Nota sobre la versión de Expo SDK**: el proyecto usa Expo SDK 56 en vez del 57 (la última
-> disponible en npm en el momento de escribir esto) porque el cliente Expo Go publicado en las
-> tiendas de apps todavía no soportaba SDK 57. Si al abrir el proyecto en Expo Go ves un error
-> de "Project is incompatible with this version of Expo Go", actualiza Expo Go desde la tienda;
-> si el error persiste, es que SDK 57 ya está soportado y puedes volver a subir de versión con
-> `npx expo install expo@latest --fix`.
+> **Nota sobre la versión de Expo SDK**: el proyecto usa Expo SDK 54 (no la última disponible
+> en npm) porque distintas versiones de la app Expo Go instalada desde la tienda solo soportan
+> el SDK con el que fueron publicadas — Expo Go **no soporta cualquier SDK**, solo el que trae
+> integrado esa versión concreta de la app. Si al abrir el proyecto ves "Project is incompatible
+> with this version of Expo Go", comprueba qué SDK soporta tu Expo Go (suele indicarlo el propio
+> error o la pantalla de inicio de la app) y alinea el proyecto a esa versión con:
+> ```bash
+> npm config set legacy-peer-deps true
+> npx expo install expo@<versión SDK> --fix
+> ```
+> Por ejemplo, para SDK 55: `npx expo install expo@^55.0.0 --fix`. Después de cualquier cambio
+> de SDK, borra `node_modules` y reinstala (`rm -rf node_modules && npm install --legacy-peer-deps`).
 >
 > Si desarrollas sobre Termux (Android) en el mismo teléfono donde corre Expo Go: usa
 > `npx expo start` (modo LAN) en vez de `--tunnel`, ya que el túnel basado en ngrok no
