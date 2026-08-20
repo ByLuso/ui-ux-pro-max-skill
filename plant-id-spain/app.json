@@ -1,0 +1,56 @@
+{
+  "expo": {
+    "name": "FloraDex España",
+    "slug": "plant-id-spain",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "floradex",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.floradex.spain",
+      "infoPlist": {
+        "NSCameraUsageDescription": "FloraDex necesita la cámara para fotografiar plantas y añadirlas a tu colección.",
+        "NSLocationWhenInUseUsageDescription": "FloraDex usa tu ubicación para registrar dónde encontraste cada planta y asignarla a su comunidad autónoma.",
+        "NSPhotoLibraryAddUsageDescription": "FloraDex guarda una copia de tus fotos de plantas en tu galería."
+      }
+    },
+    "android": {
+      "package": "com.floradex.spain",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4EA",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "CAMERA",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-secure-store",
+      "expo-status-bar",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "FloraDex necesita la cámara para fotografiar plantas y añadirlas a tu colección."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "FloraDex usa tu ubicación para registrar dónde encontraste cada planta y asignarla a su comunidad autónoma."
+        }
+      ]
+    ]
+  }
+}
