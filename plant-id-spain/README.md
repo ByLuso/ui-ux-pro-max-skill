@@ -23,10 +23,23 @@ centrada en la flora española.
 ## Requisitos previos
 
 1. **Node.js 18+** y npm.
-2. **App Expo Go** en tu móvil (iOS/Android) — o Xcode/Android Studio para simuladores.
+2. **App Expo Go** en tu móvil (iOS/Android), actualizada a la última versión — o Xcode/Android
+   Studio para simuladores.
 3. **API key gratuita de PlantNet**: regístrate en https://my.plantnet.org/, crea una app y
    copia tu clave. Se introduce dentro de la app, en la pestaña **Ajustes** (se guarda de
    forma segura en el dispositivo con `expo-secure-store`, nunca se sube a ningún sitio).
+
+> **Nota sobre la versión de Expo SDK**: el proyecto usa Expo SDK 56 en vez del 57 (la última
+> disponible en npm en el momento de escribir esto) porque el cliente Expo Go publicado en las
+> tiendas de apps todavía no soportaba SDK 57. Si al abrir el proyecto en Expo Go ves un error
+> de "Project is incompatible with this version of Expo Go", actualiza Expo Go desde la tienda;
+> si el error persiste, es que SDK 57 ya está soportado y puedes volver a subir de versión con
+> `npx expo install expo@latest --fix`.
+>
+> Si desarrollas sobre Termux (Android) en el mismo teléfono donde corre Expo Go: usa
+> `npx expo start` (modo LAN) en vez de `--tunnel`, ya que el túnel basado en ngrok no
+> funciona en ese entorno. Copia la URL `exp://<ip-local>:8081` que se muestra en la terminal
+> y pégala en Expo Go usando la opción "Enter URL manually".
 
 ## Puesta en marcha
 
