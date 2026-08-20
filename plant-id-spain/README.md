@@ -95,12 +95,19 @@ lib/
 
 ## Ampliar el catálogo de flora
 
-`data/species.ts` es un punto de partida curado con ~90 especies repartidas por las 19
-regiones (varias son comunes a más de una). **La Rioja** (20 especies: hayedos y melojares de
-la Sierra de la Demanda/Cebollera, ribera del Ebro, viñedos) y **Castilla-La Mancha** (37
-especies: dehesas, pinares de la Serranía de Cuenca y Montes de Toledo, matorral gipsófilo y
-estepario de La Mancha, humedales como las Tablas de Daimiel, y el viñedo manchego) están
-especialmente desarrolladas. Para ampliar cualquier otra región:
+`data/species.ts` es un punto de partida curado con ~290 especies repartidas por las 19
+regiones (varias son comunes a más de una). **La Rioja** (241 especies) está muy por encima
+del resto: además del matorral mediterráneo, bosques de ribera y humedales del Ebro,
+matorrales de suelos salinos/yesosos, encinares, quejigares y rebollares de media montaña,
+incorpora una gran ampliación a partir del catálogo histórico *Flora de La Rioja* (Ildefonso
+Zubía, 1921) — herbáceas de sembrado y baldío, orquídeas silvestres, flora acuática y de
+ribera, árboles caducifolios, etc. Al tratarse de un catálogo de 1921, se han priorizado las
+especies con nombre científico moderno vigente y se han omitido criptógamas (algas, hongos,
+musgos) por quedar fuera del alcance de una app de identificación fotográfica de plantas, así
+como la mayoría de variedades y sinónimos históricos que PlantNet no reconoce hoy.
+**Castilla-La Mancha** (37 especies: dehesas, pinares de la Serranía de Cuenca y Montes de
+Toledo, matorral gipsófilo y estepario de La Mancha, humedales como las Tablas de Daimiel, y
+el viñedo manchego) también está especialmente desarrollada. Para ampliar cualquier otra región:
 
 - Añade nuevas entradas al array `SPECIES` siguiendo el mismo formato (id, nombre científico,
   nombre común, familia, `regions` con los ids de `data/regions.ts`, descripción y rareza).
