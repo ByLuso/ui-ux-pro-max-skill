@@ -29,8 +29,8 @@ centrada en la flora española.
    copia tu clave. Se introduce dentro de la app, en la pestaña **Ajustes** (se guarda de
    forma segura en el dispositivo con `expo-secure-store`, nunca se sube a ningún sitio).
 
-> **Nota sobre la versión de Expo SDK**: el proyecto usa Expo SDK 53 (no la última disponible
-> en npm) porque distintas versiones de la app Expo Go instalada desde la tienda solo soportan
+> **Nota sobre la versión de Expo SDK**: el proyecto usa Expo SDK 57 (la última disponible en
+> npm). Distintas versiones de la app Expo Go instalada desde la tienda solo soportan
 > el SDK con el que fueron publicadas — Expo Go **no soporta cualquier SDK**, solo el que trae
 > integrado esa versión concreta de la app. Si al abrir el proyecto ves "Project is incompatible
 > with this version of Expo Go", comprueba qué SDK soporta tu Expo Go (suele indicarlo el propio
