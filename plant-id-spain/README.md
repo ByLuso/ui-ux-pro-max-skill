@@ -18,6 +18,11 @@ centrada en la flora española.
   desbloquean automáticamente la primera vez que identificas esa especie en esa región.
 - **📍 Ficha de especie**: al desbloquear una especie ves su información (familia, rareza,
   descripción, dónde se encuentra en España) y el historial de tus propios avistamientos.
+- **📖 Enciclopedia**: a diferencia del Pokédex (que oculta lo no descubierto), esta sección
+  muestra libremente las ~290 especies del catálogo desde el principio, con buscador y filtros
+  por propiedad (aromática, medicinal, comestible, tóxica, melífera, tintórea, ornamental,
+  antioxidante, invasora). 189 de esas especies incluyen además usos tradicionales y una
+  curiosidad; el resto se irán completando.
 - **100% local**: sin registro ni backend. Todo se guarda en SQLite en el propio dispositivo.
 
 ## Requisitos previos
@@ -69,6 +74,8 @@ app/
     pokedex/
       index.tsx          # Lista de comunidades autónomas con progreso
       [regionId].tsx      # Grid de especies bloqueadas/desbloqueadas por región
+    encyclopedia/
+      index.tsx           # Enciclopedia: buscador + filtros, todas las especies visibles
     settings.tsx         # API key de PlantNet
   species/[speciesId].tsx  # Ficha de especie + tus avistamientos
 data/

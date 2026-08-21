@@ -40,6 +40,14 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="encyclopedia"
+        options={{
+          title: "Enciclopedia",
+          headerShown: false,
+          tabBarIcon: () => <TabIcon emoji="📖" />,
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           title: "Ajustes",

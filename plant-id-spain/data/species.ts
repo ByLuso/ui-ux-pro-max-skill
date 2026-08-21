@@ -1,5 +1,16 @@
 export type Rarity = "común" | "poco común" | "rara" | "endémica";
 
+export type PlantProperty =
+  | "aromática"
+  | "medicinal"
+  | "comestible"
+  | "tóxica"
+  | "melífera"
+  | "tintórea"
+  | "ornamental"
+  | "antioxidante"
+  | "invasora";
+
 export type Species = {
   id: string;
   scientificName: string;
@@ -9,6 +20,12 @@ export type Species = {
   regions: string[];
   description: string;
   rarity: Rarity;
+  /** Etiquetas rápidas para la Enciclopedia: para qué se usa tradicionalmente. */
+  properties?: PlantProperty[];
+  /** Para qué se ha usado tradicionalmente (cocina, medicina popular, artesanía...). */
+  uses?: string;
+  /** Un dato curioso, anécdota o particularidad de la especie. */
+  curiosity?: string;
 };
 
 export const SPECIES: Species[] = [
@@ -20,6 +37,9 @@ export const SPECIES: Species[] = [
     regions: ["andalucia", "castilla-la-mancha", "extremadura", "comunidad-valenciana", "cataluna", "aragon"],
     description: "Árbol perenne cultivado desde hace milenios en el Mediterráneo por su fruto, la aceituna. Su variante silvestre es el acebuche.",
     rarity: "común",
+    properties: ["comestible", "antioxidante", "aromática"],
+    uses: "Su fruto, la aceituna, se consume de mesa o se prensa para obtener aceite de oliva, base de la dieta mediterránea.",
+    curiosity: "Un olivo bien cuidado puede vivir varios cientos de años y seguir produciendo aceitunas; algunos ejemplares monumentales en España superan el millar de años.",
   },
   {
     id: "quercus-ilex",
@@ -29,6 +49,9 @@ export const SPECIES: Species[] = [
     regions: ["andalucia", "castilla-la-mancha", "castilla-y-leon", "extremadura", "madrid", "cataluna", "la-rioja"],
     description: "El árbol más representativo de la dehesa ibérica. Hoja perenne, coriácea y espinosa; su fruto, la bellota, alimenta al cerdo ibérico.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Su fruto, la bellota, alimenta tradicionalmente al cerdo ibérico durante la montanera, clave en la producción del jamón ibérico de bellota.",
+    curiosity: "La dehesa, el paisaje de encinas dispersas sobre pasto, es un ecosistema creado por el ser humano y reconocido como uno de los más sostenibles de Europa.",
   },
   {
     id: "quercus-suber",
@@ -38,6 +61,9 @@ export const SPECIES: Species[] = [
     regions: ["andalucia", "extremadura", "cataluna"],
     description: "Produce el corcho tras el descortezado periódico de su tronco. Forma parte, junto a la encina, de las dehesas del suroeste peninsular.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Su corteza gruesa se descortezada cada 9-14 años sin dañar al árbol para producir corcho, usado en tapones de vino y aislamiento; sus bellotas también alimentan al ganado.",
+    curiosity: "Un alcornoque puede vivir y ser descortezado durante más de 150 años, produciendo corcho de mejor calidad a medida que envejece.",
   },
   {
     id: "chamaerops-humilis",
@@ -47,6 +73,9 @@ export const SPECIES: Species[] = [
     regions: ["andalucia", "murcia", "comunidad-valenciana", "baleares"],
     description: "Única palmera autóctona de Europa continental. Crece en matorrales costeros del sureste y sur peninsular.",
     rarity: "poco común",
+    properties: ["comestible"],
+    uses: "Sus hojas se han usado tradicionalmente para tejer cestos, esteras y sombreros en el sureste peninsular.",
+    curiosity: "Es la única especie de palmera auténticamente silvestre y autóctona de toda Europa continental.",
   },
   {
     id: "nerium-oleander",
@@ -56,6 +85,9 @@ export const SPECIES: Species[] = [
     regions: ["andalucia", "murcia", "melilla", "comunidad-valenciana"],
     description: "Arbusto de flores rosadas o blancas muy vistosas que crece junto a ramblas y cauces secos. Todas sus partes son tóxicas.",
     rarity: "común",
+    properties: ["tóxica", "ornamental"],
+    uses: "Muy cultivada como planta ornamental por su vistosa floración, pero toda ella es tóxica si se ingiere, incluido el humo de su madera al quemarse.",
+    curiosity: "Se han documentado intoxicaciones por usar sus ramas como pinchos improvisados para asar alimentos en el campo.",
   },
   {
     id: "cistus-ladanifer",
@@ -65,6 +97,9 @@ export const SPECIES: Species[] = [
     regions: ["andalucia", "extremadura", "madrid", "castilla-la-mancha"],
     description: "Arbusto resinoso de flores blancas con manchas rojas en la base, típico del matorral mediterráneo tras incendios o talas.",
     rarity: "común",
+    properties: ["aromática", "medicinal"],
+    uses: "De su resina pegajosa (láudano) se extrae una sustancia muy usada en perfumería como fijador de fragancias.",
+    curiosity: "En verano, sus hojas resinosas pueden llegar a oler tan intensamente que perfuman el aire de todo el monte tras las horas de más calor.",
   },
   {
     id: "abies-pinsapo",
@@ -74,6 +109,9 @@ export const SPECIES: Species[] = [
     regions: ["andalucia"],
     description: "Abeto endémico de las sierras de Grazalema y Ronda, reliquia de los bosques que cubrían el Mediterráneo hace millones de años.",
     rarity: "endémica",
+    properties: ["ornamental"],
+    uses: "Sin uso tradicional relevante más allá de la explotación forestal histórica de su madera; hoy es una especie protegida.",
+    curiosity: "Es un fósil viviente: pariente cercano de abetos que cubrían amplias zonas del Mediterráneo hace millones de años, hoy solo sobrevive en unas pocas sierras andaluzas y del norte de Marruecos.",
   },
   {
     id: "juniperus-thurifera",
@@ -83,6 +121,9 @@ export const SPECIES: Species[] = [
     regions: ["aragon", "castilla-y-leon", "castilla-la-mancha", "la-rioja", "navarra"],
     description: "Conífera de crecimiento muy lento propia de páramos fríos y secos del interior peninsular, capaz de vivir más de mil años.",
     rarity: "poco común",
+    properties: ["aromática"],
+    uses: "Su madera aromática, muy resistente a la putrefacción, se ha usado tradicionalmente en carpintería rural y como leña de gran calidad.",
+    curiosity: "Es una de las coníferas más longevas de la Península: algunos ejemplares de sabinares como los de Soria o Guadalajara superan los mil años de edad.",
   },
   {
     id: "pinus-uncinata",
@@ -110,6 +151,9 @@ export const SPECIES: Species[] = [
     regions: ["aragon", "cataluna", "navarra", "pais-vasco", "la-rioja"],
     description: "Arbusto de hoja perenne muy longevo, habitual en el sotobosque calcáreo de media montaña.",
     rarity: "común",
+    properties: ["ornamental", "tóxica"],
+    uses: "Su madera, muy dura y de grano fino, se ha usado tradicionalmente para instrumentos de precisión y tallas; toda la planta es tóxica si se ingiere.",
+    curiosity: "Es una de las maderas más densas de Europa: a diferencia de la mayoría, se hunde en el agua.",
   },
   {
     id: "gentiana-lutea",
@@ -119,6 +163,9 @@ export const SPECIES: Species[] = [
     regions: ["aragon", "navarra", "castilla-y-leon"],
     description: "Planta de flores amarillas y raíz amarga usada tradicionalmente en licores. Habita prados de montaña del norte peninsular.",
     rarity: "poco común",
+    properties: ["medicinal"],
+    uses: "Su raíz amarga es la base de numerosos licores digestivos y aperitivos tradicionales de montaña.",
+    curiosity: "Es una de las plantas de mayor porte de los prados alpinos, pudiendo alcanzar más de un metro de altura, y tarda varios años en florecer por primera vez.",
   },
   {
     id: "leontopodium-alpinum",
@@ -137,6 +184,9 @@ export const SPECIES: Species[] = [
     regions: ["aragon", "andalucia", "murcia", "cataluna", "la-rioja", "comunidad-valenciana"],
     description: "Arbusto aromático de flores azuladas, omnipresente en el matorral mediterráneo y muy usado en cocina.",
     rarity: "común",
+    properties: ["aromática", "medicinal", "antioxidante", "melífera"],
+    uses: "Muy usado en cocina para carnes y guisos; en medicina popular se emplea en friegas para dolores musculares y como estimulante circulatorio.",
+    curiosity: "Sus flores son muy visitadas por las abejas: la miel de romero es una de las más apreciadas y típicas del monte mediterráneo.",
   },
   {
     id: "thymus-vulgaris",
@@ -146,6 +196,9 @@ export const SPECIES: Species[] = [
     regions: ["aragon", "castilla-la-mancha", "castilla-y-leon", "melilla", "la-rioja"],
     description: "Pequeño arbusto muy aromático que tapiza laderas soleadas y secas de toda la Península.",
     rarity: "común",
+    properties: ["aromática", "medicinal", "antioxidante"],
+    uses: "Condimento clásico de la cocina mediterránea; en infusión se usa tradicionalmente para aliviar la tos y facilitar la digestión.",
+    curiosity: "Contiene timol, un compuesto con propiedades antisépticas que se ha usado históricamente para conservar alimentos.",
   },
   {
     id: "fagus-sylvatica",
@@ -173,6 +226,9 @@ export const SPECIES: Species[] = [
     regions: ["asturias", "galicia"],
     description: "Árbol de gran porte cultivado desde época romana por su fruto, la castaña, muy presente en la gastronomía del norte.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Su fruto, la castaña, se consume asado, cocido o en repostería; fue durante siglos un alimento básico en las zonas de montaña del norte de España.",
+    curiosity: "Antes de la llegada masiva de la patata a Europa, la castaña fue durante siglos el alimento base de muchas comunidades rurales de montaña.",
   },
   {
     id: "erica-arborea",
@@ -182,6 +238,9 @@ export const SPECIES: Species[] = [
     regions: ["asturias", "cantabria", "galicia", "andalucia", "la-rioja"],
     description: "Arbusto de pequeñas flores blancas en racimo, típico del matorral atlántico y de zonas quemadas o degradadas. En La Rioja acompaña a los encinares silíceos y forma parte del sotobosque de los rebollares.",
     rarity: "común",
+    properties: ["melífera"],
+    uses: "Su madera, muy dura y resistente al fuego, se ha usado tradicionalmente para fabricar cazoletas de pipas de fumar.",
+    curiosity: "La miel de brezo, oscura y de sabor intenso, es una de las mieles monoflorales más características y apreciadas de la España atlántica.",
   },
   {
     id: "ilex-aquifolium",
@@ -200,6 +259,9 @@ export const SPECIES: Species[] = [
     regions: ["asturias", "cantabria", "navarra", "la-rioja"],
     description: "Conífera longeva y venenosa (salvo el arilo rojo del fruto), ligada en la mitología a los bosques sagrados del norte peninsular. Presente de forma dispersa en los bosques de montaña de La Rioja.",
     rarity: "rara",
+    properties: ["tóxica", "medicinal"],
+    uses: "Todas sus partes son tóxicas excepto el arilo rojo carnoso que rodea la semilla; de su corteza se extraen compuestos usados en quimioterapia.",
+    curiosity: "Es una de las plantas más longevas de Europa: algunos tejos ibéricos superan los mil años de edad y eran considerados árboles sagrados por pueblos prerromanos.",
   },
   {
     id: "pteridium-aquilinum",
@@ -254,6 +316,9 @@ export const SPECIES: Species[] = [
     regions: ["baleares", "comunidad-valenciana", "murcia", "ceuta"],
     description: "Árbol mediterráneo de hoja perenne cuyo fruto, la algarroba, se usa en alimentación humana y animal.",
     rarity: "común",
+    properties: ["comestible", "antioxidante"],
+    uses: "Su fruto, la algarroba, se muele para obtener harina de algarroba, usada como sucedáneo del cacao y en alimentación animal.",
+    curiosity: "Las semillas de algarrobo, muy uniformes en peso, se usaron históricamente como unidad de medida de los joyeros: de ahí procede el término 'quilate'.",
   },
   {
     id: "pistacia-lentiscus",
@@ -263,6 +328,9 @@ export const SPECIES: Species[] = [
     regions: ["baleares", "murcia", "comunidad-valenciana", "andalucia", "ceuta", "melilla", "la-rioja"],
     description: "Arbusto aromático de hoja perenne y bayas rojas que maduran a negro, componente clave del matorral mediterráneo (garriga/maquia). Presente también en el matorral degradado del Valle del Ebro riojano.",
     rarity: "común",
+    properties: ["aromática", "medicinal"],
+    uses: "De su resina se obtiene la almáciga, usada tradicionalmente como goma de mascar natural y en barnices; en medicina popular como digestivo.",
+    curiosity: "La isla griega de Quíos mantiene desde hace siglos el monopolio casi exclusivo de la producción de almáciga de calidad, protegida hoy como denominación de origen.",
   },
   {
     id: "ophrys-apifera",
@@ -272,6 +340,9 @@ export const SPECIES: Species[] = [
     regions: ["baleares", "cataluna"],
     description: "Orquídea silvestre cuya flor imita a una abeja para atraer a machos polinizadores mediante engaño sexual.",
     rarity: "rara",
+    properties: ["ornamental"],
+    uses: "Sin uso tradicional; su interés es exclusivamente botánico y ornamental como orquídea silvestre.",
+    curiosity: "Su flor imita el aspecto y el olor de una hembra de abeja para engañar a los machos, que al intentar aparearse con ella la polinizan sin darse cuenta.",
   },
   {
     id: "dracaena-draco",
@@ -281,6 +352,9 @@ export const SPECIES: Species[] = [
     regions: ["canarias"],
     description: "Árbol longevo y de silueta inconfundible, símbolo de Canarias. Su savia roja se conocía como 'sangre de drago'.",
     rarity: "endémica",
+    properties: ["ornamental", "medicinal"],
+    uses: "Su savia roja, la 'sangre de drago', se ha usado tradicionalmente como remedio cicatrizante y también como barniz para instrumentos musicales.",
+    curiosity: "No tiene anillos de crecimiento como otros árboles, por lo que su edad solo puede estimarse de forma aproximada contando sus ramificaciones.",
   },
   {
     id: "echium-wildpretii",
@@ -290,6 +364,9 @@ export const SPECIES: Species[] = [
     regions: ["canarias"],
     description: "Espectacular espiga floral roja de hasta 3 metros, endémica del Teide, donde florece una única vez antes de morir.",
     rarity: "endémica",
+    properties: ["ornamental", "melífera"],
+    uses: "Sin uso tradicional relevante; es una planta protegida de gran valor ornamental y ecológico dentro del Parque Nacional del Teide.",
+    curiosity: "Tras varios años acumulando reservas en forma de roseta, florece una sola vez formando un cono de hasta 3 metros con miles de flores, y después muere.",
   },
   {
     id: "pinus-canariensis",
@@ -326,6 +403,9 @@ export const SPECIES: Species[] = [
     regions: ["canarias"],
     description: "Planta suculenta de tallos columnares que recuerda a un cactus, típica del piso basal árido de las islas.",
     rarity: "endémica",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros: su savia lechosa es muy irritante para piel y ojos, y tóxica si se ingiere.",
+    curiosity: "Aunque recuerda mucho a un cactus americano, no tiene ningún parentesco con ellos: su forma columnar es un ejemplo de evolución convergente entre continentes distintos.",
   },
   {
     id: "phoenix-canariensis",
@@ -362,6 +442,9 @@ export const SPECIES: Species[] = [
     regions: ["cantabria", "asturias", "pais-vasco"],
     description: "Arbusto de hoja caduca que produce avellanas; frecuente en setos y bosques de ribera del norte.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Su fruto, la avellana, se consume al natural o en repostería y es uno de los frutos secos más cultivados de España.",
+    curiosity: "Sus flores masculinas, los amentos colgantes, liberan el polen ya en pleno invierno, siendo una de las primeras plantas en florecer del año.",
   },
   {
     id: "arbutus-unedo",
@@ -371,6 +454,9 @@ export const SPECIES: Species[] = [
     regions: ["cantabria", "madrid", "extremadura", "cataluna", "la-rioja"],
     description: "Arbusto o árbol pequeño con frutos rojos comestibles, emblema de la ciudad de Madrid. Acompaña a los encinares calizos riojanos de los Montes Obarenes y la Sierra de Toloño.",
     rarity: "común",
+    properties: ["comestible", "melífera"],
+    uses: "Su fruto rojo, la madroña, es comestible y se usa en mermeladas y aguardientes, aunque en grandes cantidades puede resultar ligeramente narcótico por su fermentación.",
+    curiosity: "Su nombre científico, 'unedo', vendría del latín 'unum edo' ('como uno solo'), aludiendo a que su sabor no invita a comer más de un fruto.",
   },
   {
     id: "crocus-sativus",
@@ -380,6 +466,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha"],
     description: "Planta bulbosa cultivada por sus estigmas, la especia más cara del mundo. La Mancha es su región emblemática en España.",
     rarity: "poco común",
+    properties: ["comestible", "antioxidante"],
+    uses: "Sus estigmas secos son la especia azafrán, usada para aromatizar y colorear platos como la paella; contiene crocina, un potente antioxidante.",
+    curiosity: "Hacen falta entre 150.000 y 200.000 flores recolectadas y despistiladas a mano para obtener un solo kilogramo de azafrán, lo que la convierte en la especia más cara del mundo.",
   },
   {
     id: "quercus-coccifera",
@@ -389,6 +478,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "murcia", "comunidad-valenciana", "la-rioja"],
     description: "Arbusto espinoso de hoja perenne muy resistente a la sequía, forma parte del matorral mediterráneo degradado. Muy extendida en el matorral de sustitución del encinar en el Valle del Ebro.",
     rarity: "común",
+    properties: ["tintórea"],
+    uses: "Hospeda tradicionalmente a un pequeño insecto (la cochinilla del quermes) del que antiguamente se extraía un tinte rojo usado antes de la llegada de la cochinilla americana.",
+    curiosity: "Su nombre 'coccifera' significa literalmente 'portadora de cochinilla', por ese insecto que parasitaba sus ramas y que se recolectaba para teñir telas de rojo carmesí.",
   },
   {
     id: "retama-sphaerocarpa",
@@ -398,6 +490,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "extremadura", "madrid", "la-rioja"],
     description: "Arbusto de ramas verdes casi sin hojas y flores amarillas, típico de suelos secos y pobres del centro peninsular. Frecuente en el matorral degradado del Valle del Ebro.",
     rarity: "común",
+    properties: ["melífera"],
+    uses: "Sus ramas verdes se han usado tradicionalmente como escobas rústicas y forraje de emergencia para el ganado en épocas de sequía.",
+    curiosity: "Casi no tiene hojas: sus propios tallos verdes realizan la fotosíntesis, una adaptación que reduce la pérdida de agua en climas muy secos.",
   },
   {
     id: "pinus-sylvestris",
@@ -425,6 +520,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-y-leon", "aragon", "la-rioja", "castilla-la-mancha"],
     description: "Arbusto de bayas azuladas usadas para aromatizar la ginebra, presente en matorrales de montaña de toda Eurasia.",
     rarity: "común",
+    properties: ["aromática", "medicinal"],
+    uses: "Sus bayas (gálbulos) se usan para aromatizar la ginebra y en la cocina tradicional de caza; en infusión se ha usado tradicionalmente como diurético.",
+    curiosity: "La ginebra debe su nombre precisamente al enebro: viene del francés 'genièvre' y el neerlandés 'jenever', ambos derivados de la palabra latina para esta planta.",
   },
   {
     id: "lavandula-stoechas",
@@ -434,6 +532,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-y-leon", "andalucia", "murcia", "la-rioja"],
     description: "Lavanda de flor morada rematada por brácteas vistosas ('orejas de conejo'), típica de suelos ácidos mediterráneos. Presente en el matorral mediterráneo del Valle del Ebro riojano.",
     rarity: "común",
+    properties: ["aromática", "medicinal", "melífera"],
+    uses: "Se usa en infusión relajante y para perfumar armarios; tradicionalmente también como repelente de insectos.",
+    curiosity: "Sus llamativas brácteas moradas en la punta de la flor, popularmente llamadas 'orejas de conejo', no son pétalos sino hojas modificadas.",
   },
   {
     id: "pinus-pinea",
@@ -443,6 +544,9 @@ export const SPECIES: Species[] = [
     regions: ["cataluna", "andalucia", "madrid"],
     description: "Pino de copa característica en forma de sombrilla, cultivado tradicionalmente por sus piñones comestibles.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Su semilla, el piñón, es un fruto seco muy apreciado en repostería y cocina tradicional, especialmente en salsas y turrones.",
+    curiosity: "Cada piña tarda unos tres años en madurar completamente desde su polinización hasta liberar los piñones listos para recolectar.",
   },
   {
     id: "viburnum-tinus",
@@ -452,6 +556,9 @@ export const SPECIES: Species[] = [
     regions: ["extremadura", "cataluna", "andalucia", "la-rioja"],
     description: "Arbusto de hoja perenne con flores blancas invernales y frutos azul metálico, habitual en bosques mediterráneos húmedos. Acompaña a los encinares calizos de la Sierra de Toloño y los Montes Obarenes, en La Rioja.",
     rarity: "común",
+    properties: ["ornamental", "tóxica"],
+    uses: "Muy cultivado como seto ornamental por su floración invernal; sus frutos azulados son tóxicos si se ingieren.",
+    curiosity: "Es una de las pocas plantas mediterráneas que florece en pleno invierno, proporcionando alimento a los pocos insectos activos en esa época.",
   },
   {
     id: "ulex-europaeus",
@@ -470,6 +577,9 @@ export const SPECIES: Species[] = [
     regions: ["galicia"],
     description: "Arbusto ornamental de origen asiático profundamente arraigado en los pazos gallegos, con cientos de variedades cultivadas.",
     rarity: "común",
+    properties: ["ornamental"],
+    uses: "Cultivada exclusivamente como planta ornamental, muy apreciada en los jardines históricos y pazos gallegos.",
+    curiosity: "Galicia alberga una de las mayores colecciones de camelias de Europa, con concursos florales centenarios en localidades como Vigo o Sada.",
   },
   {
     id: "eucalyptus-globulus",
@@ -479,6 +589,9 @@ export const SPECIES: Species[] = [
     regions: ["galicia"],
     description: "Árbol de origen australiano ampliamente plantado para producción de madera y pasta de papel; especie naturalizada e invasora.",
     rarity: "común",
+    properties: ["invasora", "medicinal", "aromática"],
+    uses: "Sus hojas se usan en infusión y vahos tradicionales para afecciones respiratorias, aunque su cultivo extensivo se considera problemático para los ecosistemas ibéricos.",
+    curiosity: "Introducido desde Australia en el siglo XIX para desecar zonas pantanosas, hoy es una de las especies forestales más discutidas de España por su impacto en la biodiversidad y el riesgo de incendios.",
   },
   {
     id: "vitis-vinifera",
@@ -488,6 +601,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja", "navarra", "castilla-y-leon", "castilla-la-mancha"],
     description: "Planta trepadora cultivada desde la Antigüedad para producir uva y vino; La Rioja y Castilla-La Mancha (la mayor superficie de viñedo del mundo) son sus regiones más emblemáticas en España.",
     rarity: "común",
+    properties: ["comestible", "antioxidante"],
+    uses: "Su fruto, la uva, se consume fresco o se fermenta para producir vino; la piel y las pepitas son ricas en resveratrol y otros polifenoles antioxidantes.",
+    curiosity: "La Rioja y Castilla-La Mancha son, respectivamente, la región de mayor prestigio vinícola y la de mayor superficie de viñedo de España.",
   },
   {
     id: "fraxinus-angustifolia",
@@ -497,6 +613,9 @@ export const SPECIES: Species[] = [
     regions: ["madrid", "castilla-y-leon", "castilla-la-mancha", "la-rioja"],
     description: "Árbol de ribera de hoja caduca, frecuente junto a arroyos y vegas del centro y sur peninsular.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "De su savia se ha obtenido tradicionalmente en algunas zonas mediterráneas la 'manna', una sustancia dulce usada como laxante suave.",
+    curiosity: "Su madera, elástica y resistente, se usaba tradicionalmente para fabricar mangos de herramientas y varas de carro.",
   },
   {
     id: "phoenix-dactylifera",
@@ -506,6 +625,9 @@ export const SPECIES: Species[] = [
     regions: ["murcia", "comunidad-valenciana", "melilla"],
     description: "Palmera cultivada por sus dátiles; el Palmeral de Elche, patrimonio de la Humanidad, es el mayor palmeral de Europa.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Su fruto, el dátil, es un alimento tradicional muy energético, base de la dieta en muchas culturas del norte de África y Oriente Medio.",
+    curiosity: "El Palmeral de Elche, con cerca de 200.000 palmeras, es el palmeral más grande de Europa y fue declarado Patrimonio de la Humanidad por la UNESCO.",
   },
   {
     id: "ziziphus-lotus",
@@ -515,6 +637,9 @@ export const SPECIES: Species[] = [
     regions: ["murcia"],
     description: "Arbusto espinoso muy resistente a la aridez, propio de los matorrales semidesérticos del sureste ibérico.",
     rarity: "poco común",
+    properties: ["comestible"],
+    uses: "Su fruto, parecido a una pequeña aceituna dulce, se ha consumido tradicionalmente fresco o seco en zonas áridas del sureste peninsular.",
+    curiosity: "Se le relaciona con el legendario 'loto' que en la Odisea de Homero hacía olvidar su hogar a quien lo comía, aunque el fruto real no tiene ningún efecto narcótico documentado.",
   },
   {
     id: "stipa-tenacissima",
@@ -524,6 +649,9 @@ export const SPECIES: Species[] = [
     regions: ["murcia", "melilla"],
     description: "Gramínea de hojas fibrosas usada tradicionalmente para cestería y cuerdas; forma extensos espartizales en el sureste árido.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus hojas fibrosas se han usado durante siglos para tejer cestos, esteras, cuerdas y alpargatas, una artesanía tradicional aún viva en Murcia y Almería.",
+    curiosity: "El esparto fue una industria de exportación española tan importante en el siglo XIX que dio nombre en inglés a un tipo de papel, 'esparto paper'.",
   },
   {
     id: "erica-vagans",
@@ -542,6 +670,9 @@ export const SPECIES: Species[] = [
     regions: ["comunidad-valenciana"],
     description: "Árbol cítrico cuyo cultivo intensivo en la huerta valenciana convirtió a la naranja en símbolo de la región.",
     rarity: "común",
+    properties: ["comestible", "antioxidante", "aromática"],
+    uses: "Su fruto, la naranja, es una de las principales fuentes dietéticas de vitamina C y antioxidantes cítricos.",
+    curiosity: "El azahar, la flor del naranjo, es tan apreciada en perfumería y repostería que en la huerta valenciana se recolecta específicamente para destilar agua de azahar.",
   },
   {
     id: "olea-europaea-sylvestris",
@@ -551,6 +682,9 @@ export const SPECIES: Species[] = [
     regions: ["ceuta", "andalucia"],
     description: "Forma silvestre del olivo, de hoja más pequeña y fruto amargo, típica del monte mediterráneo del Estrecho.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Su fruto, más pequeño y amargo que el de las variedades cultivadas, no suele consumirse directamente pero es un recurso importante para la fauna silvestre.",
+    curiosity: "Todos los olivos cultivados actuales descienden de la domesttificación del acebuche silvestre hace miles de años en el Mediterráneo oriental.",
   },
   {
     id: "laurus-nobilis",
@@ -560,6 +694,9 @@ export const SPECIES: Species[] = [
     regions: ["ceuta", "cataluna"],
     description: "Árbol aromático de hoja perenne usado en cocina desde la Antigüedad; en el Estrecho forma parte de bosques relictos.",
     rarity: "común",
+    properties: ["aromática", "comestible", "antioxidante"],
+    uses: "Sus hojas secas son un condimento clásico de guisos y caldos; ricas en compuestos antioxidantes.",
+    curiosity: "En la Antigua Grecia y Roma, coronas de laurel premiaban a atletas vencedores y poetas, origen de expresiones actuales como 'dormirse en los laureles'.",
   },
 
   // --- La Rioja: Sierra de la Demanda / Sierra Cebollera, valle del Ebro y viñedos ---
@@ -580,6 +717,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja", "castilla-la-mancha", "aragon", "castilla-y-leon"],
     description: "Árbol de ribera de crecimiento rápido y copa columnar, muy plantado a lo largo del Ebro y otros ríos del interior.",
     rarity: "común",
+    properties: ["medicinal"],
+    uses: "Sus yemas resinosas se han usado tradicionalmente en ungüentos para golpes y contusiones.",
+    curiosity: "Existen ejemplares centenarios llamados 'chopos cabeceros' en Aragón y Guadalajara, podados durante generaciones para obtener leña sin talar el árbol.",
   },
   {
     id: "salix-alba",
@@ -589,6 +729,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja", "castilla-la-mancha", "aragon"],
     description: "Árbol de ribera de hojas plateadas por el envés, forma bosquetes de galería junto a ríos y arroyos.",
     rarity: "común",
+    properties: ["medicinal"],
+    uses: "Su corteza contiene salicina, precursora química de la aspirina, y se ha usado tradicionalmente en infusión contra la fiebre y el dolor.",
+    curiosity: "El ácido acetilsalicílico, el principio activo de la aspirina moderna, fue sintetizado originalmente a partir de compuestos aislados de la corteza de sauce.",
   },
   {
     id: "crataegus-monogyna",
@@ -598,6 +741,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja", "castilla-la-mancha", "madrid", "aragon"],
     description: "Arbusto espinoso de flores blancas en primavera y frutos rojos (majuelas) en otoño, típico de setos y linderos de bosque.",
     rarity: "común",
+    properties: ["medicinal", "comestible"],
+    uses: "Sus flores y frutos se usan tradicionalmente en infusión como tónico cardiovascular suave; las majuelas (frutos) también se comen o se usan en mermeladas.",
+    curiosity: "En muchas culturas europeas se consideraba un árbol protector, y era tradición no cortar un espino albar solitario en mitad de un campo por mala suerte.",
   },
   {
     id: "berberis-vulgaris",
@@ -616,6 +762,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja", "castilla-la-mancha", "madrid"],
     description: "Lavanda de flor azulada y hoja más ancha que el cantueso, muy aromática, típica de páramos y laderas calizas del interior.",
     rarity: "común",
+    properties: ["aromática", "medicinal", "melífera"],
+    uses: "Su aceite esencial se usa en perfumería y como relajante; en medicina popular se aplica para aliviar dolores de cabeza.",
+    curiosity: "A diferencia de la lavanda de Provenza (Lavandula angustifolia), el espliego tolera mejor el calor y la sequía del interior peninsular.",
   },
   {
     id: "rosa-canina",
@@ -625,6 +774,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja", "castilla-la-mancha", "aragon", "castilla-y-leon"],
     description: "Rosal silvestre de flores rosadas y falsos frutos rojos (escaramujos) ricos en vitamina C, común en setos y bordes de camino.",
     rarity: "común",
+    properties: ["medicinal", "comestible", "antioxidante"],
+    uses: "Sus falsos frutos (escaramujos) son muy ricos en vitamina C y se usan en mermeladas e infusiones.",
+    curiosity: "Durante la Segunda Guerra Mundial, el Reino Unido organizó recolectas masivas de escaramujos para elaborar jarabe de vitamina C ante la escasez de cítricos importados.",
   },
   {
     id: "vaccinium-myrtillus",
@@ -634,6 +786,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja", "asturias", "cantabria", "aragon"],
     description: "Pequeño arbusto de fruto azulado comestible que tapiza el sotobosque de hayedos y pinares de montaña sobre suelo ácido.",
     rarity: "poco común",
+    properties: ["comestible", "antioxidante"],
+    uses: "Su fruto, el arándano, se consume fresco o en mermelada y es muy rico en antocianinas antioxidantes.",
+    curiosity: "Tradicionalmente se ha usado para mejorar la visión nocturna, una creencia popularizada por pilotos de la Segunda Guerra Mundial que comían mermelada de arándanos antes de misiones nocturnas.",
   },
 
   // --- Castilla-La Mancha: dehesas, Montes de Toledo, Serranía de Cuenca, estepas y humedales de La Mancha ---
@@ -690,6 +845,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "madrid", "castilla-y-leon", "la-rioja"],
     description: "Árbol de ribera y de vegas antaño abundantísimo, muy diezmado por la grafiosis; sobreviven sobre todo ejemplares jóvenes que rebrotan de raíz. Formaba parte de los sotos del Ebro riojano.",
     rarity: "poco común",
+    properties: ["medicinal"],
+    uses: "Su corteza interna se ha usado tradicionalmente en cataplasmas para heridas e irritaciones cutáneas.",
+    curiosity: "La grafiosis, una enfermedad causada por un hongo transportado por escarabajos, ha eliminado a la mayoría de los grandes olmos adultos de Europa desde el siglo XX.",
   },
   {
     id: "cistus-albidus",
@@ -699,6 +857,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "murcia", "andalucia", "la-rioja"],
     description: "Arbusto de hojas grisáceas y flores rosa-malva, coloniza junto a la jara pringosa los matorrales mediterráneos degradados. Presente en los encinares del Valle del Ebro riojano.",
     rarity: "común",
+    properties: ["aromática"],
+    uses: "Sus hojas resinosas y aromáticas se han usado tradicionalmente en infusión digestiva en algunas zonas rurales.",
+    curiosity: "Sus flores rosa-malva duran apenas un día: se abren por la mañana y pierden los pétalos por la tarde, siendo reemplazadas por otras nuevas cada jornada.",
   },
   {
     id: "genista-scorpius",
@@ -708,6 +869,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "aragon", "la-rioja"],
     description: "Arbusto espinoso de flores amarillas muy abundante en el matorral degradado sobre suelos calizos del interior peninsular.",
     rarity: "común",
+    properties: [],
+    uses: "Sus ramas espinosas se han usado tradicionalmente como material para setos vivos defensivos en el campo.",
+    curiosity: "Su nombre 'scorpius' alude a sus espinas curvas, que recuerdan al aguijón de un escorpión.",
   },
   {
     id: "rhamnus-lycioides",
@@ -726,6 +890,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "aragon"],
     description: "Pequeño arbusto grisáceo muy aromático, característico de las estepas semiáridas del interior peninsular junto al esparto y el romero.",
     rarity: "poco común",
+    properties: ["aromática", "medicinal"],
+    uses: "En infusión se usa tradicionalmente en zonas esteparias como digestivo y vermífugo.",
+    curiosity: "Su nombre común, ontina, es una de las plantas más características del paisaje estepario ibérico, tapizando de gris amplias extensiones de La Mancha y el valle del Ebro.",
   },
   {
     id: "gypsophila-struthium",
@@ -771,6 +938,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "murcia", "la-rioja"],
     description: "Arbusto grisáceo y ramoso de hojas carnosas, propio de estepas salinas y yesosas semiáridas del interior peninsular. Indicador de los matorrales gipsófilos del Valle del Ebro, presentes en localidades riojanas como Viguera o Alcanadre.",
     rarity: "poco común",
+    properties: [],
+    uses: "Tradicionalmente ramoneada por el ganado ovino en los pastizales esteparios donde escasea otra vegetación.",
+    curiosity: "Sus hojas carnosas acumulan sales, una adaptación típica de las plantas de estepas salinas que les permite sobrevivir donde otras especies no toleran la salinidad del suelo.",
   },
   {
     id: "asphodelus-ramosus",
@@ -780,6 +950,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "andalucia", "murcia"],
     description: "Planta de hojas basales largas y alta espiga de flores blancas con vena rosada, muy visible en primavera en pastizales y baldíos.",
     rarity: "común",
+    properties: ["tóxica"],
+    uses: "Su raíz tuberosa, aunque tóxica en crudo, se ha usado tradicionalmente tras un largo procesado como pegamento y en la fabricación de alcohol industrial.",
+    curiosity: "En la mitología griega, los Campos Elíseos (el paraíso de los héroes) estaban descritos como praderas cubiertas de asfódelos en flor.",
   },
   {
     id: "phragmites-australis",
@@ -789,6 +962,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "murcia"],
     description: "Gramínea alta que forma densos carrizales en las orillas de humedales como las Tablas de Daimiel o las Lagunas de Ruidera.",
     rarity: "común",
+    properties: [],
+    uses: "Sus tallos se han usado tradicionalmente para techar chozas (bardas) y fabricar esteras en zonas de humedal.",
+    curiosity: "Forma uno de los ecosistemas de humedal más productivos y extendidos del mundo, presente en todos los continentes salvo la Antártida.",
   },
   {
     id: "typha-latifolia",
@@ -798,6 +974,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "murcia"],
     description: "Planta acuática de hoja ancha y característica espiga marrón cilíndrica, habitual en los márgenes de lagunas y humedales manchegos.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus rizomas son comestibles tras cocción, y sus hojas se han usado tradicionalmente para tejer esteras y asientos de sillas.",
+    curiosity: "Su vellosa espiga marrón, al madurar, libera miles de semillas diminutas con pelusa que se dispersan con el viento como si fuera algodón.",
   },
   {
     id: "santolina-chamaecyparissus",
@@ -807,6 +986,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "madrid", "aragon", "la-rioja"],
     description: "Subarbusto grisáceo muy aromático de flores amarillas globosas, frecuente en pastizales y márgenes de cultivo semiáridos. En La Rioja se conoce también como abrótano hembra.",
     rarity: "común",
+    properties: ["aromática", "medicinal"],
+    uses: "Tradicionalmente usada como vermífugo (contra parásitos intestinales) y en infusión digestiva amarga.",
+    curiosity: "Se cultiva también como planta ornamental de borde en jardinería mediterránea por su follaje plateado y aromático todo el año.",
   },
   {
     id: "thymus-zygis",
@@ -816,6 +998,9 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "madrid", "castilla-y-leon"],
     description: "Tomillo de hoja muy fina y aroma intenso, la especie más usada tradicionalmente para aromatizar aceitunas y guisos en el centro peninsular.",
     rarity: "común",
+    properties: ["aromática", "medicinal"],
+    uses: "Es el tomillo tradicionalmente usado para aromatizar las aceitunas de mesa y en infusión como digestivo.",
+    curiosity: "De sus flores las abejas producen una miel muy apreciada, y su aceite esencial es uno de los más ricos en timol de todos los tomillos ibéricos.",
   },
 
   // --- La Rioja: matorral mediterráneo, sotos del Ebro, suelos salinos/yesosos, encinares, quejigares y rebollares ---
@@ -836,6 +1021,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Subarbusto de hojas plateadas y aroma intenso a curry, con flores amarillas que se mantienen tras secarse; forma parte del matorral mediterráneo de sustitución del encinar.",
     rarity: "poco común",
+    properties: ["aromática", "medicinal", "antioxidante"],
+    uses: "Su aceite esencial, de intenso aroma a curry, se usa en perfumería y cosmética por sus propiedades antioxidantes y regeneradoras de la piel.",
+    curiosity: "Aunque huele intensamente a curry, no tiene ninguna relación botánica con las especias que componen esa mezcla; el aroma es pura coincidencia química.",
   },
   {
     id: "helichrysum-stoechas",
@@ -845,6 +1033,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta grisácea y aromática de capítulos amarillos, propia de matorrales secos y soleados del Valle del Ebro.",
     rarity: "común",
+    properties: ["aromática", "melífera"],
+    uses: "Sus flores secas mantienen el color y la forma durante años, por lo que se han usado tradicionalmente en ramos secos decorativos.",
+    curiosity: "Su nombre común, siempreviva, alude precisamente a que sus flores no marchitan visualmente al secarse, a diferencia de la mayoría de plantas.",
   },
   {
     id: "lonicera-etrusca",
@@ -863,6 +1054,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto o arbolillo caducifolio emparentado con el lentisco, de frutos rojizos que oscurecen al madurar; frecuente en el matorral mediterráneo del Valle del Ebro.",
     rarity: "común",
+    properties: ["aromática"],
+    uses: "De su tronco se extraía tradicionalmente la trementina de Chipre, una resina usada en barnices antes de la generalización de la trementina de pino.",
+    curiosity: "Sus llamativas agallas rojas, formadas por la picadura de pequeños insectos, se han usado tradicionalmente como tinte y en curtidos.",
   },
   {
     id: "thymus-mastichina",
@@ -872,6 +1066,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Tomillo de aroma alcanforado y hojas grisáceas, forma parte del matorral degradado que sustituye a los encinares tras talas y pastoreo.",
     rarity: "común",
+    properties: ["aromática", "medicinal"],
+    uses: "Su aroma alcanforado lo hace muy apreciado en infusión digestiva y como condimento en la cocina tradicional del centro peninsular.",
+    curiosity: "Su nombre popular, 'tomillo blanco', viene del tono plateado de sus hojas, más claro que el del tomillo común.",
   },
   {
     id: "cornus-sanguinea",
@@ -881,6 +1078,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de ribera de ramas rojizas muy vistosas en invierno y frutos negros, propio de las orlas de los bosques de ribera del Ebro.",
     rarity: "común",
+    properties: ["ornamental"],
+    uses: "Sus varas jóvenes, de color rojo intenso en invierno, se cultivan como planta ornamental por su colorido en la estación fría.",
+    curiosity: "Su nombre 'sanguinea' alude al color rojo sangre que adquieren sus ramas jóvenes, especialmente visible en los meses de invierno sin hojas.",
   },
   {
     id: "euonymus-europaeus",
@@ -899,6 +1099,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta trepadora de bosques de ribera húmedos, cuyas inflorescencias femeninas (conos) se usan tradicionalmente para aromatizar la cerveza.",
     rarity: "poco común",
+    properties: ["aromática"],
+    uses: "Sus inflorescencias femeninas (conos) son el ingrediente que aporta el amargor y aroma característicos a la cerveza.",
+    curiosity: "Antes de popularizarse en la elaboración de cerveza en la Edad Media, otras plantas amargas como la hierba terrestre cumplían esa misma función aromatizante.",
   },
   {
     id: "rubus-ulmifolius",
@@ -908,6 +1111,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto espinoso y trepador de fruto comestible (la mora), muy abundante en linderos, setos y claros de los bosques de ribera.",
     rarity: "común",
+    properties: ["comestible", "antioxidante"],
+    uses: "Su fruto, la mora, se consume fresco o en mermeladas y es rico en antocianinas antioxidantes.",
+    curiosity: "Sus tallos arqueados enraízan al tocar el suelo con la punta, formando nuevas plantas y permitiendo que una sola zarza colonice grandes extensiones.",
   },
   {
     id: "sambucus-ebulus",
@@ -917,6 +1123,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta herbácea perenne de gran porte y flores blancas en umbela, propia de suelos húmedos y nitrificados junto a ríos y caminos; sus frutos son tóxicos.",
     rarity: "común",
+    properties: ["tóxica", "medicinal"],
+    uses: "A diferencia del saúco arbóreo, esta especie herbácea es tóxica y no debe consumirse; tradicionalmente solo se ha usado en uso externo.",
+    curiosity: "Pese a su gran parecido con el saúco común, es una especie herbácea que muere cada invierno, mientras que el saúco arbóreo es un arbusto leñoso perenne.",
   },
   {
     id: "urtica-dioica",
@@ -926,6 +1135,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta herbácea urticante muy común en suelos húmedos y ricos en nitrógeno, típica del sotobosque de los bosques de ribera.",
     rarity: "común",
+    properties: ["medicinal", "comestible", "antioxidante"],
+    uses: "Cocinada (pierde su efecto urticante) se usa como verdura en tortillas y sopas; en infusión se emplea tradicionalmente como depurativo.",
+    curiosity: "Sus pelos urticantes funcionan como diminutas jeringuillas de vidrio que se rompen al contacto e inyectan ácido fórmico e histamina bajo la piel.",
   },
   {
     id: "vitis-sylvestris",
@@ -944,6 +1156,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de aspecto articulado y ramas verdes casi sin hojas, propio de matorrales sobre suelos salinos y yesosos del Valle del Ebro.",
     rarity: "poco común",
+    properties: [],
+    uses: "Sin uso tradicional destacado en la Península, a diferencia de otras especies del género usadas en Asia como estimulantes.",
+    curiosity: "Es uno de los parientes vivos más antiguos de las coníferas: pertenece a un grupo de plantas (las gnetales) evolutivamente muy distinto del resto de plantas con flor.",
   },
   {
     id: "ononis-fruticosa",
@@ -1007,6 +1222,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Jara de hoja grande y coriácea parecida a la del laurel, resistente al frío de montaña; acompaña a encinares silíceos y rebollares riojanos.",
     rarity: "común",
+    properties: ["aromática"],
+    uses: "Sus hojas resinosas desprenden un aroma balsámico intenso al calentarse con el sol, formando parte del característico olor del monte mediterráneo de montaña en verano.",
+    curiosity: "A diferencia de otras jaras, resiste bien el frío de montaña, por lo que sustituye a la jara pringosa en las cotas más altas.",
   },
   {
     id: "cistus-salviifolius",
@@ -1025,6 +1243,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto o arbolillo espinoso de bayas rojizas al madurar, del que tradicionalmente se extraía un aceite (la miera) usado como antiséptico veterinario.",
     rarity: "poco común",
+    properties: ["medicinal"],
+    uses: "De su madera se extraía tradicionalmente por destilación un aceite oscuro, la miera, usado como antiséptico y repelente en veterinaria tradicional de ganado ovino.",
+    curiosity: "El término 'cade' con que se conoce su aceite en perfumería procede del nombre provenzal de esta planta.",
   },
   {
     id: "ligustrum-vulgare",
@@ -1034,6 +1255,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de hoja semipersistente y flores blancas muy perfumadas en panícula, con bayas negras; frecuente en el sotobosque de los encinares riojanos.",
     rarity: "común",
+    properties: ["ornamental", "tóxica"],
+    uses: "Muy cultivado como seto ornamental por su rápido crecimiento; sus bayas negras son tóxicas si se ingieren.",
+    curiosity: "Es uno de los arbustos más usados en jardinería para setos topiarios por su tolerancia a podas frecuentes y drásticas.",
   },
   {
     id: "acer-monspessulanum",
@@ -1052,6 +1276,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de floración blanca muy temprana en primavera y frutos azulados comestibles, propio de roquedos y claros de quejigar.",
     rarity: "poco común",
+    properties: ["comestible"],
+    uses: "Sus pequeños frutos azulados, dulces al madurar, se han recolectado tradicionalmente en zonas de montaña.",
+    curiosity: "Es de los primeros arbustos en florecer en la montaña tras el invierno, cubriéndose de flores blancas antes incluso de que le broten las hojas.",
   },
   {
     id: "calluna-vulgaris",
@@ -1061,6 +1288,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeño arbusto de flores rosa-violáceas en espiga que tapiza laderas silíceas lavadas por la lluvia, como en la umbría de la Sierra de Moncalvillo.",
     rarity: "poco común",
+    properties: ["melífera", "medicinal"],
+    uses: "En infusión se ha usado tradicionalmente como diurético suave; sus flores producen una miel oscura muy apreciada.",
+    curiosity: "Es la especie que da nombre a los brezales, extensos ecosistemas de matorral atlántico típicos del norte de Europa y del norte peninsular.",
   },
   {
     id: "cytisus-scoparius",
@@ -1091,6 +1321,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta anual de flor roja intensa con centro oscuro, propia de sembrados y barbechos cerealistas.",
     rarity: "poco común",
+    properties: ["tóxica", "ornamental"],
+    uses: "Sin usos seguros: contiene glucósidos cardiotónicos tóxicos similares a los de la digital.",
+    curiosity: "En la mitología griega nació de la sangre derramada por Adonis, el bello joven amado por Afrodita y herido mortalmente por un jabalí.",
   },
   {
     id: "aquilegia-vulgaris",
@@ -1100,6 +1333,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores azuladas o violáceas con espolones característicos en forma de garra de águila, propia de claros de bosque húmedos.",
     rarity: "poco común",
+    properties: ["ornamental", "tóxica", "melífera"],
+    uses: "Muy cultivada como planta ornamental de jardín; sus semillas son ligeramente tóxicas si se ingieren en cantidad.",
+    curiosity: "Sus flores tienen largos espolones nectaríferos adaptados específicamente a la lengua larga de los abejorros y de algunas mariposas nocturnas.",
   },
   {
     id: "nigella-arvensis",
@@ -1109,6 +1345,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flor azul pálido rodeada de brácteas finamente divididas, habitual en sembrados y barbechos.",
     rarity: "poco común",
+    properties: ["aromática"],
+    uses: "Sus semillas, parecidas a las de su pariente cultivado Nigella sativa, se han usado ocasionalmente como condimento en algunas zonas rurales.",
+    curiosity: "Su llamativa flor azul rodeada de finas brácteas como una nube verde le da otro nombre popular, 'ajenuz', muy usado en la cocina árabe medieval.",
   },
   {
     id: "helleborus-viridis",
@@ -1118,6 +1357,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores verdosas colgantes que aparece a finales de invierno en claros de bosque húmedo; tóxica como el resto del género.",
     rarity: "poco común",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: toda la planta es tóxica si se ingiere.",
+    curiosity: "Florece a finales de invierno, cuando apenas hay otra vegetación activa, aprovechando la luz que aún llega al suelo del bosque antes de que broten las hojas de los árboles.",
   },
   {
     id: "aconitum-napellus",
@@ -1127,6 +1369,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores azul-violáceas en forma de casco, una de las más tóxicas de la flora europea; habita prados húmedos de montaña.",
     rarity: "rara",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: es una de las plantas más tóxicas de la flora europea, incluso por simple contacto con la piel en grandes cantidades.",
+    curiosity: "En la mitología griega, el acónito habría nacido de la baba venenosa del perro Cerbero al ser arrastrado por Hércules desde el inframundo.",
   },
   {
     id: "ficaria-verna",
@@ -1136,6 +1381,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta de flores amarillas brillantes y hojas acorazonadas, tapiza el suelo de bosques de ribera a comienzos de primavera.",
     rarity: "común",
+    properties: ["medicinal"],
+    uses: "Tradicionalmente aplicada en cataplasmas contra las hemorroides, de donde procede su nombre en inglés ('pilewort'); sus hojas jóvenes son ligeramente tóxicas en crudo.",
+    curiosity: "Sus pequeños tubérculos radiculares, agrupados en racimo, recuerdan a diminutas almorranas, lo que inspiró su uso medicinal tradicional según la 'teoría de la firma'.",
   },
   {
     id: "ranunculus-repens",
@@ -1154,6 +1402,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "La flor roja más reconocible de los sembrados y cunetas de toda España; florece profusamente en primavera entre los cultivos de cereal.",
     rarity: "común",
+    properties: ["ornamental", "tóxica"],
+    uses: "Sus pétalos se han usado tradicionalmente en jarabes suaves para la tos infantil; el resto de la planta contiene alcaloides poco recomendables.",
+    curiosity: "En el Reino Unido y otros países de la Commonwealth, la amapola es el símbolo oficial de homenaje a los caídos en las guerras mundiales, por haber cubierto masivamente los campos de batalla de Flandes.",
   },
   {
     id: "glaucium-corniculatum",
@@ -1172,6 +1423,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores amarillas y savia anaranjada usada tradicionalmente contra verrugas; crece en muros, escombros y setos.",
     rarity: "común",
+    properties: ["medicinal", "tóxica"],
+    uses: "Su savia anaranjada se ha aplicado tradicionalmente de forma tópica sobre verrugas, aunque su ingestión es tóxica para el hígado.",
+    curiosity: "Su nombre viene del griego 'chelidon' (golondrina), porque se creía que florecía con la llegada de estas aves migratorias en primavera.",
   },
   {
     id: "raphanus-raphanistrum",
@@ -1181,6 +1435,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Antepasado silvestre del rábano cultivado, de flores blancas o amarillentas con venas moradas, frecuente en cultivos y baldíos.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus semillas y vainas jóvenes, de sabor picante, se han consumido ocasionalmente como condimento silvestre.",
+    curiosity: "Es la especie silvestre de la que probablemente derivan todas las variedades cultivadas de rábano.",
   },
   {
     id: "barbarea-vulgaris",
@@ -1190,6 +1447,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores amarillas en racimo, común en suelos húmedos junto a acequias y cursos de agua.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus hojas jóvenes, de sabor picante parecido al berro, se han usado tradicionalmente en ensaladas de invierno.",
+    curiosity: "Su nombre alude a Santa Bárbara, patrona invocada contra las tormentas, por reverdecer y florecer ya en pleno invierno cuando pocas plantas lo hacen.",
   },
   {
     id: "nasturtium-officinale",
@@ -1199,6 +1459,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta acuática comestible de hojas verdes brillantes, crece flotando o arraigada en el lecho de acequias y arroyos de agua limpia.",
     rarity: "común",
+    properties: ["comestible", "antioxidante"],
+    uses: "Sus hojas se consumen crudas en ensalada por su sabor picante, siendo muy ricas en vitamina C y compuestos antioxidantes.",
+    curiosity: "Solo debe recolectarse de aguas limpias, ya que puede acumular parásitos si crece en cursos de agua contaminados por ganado.",
   },
   {
     id: "cardamine-hirsuta",
@@ -1208,6 +1471,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta anual de flores blancas diminutas, muy común en jardines, huertos y terrenos removidos.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus hojas, de sabor ligeramente picante, son comestibles y se añaden ocasionalmente a ensaladas.",
+    curiosity: "Sus vainas maduras explotan al tocarlas, disparando las semillas a más de un metro de distancia como mecanismo de dispersión.",
   },
   {
     id: "eruca-vesicaria",
@@ -1217,6 +1483,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Antepasado silvestre de la rúcula cultivada, de flores blanco-amarillentas con venas moradas y sabor picante.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Antepasado silvestre de la rúcula cultivada; sus hojas jóvenes de sabor picante se usan en ensaladas.",
+    curiosity: "Los romanos la consideraban una planta afrodisíaca y prohibieron cultivarla dentro de monasterios en algunas épocas medievales.",
   },
   {
     id: "sinapis-arvensis",
@@ -1226,6 +1495,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores amarillas muy vistosas que amarillea campos de cultivo enteros en primavera; mala hierba muy común.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus semillas, molidas, se han usado tradicionalmente como sucedáneo rústico de la mostaza comercial.",
+    curiosity: "Sus semillas pueden permanecer viables en el suelo durante décadas, germinando en cuanto la tierra se remueve y queda expuesta a la luz.",
   },
   {
     id: "capsella-bursa-pastoris",
@@ -1235,6 +1507,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta de flores blancas y frutos triangulares en forma de zurrón, una de las malas hierbas más cosmopolitas del mundo.",
     rarity: "común",
+    properties: ["medicinal", "comestible"],
+    uses: "Tradicionalmente usada en infusión para cortar hemorragias leves; sus hojas jóvenes también son comestibles en ensalada.",
+    curiosity: "Es una de las plantas con flor más extendidas del planeta, presente en prácticamente todos los continentes habitados.",
   },
   {
     id: "tuberaria-guttata",
@@ -1262,6 +1537,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores rosadas cuyas hojas machacadas producen espuma jabonosa; crece junto a ríos y en linderos de cultivo.",
     rarity: "común",
+    properties: ["medicinal"],
+    uses: "Sus hojas y raíz, machacadas en agua, producen espuma jabonosa usada tradicionalmente para lavar tejidos delicados y antiguos textiles históricos.",
+    curiosity: "Los museos textiles siguen usando extracto de saponaria para limpiar tapices antiguos por ser más suave que los detergentes modernos.",
   },
   {
     id: "silene-vulgaris",
@@ -1271,6 +1549,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de cáliz hinchado característico y flores blancas, sus hojas tiernas se recolectan tradicionalmente como verdura silvestre.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus hojas y brotes tiernos, conocidos como collejas, son una verdura silvestre muy popular en tortillas y guisos del centro y sur de España.",
+    curiosity: "Su cáliz hinchado en forma de globo, del que cuelgan los pétalos blancos, le da el aspecto de una pequeña farolillo antes de abrirse.",
   },
   {
     id: "cerastium-glomeratum",
@@ -1289,6 +1570,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores rosa-violáceas con venas moradas, muy común en baldíos, cunetas y terrenos nitrificados.",
     rarity: "común",
+    properties: ["medicinal", "comestible"],
+    uses: "En infusión se usa tradicionalmente para aliviar la tos y las irritaciones de garganta; sus hojas y flores tiernas también son comestibles.",
+    curiosity: "Sus flores, frotadas suavemente, liberan un mucílago que las hace algo resbaladizas al tacto, la misma propiedad que da nombre a los caramelos de malvavisco.",
   },
   {
     id: "althaea-hirsuta",
@@ -1307,6 +1591,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores rosa-magenta intenso y hojas muy divididas que enrojecen en otoño, propia de linderos de matorral.",
     rarity: "común",
+    properties: ["ornamental"],
+    uses: "Cultivado como planta ornamental de jardín rocoso por su intensa floración magenta y su follaje otoñal rojizo.",
+    curiosity: "Sus frutos, en forma de pico alargado, expulsan las semillas de golpe al madurar mediante un mecanismo elástico de dispersión.",
   },
   {
     id: "geranium-rotundifolium",
@@ -1325,6 +1612,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores rosadas y frutos alargados en forma de aguja que se enroscan al madurar, muy común en baldíos y caminos.",
     rarity: "común",
+    properties: [],
+    uses: "Sin uso tradicional destacado; su interés es sobre todo ecológico como planta pionera de suelos removidos.",
+    curiosity: "Su fruto en forma de aguja se retuerce en espiral al secarse según cambia la humedad ambiental, lo que ayuda a clavar la semilla en el suelo como un diminuto sacacorchos.",
   },
   {
     id: "oxalis-corniculata",
@@ -1334,6 +1624,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta rastrera de hojas trifoliadas y flores amarillas, de sabor ácido; muy común en jardines y huertos.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus hojas, de sabor ácido por el ácido oxálico, se han masticado tradicionalmente para calmar la sed, aunque no deben consumirse en grandes cantidades.",
+    curiosity: "Sus hojas trifoliadas se pliegan hacia abajo por la noche o ante el contacto, en un movimiento llamado nictinastia.",
   },
   {
     id: "rhus-coriaria",
@@ -1343,6 +1636,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de hojas compuestas que enrojecen intensamente en otoño; sus frutos secos y molidos se usan como especia ácida.",
     rarity: "poco común",
+    properties: ["comestible", "tintórea"],
+    uses: "Sus frutos secos y molidos son la especia zumaque, de sabor ácido, muy usada en la cocina de Oriente Medio; sus hojas también se han usado tradicionalmente para curtir cuero.",
+    curiosity: "Su nombre común, zumaque, da nombre a su vez al proceso tradicional de curtido de cueros conocido como 'zumaque' o 'zumacado'.",
   },
   {
     id: "colutea-arborescens",
@@ -1370,6 +1666,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Leguminosa trepadora de flores rosa-púrpura, muy común en cultivos, barbechos y linderos.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Cultivada tradicionalmente como forraje y abono verde, ya que fija nitrógeno en el suelo como el resto de leguminosas.",
+    curiosity: "Sus zarcillos, modificaciones de las hojas, se enroscan alrededor de cualquier soporte cercano en cuestión de horas.",
   },
   {
     id: "lathyrus-articulatus",
@@ -1388,6 +1687,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores amarillas agrupadas en cabezuela envuelta en cálices algodonosos, propia de pastizales secos.",
     rarity: "común",
+    properties: ["medicinal"],
+    uses: "Su nombre, del latín 'vulnerarius' (para heridas), refleja su uso tradicional en cataplasmas para cicatrizar cortes leves.",
+    curiosity: "Sus flores están protegidas por un cáliz hinchado y algodonoso que las aísla del frío en los pastizales de montaña donde crece.",
   },
   {
     id: "lotus-corniculatus",
@@ -1397,6 +1699,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores amarillas (a veces con toques anaranjados) y frutos en forma de cuerno dispuestos en corona; muy común en prados.",
     rarity: "común",
+    properties: ["melífera"],
+    uses: "Muy usada como planta forrajera y de recuperación de suelos pobres por fijar nitrógeno atmosférico.",
+    curiosity: "Sus vainas, dispuestas en corona a partir de un mismo punto, recuerdan a las uñas de un pie, de donde recibe el nombre común de 'cuernecillo' o 'pie de pájaro' en otras lenguas.",
   },
   {
     id: "trifolium-fragiferum",
@@ -1424,6 +1729,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de ramas verdes junciformes y grandes flores amarillas muy perfumadas, cultivado y asilvestrado en taludes y baldíos.",
     rarity: "común",
+    properties: ["aromática", "melífera"],
+    uses: "Sus fibras se han usado tradicionalmente para tejer cuerdas y tejidos bastos, mientras que sus flores se emplean en perfumería por su intenso aroma.",
+    curiosity: "Sus tallos, casi sin hojas, realizan la fotosíntesis directamente, una adaptación frecuente en plantas de climas secos para reducir la pérdida de agua.",
   },
   {
     id: "genista-tinctoria",
@@ -1433,6 +1741,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeño arbusto de flores amarillas usado tradicionalmente para obtener un tinte amarillo; propio de prados y claros de matorral.",
     rarity: "poco común",
+    properties: ["tintórea"],
+    uses: "Tradicionalmente usada para obtener un tinte amarillo natural para lana y otros textiles.",
+    curiosity: "Mezclada con el pastel (una planta tintórea azul), se usaba para obtener el color verde en los tejidos medievales, un color que ninguna planta produce sola de forma estable.",
   },
   {
     id: "lupinus-angustifolius",
@@ -1451,6 +1762,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto espinoso de floración blanca muy temprana y frutos azulados (endrinas) usados para el pacharán; forma setos densos.",
     rarity: "común",
+    properties: ["comestible", "medicinal"],
+    uses: "Sus frutos (endrinas), muy astringentes en crudo, se maceran tradicionalmente en aguardiente con azúcar para elaborar pacharán.",
+    curiosity: "Sus flores blancas cubren por completo el arbusto antes de que le salgan las hojas, siendo uno de los primeros anuncios visuales de la primavera en los setos.",
   },
   {
     id: "rosa-rubiginosa",
@@ -1460,6 +1774,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Rosal silvestre cuyas hojas desprenden un característico aroma a manzana al frotarlas, distinto del escaramujo común.",
     rarity: "común",
+    properties: ["medicinal", "comestible", "aromática"],
+    uses: "El aceite extraído de sus semillas se usa tradicionalmente en cosmética para cicatrices y manchas cutáneas.",
+    curiosity: "Se reconoce fácilmente frotando sus hojas entre los dedos: desprenden un característico aroma a manzana verde.",
   },
   {
     id: "potentilla-reptans",
@@ -1505,6 +1822,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de hojas compuestas de sabor a pepino y pequeñas cabezuelas florales rojizas, común en prados y taludes secos.",
     rarity: "común",
+    properties: ["comestible", "aromática"],
+    uses: "Sus hojas, de sabor a pepino fresco, se usan tradicionalmente para aromatizar ensaladas, vinagres y ponches.",
+    curiosity: "Sus diminutas flores rojizas carecen de pétalos vistosos y dependen del viento para la polinización, a diferencia de la mayoría de sus parientes de la familia de las rosáceas.",
   },
   {
     id: "cotoneaster-integerrimus",
@@ -1577,6 +1897,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta espinosa de color grisáceo-azulado que al secarse se desprende de la raíz y rueda empujada por el viento.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Su raíz tierna se ha consumido tradicionalmente cocida como verdura en algunas zonas rurales, de forma similar al cardo corredor cultivado.",
+    curiosity: "Al secarse en verano, toda la planta se desprende de la raíz y rueda empujada por el viento (planta 'rodadora'), dispersando sus semillas por el camino.",
   },
   {
     id: "daucus-carota",
@@ -1586,6 +1909,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Antepasado silvestre de la zanahoria cultivada, de umbela blanca con una flor central a menudo purpúrea, común en baldíos.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Es el antepasado silvestre directo de la zanahoria cultivada, aunque su raíz silvestre es fina, leñosa y de sabor mucho menos dulce.",
+    curiosity: "Su umbela suele tener una única flor central de color rojo oscuro entre las cientos de flores blancas, cuya función exacta sigue sin explicarse del todo: podría imitar a un insecto para atraer polinizadores.",
   },
   {
     id: "foeniculum-vulgare",
@@ -1595,6 +1921,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta muy aromática de hojas finamente divididas y umbelas amarillas, común en cunetas, baldíos y linderos de cultivo.",
     rarity: "común",
+    properties: ["aromática", "medicinal", "comestible"],
+    uses: "Sus semillas y hojas se usan en cocina y en infusión digestiva, tradicionalmente recomendada contra los gases y los cólicos infantiles.",
+    curiosity: "En la mitología griega, Prometeo escondió el fuego robado a los dioses en un tallo hueco de hinojo para entregárselo a la humanidad.",
   },
   {
     id: "angelica-sylvestris",
@@ -1604,6 +1933,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta robusta de gran porte y umbelas blanco-rosadas, propia de bosques de ribera y prados húmedos de montaña.",
     rarity: "poco común",
+    properties: ["aromática"],
+    uses: "Sus tallos jóvenes, de aroma anisado, se han confitado tradicionalmente en azúcar en algunas regiones europeas.",
+    curiosity: "Su nombre, angélica, refleja la antigua creencia popular de que protegía contra epidemias y malos espíritus.",
   },
   {
     id: "apium-graveolens",
@@ -1640,6 +1972,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto o arbolillo de grandes umbelas de flores blancas muy aromáticas y bayas negras usadas en mermeladas y licores.",
     rarity: "común",
+    properties: ["medicinal", "comestible", "tóxica"],
+    uses: "Sus flores se usan en infusión sudorífica contra resfriados y para elaborar jarabes y licores; sus bayas maduras y cocinadas son comestibles, pero crudas o verdes son tóxicas.",
+    curiosity: "Con sus flores se elabora un sirope muy popular en el norte de Europa para preparar refrescos caseros de saúco.",
   },
   {
     id: "lonicera-implexa",
@@ -1649,6 +1984,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Enredadera de hoja perenne cuyas hojas superiores rodean el tallo formando un disco, con flores tubulares blanco-amarillentas.",
     rarity: "común",
+    properties: ["aromática", "melífera"],
+    uses: "Sin uso tradicional destacado más allá de lo ornamental; muy visitada por mariposas nocturnas atraídas por su intenso perfume vespertino.",
+    curiosity: "Sus flores tubulares están adaptadas a la lengua larga de las mariposas esfinge, que las polinizan al anochecer atraídas por su fuerte aroma.",
   },
   {
     id: "galium-mollugo",
@@ -1667,6 +2005,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta trepadora cuya raíz se usó tradicionalmente para obtener un tinte rojo (la granza); crece en setos y linderos.",
     rarity: "poco común",
+    properties: ["tintórea"],
+    uses: "Su raíz se ha usado desde la Antigüedad para obtener un tinte rojo natural (la granza), empleado en textiles y, antiguamente, en el uniforme militar.",
+    curiosity: "El tinte rojo de la rubia, la alizarina, fue uno de los primeros pigmentos naturales sintetizados artificialmente en el siglo XIX, lo que acabó con su cultivo comercial.",
   },
   {
     id: "sherardia-arvensis",
@@ -1694,6 +2035,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Enredadera trepadora de raíz tuberosa tóxica y bayas rojas muy vistosas en otoño, común en setos y linderos.",
     rarity: "común",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: su raíz tuberosa, a veces confundida con nabos silvestres, es muy tóxica.",
+    curiosity: "Su raíz puede alcanzar un tamaño enorme y a veces se ha usado fraudulentamente en el pasado para falsificar raíces de mandrágora.",
   },
   {
     id: "valeriana-officinalis",
@@ -1703,6 +2047,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores blanco-rosadas en corimbo cuya raíz se usa tradicionalmente como sedante; crece en prados húmedos.",
     rarity: "poco común",
+    properties: ["medicinal"],
+    uses: "Su raíz se usa tradicionalmente en infusión como sedante suave para el insomnio y la ansiedad leve.",
+    curiosity: "Su olor, desagradable para las personas, resulta muy atractivo para los gatos, de forma similar a la hierba gatera.",
   },
   {
     id: "dipsacus-fullonum",
@@ -1712,6 +2059,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta espinosa de gran porte con inflorescencias ovaladas muy características, usadas antiguamente para cardar lana.",
     rarity: "común",
+    properties: [],
+    uses: "Sus inflorescencias secas y espinosas se usaban tradicionalmente en la industria textil para cardar (peinar) la lana antes del hilado.",
+    curiosity: "La industria textil usó cabezas de cardencha reales para el cardado de tejidos de calidad hasta bien entrado el siglo XX, por dar un acabado más suave que los cardadores metálicos.",
   },
   {
     id: "scabiosa-columbaria",
@@ -1739,6 +2089,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de gran porte con densas inflorescencias rosa-purpúreas, muy visitada por mariposas; crece junto a ríos y acequias.",
     rarity: "común",
+    properties: ["melífera", "medicinal"],
+    uses: "Tradicionalmente usada en infusión como depurativo, aunque debe emplearse con precaución por contener alcaloides en cantidades variables.",
+    curiosity: "Sus inflorescencias rosadas son un imán para mariposas: es una de las plantas más visitadas por lepidópteros de los cauces fluviales españoles.",
   },
   {
     id: "bellis-perennis",
@@ -1748,6 +2101,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "La margarita de flor blanca y centro amarillo más común de prados, jardines y céspedes, florece casi todo el año.",
     rarity: "común",
+    properties: ["medicinal", "comestible"],
+    uses: "Sus flores y hojas jóvenes son comestibles en ensalada; tradicionalmente también se han usado en infusión para golpes y contusiones.",
+    curiosity: "Su nombre científico, 'bellis perennis', significa 'bonita para siempre', porque puede florecer casi todo el año, incluso en pleno invierno en climas suaves.",
   },
   {
     id: "artemisia-absinthium",
@@ -1757,6 +2113,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta grisácea muy aromática y de sabor amargo, tradicionalmente usada en licores como la absenta y el vermú.",
     rarity: "común",
+    properties: ["aromática", "medicinal", "tóxica"],
+    uses: "Base tradicional de licores como la absenta y el vermú; en dosis altas o uso prolongado puede ser tóxica.",
+    curiosity: "La absenta, el licor derivado del ajenjo, fue prohibida en varios países europeos a comienzos del siglo XX por su fama (exagerada) de causar alucinaciones.",
   },
   {
     id: "achillea-millefolium",
@@ -1766,6 +2125,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de hojas muy divididas (de ahí su nombre) y corimbos de flores blancas, muy común en prados y linderos.",
     rarity: "común",
+    properties: ["medicinal", "antioxidante"],
+    uses: "Tradicionalmente usada para cicatrizar heridas leves y en infusión digestiva; su nombre honra al héroe griego Aquiles, que la habría usado para curar a sus soldados.",
+    curiosity: "Sus hojas, finísimamente divididas en cientos de segmentos, le dan el nombre científico 'millefolium' ('mil hojas').",
   },
   {
     id: "anacyclus-clavatus",
@@ -1793,6 +2155,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Margarita de mayor tamaño que la común, de largos pétalos blancos, muy abundante en prados de siega en primavera.",
     rarity: "común",
+    properties: ["ornamental", "comestible"],
+    uses: "Sus hojas jóvenes, de sabor ligeramente picante, se han añadido ocasionalmente a ensaladas silvestres.",
+    curiosity: "El popular juego de 'me quiere, no me quiere' deshojando margaritas se practica tradicionalmente con esta especie.",
   },
   {
     id: "tanacetum-vulgare",
@@ -1802,6 +2167,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta muy aromática de flores amarillas en botón sin pétalos visibles, agrupadas en corimbo; crece junto a caminos y ríos.",
     rarity: "poco común",
+    properties: ["aromática", "medicinal", "tóxica"],
+    uses: "Tradicionalmente usada como repelente de insectos y vermífugo, aunque su aceite esencial es tóxico en dosis altas.",
+    curiosity: "Antiguamente se colocaban ramas de tanaceto en las despensas y armarios como repelente natural contra polillas e insectos.",
   },
   {
     id: "glebionis-segetum",
@@ -1820,6 +2188,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Antepasada silvestre de la caléndula de jardín, de flores naranja-amarillentas, común en cultivos y baldíos.",
     rarity: "común",
+    properties: ["medicinal", "ornamental"],
+    uses: "Antepasada silvestre de la caléndula de jardín, usada tradicionalmente en ungüentos cicatrizantes para heridas leves.",
+    curiosity: "Sus flores se abren y cierran siguiendo el movimiento del sol a lo largo del día, un fenómeno llamado heliotropismo.",
   },
   {
     id: "carlina-vulgaris",
@@ -1829,6 +2200,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Cardo de brácteas doradas y brillantes que permanecen abiertas incluso secas, muy usado en ramos y decoración rural.",
     rarity: "común",
+    properties: ["ornamental"],
+    uses: "Sus capítulos secos, de brácteas doradas que se abren y cierran según la humedad ambiental, se han usado tradicionalmente como higrómetro rústico casero.",
+    curiosity: "Sus brácteas se cierran cuando el aire está húmedo (anunciando lluvia) y se abren con el tiempo seco, por lo que se colgaban en las puertas como barómetro popular.",
   },
   {
     id: "carthamus-tinctorius",
@@ -1838,6 +2212,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta espinosa de flores anaranjadas, cultivada tradicionalmente para obtener tinte y aceite de sus semillas.",
     rarity: "poco común",
+    properties: ["tintórea", "comestible"],
+    uses: "Sus flores se usan tradicionalmente como colorante alimentario (sucedáneo del azafrán) y para obtener tinte textil; sus semillas producen un aceite comestible.",
+    curiosity: "Se le conoce popularmente como 'azafrán falso' o 'azafrán de moro', porque durante siglos se usó para adulterar o sustituir al azafrán verdadero por ser mucho más barato.",
   },
   {
     id: "centaurea-aspera",
@@ -1847,6 +2224,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores rosa-purpúreas y brácteas espinosas, muy común en baldíos, cunetas y taludes secos.",
     rarity: "común",
+    properties: ["melífera"],
+    uses: "Sin uso tradicional destacado; es una importante planta de matorral para la fauna polinizadora mediterránea.",
+    curiosity: "Sus brácteas espinosas, dobladas hacia atrás, la distinguen fácilmente de otras centaureas de flor similar.",
   },
   {
     id: "cirsium-eriophorum",
@@ -1874,6 +2254,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Cardo espinoso de flores amarillas cuyos tallos tiernos se recolectan tradicionalmente como verdura silvestre en primavera.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus tallos tiernos, pelados de espinas, se recolectan tradicionalmente en primavera y se cocinan como verdura, muy apreciados en Andalucía y el Levante.",
+    curiosity: "Pese a su aspecto agresivamente espinoso, es una de las verduras silvestres más buscadas en la cocina tradicional española.",
   },
   {
     id: "lapsana-communis",
@@ -1883,6 +2266,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de pequeñas flores amarillas y hojas comestibles, muy común en setos, huertos y claros de bosque.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus hojas jóvenes, de sabor suave, se han consumido tradicionalmente cocidas como verdura en algunas zonas rurales de Europa.",
+    curiosity: "Pese a su discreto aspecto, era una verdura silvestre habitual en la olla campesina antes de la generalización de las hortalizas cultivadas.",
   },
   {
     id: "picris-hieracioides",
@@ -1892,6 +2278,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta cubierta de pelos rígidos ganchudos y flores amarillas parecidas a las del diente de león, común en baldíos y linderos.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus hojas jóvenes, de sabor amargo, se han consumido tradicionalmente cocidas, aunque requieren varios cambios de agua para suavizar el amargor.",
+    curiosity: "Está cubierta de pelos rígidos y ganchudos al tacto, una característica que le da el nombre común de 'amargón' en algunas zonas por su textura áspera y sabor.",
   },
   {
     id: "scorzonera-hispanica",
@@ -1901,6 +2290,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de raíz negra comestible y flores amarillas, cultivada tradicionalmente como hortaliza y presente también en estado silvestre.",
     rarity: "poco común",
+    properties: ["comestible", "medicinal"],
+    uses: "Su raíz negra, cultivada como hortaliza de invierno, se ha usado tradicionalmente cocida en guisos; su savia lechosa se aplicaba contra picaduras de serpiente.",
+    curiosity: "Su nombre, del italiano 'scorzone' (víbora), refleja la antigua creencia de que era un remedio eficaz contra las mordeduras de serpiente.",
   },
   {
     id: "tragopogon-pratensis",
@@ -1910,6 +2302,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flor amarilla que se cierra al mediodía y da paso a un vilano esférico gigante, mucho mayor que el del diente de león.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Su raíz, de sabor parecido a la ostra vegetal, se ha consumido tradicionalmente cocida como hortaliza.",
+    curiosity: "Sus flores amarillas se cierran siempre al mediodía, dándole el nombre popular inglés de 'Jack-go-to-bed-at-noon' ('Juan se va a la cama al mediodía').",
   },
   {
     id: "taraxacum-officinale",
@@ -1919,6 +2314,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Una de las plantas silvestres más reconocibles del mundo, de flor amarilla y vilano esférico plateado que se dispersa con el viento.",
     rarity: "común",
+    properties: ["medicinal", "comestible", "antioxidante", "melífera"],
+    uses: "Sus hojas tiernas se comen en ensalada y su raíz tostada se ha usado como sucedáneo del café; tradicionalmente se emplea como depurativo hepático.",
+    curiosity: "Su vilano esférico y plateado, que los niños soplan para 'pedir un deseo', dispersa las semillas a varios kilómetros de distancia con el viento.",
   },
   {
     id: "sonchus-oleraceus",
@@ -1928,6 +2326,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de hojas comestibles y flores amarillas parecidas a las del diente de león, muy común en huertos y baldíos.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus hojas tiernas se consumen en ensalada o cocinadas, con un sabor parecido a una lechuga ligeramente amarga.",
+    curiosity: "Es una planta cosmopolita presente en casi todos los continentes, y sus semillas con vilano se dispersan igual de bien que las del diente de león.",
   },
   {
     id: "crepis-vesicaria",
@@ -1937,6 +2338,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores amarillas parecidas a las del diente de león, sus hojas tiernas se recolectan como verdura silvestre en primavera.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus hojas tiernas se recolectan tradicionalmente en primavera como verdura silvestre, con un punto amargo similar a la achicoria.",
+    curiosity: "Se conoce popularmente como 'radicheta' en varias zonas de España, donde se recolecta igual que la achicoria cultivada.",
   },
   {
     id: "daboecia-cantabrica",
@@ -1964,6 +2368,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de ramas verdes angulosas y flores amarillas poco perfumadas, propio de matorrales calizos soleados.",
     rarity: "poco común",
+    properties: ["ornamental"],
+    uses: "Sin uso tradicional destacado más allá de lo ornamental en jardinería mediterránea rústica.",
+    curiosity: "A diferencia de los jazmines de jardín más conocidos, sus flores amarillas apenas desprenden aroma perceptible.",
   },
   {
     id: "phillyrea-latifolia",
@@ -1991,6 +2398,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta rastrera de hoja perenne y flores azul-violáceas, frecuente en setos húmedos y sotobosques umbríos.",
     rarity: "común",
+    properties: ["ornamental", "tóxica"],
+    uses: "Muy cultivada como cubresuelos ornamental en jardinería por su rápido crecimiento; contiene alcaloides tóxicos.",
+    curiosity: "Sus tallos rastreros pueden enraizar en cualquier punto que toque el suelo, lo que la convierte en una excelente planta cubresuelos pero también potencialmente invasora.",
   },
   {
     id: "blackstonia-perfoliata",
@@ -2009,6 +2419,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores rosadas en corimbo apretado, tradicionalmente usada como tónico amargo digestivo.",
     rarity: "común",
+    properties: ["medicinal"],
+    uses: "En infusión muy amarga se usa tradicionalmente como tónico digestivo y para abrir el apetito.",
+    curiosity: "Su nombre alude al centauro Quirón, sabio en la mitología griega en el uso medicinal de las plantas.",
   },
   {
     id: "primula-elatior",
@@ -2018,6 +2431,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Una de las primeras flores en aparecer tras el invierno, de color amarillo pálido, en claros de bosques húmedos de montaña.",
     rarity: "poco común",
+    properties: ["ornamental"],
+    uses: "Cultivada ocasionalmente como planta ornamental de jardín de sombra por su temprana floración.",
+    curiosity: "Es una de las primeras flores silvestres en abrirse tras el invierno, lo que le da su nombre: 'primula', diminutivo de 'primera'.",
   },
   {
     id: "anagallis-arvensis",
@@ -2027,6 +2443,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta rastrera de flores anaranjadas o azules que se cierran antes de la lluvia, muy común en huertos y baldíos.",
     rarity: "común",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para consumo: toda la planta es ligeramente tóxica si se ingiere en cantidad.",
+    curiosity: "Sus flores se cierran ante la humedad y la falta de luz, por lo que tradicionalmente se usaban como predictor rústico del tiempo, dándole el nombre popular de 'pimpinela' del pobre o 'reloj de pastor'.",
   },
   {
     id: "lysimachia-ephemerum",
@@ -2045,6 +2464,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta carnívora de hojas pegajosas que atrapan insectos y flor violeta solitaria, propia de rezumaderos de montaña.",
     rarity: "rara",
+    properties: [],
+    uses: "Sin uso tradicional relevante; su interés es exclusivamente botánico como una de las pocas plantas carnívoras de la flora ibérica.",
+    curiosity: "Sus hojas pegajosas atrapan pequeños insectos y los digieren con enzimas propias, complementando así los nutrientes que faltan en los suelos pobres donde vive.",
   },
   {
     id: "orobanche-cruenta",
@@ -2072,6 +2494,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Dedalera de flores pequeñas de color pardo-rojizo agrupadas en densa espiga, endémica de las montañas del norte de la Península.",
     rarity: "rara",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: contiene los mismos glucósidos cardiotóxicos que otras especies de dedalera.",
+    curiosity: "Del género Digitalis se extrae la digoxina, un fármaco cardiovascular todavía usado en medicina moderna bajo estricto control médico.",
   },
   {
     id: "veronica-arvensis",
@@ -2099,6 +2524,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta semiparásita de flores blancas con venas moradas, usada tradicionalmente en infusión para problemas oculares.",
     rarity: "poco común",
+    properties: ["medicinal"],
+    uses: "Tradicionalmente usada en infusión o compresas para aliviar el enrojecimiento e irritación ocular leve, de ahí su nombre común.",
+    curiosity: "Su nombre, Euphrasia, viene del griego 'euphrosyne' (alegría), por la mejora del ánimo que se atribuía a la vista descansada.",
   },
   {
     id: "verbascum-thapsus",
@@ -2108,6 +2536,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de gran porte con hojas aterciopeladas grisáceas y un largo espigón de flores amarillas, común en baldíos y taludes.",
     rarity: "común",
+    properties: ["medicinal", "aromática"],
+    uses: "Sus flores y hojas se han usado tradicionalmente en infusión para afecciones respiratorias.",
+    curiosity: "Sus hojas, cubiertas de una densa pelusa blanquecina que las hace suaves al tacto, se usaban antiguamente como pañuelos improvisados y mechas para lámparas de aceite.",
   },
   {
     id: "atropa-belladonna",
@@ -2117,6 +2548,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta muy tóxica de flores acampanadas pardo-violáceas y bayas negras brillantes, propia de claros de bosque húmedo de montaña.",
     rarity: "rara",
+    properties: ["tóxica", "medicinal"],
+    uses: "Aunque contiene alcaloides usados en medicina bajo estricto control médico, la planta entera es extremadamente tóxica y no debe manipularse ni consumirse.",
+    curiosity: "Su nombre, 'belladonna' ('bella dama' en italiano), viene del uso renacentista de su jugo para dilatar las pupilas y darles a las mujeres una mirada más seductora.",
   },
   {
     id: "datura-stramonium",
@@ -2126,6 +2560,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta tóxica de grandes flores blancas en forma de trompeta y fruto espinoso, común en baldíos y terrenos nitrificados.",
     rarity: "común",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: toda la planta es tóxica y su ingestión puede causar alucinaciones graves e incluso la muerte.",
+    curiosity: "Su fruto, cubierto de púas, se conoce popularmente como 'manzana espinosa' y se abre al madurar liberando cientos de semillas negras.",
   },
   {
     id: "hyoscyamus-niger",
@@ -2135,6 +2572,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta tóxica de flores amarillentas con intrincadas venas moradas y olor desagradable, propia de escombreras y baldíos.",
     rarity: "poco común",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: planta tóxica que contiene los mismos alcaloides que la belladona y el estramonio.",
+    curiosity: "Su nombre común, beleño, comparte raíz con la palabra alemana para 'gallina' porque sus semillas eran tóxicas para las aves de corral.",
   },
   {
     id: "convolvulus-arvensis",
@@ -2144,6 +2584,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta trepadora y rastrera de flores blanco-rosadas en forma de embudo, muy común como mala hierba en cultivos y baldíos.",
     rarity: "común",
+    properties: ["invasora"],
+    uses: "Sin uso tradicional relevante; es considerada una mala hierba agrícola difícil de erradicar por su extenso sistema de raíces.",
+    curiosity: "Sus raíces pueden profundizar varios metros en el suelo, lo que hace casi imposible eliminarla arrancándola manualmente.",
   },
   {
     id: "calystegia-sepium",
@@ -2162,6 +2605,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores azul-violáceas con estambres rojos muy vistosos, común en baldíos, taludes y cunetas.",
     rarity: "común",
+    properties: ["melífera"],
+    uses: "Sin uso tradicional relevante en alimentación humana; es una planta muy valorada en apicultura por su abundante néctar.",
+    curiosity: "Sus flores nacen rosadas y cambian a azul intenso a medida que maduran, lo que permite ver varios tonos en la misma inflorescencia.",
   },
   {
     id: "borago-officinalis",
@@ -2171,6 +2617,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores azules con forma de estrella y hojas comestibles muy vellosas, cultivada tradicionalmente como verdura de huerta.",
     rarity: "común",
+    properties: ["comestible", "medicinal"],
+    uses: "Sus hojas tiernas son una verdura muy popular en la cocina de Aragón y Navarra; sus flores azules también se usan para decorar platos.",
+    curiosity: "Sus flores, de un azul intenso poco común en el reino vegetal, eran usadas en la Antigüedad para 'infundir valor' antes de las batallas.",
   },
   {
     id: "anchusa-azurea",
@@ -2180,6 +2629,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores azul intenso y hojas ásperas al tacto, común en baldíos, cunetas y linderos de cultivo.",
     rarity: "común",
+    properties: ["tintórea"],
+    uses: "Su raíz se ha usado tradicionalmente para obtener un tinte rojizo natural, empleado antiguamente en cosmética casera para colorear labios y mejillas.",
+    curiosity: "Su nombre, Anchusa, proviene del griego 'ankousa', que ya en la Antigüedad hacía referencia a su uso como colorante cosmético.",
   },
   {
     id: "pulmonaria-officinalis",
@@ -2189,6 +2641,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de hojas moteadas de blanco y flores que cambian de rosa a azul según maduran, propia de bosques húmedos umbríos.",
     rarity: "poco común",
+    properties: ["medicinal"],
+    uses: "Tradicionalmente usada en infusión para afecciones respiratorias, según la antigua 'teoría de la firma' por el parecido de sus hojas moteadas con el tejido pulmonar.",
+    curiosity: "Sus flores cambian de color rosa a azul según van madurando, lo que permite ver varios tonos a la vez en la misma planta.",
   },
   {
     id: "symphytum-tuberosum",
@@ -2198,6 +2653,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de raíz tuberosa y flores amarillo pálido colgantes, propia de bosques de ribera y claros húmedos.",
     rarity: "poco común",
+    properties: ["medicinal"],
+    uses: "Su raíz se ha usado tradicionalmente en cataplasmas para golpes y fracturas, de ahí su nombre común 'consuelda' (que suelda).",
+    curiosity: "Su nombre científico, Symphytum, proviene del griego 'symphyo' (unir), reflejando su reputación tradicional para favorecer la consolidación de huesos.",
   },
   {
     id: "cynoglossum-officinale",
@@ -2207,6 +2665,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores rojo-purpúreas y hojas ásperas y aterciopeladas, común en baldíos y bordes de camino.",
     rarity: "común",
+    properties: ["tóxica"],
+    uses: "Sin usos recomendables: contiene alcaloides tóxicos para el hígado si se ingiere.",
+    curiosity: "Sus hojas ásperas y alargadas recuerdan a una lengua de perro, lo que le da nombre tanto en español como en su nombre científico ('cynos' + 'glossa').",
   },
   {
     id: "origanum-vulgare",
@@ -2216,6 +2677,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta aromática de flores rosa-púrpura agrupadas en corimbo, muy usada en cocina; común en matorrales y linderos secos.",
     rarity: "común",
+    properties: ["aromática", "medicinal", "antioxidante", "comestible"],
+    uses: "Condimento imprescindible en salsas de tomate, pizzas y carnes; en infusión se usa tradicionalmente para la tos y la digestión.",
+    curiosity: "Su nombre científico, del griego 'oros' (montaña) y 'ganos' (alegría), significa aproximadamente 'alegría de la montaña'.",
   },
   {
     id: "satureja-hortensis",
@@ -2225,6 +2689,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta muy aromática de flores lilas, cultivada tradicionalmente como condimento y también asilvestrada.",
     rarity: "poco común",
+    properties: ["aromática", "comestible"],
+    uses: "Se usa tradicionalmente para condimentar legumbres, especialmente habas y judías, por facilitar su digestión.",
+    curiosity: "Su nombre común, ajedrea, comparte raíz con 'satirión', por su antigua fama (infundada) de planta afrodisíaca en la tradición popular.",
   },
   {
     id: "melissa-officinalis",
@@ -2234,6 +2701,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de aroma a limón y flores blanquecinas, cultivada y asilvestrada en setos y linderos húmedos.",
     rarity: "poco común",
+    properties: ["aromática", "medicinal"],
+    uses: "Sus hojas, de aroma a limón, se usan en infusión relajante para el insomnio y los nervios.",
+    curiosity: "Su nombre viene del griego 'melissa' (abeja): es una planta muy melífera, y los apicultores frotaban colmenas nuevas con sus hojas para atraer enjambres.",
   },
   {
     id: "hyssopus-officinalis",
@@ -2243,6 +2713,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta aromática de flores azul-violáceas dispuestas en espiga, propia de matorrales soleados sobre suelo calizo.",
     rarity: "poco común",
+    properties: ["aromática", "medicinal"],
+    uses: "Se usa en infusión para afecciones respiratorias y como condimento en licores tradicionales.",
+    curiosity: "El hisopo se menciona varias veces en la Biblia como planta purificadora, usada en rituales de limpieza ceremonial.",
   },
   {
     id: "salvia-lavandulifolia",
@@ -2252,6 +2725,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Salvia de hoja estrecha grisácea muy aromática y flores azul-violáceas, propia de matorrales secos calizos.",
     rarity: "común",
+    properties: ["aromática", "medicinal", "antioxidante"],
+    uses: "En infusión se usa tradicionalmente como digestivo y para aliviar el dolor de garganta; muy rica en compuestos antioxidantes.",
+    curiosity: "El nombre del género, Salvia, proviene del latín 'salvare' (salvar/curar), por la enorme reputación medicinal que tuvo en la Antigüedad.",
   },
   {
     id: "nepeta-cataria",
@@ -2261,6 +2737,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta aromática de flores blancas con motas moradas, conocida por su efecto estimulante sobre los gatos.",
     rarity: "poco común",
+    properties: ["aromática", "medicinal"],
+    uses: "En infusión se usa tradicionalmente como calmante suave; sus compuestos volátiles provocan una reacción de excitación característica en los gatos.",
+    curiosity: "El compuesto responsable de su efecto sobre los felinos, la nepetalactona, atrae también a algunos grandes felinos como leones y tigres en cautividad.",
   },
   {
     id: "glechoma-hederacea",
@@ -2270,6 +2749,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta rastrera de hojas redondeadas y flores azul-violáceas, tapiza el suelo de setos y bosques de ribera húmedos.",
     rarity: "común",
+    properties: ["aromática", "medicinal"],
+    uses: "Usada tradicionalmente en infusión para afecciones respiratorias leves; antiguamente también para clarificar la cerveza antes del uso del lúpulo.",
+    curiosity: "Antes de que se generalizara el lúpulo, esta planta se usaba en el norte de Europa para aromatizar y conservar la cerveza.",
   },
   {
     id: "lamium-amplexicaule",
@@ -2279,6 +2761,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta de flores rosa-púrpura y hojas que abrazan el tallo, muy común en huertos, jardines y baldíos en invierno.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus hojas y flores tiernas son comestibles y se han añadido ocasionalmente a ensaladas silvestres invernales.",
+    curiosity: "Puede florecer prácticamente todo el invierno en climas suaves, siendo una fuente temprana de néctar para los primeros insectos polinizadores del año.",
   },
   {
     id: "marrubium-vulgare",
@@ -2288,6 +2773,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta grisácea y aromática de flores blancas diminutas, usada tradicionalmente en infusión para la tos; común en baldíos.",
     rarity: "común",
+    properties: ["medicinal", "aromática"],
+    uses: "Tradicionalmente usado en jarabe o infusión para aliviar la tos y las afecciones respiratorias.",
+    curiosity: "Su extremo sabor amargo le da el nombre común 'marrubio', del hebreo 'mar' (amargo), usado ya en la medicina de la Antigüedad.",
   },
   {
     id: "sideritis-scorpioides",
@@ -2297,6 +2785,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta grisácea de flores amarillas dispuestas en verticilos a lo largo del tallo, propia de roquedos y matorrales de montaña caliza.",
     rarity: "poco común",
+    properties: ["medicinal", "aromática", "antioxidante"],
+    uses: "Es uno de los llamados 'tés de monte' o 'tés de roca', muy consumidos en infusión digestiva y por su alto contenido en antioxidantes.",
+    curiosity: "El género Sideritis debe su nombre al griego 'sideros' (hierro): antiguamente se usaba para curar heridas causadas por armas de hierro.",
   },
   {
     id: "ajuga-reptans",
@@ -2306,6 +2797,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta rastrera de flores azul-violáceas dispuestas en espiga, tapiza el suelo de prados húmedos y claros de bosque.",
     rarity: "común",
+    properties: ["medicinal", "ornamental"],
+    uses: "Tradicionalmente usada en infusión y cataplasmas para heridas leves; también cultivada como cubresuelos ornamental.",
+    curiosity: "Se extiende formando alfombras mediante estolones rastreros, de forma similar a las fresas silvestres.",
   },
   {
     id: "verbena-officinalis",
@@ -2315,6 +2809,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de tallos rígidos y diminutas flores lilas espaciadas a lo largo de finas espigas, común en baldíos y bordes de camino.",
     rarity: "común",
+    properties: ["medicinal"],
+    uses: "Usada tradicionalmente en infusión digestiva y como calmante suave.",
+    curiosity: "Considerada planta sagrada por celtas y romanos, se usaba en rituales de purificación y como amuleto protector.",
   },
   {
     id: "armeria-latifolia",
@@ -2324,6 +2821,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de hojas basales en roseta y flores rosadas agrupadas en una cabezuela sobre un tallo desnudo, propia de pastizales secos.",
     rarity: "poco común",
+    properties: ["ornamental"],
+    uses: "Sin uso tradicional destacado más allá de lo ornamental en jardines de rocalla.",
+    curiosity: "Su nombre común, armeria, comparte origen con la palabra francesa para clavel ('armoires'), por el antiguo parecido atribuido entre ambas flores.",
   },
   {
     id: "daphne-laureola",
@@ -2333,6 +2833,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de hoja perenne brillante y flores verdosas poco vistosas seguidas de bayas negras tóxicas, propio del sotobosque de encinares y quejigares.",
     rarity: "poco común",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: sus bayas negras y toda la planta son tóxicas por contener compuestos muy irritantes.",
+    curiosity: "El género Daphne debe su nombre a la ninfa griega que, según el mito, se transformó en laurel para escapar del dios Apolo.",
   },
   {
     id: "rumex-crispus",
@@ -2342,6 +2845,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de hojas onduladas en el borde y densas espigas de flores verdosas que se vuelven pardo-rojizas al fructificar.",
     rarity: "común",
+    properties: ["comestible", "medicinal"],
+    uses: "Sus hojas jóvenes, de sabor ácido, se han consumido tradicionalmente cocidas como verdura; su raíz se ha usado como laxante suave.",
+    curiosity: "Sus semillas, agrupadas en densas espigas pardo-rojizas, permanecen visibles en la planta seca durante todo el invierno, sirviendo de alimento a muchas aves.",
   },
   {
     id: "betula-pendula",
@@ -2351,6 +2857,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Árbol de corteza blanca característica y ramas colgantes, forma bosquetes en zonas húmedas de montaña del norte de La Rioja.",
     rarity: "poco común",
+    properties: ["medicinal"],
+    uses: "Su savia primaveral se ha recolectado tradicionalmente como bebida depurativa en el norte de Europa; sus hojas en infusión se usan como diurético.",
+    curiosity: "Su corteza blanca, que se desprende en finas láminas de papel, se ha usado tradicionalmente como material de escritura de emergencia y para encender fuego incluso húmeda.",
   },
   {
     id: "alnus-glutinosa",
@@ -2360,6 +2869,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Árbol de ribera que tolera el encharcamiento, forma parte de las alisedas que bordean ríos y arroyos junto al chopo y el sauce.",
     rarity: "común",
+    properties: ["tintórea"],
+    uses: "Su corteza y conos se han usado tradicionalmente para obtener tintes negros y pardos; su madera, muy resistente bajo el agua, se usaba en pilotes y cimentaciones.",
+    curiosity: "Su madera, al cortarla, se tiñe de un color anaranjado que con el tiempo se oscurece, por lo que antiguamente se decía (erróneamente) que 'sangraba'.",
   },
   {
     id: "muscari-comosum",
@@ -2369,6 +2881,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta bulbosa de inflorescencia rematada por un vistoso penacho de flores estériles azul-violáceas, común en cultivos y baldíos.",
     rarity: "común",
+    properties: ["ornamental", "comestible"],
+    uses: "Sus bulbos, muy amargos, se han consumido tradicionalmente en algunas zonas del Mediterráneo tras un largo proceso de cocción y encurtido.",
+    curiosity: "Su nombre común, nazareno, alude al parecido de su penacho superior de flores estériles con una melena, y se cultiva también como flor ornamental de jardín.",
   },
   {
     id: "allium-carinatum",
@@ -2378,6 +2893,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Ajo silvestre de flores rosa-púrpura agrupadas en umbela laxa, propio de prados y taludes secos.",
     rarity: "poco común",
+    properties: ["comestible", "aromática"],
+    uses: "Como el resto de ajos silvestres, sus bulbos y hojas son comestibles y de sabor similar al ajo cultivado.",
+    curiosity: "Su umbela combina flores fértiles con pequeños bulbillos aéreos, una doble estrategia de reproducción por semilla y de forma vegetativa a la vez.",
   },
   {
     id: "ornithogalum-narbonense",
@@ -2396,6 +2914,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de hoja perenne rígida y punzante (en realidad tallos aplanados) con bayas rojas muy vistosas en invierno; propio del sotobosque de encinares.",
     rarity: "común",
+    properties: ["medicinal", "ornamental"],
+    uses: "Su raíz se usa tradicionalmente en preparados para mejorar la circulación venosa y aliviar la sensación de piernas cansadas.",
+    curiosity: "Lo que parecen sus 'hojas' espinosas son en realidad tallos aplanados (cladodios); las flores y frutos rojos nacen directamente en el centro de estas falsas hojas.",
   },
   {
     id: "asparagus-officinalis",
@@ -2405,6 +2926,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Antepasado silvestre del espárrago cultivado, cuyos turiones tiernos se recolectan tradicionalmente en primavera.",
     rarity: "común",
+    properties: ["comestible"],
+    uses: "Sus turiones (brotes tiernos) se recolectan tradicionalmente en primavera y se cocinan igual que el espárrago cultivado.",
+    curiosity: "Los espárragos silvestres crecen escondidos entre zarzas y matorral, por lo que su búsqueda es toda una tradición rural en primavera.",
   },
   {
     id: "tamus-communis",
@@ -2414,6 +2938,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Enredadera de raíz tuberosa tóxica y bayas rojas brillantes, trepa por setos y linderos de bosque.",
     rarity: "común",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: toda la planta, especialmente la raíz tuberosa, es tóxica.",
+    curiosity: "Sus brotes tiernos primaverales se han consumido tradicionalmente en algunas zonas tras una cocción cuidadosa, aunque no es recomendable sin conocimiento experto.",
   },
   {
     id: "colchicum-autumnale",
@@ -2423,6 +2950,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta muy tóxica cuyas flores rosa-lilas surgen directamente del suelo en otoño, sin hojas, en prados húmedos de montaña.",
     rarity: "poco común",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: toda la planta es muy tóxica, aunque de ella se extrae la colchicina, usada en medicina bajo estricto control.",
+    curiosity: "Florece en otoño sin hojas, que solo aparecen la primavera siguiente junto al fruto, un desfase que le da el nombre popular de 'quitameriendas' (llega cuando terminan las meriendas de verano).",
   },
   {
     id: "veratrum-album",
@@ -2432,6 +2962,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de gran porte y hojas muy plegadas, extremadamente tóxica, propia de prados húmedos de alta montaña.",
     rarity: "rara",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: sus hojas jóvenes se confunden peligrosamente con la genciana, con casos de intoxicación grave documentados.",
+    curiosity: "En los prados de montaña donde crecen juntas, distinguir el vedegambre de la genciana antes de la floración exige mucha experiencia, ya que sus hojas son muy similares.",
   },
   {
     id: "juncus-acutus",
@@ -2441,6 +2974,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Junco robusto de hojas rígidas y punzantes, forma matas densas en suelos húmedos y algo salinos junto a charcas.",
     rarity: "común",
+    properties: [],
+    uses: "Sus tallos rígidos se han usado tradicionalmente para tejer cestas y esteras en zonas de marisma y humedal costero.",
+    curiosity: "Sus hojas terminan en una punta tan afilada y rígida que puede atravesar la piel con facilidad, de ahí su nombre 'acutus' (agudo, puntiagudo).",
   },
   {
     id: "orchis-morio",
@@ -2450,6 +2986,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Orquídea silvestre de flores moradas con labelo moteado, florece en primavera en prados no abonados sobre suelo calizo.",
     rarity: "rara",
+    properties: ["ornamental"],
+    uses: "Sin uso tradicional relevante; especie protegida cuyo único interés es la observación botánica.",
+    curiosity: "Del tubérculo de varias orquídeas silvestres emparentadas se obtenía tradicionalmente el salep, una harina usada en Oriente Medio para bebidas y helados, lo que diezmó sus poblaciones en varios países.",
   },
   {
     id: "aceras-anthropophorum",
@@ -2459,6 +2998,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Orquídea de nombre curioso por la silueta de sus flores verdosas, que recuerdan a una pequeña figura humana colgante.",
     rarity: "rara",
+    properties: ["ornamental"],
+    uses: "Sin uso tradicional; especie protegida de interés exclusivamente botánico.",
+    curiosity: "Su nombre común, 'hombre ahorcado', describe la silueta de cada flor individual, con brazos y piernas alargados que recuerdan a una pequeña figura humana colgante.",
   },
   {
     id: "spiranthes-spiralis",
@@ -2468,6 +3010,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña orquídea de finales de verano cuyas diminutas flores blancas se disponen en espiral a lo largo del tallo.",
     rarity: "rara",
+    properties: ["ornamental"],
+    uses: "Sin uso tradicional; especie protegida de interés exclusivamente botánico.",
+    curiosity: "Es una de las orquídeas europeas de floración más tardía, apareciendo a finales de verano cuando la mayoría de las demás ya han terminado su ciclo.",
   },
   {
     id: "cephalanthera-longifolia",
@@ -2477,6 +3022,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Orquídea de flores blancas que apenas se abren del todo, propia del sotobosque claro de encinares y quejigares.",
     rarity: "rara",
+    properties: ["ornamental"],
+    uses: "Sin uso tradicional; especie protegida de interés exclusivamente botánico.",
+    curiosity: "Como muchas orquídeas, depende en sus primeros años de vida de una asociación con hongos del suelo para poder germinar y desarrollarse.",
   },
   {
     id: "listera-ovata",
@@ -2486,6 +3034,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Orquídea discreta de flores verdosas y un par de hojas anchas y ovaladas en la base del tallo, propia de bosques húmedos.",
     rarity: "rara",
+    properties: ["ornamental"],
+    uses: "Sin uso tradicional; especie protegida de interés exclusivamente botánico.",
+    curiosity: "Su labelo (pétalo inferior modificado) libera repentinamente una gota de savia pegajosa cuando un insecto lo toca, pegándole el polen al instante.",
   },
   {
     id: "gladiolus-illyricus",
@@ -2495,6 +3046,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Antepasado silvestre de los gladiolos de jardín, de flores rosa-púrpura dispuestas en una espiga unilateral, propio de matorrales y linderos de cultivo.",
     rarity: "poco común",
+    properties: ["ornamental"],
+    uses: "Sin uso tradicional relevante más allá de lo ornamental; es el antepasado silvestre de los gladiolos cultivados en jardinería.",
+    curiosity: "Su nombre, del latín 'gladius' (espada), alude a la forma alargada y puntiaguda de sus hojas.",
   },
   {
     id: "cyperus-longus",
@@ -2504,6 +3058,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de tallo triangular característico de las juncias, forma matas en suelos encharcados junto a acequias y charcas.",
     rarity: "poco común",
+    properties: ["aromática"],
+    uses: "Su rizoma aromático se ha usado tradicionalmente en perfumería rústica y como sustituto local de otras juncias aromáticas cultivadas en otras regiones.",
+    curiosity: "Su tallo de sección claramente triangular al tacto es una forma sencilla de distinguir las juncias (Cyperaceae) de los juncos verdaderos, de tallo cilíndrico.",
   },
   {
     id: "arundo-donax",
@@ -2513,6 +3070,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Gramínea gigante de tallos leñosos que puede superar los 4 metros, forma densos cañaverales junto a ríos y acequias.",
     rarity: "común",
+    properties: [],
+    uses: "Sus cañas se han usado tradicionalmente para tutores agrícolas, cañizos, instrumentos musicales de viento y estructuras rústicas.",
+    curiosity: "Las lengüetas de instrumentos de viento como el clarinete, el oboe y el saxofón se siguen fabricando artesanalmente con cañas de esta especie.",
   },
   {
     id: "cynodon-dactylon",
@@ -2522,6 +3082,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Gramínea rastrera muy resistente a la sequía y el pisoteo, coloniza céspedes, baldíos y bordes de camino.",
     rarity: "común",
+    properties: ["medicinal"],
+    uses: "Su rizoma se ha usado tradicionalmente en infusión como diurético popular.",
+    curiosity: "Es una de las hierbas más resistentes que existen: sobrevive a la sequía extrema, el pisoteo constante y la siega frecuente gracias a sus rizomas subterráneos.",
   },
   {
     id: "dactylis-glomerata",
@@ -2549,6 +3112,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Gramínea silvestre parecida a la avena cultivada, con largas aristas retorcidas; mala hierba muy común en cultivos de cereal.",
     rarity: "común",
+    properties: [],
+    uses: "Sin uso agrícola directo: es la mala hierba más problemática de los cultivos de avena y cereal por competir con ellos y ser difícil de eliminar por su parecido con el cultivo.",
+    curiosity: "Su arista retorcida se enrosca y desenrosca con los cambios de humedad, un mecanismo que ayuda a la semilla a enterrarse progresivamente en el suelo como un diminuto taladro.",
   },
   {
     id: "sparganium-erectum",
@@ -2567,6 +3133,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de hojas grandes con venas blanquecinas y una espiga de bayas rojas muy tóxicas en otoño, propia de setos y bosques umbríos.",
     rarity: "común",
+    properties: ["tóxica", "ornamental"],
+    uses: "Sus llamativas bayas rojas de otoño son tóxicas y no deben consumirse pese a su aspecto atractivo.",
+    curiosity: "Sus flores generan calor internamente (termogénesis) para volatilizar mejor su olor y atraer a los pequeños insectos que las polinizan.",
   },
   {
     id: "potamogeton-natans",
@@ -2594,6 +3163,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta hemiparásita que crece formando bolas sobre las ramas de chopos, álamos y otros árboles, con bayas blancas translúcidas.",
     rarity: "poco común",
+    properties: ["tóxica", "medicinal"],
+    uses: "Sus bayas son tóxicas si se ingieren, aunque extractos de la planta se han usado en medicina complementaria bajo supervisión.",
+    curiosity: "Al no tener raíces en el suelo, obtiene agua y minerales parasitando las ramas de otros árboles, aunque también fotosintetiza por sí mismo.",
   },
   {
     id: "juniperus-sabina",
@@ -2603,6 +3175,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Conífera rastrera de porte achaparrado y follaje tóxico si se ingiere, propia de roquedos y páramos de montaña caliza.",
     rarity: "poco común",
+    properties: ["tóxica"],
+    uses: "Sin usos seguros para el público general: toda la planta es tóxica, especialmente para mujeres embarazadas.",
+    curiosity: "Pese a su toxicidad, se ha empleado erróneamente en la medicina popular histórica con fines abortivos, causando numerosos envenenamientos graves documentados.",
   },
   {
     id: "equisetum-arvense",
@@ -2612,6 +3187,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta sin flores de tallos articulados y ramas verticiladas, forma colonias en suelos húmedos junto a ríos y acequias.",
     rarity: "común",
+    properties: ["medicinal"],
+    uses: "En infusión se usa tradicionalmente como diurético; también, por su alto contenido en sílice, para fortalecer uñas y cabello.",
+    curiosity: "Los equisetos son parientes de plantas gigantes que formaban bosques enteros hace más de 300 millones de años, en la era de los grandes yacimientos de carbón.",
   },
   {
     id: "asplenium-viride",
@@ -2621,6 +3199,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeño helecho de raquis verde (a diferencia de otros Asplenium de raquis oscuro), propio de grietas de roquedos calizos de montaña.",
     rarity: "rara",
+    properties: [],
+    uses: "Sin uso tradicional documentado; su interés es exclusivamente botánico.",
+    curiosity: "A diferencia de otros helechos del mismo género, su raquis (el 'tallo' de la hoja) es verde en vez de negro, lo que le da nombre.",
   },
   {
     id: "ceterach-officinarum",
@@ -2630,6 +3211,9 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Helecho pequeño de hojas cubiertas de escamas doradas en el envés, capaz de secarse por completo y reverdecer con la lluvia; crece en grietas de muros y roquedos.",
     rarity: "poco común",
+    properties: ["medicinal"],
+    uses: "Usado tradicionalmente en infusión como remedio popular para dolencias del bazo, de donde procede su antiguo nombre 'hierba dorada de la esplenitis'.",
+    curiosity: "Es capaz de secarse casi por completo durante la sequía y enrollar sus hojas hacia dentro, para luego reverdecer en cuestión de horas tras la primera lluvia.",
   },
 ];
 

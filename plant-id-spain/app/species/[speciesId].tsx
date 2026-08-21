@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { FlatList, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect, useLocalSearchParams, Stack } from "expo-router";
 import { colors, radius, spacing } from "@/constants/theme";
-import { SPECIES } from "@/data/species";
+import { PlantProperty, SPECIES } from "@/data/species";
 import { REGIONS } from "@/data/regions";
 import { getSightingsForSpecies, Sighting } from "@/lib/db";
 
@@ -11,6 +11,18 @@ const RARITY_LABEL: Record<string, string> = {
   "poco común": "Poco común",
   rara: "Rara",
   endémica: "Endémica",
+};
+
+const PROPERTY_META: Record<PlantProperty, { emoji: string; label: string }> = {
+  "aromática": { emoji: "🌿", label: "Aromática" },
+  "medicinal": { emoji: "💊", label: "Medicinal" },
+  "comestible": { emoji: "🍽️", label: "Comestible" },
+  "tóxica": { emoji: "☠️", label: "Tóxica" },
+  "melífera": { emoji: "🐝", label: "Melífera" },
+  "tintórea": { emoji: "🎨", label: "Tintórea" },
+  "ornamental": { emoji: "🌸", label: "Ornamental" },
+  "antioxidante": { emoji: "✨", label: "Antioxidante" },
+  "invasora": { emoji: "⚠️", label: "Invasora" },
 };
 
 function formatDate(timestamp: number) {
@@ -64,12 +76,37 @@ export default function SpeciesDetailScreen() {
             </Text>
           </View>
         </View>
+        {species.properties && species.properties.length > 0 && (
+          <View style={styles.badgeRow}>
+            {species.properties.map((p) => (
+              <View key={p} style={styles.propertyBadge}>
+                <Text style={styles.propertyBadgeText}>
+                  {PROPERTY_META[p].emoji} {PROPERTY_META[p].label}
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
 
       <Text style={styles.description}>{species.description}</Text>
 
       <Text style={styles.sectionTitle}>Dónde encontrarla</Text>
       <Text style={styles.mutedText}>{regionNames}</Text>
+
+      {species.uses && (
+        <>
+          <Text style={styles.sectionTitle}>Usos tradicionales</Text>
+          <Text style={styles.description}>{species.uses}</Text>
+        </>
+      )}
+
+      {species.curiosity && (
+        <>
+          <Text style={styles.sectionTitle}>¿Sabías que...?</Text>
+          <Text style={styles.description}>{species.curiosity}</Text>
+        </>
+      )}
 
       <Text style={styles.sectionTitle}>Tus avistamientos ({sightings.length})</Text>
       {sightings.length === 0 ? (
@@ -104,7 +141,7 @@ const styles = StyleSheet.create({
   headerBlock: { marginTop: spacing.sm },
   commonName: { fontSize: 24, fontWeight: "800", color: colors.text },
   scientificName: { fontStyle: "italic", color: colors.textMuted, fontSize: 15, marginTop: 2 },
-  badgeRow: { flexDirection: "row", gap: spacing.sm, marginTop: spacing.sm },
+  badgeRow: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm, marginTop: spacing.sm },
   badge: {
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
@@ -114,6 +151,15 @@ const styles = StyleSheet.create({
   badgeAccent: { backgroundColor: "#EAF3DE" },
   badgeText: { fontSize: 12, fontWeight: "600", color: colors.text },
   badgeAccentText: { color: colors.primaryDark },
+  propertyBadge: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 4,
+    borderRadius: radius.pill,
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  propertyBadgeText: { fontSize: 12, fontWeight: "600", color: colors.text },
   description: { color: colors.text, fontSize: 15, lineHeight: 21, marginTop: spacing.sm },
   sectionTitle: { fontWeight: "700", fontSize: 16, color: colors.text, marginTop: spacing.md },
   mutedText: { color: colors.textMuted },
