@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { router } from "expo-router";
 import { colors, radius, spacing } from "@/constants/theme";
 import { SPECIES, Species, PlantProperty } from "@/data/species";
@@ -104,6 +104,13 @@ function SpeciesRow({ species }: { species: Species }) {
 
   return (
     <Pressable style={styles.row} onPress={() => router.push(`/species/${species.id}`)}>
+      {species.imageUrl ? (
+        <Image source={{ uri: species.imageUrl }} style={styles.thumb} />
+      ) : (
+        <View style={[styles.thumb, styles.thumbPlaceholder]}>
+          <Text style={styles.thumbPlaceholderEmoji}>🌱</Text>
+        </View>
+      )}
       <View style={styles.flex}>
         <Text style={styles.commonName}>{species.commonName}</Text>
         <Text style={styles.scientificName}>{species.scientificName}</Text>
@@ -157,13 +164,19 @@ const styles = StyleSheet.create({
   countText: { color: colors.textMuted, fontSize: 12 },
   list: { padding: spacing.md, gap: spacing.sm },
   row: {
+    flexDirection: "row",
+    gap: spacing.sm,
+    alignItems: "center",
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    padding: spacing.md,
+    padding: spacing.sm,
     marginBottom: spacing.sm,
     borderWidth: 1,
     borderColor: colors.border,
   },
+  thumb: { width: 56, height: 56, borderRadius: radius.sm, backgroundColor: colors.border },
+  thumbPlaceholder: { alignItems: "center", justifyContent: "center" },
+  thumbPlaceholderEmoji: { fontSize: 22 },
   commonName: { fontWeight: "700", color: colors.text, fontSize: 15 },
   scientificName: { fontStyle: "italic", color: colors.textMuted, fontSize: 12, marginTop: 1 },
   meta: { color: colors.textMuted, fontSize: 12, marginTop: 4 },

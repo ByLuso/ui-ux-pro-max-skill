@@ -19,10 +19,13 @@ centrada en la flora española.
 - **📍 Ficha de especie**: al desbloquear una especie ves su información (familia, rareza,
   descripción, dónde se encuentra en España) y el historial de tus propios avistamientos.
 - **📖 Enciclopedia**: a diferencia del Pokédex (que oculta lo no descubierto), esta sección
-  muestra libremente las ~290 especies del catálogo desde el principio, con buscador y filtros
+  muestra libremente las ~290 especies del catálogo desde el principio, con buscador, filtros
   por propiedad (aromática, medicinal, comestible, tóxica, melífera, tintórea, ornamental,
-  antioxidante, invasora). 189 de esas especies incluyen además usos tradicionales y una
-  curiosidad; el resto se irán completando.
+  antioxidante, invasora), y una **foto de referencia real** por especie (287 de 290, obtenidas
+  de Wikimedia Commons vía la API de Wikipedia — nunca imágenes generadas por IA, para no
+  inducir a errores de identificación). 189 especies incluyen además usos tradicionales y una
+  curiosidad; el resto se irán completando. En la ficha de especie, tus propias fotos siempre
+  tienen prioridad sobre la de referencia en cuanto identificas la planta tú mismo.
 - **100% local**: sin registro ni backend. Todo se guarda en SQLite en el propio dispositivo.
 
 ## Requisitos previos
@@ -123,6 +126,11 @@ el viñedo manchego) también está especialmente desarrollada. Para ampliar cua
 - Fuentes recomendadas para ampliar con datos reales: [GBIF](https://www.gbif.org/),
   [Flora Ibérica](http://www.floraiberica.es/), o los inventarios de flora de cada comunidad
   autónoma.
+- Para añadir la foto de referencia (`imageUrl`) de una especie nueva, la forma más rápida es
+  consultar `https://es.wikipedia.org/api/rest_v1/page/summary/<Genus_species>` (o el
+  equivalente en `en.wikipedia.org` si no hay artículo en español) y usar el valor de
+  `thumbnail.source` de la respuesta. Faltan 3 especialistas de yesos muy poco documentados
+  (`lepidium-subulatum`, `ononis-tridentata`, `helianthemum-hirtum`) sin foto en Wikipedia.
 
 ## Notas y limitaciones conocidas
 

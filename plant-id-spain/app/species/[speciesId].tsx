@@ -61,7 +61,14 @@ export default function SpeciesDetailScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <Stack.Screen options={{ title: species.commonName }} />
 
-      {sightings[0] && <Image source={{ uri: sightings[0].photoUri }} style={styles.hero} />}
+      {sightings[0] ? (
+        <Image source={{ uri: sightings[0].photoUri }} style={styles.hero} />
+      ) : species.imageUrl ? (
+        <View>
+          <Image source={{ uri: species.imageUrl }} style={styles.hero} />
+          <Text style={styles.imageCredit}>Foto de referencia · Wikimedia Commons</Text>
+        </View>
+      ) : null}
 
       <View style={styles.headerBlock}>
         <Text style={styles.commonName}>{species.commonName}</Text>
@@ -138,6 +145,7 @@ const styles = StyleSheet.create({
   container: { padding: spacing.md, gap: spacing.sm, backgroundColor: colors.background },
   notFound: { flex: 1, alignItems: "center", justifyContent: "center" },
   hero: { width: "100%", aspectRatio: 4 / 3, borderRadius: radius.lg, backgroundColor: colors.border },
+  imageCredit: { fontSize: 11, color: colors.textMuted, marginTop: 4, textAlign: "right" },
   headerBlock: { marginTop: spacing.sm },
   commonName: { fontSize: 24, fontWeight: "800", color: colors.text },
   scientificName: { fontStyle: "italic", color: colors.textMuted, fontSize: 15, marginTop: 2 },

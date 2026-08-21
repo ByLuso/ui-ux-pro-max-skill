@@ -26,6 +26,11 @@ export type Species = {
   uses?: string;
   /** Un dato curioso, anécdota o particularidad de la especie. */
   curiosity?: string;
+  /**
+   * Foto de referencia real de la especie (Wikimedia Commons, vía la API de Wikipedia).
+   * Se muestra en la Enciclopedia y en la ficha de especie cuando aún no tienes fotos propias.
+   */
+  imageUrl?: string;
 };
 
 export const SPECIES: Species[] = [
@@ -40,6 +45,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "antioxidante", "aromática"],
     uses: "Su fruto, la aceituna, se consume de mesa o se prensa para obtener aceite de oliva, base de la dieta mediterránea.",
     curiosity: "Un olivo bien cuidado puede vivir varios cientos de años y seguir produciendo aceitunas; algunos ejemplares monumentales en España superan el millar de años.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Oliveira_%28Olea_europaea%29_na_Pra%C3%A7a_da_Esta%C3%A7%C3%A3o%2C_Bag%C3%A9%2C_RS%2C_Brasil_%288160_x_6120px%29.jpg/330px-Oliveira_%28Olea_europaea%29_na_Pra%C3%A7a_da_Esta%C3%A7%C3%A3o%2C_Bag%C3%A9%2C_RS%2C_Brasil_%288160_x_6120px%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "quercus-ilex",
@@ -52,6 +58,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Su fruto, la bellota, alimenta tradicionalmente al cerdo ibérico durante la montanera, clave en la producción del jamón ibérico de bellota.",
     curiosity: "La dehesa, el paisaje de encinas dispersas sobre pasto, es un ecosistema creado por el ser humano y reconocido como uno de los más sostenibles de Europa.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Carrasca_de_la_Raboseras.JPG/330px-Carrasca_de_la_Raboseras.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "quercus-suber",
@@ -64,6 +71,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Su corteza gruesa se descortezada cada 9-14 años sin dañar al árbol para producir corcho, usado en tapones de vino y aislamiento; sus bellotas también alimentan al ganado.",
     curiosity: "Un alcornoque puede vivir y ser descortezado durante más de 150 años, produciendo corcho de mejor calidad a medida que envejece.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Quercus_suber_JPG1.jpg/330px-Quercus_suber_JPG1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "chamaerops-humilis",
@@ -76,6 +84,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas se han usado tradicionalmente para tejer cestos, esteras y sombreros en el sureste peninsular.",
     curiosity: "Es la única especie de palmera auténticamente silvestre y autóctona de toda Europa continental.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Chamaerops_humilis_Torreblanca.jpg/330px-Chamaerops_humilis_Torreblanca.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "nerium-oleander",
@@ -88,6 +97,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica", "ornamental"],
     uses: "Muy cultivada como planta ornamental por su vistosa floración, pero toda ella es tóxica si se ingiere, incluido el humo de su madera al quemarse.",
     curiosity: "Se han documentado intoxicaciones por usar sus ramas como pinchos improvisados para asar alimentos en el campo.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Nerium_oleander_flowers_leaves.jpg/330px-Nerium_oleander_flowers_leaves.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cistus-ladanifer",
@@ -100,6 +110,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "De su resina pegajosa (láudano) se extrae una sustancia muy usada en perfumería como fijador de fragancias.",
     curiosity: "En verano, sus hojas resinosas pueden llegar a oler tan intensamente que perfuman el aire de todo el monte tras las horas de más calor.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Aracena_-_Cistus_ladanifer_01.jpg/330px-Aracena_-_Cistus_ladanifer_01.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "abies-pinsapo",
@@ -112,6 +123,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sin uso tradicional relevante más allá de la explotación forestal histórica de su madera; hoy es una especie protegida.",
     curiosity: "Es un fósil viviente: pariente cercano de abetos que cubrían amplias zonas del Mediterráneo hace millones de años, hoy solo sobrevive en unas pocas sierras andaluzas y del norte de Marruecos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Abies_pinsapo%2C_joven%2C_en_la_Sierra_de_las_Nieves.jpg/330px-Abies_pinsapo%2C_joven%2C_en_la_Sierra_de_las_Nieves.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "juniperus-thurifera",
@@ -124,6 +136,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática"],
     uses: "Su madera aromática, muy resistente a la putrefacción, se ha usado tradicionalmente en carpintería rural y como leña de gran calidad.",
     curiosity: "Es una de las coníferas más longevas de la Península: algunos ejemplares de sabinares como los de Soria o Guadalajara superan los mil años de edad.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Juniperus-thurifera-01.jpg/330px-Juniperus-thurifera-01.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pinus-uncinata",
@@ -133,6 +146,7 @@ export const SPECIES: Species[] = [
     regions: ["aragon", "cataluna"],
     description: "Pino de alta montaña que forma el límite superior del bosque en el Pirineo, resistente al frío y a la nieve.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Pinus_mugo_cone_01.jpg/330px-Pinus_mugo_cone_01.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "quercus-faginea",
@@ -142,6 +156,7 @@ export const SPECIES: Species[] = [
     regions: ["aragon", "la-rioja", "navarra", "castilla-la-mancha"],
     description: "Roble marcescente (conserva las hojas secas en invierno) típico de zonas de transición entre el bosque húmedo y el mediterráneo.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Quejigo_de_la_Molinera.JPG/330px-Quejigo_de_la_Molinera.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "buxus-sempervirens",
@@ -154,6 +169,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental", "tóxica"],
     uses: "Su madera, muy dura y de grano fino, se ha usado tradicionalmente para instrumentos de precisión y tallas; toda la planta es tóxica si se ingiere.",
     curiosity: "Es una de las maderas más densas de Europa: a diferencia de la mayoría, se hunde en el agua.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Buxus_sempervirens.jpg/330px-Buxus_sempervirens.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "gentiana-lutea",
@@ -166,6 +182,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Su raíz amarga es la base de numerosos licores digestivos y aperitivos tradicionales de montaña.",
     curiosity: "Es una de las plantas de mayor porte de los prados alpinos, pudiendo alcanzar más de un metro de altura, y tarda varios años en florecer por primera vez.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Gentiana_lutea_090705.jpg/330px-Gentiana_lutea_090705.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "leontopodium-alpinum",
@@ -175,6 +192,7 @@ export const SPECIES: Species[] = [
     regions: ["aragon", "cataluna"],
     description: "Flor de alta montaña con brácteas blancas aterciopeladas en forma de estrella. Especie protegida en el Pirineo.",
     rarity: "rara",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Alpen_Edelwei%C3%9F%2C_Leontopodium_alpinum_2.JPG/330px-Alpen_Edelwei%C3%9F%2C_Leontopodium_alpinum_2.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "rosmarinus-officinalis",
@@ -187,6 +205,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal", "antioxidante", "melífera"],
     uses: "Muy usado en cocina para carnes y guisos; en medicina popular se emplea en friegas para dolores musculares y como estimulante circulatorio.",
     curiosity: "Sus flores son muy visitadas por las abejas: la miel de romero es una de las más apreciadas y típicas del monte mediterráneo.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Rosemary_in_bloom.JPG/330px-Rosemary_in_bloom.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "thymus-vulgaris",
@@ -199,6 +218,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal", "antioxidante"],
     uses: "Condimento clásico de la cocina mediterránea; en infusión se usa tradicionalmente para aliviar la tos y facilitar la digestión.",
     curiosity: "Contiene timol, un compuesto con propiedades antisépticas que se ha usado históricamente para conservar alimentos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Thymus_vulgaris1.JPG/330px-Thymus_vulgaris1.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "fagus-sylvatica",
@@ -208,6 +228,7 @@ export const SPECIES: Species[] = [
     regions: ["asturias", "cantabria", "pais-vasco", "navarra", "la-rioja"],
     description: "Forma los hayedos más meridionales de Europa, bosques densos y umbríos del norte peninsular con un espectacular color otoñal. En La Rioja forma los hayedos de la Sierra de Cebollera y la Sierra de la Demanda.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Illustration_Fagus_sylvatica0.jpg/330px-Illustration_Fagus_sylvatica0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "quercus-petraea",
@@ -217,6 +238,7 @@ export const SPECIES: Species[] = [
     regions: ["asturias", "pais-vasco"],
     description: "Roble de montaña de hoja caduca que convive con el haya en los bosques atlánticos del norte de España.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Sivry-Rance_AR1aJPG.jpg/330px-Sivry-Rance_AR1aJPG.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "castanea-sativa",
@@ -229,6 +251,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Su fruto, la castaña, se consume asado, cocido o en repostería; fue durante siglos un alimento básico en las zonas de montaña del norte de España.",
     curiosity: "Antes de la llegada masiva de la patata a Europa, la castaña fue durante siglos el alimento base de muchas comunidades rurales de montaña.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Castanea_sativa_001.jpg/330px-Castanea_sativa_001.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "erica-arborea",
@@ -241,6 +264,7 @@ export const SPECIES: Species[] = [
     properties: ["melífera"],
     uses: "Su madera, muy dura y resistente al fuego, se ha usado tradicionalmente para fabricar cazoletas de pipas de fumar.",
     curiosity: "La miel de brezo, oscura y de sabor intenso, es una de las mieles monoflorales más características y apreciadas de la España atlántica.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Erica_arborea.jpg/330px-Erica_arborea.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ilex-aquifolium",
@@ -250,6 +274,7 @@ export const SPECIES: Species[] = [
     regions: ["asturias", "cantabria", "pais-vasco"],
     description: "Arbusto de hojas espinosas y bayas rojas, símbolo navideño, que crece en el sotobosque de hayedos y robledales.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Ilex_aquifolium_001.JPG/330px-Ilex_aquifolium_001.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "taxus-baccata",
@@ -262,6 +287,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica", "medicinal"],
     uses: "Todas sus partes son tóxicas excepto el arilo rojo carnoso que rodea la semilla; de su corteza se extraen compuestos usados en quimioterapia.",
     curiosity: "Es una de las plantas más longevas de Europa: algunos tejos ibéricos superan los mil años de edad y eran considerados árboles sagrados por pueblos prerromanos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Taxus_baccata_MHNT.jpg/330px-Taxus_baccata_MHNT.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pteridium-aquilinum",
@@ -271,6 +297,7 @@ export const SPECIES: Species[] = [
     regions: ["asturias", "cantabria", "galicia", "pais-vasco", "la-rioja"],
     description: "Helecho robusto y de rápida expansión que cubre laderas y claros de bosque en toda la España atlántica, incluidos los bosques de montaña riojanos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Adelaarsvaren_planten_Pteridium_aquilinum.jpg/330px-Adelaarsvaren_planten_Pteridium_aquilinum.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "malus-sylvestris",
@@ -280,6 +307,7 @@ export const SPECIES: Species[] = [
     regions: ["asturias", "pais-vasco", "la-rioja"],
     description: "Antepasado silvestre del manzano cultivado, base histórica de la sidra en el norte de España. En La Rioja se conoce como maguillo y aparece como acompañante de los rebollares de media montaña.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Malus_sylvestris_005.JPG/330px-Malus_sylvestris_005.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "juniperus-phoenicea",
@@ -289,6 +317,7 @@ export const SPECIES: Species[] = [
     regions: ["baleares", "murcia", "canarias", "la-rioja"],
     description: "Conífera achaparrada y resistente al viento y la sal, típica de acantilados y dunas costeras. En el interior, como en La Rioja (donde se conoce como sabina negra), coloniza laderas soleadas de los encinares.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Juniperus_phoenicea1.jpg/330px-Juniperus_phoenicea1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "rhamnus-alaternus",
@@ -298,6 +327,7 @@ export const SPECIES: Species[] = [
     regions: ["baleares", "cataluna", "comunidad-valenciana", "la-rioja"],
     description: "Arbusto de hoja perenne y coriácea muy resistente a la sequía, habitual en el matorral mediterráneo costero. También forma parte del sotobosque de los encinares calizos del Valle del Ebro, en La Rioja.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Rhamnus_alaternus_%288692911406%29.jpg/330px-Rhamnus_alaternus_%288692911406%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "hypericum-balearicum",
@@ -307,6 +337,7 @@ export const SPECIES: Species[] = [
     regions: ["baleares"],
     description: "Arbusto endémico de las Islas Baleares de flores amarillas y hojas aromáticas resinosas.",
     rarity: "endémica",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Hypericum_balearicum.jpg/330px-Hypericum_balearicum.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ceratonia-siliqua",
@@ -319,6 +350,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "antioxidante"],
     uses: "Su fruto, la algarroba, se muele para obtener harina de algarroba, usada como sucedáneo del cacao y en alimentación animal.",
     curiosity: "Las semillas de algarrobo, muy uniformes en peso, se usaron históricamente como unidad de medida de los joyeros: de ahí procede el término 'quilate'.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Ceratonia_siliqua_Keciboynuzu_1370984_Nevit.jpg/330px-Ceratonia_siliqua_Keciboynuzu_1370984_Nevit.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pistacia-lentiscus",
@@ -331,6 +363,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "De su resina se obtiene la almáciga, usada tradicionalmente como goma de mascar natural y en barnices; en medicina popular como digestivo.",
     curiosity: "La isla griega de Quíos mantiene desde hace siglos el monopolio casi exclusivo de la producción de almáciga de calidad, protegida hoy como denominación de origen.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Pistacia_lentiscus.jpg/330px-Pistacia_lentiscus.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ophrys-apifera",
@@ -343,6 +376,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sin uso tradicional; su interés es exclusivamente botánico y ornamental como orquídea silvestre.",
     curiosity: "Su flor imita el aspecto y el olor de una hembra de abeja para engañar a los machos, que al intentar aparearse con ella la polinizan sin darse cuenta.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/%28MHNT%29_Ophrys_apifera_-_Villeneuve-l%C3%A8s-Bouloc_-_Flower.jpg/330px-%28MHNT%29_Ophrys_apifera_-_Villeneuve-l%C3%A8s-Bouloc_-_Flower.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "dracaena-draco",
@@ -355,6 +389,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental", "medicinal"],
     uses: "Su savia roja, la 'sangre de drago', se ha usado tradicionalmente como remedio cicatrizante y también como barniz para instrumentos musicales.",
     curiosity: "No tiene anillos de crecimiento como otros árboles, por lo que su edad solo puede estimarse de forma aproximada contando sus ramificaciones.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Dracaena_draco.jpg/330px-Dracaena_draco.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "echium-wildpretii",
@@ -367,6 +402,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental", "melífera"],
     uses: "Sin uso tradicional relevante; es una planta protegida de gran valor ornamental y ecológico dentro del Parque Nacional del Teide.",
     curiosity: "Tras varios años acumulando reservas en forma de roseta, florece una sola vez formando un cono de hasta 3 metros con miles de flores, y después muere.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Echium_wildpretii_LC0204.jpg/330px-Echium_wildpretii_LC0204.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pinus-canariensis",
@@ -376,6 +412,7 @@ export const SPECIES: Species[] = [
     regions: ["canarias"],
     description: "Pino endémico adaptado al fuego, capaz de rebrotar tras un incendio gracias a yemas protegidas bajo la corteza.",
     rarity: "endémica",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Caldera_de_Taburiente_La_Palma.jpg/330px-Caldera_de_Taburiente_La_Palma.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "laurus-novocanariensis",
@@ -385,6 +422,7 @@ export const SPECIES: Species[] = [
     regions: ["canarias"],
     description: "Árbol propio de la laurisilva, bosque relicto de niebla que cubría el Mediterráneo hace millones de años.",
     rarity: "endémica",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Laurus_novocanariensis_%28Garaf%C3%ADa%29_01_ies.jpg/330px-Laurus_novocanariensis_%28Garaf%C3%ADa%29_01_ies.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "viola-cheiranthifolia",
@@ -394,6 +432,7 @@ export const SPECIES: Species[] = [
     regions: ["canarias"],
     description: "La planta con flor que crece a mayor altitud en España, exclusiva de las coladas volcánicas del Teide.",
     rarity: "endémica",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Viola_cheiranthifolia3.jpg/330px-Viola_cheiranthifolia3.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "euphorbia-canariensis",
@@ -406,6 +445,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros: su savia lechosa es muy irritante para piel y ojos, y tóxica si se ingiere.",
     curiosity: "Aunque recuerda mucho a un cactus americano, no tiene ningún parentesco con ellos: su forma columnar es un ejemplo de evolución convergente entre continentes distintos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Euphorbia_canariensis_Tenerife_2012.jpg/330px-Euphorbia_canariensis_Tenerife_2012.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "phoenix-canariensis",
@@ -415,6 +455,7 @@ export const SPECIES: Species[] = [
     regions: ["canarias"],
     description: "Palmera endémica de tronco grueso, símbolo del paisaje canario y ampliamente cultivada como ornamental en el mundo.",
     rarity: "endémica",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Phoenix_canariensis_%28Puntallana%29_01.jpg/330px-Phoenix_canariensis_%28Puntallana%29_01.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "spartocytisus-supranubius",
@@ -424,6 +465,7 @@ export const SPECIES: Species[] = [
     regions: ["canarias"],
     description: "Arbusto endémico de flores blancas que tiñe de manto nevado las laderas del Teide en primavera.",
     rarity: "endémica",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Spartocytisus_supranubius.jpg/330px-Spartocytisus_supranubius.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "quercus-robur",
@@ -433,6 +475,7 @@ export const SPECIES: Species[] = [
     regions: ["galicia", "cantabria", "pais-vasco", "asturias", "navarra", "la-rioja"],
     description: "El roble por excelencia de la España atlántica, de bellota alargada y madera muy apreciada. Citado históricamente en las riberas y vegas de La Rioja.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Crooked_branches_of_Quercus_robur.jpg/330px-Crooked_branches_of_Quercus_robur.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "corylus-avellana",
@@ -445,6 +488,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Su fruto, la avellana, se consume al natural o en repostería y es uno de los frutos secos más cultivados de España.",
     curiosity: "Sus flores masculinas, los amentos colgantes, liberan el polen ya en pleno invierno, siendo una de las primeras plantas en florecer del año.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Illustration_Corylus_avellana0.jpg/330px-Illustration_Corylus_avellana0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "arbutus-unedo",
@@ -457,6 +501,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "melífera"],
     uses: "Su fruto rojo, la madroña, es comestible y se usa en mermeladas y aguardientes, aunque en grandes cantidades puede resultar ligeramente narcótico por su fermentación.",
     curiosity: "Su nombre científico, 'unedo', vendría del latín 'unum edo' ('como uno solo'), aludiendo a que su sabor no invita a comer más de un fruto.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Arbutus_unedo_Corsica.jpg/330px-Arbutus_unedo_Corsica.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "crocus-sativus",
@@ -469,6 +514,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "antioxidante"],
     uses: "Sus estigmas secos son la especia azafrán, usada para aromatizar y colorear platos como la paella; contiene crocina, un potente antioxidante.",
     curiosity: "Hacen falta entre 150.000 y 200.000 flores recolectadas y despistiladas a mano para obtener un solo kilogramo de azafrán, lo que la convierte en la especia más cara del mundo.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Saffran_crocus_sativus_moist.jpg/330px-Saffran_crocus_sativus_moist.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "quercus-coccifera",
@@ -481,6 +527,7 @@ export const SPECIES: Species[] = [
     properties: ["tintórea"],
     uses: "Hospeda tradicionalmente a un pequeño insecto (la cochinilla del quermes) del que antiguamente se extraía un tinte rojo usado antes de la llegada de la cochinilla americana.",
     curiosity: "Su nombre 'coccifera' significa literalmente 'portadora de cochinilla', por ese insecto que parasitaba sus ramas y que se recolectaba para teñir telas de rojo carmesí.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Quercus_coccifera_1.JPG/330px-Quercus_coccifera_1.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "retama-sphaerocarpa",
@@ -493,6 +540,7 @@ export const SPECIES: Species[] = [
     properties: ["melífera"],
     uses: "Sus ramas verdes se han usado tradicionalmente como escobas rústicas y forraje de emergencia para el ganado en épocas de sequía.",
     curiosity: "Casi no tiene hojas: sus propios tallos verdes realizan la fotosíntesis, una adaptación que reduce la pérdida de agua en climas muy secos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Retama_sphaerocarpa.011_-_Monfrague.JPG/330px-Retama_sphaerocarpa.011_-_Monfrague.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pinus-sylvestris",
@@ -502,6 +550,7 @@ export const SPECIES: Species[] = [
     regions: ["castilla-y-leon", "madrid", "la-rioja"],
     description: "Pino de corteza rojiza en la parte superior del tronco, forma extensos pinares de montaña en el Sistema Central e Ibérico.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Borovice_pod_Kun%C4%9Btickou_Horou.jpg/330px-Borovice_pod_Kun%C4%9Btickou_Horou.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cytisus-oromediterraneus",
@@ -511,6 +560,7 @@ export const SPECIES: Species[] = [
     regions: ["castilla-y-leon", "madrid"],
     description: "Matorral de alta montaña con flores amarillas que forma el piso subalpino del Sistema Central, junto al enebro rastrero.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Cytisus_oromediterraneus_2601.jpg/330px-Cytisus_oromediterraneus_2601.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "juniperus-communis",
@@ -523,6 +573,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "Sus bayas (gálbulos) se usan para aromatizar la ginebra y en la cocina tradicional de caza; en infusión se ha usado tradicionalmente como diurético.",
     curiosity: "La ginebra debe su nombre precisamente al enebro: viene del francés 'genièvre' y el neerlandés 'jenever', ambos derivados de la palabra latina para esta planta.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Den_Italienske_Sti%2C_eneb%C3%A6r.JPG/330px-Den_Italienske_Sti%2C_eneb%C3%A6r.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lavandula-stoechas",
@@ -535,6 +586,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal", "melífera"],
     uses: "Se usa en infusión relajante y para perfumar armarios; tradicionalmente también como repelente de insectos.",
     curiosity: "Sus llamativas brácteas moradas en la punta de la flor, popularmente llamadas 'orejas de conejo', no son pétalos sino hojas modificadas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Topped_lavendar_flowerhead.jpg/330px-Topped_lavendar_flowerhead.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pinus-pinea",
@@ -547,6 +599,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Su semilla, el piñón, es un fruto seco muy apreciado en repostería y cocina tradicional, especialmente en salsas y turrones.",
     curiosity: "Cada piña tarda unos tres años en madurar completamente desde su polinización hasta liberar los piñones listos para recolectar.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Pinus_pinea_Wellington_Botanic_Gardens.jpg/330px-Pinus_pinea_Wellington_Botanic_Gardens.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "viburnum-tinus",
@@ -559,6 +612,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental", "tóxica"],
     uses: "Muy cultivado como seto ornamental por su floración invernal; sus frutos azulados son tóxicos si se ingieren.",
     curiosity: "Es una de las pocas plantas mediterráneas que florece en pleno invierno, proporcionando alimento a los pocos insectos activos en esa época.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Laurustinus_%28Viburnum_tinus%29_fruits_%2815726383257%29.jpg/330px-Laurustinus_%28Viburnum_tinus%29_fruits_%2815726383257%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ulex-europaeus",
@@ -568,6 +622,7 @@ export const SPECIES: Species[] = [
     regions: ["galicia", "asturias", "pais-vasco"],
     description: "Arbusto espinoso de flores amarillas muy vistosas que coloniza suelos ácidos y pobres del norte atlántico.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Ulex_europaeus.jpg/330px-Ulex_europaeus.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "camellia-japonica",
@@ -580,6 +635,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Cultivada exclusivamente como planta ornamental, muy apreciada en los jardines históricos y pazos gallegos.",
     curiosity: "Galicia alberga una de las mayores colecciones de camelias de Europa, con concursos florales centenarios en localidades como Vigo o Sada.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Camellia_japonica1.jpg/330px-Camellia_japonica1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "eucalyptus-globulus",
@@ -592,6 +648,7 @@ export const SPECIES: Species[] = [
     properties: ["invasora", "medicinal", "aromática"],
     uses: "Sus hojas se usan en infusión y vahos tradicionales para afecciones respiratorias, aunque su cultivo extensivo se considera problemático para los ecosistemas ibéricos.",
     curiosity: "Introducido desde Australia en el siglo XIX para desecar zonas pantanosas, hoy es una de las especies forestales más discutidas de España por su impacto en la biodiversidad y el riesgo de incendios.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Eucalyptus_globulus_subsp._maidenii.jpg/330px-Eucalyptus_globulus_subsp._maidenii.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "vitis-vinifera",
@@ -604,6 +661,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "antioxidante"],
     uses: "Su fruto, la uva, se consume fresco o se fermenta para producir vino; la piel y las pepitas son ricas en resveratrol y otros polifenoles antioxidantes.",
     curiosity: "La Rioja y Castilla-La Mancha son, respectivamente, la región de mayor prestigio vinícola y la de mayor superficie de viñedo de España.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Cabernet_Sauvignon_Gaillac.jpg/330px-Cabernet_Sauvignon_Gaillac.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "fraxinus-angustifolia",
@@ -616,6 +674,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "De su savia se ha obtenido tradicionalmente en algunas zonas mediterráneas la 'manna', una sustancia dulce usada como laxante suave.",
     curiosity: "Su madera, elástica y resistente, se usaba tradicionalmente para fabricar mangos de herramientas y varas de carro.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Fresno_%28Colmenar_Viejo%29.jpg/330px-Fresno_%28Colmenar_Viejo%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "phoenix-dactylifera",
@@ -628,6 +687,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Su fruto, el dátil, es un alimento tradicional muy energético, base de la dieta en muchas culturas del norte de África y Oriente Medio.",
     curiosity: "El Palmeral de Elche, con cerca de 200.000 palmeras, es el palmeral más grande de Europa y fue declarado Patrimonio de la Humanidad por la UNESCO.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Phoenix_dactylifera2.jpg/330px-Phoenix_dactylifera2.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ziziphus-lotus",
@@ -640,6 +700,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Su fruto, parecido a una pequeña aceituna dulce, se ha consumido tradicionalmente fresco o seco en zonas áridas del sureste peninsular.",
     curiosity: "Se le relaciona con el legendario 'loto' que en la Odisea de Homero hacía olvidar su hogar a quien lo comía, aunque el fruto real no tiene ningún efecto narcótico documentado.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Ziziphus_lotus_20200928_191923.jpg/330px-Ziziphus_lotus_20200928_191923.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "stipa-tenacissima",
@@ -652,6 +713,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas fibrosas se han usado durante siglos para tejer cestos, esteras, cuerdas y alpargatas, una artesanía tradicional aún viva en Murcia y Almería.",
     curiosity: "El esparto fue una industria de exportación española tan importante en el siglo XIX que dio nombre en inglés a un tipo de papel, 'esparto paper'.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Macrochloa_tenacissima_subsp._tenacissima_kz18.jpg/330px-Macrochloa_tenacissima_subsp._tenacissima_kz18.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "erica-vagans",
@@ -661,6 +723,7 @@ export const SPECIES: Species[] = [
     regions: ["pais-vasco", "cantabria"],
     description: "Brezo de floración estival abundante en flor, típico de suelos calcáreos húmedos del norte peninsular.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Erica_vagans_2601.JPG/330px-Erica_vagans_2601.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "citrus-sinensis",
@@ -673,6 +736,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "antioxidante", "aromática"],
     uses: "Su fruto, la naranja, es una de las principales fuentes dietéticas de vitamina C y antioxidantes cítricos.",
     curiosity: "El azahar, la flor del naranjo, es tan apreciada en perfumería y repostería que en la huerta valenciana se recolecta específicamente para destilar agua de azahar.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Histoire_et_culture_des_orangers_A._Risso_et_A._Poiteau._--_Paris_Henri_Plon%2C_Editeur%2C_1872.jpg/330px-Histoire_et_culture_des_orangers_A._Risso_et_A._Poiteau._--_Paris_Henri_Plon%2C_Editeur%2C_1872.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "olea-europaea-sylvestris",
@@ -685,6 +749,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Su fruto, más pequeño y amargo que el de las variedades cultivadas, no suele consumirse directamente pero es un recurso importante para la fauna silvestre.",
     curiosity: "Todos los olivos cultivados actuales descienden de la domesttificación del acebuche silvestre hace miles de años en el Mediterráneo oriental.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Oliveira_%28Olea_europaea%29_na_Pra%C3%A7a_da_Esta%C3%A7%C3%A3o%2C_Bag%C3%A9%2C_RS%2C_Brasil_%288160_x_6120px%29.jpg/330px-Oliveira_%28Olea_europaea%29_na_Pra%C3%A7a_da_Esta%C3%A7%C3%A3o%2C_Bag%C3%A9%2C_RS%2C_Brasil_%288160_x_6120px%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "laurus-nobilis",
@@ -697,6 +762,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "comestible", "antioxidante"],
     uses: "Sus hojas secas son un condimento clásico de guisos y caldos; ricas en compuestos antioxidantes.",
     curiosity: "En la Antigua Grecia y Roma, coronas de laurel premiaban a atletas vencedores y poetas, origen de expresiones actuales como 'dormirse en los laureles'.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Starr-071024-0195-Laurus_nobilis-leaves-Enchanting_Floral_Gardens_of_Kula-Maui_%2824867859296%29.jpg/330px-Starr-071024-0195-Laurus_nobilis-leaves-Enchanting_Floral_Gardens_of_Kula-Maui_%2824867859296%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
 
   // --- La Rioja: Sierra de la Demanda / Sierra Cebollera, valle del Ebro y viñedos ---
@@ -708,6 +774,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja", "castilla-y-leon", "madrid", "extremadura"],
     description: "Roble de hoja caduca y lobulada que rebrota de raíz con facilidad, forma melojares extensos en la Sierra de la Demanda y el Sistema Central.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Quercus_pyrenaica_20190708a.jpg/330px-Quercus_pyrenaica_20190708a.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "populus-nigra",
@@ -720,6 +787,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Sus yemas resinosas se han usado tradicionalmente en ungüentos para golpes y contusiones.",
     curiosity: "Existen ejemplares centenarios llamados 'chopos cabeceros' en Aragón y Guadalajara, podados durante generaciones para obtener leña sin talar el árbol.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Populus_nigra_range.svg/langes-330px-Populus_nigra_range.svg.png?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "salix-alba",
@@ -732,6 +800,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Su corteza contiene salicina, precursora química de la aspirina, y se ha usado tradicionalmente en infusión contra la fiebre y el dolor.",
     curiosity: "El ácido acetilsalicílico, el principio activo de la aspirina moderna, fue sintetizado originalmente a partir de compuestos aislados de la corteza de sauce.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Salix_alba_leaves.jpg/330px-Salix_alba_leaves.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "crataegus-monogyna",
@@ -744,6 +813,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "comestible"],
     uses: "Sus flores y frutos se usan tradicionalmente en infusión como tónico cardiovascular suave; las majuelas (frutos) también se comen o se usan en mermeladas.",
     curiosity: "En muchas culturas europeas se consideraba un árbol protector, y era tradición no cortar un espino albar solitario en mitad de un campo por mala suerte.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Hawthorn_fruit.JPG/330px-Hawthorn_fruit.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "berberis-vulgaris",
@@ -753,6 +823,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja", "aragon", "castilla-y-leon"],
     description: "Arbusto espinoso de flores amarillas y bayas rojas ácidas, propio del matorral de montaña caliza del Sistema Ibérico.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Illustration_Berberis_vulgaris0.jpg/330px-Illustration_Berberis_vulgaris0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lavandula-latifolia",
@@ -765,6 +836,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal", "melífera"],
     uses: "Su aceite esencial se usa en perfumería y como relajante; en medicina popular se aplica para aliviar dolores de cabeza.",
     curiosity: "A diferencia de la lavanda de Provenza (Lavandula angustifolia), el espliego tolera mejor el calor y la sequía del interior peninsular.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Lavandula_Latifolia.jpg/330px-Lavandula_Latifolia.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "rosa-canina",
@@ -777,6 +849,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "comestible", "antioxidante"],
     uses: "Sus falsos frutos (escaramujos) son muy ricos en vitamina C y se usan en mermeladas e infusiones.",
     curiosity: "Durante la Segunda Guerra Mundial, el Reino Unido organizó recolectas masivas de escaramujos para elaborar jarabe de vitamina C ante la escasez de cítricos importados.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/BY_KarlstTrGeb_Mai2013_GrKaefer.JPG/330px-BY_KarlstTrGeb_Mai2013_GrKaefer.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "vaccinium-myrtillus",
@@ -789,6 +862,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "antioxidante"],
     uses: "Su fruto, el arándano, se consume fresco o en mermelada y es muy rico en antocianinas antioxidantes.",
     curiosity: "Tradicionalmente se ha usado para mejorar la visión nocturna, una creencia popularizada por pilotos de la Segunda Guerra Mundial que comían mermelada de arándanos antes de misiones nocturnas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Ergaki%2C_Blueberry_fruit_and_leaves%2C_Sayan_Mountains%2C_Russia.jpg/330px-Ergaki%2C_Blueberry_fruit_and_leaves%2C_Sayan_Mountains%2C_Russia.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
 
   // --- Castilla-La Mancha: dehesas, Montes de Toledo, Serranía de Cuenca, estepas y humedales de La Mancha ---
@@ -800,6 +874,7 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "aragon"],
     description: "Pino de tronco recto y copa cónica que forma los grandes pinares de la Serranía de Cuenca, sobre suelos calizos de montaña.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Pinus_nigra_%28subsp._nigra%29_sl2.jpg/330px-Pinus_nigra_%28subsp._nigra%29_sl2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pinus-pinaster",
@@ -809,6 +884,7 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "madrid"],
     description: "Pino de corteza gruesa y agrietada, tradicionalmente explotado por su resina; abunda en los suelos arenosos de los Montes de Toledo.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Pino_resinero_%286344573367%29.jpg/330px-Pino_resinero_%286344573367%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pinus-halepensis",
@@ -818,6 +894,7 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "comunidad-valenciana", "murcia"],
     description: "El pino mediterráneo más resistente a la sequía y el calor, de copa irregular y piñas asimétricas.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/%CE%A7%CE%B1%CE%BB%CE%AD%CF%80%CE%B9%CE%BF%CF%82_%CF%80%CE%B5%CF%8D%CE%BA%CE%B7_%CE%A3%CE%BF%CF%8D%CE%BD%CE%B9%CE%BF_1963.jpg/330px-%CE%A7%CE%B1%CE%BB%CE%AD%CF%80%CE%B9%CE%BF%CF%82_%CF%80%CE%B5%CF%8D%CE%BA%CE%B7_%CE%A3%CE%BF%CF%8D%CE%BD%CE%B9%CE%BF_1963.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "populus-alba",
@@ -827,6 +904,7 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "aragon", "castilla-y-leon", "la-rioja"],
     description: "Árbol de ribera de hojas blanquecinas por el envés, forma alamedas junto a ríos como el Guadiana o el Júcar. También puebla los sotos del Ebro a su paso por La Rioja.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Populus_alba_001.JPG/330px-Populus_alba_001.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "tamarix-gallica",
@@ -836,6 +914,7 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "murcia", "la-rioja"],
     description: "Arbusto o arbolillo tolerante a la salinidad, de flores rosadas en espiga, típico de humedales como las Tablas de Daimiel. También presente en zonas salinas del Valle del Ebro riojano.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Tamarix_gallica_-_Villa_Taranto_%28Verbania%29_-_DSC03778.JPG/330px-Tamarix_gallica_-_Villa_Taranto_%28Verbania%29_-_DSC03778.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ulmus-minor",
@@ -848,6 +927,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Su corteza interna se ha usado tradicionalmente en cataplasmas para heridas e irritaciones cutáneas.",
     curiosity: "La grafiosis, una enfermedad causada por un hongo transportado por escarabajos, ha eliminado a la mayoría de los grandes olmos adultos de Europa desde el siglo XX.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Blismes_elm_2007.jpg/330px-Blismes_elm_2007.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cistus-albidus",
@@ -860,6 +940,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática"],
     uses: "Sus hojas resinosas y aromáticas se han usado tradicionalmente en infusión digestiva en algunas zonas rurales.",
     curiosity: "Sus flores rosa-malva duran apenas un día: se abren por la mañana y pierden los pétalos por la tarde, siendo reemplazadas por otras nuevas cada jornada.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Cistus_albidus_flowers.jpg/330px-Cistus_albidus_flowers.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "genista-scorpius",
@@ -872,6 +953,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Sus ramas espinosas se han usado tradicionalmente como material para setos vivos defensivos en el campo.",
     curiosity: "Su nombre 'scorpius' alude a sus espinas curvas, que recuerdan al aguijón de un escorpión.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Genet_epineux.jpg/330px-Genet_epineux.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "rhamnus-lycioides",
@@ -881,6 +963,7 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "murcia", "andalucia", "la-rioja"],
     description: "Arbusto espinoso de hoja perenne y bayas negras, componente habitual del matorral mediterráneo semiárido. Presente en los encinares y matorrales del Valle del Ebro riojano.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Rhamnus_lycioides_fruits.JPG/330px-Rhamnus_lycioides_fruits.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "artemisia-herba-alba",
@@ -893,6 +976,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "En infusión se usa tradicionalmente en zonas esteparias como digestivo y vermífugo.",
     curiosity: "Su nombre común, ontina, es una de las plantas más características del paisaje estepario ibérico, tapizando de gris amplias extensiones de La Mancha y el valle del Ebro.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Artemisia_herba-alba.jpg/330px-Artemisia_herba-alba.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "gypsophila-struthium",
@@ -902,6 +986,7 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "aragon"],
     description: "Planta especializada en suelos de yeso (gipsófila estricta), de flores blancas diminutas en panícula; indicadora de los páramos yesosos manchegos.",
     rarity: "rara",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/GYPSOPHYLA_STRUTHIUM_-_EMPALOUS_-_IB-507_%28Trincola%29.JPG/330px-GYPSOPHYLA_STRUTHIUM_-_EMPALOUS_-_IB-507_%28Trincola%29.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lepidium-subulatum",
@@ -920,6 +1005,7 @@ export const SPECIES: Species[] = [
     regions: ["castilla-la-mancha", "madrid"],
     description: "Jarilla de pequeño porte y flor amarilla, especialista gipsófila que tapiza los páramos de yeso manchegos junto a la gipsófila.",
     rarity: "rara",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Helianthemum_squamatum_1_%28Espagne%29.jpg/330px-Helianthemum_squamatum_1_%28Espagne%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ononis-tridentata",
@@ -941,6 +1027,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Tradicionalmente ramoneada por el ganado ovino en los pastizales esteparios donde escasea otra vegetación.",
     curiosity: "Sus hojas carnosas acumulan sales, una adaptación típica de las plantas de estepas salinas que les permite sobrevivir donde otras especies no toleran la salinidad del suelo.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Salsola_vermiculata.jpg/330px-Salsola_vermiculata.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "asphodelus-ramosus",
@@ -953,6 +1040,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Su raíz tuberosa, aunque tóxica en crudo, se ha usado tradicionalmente tras un largo procesado como pegamento y en la fabricación de alcohol industrial.",
     curiosity: "En la mitología griega, los Campos Elíseos (el paraíso de los héroes) estaban descritos como praderas cubiertas de asfódelos en flor.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/L%27asfodelo_mediterraneo.jpg/330px-L%27asfodelo_mediterraneo.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "phragmites-australis",
@@ -965,6 +1053,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Sus tallos se han usado tradicionalmente para techar chozas (bardas) y fabricar esteras en zonas de humedal.",
     curiosity: "Forma uno de los ecosistemas de humedal más productivos y extendidos del mundo, presente en todos los continentes salvo la Antártida.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Phragmites_australis_habitus_15August2009_LagunadeCaracuel.jpg/330px-Phragmites_australis_habitus_15August2009_LagunadeCaracuel.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "typha-latifolia",
@@ -977,6 +1066,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus rizomas son comestibles tras cocción, y sus hojas se han usado tradicionalmente para tejer esteras y asientos de sillas.",
     curiosity: "Su vellosa espiga marrón, al madurar, libera miles de semillas diminutas con pelusa que se dispersan con el viento como si fuera algodón.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Bulrush_%28Typha_latifolia%29_%288139113636%29.jpg/330px-Bulrush_%28Typha_latifolia%29_%288139113636%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "santolina-chamaecyparissus",
@@ -989,6 +1079,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "Tradicionalmente usada como vermífugo (contra parásitos intestinales) y en infusión digestiva amarga.",
     curiosity: "Se cultiva también como planta ornamental de borde en jardinería mediterránea por su follaje plateado y aromático todo el año.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Santolina_chamaecyparissus2.jpg/330px-Santolina_chamaecyparissus2.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "thymus-zygis",
@@ -1001,6 +1092,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "Es el tomillo tradicionalmente usado para aromatizar las aceitunas de mesa y en infusión como digestivo.",
     curiosity: "De sus flores las abejas producen una miel muy apreciada, y su aceite esencial es uno de los más ricos en timol de todos los tomillos ibéricos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Thymus_zygis_1.JPG/330px-Thymus_zygis_1.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
 
   // --- La Rioja: matorral mediterráneo, sotos del Ebro, suelos salinos/yesosos, encinares, quejigares y rebollares ---
@@ -1012,6 +1104,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Gramínea perenne que tapiza el suelo del matorral mediterráneo degradado, muy común en los espacios no cultivados del Valle del Ebro riojano.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Brachypodium_retusum_hivern_Canyelles.jpg/330px-Brachypodium_retusum_hivern_Canyelles.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "helichrysum-italicum",
@@ -1024,6 +1117,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal", "antioxidante"],
     uses: "Su aceite esencial, de intenso aroma a curry, se usa en perfumería y cosmética por sus propiedades antioxidantes y regeneradoras de la piel.",
     curiosity: "Aunque huele intensamente a curry, no tiene ninguna relación botánica con las especias que componen esa mezcla; el aroma es pura coincidencia química.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Helichrysum_italicum_%28immortelle%29.JPG/330px-Helichrysum_italicum_%28immortelle%29.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "helichrysum-stoechas",
@@ -1036,6 +1130,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "melífera"],
     uses: "Sus flores secas mantienen el color y la forma durante años, por lo que se han usado tradicionalmente en ramos secos decorativos.",
     curiosity: "Su nombre común, siempreviva, alude precisamente a que sus flores no marchitan visualmente al secarse, a diferencia de la mayoría de plantas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/HELICHRYSUM_STOECHAS_-_AGUDA_-_IB-813_%28Sempreviva_borda%29.JPG/330px-HELICHRYSUM_STOECHAS_-_AGUDA_-_IB-813_%28Sempreviva_borda%29.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lonicera-etrusca",
@@ -1045,6 +1140,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Enredadera de flores tubulares blanco-amarillentas muy perfumadas, trepa entre encinas y rebollos en el matorral y bosque riojanos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lonicera_etrusca_3.jpg/330px-Lonicera_etrusca_3.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pistacia-terebinthus",
@@ -1057,6 +1153,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática"],
     uses: "De su tronco se extraía tradicionalmente la trementina de Chipre, una resina usada en barnices antes de la generalización de la trementina de pino.",
     curiosity: "Sus llamativas agallas rojas, formadas por la picadura de pequeños insectos, se han usado tradicionalmente como tinte y en curtidos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Pistacia_palaestina.JPG/330px-Pistacia_palaestina.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "thymus-mastichina",
@@ -1069,6 +1166,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "Su aroma alcanforado lo hace muy apreciado en infusión digestiva y como condimento en la cocina tradicional del centro peninsular.",
     curiosity: "Su nombre popular, 'tomillo blanco', viene del tono plateado de sus hojas, más claro que el del tomillo común.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Thymus_mastichina.jpg/330px-Thymus_mastichina.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cornus-sanguinea",
@@ -1081,6 +1179,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sus varas jóvenes, de color rojo intenso en invierno, se cultivan como planta ornamental por su colorido en la estación fría.",
     curiosity: "Su nombre 'sanguinea' alude al color rojo sangre que adquieren sus ramas jóvenes, especialmente visible en los meses de invierno sin hojas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Cornus_sanguinea_Sturm39.jpg/330px-Cornus_sanguinea_Sturm39.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "euonymus-europaeus",
@@ -1090,6 +1189,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de ribera con característicos frutos rosados en forma de cápsula que se abren mostrando semillas de color naranja.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Illustration_Euonymus_europaea0.jpg/330px-Illustration_Euonymus_europaea0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "humulus-lupulus",
@@ -1102,6 +1202,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática"],
     uses: "Sus inflorescencias femeninas (conos) son el ingrediente que aporta el amargor y aroma característicos a la cerveza.",
     curiosity: "Antes de popularizarse en la elaboración de cerveza en la Edad Media, otras plantas amargas como la hierba terrestre cumplían esa misma función aromatizante.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Hopfen1.jpg/330px-Hopfen1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "rubus-ulmifolius",
@@ -1114,6 +1215,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "antioxidante"],
     uses: "Su fruto, la mora, se consume fresco o en mermeladas y es rico en antocianinas antioxidantes.",
     curiosity: "Sus tallos arqueados enraízan al tocar el suelo con la punta, formando nuevas plantas y permitiendo que una sola zarza colonice grandes extensiones.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Blackberries_Rubus_ulmifolius2.jpg/330px-Blackberries_Rubus_ulmifolius2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sambucus-ebulus",
@@ -1126,6 +1228,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica", "medicinal"],
     uses: "A diferencia del saúco arbóreo, esta especie herbácea es tóxica y no debe consumirse; tradicionalmente solo se ha usado en uso externo.",
     curiosity: "Pese a su gran parecido con el saúco común, es una especie herbácea que muere cada invierno, mientras que el saúco arbóreo es un arbusto leñoso perenne.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Sambucus_ebulus_bgiu.jpg/330px-Sambucus_ebulus_bgiu.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "urtica-dioica",
@@ -1138,6 +1241,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "comestible", "antioxidante"],
     uses: "Cocinada (pierde su efecto urticante) se usa como verdura en tortillas y sopas; en infusión se emplea tradicionalmente como depurativo.",
     curiosity: "Sus pelos urticantes funcionan como diminutas jeringuillas de vidrio que se rompen al contacto e inyectan ácido fórmico e histamina bajo la piel.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Fen_nettle_%28Urtica_dioica_ssp._galeopsifolia%29_-_geograph.org.uk_-_5423125.jpg/330px-Fen_nettle_%28Urtica_dioica_ssp._galeopsifolia%29_-_geograph.org.uk_-_5423125.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "vitis-sylvestris",
@@ -1147,6 +1251,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Antepasado silvestre de la vid cultivada, trepa por los árboles de los bosques de ribera del Ebro; hoy es un reducto escaso frente al viñedo.",
     rarity: "rara",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Cabernet_Sauvignon_Gaillac.jpg/330px-Cabernet_Sauvignon_Gaillac.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ephedra-fragilis",
@@ -1159,6 +1264,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Sin uso tradicional destacado en la Península, a diferencia de otras especies del género usadas en Asia como estimulantes.",
     curiosity: "Es uno de los parientes vivos más antiguos de las coníferas: pertenece a un grupo de plantas (las gnetales) evolutivamente muy distinto del resto de plantas con flor.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Ephedra_fragilis_3.JPG/330px-Ephedra_fragilis_3.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ononis-fruticosa",
@@ -1168,6 +1274,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeño arbusto leñoso de flores rosadas, propio de suelos yesosos y salinos del Valle del Ebro.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Ononis_fruticosa.jpg/330px-Ononis_fruticosa.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sorbus-torminalis",
@@ -1177,6 +1284,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Árbol de hoja caduca lobulada, similar a la del arce, y frutos pardos comestibles tras sobremadurar; aparece disperso en bosques de media montaña riojanos.",
     rarity: "rara",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Sorbus_torminalis_Trunk_and_canopy.jpg/330px-Sorbus_torminalis_Trunk_and_canopy.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "suaeda-vera",
@@ -1186,6 +1294,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Subarbusto suculento de tallos verdes carnosos, especialista en suelos salinos de lagunas y charcas endorreicas temporales del Valle del Ebro.",
     rarity: "rara",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Suaeda_vera.JPG/330px-Suaeda_vera.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "salicornia-ramosissima",
@@ -1195,6 +1304,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta suculenta sin hojas visibles, de tallos articulados verdes que enrojecen en otoño; vive exclusivamente en suelos encharcados muy salinos.",
     rarity: "rara",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Salicornia_ramosissima_fg01.jpg/330px-Salicornia_ramosissima_fg01.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "tamarix-africana",
@@ -1204,6 +1314,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto o arbolillo de flores rosadas en espiga tolerante a la salinidad, presente en zonas húmedas y salinas del Valle del Ebro.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Tamarix_africana.jpg/330px-Tamarix_africana.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "tamarix-canariensis",
@@ -1213,6 +1324,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pese a su nombre, especie de amplia distribución ibérica; coloniza suelos salinos y encharcados junto a otras especies de taray.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Tamarix_canariensis.JPG/330px-Tamarix_canariensis.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cistus-laurifolius",
@@ -1225,6 +1337,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática"],
     uses: "Sus hojas resinosas desprenden un aroma balsámico intenso al calentarse con el sol, formando parte del característico olor del monte mediterráneo de montaña en verano.",
     curiosity: "A diferencia de otras jaras, resiste bien el frío de montaña, por lo que sustituye a la jara pringosa en las cotas más altas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Cistus_laurifolius_3.JPG/330px-Cistus_laurifolius_3.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cistus-salviifolius",
@@ -1234,6 +1347,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Jara de porte bajo y hojas rugosas parecidas a las de la salvia, con flores blancas; puebla los encinares silíceos degradados.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Cistus_April_2008-1.jpg/330px-Cistus_April_2008-1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "juniperus-oxycedrus",
@@ -1246,6 +1360,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "De su madera se extraía tradicionalmente por destilación un aceite oscuro, la miera, usado como antiséptico y repelente en veterinaria tradicional de ganado ovino.",
     curiosity: "El término 'cade' con que se conoce su aceite en perfumería procede del nombre provenzal de esta planta.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Juniperus_oxycedrus_g1.jpg/330px-Juniperus_oxycedrus_g1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ligustrum-vulgare",
@@ -1258,6 +1373,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental", "tóxica"],
     uses: "Muy cultivado como seto ornamental por su rápido crecimiento; sus bayas negras son tóxicas si se ingieren.",
     curiosity: "Es uno de los arbustos más usados en jardinería para setos topiarios por su tolerancia a podas frecuentes y drásticas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Wilde_liguster_%28Ligustrum_vulgare%29.jpg/330px-Wilde_liguster_%28Ligustrum_vulgare%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "acer-monspessulanum",
@@ -1267,6 +1383,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeño arce de hoja trilobulada que se tiñe de tonos rojizos en otoño, típico compañero arbóreo de los quejigares de media montaña.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Acer_monspessulanum_fg02.jpg/330px-Acer_monspessulanum_fg02.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "amelanchier-ovalis",
@@ -1279,6 +1396,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus pequeños frutos azulados, dulces al madurar, se han recolectado tradicionalmente en zonas de montaña.",
     curiosity: "Es de los primeros arbustos en florecer en la montaña tras el invierno, cubriéndose de flores blancas antes incluso de que le broten las hojas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Amelanchier_ovalis01.jpg/330px-Amelanchier_ovalis01.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "calluna-vulgaris",
@@ -1291,6 +1409,7 @@ export const SPECIES: Species[] = [
     properties: ["melífera", "medicinal"],
     uses: "En infusión se ha usado tradicionalmente como diurético suave; sus flores producen una miel oscura muy apreciada.",
     curiosity: "Es la especie que da nombre a los brezales, extensos ecosistemas de matorral atlántico típicos del norte de Europa y del norte peninsular.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/CallunaVulgaris.jpg/330px-CallunaVulgaris.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cytisus-scoparius",
@@ -1300,6 +1419,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de ramas verdes flexibles y flores amarillas vistosas, coloniza claros y linderos de los rebollares de media montaña.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Illustration_Cytisus_scoparius0.jpg/330px-Illustration_Cytisus_scoparius0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "genista-florida",
@@ -1309,6 +1429,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de ramas erguidas y densos racimos de flores amarillas, forma parte del matorral que acompaña a los rebollares de montaña.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Genista_florida_2601.JPG/330px-Genista_florida_2601.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
 
   // --- La Rioja: catálogo histórico (Zubía, Flora de La Rioja, 1921) — ampliación de herbáceas, ---
@@ -1324,6 +1445,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica", "ornamental"],
     uses: "Sin usos seguros: contiene glucósidos cardiotónicos tóxicos similares a los de la digital.",
     curiosity: "En la mitología griega nació de la sangre derramada por Adonis, el bello joven amado por Afrodita y herido mortalmente por un jabalí.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Adonis_annua_flor.jpg/330px-Adonis_annua_flor.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "aquilegia-vulgaris",
@@ -1336,6 +1458,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental", "tóxica", "melífera"],
     uses: "Muy cultivada como planta ornamental de jardín; sus semillas son ligeramente tóxicas si se ingieren en cantidad.",
     curiosity: "Sus flores tienen largos espolones nectaríferos adaptados específicamente a la lengua larga de los abejorros y de algunas mariposas nocturnas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Aquilegia_vulgaris9_ies.jpg/330px-Aquilegia_vulgaris9_ies.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "nigella-arvensis",
@@ -1348,6 +1471,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática"],
     uses: "Sus semillas, parecidas a las de su pariente cultivado Nigella sativa, se han usado ocasionalmente como condimento en algunas zonas rurales.",
     curiosity: "Su llamativa flor azul rodeada de finas brácteas como una nube verde le da otro nombre popular, 'ajenuz', muy usado en la cocina árabe medieval.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Nigella_arvensis_kz05.jpg/330px-Nigella_arvensis_kz05.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "helleborus-viridis",
@@ -1360,6 +1484,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: toda la planta es tóxica si se ingiere.",
     curiosity: "Florece a finales de invierno, cuando apenas hay otra vegetación activa, aprovechando la luz que aún llega al suelo del bosque antes de que broten las hojas de los árboles.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Helleborus_viridis01.jpg/330px-Helleborus_viridis01.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "aconitum-napellus",
@@ -1372,6 +1497,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: es una de las plantas más tóxicas de la flora europea, incluso por simple contacto con la piel en grandes cantidades.",
     curiosity: "En la mitología griega, el acónito habría nacido de la baba venenosa del perro Cerbero al ser arrastrado por Hércules desde el inframundo.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Illustration_Aconitum_napellus0_clean.jpg/330px-Illustration_Aconitum_napellus0_clean.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ficaria-verna",
@@ -1384,6 +1510,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Tradicionalmente aplicada en cataplasmas contra las hemorroides, de donde procede su nombre en inglés ('pilewort'); sus hojas jóvenes son ligeramente tóxicas en crudo.",
     curiosity: "Sus pequeños tubérculos radiculares, agrupados en racimo, recuerdan a diminutas almorranas, lo que inspiró su uso medicinal tradicional según la 'teoría de la firma'.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Ficaria_verna%2C_Lehrbuch_der_Botanik_%28Schmeil_1911%2C_Tafel_5%2C_HG_wei%C3%9F%29.jpg/330px-Ficaria_verna%2C_Lehrbuch_der_Botanik_%28Schmeil_1911%2C_Tafel_5%2C_HG_wei%C3%9F%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ranunculus-repens",
@@ -1393,6 +1520,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta rastrera de flores amarillas brillantes muy común en prados húmedos y orillas de acequias del Valle del Ebro.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Creeping_butercup_close_800.jpg/330px-Creeping_butercup_close_800.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "papaver-rhoeas",
@@ -1405,6 +1533,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental", "tóxica"],
     uses: "Sus pétalos se han usado tradicionalmente en jarabes suaves para la tos infantil; el resto de la planta contiene alcaloides poco recomendables.",
     curiosity: "En el Reino Unido y otros países de la Commonwealth, la amapola es el símbolo oficial de homenaje a los caídos en las guerras mundiales, por haber cubierto masivamente los campos de batalla de Flandes.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Papaver_rhoeas_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-101.jpg/330px-Papaver_rhoeas_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-101.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "glaucium-corniculatum",
@@ -1414,6 +1543,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Amapola de flor naranja-rojiza y fruto en forma de cuerno alargado, propia de baldíos y campos removidos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Illustration_Glaucium_corniculatum0.jpg/330px-Illustration_Glaucium_corniculatum0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "chelidonium-majus",
@@ -1426,6 +1556,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "tóxica"],
     uses: "Su savia anaranjada se ha aplicado tradicionalmente de forma tópica sobre verrugas, aunque su ingestión es tóxica para el hígado.",
     curiosity: "Su nombre viene del griego 'chelidon' (golondrina), porque se creía que florecía con la llegada de estas aves migratorias en primavera.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Chelidonium_majus_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-033.jpg/330px-Chelidonium_majus_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-033.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "raphanus-raphanistrum",
@@ -1438,6 +1569,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus semillas y vainas jóvenes, de sabor picante, se han consumido ocasionalmente como condimento silvestre.",
     curiosity: "Es la especie silvestre de la que probablemente derivan todas las variedades cultivadas de rábano.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Raphanus_raphanistrum_-_Deutschlands_flora_in_abbildungen_nach_der_natur_-_vol._6_-_t._40_-_clean.jpg/330px-Raphanus_raphanistrum_-_Deutschlands_flora_in_abbildungen_nach_der_natur_-_vol._6_-_t._40_-_clean.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "barbarea-vulgaris",
@@ -1450,6 +1582,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas jóvenes, de sabor picante parecido al berro, se han usado tradicionalmente en ensaladas de invierno.",
     curiosity: "Su nombre alude a Santa Bárbara, patrona invocada contra las tormentas, por reverdecer y florecer ya en pleno invierno cuando pocas plantas lo hacen.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/%28MHNT%29_Barbarea_vulgaris_-_Habit.jpg/330px-%28MHNT%29_Barbarea_vulgaris_-_Habit.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "nasturtium-officinale",
@@ -1462,6 +1595,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "antioxidante"],
     uses: "Sus hojas se consumen crudas en ensalada por su sabor picante, siendo muy ricas en vitamina C y compuestos antioxidantes.",
     curiosity: "Solo debe recolectarse de aguas limpias, ya que puede acumular parásitos si crece en cursos de agua contaminados por ganado.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Watercress_%282%29.JPG/330px-Watercress_%282%29.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cardamine-hirsuta",
@@ -1474,6 +1608,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas, de sabor ligeramente picante, son comestibles y se añaden ocasionalmente a ensaladas.",
     curiosity: "Sus vainas maduras explotan al tocarlas, disparando las semillas a más de un metro de distancia como mecanismo de dispersión.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Kleine_veldkers_Cardamine_hirsuta_plant.jpg/330px-Kleine_veldkers_Cardamine_hirsuta_plant.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "eruca-vesicaria",
@@ -1486,6 +1621,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Antepasado silvestre de la rúcula cultivada; sus hojas jóvenes de sabor picante se usan en ensaladas.",
     curiosity: "Los romanos la consideraban una planta afrodisíaca y prohibieron cultivarla dentro de monasterios en algunas épocas medievales.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Eruca_vesicaria_BM010755249.jpg/330px-Eruca_vesicaria_BM010755249.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sinapis-arvensis",
@@ -1498,6 +1634,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus semillas, molidas, se han usado tradicionalmente como sucedáneo rústico de la mostaza comercial.",
     curiosity: "Sus semillas pueden permanecer viables en el suelo durante décadas, germinando en cuanto la tierra se remueve y queda expuesta a la luz.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Brassicaceae_-_Sinapis_arvensis_%283%29.JPG/330px-Brassicaceae_-_Sinapis_arvensis_%283%29.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "capsella-bursa-pastoris",
@@ -1510,6 +1647,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "comestible"],
     uses: "Tradicionalmente usada en infusión para cortar hemorragias leves; sus hojas jóvenes también son comestibles en ensalada.",
     curiosity: "Es una de las plantas con flor más extendidas del planeta, presente en prácticamente todos los continentes habitados.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/A_Field_of_Shepherd%E2%80%99s-purse.jpg/330px-A_Field_of_Shepherd%E2%80%99s-purse.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "tuberaria-guttata",
@@ -1519,6 +1657,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta de flores amarillas con una mancha oscura en la base de cada pétalo, propia de pastizales secos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Tuberaria_guttata_Crete.jpg/330px-Tuberaria_guttata_Crete.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "helianthemum-hirtum",
@@ -1540,6 +1679,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Sus hojas y raíz, machacadas en agua, producen espuma jabonosa usada tradicionalmente para lavar tejidos delicados y antiguos textiles históricos.",
     curiosity: "Los museos textiles siguen usando extracto de saponaria para limpiar tapices antiguos por ser más suave que los detergentes modernos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Saponaria-officinalis-flower.jpg/330px-Saponaria-officinalis-flower.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "silene-vulgaris",
@@ -1552,6 +1692,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas y brotes tiernos, conocidos como collejas, son una verdura silvestre muy popular en tortillas y guisos del centro y sur de España.",
     curiosity: "Su cáliz hinchado en forma de globo, del que cuelgan los pétalos blancos, le da el aspecto de una pequeña farolillo antes de abrirse.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Bladder_Campion.jpg/330px-Bladder_Campion.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cerastium-glomeratum",
@@ -1561,6 +1702,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta velluda de flores blancas diminutas agrupadas, muy común en prados, huertos y baldíos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/%28MHNT%29_Cerastium_glomeratum_-_habitus.jpg/330px-%28MHNT%29_Cerastium_glomeratum_-_habitus.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "malva-sylvestris",
@@ -1573,6 +1715,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "comestible"],
     uses: "En infusión se usa tradicionalmente para aliviar la tos y las irritaciones de garganta; sus hojas y flores tiernas también son comestibles.",
     curiosity: "Sus flores, frotadas suavemente, liberan un mucílago que las hace algo resbaladizas al tacto, la misma propiedad que da nombre a los caramelos de malvavisco.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Malva_sylvestris_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-222.jpg/330px-Malva_sylvestris_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-222.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "althaea-hirsuta",
@@ -1582,6 +1725,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta emparentada con la malva, de flores rosadas y tallos y hojas cubiertos de pelos ásperos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/ALTHAEA_HIRSUTA_-_S%C3%92BOL_-_IB-793_%28Malv%C3%AD_pelut%29.jpg/330px-ALTHAEA_HIRSUTA_-_S%C3%92BOL_-_IB-793_%28Malv%C3%AD_pelut%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "geranium-sanguineum",
@@ -1594,6 +1738,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Cultivado como planta ornamental de jardín rocoso por su intensa floración magenta y su follaje otoñal rojizo.",
     curiosity: "Sus frutos, en forma de pico alargado, expulsan las semillas de golpe al madurar mediante un mecanismo elástico de dispersión.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/2012-07-03_Bloody_Crane%27s-bill%2C_Hauxley%2C_Northumberland_1.jpg/330px-2012-07-03_Bloody_Crane%27s-bill%2C_Hauxley%2C_Northumberland_1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "geranium-rotundifolium",
@@ -1603,6 +1748,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeño geranio silvestre de flores rosadas y hojas redondeadas, frecuente en muros, escombros y baldíos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Geranium_February_2008-3.jpg/330px-Geranium_February_2008-3.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "erodium-cicutarium",
@@ -1615,6 +1761,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Sin uso tradicional destacado; su interés es sobre todo ecológico como planta pionera de suelos removidos.",
     curiosity: "Su fruto en forma de aguja se retuerce en espiral al secarse según cambia la humedad ambiental, lo que ayuda a clavar la semilla en el suelo como un diminuto sacacorchos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Erodium_cicutarium_whole_plant.jpg/330px-Erodium_cicutarium_whole_plant.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "oxalis-corniculata",
@@ -1627,6 +1774,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas, de sabor ácido por el ácido oxálico, se han masticado tradicionalmente para calmar la sed, aunque no deben consumirse en grandes cantidades.",
     curiosity: "Sus hojas trifoliadas se pliegan hacia abajo por la noche o ante el contacto, en un movimiento llamado nictinastia.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Oxalis_corniculata23.jpg/330px-Oxalis_corniculata23.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "rhus-coriaria",
@@ -1639,6 +1787,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "tintórea"],
     uses: "Sus frutos secos y molidos son la especia zumaque, de sabor ácido, muy usada en la cocina de Oriente Medio; sus hojas también se han usado tradicionalmente para curtir cuero.",
     curiosity: "Su nombre común, zumaque, da nombre a su vez al proceso tradicional de curtido de cueros conocido como 'zumaque' o 'zumacado'.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Sommacco.jpg/330px-Sommacco.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "colutea-arborescens",
@@ -1648,6 +1797,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de flores amarillas y característicos frutos en vejiga inflada y translúcida, propio de matorrales calizos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Colutea_arborescens01.jpg/330px-Colutea_arborescens01.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "galega-officinalis",
@@ -1657,6 +1807,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores blanco-azuladas en racimo, crece en suelos húmedos junto a acequias y cursos de agua.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Galegaofficinalis03.jpg/330px-Galegaofficinalis03.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "vicia-sativa",
@@ -1669,6 +1820,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Cultivada tradicionalmente como forraje y abono verde, ya que fija nitrógeno en el suelo como el resto de leguminosas.",
     curiosity: "Sus zarcillos, modificaciones de las hojas, se enroscan alrededor de cualquier soporte cercano en cuestión de horas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/%28MHNT%29_Vicia_sativa.jpg/330px-%28MHNT%29_Vicia_sativa.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lathyrus-articulatus",
@@ -1678,6 +1830,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Almorta silvestre de flores rosa-púrpura, trepa entre cultivos y matorral con la ayuda de zarcillos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Lathyrus_clymenum_2.JPG/330px-Lathyrus_clymenum_2.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "anthyllis-vulneraria",
@@ -1690,6 +1843,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Su nombre, del latín 'vulnerarius' (para heridas), refleja su uso tradicional en cataplasmas para cicatrizar cortes leves.",
     curiosity: "Sus flores están protegidas por un cáliz hinchado y algodonoso que las aísla del frío en los pastizales de montaña donde crece.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Anthyllis_vulneraria_inflorescence_-_Niitv%C3%A4lja.jpg/330px-Anthyllis_vulneraria_inflorescence_-_Niitv%C3%A4lja.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lotus-corniculatus",
@@ -1702,6 +1856,7 @@ export const SPECIES: Species[] = [
     properties: ["melífera"],
     uses: "Muy usada como planta forrajera y de recuperación de suelos pobres por fijar nitrógeno atmosférico.",
     curiosity: "Sus vainas, dispuestas en corona a partir de un mismo punto, recuerdan a las uñas de un pie, de donde recibe el nombre común de 'cuernecillo' o 'pie de pájaro' en otras lenguas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Illustration_Lotus_corniculatus0.jpg/330px-Illustration_Lotus_corniculatus0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "trifolium-fragiferum",
@@ -1711,6 +1866,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Trébol de cabezuelas rosadas que tras la floración se hinchan recordando pequeñas fresas, propio de suelos húmedos y algo salinos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/TrifoliumFragiferum2.jpg/330px-TrifoliumFragiferum2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "medicago-lupulina",
@@ -1720,6 +1876,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña leguminosa de flores amarillas y vainas negras arriñonadas al madurar, muy común en prados y cunetas.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/MedicagoLupulina02.jpg/330px-MedicagoLupulina02.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "spartium-junceum",
@@ -1732,6 +1889,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "melífera"],
     uses: "Sus fibras se han usado tradicionalmente para tejer cuerdas y tejidos bastos, mientras que sus flores se emplean en perfumería por su intenso aroma.",
     curiosity: "Sus tallos, casi sin hojas, realizan la fotosíntesis directamente, una adaptación frecuente en plantas de climas secos para reducir la pérdida de agua.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Spartium_junceum_%28habitus%29.jpg/330px-Spartium_junceum_%28habitus%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "genista-tinctoria",
@@ -1744,6 +1902,7 @@ export const SPECIES: Species[] = [
     properties: ["tintórea"],
     uses: "Tradicionalmente usada para obtener un tinte amarillo natural para lana y otros textiles.",
     curiosity: "Mezclada con el pastel (una planta tintórea azul), se usaba para obtener el color verde en los tejidos medievales, un color que ninguna planta produce sola de forma estable.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Genista_tinctoria.jpeg/330px-Genista_tinctoria.jpeg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lupinus-angustifolius",
@@ -1753,6 +1912,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores azuladas dispuestas en largos racimos y hojas palmeadas muy características, propia de suelos arenosos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Lupinus_angustifolius.jpg/330px-Lupinus_angustifolius.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "prunus-spinosa",
@@ -1765,6 +1925,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "medicinal"],
     uses: "Sus frutos (endrinas), muy astringentes en crudo, se maceran tradicionalmente en aguardiente con azúcar para elaborar pacharán.",
     curiosity: "Sus flores blancas cubren por completo el arbusto antes de que le salgan las hojas, siendo uno de los primeros anuncios visuales de la primavera en los setos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Closeup_of_blackthorn_aka_sloe_aka_prunus_spinosa_sweden_20050924.jpg/330px-Closeup_of_blackthorn_aka_sloe_aka_prunus_spinosa_sweden_20050924.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "rosa-rubiginosa",
@@ -1777,6 +1938,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "comestible", "aromática"],
     uses: "El aceite extraído de sus semillas se usa tradicionalmente en cosmética para cicatrices y manchas cutáneas.",
     curiosity: "Se reconoce fácilmente frotando sus hojas entre los dedos: desprenden un característico aroma a manzana verde.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Wild_Rosa_rubiginosa.jpg/330px-Wild_Rosa_rubiginosa.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "potentilla-reptans",
@@ -1786,6 +1948,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta rastrera de flores amarillas y hojas divididas en cinco folíolos, común en prados húmedos y orillas de camino.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Illustration_Potentilla_reptans0.jpg/330px-Illustration_Potentilla_reptans0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "geum-urbanum",
@@ -1795,6 +1958,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores amarillas pequeñas y frutos con garfios que se enganchan a la ropa y el pelaje animal; propia de bosques de ribera.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Geum_urbanum_Sturm44.jpg/330px-Geum_urbanum_Sturm44.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "filipendula-vulgaris",
@@ -1804,6 +1968,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de raíz tuberosa y flores blancas en densa panícula, propia de prados secos sobre suelo calizo.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Filipendula_vulgaris_-_inflorescence_-_Kulna.jpg/330px-Filipendula_vulgaris_-_inflorescence_-_Kulna.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "alchemilla-vulgaris",
@@ -1813,6 +1978,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de hojas plegadas en forma de abanico que retienen gotas de rocío, propia de prados húmedos de montaña.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Nordens_flora_Alchemilla_vulgaris.jpg/330px-Nordens_flora_Alchemilla_vulgaris.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sanguisorba-minor",
@@ -1825,6 +1991,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "aromática"],
     uses: "Sus hojas, de sabor a pepino fresco, se usan tradicionalmente para aromatizar ensaladas, vinagres y ponches.",
     curiosity: "Sus diminutas flores rojizas carecen de pétalos vistosos y dependen del viento para la polinización, a diferencia de la mayoría de sus parientes de la familia de las rosáceas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Illustration_Sanguisorba_minor0.jpg/330px-Illustration_Sanguisorba_minor0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cotoneaster-integerrimus",
@@ -1834,6 +2001,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de hojas ovales y frutos rojos en otoño, crece disperso en roquedos y matorrales de montaña caliza.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Cotoneaster_integerrimus_Sturm1.jpg/330px-Cotoneaster_integerrimus_Sturm1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "epilobium-montanum",
@@ -1843,6 +2011,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores rosadas pequeñas y semillas con penacho de pelos plumosos, propia de claros y bordes de bosque húmedo.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Epilobium_montanum_05_ies.jpg/330px-Epilobium_montanum_05_ies.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "umbilicus-rupestris",
@@ -1852,6 +2021,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta suculenta de hojas circulares con una depresión central característica, crece en grietas de muros y roquedos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Navelwort_700.jpg/330px-Navelwort_700.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sempervivum-tectorum",
@@ -1861,6 +2031,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Roseta suculenta muy resistente a la sequía, tradicionalmente cultivada sobre tejados y muros de piedra.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Sempervivum_tectorum_Almindelig_Husl%C3%B8g.jpg/330px-Sempervivum_tectorum_Almindelig_Husl%C3%B8g.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sedum-acre",
@@ -1870,6 +2041,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta suculenta tapizante de flores amarillas estrelladas y sabor acre, coloniza roquedos y muros secos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Sedum_acre_single_-_Niitv%C3%A4lja.jpg/330px-Sedum_acre_single_-_Niitv%C3%A4lja.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sedum-telephium",
@@ -1879,6 +2051,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta suculenta de hojas carnosas y flores rosa-púrpura agrupadas, usada tradicionalmente para curar callos y heridas.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Sedum_fabaria_a1.jpg/330px-Sedum_fabaria_a1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "saxifraga-aizoides",
@@ -1888,6 +2061,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta de flores amarillas moteadas de naranja, propia de rezumaderos y rocas húmedas de alta montaña.",
     rarity: "rara",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Saxifragaaizoides.jpg/330px-Saxifragaaizoides.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "eryngium-campestre",
@@ -1900,6 +2074,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Su raíz tierna se ha consumido tradicionalmente cocida como verdura en algunas zonas rurales, de forma similar al cardo corredor cultivado.",
     curiosity: "Al secarse en verano, toda la planta se desprende de la raíz y rueda empujada por el viento (planta 'rodadora'), dispersando sus semillas por el camino.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Eryngium_campestre_310705b.jpg/330px-Eryngium_campestre_310705b.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "daucus-carota",
@@ -1912,6 +2087,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Es el antepasado silvestre directo de la zanahoria cultivada, aunque su raíz silvestre es fina, leñosa y de sabor mucho menos dulce.",
     curiosity: "Su umbela suele tener una única flor central de color rojo oscuro entre las cientos de flores blancas, cuya función exacta sigue sin explicarse del todo: podría imitar a un insecto para atraer polinizadores.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Daucus_carota_May_2008-1_edit.jpg/330px-Daucus_carota_May_2008-1_edit.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "foeniculum-vulgare",
@@ -1924,6 +2100,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal", "comestible"],
     uses: "Sus semillas y hojas se usan en cocina y en infusión digestiva, tradicionalmente recomendada contra los gases y los cólicos infantiles.",
     curiosity: "En la mitología griega, Prometeo escondió el fuego robado a los dioses en un tallo hueco de hinojo para entregárselo a la humanidad.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Foeniculum_vulgare_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-148.jpg/330px-Foeniculum_vulgare_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-148.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "angelica-sylvestris",
@@ -1936,6 +2113,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática"],
     uses: "Sus tallos jóvenes, de aroma anisado, se han confitado tradicionalmente en azúcar en algunas regiones europeas.",
     curiosity: "Su nombre, angélica, refleja la antigua creencia popular de que protegía contra epidemias y malos espíritus.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Illustration_Angelica_silvestris0.jpg/330px-Illustration_Angelica_silvestris0.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "apium-graveolens",
@@ -1945,6 +2123,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Antepasado silvestre del apio cultivado, de olor característico, propio de suelos húmedos y algo salinos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Illustration_Apium_graveolens0.jpg/330px-Illustration_Apium_graveolens0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "bupleurum-rotundifolium",
@@ -1954,6 +2133,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de hojas redondeadas que parecen perforadas por el tallo y umbelas amarillo-verdosas, propia de cultivos de cereal.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Bupleurum_rotundifolium2_eF.jpg/330px-Bupleurum_rotundifolium2_eF.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "hydrocotyle-vulgaris",
@@ -1963,6 +2143,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta de hojas circulares y flores minúsculas, crece flotando o arraigada en el barro de charcas y acequias.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/HydrocotyleVulgaris.jpg/330px-HydrocotyleVulgaris.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sambucus-nigra",
@@ -1975,6 +2156,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "comestible", "tóxica"],
     uses: "Sus flores se usan en infusión sudorífica contra resfriados y para elaborar jarabes y licores; sus bayas maduras y cocinadas son comestibles, pero crudas o verdes son tóxicas.",
     curiosity: "Con sus flores se elabora un sirope muy popular en el norte de Europa para preparar refrescos caseros de saúco.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Sambucus_nigra_004.jpg/330px-Sambucus_nigra_004.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lonicera-implexa",
@@ -1987,6 +2169,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "melífera"],
     uses: "Sin uso tradicional destacado más allá de lo ornamental; muy visitada por mariposas nocturnas atraídas por su intenso perfume vespertino.",
     curiosity: "Sus flores tubulares están adaptadas a la lengua larga de las mariposas esfinge, que las polinizan al anochecer atraídas por su fuerte aroma.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Lonicera_implexa.jpg/330px-Lonicera_implexa.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "galium-mollugo",
@@ -1996,6 +2179,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de tallos trepadores con hojas dispuestas en verticilos y diminutas flores blancas en panícula, común en setos y linderos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Rubiaceae_-_Galium_mollugo.JPG/330px-Rubiaceae_-_Galium_mollugo.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "rubia-tinctorum",
@@ -2008,6 +2192,7 @@ export const SPECIES: Species[] = [
     properties: ["tintórea"],
     uses: "Su raíz se ha usado desde la Antigüedad para obtener un tinte rojo natural (la granza), empleado en textiles y, antiguamente, en el uniforme militar.",
     curiosity: "El tinte rojo de la rubia, la alizarina, fue uno de los primeros pigmentos naturales sintetizados artificialmente en el siglo XIX, lo que acabó con su cultivo comercial.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Rubia_tinctorum_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-123.jpg/330px-Rubia_tinctorum_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-123.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sherardia-arvensis",
@@ -2017,6 +2202,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta de flores lila-rosadas agrupadas en cabezuela, muy común como mala hierba en cultivos y baldíos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Sherardia_arvensis_050731.jpg/330px-Sherardia_arvensis_050731.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "jasione-montana",
@@ -2026,6 +2212,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores azules agrupadas en una cabezuela redonda parecida a una escabiosa, propia de suelos ácidos y arenosos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Jasione-montana2.JPG/330px-Jasione-montana2.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "bryonia-dioica",
@@ -2038,6 +2225,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: su raíz tuberosa, a veces confundida con nabos silvestres, es muy tóxica.",
     curiosity: "Su raíz puede alcanzar un tamaño enorme y a veces se ha usado fraudulentamente en el pasado para falsificar raíces de mandrágora.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Bryonia_dioica_Sturm64.jpg/330px-Bryonia_dioica_Sturm64.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "valeriana-officinalis",
@@ -2050,6 +2238,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Su raíz se usa tradicionalmente en infusión como sedante suave para el insomnio y la ansiedad leve.",
     curiosity: "Su olor, desagradable para las personas, resulta muy atractivo para los gatos, de forma similar a la hierba gatera.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Valeriana_officinalis_-_Niitv%C3%A4lja.jpg/330px-Valeriana_officinalis_-_Niitv%C3%A4lja.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "dipsacus-fullonum",
@@ -2062,6 +2251,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Sus inflorescencias secas y espinosas se usaban tradicionalmente en la industria textil para cardar (peinar) la lana antes del hilado.",
     curiosity: "La industria textil usó cabezas de cardencha reales para el cardado de tejidos de calidad hasta bien entrado el siglo XX, por dar un acabado más suave que los cardadores metálicos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Illustration_Dipsacus_fullonum0.jpg/330px-Illustration_Dipsacus_fullonum0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "scabiosa-columbaria",
@@ -2071,6 +2261,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores lila-azuladas agrupadas en cabezuela plana, común en pastizales y linderos secos sobre suelo calizo.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Scabiosa_columbaria_Butterfly_Blue_2.jpg/330px-Scabiosa_columbaria_Butterfly_Blue_2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "succisa-pratensis",
@@ -2080,6 +2271,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores azul-violáceas en cabezuela globosa y raíz que parece cortada abruptamente, propia de prados húmedos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/SuccisaPratensis2.jpg/330px-SuccisaPratensis2.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "eupatorium-cannabinum",
@@ -2092,6 +2284,7 @@ export const SPECIES: Species[] = [
     properties: ["melífera", "medicinal"],
     uses: "Tradicionalmente usada en infusión como depurativo, aunque debe emplearse con precaución por contener alcaloides en cantidades variables.",
     curiosity: "Sus inflorescencias rosadas son un imán para mariposas: es una de las plantas más visitadas por lepidópteros de los cauces fluviales españoles.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Eupatorium_cannabinum.jpeg/330px-Eupatorium_cannabinum.jpeg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "bellis-perennis",
@@ -2104,6 +2297,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "comestible"],
     uses: "Sus flores y hojas jóvenes son comestibles en ensalada; tradicionalmente también se han usado en infusión para golpes y contusiones.",
     curiosity: "Su nombre científico, 'bellis perennis', significa 'bonita para siempre', porque puede florecer casi todo el año, incluso en pleno invierno en climas suaves.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Bellis_perennis_sl1.jpg/330px-Bellis_perennis_sl1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "artemisia-absinthium",
@@ -2116,6 +2310,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal", "tóxica"],
     uses: "Base tradicional de licores como la absenta y el vermú; en dosis altas o uso prolongado puede ser tóxica.",
     curiosity: "La absenta, el licor derivado del ajenjo, fue prohibida en varios países europeos a comienzos del siglo XX por su fama (exagerada) de causar alucinaciones.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Artemisia_absinthium_P1210748.jpg/330px-Artemisia_absinthium_P1210748.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "achillea-millefolium",
@@ -2128,6 +2323,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "antioxidante"],
     uses: "Tradicionalmente usada para cicatrizar heridas leves y en infusión digestiva; su nombre honra al héroe griego Aquiles, que la habría usado para curar a sus soldados.",
     curiosity: "Sus hojas, finísimamente divididas en cientos de segmentos, le dan el nombre científico 'millefolium' ('mil hojas').",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Achillea_millefolium_%28bright%29.jpg/330px-Achillea_millefolium_%28bright%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "anacyclus-clavatus",
@@ -2137,6 +2333,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta parecida a la manzanilla común pero de sabor picante, muy abundante en baldíos y cunetas en primavera.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Anacyclus_clavatus.jpg/330px-Anacyclus_clavatus.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "anthemis-arvensis",
@@ -2146,6 +2343,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta similar a la manzanilla común, de flores blancas con centro amarillo, propia de sembrados y baldíos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Anthemis_arvensis_009.JPG/330px-Anthemis_arvensis_009.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "leucanthemum-vulgare",
@@ -2158,6 +2356,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental", "comestible"],
     uses: "Sus hojas jóvenes, de sabor ligeramente picante, se han añadido ocasionalmente a ensaladas silvestres.",
     curiosity: "El popular juego de 'me quiere, no me quiere' deshojando margaritas se practica tradicionalmente con esta especie.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Leucanthemum_vulgare_%27Filigran%27_Flower_2200px.jpg/330px-Leucanthemum_vulgare_%27Filigran%27_Flower_2200px.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "tanacetum-vulgare",
@@ -2170,6 +2369,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal", "tóxica"],
     uses: "Tradicionalmente usada como repelente de insectos y vermífugo, aunque su aceite esencial es tóxico en dosis altas.",
     curiosity: "Antiguamente se colocaban ramas de tanaceto en las despensas y armarios como repelente natural contra polillas e insectos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Tanacetum_vulgare_-_harilik_soolikarohi_Keilas2.jpg/330px-Tanacetum_vulgare_-_harilik_soolikarohi_Keilas2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "glebionis-segetum",
@@ -2179,6 +2379,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores amarillo intenso muy vistosas que antaño amarilleaban campos de cereal enteros; hoy más escasa por los herbicidas.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Glebionis_segetum.jpg/330px-Glebionis_segetum.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "calendula-arvensis",
@@ -2191,6 +2392,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "ornamental"],
     uses: "Antepasada silvestre de la caléndula de jardín, usada tradicionalmente en ungüentos cicatrizantes para heridas leves.",
     curiosity: "Sus flores se abren y cierran siguiendo el movimiento del sol a lo largo del día, un fenómeno llamado heliotropismo.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Calendula_January_2008-1_filtered.jpg/330px-Calendula_January_2008-1_filtered.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "carlina-vulgaris",
@@ -2203,6 +2405,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sus capítulos secos, de brácteas doradas que se abren y cierran según la humedad ambiental, se han usado tradicionalmente como higrómetro rústico casero.",
     curiosity: "Sus brácteas se cierran cuando el aire está húmedo (anunciando lluvia) y se abren con el tiempo seco, por lo que se colgaban en las puertas como barómetro popular.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Carlina_vulgaris_060903.jpg/330px-Carlina_vulgaris_060903.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "carthamus-tinctorius",
@@ -2215,6 +2418,7 @@ export const SPECIES: Species[] = [
     properties: ["tintórea", "comestible"],
     uses: "Sus flores se usan tradicionalmente como colorante alimentario (sucedáneo del azafrán) y para obtener tinte textil; sus semillas producen un aceite comestible.",
     curiosity: "Se le conoce popularmente como 'azafrán falso' o 'azafrán de moro', porque durante siglos se usó para adulterar o sustituir al azafrán verdadero por ser mucho más barato.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Safflower.jpg/330px-Safflower.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "centaurea-aspera",
@@ -2227,6 +2431,7 @@ export const SPECIES: Species[] = [
     properties: ["melífera"],
     uses: "Sin uso tradicional destacado; es una importante planta de matorral para la fauna polinizadora mediterránea.",
     curiosity: "Sus brácteas espinosas, dobladas hacia atrás, la distinguen fácilmente de otras centaureas de flor similar.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Centaurea_aspera3.JPG/330px-Centaurea_aspera3.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cirsium-eriophorum",
@@ -2236,6 +2441,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Cardo de gran porte con capítulos florales cubiertos de una densa borra lanosa, propio de pastizales y linderos de montaña.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Cirsium_eriophorum01.jpg/330px-Cirsium_eriophorum01.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "carduus-crispus",
@@ -2245,6 +2451,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Cardo de tallos alados espinosos y flores rosa-purpúreas agrupadas, frecuente en baldíos y bordes de camino.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Carduus_crispus_003.jpg/330px-Carduus_crispus_003.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "scolymus-hispanicus",
@@ -2257,6 +2464,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus tallos tiernos, pelados de espinas, se recolectan tradicionalmente en primavera y se cocinan como verdura, muy apreciados en Andalucía y el Levante.",
     curiosity: "Pese a su aspecto agresivamente espinoso, es una de las verduras silvestres más buscadas en la cocina tradicional española.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Scolymus_hispanicus.jpg/330px-Scolymus_hispanicus.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lapsana-communis",
@@ -2269,6 +2477,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas jóvenes, de sabor suave, se han consumido tradicionalmente cocidas como verdura en algunas zonas rurales de Europa.",
     curiosity: "Pese a su discreto aspecto, era una verdura silvestre habitual en la olla campesina antes de la generalización de las hortalizas cultivadas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Illustration_Lapsana_communis0.jpg/330px-Illustration_Lapsana_communis0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "picris-hieracioides",
@@ -2281,6 +2490,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas jóvenes, de sabor amargo, se han consumido tradicionalmente cocidas, aunque requieren varios cambios de agua para suavizar el amargor.",
     curiosity: "Está cubierta de pelos rígidos y ganchudos al tacto, una característica que le da el nombre común de 'amargón' en algunas zonas por su textura áspera y sabor.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Illustration_Picris_hieracioides0.jpg/330px-Illustration_Picris_hieracioides0.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "scorzonera-hispanica",
@@ -2293,6 +2503,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "medicinal"],
     uses: "Su raíz negra, cultivada como hortaliza de invierno, se ha usado tradicionalmente cocida en guisos; su savia lechosa se aplicaba contra picaduras de serpiente.",
     curiosity: "Su nombre, del italiano 'scorzone' (víbora), refleja la antigua creencia de que era un remedio eficaz contra las mordeduras de serpiente.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Scorzonera_hispanica.jpg/330px-Scorzonera_hispanica.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "tragopogon-pratensis",
@@ -2305,6 +2516,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Su raíz, de sabor parecido a la ostra vegetal, se ha consumido tradicionalmente cocida como hortaliza.",
     curiosity: "Sus flores amarillas se cierran siempre al mediodía, dándole el nombre popular inglés de 'Jack-go-to-bed-at-noon' ('Juan se va a la cama al mediodía').",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Tragopogon_pratense_2004-05-30_JOF.JPG/330px-Tragopogon_pratense_2004-05-30_JOF.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "taraxacum-officinale",
@@ -2317,6 +2529,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "comestible", "antioxidante", "melífera"],
     uses: "Sus hojas tiernas se comen en ensalada y su raíz tostada se ha usado como sucedáneo del café; tradicionalmente se emplea como depurativo hepático.",
     curiosity: "Su vilano esférico y plateado, que los niños soplan para 'pedir un deseo', dispersa las semillas a varios kilómetros de distancia con el viento.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Taraxacum_officinale_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-135.jpg/330px-Taraxacum_officinale_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-135.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sonchus-oleraceus",
@@ -2329,6 +2542,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas tiernas se consumen en ensalada o cocinadas, con un sabor parecido a una lechuga ligeramente amarga.",
     curiosity: "Es una planta cosmopolita presente en casi todos los continentes, y sus semillas con vilano se dispersan igual de bien que las del diente de león.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Sonchus_oleraceus_PID1767-2.jpg/330px-Sonchus_oleraceus_PID1767-2.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "crepis-vesicaria",
@@ -2341,6 +2555,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas tiernas se recolectan tradicionalmente en primavera como verdura silvestre, con un punto amargo similar a la achicoria.",
     curiosity: "Se conoce popularmente como 'radicheta' en varias zonas de España, donde se recolecta igual que la achicoria cultivada.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/C.vesicaria-gen-1.jpg/330px-C.vesicaria-gen-1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "daboecia-cantabrica",
@@ -2350,6 +2565,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Brezo de flores rosa-púrpura grandes y colgantes en forma de urna, propio de matorrales de montaña sobre suelo ácido.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Daboecia_cantabrica1373917974.jpg/330px-Daboecia_cantabrica1373917974.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "erica-ciliaris",
@@ -2359,6 +2575,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Brezo de flores rosadas grandes agrupadas en el extremo de las ramas, propio de brezales húmedos de montaña.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Erica_ciliaris.jpg/330px-Erica_ciliaris.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "jasminum-fruticans",
@@ -2371,6 +2588,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sin uso tradicional destacado más allá de lo ornamental en jardinería mediterránea rústica.",
     curiosity: "A diferencia de los jazmines de jardín más conocidos, sus flores amarillas apenas desprenden aroma perceptible.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Jasminum_fruticans_a.JPG/330px-Jasminum_fruticans_a.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "phillyrea-latifolia",
@@ -2380,6 +2598,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Arbusto de hoja perenne coriácea y bayas negro-azuladas, propio del sotobosque de encinares calizos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Phillyrea_latifolia2.jpg/330px-Phillyrea_latifolia2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "vincetoxicum-hirundinaria",
@@ -2389,6 +2608,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores blanco-amarillentas en umbela y frutos en forma de vaina alargada, propia de matorrales y claros de bosque calizos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Vincetoxicum_hirundinaria_sl3.jpg/330px-Vincetoxicum_hirundinaria_sl3.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "vinca-major",
@@ -2401,6 +2621,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental", "tóxica"],
     uses: "Muy cultivada como cubresuelos ornamental en jardinería por su rápido crecimiento; contiene alcaloides tóxicos.",
     curiosity: "Sus tallos rastreros pueden enraizar en cualquier punto que toque el suelo, lo que la convierte en una excelente planta cubresuelos pero también potencialmente invasora.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Vinca_major_-_Flower_and_bud.jpg/330px-Vinca_major_-_Flower_and_bud.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "blackstonia-perfoliata",
@@ -2410,6 +2631,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de flores amarillas estrelladas y hojas que rodean el tallo como perforadas por él, propia de prados húmedos calizos.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Blackstonia_perfoliata1.jpg/330px-Blackstonia_perfoliata1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "centaurium-erythraea",
@@ -2422,6 +2644,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "En infusión muy amarga se usa tradicionalmente como tónico digestivo y para abrir el apetito.",
     curiosity: "Su nombre alude al centauro Quirón, sabio en la mitología griega en el uso medicinal de las plantas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Centaurium_erythraea_220603.jpg/330px-Centaurium_erythraea_220603.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "primula-elatior",
@@ -2434,6 +2657,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Cultivada ocasionalmente como planta ornamental de jardín de sombra por su temprana floración.",
     curiosity: "Es una de las primeras flores silvestres en abrirse tras el invierno, lo que le da su nombre: 'primula', diminutivo de 'primera'.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Primula_elatior_170405a.jpg/330px-Primula_elatior_170405a.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "anagallis-arvensis",
@@ -2446,6 +2670,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para consumo: toda la planta es ligeramente tóxica si se ingiere en cantidad.",
     curiosity: "Sus flores se cierran ante la humedad y la falta de luz, por lo que tradicionalmente se usaban como predictor rústico del tiempo, dándole el nombre popular de 'pimpinela' del pobre o 'reloj de pastor'.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Flowers_March_2008-19.jpg/330px-Flowers_March_2008-19.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lysimachia-ephemerum",
@@ -2455,6 +2680,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta de porte esbelto con largas espigas de flores blanco-grisáceas, propia de suelos húmedos junto a ríos y acequias.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Lysimachia_ephemerum_kz01.jpg/330px-Lysimachia_ephemerum_kz01.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pinguicula-vulgaris",
@@ -2467,6 +2693,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Sin uso tradicional relevante; su interés es exclusivamente botánico como una de las pocas plantas carnívoras de la flora ibérica.",
     curiosity: "Sus hojas pegajosas atrapan pequeños insectos y los digieren con enzimas propias, complementando así los nutrientes que faltan en los suelos pobres donde vive.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Pinguicula_vulgaris_flower_%28front_view%29_-_Keila.jpg/330px-Pinguicula_vulgaris_flower_%28front_view%29_-_Keila.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "orobanche-cruenta",
@@ -2476,6 +2703,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta sin clorofila, parásita de las raíces de leguminosas, de tallo rojizo y flores tubulares agrupadas en espiga.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Orobanche_crenata_1.jpg/330px-Orobanche_crenata_1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "misopates-orontium",
@@ -2485,6 +2713,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta emparentada con la boca de dragón de jardín, de flores rosadas pequeñas, propia de cultivos y baldíos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Misopates_orontium.jpg/330px-Misopates_orontium.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "digitalis-parviflora",
@@ -2497,6 +2726,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: contiene los mismos glucósidos cardiotóxicos que otras especies de dedalera.",
     curiosity: "Del género Digitalis se extrae la digoxina, un fármaco cardiovascular todavía usado en medicina moderna bajo estricto control médico.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Digitalis_parviflora_001.JPG/330px-Digitalis_parviflora_001.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "veronica-arvensis",
@@ -2506,6 +2736,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Pequeña planta de flores azules diminutas, muy común como mala hierba en cultivos, jardines y baldíos.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/20190604Veronica_arvensis1.jpg/330px-20190604Veronica_arvensis1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "rhinanthus-minor",
@@ -2515,6 +2746,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta semiparásita de las raíces de gramíneas, de flores amarillas y cáliz inflado que suena como un sonajero al secarse.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/20170517Rhinanthus_minor6.jpg/330px-20170517Rhinanthus_minor6.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "euphrasia-officinalis",
@@ -2527,6 +2759,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Tradicionalmente usada en infusión o compresas para aliviar el enrojecimiento e irritación ocular leve, de ahí su nombre común.",
     curiosity: "Su nombre, Euphrasia, viene del griego 'euphrosyne' (alegría), por la mejora del ánimo que se atribuía a la vista descansada.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Euphrasia_officinalis06.jpg/330px-Euphrasia_officinalis06.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "verbascum-thapsus",
@@ -2539,6 +2772,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "aromática"],
     uses: "Sus flores y hojas se han usado tradicionalmente en infusión para afecciones respiratorias.",
     curiosity: "Sus hojas, cubiertas de una densa pelusa blanquecina que las hace suaves al tacto, se usaban antiguamente como pañuelos improvisados y mechas para lámparas de aceite.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Starr_040723-0030_Verbascum_thapsus.jpg/330px-Starr_040723-0030_Verbascum_thapsus.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "atropa-belladonna",
@@ -2551,6 +2785,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica", "medicinal"],
     uses: "Aunque contiene alcaloides usados en medicina bajo estricto control médico, la planta entera es extremadamente tóxica y no debe manipularse ni consumirse.",
     curiosity: "Su nombre, 'belladonna' ('bella dama' en italiano), viene del uso renacentista de su jugo para dilatar las pupilas y darles a las mujeres una mirada más seductora.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Atropa_bella-donna1.jpg/330px-Atropa_bella-donna1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "datura-stramonium",
@@ -2563,6 +2798,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: toda la planta es tóxica y su ingestión puede causar alucinaciones graves e incluso la muerte.",
     curiosity: "Su fruto, cubierto de púas, se conoce popularmente como 'manzana espinosa' y se abre al madurar liberando cientos de semillas negras.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Datura_stramonium_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-051.jpg/330px-Datura_stramonium_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-051.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "hyoscyamus-niger",
@@ -2575,6 +2811,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: planta tóxica que contiene los mismos alcaloides que la belladona y el estramonio.",
     curiosity: "Su nombre común, beleño, comparte raíz con la palabra alemana para 'gallina' porque sus semillas eran tóxicas para las aves de corral.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Hyoscyamus_niger_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-073.jpg/330px-Hyoscyamus_niger_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-073.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "convolvulus-arvensis",
@@ -2587,6 +2824,7 @@ export const SPECIES: Species[] = [
     properties: ["invasora"],
     uses: "Sin uso tradicional relevante; es considerada una mala hierba agrícola difícil de erradicar por su extenso sistema de raíces.",
     curiosity: "Sus raíces pueden profundizar varios metros en el suelo, lo que hace casi imposible eliminarla arrancándola manualmente.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Convolvulus_arvensis_001.JPG/330px-Convolvulus_arvensis_001.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "calystegia-sepium",
@@ -2596,6 +2834,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Enredadera vigorosa de grandes flores blancas en forma de trompeta, trepa por setos y vegetación de ribera.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Calystegia_sepium_-_tara-seatapp.jpg/330px-Calystegia_sepium_-_tara-seatapp.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "echium-vulgare",
@@ -2608,6 +2847,7 @@ export const SPECIES: Species[] = [
     properties: ["melífera"],
     uses: "Sin uso tradicional relevante en alimentación humana; es una planta muy valorada en apicultura por su abundante néctar.",
     curiosity: "Sus flores nacen rosadas y cambian a azul intenso a medida que maduran, lo que permite ver varios tonos en la misma inflorescencia.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/87_Echium_vulgare.jpg/330px-87_Echium_vulgare.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "borago-officinalis",
@@ -2620,6 +2860,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "medicinal"],
     uses: "Sus hojas tiernas son una verdura muy popular en la cocina de Aragón y Navarra; sus flores azules también se usan para decorar platos.",
     curiosity: "Sus flores, de un azul intenso poco común en el reino vegetal, eran usadas en la Antigüedad para 'infundir valor' antes de las batallas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Borago_officinalis_%282025%29.jpg/330px-Borago_officinalis_%282025%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "anchusa-azurea",
@@ -2632,6 +2873,7 @@ export const SPECIES: Species[] = [
     properties: ["tintórea"],
     uses: "Su raíz se ha usado tradicionalmente para obtener un tinte rojizo natural, empleado antiguamente en cosmética casera para colorear labios y mejillas.",
     curiosity: "Su nombre, Anchusa, proviene del griego 'ankousa', que ya en la Antigüedad hacía referencia a su uso como colorante cosmético.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Anchusa_azurea_habito.jpg/330px-Anchusa_azurea_habito.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "pulmonaria-officinalis",
@@ -2644,6 +2886,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Tradicionalmente usada en infusión para afecciones respiratorias, según la antigua 'teoría de la firma' por el parecido de sus hojas moteadas con el tejido pulmonar.",
     curiosity: "Sus flores cambian de color rosa a azul según van madurando, lo que permite ver varios tonos a la vez en la misma planta.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Illustration_Pulmonaria_officinalis0.jpg/330px-Illustration_Pulmonaria_officinalis0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "symphytum-tuberosum",
@@ -2656,6 +2899,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Su raíz se ha usado tradicionalmente en cataplasmas para golpes y fracturas, de ahí su nombre común 'consuelda' (que suelda).",
     curiosity: "Su nombre científico, Symphytum, proviene del griego 'symphyo' (unir), reflejando su reputación tradicional para favorecer la consolidación de huesos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Symphytum_tuberosum_Eglinton.JPG/330px-Symphytum_tuberosum_Eglinton.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cynoglossum-officinale",
@@ -2668,6 +2912,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos recomendables: contiene alcaloides tóxicos para el hígado si se ingiere.",
     curiosity: "Sus hojas ásperas y alargadas recuerdan a una lengua de perro, lo que le da nombre tanto en español como en su nombre científico ('cynos' + 'glossa').",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Cynoglossum_officinale_W.jpg/330px-Cynoglossum_officinale_W.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "origanum-vulgare",
@@ -2680,6 +2925,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal", "antioxidante", "comestible"],
     uses: "Condimento imprescindible en salsas de tomate, pizzas y carnes; en infusión se usa tradicionalmente para la tos y la digestión.",
     curiosity: "Su nombre científico, del griego 'oros' (montaña) y 'ganos' (alegría), significa aproximadamente 'alegría de la montaña'.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Oregano-spice.jpg/330px-Oregano-spice.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "satureja-hortensis",
@@ -2692,6 +2938,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "comestible"],
     uses: "Se usa tradicionalmente para condimentar legumbres, especialmente habas y judías, por facilitar su digestión.",
     curiosity: "Su nombre común, ajedrea, comparte raíz con 'satirión', por su antigua fama (infundada) de planta afrodisíaca en la tradición popular.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Satureja_hortensis_bgiu.jpg/330px-Satureja_hortensis_bgiu.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "melissa-officinalis",
@@ -2704,6 +2951,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "Sus hojas, de aroma a limón, se usan en infusión relajante para el insomnio y los nervios.",
     curiosity: "Su nombre viene del griego 'melissa' (abeja): es una planta muy melífera, y los apicultores frotaban colmenas nuevas con sus hojas para atraer enjambres.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Melissa_officinalis_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-094.jpg/330px-Melissa_officinalis_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-094.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "hyssopus-officinalis",
@@ -2716,6 +2964,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "Se usa en infusión para afecciones respiratorias y como condimento en licores tradicionales.",
     curiosity: "El hisopo se menciona varias veces en la Biblia como planta purificadora, usada en rituales de limpieza ceremonial.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Illustration_Hyssopus_officinalis0.jpg/330px-Illustration_Hyssopus_officinalis0.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "salvia-lavandulifolia",
@@ -2728,6 +2977,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal", "antioxidante"],
     uses: "En infusión se usa tradicionalmente como digestivo y para aliviar el dolor de garganta; muy rica en compuestos antioxidantes.",
     curiosity: "El nombre del género, Salvia, proviene del latín 'salvare' (salvar/curar), por la enorme reputación medicinal que tuvo en la Antigüedad.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Salvia_lavandulifolia.jpg/330px-Salvia_lavandulifolia.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "nepeta-cataria",
@@ -2740,6 +2990,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "En infusión se usa tradicionalmente como calmante suave; sus compuestos volátiles provocan una reacción de excitación característica en los gatos.",
     curiosity: "El compuesto responsable de su efecto sobre los felinos, la nepetalactona, atrae también a algunos grandes felinos como leones y tigres en cautividad.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Nepeta_cataria_Sturm24cleaned.jpg/330px-Nepeta_cataria_Sturm24cleaned.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "glechoma-hederacea",
@@ -2752,6 +3003,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática", "medicinal"],
     uses: "Usada tradicionalmente en infusión para afecciones respiratorias leves; antiguamente también para clarificar la cerveza antes del uso del lúpulo.",
     curiosity: "Antes de que se generalizara el lúpulo, esta planta se usaba en el norte de Europa para aromatizar y conservar la cerveza.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Glechoma_hederacea_-_Keila.jpg/330px-Glechoma_hederacea_-_Keila.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lamium-amplexicaule",
@@ -2764,6 +3016,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus hojas y flores tiernas son comestibles y se han añadido ocasionalmente a ensaladas silvestres invernales.",
     curiosity: "Puede florecer prácticamente todo el invierno en climas suaves, siendo una fuente temprana de néctar para los primeros insectos polinizadores del año.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Lamium_amplexicaule_Nashville.jpg/330px-Lamium_amplexicaule_Nashville.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "marrubium-vulgare",
@@ -2776,6 +3029,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "aromática"],
     uses: "Tradicionalmente usado en jarabe o infusión para aliviar la tos y las afecciones respiratorias.",
     curiosity: "Su extremo sabor amargo le da el nombre común 'marrubio', del hebreo 'mar' (amargo), usado ya en la medicina de la Antigüedad.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Marrubium_vulgare_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-224.jpg/330px-Marrubium_vulgare_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-224.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sideritis-scorpioides",
@@ -2788,6 +3042,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "aromática", "antioxidante"],
     uses: "Es uno de los llamados 'tés de monte' o 'tés de roca', muy consumidos en infusión digestiva y por su alto contenido en antioxidantes.",
     curiosity: "El género Sideritis debe su nombre al griego 'sideros' (hierro): antiguamente se usaba para curar heridas causadas por armas de hierro.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Sideritis_hyssopifolia_%28BG_Wroclaw%29-3.JPG/330px-Sideritis_hyssopifolia_%28BG_Wroclaw%29-3.JPG?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ajuga-reptans",
@@ -2800,6 +3055,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "ornamental"],
     uses: "Tradicionalmente usada en infusión y cataplasmas para heridas leves; también cultivada como cubresuelos ornamental.",
     curiosity: "Se extiende formando alfombras mediante estolones rastreros, de forma similar a las fresas silvestres.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Zbehovec_plaziv%C3%BD_%28Ajuga_reptans%29_%282%29.jpg/330px-Zbehovec_plaziv%C3%BD_%28Ajuga_reptans%29_%282%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "verbena-officinalis",
@@ -2812,6 +3068,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Usada tradicionalmente en infusión digestiva y como calmante suave.",
     curiosity: "Considerada planta sagrada por celtas y romanos, se usaba en rituales de purificación y como amuleto protector.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Verbena_officinalis_sabliere-morriere-plailly_60_30062008_1.jpg/330px-Verbena_officinalis_sabliere-morriere-plailly_60_30062008_1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "armeria-latifolia",
@@ -2824,6 +3081,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sin uso tradicional destacado más allá de lo ornamental en jardines de rocalla.",
     curiosity: "Su nombre común, armeria, comparte origen con la palabra francesa para clavel ('armoires'), por el antiguo parecido atribuido entre ambas flores.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Epipactis_helleborine_flowers1_220703.jpg/330px-Epipactis_helleborine_flowers1_220703.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "daphne-laureola",
@@ -2836,6 +3094,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: sus bayas negras y toda la planta son tóxicas por contener compuestos muy irritantes.",
     curiosity: "El género Daphne debe su nombre a la ninfa griega que, según el mito, se transformó en laurel para escapar del dios Apolo.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Daphne_laureola_8703.jpg/330px-Daphne_laureola_8703.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "rumex-crispus",
@@ -2848,6 +3107,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "medicinal"],
     uses: "Sus hojas jóvenes, de sabor ácido, se han consumido tradicionalmente cocidas como verdura; su raíz se ha usado como laxante suave.",
     curiosity: "Sus semillas, agrupadas en densas espigas pardo-rojizas, permanecen visibles en la planta seca durante todo el invierno, sirviendo de alimento a muchas aves.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Rumex_crispus_vallee-de-grace-amiens_80_12062007_3.jpg/330px-Rumex_crispus_vallee-de-grace-amiens_80_12062007_3.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "betula-pendula",
@@ -2860,6 +3120,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Su savia primaveral se ha recolectado tradicionalmente como bebida depurativa en el norte de Europa; sus hojas en infusión se usan como diurético.",
     curiosity: "Su corteza blanca, que se desprende en finas láminas de papel, se ha usado tradicionalmente como material de escritura de emergencia y para encender fuego incluso húmeda.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Betula_pendula_Finland.jpg/330px-Betula_pendula_Finland.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "alnus-glutinosa",
@@ -2872,6 +3133,7 @@ export const SPECIES: Species[] = [
     properties: ["tintórea"],
     uses: "Su corteza y conos se han usado tradicionalmente para obtener tintes negros y pardos; su madera, muy resistente bajo el agua, se usaba en pilotes y cimentaciones.",
     curiosity: "Su madera, al cortarla, se tiñe de un color anaranjado que con el tiempo se oscurece, por lo que antiguamente se decía (erróneamente) que 'sangraba'.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Alnus_glutinosa_011.jpg/330px-Alnus_glutinosa_011.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "muscari-comosum",
@@ -2884,6 +3146,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental", "comestible"],
     uses: "Sus bulbos, muy amargos, se han consumido tradicionalmente en algunas zonas del Mediterráneo tras un largo proceso de cocción y encurtido.",
     curiosity: "Su nombre común, nazareno, alude al parecido de su penacho superior de flores estériles con una melena, y se cultiva también como flor ornamental de jardín.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Leopoldia_comosum_08-05-2010_%281%29.jpg/330px-Leopoldia_comosum_08-05-2010_%281%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "allium-carinatum",
@@ -2896,6 +3159,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible", "aromática"],
     uses: "Como el resto de ajos silvestres, sus bulbos y hojas son comestibles y de sabor similar al ajo cultivado.",
     curiosity: "Su umbela combina flores fértiles con pequeños bulbillos aéreos, una doble estrategia de reproducción por semilla y de forma vegetativa a la vez.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Allium_carinatum_Sturm38.jpg/330px-Allium_carinatum_Sturm38.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ornithogalum-narbonense",
@@ -2905,6 +3169,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta bulbosa de flores blancas con una línea verde en el envés de cada pétalo, agrupadas en un largo racimo.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Ornithogalum_narbonense.jpg/330px-Ornithogalum_narbonense.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ruscus-aculeatus",
@@ -2917,6 +3182,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal", "ornamental"],
     uses: "Su raíz se usa tradicionalmente en preparados para mejorar la circulación venosa y aliviar la sensación de piernas cansadas.",
     curiosity: "Lo que parecen sus 'hojas' espinosas son en realidad tallos aplanados (cladodios); las flores y frutos rojos nacen directamente en el centro de estas falsas hojas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Ruscus_aculeatus2.jpg/330px-Ruscus_aculeatus2.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "asparagus-officinalis",
@@ -2929,6 +3195,7 @@ export const SPECIES: Species[] = [
     properties: ["comestible"],
     uses: "Sus turiones (brotes tiernos) se recolectan tradicionalmente en primavera y se cocinan igual que el espárrago cultivado.",
     curiosity: "Los espárragos silvestres crecen escondidos entre zarzas y matorral, por lo que su búsqueda es toda una tradición rural en primavera.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Illustration_Asparagus_officinalis0b.jpg/330px-Illustration_Asparagus_officinalis0b.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "tamus-communis",
@@ -2941,6 +3208,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: toda la planta, especialmente la raíz tuberosa, es tóxica.",
     curiosity: "Sus brotes tiernos primaverales se han consumido tradicionalmente en algunas zonas tras una cocción cuidadosa, aunque no es recomendable sin conocimiento experto.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Tamus_communis.jpg/330px-Tamus_communis.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "colchicum-autumnale",
@@ -2953,6 +3221,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: toda la planta es muy tóxica, aunque de ella se extrae la colchicina, usada en medicina bajo estricto control.",
     curiosity: "Florece en otoño sin hojas, que solo aparecen la primavera siguiente junto al fruto, un desfase que le da el nombre popular de 'quitameriendas' (llega cuando terminan las meriendas de verano).",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Illustration_Colchicum_autumnale0.jpg/330px-Illustration_Colchicum_autumnale0.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "veratrum-album",
@@ -2965,6 +3234,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: sus hojas jóvenes se confunden peligrosamente con la genciana, con casos de intoxicación grave documentados.",
     curiosity: "En los prados de montaña donde crecen juntas, distinguir el vedegambre de la genciana antes de la floración exige mucha experiencia, ya que sus hojas son muy similares.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Illustration_Veratrum_album0.jpg/330px-Illustration_Veratrum_album0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "juncus-acutus",
@@ -2977,6 +3247,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Sus tallos rígidos se han usado tradicionalmente para tejer cestas y esteras en zonas de marisma y humedal costero.",
     curiosity: "Sus hojas terminan en una punta tan afilada y rígida que puede atravesar la piel con facilidad, de ahí su nombre 'acutus' (agudo, puntiagudo).",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Juncus_acutus_at_Lake_Walyungup%2C_Rockingham_Lakes_Regional_Park%2C_June_2022_02.jpg/330px-Juncus_acutus_at_Lake_Walyungup%2C_Rockingham_Lakes_Regional_Park%2C_June_2022_02.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "orchis-morio",
@@ -2989,6 +3260,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sin uso tradicional relevante; especie protegida cuyo único interés es la observación botánica.",
     curiosity: "Del tubérculo de varias orquídeas silvestres emparentadas se obtenía tradicionalmente el salep, una harina usada en Oriente Medio para bebidas y helados, lo que diezmó sus poblaciones en varios países.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Anacamptis_morio_hampe.jpg/330px-Anacamptis_morio_hampe.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "aceras-anthropophorum",
@@ -3001,6 +3273,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sin uso tradicional; especie protegida de interés exclusivamente botánico.",
     curiosity: "Su nombre común, 'hombre ahorcado', describe la silueta de cada flor individual, con brazos y piernas alargados que recuerdan a una pequeña figura humana colgante.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Aceras_anthropophorum_flowers.jpg/330px-Aceras_anthropophorum_flowers.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "spiranthes-spiralis",
@@ -3013,6 +3286,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sin uso tradicional; especie protegida de interés exclusivamente botánico.",
     curiosity: "Es una de las orquídeas europeas de floración más tardía, apareciendo a finales de verano cuando la mayoría de las demás ya han terminado su ciclo.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Spiranthes_spiralis_170808.jpg/330px-Spiranthes_spiralis_170808.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cephalanthera-longifolia",
@@ -3025,6 +3299,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sin uso tradicional; especie protegida de interés exclusivamente botánico.",
     curiosity: "Como muchas orquídeas, depende en sus primeros años de vida de una asociación con hongos del suelo para poder germinar y desarrollarse.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Cephalanthera_longifolia_300508.jpg/330px-Cephalanthera_longifolia_300508.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "listera-ovata",
@@ -3037,6 +3312,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sin uso tradicional; especie protegida de interés exclusivamente botánico.",
     curiosity: "Su labelo (pétalo inferior modificado) libera repentinamente una gota de savia pegajosa cuando un insecto lo toca, pegándole el polen al instante.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Listera_ovata_050505.jpg/330px-Listera_ovata_050505.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "gladiolus-illyricus",
@@ -3049,6 +3325,7 @@ export const SPECIES: Species[] = [
     properties: ["ornamental"],
     uses: "Sin uso tradicional relevante más allá de lo ornamental; es el antepasado silvestre de los gladiolos cultivados en jardinería.",
     curiosity: "Su nombre, del latín 'gladius' (espada), alude a la forma alargada y puntiaguda de sus hojas.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Gladiolus_illyricus1.jpg/330px-Gladiolus_illyricus1.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cyperus-longus",
@@ -3061,6 +3338,7 @@ export const SPECIES: Species[] = [
     properties: ["aromática"],
     uses: "Su rizoma aromático se ha usado tradicionalmente en perfumería rústica y como sustituto local de otras juncias aromáticas cultivadas en otras regiones.",
     curiosity: "Su tallo de sección claramente triangular al tacto es una forma sencilla de distinguir las juncias (Cyperaceae) de los juncos verdaderos, de tallo cilíndrico.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Cyperus_longus_Ypey52.jpg/330px-Cyperus_longus_Ypey52.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "arundo-donax",
@@ -3073,6 +3351,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Sus cañas se han usado tradicionalmente para tutores agrícolas, cañizos, instrumentos musicales de viento y estructuras rústicas.",
     curiosity: "Las lengüetas de instrumentos de viento como el clarinete, el oboe y el saxofón se siguen fabricando artesanalmente con cañas de esta especie.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Rizoma_ca%C3%B1a_com%C3%BAn.jpg/330px-Rizoma_ca%C3%B1a_com%C3%BAn.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "cynodon-dactylon",
@@ -3085,6 +3364,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Su rizoma se ha usado tradicionalmente en infusión como diurético popular.",
     curiosity: "Es una de las hierbas más resistentes que existen: sobrevive a la sequía extrema, el pisoteo constante y la siega frecuente gracias a sus rizomas subterráneos.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Cynodon_dactylon_2.jpg/330px-Cynodon_dactylon_2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "dactylis-glomerata",
@@ -3094,6 +3374,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Gramínea robusta en macolla con inflorescencia densa y unilateral, muy común en prados de siega y cunetas.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Dactylisglomerata_3862461102_07435a8173_b.jpg/330px-Dactylisglomerata_3862461102_07435a8173_b.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lolium-perenne",
@@ -3103,6 +3384,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Gramínea de espiga estrecha y aplanada muy usada para céspedes y pastos, común en prados y bordes de camino.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Illustration_Lolium_perenne0.jpg/330px-Illustration_Lolium_perenne0.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "avena-fatua",
@@ -3115,6 +3397,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Sin uso agrícola directo: es la mala hierba más problemática de los cultivos de avena y cereal por competir con ellos y ser difícil de eliminar por su parecido con el cultivo.",
     curiosity: "Su arista retorcida se enrosca y desenrosca con los cambios de humedad, un mecanismo que ayuda a la semilla a enterrarse progresivamente en el suelo como un diminuto taladro.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Avena_May_2010-3.jpg/330px-Avena_May_2010-3.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "sparganium-erectum",
@@ -3124,6 +3407,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta acuática de hojas erguidas en forma de espada e infrutescencias esféricas y espinosas, propia de orillas de charcas y acequias.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Vandens_augalas01.JPG/330px-Vandens_augalas01.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "arum-italicum",
@@ -3136,6 +3420,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica", "ornamental"],
     uses: "Sus llamativas bayas rojas de otoño son tóxicas y no deben consumirse pese a su aspecto atractivo.",
     curiosity: "Sus flores generan calor internamente (termogénesis) para volatilizar mejor su olor y atraer a los pequeños insectos que las polinizan.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Arum_italicum_%28aka%29.jpg/330px-Arum_italicum_%28aka%29.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "potamogeton-natans",
@@ -3145,6 +3430,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Planta acuática de hojas flotantes ovaladas y una pequeña espiga floral que emerge del agua, propia de charcas y acequias tranquilas.",
     rarity: "poco común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/PotamogetonNatans.jpg/330px-PotamogetonNatans.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "lemna-minor",
@@ -3154,6 +3440,7 @@ export const SPECIES: Species[] = [
     regions: ["la-rioja"],
     description: "Diminuta planta acuática flotante que puede cubrir por completo la superficie de charcas y acequias de aguas quietas.",
     rarity: "común",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Eendekroos_dicht_bijeen.JPG/330px-Eendekroos_dicht_bijeen.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "viscum-album",
@@ -3166,6 +3453,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica", "medicinal"],
     uses: "Sus bayas son tóxicas si se ingieren, aunque extractos de la planta se han usado en medicina complementaria bajo supervisión.",
     curiosity: "Al no tener raíces en el suelo, obtiene agua y minerales parasitando las ramas de otros árboles, aunque también fotosintetiza por sí mismo.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Viscum_album_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-281.jpg/330px-Viscum_album_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-281.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "juniperus-sabina",
@@ -3178,6 +3466,7 @@ export const SPECIES: Species[] = [
     properties: ["tóxica"],
     uses: "Sin usos seguros para el público general: toda la planta es tóxica, especialmente para mujeres embarazadas.",
     curiosity: "Pese a su toxicidad, se ha empleado erróneamente en la medicina popular histórica con fines abortivos, causando numerosos envenenamientos graves documentados.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Juniperus_sabina_cult1.jpg/330px-Juniperus_sabina_cult1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "equisetum-arvense",
@@ -3190,6 +3479,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "En infusión se usa tradicionalmente como diurético; también, por su alto contenido en sílice, para fortalecer uñas y cabello.",
     curiosity: "Los equisetos son parientes de plantas gigantes que formaban bosques enteros hace más de 300 millones de años, en la era de los grandes yacimientos de carbón.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Equisetum_arvense_foliage.jpg/330px-Equisetum_arvense_foliage.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "asplenium-viride",
@@ -3202,6 +3492,7 @@ export const SPECIES: Species[] = [
     properties: [],
     uses: "Sin uso tradicional documentado; su interés es exclusivamente botánico.",
     curiosity: "A diferencia de otros helechos del mismo género, su raquis (el 'tallo' de la hoja) es verde en vez de negro, lo que le da nombre.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Asplenium-viride.jpg/330px-Asplenium-viride.jpg?utm_source=es.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
   {
     id: "ceterach-officinarum",
@@ -3214,6 +3505,7 @@ export const SPECIES: Species[] = [
     properties: ["medicinal"],
     uses: "Usado tradicionalmente en infusión como remedio popular para dolencias del bazo, de donde procede su antiguo nombre 'hierba dorada de la esplenitis'.",
     curiosity: "Es capaz de secarse casi por completo durante la sequía y enrollar sus hojas hacia dentro, para luego reverdecer en cuestión de horas tras la primera lluvia.",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Dauradella_per_la_Mallada_Verda%2C_Benissa.jpg/330px-Dauradella_per_la_Mallada_Verda%2C_Benissa.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   },
 ];
 
