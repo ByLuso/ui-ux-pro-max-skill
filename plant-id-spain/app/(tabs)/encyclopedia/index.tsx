@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import { colors, radius, spacing } from "@/constants/theme";
 import { SPECIES, Species, PlantProperty } from "@/data/species";
 import { REGIONS } from "@/data/regions";
+import { WIKIMEDIA_IMAGE_HEADERS } from "@/lib/wikimedia";
 
 const PROPERTY_META: Record<PlantProperty, { emoji: string; label: string }> = {
   "aromática": { emoji: "🌿", label: "Aromática" },
@@ -106,7 +107,7 @@ function SpeciesRow({ species }: { species: Species }) {
     <Pressable style={styles.row} onPress={() => router.push(`/species/${species.id}`)}>
       {species.imageUrl ? (
         <Image
-          source={{ uri: species.imageUrl }}
+          source={{ uri: species.imageUrl, headers: WIKIMEDIA_IMAGE_HEADERS }}
           style={styles.thumb}
           onError={(e) =>
             console.log("[Encyclopedia] image failed:", species.id, e.nativeEvent.error)

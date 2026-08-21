@@ -5,6 +5,7 @@ import { colors, radius, spacing } from "@/constants/theme";
 import { PlantProperty, SPECIES } from "@/data/species";
 import { REGIONS } from "@/data/regions";
 import { getSightingsForSpecies, Sighting } from "@/lib/db";
+import { WIKIMEDIA_IMAGE_HEADERS } from "@/lib/wikimedia";
 
 const RARITY_LABEL: Record<string, string> = {
   común: "Común",
@@ -66,7 +67,7 @@ export default function SpeciesDetailScreen() {
       ) : species.imageUrl ? (
         <View>
           <Image
-            source={{ uri: species.imageUrl }}
+            source={{ uri: species.imageUrl, headers: WIKIMEDIA_IMAGE_HEADERS }}
             style={styles.hero}
             onError={(e) =>
               console.log("[SpeciesDetail] image failed:", species.id, e.nativeEvent.error)
