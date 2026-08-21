@@ -105,7 +105,13 @@ function SpeciesRow({ species }: { species: Species }) {
   return (
     <Pressable style={styles.row} onPress={() => router.push(`/species/${species.id}`)}>
       {species.imageUrl ? (
-        <Image source={{ uri: species.imageUrl }} style={styles.thumb} />
+        <Image
+          source={{ uri: species.imageUrl }}
+          style={styles.thumb}
+          onError={(e) =>
+            console.log("[Encyclopedia] image failed:", species.id, e.nativeEvent.error)
+          }
+        />
       ) : (
         <View style={[styles.thumb, styles.thumbPlaceholder]}>
           <Text style={styles.thumbPlaceholderEmoji}>🌱</Text>

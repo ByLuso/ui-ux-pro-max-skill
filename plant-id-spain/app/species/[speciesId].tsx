@@ -65,7 +65,14 @@ export default function SpeciesDetailScreen() {
         <Image source={{ uri: sightings[0].photoUri }} style={styles.hero} />
       ) : species.imageUrl ? (
         <View>
-          <Image source={{ uri: species.imageUrl }} style={styles.hero} />
+          <Image
+            source={{ uri: species.imageUrl }}
+            style={styles.hero}
+            onError={(e) =>
+              console.log("[SpeciesDetail] image failed:", species.id, e.nativeEvent.error)
+            }
+            onLoad={() => console.log("[SpeciesDetail] image loaded ok:", species.id)}
+          />
           <Text style={styles.imageCredit}>Foto de referencia · Wikimedia Commons</Text>
         </View>
       ) : null}
