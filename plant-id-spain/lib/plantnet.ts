@@ -44,11 +44,18 @@ export async function identifyPlant(
     apiKey
   )}`;
 
-  const response = await fetch(url, {
-    method: "POST",
-    body: form,
-    headers: { Accept: "application/json" },
-  });
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      method: "POST",
+      body: form,
+      headers: { Accept: "application/json" },
+    });
+  } catch (networkError) {
+    const detail = networkError instanceof Error ? networkError.message : String(networkError);
+    console.log("[PlantNet] network error:", detail);
+    throw new PlantNetError(`No se pudo conectar con PlantNet: ${detail}`);
+  }
 
   if (!response.ok) {
     if (response.status === 401 || response.status === 403) {
@@ -58,10 +65,18 @@ export async function identifyPlant(
       throw new PlantNetError("Límite diario de identificaciones de PlantNet alcanzado.", response.status);
     }
     const body = await response.text().catch(() => "");
+    console.log("[PlantNet] HTTP error:", response.status, body);
     throw new PlantNetError(`Error de PlantNet (${response.status}): ${body}`, response.status);
   }
 
-  const data = await response.json();
+  let data: any;
+  try {
+    data = await response.json();
+  } catch (parseError) {
+    const detail = parseError instanceof Error ? parseError.message : String(parseError);
+    console.log("[PlantNet] response parse error:", detail);
+    throw new PlantNetError(`Respuesta inesperada de PlantNet: ${detail}`);
+  }
   const results: any[] = data.results ?? [];
 
   return results.map((r) => ({

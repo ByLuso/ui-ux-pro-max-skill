@@ -73,6 +73,7 @@ export default function CameraScreen() {
       setMatches(results.slice(0, 5));
       setStage("results");
     } catch (e) {
+      console.log("[Camera] identification failed:", e);
       const message = e instanceof PlantNetError ? e.message : "No se pudo identificar la planta. Revisa tu conexión.";
       setError(message);
       setStage("preview");
