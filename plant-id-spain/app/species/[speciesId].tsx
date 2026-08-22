@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image } from "expo-image";
 import { useFocusEffect, useLocalSearchParams, Stack } from "expo-router";
 import { colors, radius, spacing } from "@/constants/theme";
 import { PlantProperty, SPECIES } from "@/data/species";
@@ -69,9 +70,7 @@ export default function SpeciesDetailScreen() {
           <Image
             source={{ uri: species.imageUrl, headers: WIKIMEDIA_IMAGE_HEADERS }}
             style={styles.hero}
-            onError={(e) =>
-              console.log("[SpeciesDetail] image failed:", species.id, e.nativeEvent.error)
-            }
+            onError={(e) => console.log("[SpeciesDetail] image failed:", species.id, e.error)}
             onLoad={() => console.log("[SpeciesDetail] image loaded ok:", species.id)}
           />
           <Text style={styles.imageCredit}>Foto de referencia · Wikimedia Commons</Text>

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image } from "expo-image";
 import { router } from "expo-router";
 import { colors, radius, spacing } from "@/constants/theme";
 import { SPECIES, Species, PlantProperty } from "@/data/species";
@@ -109,9 +110,7 @@ function SpeciesRow({ species }: { species: Species }) {
         <Image
           source={{ uri: species.imageUrl, headers: WIKIMEDIA_IMAGE_HEADERS }}
           style={styles.thumb}
-          onError={(e) =>
-            console.log("[Encyclopedia] image failed:", species.id, e.nativeEvent.error)
-          }
+          onError={(e) => console.log("[Encyclopedia] image failed:", species.id, e.error)}
         />
       ) : (
         <View style={[styles.thumb, styles.thumbPlaceholder]}>
