@@ -6,7 +6,7 @@ import { colors, radius, spacing } from "@/constants/theme";
 import { PlantProperty, SPECIES } from "@/data/species";
 import { REGIONS } from "@/data/regions";
 import { getSightingsForSpecies, Sighting } from "@/lib/db";
-import { WIKIMEDIA_IMAGE_HEADERS } from "@/lib/wikimedia";
+import { WikimediaImage } from "@/components/WikimediaImage";
 
 const RARITY_LABEL: Record<string, string> = {
   común: "Común",
@@ -39,6 +39,7 @@ export default function SpeciesDetailScreen() {
   const { speciesId } = useLocalSearchParams<{ speciesId: string }>();
   const species = SPECIES.find((s) => s.id === speciesId);
   const [sightings, setSightings] = useState<Sighting[]>([]);
+  const [heroImageFailed, setHeroImageFailed] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -65,13 +66,13 @@ export default function SpeciesDetailScreen() {
 
       {sightings[0] ? (
         <Image source={{ uri: sightings[0].photoUri }} style={styles.hero} />
-      ) : species.imageUrl ? (
+      ) : species.imageUrl && !heroImageFailed ? (
         <View>
-          <Image
-            source={{ uri: species.imageUrl, headers: WIKIMEDIA_IMAGE_HEADERS }}
+          <WikimediaImage
+            id={species.id}
+            imageUrl={species.imageUrl}
             style={styles.hero}
-            onError={(e) => console.log("[SpeciesDetail] image failed:", species.id, e.error)}
-            onLoad={() => console.log("[SpeciesDetail] image loaded ok:", species.id)}
+            onGiveUp={() => setHeroImageFailed(true)}
           />
           <Text style={styles.imageCredit}>Foto de referencia · Wikimedia Commons</Text>
         </View>

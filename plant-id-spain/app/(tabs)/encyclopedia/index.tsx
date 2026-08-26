@@ -1,11 +1,10 @@
 import { useMemo, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { Image } from "expo-image";
 import { router } from "expo-router";
 import { colors, radius, spacing } from "@/constants/theme";
 import { SPECIES, Species, PlantProperty } from "@/data/species";
 import { REGIONS } from "@/data/regions";
-import { WIKIMEDIA_IMAGE_HEADERS } from "@/lib/wikimedia";
+import { WikimediaImage } from "@/components/WikimediaImage";
 
 const PROPERTY_META: Record<PlantProperty, { emoji: string; label: string }> = {
   "aromática": { emoji: "🌿", label: "Aromática" },
@@ -91,12 +90,17 @@ export default function EncyclopediaScreen() {
         ListEmptyComponent={
           <Text style={styles.emptyText}>No se encontró ninguna especie con ese filtro.</Text>
         }
+        initialNumToRender={8}
+        maxToRenderPerBatch={6}
+        windowSize={5}
+        removeClippedSubviews
       />
     </View>
   );
 }
 
 function SpeciesRow({ species }: { species: Species }) {
+  const [imageFailed, setImageFailed] = useState(false);
   const regionNames = species.regions
     .slice(0, 2)
     .map((id) => REGIONS.find((r) => r.id === id)?.name)
@@ -106,11 +110,12 @@ function SpeciesRow({ species }: { species: Species }) {
 
   return (
     <Pressable style={styles.row} onPress={() => router.push(`/species/${species.id}`)}>
-      {species.imageUrl ? (
-        <Image
-          source={{ uri: species.imageUrl, headers: WIKIMEDIA_IMAGE_HEADERS }}
+      {species.imageUrl && !imageFailed ? (
+        <WikimediaImage
+          id={species.id}
+          imageUrl={species.imageUrl}
           style={styles.thumb}
-          onError={(e) => console.log("[Encyclopedia] image failed:", species.id, e.error)}
+          onGiveUp={() => setImageFailed(true)}
         />
       ) : (
         <View style={[styles.thumb, styles.thumbPlaceholder]}>

@@ -3,6 +3,7 @@
  * Get a free personal API key at https://my.plantnet.org/ and set it from the
  * app's Settings screen — see lib/settings.ts.
  */
+import { uploadAsync, FileSystemUploadType } from "expo-file-system/legacy";
 
 export type PlantOrgan = "auto" | "leaf" | "flower" | "fruit" | "bark" | "habit" | "other";
 
@@ -31,24 +32,22 @@ export async function identifyPlant(
     throw new PlantNetError("Falta la API key de PlantNet. Configúrala en Ajustes.");
   }
 
-  const form = new FormData();
-  form.append("organs", organ);
-  // React Native's FormData accepts this file-descriptor shape for local URIs.
-  form.append("images", {
-    uri: photoUri,
-    name: "photo.jpg",
-    type: "image/jpeg",
-  } as unknown as Blob);
-
   const url = `https://my-api.plantnet.org/v2/identify/${PROJECT}?api-key=${encodeURIComponent(
     apiKey
   )}`;
 
-  let response: Response;
+  // Uses expo-file-system's native multipart upload instead of a hand-built
+  // FormData: newer Expo/React Native fetch implementations no longer accept
+  // the classic RN-specific `{ uri, name, type }` file descriptor shape,
+  // which fails with "Unsupported FormDataPart implementation".
+  let result: { status: number; body: string };
   try {
-    response = await fetch(url, {
-      method: "POST",
-      body: form,
+    result = await uploadAsync(url, photoUri, {
+      httpMethod: "POST",
+      uploadType: FileSystemUploadType.MULTIPART,
+      fieldName: "images",
+      mimeType: "image/jpeg",
+      parameters: { organs: organ },
       headers: { Accept: "application/json" },
     });
   } catch (networkError) {
@@ -57,21 +56,20 @@ export async function identifyPlant(
     throw new PlantNetError(`No se pudo conectar con PlantNet: ${detail}`);
   }
 
-  if (!response.ok) {
-    if (response.status === 401 || response.status === 403) {
-      throw new PlantNetError("API key de PlantNet inválida o caducada.", response.status);
+  if (result.status < 200 || result.status >= 300) {
+    if (result.status === 401 || result.status === 403) {
+      throw new PlantNetError("API key de PlantNet inválida o caducada.", result.status);
     }
-    if (response.status === 429) {
-      throw new PlantNetError("Límite diario de identificaciones de PlantNet alcanzado.", response.status);
+    if (result.status === 429) {
+      throw new PlantNetError("Límite diario de identificaciones de PlantNet alcanzado.", result.status);
     }
-    const body = await response.text().catch(() => "");
-    console.log("[PlantNet] HTTP error:", response.status, body);
-    throw new PlantNetError(`Error de PlantNet (${response.status}): ${body}`, response.status);
+    console.log("[PlantNet] HTTP error:", result.status, result.body);
+    throw new PlantNetError(`Error de PlantNet (${result.status}): ${result.body}`, result.status);
   }
 
   let data: any;
   try {
-    data = await response.json();
+    data = JSON.parse(result.body);
   } catch (parseError) {
     const detail = parseError instanceof Error ? parseError.message : String(parseError);
     console.log("[PlantNet] response parse error:", detail);
