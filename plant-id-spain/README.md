@@ -67,6 +67,35 @@ Escanea el QR con la app **Expo Go** (Android) o la cámara (iOS) para abrir la 
 móvil. Necesitarás un dispositivo físico (o simulador con cámara) para probar el flujo de
 captura de fotos.
 
+## Generar un APK instalable (sin Expo Go ni servidor)
+
+El modo anterior (`npx expo start` + Expo Go) es solo para desarrollo: necesitas el servidor
+corriendo cada vez. Para tener una app real con su propio icono, que se abra sola sin Termux ni
+ordenador, compílala con **EAS Build**, el servicio de compilación en la nube de Expo (gratuito
+para uso personal — no necesita instalar el SDK de Android):
+
+```bash
+cd plant-id-spain
+npx eas-cli login          # crea una cuenta gratuita en expo.dev si no tienes, o inicia sesión
+npx eas-cli build --platform android --profile preview
+```
+
+- La primera vez te preguntará si quieres crear/vincular un proyecto EAS: acepta (se guarda un
+  `projectId` en `app.json`).
+- La compilación se hace en los servidores de Expo, no en tu móvil — tarda entre 10 y 20
+  minutos. Puedes cerrar Termux mientras tanto; el estado se sigue desde
+  [expo.dev](https://expo.dev) o volviendo a abrir la terminal más tarde.
+- Al terminar, el comando (o la web de expo.dev) te da un enlace de descarga del `.apk`. Ábrelo
+  desde el móvil para descargarlo e instalarlo (Android te pedirá permitir instalar desde
+  "orígenes desconocidos" la primera vez).
+- A partir de ahí, la app funciona como cualquier otra: icono propio, se abre sola, sin
+  necesidad de Termux, Metro ni conexión al servidor de desarrollo.
+
+**Importante**: un APK así es una foto fija del código en ese momento. Si luego cambias algo
+(por ejemplo, amplío el catálogo de flora), tendrás que repetir `eas build` y reinstalar el
+nuevo APK — no se actualiza solo. `eas.json` ya está configurado en el proyecto con el perfil
+`preview` (genera un `.apk` directamente instalable, en vez del `.aab` que pediría Google Play).
+
 ## Estructura del proyecto
 
 ```
