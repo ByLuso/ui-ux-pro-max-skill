@@ -19,11 +19,11 @@ centrada en la flora española.
 - **📍 Ficha de especie**: al desbloquear una especie ves su información (familia, rareza,
   descripción, dónde se encuentra en España) y el historial de tus propios avistamientos.
 - **📖 Enciclopedia**: a diferencia del Pokédex (que oculta lo no descubierto), esta sección
-  muestra libremente las ~290 especies del catálogo desde el principio, con buscador, filtros
+  muestra libremente las ~320 especies del catálogo desde el principio, con buscador, filtros
   por propiedad (aromática, medicinal, comestible, tóxica, melífera, tintórea, ornamental,
-  antioxidante, invasora), y una **foto de referencia real** por especie (287 de 290, obtenidas
+  antioxidante, invasora), y una **foto de referencia real** por especie (306 de 321, obtenidas
   de Wikimedia Commons vía la API de Wikipedia — nunca imágenes generadas por IA, para no
-  inducir a errores de identificación). 189 especies incluyen además usos tradicionales y una
+  inducir a errores de identificación). 220 especies incluyen además usos tradicionales y una
   curiosidad; el resto se irán completando. En la ficha de especie, tus propias fotos siempre
   tienen prioridad sobre la de referencia en cuanto identificas la planta tú mismo.
 - **100% local**: sin registro ni backend. Todo se guarda en SQLite en el propio dispositivo.
@@ -134,7 +134,7 @@ lib/
 
 ## Ampliar el catálogo de flora
 
-`data/species.ts` es un punto de partida curado con ~290 especies repartidas por las 19
+`data/species.ts` es un punto de partida curado con ~320 especies repartidas por las 19
 regiones (varias son comunes a más de una). **La Rioja** (241 especies) está muy por encima
 del resto: además del matorral mediterráneo, bosques de ribera y humedales del Ebro,
 matorrales de suelos salinos/yesosos, encinares, quejigares y rebollares de media montaña,
@@ -144,9 +144,14 @@ ribera, árboles caducifolios, etc. Al tratarse de un catálogo de 1921, se han 
 especies con nombre científico moderno vigente y se han omitido criptógamas (algas, hongos,
 musgos) por quedar fuera del alcance de una app de identificación fotográfica de plantas, así
 como la mayoría de variedades y sinónimos históricos que PlantNet no reconoce hoy.
-**Castilla-La Mancha** (37 especies: dehesas, pinares de la Serranía de Cuenca y Montes de
-Toledo, matorral gipsófilo y estepario de La Mancha, humedales como las Tablas de Daimiel, y
-el viñedo manchego) también está especialmente desarrollada. Para ampliar cualquier otra región:
+**Castilla-La Mancha** (100 especies) también está muy desarrollada: dehesas, pinares de la
+Serranía de Cuenca y Montes de Toledo, matorral gipsófilo y estepario de La Mancha, humedales
+como las Tablas de Daimiel, y el viñedo manchego, ampliado además con árboles y arbustos de
+sierra (almez, mostajo, arce de Granada, cerezo silvestre, brezos, jaras, escobones, la albaida
+del sureste de Albacete, el agracejo endémico de Sierra de Alcaraz...), flora acuática de las
+Lagunas de Ruidera (nenúfar blanco, ranúnculo acuático, castañuela) y cultivos icónicos hoy muy
+identificados con la región (ajo de Las Pedroñeras, pistacho, melón). Para ampliar cualquier
+otra región:
 
 - Añade nuevas entradas al array `SPECIES` siguiendo el mismo formato (id, nombre científico,
   nombre común, familia, `regions` con los ids de `data/regions.ts`, descripción y rareza).
