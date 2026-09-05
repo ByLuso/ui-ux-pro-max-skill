@@ -7,11 +7,36 @@ La Rioja (España), extensible a otras regiones.
 Este proyecto es independiente del skill UI/UX Pro Max del resto del repositorio; vive en su
 propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli/`.
 
-## Estado actual: Fase 1 — Esqueleto
+## Estado actual: Fase 2 — Capa de litología (IGME)
 
 - Backend FastAPI con endpoints `/health` y `/config` (región + pesos de scoring por defecto).
 - Frontend con mapa Leaflet centrado en La Rioja y el bounding box de la región dibujado.
-- Sin base de datos ni capas geoespaciales todavía (llegan en las fases 2-7).
+- Capa de litología del IGME pintada como overlay WMS (ver detalle abajo), con control de
+  capas (on/off) y leyenda dinámica.
+- Sin base de datos ni procesamiento geoespacial en backend todavía (llegan en las fases 3-7).
+
+### Capa de litología (fase 2)
+
+Se usa el servicio WMS público del IGME **`IGME_Litologias_1M`** (Mapa Litológico de España a
+escala 1:1.000.000), añadido directamente en el frontend como `L.tileLayer.wms` sobre el mapa base:
+
+```
+https://mapas.igme.es/gis/services/Cartografia_Geologica/IGME_Litologias_1M/MapServer/WMSServer
+```
+
+**Por qué esta capa y no el Mapa Geológico 1:200.000:** el servicio `IGME_Geologico_200` (más
+detallado) tiene huecos de digitalización por hoja — comprobado con peticiones `GetMap` reales,
+el área de La Rioja devuelve un lienzo en blanco en ese servicio. `IGME_Litologias_1M` sí tiene
+cobertura nacional completa y devuelve litología real sobre La Rioja, así que se usó como capa
+de fase 2. Cuando se aborde el scoring por celda (fase 6) puede convenir buscar una fuente más
+detallada a nivel de hoja (o vectorizar sheets del 1:200.000 donde existan) en vez de depender
+solo del 1:1.000.000.
+
+No requiere API key: es un servicio WMS público de acceso abierto. La leyenda se obtiene en
+tiempo real vía `GetLegendGraphic` del mismo servicio.
+
+Leaflet se sirve ahora vendorizado en `frontend/vendor/leaflet/` (en vez de CDN) para no depender
+de una CDN externa al abrir la app — útil también para el caso de Termux.
 
 ## Cómo levantarlo
 
@@ -39,8 +64,8 @@ Ver `backend/.env.example`. Ninguna es obligatoria para la fase 1; `FZM_COPERNIC
 
 ## Roadmap
 
-1. ~~Esqueleto backend + frontend~~ (actual)
-2. Capa de litología (IGME) sobre el mapa
+1. ~~Esqueleto backend + frontend~~
+2. ~~Capa de litología (IGME) sobre el mapa~~ (actual)
 3. Cálculo de pendiente a partir del MDT (IGN)
 4. NDVI / cobertura vegetal (Sentinel-2, Copernicus)
 5. Hidrografía y distancia a cauces (IGN)

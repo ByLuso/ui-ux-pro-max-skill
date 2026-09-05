@@ -18,7 +18,7 @@ async function initMap() {
 
   const map = L.map("map").setView(regionConfig.region_center, regionConfig.region_default_zoom);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  const baseLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors",
     maxZoom: 19,
   }).addTo(map);
@@ -31,8 +31,41 @@ async function initMap() {
     fillOpacity: 0.05,
   }).addTo(map);
 
-  // Las capas de litología, pendiente, NDVI, hidrografía y el heatmap de
-  // scoring se añadirán en las fases 2-6.
+  const lithologyLayer = L.tileLayer.wms(IGME_WMS_URL, {
+    layers: IGME_LITHOLOGY_LAYER,
+    format: "image/png",
+    transparent: true,
+    version: "1.1.1",
+    opacity: 0.65,
+    attribution: "Litología: IGME (Mapa Litológico 1:1.000.000)",
+  }).addTo(map);
+
+  L.control
+    .layers({ "Mapa base (OSM)": baseLayer }, { "Litología (IGME)": lithologyLayer })
+    .addTo(map);
+
+  addLithologyLegend(map);
+
+  // El cálculo de pendiente, NDVI, hidrografía y el heatmap de scoring se
+  // añadirán en las fases 3-6.
+}
+
+function addLithologyLegend(map) {
+  const legend = L.control({ position: "bottomright" });
+
+  legend.onAdd = function () {
+    const container = L.DomUtil.create("div", "legend-control");
+    container.innerHTML = `
+      <strong>Litología (IGME)</strong>
+      <img
+        src="${IGME_WMS_URL}?service=WMS&version=1.1.1&request=GetLegendGraphic&layer=${IGME_LITHOLOGY_LAYER}&format=image/png"
+        alt="Leyenda de litología"
+      />
+    `;
+    return container;
+  };
+
+  legend.addTo(map);
 }
 
 initMap();
