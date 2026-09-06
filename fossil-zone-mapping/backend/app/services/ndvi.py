@@ -4,12 +4,12 @@ import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-import httpx
 import numpy as np
 import rasterio
 from rasterio.warp import Resampling, reproject
 
 from app.config import settings
+from app.services.http_utils import request_with_retry
 
 TOKEN_URL = "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token"
 PROCESS_URL = "https://sh.dataspace.copernicus.eu/api/v1/process"
@@ -69,7 +69,8 @@ def _get_access_token() -> str:
             "Faltan FZM_COPERNICUS_CLIENT_ID / FZM_COPERNICUS_CLIENT_SECRET en backend/.env"
         )
 
-    response = httpx.post(
+    response = request_with_retry(
+        "POST",
         TOKEN_URL,
         data={
             "grant_type": "client_credentials",
@@ -78,7 +79,6 @@ def _get_access_token() -> str:
         },
         timeout=20,
     )
-    response.raise_for_status()
     payload = response.json()
     _token_cache["access_token"] = payload["access_token"]
     _token_cache["expires_at"] = time.time() + payload["expires_in"]
@@ -124,13 +124,13 @@ def fetch_ndvi_geotiff() -> Path:
         "evalscript": EVALSCRIPT,
     }
 
-    response = httpx.post(
+    response = request_with_retry(
+        "POST",
         PROCESS_URL,
         headers={"Authorization": f"Bearer {token}"},
         json=body,
         timeout=60,
     )
-    response.raise_for_status()
     cache_file.write_bytes(response.content)
     return cache_file
 

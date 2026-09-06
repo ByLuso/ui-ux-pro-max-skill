@@ -3,13 +3,13 @@ import re
 from pathlib import Path
 
 import geopandas as gpd
-import httpx
 import numpy as np
 import rasterio
 import rasterio.features
 from shapely.geometry import Point
 
 from app.config import settings
+from app.services.http_utils import request_with_retry
 
 IGME_QUERY_URL = (
     "https://mapas.igme.es/gis/rest/services/Cartografia_Geologica/"
@@ -61,7 +61,8 @@ def fetch_lithology_polygons() -> Path:
         return cache_file
 
     min_lon, min_lat, max_lon, max_lat = settings.region_bbox
-    response = httpx.get(
+    response = request_with_retry(
+        "GET",
         IGME_QUERY_URL,
         params={
             "geometry": f"{min_lon},{min_lat},{max_lon},{max_lat}",
@@ -74,7 +75,6 @@ def fetch_lithology_polygons() -> Path:
         },
         timeout=60,
     )
-    response.raise_for_status()
     geojson = response.json()
 
     gdf = gpd.GeoDataFrame.from_features(geojson["features"], crs="EPSG:4326")

@@ -4,7 +4,6 @@ import tempfile
 from pathlib import Path
 
 import geopandas as gpd
-import httpx
 import numpy as np
 import pandas as pd
 import rasterio
@@ -14,6 +13,7 @@ from scipy.ndimage import distance_transform_edt
 
 from app.config import settings
 from app.services import dem
+from app.services.http_utils import request_with_retry
 
 IGN_WFS_URL = "https://servicios.idee.es/wfs-inspire/hidrografia"
 WATERCOURSE_TYPE = "hy-p:Watercourse"
@@ -52,7 +52,8 @@ def fetch_watercourses() -> Path:
     frames = []
     start_index = 0
     while True:
-        response = httpx.get(
+        response = request_with_retry(
+            "GET",
             IGN_WFS_URL,
             params={
                 "service": "WFS",
@@ -65,7 +66,6 @@ def fetch_watercourses() -> Path:
             },
             timeout=120,
         )
-        response.raise_for_status()
         with tempfile.NamedTemporaryFile(suffix=".gml") as tmp:
             tmp.write(response.content)
             tmp.flush()

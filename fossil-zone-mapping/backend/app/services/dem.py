@@ -2,12 +2,12 @@
 import json
 from pathlib import Path
 
-import httpx
 import numpy as np
 import rasterio
 from rasterio.warp import Resampling, calculate_default_transform, reproject, transform_bounds
 
 from app.config import settings
+from app.services.http_utils import request_with_retry
 
 IGN_WCS_URL = "https://servicios.idee.es/wcs-inspire/mdt"
 DEM_NATIVE_CRS = "EPSG:25830"
@@ -44,7 +44,8 @@ def fetch_dem_geotiff() -> Path:
         "EPSG:4326", DEM_NATIVE_CRS, min_lon, min_lat, max_lon, max_lat
     )
 
-    response = httpx.get(
+    response = request_with_retry(
+        "GET",
         IGN_WCS_URL,
         params=[
             ("service", "WCS"),
@@ -57,7 +58,6 @@ def fetch_dem_geotiff() -> Path:
         ],
         timeout=60,
     )
-    response.raise_for_status()
     cache_file.write_bytes(response.content)
     return cache_file
 
