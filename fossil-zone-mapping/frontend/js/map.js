@@ -54,44 +54,59 @@ async function initMap() {
     },
   };
 
-  const slopeMeta = await fetchSlopeMeta();
-  if (slopeMeta) {
-    const slopeBounds = L.latLngBounds(slopeMeta.bounds[0], slopeMeta.bounds[1]);
-    const slopeLayer = L.imageOverlay(`${API_BASE_URL}/terrain/slope.png`, slopeBounds, {
-      opacity: 0.85,
-      attribution: slopeMeta.source,
-    });
-    overlays["Pendiente (MDT-IGN)"] = slopeLayer;
-    legendSections["Pendiente (MDT-IGN)"] = {
-      visible: false,
-      html: `<strong>Pendiente (MDT-IGN)</strong>${slopeMeta.legend
-        .map(
-          (item) => `
-            <div class="legend-row">
-              <span class="legend-swatch" style="background:${item.color}"></span>
-              <span>${item.label}</span>
-            </div>`
-        )
-        .join("")}`,
-    };
-  }
+  await addRasterOverlay(map, overlays, legendSections, {
+    name: "Pendiente (MDT-IGN)",
+    metaUrl: `${API_BASE_URL}/terrain/slope`,
+    pngUrl: `${API_BASE_URL}/terrain/slope.png`,
+  });
+
+  await addRasterOverlay(map, overlays, legendSections, {
+    name: "NDVI (Sentinel-2)",
+    metaUrl: `${API_BASE_URL}/vegetation/ndvi`,
+    pngUrl: `${API_BASE_URL}/vegetation/ndvi.png`,
+  });
 
   L.control.layers({ "Mapa base (OSM)": baseLayer }, overlays).addTo(map);
 
   addLegendControl(map, legendSections);
 
-  // NDVI, hidrografía y el heatmap de scoring se añadirán en las fases 4-6.
+  // Hidrografía, el scoring combinado y los yacimientos conocidos se
+  // añadirán en las fases 5-7.
 }
 
-async function fetchSlopeMeta() {
+async function fetchLayerMeta(url) {
   try {
-    const response = await fetch(`${API_BASE_URL}/terrain/slope`);
+    const response = await fetch(url);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return await response.json();
   } catch (error) {
-    console.error("No se pudo cargar la capa de pendiente:", error);
+    console.error(`No se pudo cargar la capa (${url}):`, error);
     return null;
   }
+}
+
+async function addRasterOverlay(map, overlays, legendSections, { name, metaUrl, pngUrl }) {
+  const meta = await fetchLayerMeta(metaUrl);
+  if (!meta) return;
+
+  const bounds = L.latLngBounds(meta.bounds[0], meta.bounds[1]);
+  overlays[name] = L.imageOverlay(pngUrl, bounds, {
+    opacity: 0.85,
+    attribution: meta.source,
+  });
+
+  legendSections[name] = {
+    visible: false,
+    html: `<strong>${name}</strong>${meta.legend
+      .map(
+        (item) => `
+          <div class="legend-row">
+            <span class="legend-swatch" style="background:${item.color}"></span>
+            <span>${item.label}</span>
+          </div>`
+      )
+      .join("")}`,
+  };
 }
 
 function addLegendControl(map, sections) {

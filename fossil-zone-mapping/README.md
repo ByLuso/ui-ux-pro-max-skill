@@ -7,13 +7,12 @@ La Rioja (España), extensible a otras regiones.
 Este proyecto es independiente del skill UI/UX Pro Max del resto del repositorio; vive en su
 propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli/`.
 
-## Estado actual: Fase 3 — Pendiente a partir del MDT (IGN)
+## Estado actual: Fase 4 — NDVI / cobertura vegetal (Sentinel-2)
 
-- Backend FastAPI con endpoints `/health`, `/config`, `/terrain/slope` y `/terrain/slope.png`.
+- Backend FastAPI con endpoints `/health`, `/config`, `/terrain/slope(.png)` y `/vegetation/ndvi(.png)`.
 - Frontend con mapa Leaflet centrado en La Rioja y el bounding box de la región dibujado.
-- Capa de litología del IGME pintada como overlay WMS, con control de capas y leyenda dinámica.
-- Capa de pendiente calculada por el backend a partir del MDT del IGN (ver detalle abajo),
-  también con control de capas y leyenda.
+- Tres capas superpuestas, cada una con su control de capas y su sección de leyenda:
+  litología (IGME, WMS), pendiente (MDT del IGN) y NDVI (Sentinel-2, Copernicus).
 - Sin base de datos todavía; el procesamiento geoespacial usa caché en disco (`backend/data/cache/`).
 
 ### Capa de litología (fase 2)
@@ -67,6 +66,38 @@ usada para esta vista regional; si en el scoring por celda (fase 6) hace falta m
 mismo servicio ofrece coverages a 25 m y 5 m (`Elevacion25830_25` / `_5`), más pesados de
 descargar y procesar.
 
+### NDVI / cobertura vegetal (fase 4)
+
+Usa la **Process API** de Sentinel Hub dentro del Copernicus Data Space Ecosystem (CDSE), que
+calcula el NDVI directamente en la nube a partir de Sentinel-2 L2A y devuelve ya el resultado
+recortado a la bbox de la región — evita descargar escenas completas (~1 GB) y hacer el álgebra
+de bandas nosotros mismos:
+
+```
+Token OAuth2: https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token
+Process API:  https://sh.dataspace.copernicus.eu/api/v1/process
+```
+
+Flujo (`backend/app/services/ndvi.py`):
+1. Se autentica con `client_credentials` usando `FZM_COPERNICUS_CLIENT_ID` / `FZM_COPERNICUS_CLIENT_SECRET`
+   (un "OAuth client" del dashboard de Sentinel Hub, no el usuario/contraseña de la cuenta —
+   así el secreto es revocable de forma aislada). El token se cachea en memoria hasta que expira.
+2. Pide a la Process API el NDVI de los últimos 90 días (mosaico de menor nubosidad,
+   `maxCloudCoverage: 30`) evaluado con un evalscript propio, ya en EPSG:4326 y recortado a la bbox
+   — la API devuelve directamente un GeoTIFF de 2 bandas (NDVI escalado 0-255 + máscara de validez).
+3. Clasifica el NDVI en 4 rangos pensados para el objetivo del proyecto: **NDVI bajo = suelo/roca
+   expuesta** (señal positiva de fosilización, en rojo) y NDVI alto = vegetación densa que oculta
+   el terreno (en verde) — mismo código de color que la capa de pendiente (rojo = interés) para
+   mantener consistencia visual entre capas.
+4. Cachea el GeoTIFF crudo, el PNG coloreado y sus metadatos (bounds + leyenda) en disco.
+
+Igual que la pendiente: capa apagada por defecto, con su propia sección de leyenda que aparece
+al activarla desde el control de capas.
+
+**Credenciales:** rellena `FZM_COPERNICUS_CLIENT_ID` y `FZM_COPERNICUS_CLIENT_SECRET` en
+`backend/.env` (nunca se commitea) con un OAuth client creado en
+https://shapps.dataspace.copernicus.eu/dashboard/#/account/settings → *OAuth clients* → *Create*.
+
 ## Cómo levantarlo
 
 ### Backend
@@ -88,15 +119,22 @@ servidor estático; si el backend no está disponible, cae a una configuración 
 
 ## Variables de entorno
 
-Ver `backend/.env.example`. Ninguna es obligatoria para la fase 1; `FZM_COPERNICUS_CLIENT_ID` /
-`FZM_COPERNICUS_CLIENT_SECRET` se necesitarán a partir de la fase 4 (NDVI vía Sentinel-2).
+Copia `backend/.env.example` a `backend/.env` (gitignored) y rellena:
+
+```
+FZM_COPERNICUS_CLIENT_ID=...
+FZM_COPERNICUS_CLIENT_SECRET=...
+```
+
+Necesarias desde la fase 4 (capa NDVI). Sin ellas, `/vegetation/ndvi` responde 500 pero el resto
+de la app sigue funcionando con normalidad.
 
 ## Roadmap
 
 1. ~~Esqueleto backend + frontend~~
 2. ~~Capa de litología (IGME) sobre el mapa~~
-3. ~~Cálculo de pendiente a partir del MDT (IGN)~~ (actual)
-4. NDVI / cobertura vegetal (Sentinel-2, Copernicus)
+3. ~~Cálculo de pendiente a partir del MDT (IGN)~~
+4. ~~NDVI / cobertura vegetal (Sentinel-2, Copernicus)~~ (actual)
 5. Hidrografía y distancia a cauces (IGN)
 6. Función de scoring combinando capas con pesos ajustables (sliders)
 7. Capa de yacimientos paleontológicos conocidos

@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
-from app.routers import health, terrain
+from app.routers import health, terrain, vegetation
 
 app = FastAPI(title=settings.app_name)
 
@@ -16,5 +16,6 @@ app.add_middleware(
 
 app.include_router(health.router, tags=["health"])
 app.include_router(terrain.router)
+app.include_router(vegetation.router)
 
 app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
