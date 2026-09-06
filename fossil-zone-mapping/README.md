@@ -7,12 +7,14 @@ La Rioja (España), extensible a otras regiones.
 Este proyecto es independiente del skill UI/UX Pro Max del resto del repositorio; vive en su
 propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli/`.
 
-## Estado actual: Fase 4 — NDVI / cobertura vegetal (Sentinel-2)
+## Estado actual: Fase 5 — Hidrografía y distancia a cauces (IGN)
 
-- Backend FastAPI con endpoints `/health`, `/config`, `/terrain/slope(.png)` y `/vegetation/ndvi(.png)`.
+- Backend FastAPI con endpoints `/health`, `/config`, `/terrain/slope(.png)`, `/vegetation/ndvi(.png)`
+  y `/hydrography/distance(.png)`.
 - Frontend con mapa Leaflet centrado en La Rioja y el bounding box de la región dibujado.
-- Tres capas superpuestas, cada una con su control de capas y su sección de leyenda:
-  litología (IGME, WMS), pendiente (MDT del IGN) y NDVI (Sentinel-2, Copernicus).
+- Cinco capas superpuestas, cada una con su control de capas y su sección de leyenda (cuando aplica):
+  litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2, Copernicus), ríos y arroyos
+  (IGN, WMS) y distancia a cauces (calculada en el backend).
 - Sin base de datos todavía; el procesamiento geoespacial usa caché en disco (`backend/data/cache/`).
 
 ### Capa de litología (fase 2)
@@ -98,6 +100,37 @@ al activarla desde el control de capas.
 `backend/.env` (nunca se commitea) con un OAuth client creado en
 https://shapps.dataspace.copernicus.eu/dashboard/#/account/settings → *OAuth clients* → *Create*.
 
+### Hidrografía y distancia a cauces (fase 5)
+
+Dos fuentes distintas para dos necesidades distintas:
+
+- **Visualización** (ríos con nombre, para contexto): WMS INSPIRE público del IGN, capa
+  `HY.Network`, añadido directamente en el frontend igual que la litología (sin pasar por el
+  backend):
+  ```
+  https://servicios.idee.es/wms-inspire/hidrografia
+  ```
+- **Cálculo de distancia** (la señal que de verdad alimentará el scoring en fase 6): el WMS solo
+  da una imagen renderizada, no sirve para calcular distancias. Se usa en su lugar el **WFS**
+  INSPIRE del mismo servicio (`hy-p:Watercourse`), que devuelve la geometría real de ríos y
+  arroyos — para La Rioja son **~18.300 tramos**, descargados paginados (5000 por página) y
+  cacheados en `data/cache/hydrography_<región>.gpkg`.
+
+Flujo (`backend/app/services/hydrography.py`):
+1. Descarga (o reutiliza de caché) la red completa de cursos de agua vía WFS.
+2. Reproyecta esos tramos a la misma rejilla que ya usa la capa de pendiente (reutiliza el MDT
+   cacheado en fase 3 para que ambas capas queden pixel-alineadas de cara al scoring).
+3. "Rasteriza" los tramos (`rasterio.features.rasterize`) y aplica una transformada de distancia
+   euclídea (`scipy.ndimage.distance_transform_edt`) para obtener, en cada celda, la distancia en
+   metros al cauce más cercano — la técnica estándar en SIG para este tipo de mapa de proximidad,
+   mucho más rápida que calcular distancia punto-a-línea contra 18.300 geometrías una a una.
+4. Clasifica la distancia en 4 rangos (<100 m, 100-300 m, 300-600 m, >600 m) — cerca de un cauce
+   es señal positiva (erosión activa/reciente), mismo código de color rojo=interés que pendiente y NDVI.
+5. Reproyecta a EPSG:4326 y cachea PNG + metadatos, igual que las otras capas calculadas.
+
+Primer cálculo: ~2 minutos (descarga WFS paginada + rasterizado); las siguientes peticiones son
+instantáneas gracias a la caché en disco.
+
 ## Cómo levantarlo
 
 ### Backend
@@ -134,8 +167,8 @@ de la app sigue funcionando con normalidad.
 1. ~~Esqueleto backend + frontend~~
 2. ~~Capa de litología (IGME) sobre el mapa~~
 3. ~~Cálculo de pendiente a partir del MDT (IGN)~~
-4. ~~NDVI / cobertura vegetal (Sentinel-2, Copernicus)~~ (actual)
-5. Hidrografía y distancia a cauces (IGN)
+4. ~~NDVI / cobertura vegetal (Sentinel-2, Copernicus)~~
+5. ~~Hidrografía y distancia a cauces (IGN)~~ (actual)
 6. Función de scoring combinando capas con pesos ajustables (sliders)
 7. Capa de yacimientos paleontológicos conocidos
 8. Pulido: leyenda, exportar GeoJSON, guardar configuraciones de pesos

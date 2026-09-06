@@ -66,12 +66,26 @@ async function initMap() {
     pngUrl: `${API_BASE_URL}/vegetation/ndvi.png`,
   });
 
+  overlays["Ríos y arroyos (IGN)"] = L.tileLayer.wms(IGN_HYDROGRAPHY_WMS_URL, {
+    layers: IGN_HYDROGRAPHY_LAYER,
+    format: "image/png",
+    transparent: true,
+    version: "1.1.1",
+    attribution: "Hidrografía: IGN (WMS INSPIRE)",
+  });
+
+  await addRasterOverlay(map, overlays, legendSections, {
+    name: "Distancia a cauces",
+    metaUrl: `${API_BASE_URL}/hydrography/distance`,
+    pngUrl: `${API_BASE_URL}/hydrography/distance.png`,
+  });
+
   L.control.layers({ "Mapa base (OSM)": baseLayer }, overlays).addTo(map);
 
   addLegendControl(map, legendSections);
 
-  // Hidrografía, el scoring combinado y los yacimientos conocidos se
-  // añadirán en las fases 5-7.
+  // El scoring combinado (sliders) y los yacimientos conocidos se añadirán
+  // en las fases 6-7.
 }
 
 async function fetchLayerMeta(url) {

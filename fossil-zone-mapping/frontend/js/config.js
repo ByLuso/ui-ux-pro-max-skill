@@ -7,3 +7,8 @@ const API_BASE_URL = window.location.origin;
 const IGME_WMS_URL =
   "https://mapas.igme.es/gis/services/Cartografia_Geologica/IGME_Litologias_1M/MapServer/WMSServer";
 const IGME_LITHOLOGY_LAYER = "0";
+
+// Servicio WMS INSPIRE del IGN: red hidrográfica (ríos, arroyos), con
+// nombres. Servicio público, sin API key.
+const IGN_HYDROGRAPHY_WMS_URL = "https://servicios.idee.es/wms-inspire/hidrografia";
+const IGN_HYDROGRAPHY_LAYER = "HY.Network";
