@@ -1,0 +1,173 @@
+"""Combina litología, pendiente, NDVI y distancia a cauces en un score 0-100 por celda."""
+import numpy as np
+import rasterio
+from rasterio.io import MemoryFile
+from rasterio.warp import Resampling, calculate_default_transform, reproject, transform as warp_transform
+
+from app.config import settings
+from app.services import dem, hydrography, lithology, ndvi
+
+# Valores a partir de los cuales cada variable satura su contribución al
+# score (0-100). Elegidos para que coincidan con los rangos "de interés" ya
+# usados en las capas individuales (pendiente >30°, NDVI <~0, agua <600m).
+SLOPE_SATURATION_DEG = 30.0
+NDVI_SATURATION = 0.5
+WATER_SATURATION_M = 600.0
+
+LAYER_KEYS = ("lithology", "slope", "vegetation", "water")
+
+# Rampa continua de color para el heatmap de score (0 = sin interés/transparente,
+# 100 = máximo interés). Mismo lenguaje de color (rojo = interés) que las
+# capas individuales, pero como degradado continuo en vez de clases.
+HEATMAP_STOPS = [
+    (0, (37, 99, 235, 0)),
+    (25, (34, 197, 94, 90)),
+    (50, (250, 204, 21, 140)),
+    (75, (249, 115, 22, 190)),
+    (100, (220, 38, 38, 225)),
+]
+
+_layers_cache: dict | None = None
+
+
+def default_weights() -> dict:
+    return {
+        "lithology": settings.weight_lithology,
+        "slope": settings.weight_slope,
+        "vegetation": settings.weight_vegetation,
+        "water": settings.weight_water_proximity,
+    }
+
+
+def _get_layers() -> dict:
+    """Calcula (una vez, en memoria) los 4 sub-scores 0-100 sobre la rejilla del MDT."""
+    global _layers_cache
+    if _layers_cache is not None:
+        return _layers_cache
+
+    transform, shape, crs = dem.get_grid()
+
+    slope_deg, _, _ = dem.compute_slope_degrees(dem.fetch_dem_geotiff())
+    distance_m, _, _ = hydrography.compute_distance_raster()
+    ndvi_arr = ndvi.get_ndvi_on_grid(transform, shape, crs)
+    lithology_score = lithology.get_lithology_score_on_grid(transform, shape, crs)
+
+    slope_score = np.clip(slope_deg / SLOPE_SATURATION_DEG, 0, 1) * 100
+    water_score = np.clip(1 - distance_m / WATER_SATURATION_M, 0, 1) * 100
+    vegetation_score = np.clip((NDVI_SATURATION - ndvi_arr) / NDVI_SATURATION, 0, 1) * 100
+    vegetation_score = np.nan_to_num(vegetation_score, nan=50.0)
+
+    _layers_cache = {
+        "transform": transform,
+        "shape": shape,
+        "crs": crs,
+        "raw": {"slope_deg": slope_deg, "distance_m": distance_m, "ndvi": ndvi_arr},
+        "scores": {
+            "lithology": lithology_score,
+            "slope": slope_score,
+            "vegetation": vegetation_score,
+            "water": water_score,
+        },
+    }
+    return _layers_cache
+
+
+def compute_score(weights: dict) -> np.ndarray:
+    layers = _get_layers()
+    total_weight = sum(max(weights.get(k, 0), 0) for k in LAYER_KEYS)
+    if total_weight <= 0:
+        return np.full(layers["shape"], 50.0)
+    combined = sum(max(weights.get(k, 0), 0) * layers["scores"][k] for k in LAYER_KEYS) / total_weight
+    return np.clip(combined, 0, 100)
+
+
+def _colorize_score(score: np.ndarray) -> np.ndarray:
+    height, width = score.shape
+    rgba = np.zeros((4, height, width), dtype="uint8")
+    stop_scores = [s[0] for s in HEATMAP_STOPS]
+    for band in range(4):
+        stop_values = [s[1][band] for s in HEATMAP_STOPS]
+        rgba[band] = np.interp(score, stop_scores, stop_values).astype("uint8")
+    return rgba
+
+
+def _grid_bounds_4326() -> tuple[rasterio.Affine, int, int, list]:
+    layers = _get_layers()
+    src_bounds = rasterio.transform.array_bounds(*layers["shape"], layers["transform"])
+    dst_transform, width, height = calculate_default_transform(
+        layers["crs"], "EPSG:4326", layers["shape"][1], layers["shape"][0], *src_bounds
+    )
+    west, south, east, north = rasterio.transform.array_bounds(height, width, dst_transform)
+    return dst_transform, width, height, [[south, west], [north, east]]
+
+
+def get_meta() -> dict:
+    _, _, _, bounds = _grid_bounds_4326()
+    return {
+        "bounds": bounds,
+        "gradient": [
+            {"score": s, "color": f"rgba({c[0]},{c[1]},{c[2]},{c[3] / 255:.2f})"} for s, c in HEATMAP_STOPS
+        ],
+        "default_weights": default_weights(),
+    }
+
+
+def render_heatmap_png(weights: dict) -> bytes:
+    layers = _get_layers()
+    score = compute_score(weights)
+    rgba = _colorize_score(score)
+
+    dst_transform, width, height, _ = _grid_bounds_4326()
+    dst_rgba = np.zeros((4, height, width), dtype="uint8")
+    for band in range(4):
+        reproject(
+            source=rgba[band],
+            destination=dst_rgba[band],
+            src_transform=layers["transform"],
+            src_crs=layers["crs"],
+            dst_transform=dst_transform,
+            dst_crs="EPSG:4326",
+            resampling=Resampling.bilinear,
+        )
+
+    with MemoryFile() as memfile:
+        with memfile.open(driver="PNG", height=height, width=width, count=4, dtype="uint8") as dst:
+            dst.write(dst_rgba)
+        return memfile.read()
+
+
+def get_breakdown(lon: float, lat: float, weights: dict) -> dict | None:
+    """Desglose del score en el punto (lon, lat) WGS84: por qué tiene esa puntuación."""
+    layers = _get_layers()
+    xs, ys = warp_transform("EPSG:4326", layers["crs"], [lon], [lat])
+    row, col = rasterio.transform.rowcol(layers["transform"], xs[0], ys[0])
+    height, width = layers["shape"]
+    if not (0 <= row < height and 0 <= col < width):
+        return None
+
+    litho_info = lithology.get_lithology_at_point(lon, lat)
+    score = float(compute_score(weights)[row, col])
+
+    return {
+        "lat": lat,
+        "lon": lon,
+        "score": score,
+        "components": {
+            "lithology": {
+                "score": float(layers["scores"]["lithology"][row, col]),
+                "description": litho_info["description"] if litho_info else None,
+            },
+            "slope": {
+                "score": float(layers["scores"]["slope"][row, col]),
+                "degrees": float(layers["raw"]["slope_deg"][row, col]),
+            },
+            "vegetation": {
+                "score": float(layers["scores"]["vegetation"][row, col]),
+                "ndvi": float(layers["raw"]["ndvi"][row, col]),
+            },
+            "water": {
+                "score": float(layers["scores"]["water"][row, col]),
+                "distance_m": float(layers["raw"]["distance_m"][row, col]),
+            },
+        },
+    }

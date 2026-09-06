@@ -80,12 +80,130 @@ async function initMap() {
     pngUrl: `${API_BASE_URL}/hydrography/distance.png`,
   });
 
+  const scoringWeights = await addScoringLayer(map, overlays, legendSections);
+
   L.control.layers({ "Mapa base (OSM)": baseLayer }, overlays).addTo(map);
 
   addLegendControl(map, legendSections);
 
-  // El scoring combinado (sliders) y los yacimientos conocidos se añadirán
-  // en las fases 6-7.
+  if (scoringWeights) {
+    addScoringClickHandler(map, () => scoringWeights);
+  }
+
+  // Los yacimientos conocidos se añadirán en la fase 7.
+}
+
+async function addScoringLayer(map, overlays, legendSections) {
+  const meta = await fetchLayerMeta(`${API_BASE_URL}/scoring/meta`);
+  if (!meta) return null;
+
+  const weights = { ...meta.default_weights };
+  const bounds = L.latLngBounds(meta.bounds[0], meta.bounds[1]);
+  const buildHeatmapUrl = () =>
+    `${API_BASE_URL}/scoring/heatmap.png?w_lithology=${weights.lithology}&w_slope=${weights.slope}` +
+    `&w_vegetation=${weights.vegetation}&w_water=${weights.water}`;
+
+  const heatmapLayer = L.imageOverlay(buildHeatmapUrl(), bounds, {
+    opacity: 0.8,
+    attribution: "Score combinado (calculado en el backend)",
+  }).addTo(map);
+
+  overlays["Score combinado (heatmap)"] = heatmapLayer;
+  legendSections["Score combinado (heatmap)"] = {
+    visible: true,
+    html: buildGradientLegendHtml(meta.gradient),
+  };
+
+  addWeightsControl(map, weights, () => heatmapLayer.setUrl(buildHeatmapUrl()));
+
+  return weights;
+}
+
+function buildGradientLegendHtml(gradientStops) {
+  const cssStops = gradientStops.map((stop) => `${stop.color} ${stop.score}%`).join(", ");
+  return `
+    <strong>Score combinado</strong>
+    <div class="gradient-bar" style="background: linear-gradient(to right, ${cssStops})"></div>
+    <div class="gradient-labels"><span>0 (bajo)</span><span>100 (alto)</span></div>
+  `;
+}
+
+function addWeightsControl(map, weights, onChange) {
+  const labels = {
+    lithology: "Litología",
+    slope: "Pendiente",
+    vegetation: "Vegetación (NDVI)",
+    water: "Cercanía a agua",
+  };
+
+  const control = L.control({ position: "topleft" });
+  control.onAdd = function () {
+    const container = L.DomUtil.create("div", "weights-control");
+    L.DomEvent.disableClickPropagation(container);
+    L.DomEvent.disableScrollPropagation(container);
+    container.innerHTML = "<strong>Pesos del score</strong>";
+
+    let debounceTimer = null;
+    for (const [key, label] of Object.entries(labels)) {
+      const initialPercent = Math.round(weights[key] * 100);
+      const row = L.DomUtil.create("div", "weight-row", container);
+      row.innerHTML = `
+        <label>${label} <span class="weight-value">${initialPercent}%</span></label>
+        <input type="range" min="0" max="100" value="${initialPercent}" />
+      `;
+      const input = row.querySelector("input");
+      const valueLabel = row.querySelector(".weight-value");
+      input.addEventListener("input", () => {
+        weights[key] = Number(input.value) / 100;
+        valueLabel.textContent = `${input.value}%`;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(onChange, 300);
+      });
+    }
+
+    return container;
+  };
+  control.addTo(map);
+}
+
+function addScoringClickHandler(map, getWeights) {
+  const popup = L.popup();
+  map.on("click", async (event) => {
+    const { lat, lng } = event.latlng;
+    popup.setLatLng(event.latlng).setContent("Calculando…").openOn(map);
+
+    const weights = getWeights();
+    const url =
+      `${API_BASE_URL}/scoring/breakdown?lat=${lat}&lon=${lng}` +
+      `&w_lithology=${weights.lithology}&w_slope=${weights.slope}` +
+      `&w_vegetation=${weights.vegetation}&w_water=${weights.water}`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      popup.setContent(buildBreakdownHtml(data));
+    } catch (error) {
+      popup.setContent("Este punto está fuera de la región analizada.");
+    }
+  });
+}
+
+function buildBreakdownHtml(data) {
+  const c = data.components;
+  return `
+    <div class="breakdown-popup">
+      <strong>Score: ${data.score.toFixed(0)} / 100</strong>
+      <div class="breakdown-row"><span>Litología</span><span>${c.lithology.score.toFixed(0)}</span></div>
+      <div class="breakdown-detail">${c.lithology.description ?? "sin dato en este punto"}</div>
+      <div class="breakdown-row"><span>Pendiente</span><span>${c.slope.score.toFixed(0)}</span></div>
+      <div class="breakdown-detail">${c.slope.degrees.toFixed(1)}°</div>
+      <div class="breakdown-row"><span>Vegetación (NDVI)</span><span>${c.vegetation.score.toFixed(0)}</span></div>
+      <div class="breakdown-detail">NDVI ${c.vegetation.ndvi.toFixed(2)}</div>
+      <div class="breakdown-row"><span>Cercanía a agua</span><span>${c.water.score.toFixed(0)}</span></div>
+      <div class="breakdown-detail">${c.water.distance_m.toFixed(0)} m al cauce más cercano</div>
+    </div>
+  `;
 }
 
 async function fetchLayerMeta(url) {

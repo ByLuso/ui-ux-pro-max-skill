@@ -82,13 +82,9 @@ def fetch_watercourses() -> Path:
     return cache_file
 
 
-def _compute_distance_raster() -> tuple[np.ndarray, rasterio.Affine, rasterio.CRS]:
+def compute_distance_raster() -> tuple[np.ndarray, rasterio.Affine, rasterio.CRS]:
     """Distancia (en metros) de cada celda de la malla del MDT al curso de agua más cercano."""
-    dem_path = dem.fetch_dem_geotiff()
-    with rasterio.open(dem_path) as dataset:
-        transform = dataset.transform
-        shape = dataset.shape
-        crs = dataset.crs
+    transform, shape, crs = dem.get_grid()
 
     watercourses = gpd.read_file(fetch_watercourses()).to_crs(crs)
     water_mask = rasterio.features.rasterize(
@@ -123,7 +119,7 @@ def get_hydrography_overlay() -> dict:
         meta["png_path"] = str(png_path)
         return meta
 
-    distance_m, transform, crs = _compute_distance_raster()
+    distance_m, transform, crs = compute_distance_raster()
 
     dst_crs = "EPSG:4326"
     src_bounds = rasterio.transform.array_bounds(*distance_m.shape, transform)

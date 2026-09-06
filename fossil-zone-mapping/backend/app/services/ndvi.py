@@ -7,6 +7,7 @@ from pathlib import Path
 import httpx
 import numpy as np
 import rasterio
+from rasterio.warp import Resampling, reproject
 
 from app.config import settings
 
@@ -142,6 +143,31 @@ def _colorize_ndvi(ndvi: np.ndarray, valid: np.ndarray) -> np.ndarray:
         for band, value in enumerate(ndvi_class["color"]):
             rgba[band][mask] = value
     return rgba
+
+
+def get_ndvi_on_grid(dst_transform: rasterio.Affine, dst_shape: tuple, dst_crs) -> np.ndarray:
+    """Reproyecta el NDVI real (-1..1, NaN donde no hay dato válido) sobre la rejilla dada."""
+    tif_path = fetch_ndvi_geotiff()
+    with rasterio.open(tif_path) as dataset:
+        scaled = dataset.read(1).astype("float64")
+        data_mask = dataset.read(2)
+        src_transform = dataset.transform
+        src_crs = dataset.crs
+
+    ndvi_real = scaled / NDVI_SCALE_FACTOR - NDVI_SCALE_OFFSET
+    ndvi_real[data_mask == 0] = np.nan
+
+    destination = np.full(dst_shape, np.nan, dtype="float64")
+    reproject(
+        source=ndvi_real,
+        destination=destination,
+        src_transform=src_transform,
+        src_crs=src_crs,
+        dst_transform=dst_transform,
+        dst_crs=dst_crs,
+        resampling=Resampling.bilinear,
+    )
+    return destination
 
 
 def get_ndvi_overlay() -> dict:

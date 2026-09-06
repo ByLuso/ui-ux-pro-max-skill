@@ -62,7 +62,13 @@ def fetch_dem_geotiff() -> Path:
     return cache_file
 
 
-def _compute_slope_degrees(dem_path: Path) -> tuple[np.ndarray, rasterio.Affine, rasterio.CRS]:
+def get_grid() -> tuple[rasterio.Affine, tuple, rasterio.CRS]:
+    """Transform/shape/CRS de la rejilla de análisis (la del MDT), reutilizada por otras capas."""
+    with rasterio.open(fetch_dem_geotiff()) as dataset:
+        return dataset.transform, dataset.shape, dataset.crs
+
+
+def compute_slope_degrees(dem_path: Path) -> tuple[np.ndarray, rasterio.Affine, rasterio.CRS]:
     with rasterio.open(dem_path) as dataset:
         elevation = dataset.read(1).astype("float64")
         transform = dataset.transform
@@ -100,7 +106,7 @@ def get_slope_overlay() -> dict:
         return meta
 
     dem_path = fetch_dem_geotiff()
-    slope_deg, src_transform, src_crs = _compute_slope_degrees(dem_path)
+    slope_deg, src_transform, src_crs = compute_slope_degrees(dem_path)
 
     dst_crs = "EPSG:4326"
     src_bounds = rasterio.transform.array_bounds(*slope_deg.shape, src_transform)

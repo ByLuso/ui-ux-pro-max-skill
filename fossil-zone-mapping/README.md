@@ -7,14 +7,16 @@ La Rioja (España), extensible a otras regiones.
 Este proyecto es independiente del skill UI/UX Pro Max del resto del repositorio; vive en su
 propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli/`.
 
-## Estado actual: Fase 5 — Hidrografía y distancia a cauces (IGN)
+## Estado actual: Fase 6 — Scoring combinado con pesos ajustables
 
-- Backend FastAPI con endpoints `/health`, `/config`, `/terrain/slope(.png)`, `/vegetation/ndvi(.png)`
-  y `/hydrography/distance(.png)`.
+- Backend FastAPI con endpoints `/health`, `/config`, `/terrain/slope(.png)`, `/vegetation/ndvi(.png)`,
+  `/hydrography/distance(.png)` y `/scoring/{meta,heatmap.png,breakdown}`.
 - Frontend con mapa Leaflet centrado en La Rioja y el bounding box de la región dibujado.
-- Cinco capas superpuestas, cada una con su control de capas y su sección de leyenda (cuando aplica):
-  litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2, Copernicus), ríos y arroyos
-  (IGN, WMS) y distancia a cauces (calculada en el backend).
+- Seis capas superpuestas: litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2,
+  Copernicus), ríos y arroyos (IGN, WMS), distancia a cauces y el **score combinado** (heatmap,
+  activo por defecto), cada una con su control de capas y su sección de leyenda.
+- Panel de sliders para ajustar en vivo el peso de cada variable del score, y clic en el mapa para
+  ver el desglose de por qué una zona tiene esa puntuación (ver fase 6 abajo).
 - Sin base de datos todavía; el procesamiento geoespacial usa caché en disco (`backend/data/cache/`).
 
 ### Capa de litología (fase 2)
@@ -131,6 +133,51 @@ Flujo (`backend/app/services/hydrography.py`):
 Primer cálculo: ~2 minutos (descarga WFS paginada + rasterizado); las siguientes peticiones son
 instantáneas gracias a la caché en disco.
 
+### Litología con score numérico (fase 6, previo al scoring)
+
+Las fases 2 y 5 mostraban capas del IGME/IGN como imágenes (WMS) — suficiente para visualizar,
+pero un WMS no da valores por celda, y el score los necesita. Para litología en concreto, el
+`MapServer` del IGME sí expone una operación **`query`** de ArcGIS REST (no un WFS estándar, que
+este servicio no tiene habilitado) que devuelve las ~195 geometrías de la región con su atributo
+`Litologia` en texto libre (p. ej. *"Calizas detríticas, calcarenitas, margas, arcillas y
+calizas"*).
+
+`backend/app/services/lithology.py` clasifica cada descripción con una heurística simple y
+**extensible a otras regiones** (no una tabla fija por comunidad autónoma): cuenta cuántas
+palabras clave de roca sedimentaria favorable aparecen (caliza, arenisca, arcilla, marga, lutita,
+conglomerado, dolomía, yeso, evaporita...) frente a palabras clave de roca metamórfica/ígnea o
+depósitos recientes sin consolidar (pizarra, cuarcita, esquisto, granito, grava, arena, limo...),
+y el score 0-100 es la proporción de coincidencias positivas. Sin coincidencias, score neutro (50).
+
+### Scoring combinado (fase 6)
+
+`backend/app/services/scoring.py` combina las 4 capas anteriores en un único score 0-100 por celda:
+
+1. Cada capa se lleva a la misma rejilla de análisis (la del MDT, ya usada por pendiente e
+   hidrografía) y se normaliza a 0-100, saturando en el punto que ya se usaba como umbral de
+   "interés" en su propia capa: pendiente ≥30° → 100, NDVI ≤0 → 100 (y ≥0.5 → 0, cuanta menos
+   vegetación mejor), distancia a cauce = 0 m → 100 (y ≥600 m → 0). La litología ya viene en 0-100.
+2. El score final es la media ponderada de las 4, **normalizada por la suma de los pesos activos**
+   — así los sliders no necesitan sumar 100% y poner uno a 0 simplemente lo excluye del cálculo.
+3. Se colorea con un degradado continuo (azul transparente → verde → amarillo → naranja → rojo)
+   en vez de clases discretas, para que se vea como un mapa de calor real.
+
+Endpoints:
+- `GET /scoring/meta` — bounds, degradado de color y pesos por defecto (para inicializar los sliders).
+- `GET /scoring/heatmap.png?w_lithology=&w_slope=&w_vegetation=&w_water=` — el heatmap PNG,
+  recalculado en cada petición con los pesos dados (barato: las 4 sub-capas ya están cacheadas en
+  memoria/disco, solo cambia la combinación).
+- `GET /scoring/breakdown?lat=&lon=&w_...` — al hacer clic en el mapa, devuelve el score final y,
+  por variable, su sub-score **y el dato crudo** (descripción litológica real, grados de pendiente,
+  valor de NDVI, metros al cauce más cercano) para explicar por qué una zona puntúa como puntúa.
+
+En el frontend, el panel "Pesos del score" (arriba a la izquierda) tiene un slider por variable;
+al mover uno, tras un pequeño debounce, se pide un nuevo heatmap con `imageOverlay.setUrl(...)`
+sin recrear la capa. Un clic en cualquier punto del mapa abre un popup con el desglose.
+
+El peso "yacimientos conocidos" ya existe en `config.py` pero no se usa todavía — se activará en
+la fase 7 como señal de refuerzo, no como filtro excluyente, tal como pide el objetivo del proyecto.
+
 ## Cómo levantarlo
 
 ### Backend
@@ -168,7 +215,7 @@ de la app sigue funcionando con normalidad.
 2. ~~Capa de litología (IGME) sobre el mapa~~
 3. ~~Cálculo de pendiente a partir del MDT (IGN)~~
 4. ~~NDVI / cobertura vegetal (Sentinel-2, Copernicus)~~
-5. ~~Hidrografía y distancia a cauces (IGN)~~ (actual)
-6. Función de scoring combinando capas con pesos ajustables (sliders)
+5. ~~Hidrografía y distancia a cauces (IGN)~~
+6. ~~Función de scoring combinando capas con pesos ajustables (sliders)~~ (actual)
 7. Capa de yacimientos paleontológicos conocidos
 8. Pulido: leyenda, exportar GeoJSON, guardar configuraciones de pesos
