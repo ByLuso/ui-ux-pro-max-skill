@@ -7,16 +7,17 @@ La Rioja (España), extensible a otras regiones.
 Este proyecto es independiente del skill UI/UX Pro Max del resto del repositorio; vive en su
 propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli/`.
 
-## Estado actual: Fase 6 — Scoring combinado con pesos ajustables
+## Estado actual: Fase 7 — Yacimientos paleontológicos conocidos
 
 - Backend FastAPI con endpoints `/health`, `/config`, `/terrain/slope(.png)`, `/vegetation/ndvi(.png)`,
-  `/hydrography/distance(.png)` y `/scoring/{meta,heatmap.png,breakdown}`.
+  `/hydrography/distance(.png)`, `/scoring/{meta,heatmap.png,breakdown}` y `/known-sites/sites.geojson`.
 - Frontend con mapa Leaflet centrado en La Rioja y el bounding box de la región dibujado.
-- Seis capas superpuestas: litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2,
-  Copernicus), ríos y arroyos (IGN, WMS), distancia a cauces y el **score combinado** (heatmap,
-  activo por defecto), cada una con su control de capas y su sección de leyenda.
-- Panel de sliders para ajustar en vivo el peso de cada variable del score, y clic en el mapa para
-  ver el desglose de por qué una zona tiene esa puntuación (ver fase 6 abajo).
+- Siete capas superpuestas: litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2,
+  Copernicus), ríos y arroyos (IGN, WMS), distancia a cauces, el **score combinado** (heatmap,
+  activo por defecto) y los **yacimientos paleontológicos conocidos** (IELIG, también activos por
+  defecto), cada una con su control de capas y su sección de leyenda.
+- Panel de sliders (5 variables) para ajustar en vivo el peso de cada componente del score, y clic
+  en el mapa para ver el desglose de por qué una zona tiene esa puntuación.
 - Sin base de datos todavía; el procesamiento geoespacial usa caché en disco (`backend/data/cache/`).
 
 ### Capa de litología (fase 2)
@@ -164,19 +165,48 @@ y el score 0-100 es la proporción de coincidencias positivas. Sin coincidencias
 
 Endpoints:
 - `GET /scoring/meta` — bounds, degradado de color y pesos por defecto (para inicializar los sliders).
-- `GET /scoring/heatmap.png?w_lithology=&w_slope=&w_vegetation=&w_water=` — el heatmap PNG,
-  recalculado en cada petición con los pesos dados (barato: las 4 sub-capas ya están cacheadas en
-  memoria/disco, solo cambia la combinación).
+- `GET /scoring/heatmap.png?w_lithology=&w_slope=&w_vegetation=&w_water=&w_known_sites=` — el
+  heatmap PNG, recalculado en cada petición con los pesos dados (barato: las 5 sub-capas ya están
+  cacheadas en memoria/disco, solo cambia la combinación).
 - `GET /scoring/breakdown?lat=&lon=&w_...` — al hacer clic en el mapa, devuelve el score final y,
   por variable, su sub-score **y el dato crudo** (descripción litológica real, grados de pendiente,
-  valor de NDVI, metros al cauce más cercano) para explicar por qué una zona puntúa como puntúa.
+  valor de NDVI, metros al cauce más cercano, yacimiento conocido más próximo y su distancia) para
+  explicar por qué una zona puntúa como puntúa.
 
 En el frontend, el panel "Pesos del score" (arriba a la izquierda) tiene un slider por variable;
 al mover uno, tras un pequeño debounce, se pide un nuevo heatmap con `imageOverlay.setUrl(...)`
 sin recrear la capa. Un clic en cualquier punto del mapa abre un popup con el desglose.
 
-El peso "yacimientos conocidos" ya existe en `config.py` pero no se usa todavía — se activará en
-la fase 7 como señal de refuerzo, no como filtro excluyente, tal como pide el objetivo del proyecto.
+### Yacimientos paleontológicos conocidos (fase 7)
+
+Se investigó primero el catálogo abierto de La Rioja (IDErioja): existe una capa
+"Yacimientos paleontológicos" (`https://ogc.larioja.org/wfs/yacpal/...`, en colaboración con la
+UPV/EHU), pero su WMS/WFS está detrás de un challenge anti-bot de Cloudflare que bloquea cualquier
+cliente automatizado (no solo curl con distintos user-agents; es un bloqueo real, no un capricho
+de configuración) — intentar sortearlo no es apropiado para un backend de producción.
+
+En su lugar se usa el **IELIG** (Inventario Español de Lugares de Interés Geológico) del IGME, que
+usa el mismo patrón de ArcGIS REST que ya funcionaba para la litología (fase 6) y sí es accesible:
+
+```
+https://mapas.igme.es/gis/rest/services/BasesDatos/IGME_IELIG/MapServer/0/query
+```
+
+De los 112 geosites que el IELIG cataloga en la bbox de La Rioja, `backend/app/services/known_sites.py`
+filtra los que tienen `InteresPrincipal` = "Paleontológico" (42 resultados) — incluye toda la serie
+de icnitas de dinosaurio del Weald de Cameros (yacimientos de Valdeté, Soto en Cameros, La Pellejera,
+Virgen del Campo...) además de otros hallazgos (mamíferos del Cuaternario de Villarroya, tronco fósil
+de Igea, etc.). Cada geosite (polígono) se reduce a su centroide como "punto de referencia".
+
+Dos usos de estos puntos:
+1. **Visual**: `GET /known-sites/sites.geojson` sirve los puntos con nombre; el frontend los dibuja
+   como círculos blancos con borde oscuro y popup al hacer clic. Activados por defecto — sirven
+   para comprobar a simple vista si el heatmap de score "acierta" cerca de yacimientos reales.
+2. **Scoring**: igual que la distancia a cauces (fase 5), se rasteriza la posición de los 42 puntos
+   sobre la rejilla del MDT y se aplica una transformada de distancia euclídea, saturando a 2 km
+   (más permisivo que los 600 m del agua, porque son pocos puntos y dispersos). Este componente
+   pesa un 15% por defecto y es, como pide el objetivo del proyecto, **señal de refuerzo, no filtro
+   excluyente**: se puede bajar a 0% con su slider sin que desaparezca ninguna otra capa.
 
 ## Cómo levantarlo
 
@@ -216,6 +246,6 @@ de la app sigue funcionando con normalidad.
 3. ~~Cálculo de pendiente a partir del MDT (IGN)~~
 4. ~~NDVI / cobertura vegetal (Sentinel-2, Copernicus)~~
 5. ~~Hidrografía y distancia a cauces (IGN)~~
-6. ~~Función de scoring combinando capas con pesos ajustables (sliders)~~ (actual)
-7. Capa de yacimientos paleontológicos conocidos
+6. ~~Función de scoring combinando capas con pesos ajustables (sliders)~~
+7. ~~Capa de yacimientos paleontológicos conocidos~~ (actual)
 8. Pulido: leyenda, exportar GeoJSON, guardar configuraciones de pesos

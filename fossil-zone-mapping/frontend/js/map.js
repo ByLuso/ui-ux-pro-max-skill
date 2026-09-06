@@ -82,6 +82,8 @@ async function initMap() {
 
   const scoringWeights = await addScoringLayer(map, overlays, legendSections);
 
+  await addKnownSitesLayer(map, overlays, legendSections);
+
   L.control.layers({ "Mapa base (OSM)": baseLayer }, overlays).addTo(map);
 
   addLegendControl(map, legendSections);
@@ -89,8 +91,44 @@ async function initMap() {
   if (scoringWeights) {
     addScoringClickHandler(map, () => scoringWeights);
   }
+}
 
-  // Los yacimientos conocidos se añadirán en la fase 7.
+async function addKnownSitesLayer(map, overlays, legendSections) {
+  let geojson;
+  try {
+    const response = await fetch(`${API_BASE_URL}/known-sites/sites.geojson`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    geojson = await response.json();
+  } catch (error) {
+    console.error("No se pudo cargar la capa de yacimientos conocidos:", error);
+    return;
+  }
+
+  const sitesLayer = L.geoJSON(geojson, {
+    pointToLayer: (feature, latlng) =>
+      L.circleMarker(latlng, {
+        radius: 6,
+        color: "#1f2937",
+        weight: 1.5,
+        fillColor: "#ffffff",
+        fillOpacity: 1,
+      }),
+    onEachFeature: (feature, layer) => {
+      layer.bindPopup(`<strong>${feature.properties.name}</strong><br>Yacimiento catalogado (IELIG)`);
+    },
+  }).addTo(map);
+
+  overlays["Yacimientos conocidos (IELIG)"] = sitesLayer;
+  legendSections["Yacimientos conocidos (IELIG)"] = {
+    visible: true,
+    html: `
+      <strong>Yacimientos conocidos (IELIG)</strong>
+      <div class="legend-row">
+        <span class="legend-dot"></span>
+        <span>Yacimiento paleontológico catalogado</span>
+      </div>
+    `,
+  };
 }
 
 async function addScoringLayer(map, overlays, legendSections) {
@@ -99,9 +137,7 @@ async function addScoringLayer(map, overlays, legendSections) {
 
   const weights = { ...meta.default_weights };
   const bounds = L.latLngBounds(meta.bounds[0], meta.bounds[1]);
-  const buildHeatmapUrl = () =>
-    `${API_BASE_URL}/scoring/heatmap.png?w_lithology=${weights.lithology}&w_slope=${weights.slope}` +
-    `&w_vegetation=${weights.vegetation}&w_water=${weights.water}`;
+  const buildHeatmapUrl = () => `${API_BASE_URL}/scoring/heatmap.png?${weightsQueryString(weights)}`;
 
   const heatmapLayer = L.imageOverlay(buildHeatmapUrl(), bounds, {
     opacity: 0.8,
@@ -119,6 +155,11 @@ async function addScoringLayer(map, overlays, legendSections) {
   return weights;
 }
 
+function weightsQueryString(weights) {
+  return `w_lithology=${weights.lithology}&w_slope=${weights.slope}&w_vegetation=${weights.vegetation}` +
+    `&w_water=${weights.water}&w_known_sites=${weights.known_sites}`;
+}
+
 function buildGradientLegendHtml(gradientStops) {
   const cssStops = gradientStops.map((stop) => `${stop.color} ${stop.score}%`).join(", ");
   return `
@@ -134,6 +175,7 @@ function addWeightsControl(map, weights, onChange) {
     slope: "Pendiente",
     vegetation: "Vegetación (NDVI)",
     water: "Cercanía a agua",
+    known_sites: "Yacimientos conocidos",
   };
 
   const control = L.control({ position: "topleft" });
@@ -173,10 +215,7 @@ function addScoringClickHandler(map, getWeights) {
     popup.setLatLng(event.latlng).setContent("Calculando…").openOn(map);
 
     const weights = getWeights();
-    const url =
-      `${API_BASE_URL}/scoring/breakdown?lat=${lat}&lon=${lng}` +
-      `&w_lithology=${weights.lithology}&w_slope=${weights.slope}` +
-      `&w_vegetation=${weights.vegetation}&w_water=${weights.water}`;
+    const url = `${API_BASE_URL}/scoring/breakdown?lat=${lat}&lon=${lng}&${weightsQueryString(weights)}`;
 
     try {
       const response = await fetch(url);
@@ -202,6 +241,10 @@ function buildBreakdownHtml(data) {
       <div class="breakdown-detail">NDVI ${c.vegetation.ndvi.toFixed(2)}</div>
       <div class="breakdown-row"><span>Cercanía a agua</span><span>${c.water.score.toFixed(0)}</span></div>
       <div class="breakdown-detail">${c.water.distance_m.toFixed(0)} m al cauce más cercano</div>
+      <div class="breakdown-row"><span>Yacimientos conocidos</span><span>${c.known_sites.score.toFixed(0)}</span></div>
+      <div class="breakdown-detail">
+        ${c.known_sites.distance_m.toFixed(0)} m de "${c.known_sites.nearest_name ?? "yacimiento más cercano"}"
+      </div>
     </div>
   `;
 }

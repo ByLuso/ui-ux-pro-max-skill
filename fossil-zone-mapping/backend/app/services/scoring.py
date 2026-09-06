@@ -1,20 +1,24 @@
-"""Combina litología, pendiente, NDVI y distancia a cauces en un score 0-100 por celda."""
+"""Combina litología, pendiente, NDVI, distancia a cauces y yacimientos conocidos en un score 0-100."""
 import numpy as np
 import rasterio
 from rasterio.io import MemoryFile
 from rasterio.warp import Resampling, calculate_default_transform, reproject, transform as warp_transform
 
 from app.config import settings
-from app.services import dem, hydrography, lithology, ndvi
+from app.services import dem, hydrography, known_sites, lithology, ndvi
 
 # Valores a partir de los cuales cada variable satura su contribución al
 # score (0-100). Elegidos para que coincidan con los rangos "de interés" ya
 # usados en las capas individuales (pendiente >30°, NDVI <~0, agua <600m).
+# Los yacimientos conocidos saturan a una distancia mayor (2 km): son pocos
+# y dispersos, y sirven de refuerzo ("misma zona con hallazgos previos"),
+# no de filtro exigente como la cercanía a un cauce.
 SLOPE_SATURATION_DEG = 30.0
 NDVI_SATURATION = 0.5
 WATER_SATURATION_M = 600.0
+KNOWN_SITES_SATURATION_M = 2000.0
 
-LAYER_KEYS = ("lithology", "slope", "vegetation", "water")
+LAYER_KEYS = ("lithology", "slope", "vegetation", "water", "known_sites")
 
 # Rampa continua de color para el heatmap de score (0 = sin interés/transparente,
 # 100 = máximo interés). Mismo lenguaje de color (rojo = interés) que las
@@ -36,11 +40,12 @@ def default_weights() -> dict:
         "slope": settings.weight_slope,
         "vegetation": settings.weight_vegetation,
         "water": settings.weight_water_proximity,
+        "known_sites": settings.weight_known_sites,
     }
 
 
 def _get_layers() -> dict:
-    """Calcula (una vez, en memoria) los 4 sub-scores 0-100 sobre la rejilla del MDT."""
+    """Calcula (una vez, en memoria) los 5 sub-scores 0-100 sobre la rejilla del MDT."""
     global _layers_cache
     if _layers_cache is not None:
         return _layers_cache
@@ -51,22 +56,30 @@ def _get_layers() -> dict:
     distance_m, _, _ = hydrography.compute_distance_raster()
     ndvi_arr = ndvi.get_ndvi_on_grid(transform, shape, crs)
     lithology_score = lithology.get_lithology_score_on_grid(transform, shape, crs)
+    known_sites_distance_m, _, _ = known_sites.compute_proximity_raster()
 
     slope_score = np.clip(slope_deg / SLOPE_SATURATION_DEG, 0, 1) * 100
     water_score = np.clip(1 - distance_m / WATER_SATURATION_M, 0, 1) * 100
     vegetation_score = np.clip((NDVI_SATURATION - ndvi_arr) / NDVI_SATURATION, 0, 1) * 100
     vegetation_score = np.nan_to_num(vegetation_score, nan=50.0)
+    known_sites_score = np.clip(1 - known_sites_distance_m / KNOWN_SITES_SATURATION_M, 0, 1) * 100
 
     _layers_cache = {
         "transform": transform,
         "shape": shape,
         "crs": crs,
-        "raw": {"slope_deg": slope_deg, "distance_m": distance_m, "ndvi": ndvi_arr},
+        "raw": {
+            "slope_deg": slope_deg,
+            "distance_m": distance_m,
+            "ndvi": ndvi_arr,
+            "known_sites_distance_m": known_sites_distance_m,
+        },
         "scores": {
             "lithology": lithology_score,
             "slope": slope_score,
             "vegetation": vegetation_score,
             "water": water_score,
+            "known_sites": known_sites_score,
         },
     }
     return _layers_cache
@@ -146,6 +159,7 @@ def get_breakdown(lon: float, lat: float, weights: dict) -> dict | None:
         return None
 
     litho_info = lithology.get_lithology_at_point(lon, lat)
+    nearest_site = known_sites.get_nearest_site(lon, lat)
     score = float(compute_score(weights)[row, col])
 
     return {
@@ -168,6 +182,11 @@ def get_breakdown(lon: float, lat: float, weights: dict) -> dict | None:
             "water": {
                 "score": float(layers["scores"]["water"][row, col]),
                 "distance_m": float(layers["raw"]["distance_m"][row, col]),
+            },
+            "known_sites": {
+                "score": float(layers["scores"]["known_sites"][row, col]),
+                "distance_m": float(layers["raw"]["known_sites_distance_m"][row, col]),
+                "nearest_name": nearest_site["name"] if nearest_site else None,
             },
         },
     }
