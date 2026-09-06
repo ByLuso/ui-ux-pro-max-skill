@@ -40,60 +40,84 @@ async function initMap() {
     attribution: "Litología: IGME (Mapa Litológico 1:1.000.000)",
   }).addTo(map);
 
-  const overlays = { "Litología (IGME)": lithologyLayer };
-  const legendSections = {
-    "Litología (IGME)": {
-      visible: true,
-      html: `
-        <strong>Litología (IGME)</strong>
-        <img
-          src="${IGME_WMS_URL}?service=WMS&version=1.1.1&request=GetLegendGraphic&layer=${IGME_LITHOLOGY_LAYER}&format=image/png"
-          alt="Leyenda de litología"
-        />
-      `,
-    },
-  };
+  // El control de capas y la leyenda se crean YA, antes de pedir nada al
+  // backend: así el mapa es interactivo desde el primer segundo aunque las
+  // capas calculadas (pendiente, NDVI, hidrografía, score...) tarden en
+  // llegar. Cada una se añade sola en cuanto está lista, en vez de bloquear
+  // el resto de la interfaz mientras se calcula.
+  const layersControl = L.control
+    .layers({ "Mapa base (OSM)": baseLayer }, { "Litología (IGME)": lithologyLayer })
+    .addTo(map);
 
-  await addRasterOverlay(map, overlays, legendSections, {
-    name: "Pendiente (MDT-IGN)",
-    metaUrl: `${API_BASE_URL}/terrain/slope`,
-    pngUrl: `${API_BASE_URL}/terrain/slope.png`,
-  });
+  const legend = createLegendControl(map);
+  legend.addSection(
+    "Litología (IGME)",
+    true,
+    `
+      <strong>Litología (IGME)</strong>
+      <img
+        src="${IGME_WMS_URL}?service=WMS&version=1.1.1&request=GetLegendGraphic&layer=${IGME_LITHOLOGY_LAYER}&format=image/png"
+        alt="Leyenda de litología"
+      />
+    `
+  );
 
-  await addRasterOverlay(map, overlays, legendSections, {
-    name: "NDVI (Sentinel-2)",
-    metaUrl: `${API_BASE_URL}/vegetation/ndvi`,
-    pngUrl: `${API_BASE_URL}/vegetation/ndvi.png`,
-  });
-
-  overlays["Ríos y arroyos (IGN)"] = L.tileLayer.wms(IGN_HYDROGRAPHY_WMS_URL, {
+  const hydrographyLayer = L.tileLayer.wms(IGN_HYDROGRAPHY_WMS_URL, {
     layers: IGN_HYDROGRAPHY_LAYER,
     format: "image/png",
     transparent: true,
     version: "1.1.1",
     attribution: "Hidrografía: IGN (WMS INSPIRE)",
   });
+  layersControl.addOverlay(hydrographyLayer, "Ríos y arroyos (IGN)");
 
-  await addRasterOverlay(map, overlays, legendSections, {
+  const loading = createLoadingTracker(5);
+
+  addRasterOverlay(map, layersControl, legend, {
+    name: "Pendiente (MDT-IGN)",
+    metaUrl: `${API_BASE_URL}/terrain/slope`,
+    pngUrl: `${API_BASE_URL}/terrain/slope.png`,
+  }).finally(loading.done);
+
+  addRasterOverlay(map, layersControl, legend, {
+    name: "NDVI (Sentinel-2)",
+    metaUrl: `${API_BASE_URL}/vegetation/ndvi`,
+    pngUrl: `${API_BASE_URL}/vegetation/ndvi.png`,
+  }).finally(loading.done);
+
+  addRasterOverlay(map, layersControl, legend, {
     name: "Distancia a cauces",
     metaUrl: `${API_BASE_URL}/hydrography/distance`,
     pngUrl: `${API_BASE_URL}/hydrography/distance.png`,
-  });
+  }).finally(loading.done);
 
-  const scoringWeights = await addScoringLayer(map, overlays, legendSections);
+  addScoringLayer(map, layersControl, legend)
+    .then((weights) => {
+      if (weights) addScoringClickHandler(map, () => weights);
+    })
+    .finally(loading.done);
 
-  await addKnownSitesLayer(map, overlays, legendSections);
-
-  L.control.layers({ "Mapa base (OSM)": baseLayer }, overlays).addTo(map);
-
-  addLegendControl(map, legendSections);
-
-  if (scoringWeights) {
-    addScoringClickHandler(map, () => scoringWeights);
-  }
+  addKnownSitesLayer(map, layersControl, legend).finally(loading.done);
 }
 
-async function addKnownSitesLayer(map, overlays, legendSections) {
+function createLoadingTracker(totalTasks) {
+  let remaining = totalTasks;
+  const statusEl = document.getElementById("loading-status");
+  const render = () => {
+    if (!statusEl) return;
+    statusEl.textContent =
+      remaining > 0 ? `Calculando capas de análisis… (${remaining} pendientes, puede tardar unos minutos la primera vez)` : "";
+  };
+  render();
+  return {
+    done() {
+      remaining = Math.max(0, remaining - 1);
+      render();
+    },
+  };
+}
+
+async function addKnownSitesLayer(map, layersControl, legend) {
   let geojson;
   try {
     const response = await fetch(`${API_BASE_URL}/known-sites/sites.geojson`);
@@ -118,20 +142,21 @@ async function addKnownSitesLayer(map, overlays, legendSections) {
     },
   }).addTo(map);
 
-  overlays["Yacimientos conocidos (IELIG)"] = sitesLayer;
-  legendSections["Yacimientos conocidos (IELIG)"] = {
-    visible: true,
-    html: `
+  layersControl.addOverlay(sitesLayer, "Yacimientos conocidos (IELIG)");
+  legend.addSection(
+    "Yacimientos conocidos (IELIG)",
+    true,
+    `
       <strong>Yacimientos conocidos (IELIG)</strong>
       <div class="legend-row">
         <span class="legend-dot"></span>
         <span>Yacimiento paleontológico catalogado</span>
       </div>
-    `,
-  };
+    `
+  );
 }
 
-async function addScoringLayer(map, overlays, legendSections) {
+async function addScoringLayer(map, layersControl, legend) {
   const meta = await fetchLayerMeta(`${API_BASE_URL}/scoring/meta`);
   if (!meta) return null;
 
@@ -144,11 +169,8 @@ async function addScoringLayer(map, overlays, legendSections) {
     attribution: "Score combinado (calculado en el backend)",
   }).addTo(map);
 
-  overlays["Score combinado (heatmap)"] = heatmapLayer;
-  legendSections["Score combinado (heatmap)"] = {
-    visible: true,
-    html: buildGradientLegendHtml(meta.gradient),
-  };
+  layersControl.addOverlay(heatmapLayer, "Score combinado (heatmap)");
+  legend.addSection("Score combinado (heatmap)", true, buildGradientLegendHtml(meta.gradient));
 
   addWeightsControl(map, weights, () => heatmapLayer.setUrl(buildHeatmapUrl()));
 
@@ -260,19 +282,21 @@ async function fetchLayerMeta(url) {
   }
 }
 
-async function addRasterOverlay(map, overlays, legendSections, { name, metaUrl, pngUrl }) {
+async function addRasterOverlay(map, layersControl, legend, { name, metaUrl, pngUrl }) {
   const meta = await fetchLayerMeta(metaUrl);
   if (!meta) return;
 
   const bounds = L.latLngBounds(meta.bounds[0], meta.bounds[1]);
-  overlays[name] = L.imageOverlay(pngUrl, bounds, {
+  const layer = L.imageOverlay(pngUrl, bounds, {
     opacity: 0.85,
     attribution: meta.source,
   });
+  layersControl.addOverlay(layer, name);
 
-  legendSections[name] = {
-    visible: false,
-    html: `<strong>${name}</strong>${meta.legend
+  legend.addSection(
+    name,
+    false,
+    `<strong>${name}</strong>${meta.legend
       .map(
         (item) => `
           <div class="legend-row">
@@ -280,31 +304,34 @@ async function addRasterOverlay(map, overlays, legendSections, { name, metaUrl, 
             <span>${item.label}</span>
           </div>`
       )
-      .join("")}`,
-  };
+      .join("")}`
+  );
 }
 
-function addLegendControl(map, sections) {
+function createLegendControl(map) {
   const legend = L.control({ position: "bottomright" });
-
+  let container;
   legend.onAdd = function () {
-    const container = L.DomUtil.create("div", "legend-control");
-    for (const [name, section] of Object.entries(sections)) {
-      const sectionEl = L.DomUtil.create("div", "legend-section", container);
-      sectionEl.dataset.layerName = name;
-      sectionEl.style.display = section.visible ? "block" : "none";
-      sectionEl.innerHTML = section.html;
-    }
+    container = L.DomUtil.create("div", "legend-control");
     return container;
   };
   legend.addTo(map);
 
   const toggleSection = (name, visible) => {
-    const sectionEl = legend.getContainer().querySelector(`[data-layer-name="${CSS.escape(name)}"]`);
+    const sectionEl = container.querySelector(`[data-layer-name="${CSS.escape(name)}"]`);
     if (sectionEl) sectionEl.style.display = visible ? "block" : "none";
   };
   map.on("overlayadd", (e) => toggleSection(e.name, true));
   map.on("overlayremove", (e) => toggleSection(e.name, false));
+
+  return {
+    addSection(name, visible, html) {
+      const sectionEl = L.DomUtil.create("div", "legend-section", container);
+      sectionEl.dataset.layerName = name;
+      sectionEl.style.display = visible ? "block" : "none";
+      sectionEl.innerHTML = html;
+    },
+  };
 }
 
 initMap();
