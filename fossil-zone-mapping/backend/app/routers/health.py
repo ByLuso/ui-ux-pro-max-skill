@@ -1,6 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from app.config import settings
+from app.config import REGIONS, Region, settings
+from app.dependencies import region_param
 
 router = APIRouter()
 
@@ -10,14 +11,32 @@ def health() -> dict:
     return {"status": "ok", "app": settings.app_name, "environment": settings.environment}
 
 
-@router.get("/config")
-def region_config() -> dict:
-    """Configuración de la región de interés y pesos de scoring para el frontend."""
+@router.get("/regions")
+def list_regions() -> dict:
+    """Regiones de análisis disponibles, para el selector del frontend."""
     return {
-        "region_name": settings.region_name,
-        "region_bbox": settings.region_bbox,
-        "region_center": settings.region_center,
-        "region_default_zoom": settings.region_default_zoom,
+        "regions": [
+            {
+                "slug": region.slug,
+                "name": region.name,
+                "bbox": region.bbox,
+                "center": region.center,
+                "default_zoom": region.default_zoom,
+            }
+            for region in REGIONS.values()
+        ]
+    }
+
+
+@router.get("/config")
+def region_config(region: Region = Depends(region_param)) -> dict:
+    """Configuración de la región seleccionada y pesos de scoring por defecto."""
+    return {
+        "region_slug": region.slug,
+        "region_name": region.name,
+        "region_bbox": region.bbox,
+        "region_center": region.center,
+        "region_default_zoom": region.default_zoom,
         "weights": {
             "lithology": settings.weight_lithology,
             "slope": settings.weight_slope,

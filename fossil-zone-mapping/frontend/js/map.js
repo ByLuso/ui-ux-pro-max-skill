@@ -1,12 +1,44 @@
-async function initMap() {
+let activeMap = null;
+let currentGeneration = 0;
+
+async function bootstrap() {
+  let regions;
+  try {
+    const response = await fetch(`${API_BASE_URL}/regions`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    regions = (await response.json()).regions;
+  } catch (error) {
+    console.error("No se pudieron cargar las regiones disponibles:", error);
+    regions = [{ slug: "la-rioja", name: "La Rioja" }];
+  }
+
+  const select = document.getElementById("region-select");
+  select.innerHTML = regions.map((r) => `<option value="${r.slug}">${r.name}</option>`).join("");
+  select.addEventListener("change", () => initMap(select.value));
+
+  initMap(select.value || regions[0].slug);
+}
+
+async function initMap(regionSlug) {
+  // Al cambiar de región mientras la anterior aún tenía capas cargándose en
+  // segundo plano, esas peticiones pendientes no deben tocar los controles
+  // del mapa nuevo (ni del viejo, ya eliminado). Cada tanda de carga lleva
+  // su número de generación y se descarta si ya no es la vigente.
+  const generation = ++currentGeneration;
+
+  if (activeMap) {
+    activeMap.remove();
+    activeMap = null;
+  }
+
   let regionConfig;
   try {
-    const response = await fetch(`${API_BASE_URL}/config`);
+    const response = await fetch(`${API_BASE_URL}/config?region=${regionSlug}`);
     regionConfig = await response.json();
   } catch (error) {
     console.error("No se pudo cargar la configuración de región desde el backend:", error);
     regionConfig = {
-      region_name: "La Rioja",
+      region_name: regionSlug,
       region_center: [42.28, -2.45],
       region_default_zoom: 9,
       region_bbox: [-3.15, 41.95, -1.7, 42.65],
@@ -17,6 +49,7 @@ async function initMap() {
     `Región: ${regionConfig.region_name}`;
 
   const map = L.map("map").setView(regionConfig.region_center, regionConfig.region_default_zoom);
+  activeMap = map;
 
   const baseLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors",
@@ -71,40 +104,41 @@ async function initMap() {
   });
   layersControl.addOverlay(hydrographyLayer, "Ríos y arroyos (IGN)");
 
-  const loading = createLoadingTracker(5);
+  const isStale = () => generation !== currentGeneration;
+  const loading = createLoadingTracker(5, isStale);
 
-  addRasterOverlay(map, layersControl, legend, {
+  addRasterOverlay(map, layersControl, legend, isStale, {
     name: "Pendiente (MDT-IGN)",
-    metaUrl: `${API_BASE_URL}/terrain/slope`,
-    pngUrl: `${API_BASE_URL}/terrain/slope.png`,
+    metaUrl: `${API_BASE_URL}/terrain/slope?region=${regionSlug}`,
+    pngUrl: `${API_BASE_URL}/terrain/slope.png?region=${regionSlug}`,
   }).finally(loading.done);
 
-  addRasterOverlay(map, layersControl, legend, {
+  addRasterOverlay(map, layersControl, legend, isStale, {
     name: "NDVI (Sentinel-2)",
-    metaUrl: `${API_BASE_URL}/vegetation/ndvi`,
-    pngUrl: `${API_BASE_URL}/vegetation/ndvi.png`,
+    metaUrl: `${API_BASE_URL}/vegetation/ndvi?region=${regionSlug}`,
+    pngUrl: `${API_BASE_URL}/vegetation/ndvi.png?region=${regionSlug}`,
   }).finally(loading.done);
 
-  addRasterOverlay(map, layersControl, legend, {
+  addRasterOverlay(map, layersControl, legend, isStale, {
     name: "Distancia a cauces",
-    metaUrl: `${API_BASE_URL}/hydrography/distance`,
-    pngUrl: `${API_BASE_URL}/hydrography/distance.png`,
+    metaUrl: `${API_BASE_URL}/hydrography/distance?region=${regionSlug}`,
+    pngUrl: `${API_BASE_URL}/hydrography/distance.png?region=${regionSlug}`,
   }).finally(loading.done);
 
-  addScoringLayer(map, layersControl, legend)
+  addScoringLayer(map, layersControl, legend, isStale, regionSlug)
     .then((weights) => {
-      if (weights) addScoringClickHandler(map, () => weights);
+      if (weights) addScoringClickHandler(map, () => weights, regionSlug);
     })
     .finally(loading.done);
 
-  addKnownSitesLayer(map, layersControl, legend).finally(loading.done);
+  addKnownSitesLayer(map, layersControl, legend, isStale, regionSlug).finally(loading.done);
 }
 
-function createLoadingTracker(totalTasks) {
+function createLoadingTracker(totalTasks, isStale) {
   let remaining = totalTasks;
   const statusEl = document.getElementById("loading-status");
   const render = () => {
-    if (!statusEl) return;
+    if (!statusEl || isStale()) return;
     statusEl.textContent =
       remaining > 0 ? `Calculando capas de análisis… (${remaining} pendientes, puede tardar unos minutos la primera vez)` : "";
   };
@@ -117,16 +151,17 @@ function createLoadingTracker(totalTasks) {
   };
 }
 
-async function addKnownSitesLayer(map, layersControl, legend) {
+async function addKnownSitesLayer(map, layersControl, legend, isStale, regionSlug) {
   let geojson;
   try {
-    const response = await fetch(`${API_BASE_URL}/known-sites/sites.geojson`);
+    const response = await fetch(`${API_BASE_URL}/known-sites/sites.geojson?region=${regionSlug}`);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     geojson = await response.json();
   } catch (error) {
     console.error("No se pudo cargar la capa de yacimientos conocidos:", error);
     return;
   }
+  if (isStale()) return;
 
   const sitesLayer = L.geoJSON(geojson, {
     pointToLayer: (feature, latlng) =>
@@ -156,13 +191,14 @@ async function addKnownSitesLayer(map, layersControl, legend) {
   );
 }
 
-async function addScoringLayer(map, layersControl, legend) {
-  const meta = await fetchLayerMeta(`${API_BASE_URL}/scoring/meta`);
-  if (!meta) return null;
+async function addScoringLayer(map, layersControl, legend, isStale, regionSlug) {
+  const meta = await fetchLayerMeta(`${API_BASE_URL}/scoring/meta?region=${regionSlug}`);
+  if (!meta || isStale()) return null;
 
   const weights = { ...meta.default_weights };
   const bounds = L.latLngBounds(meta.bounds[0], meta.bounds[1]);
-  const buildHeatmapUrl = () => `${API_BASE_URL}/scoring/heatmap.png?${weightsQueryString(weights)}`;
+  const buildHeatmapUrl = () =>
+    `${API_BASE_URL}/scoring/heatmap.png?region=${regionSlug}&${weightsQueryString(weights)}`;
 
   const heatmapLayer = L.imageOverlay(buildHeatmapUrl(), bounds, {
     opacity: 0.8,
@@ -230,14 +266,15 @@ function addWeightsControl(map, weights, onChange) {
   control.addTo(map);
 }
 
-function addScoringClickHandler(map, getWeights) {
+function addScoringClickHandler(map, getWeights, regionSlug) {
   const popup = L.popup();
   map.on("click", async (event) => {
     const { lat, lng } = event.latlng;
     popup.setLatLng(event.latlng).setContent("Calculando…").openOn(map);
 
     const weights = getWeights();
-    const url = `${API_BASE_URL}/scoring/breakdown?lat=${lat}&lon=${lng}&${weightsQueryString(weights)}`;
+    const url =
+      `${API_BASE_URL}/scoring/breakdown?lat=${lat}&lon=${lng}&region=${regionSlug}&${weightsQueryString(weights)}`;
 
     try {
       const response = await fetch(url);
@@ -282,9 +319,9 @@ async function fetchLayerMeta(url) {
   }
 }
 
-async function addRasterOverlay(map, layersControl, legend, { name, metaUrl, pngUrl }) {
+async function addRasterOverlay(map, layersControl, legend, isStale, { name, metaUrl, pngUrl }) {
   const meta = await fetchLayerMeta(metaUrl);
-  if (!meta) return;
+  if (!meta || isStale()) return;
 
   const bounds = L.latLngBounds(meta.bounds[0], meta.bounds[1]);
   const layer = L.imageOverlay(pngUrl, bounds, {
@@ -334,4 +371,4 @@ function createLegendControl(map) {
   };
 }
 
-initMap();
+bootstrap();

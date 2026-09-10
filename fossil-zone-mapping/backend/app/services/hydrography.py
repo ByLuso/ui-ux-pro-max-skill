@@ -11,7 +11,7 @@ import rasterio.features
 from rasterio.warp import Resampling, calculate_default_transform, reproject
 from scipy.ndimage import distance_transform_edt
 
-from app.config import settings
+from app.config import Region, settings
 from app.services import dem
 from app.services.http_utils import request_with_retry
 
@@ -36,17 +36,13 @@ def _cache_dir() -> Path:
     return path
 
 
-def _region_slug() -> str:
-    return settings.region_name.lower().replace(" ", "-")
-
-
-def fetch_watercourses() -> Path:
-    """Descarga (o reutiliza de caché) la red de cursos de agua del IGN para la bbox configurada."""
-    cache_file = _cache_dir() / f"hydrography_{_region_slug()}.gpkg"
+def fetch_watercourses(region: Region) -> Path:
+    """Descarga (o reutiliza de caché) la red de cursos de agua del IGN para la bbox de la región."""
+    cache_file = _cache_dir() / f"hydrography_{region.slug}.gpkg"
     if cache_file.exists():
         return cache_file
 
-    min_lon, min_lat, max_lon, max_lat = settings.region_bbox
+    min_lon, min_lat, max_lon, max_lat = region.bbox
     bbox_param = f"{min_lat},{min_lon},{max_lat},{max_lon},urn:ogc:def:crs:EPSG::4326"
 
     frames = []
@@ -82,11 +78,11 @@ def fetch_watercourses() -> Path:
     return cache_file
 
 
-def compute_distance_raster() -> tuple[np.ndarray, rasterio.Affine, rasterio.CRS]:
+def compute_distance_raster(region: Region) -> tuple[np.ndarray, rasterio.Affine, rasterio.CRS]:
     """Distancia (en metros) de cada celda de la malla del MDT al curso de agua más cercano."""
-    transform, shape, crs = dem.get_grid()
+    transform, shape, crs = dem.get_grid(region)
 
-    watercourses = gpd.read_file(fetch_watercourses()).to_crs(crs)
+    watercourses = gpd.read_file(fetch_watercourses(region)).to_crs(crs)
     water_mask = rasterio.features.rasterize(
         watercourses.geometry, out_shape=shape, transform=transform, fill=0, default_value=1
     ).astype(bool)
@@ -108,18 +104,17 @@ def _colorize_distance(distance_m: np.ndarray) -> np.ndarray:
     return rgba
 
 
-def get_hydrography_overlay() -> dict:
+def get_hydrography_overlay(region: Region) -> dict:
     """Genera (o reutiliza de caché) el overlay PNG de distancia a cauces y sus metadatos."""
-    slug = _region_slug()
-    png_path = _cache_dir() / f"hydro_distance_{slug}.png"
-    meta_path = _cache_dir() / f"hydro_distance_{slug}.json"
+    png_path = _cache_dir() / f"hydro_distance_{region.slug}.png"
+    meta_path = _cache_dir() / f"hydro_distance_{region.slug}.json"
 
     if png_path.exists() and meta_path.exists():
         meta = json.loads(meta_path.read_text())
         meta["png_path"] = str(png_path)
         return meta
 
-    distance_m, transform, crs = compute_distance_raster()
+    distance_m, transform, crs = compute_distance_raster(region)
 
     dst_crs = "EPSG:4326"
     src_bounds = rasterio.transform.array_bounds(*distance_m.shape, transform)

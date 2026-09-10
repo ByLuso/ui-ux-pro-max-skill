@@ -7,18 +7,21 @@ La Rioja (España), extensible a otras regiones.
 Este proyecto es independiente del skill UI/UX Pro Max del resto del repositorio; vive en su
 propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli/`.
 
-## Estado actual: Fase 7 — Yacimientos paleontológicos conocidos
+## Estado actual: Fase 7 + multi-región — Bizkaia (Pagasarri) añadida
 
-- Backend FastAPI con endpoints `/health`, `/config`, `/terrain/slope(.png)`, `/vegetation/ndvi(.png)`,
-  `/hydrography/distance(.png)`, `/scoring/{meta,heatmap.png,breakdown}` y `/known-sites/sites.geojson`.
-- Frontend con mapa Leaflet centrado en La Rioja y el bounding box de la región dibujado.
+- Backend FastAPI con endpoints `/health`, `/regions`, `/config`, `/terrain/slope(.png)`,
+  `/vegetation/ndvi(.png)`, `/hydrography/distance(.png)`, `/scoring/{meta,heatmap.png,breakdown}`
+  y `/known-sites/sites.geojson` — todos parametrizados por `?region=<slug>`.
+- Frontend con selector de región en la cabecera (La Rioja / Bizkaia (Pagasarri)); cambiar de
+  región recarga el mapa entero para esa bbox.
 - Siete capas superpuestas: litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2,
   Copernicus), ríos y arroyos (IGN, WMS), distancia a cauces, el **score combinado** (heatmap,
   activo por defecto) y los **yacimientos paleontológicos conocidos** (IELIG, también activos por
   defecto), cada una con su control de capas y su sección de leyenda.
 - Panel de sliders (5 variables) para ajustar en vivo el peso de cada componente del score, y clic
   en el mapa para ver el desglose de por qué una zona tiene esa puntuación.
-- Sin base de datos todavía; el procesamiento geoespacial usa caché en disco (`backend/data/cache/`).
+- Sin base de datos todavía; el procesamiento geoespacial usa caché en disco (`backend/data/cache/`),
+  con archivos separados por región (`dem_bizkaia_200m.tif`, `dem_la-rioja_200m.tif`, etc.).
 
 ### Capa de litología (fase 2)
 
@@ -207,6 +210,35 @@ Dos usos de estos puntos:
    (más permisivo que los 600 m del agua, porque son pocos puntos y dispersos). Este componente
    pesa un 15% por defecto y es, como pide el objetivo del proyecto, **señal de refuerzo, no filtro
    excluyente**: se puede bajar a 0% con su slider sin que desaparezca ninguna otra capa.
+
+### Soporte multi-región — Bizkaia (Pagasarri)
+
+El objetivo original ("extensible a otras regiones") se activó a raíz de un hallazgo real: fósiles
+encontrados en el Pagasarri (Bilbao). Antes de tocar código se comprobó con peticiones reales que
+las 4 fuentes externas (MDT del IGN, litología e IELIG del IGME, hidrografía del IGN) tienen datos
+para esa zona — incluyendo, en el IELIG, **2 yacimientos paleontológicos ya catalogados cerca de
+Pagasarri** ("Peces fósiles de Zeanuri" y "Ammonites y corales de San Roque"), lo que corrobora el
+hallazgo. En las coordenadas del propio Pagasarri (43.233, -2.95) el score combinado da **73/100**
+con los pesos por defecto: litología 100 (dolomías/calizas/margas), NDVI 99 (roca casi desnuda en
+la cumbre), pendiente 52, agua 67, yacimientos conocidos 19 — una validación de campo poco habitual
+para un modelo que hasta ahora solo se había probado contra datos ya catalogados.
+
+Cambios para soportarlo (`backend/app/config.py`):
+- Los datos de región (antes fijos en `Settings`) pasaron a un registro `REGIONS: dict[str, Region]`
+  (`la-rioja`, `bizkaia`), cada una con su propio slug, nombre, bbox, centro y zoom.
+- **Todas** las funciones de los servicios (`dem.py`, `ndvi.py`, `hydrography.py`, `lithology.py`,
+  `known_sites.py`, `scoring.py`) reciben ahora un `Region` explícito en vez de leer una bbox global
+  — así cada capa cachea en disco por región (`data/cache/dem_bizkaia_200m.tif` vs.
+  `dem_la-rioja_200m.tif`, etc.) y el score de `scoring.py` cachea sus 5 sub-capas en memoria por
+  `region.slug`, no en una única variable global.
+- Cada router acepta `region: Region = Depends(region_param)` (`app/dependencies.py`), que resuelve
+  `?region=<slug>` contra el registro y responde 404 si no existe. Nuevo endpoint `GET /regions`
+  para que el frontend construya el selector.
+- Frontend: `<select id="region-select">` en la cabecera, poblado desde `/regions`. Cambiar de
+  región llama a `initMap(slug)` de nuevo, que destruye el mapa Leaflet anterior
+  (`activeMap.remove()`) y lo reconstruye desde cero para la bbox nueva. Un contador de
+  "generación" evita que las peticiones aún en vuelo de la región anterior toquen los controles
+  del mapa nuevo (o de uno ya eliminado) si el usuario cambia de región mientras algo seguía cargando.
 
 ## Cómo levantarlo
 

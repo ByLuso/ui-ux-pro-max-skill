@@ -8,7 +8,7 @@ import numpy as np
 import rasterio
 from rasterio.warp import Resampling, reproject
 
-from app.config import settings
+from app.config import Region, settings
 from app.services.http_utils import request_with_retry
 
 TOKEN_URL = "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token"
@@ -56,10 +56,6 @@ def _cache_dir() -> Path:
     return path
 
 
-def _region_slug() -> str:
-    return settings.region_name.lower().replace(" ", "-")
-
-
 def _get_access_token() -> str:
     if _token_cache["access_token"] and time.time() < _token_cache["expires_at"] - 60:
         return _token_cache["access_token"]
@@ -85,16 +81,16 @@ def _get_access_token() -> str:
     return _token_cache["access_token"]
 
 
-def fetch_ndvi_geotiff() -> Path:
-    """Pide (o reutiliza de caché) el NDVI de Sentinel-2 para la bbox configurada."""
-    cache_file = _cache_dir() / f"ndvi_{_region_slug()}.tif"
+def fetch_ndvi_geotiff(region: Region) -> Path:
+    """Pide (o reutiliza de caché) el NDVI de Sentinel-2 para la bbox de la región."""
+    cache_file = _cache_dir() / f"ndvi_{region.slug}.tif"
     if cache_file.exists():
         return cache_file
 
     token = _get_access_token()
     now = datetime.now(timezone.utc)
     time_from = now - timedelta(days=TIME_WINDOW_DAYS)
-    min_lon, min_lat, max_lon, max_lat = settings.region_bbox
+    min_lon, min_lat, max_lon, max_lat = region.bbox
 
     body = {
         "input": {
@@ -145,9 +141,9 @@ def _colorize_ndvi(ndvi: np.ndarray, valid: np.ndarray) -> np.ndarray:
     return rgba
 
 
-def get_ndvi_on_grid(dst_transform: rasterio.Affine, dst_shape: tuple, dst_crs) -> np.ndarray:
+def get_ndvi_on_grid(region: Region, dst_transform: rasterio.Affine, dst_shape: tuple, dst_crs) -> np.ndarray:
     """Reproyecta el NDVI real (-1..1, NaN donde no hay dato válido) sobre la rejilla dada."""
-    tif_path = fetch_ndvi_geotiff()
+    tif_path = fetch_ndvi_geotiff(region)
     with rasterio.open(tif_path) as dataset:
         scaled = dataset.read(1).astype("float64")
         data_mask = dataset.read(2)
@@ -170,18 +166,17 @@ def get_ndvi_on_grid(dst_transform: rasterio.Affine, dst_shape: tuple, dst_crs) 
     return destination
 
 
-def get_ndvi_overlay() -> dict:
+def get_ndvi_overlay(region: Region) -> dict:
     """Genera (o reutiliza de caché) el overlay PNG de NDVI y sus metadatos."""
-    slug = _region_slug()
-    png_path = _cache_dir() / f"ndvi_{slug}.png"
-    meta_path = _cache_dir() / f"ndvi_{slug}.json"
+    png_path = _cache_dir() / f"ndvi_{region.slug}.png"
+    meta_path = _cache_dir() / f"ndvi_{region.slug}.json"
 
     if png_path.exists() and meta_path.exists():
         meta = json.loads(meta_path.read_text())
         meta["png_path"] = str(png_path)
         return meta
 
-    tif_path = fetch_ndvi_geotiff()
+    tif_path = fetch_ndvi_geotiff(region)
     with rasterio.open(tif_path) as dataset:
         scaled = dataset.read(1).astype("float64")
         data_mask = dataset.read(2)

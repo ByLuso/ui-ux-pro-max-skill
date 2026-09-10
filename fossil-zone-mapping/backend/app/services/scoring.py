@@ -4,7 +4,7 @@ import rasterio
 from rasterio.io import MemoryFile
 from rasterio.warp import Resampling, calculate_default_transform, reproject, transform as warp_transform
 
-from app.config import settings
+from app.config import Region, settings
 from app.services import dem, hydrography, known_sites, lithology, ndvi
 
 # Valores a partir de los cuales cada variable satura su contribución al
@@ -31,7 +31,9 @@ HEATMAP_STOPS = [
     (100, (220, 38, 38, 225)),
 ]
 
-_layers_cache: dict | None = None
+# Cachea las capas ya calculadas por región (region.slug -> dict), para no
+# recomputar todo si la app sirve varias regiones en el mismo proceso.
+_layers_cache: dict[str, dict] = {}
 
 
 def default_weights() -> dict:
@@ -44,19 +46,18 @@ def default_weights() -> dict:
     }
 
 
-def _get_layers() -> dict:
-    """Calcula (una vez, en memoria) los 5 sub-scores 0-100 sobre la rejilla del MDT."""
-    global _layers_cache
-    if _layers_cache is not None:
-        return _layers_cache
+def _get_layers(region: Region) -> dict:
+    """Calcula (una vez por región, en memoria) los 5 sub-scores 0-100 sobre la rejilla del MDT."""
+    if region.slug in _layers_cache:
+        return _layers_cache[region.slug]
 
-    transform, shape, crs = dem.get_grid()
+    transform, shape, crs = dem.get_grid(region)
 
-    slope_deg, _, _ = dem.compute_slope_degrees(dem.fetch_dem_geotiff())
-    distance_m, _, _ = hydrography.compute_distance_raster()
-    ndvi_arr = ndvi.get_ndvi_on_grid(transform, shape, crs)
-    lithology_score = lithology.get_lithology_score_on_grid(transform, shape, crs)
-    known_sites_distance_m, _, _ = known_sites.compute_proximity_raster()
+    slope_deg, _, _ = dem.compute_slope_degrees(dem.fetch_dem_geotiff(region))
+    distance_m, _, _ = hydrography.compute_distance_raster(region)
+    ndvi_arr = ndvi.get_ndvi_on_grid(region, transform, shape, crs)
+    lithology_score = lithology.get_lithology_score_on_grid(region, transform, shape, crs)
+    known_sites_distance_m, _, _ = known_sites.compute_proximity_raster(region)
 
     slope_score = np.clip(slope_deg / SLOPE_SATURATION_DEG, 0, 1) * 100
     water_score = np.clip(1 - distance_m / WATER_SATURATION_M, 0, 1) * 100
@@ -64,7 +65,7 @@ def _get_layers() -> dict:
     vegetation_score = np.nan_to_num(vegetation_score, nan=50.0)
     known_sites_score = np.clip(1 - known_sites_distance_m / KNOWN_SITES_SATURATION_M, 0, 1) * 100
 
-    _layers_cache = {
+    _layers_cache[region.slug] = {
         "transform": transform,
         "shape": shape,
         "crs": crs,
@@ -82,11 +83,11 @@ def _get_layers() -> dict:
             "known_sites": known_sites_score,
         },
     }
-    return _layers_cache
+    return _layers_cache[region.slug]
 
 
-def compute_score(weights: dict) -> np.ndarray:
-    layers = _get_layers()
+def compute_score(region: Region, weights: dict) -> np.ndarray:
+    layers = _get_layers(region)
     total_weight = sum(max(weights.get(k, 0), 0) for k in LAYER_KEYS)
     if total_weight <= 0:
         return np.full(layers["shape"], 50.0)
@@ -104,8 +105,8 @@ def _colorize_score(score: np.ndarray) -> np.ndarray:
     return rgba
 
 
-def _grid_bounds_4326() -> tuple[rasterio.Affine, int, int, list]:
-    layers = _get_layers()
+def _grid_bounds_4326(region: Region) -> tuple[rasterio.Affine, int, int, list]:
+    layers = _get_layers(region)
     src_bounds = rasterio.transform.array_bounds(*layers["shape"], layers["transform"])
     dst_transform, width, height = calculate_default_transform(
         layers["crs"], "EPSG:4326", layers["shape"][1], layers["shape"][0], *src_bounds
@@ -114,8 +115,8 @@ def _grid_bounds_4326() -> tuple[rasterio.Affine, int, int, list]:
     return dst_transform, width, height, [[south, west], [north, east]]
 
 
-def get_meta() -> dict:
-    _, _, _, bounds = _grid_bounds_4326()
+def get_meta(region: Region) -> dict:
+    _, _, _, bounds = _grid_bounds_4326(region)
     return {
         "bounds": bounds,
         "gradient": [
@@ -125,12 +126,12 @@ def get_meta() -> dict:
     }
 
 
-def render_heatmap_png(weights: dict) -> bytes:
-    layers = _get_layers()
-    score = compute_score(weights)
+def render_heatmap_png(region: Region, weights: dict) -> bytes:
+    layers = _get_layers(region)
+    score = compute_score(region, weights)
     rgba = _colorize_score(score)
 
-    dst_transform, width, height, _ = _grid_bounds_4326()
+    dst_transform, width, height, _ = _grid_bounds_4326(region)
     dst_rgba = np.zeros((4, height, width), dtype="uint8")
     for band in range(4):
         reproject(
@@ -149,18 +150,18 @@ def render_heatmap_png(weights: dict) -> bytes:
         return memfile.read()
 
 
-def get_breakdown(lon: float, lat: float, weights: dict) -> dict | None:
+def get_breakdown(region: Region, lon: float, lat: float, weights: dict) -> dict | None:
     """Desglose del score en el punto (lon, lat) WGS84: por qué tiene esa puntuación."""
-    layers = _get_layers()
+    layers = _get_layers(region)
     xs, ys = warp_transform("EPSG:4326", layers["crs"], [lon], [lat])
     row, col = rasterio.transform.rowcol(layers["transform"], xs[0], ys[0])
     height, width = layers["shape"]
     if not (0 <= row < height and 0 <= col < width):
         return None
 
-    litho_info = lithology.get_lithology_at_point(lon, lat)
-    nearest_site = known_sites.get_nearest_site(lon, lat)
-    score = float(compute_score(weights)[row, col])
+    litho_info = lithology.get_lithology_at_point(region, lon, lat)
+    nearest_site = known_sites.get_nearest_site(region, lon, lat)
+    score = float(compute_score(region, weights)[row, col])
 
     return {
         "lat": lat,

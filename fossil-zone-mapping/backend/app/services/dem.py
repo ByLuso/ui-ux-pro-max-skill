@@ -1,4 +1,4 @@
-"""Descarga el MDT del IGN (WCS) para la región configurada y calcula la pendiente."""
+"""Descarga el MDT del IGN (WCS) para una región y calcula la pendiente."""
 import json
 from pathlib import Path
 
@@ -6,7 +6,7 @@ import numpy as np
 import rasterio
 from rasterio.warp import Resampling, calculate_default_transform, reproject, transform_bounds
 
-from app.config import settings
+from app.config import Region, settings
 from app.services.http_utils import request_with_retry
 
 IGN_WCS_URL = "https://servicios.idee.es/wcs-inspire/mdt"
@@ -29,17 +29,13 @@ def _cache_dir() -> Path:
     return path
 
 
-def _region_slug() -> str:
-    return settings.region_name.lower().replace(" ", "-")
-
-
-def fetch_dem_geotiff() -> Path:
-    """Descarga (o reutiliza de caché) el MDT del IGN para la bbox configurada, en EPSG:25830."""
-    cache_file = _cache_dir() / f"dem_{_region_slug()}_{DEM_RESOLUTION_M}m.tif"
+def fetch_dem_geotiff(region: Region) -> Path:
+    """Descarga (o reutiliza de caché) el MDT del IGN para la bbox de la región, en EPSG:25830."""
+    cache_file = _cache_dir() / f"dem_{region.slug}_{DEM_RESOLUTION_M}m.tif"
     if cache_file.exists():
         return cache_file
 
-    min_lon, min_lat, max_lon, max_lat = settings.region_bbox
+    min_lon, min_lat, max_lon, max_lat = region.bbox
     minx, miny, maxx, maxy = transform_bounds(
         "EPSG:4326", DEM_NATIVE_CRS, min_lon, min_lat, max_lon, max_lat
     )
@@ -62,9 +58,9 @@ def fetch_dem_geotiff() -> Path:
     return cache_file
 
 
-def get_grid() -> tuple[rasterio.Affine, tuple, rasterio.CRS]:
+def get_grid(region: Region) -> tuple[rasterio.Affine, tuple, rasterio.CRS]:
     """Transform/shape/CRS de la rejilla de análisis (la del MDT), reutilizada por otras capas."""
-    with rasterio.open(fetch_dem_geotiff()) as dataset:
+    with rasterio.open(fetch_dem_geotiff(region)) as dataset:
         return dataset.transform, dataset.shape, dataset.crs
 
 
@@ -94,18 +90,17 @@ def _colorize_slope(slope_deg: np.ndarray) -> np.ndarray:
     return rgba
 
 
-def get_slope_overlay() -> dict:
+def get_slope_overlay(region: Region) -> dict:
     """Genera (o reutiliza de caché) el overlay PNG de pendiente y sus metadatos."""
-    slug = _region_slug()
-    png_path = _cache_dir() / f"slope_{slug}_{DEM_RESOLUTION_M}m.png"
-    meta_path = _cache_dir() / f"slope_{slug}_{DEM_RESOLUTION_M}m.json"
+    png_path = _cache_dir() / f"slope_{region.slug}_{DEM_RESOLUTION_M}m.png"
+    meta_path = _cache_dir() / f"slope_{region.slug}_{DEM_RESOLUTION_M}m.json"
 
     if png_path.exists() and meta_path.exists():
         meta = json.loads(meta_path.read_text())
         meta["png_path"] = str(png_path)
         return meta
 
-    dem_path = fetch_dem_geotiff()
+    dem_path = fetch_dem_geotiff(region)
     slope_deg, src_transform, src_crs = compute_slope_degrees(dem_path)
 
     dst_crs = "EPSG:4326"

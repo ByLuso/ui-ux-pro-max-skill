@@ -8,7 +8,7 @@ import rasterio
 import rasterio.features
 from shapely.geometry import Point
 
-from app.config import settings
+from app.config import Region, settings
 from app.services.http_utils import request_with_retry
 
 IGME_QUERY_URL = (
@@ -38,10 +38,6 @@ def _cache_dir() -> Path:
     return path
 
 
-def _region_slug() -> str:
-    return settings.region_name.lower().replace(" ", "-")
-
-
 def score_from_description(description: str | None) -> float:
     if not isinstance(description, str) or not description:
         return DEFAULT_SCORE
@@ -54,13 +50,13 @@ def score_from_description(description: str | None) -> float:
     return 100 * positive_hits / total_hits
 
 
-def fetch_lithology_polygons() -> Path:
+def fetch_lithology_polygons(region: Region) -> Path:
     """Descarga (o reutiliza de caché) los polígonos de litología del IGME con su score."""
-    cache_file = _cache_dir() / f"lithology_{_region_slug()}.gpkg"
+    cache_file = _cache_dir() / f"lithology_{region.slug}.gpkg"
     if cache_file.exists():
         return cache_file
 
-    min_lon, min_lat, max_lon, max_lat = settings.region_bbox
+    min_lon, min_lat, max_lon, max_lat = region.bbox
     response = request_with_retry(
         "GET",
         IGME_QUERY_URL,
@@ -84,18 +80,18 @@ def fetch_lithology_polygons() -> Path:
     return cache_file
 
 
-def get_lithology_score_on_grid(transform: rasterio.Affine, shape: tuple, crs) -> np.ndarray:
+def get_lithology_score_on_grid(region: Region, transform: rasterio.Affine, shape: tuple, crs) -> np.ndarray:
     """Rasteriza el score de litología (0-100) sobre la rejilla (transform/shape/crs) dada."""
-    gdf = gpd.read_file(fetch_lithology_polygons()).to_crs(crs)
+    gdf = gpd.read_file(fetch_lithology_polygons(region)).to_crs(crs)
     shapes = list(zip(gdf.geometry, gdf["score"]))
     return rasterio.features.rasterize(
         shapes, out_shape=shape, transform=transform, fill=DEFAULT_SCORE, dtype="float64"
     )
 
 
-def get_lithology_at_point(lon: float, lat: float) -> dict | None:
+def get_lithology_at_point(region: Region, lon: float, lat: float) -> dict | None:
     """Busca la descripción litológica y el score en el punto (lon, lat) WGS84."""
-    gdf = gpd.read_file(fetch_lithology_polygons())
+    gdf = gpd.read_file(fetch_lithology_polygons(region))
     point = Point(lon, lat)
     matches = gdf[gdf.contains(point)]
     if matches.empty:
