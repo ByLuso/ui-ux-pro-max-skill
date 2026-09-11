@@ -70,9 +70,15 @@ LOG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
 TRADE_LOG_FILE = os.path.join(LOG_DIR, "trades.jsonl")
 DECISION_LOG_FILE = os.path.join(LOG_DIR, "decisions.jsonl")
 ERROR_LOG_FILE = os.path.join(LOG_DIR, "errors.log")
+STATE_FILE = os.path.join(LOG_DIR, "state.json")             # ultima foto del estado (para el dashboard)
+STATE_HISTORY_FILE = os.path.join(LOG_DIR, "state_history.jsonl")  # serie temporal del estado
 
 # -- Ciclo principal -------------------------------------------------------------
 CYCLE_INTERVAL_MINUTES = 15
+
+# -- Dashboard (solo lectura, no ejecuta nada) -----------------------------------
+DASHBOARD_HOST = os.environ.get("DASHBOARD_HOST", "127.0.0.1")  # no exponer fuera de localhost sin auth
+DASHBOARD_PORT = int(os.environ.get("DASHBOARD_PORT", "8787"))
 
 
 @dataclass

@@ -13,8 +13,10 @@ signal_engine.py    -> aqui Claude analiza cada par y propone (no ejecuta)
 risk_engine.py      -> reglas duras: sizing, limites, circuit breakers
 executor.py          -> manda las ordenes ya aprobadas al exchange
 backtest.py           -> valida el esqueleto de la estrategia con historico
-logger_utils.py       -> logs de decisiones/trades + alertas Telegram
+logger_utils.py       -> logs de decisiones/trades + snapshots de estado + alertas Telegram
 main.py                -> bucle principal
+dashboard.py            -> servidor web local de solo lectura (visualiza logs/)
+dashboard_static/       -> frontend del dashboard (HTML/CSS/JS, un solo fichero)
 tests/                  -> tests del motor de riesgo (sin dependencias externas)
 ```
 
@@ -34,6 +36,31 @@ tests/                  -> tests del motor de riesgo (sin dependencias externas)
    `logs/trades.jsonl` a diario
 6. Solo entonces: `USE_TESTNET=false`, `DRY_RUN=false` en `.env`, y empieza con
    capital reducido real las primeras semanas
+
+## Dashboard
+
+Visualiza el bot en marcha (o el histórico de paper trading) en el navegador:
+
+```
+python dashboard.py
+```
+
+Abre `http://127.0.0.1:8787`. Es de **solo lectura**: lee `logs/state.json`,
+`logs/state_history.jsonl`, `logs/decisions.jsonl` y `logs/trades.jsonl` — no
+se conecta al exchange ni ejecuta nada, así que puedes correrlo en paralelo a
+`main.py` (o solo, para revisar un histórico) sin ningún riesgo. Muestra:
+
+- Estado en vivo: en marcha / detenido (y por qué), DRY_RUN/TESTNET, capital
+- Circuit breakers con barra de progreso hacia su límite (drawdown diario,
+  pérdidas consecutivas, exposición total)
+- Gráfica de PnL diario en el tiempo, con la línea del límite de drawdown
+- Gráfica de señales aprobadas vs rechazadas por par
+- Posiciones abiertas, con filtros y búsqueda sobre el feed de señales y
+  la tabla de órdenes
+- Auto-refresco configurable (5/10/30/60s), pausable
+
+Por defecto solo escucha en `127.0.0.1` (no lo expongas en red sin añadir
+autenticación delante — muestra tu capital y PnL).
 
 ## Tests
 

@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trading Bot IA — Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#020617; --card:#0E1223; --fg:#F8FAFC; --muted:#1A1E2F; --muted-fg:#94A3B8;
+    --border:#334155; --profit:#22C55E; --loss:#EF4444; --warn:#F59E0B; --accent:#3B82F6;
+    --radius:12px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;padding:16px;padding-block:20px 40px}
+  .wrap{max-width:1200px;margin:0 auto}
+  header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+  h1{font-size:1.25rem;margin:0;display:flex;align-items:center;gap:10px}
+  .sub{color:var(--muted-fg);font-size:.8rem;margin-top:2px}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.75rem;font-weight:600;border:1px solid var(--border)}
+  .pill.dot::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+  .pill-ok{color:var(--profit);background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3)}
+  .pill-halt{color:var(--loss);background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3)}
+  .pill-warn{color:var(--warn);background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3)}
+  .pill-muted{color:var(--muted-fg);background:var(--muted)}
+  .controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  select,button{background:var(--muted);color:var(--fg);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:.8rem;cursor:pointer}
+  button:hover,select:hover{border-color:var(--accent)}
+  .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+
+  .halt-banner{display:none;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:#FCA5A5;border-radius:var(--radius);padding:12px 16px;margin-bottom:18px;font-size:.9rem}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:18px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+  .stat .label{color:var(--muted-fg);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
+  .stat .value{font-size:1.5rem;font-weight:700;margin-top:4px}
+  .stat .value.profit{color:var(--profit)} .stat .value.loss{color:var(--loss)}
+
+  .gauge{margin-top:8px}
+  .gauge .row{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted-fg);margin-bottom:4px}
+  .bar{height:7px;background:var(--muted);border-radius:999px;overflow:hidden}
+  .bar > i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .3s ease}
+  .bar > i.danger{background:var(--loss)}
+  .bar > i.warn{background:var(--warn)}
+
+  section{margin-bottom:22px}
+  h2{font-size:.95rem;margin:0 0 10px;color:var(--fg)}
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:800px){.charts{grid-template-columns:1fr}}
+  .chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;height:260px}
+  .chart-card canvas{max-height:100%}
+  .empty{color:var(--muted-fg);font-size:.85rem;text-align:center;padding:40px 0}
+
+  .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
+  table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:560px}
+  th,td{text-align:left;padding:9px 12px;white-space:nowrap}
+  thead th{color:var(--muted-fg);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card)}
+  tbody tr{border-bottom:1px solid rgba(51,65,85,.4)}
+  tbody tr:last-child{border-bottom:none}
+  tbody tr:hover{background:rgba(255,255,255,.02)}
+  .scroll-body{max-height:340px;overflow-y:auto}
+  .badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700}
+  .badge.long{color:var(--profit);background:rgba(34,197,94,.12)}
+  .badge.short{color:var(--loss);background:rgba(239,68,68,.12)}
+  .badge.approved{color:var(--profit);background:rgba(34,197,94,.12)}
+  .badge.rejected{color:var(--muted-fg);background:var(--muted)}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+  input[type=search]{background:var(--muted);color:var(--fg);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:.8rem;min-width:160px}
+  .reason{color:var(--muted-fg);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  footer{color:var(--muted-fg);font-size:.75rem;text-align:center;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>📊 Trading Bot IA <span id="status-pill" class="pill pill-muted dot">cargando…</span></h1>
+      <div class="badges" id="badges"></div>
+    </div>
+    <div class="controls">
+      <span class="sub" id="last-updated">—</span>
+      <select id="interval-select">
+        <option value="5000">Cada 5s</option>
+        <option value="10000" selected>Cada 10s</option>
+        <option value="30000">Cada 30s</option>
+        <option value="60000">Cada 60s</option>
+      </select>
+      <button id="toggle-refresh">⏸ Pausar</button>
+      <button id="refresh-now">↻ Actualizar</button>
+    </div>
+  </header>
+
+  <div class="halt-banner" id="halt-banner"></div>
+
+  <div class="grid" id="stat-cards"></div>
+
+  <section>
+    <h2>Límites de riesgo (circuit breakers)</h2>
+    <div class="grid" id="gauges"></div>
+  </section>
+
+  <section>
+    <h2>Actividad</h2>
+    <div class="charts">
+      <div class="chart-card"><canvas id="pnl-chart"></canvas></div>
+      <div class="chart-card"><canvas id="signals-chart"></canvas></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Posiciones abiertas</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Par</th><th>Dirección</th><th>Entrada</th><th>Stop-loss</th><th>Tamaño €</th></tr></thead>
+        <tbody id="positions-body"><tr><td colspan="5" class="empty">Sin posiciones abiertas</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Señales de Claude (propuesta → decisión del motor de riesgo)</h2>
+    <div class="filters">
+      <select id="decision-filter">
+        <option value="all">Todas</option>
+        <option value="approved">Aprobadas</option>
+        <option value="rejected">Rechazadas</option>
+      </select>
+      <input type="search" id="decision-search" placeholder="Buscar por par…">
+    </div>
+    <div class="table-wrap scroll-body">
+      <table>
+        <thead><tr><th>Hora</th><th>Par</th><th>Dirección</th><th>Confianza</th><th>Estado</th><th>Motivo</th></tr></thead>
+        <tbody id="decisions-body"><tr><td colspan="6" class="empty">Sin datos todavía</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Órdenes ejecutadas</h2>
+    <div class="table-wrap scroll-body">
+      <table>
+        <thead><tr><th>Hora</th><th>Par</th><th>Dirección</th><th>Entrada</th><th>Stop-loss</th><th>Tamaño €</th></tr></thead>
+        <tbody id="trades-body"><tr><td colspan="6" class="empty">Sin operaciones todavía</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>Dashboard de solo lectura — no ejecuta ni modifica operaciones. Datos leídos de <code>logs/</code>.</footer>
+</div>
+
+<script>
+const fmtPct = (v, d=2) => (v*100).toFixed(d) + "%";
+const fmtEur = (v) => (v===undefined||v===null) ? "—" : v.toLocaleString("es-ES",{maximumFractionDigits:2}) + " €";
+const fmtTime = (iso) => iso ? new Date(iso).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",second:"2-digit"}) : "—";
+const timeAgo = (iso) => {
+  if(!iso) return "sin datos";
+  const s = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime())/1000));
+  if (s < 60) return `hace ${s}s`;
+  if (s < 3600) return `hace ${Math.floor(s/60)}min`;
+  return `hace ${Math.floor(s/3600)}h`;
+};
+
+let decisionsCache = [];
+let pnlChart, signalsChart;
+let timer = null;
+let paused = false;
+
+async function getJSON(url){
+  const r = await fetch(url);
+  if(!r.ok) throw new Error(url + " -> " + r.status);
+  return r.json();
+}
+
+function renderStatus(state){
+  const pill = document.getElementById("status-pill");
+  const banner = document.getElementById("halt-banner");
+  if(state.is_halted){
+    pill.className = "pill pill-halt dot";
+    pill.textContent = "DETENIDO";
+    banner.style.display = "block";
+    banner.textContent = "🛑 Bot detenido: " + (state.halted_reason || "motivo desconocido") + " — requiere revisión manual.";
+  } else if (state.timestamp) {
+    pill.className = "pill pill-ok dot";
+    pill.textContent = "EN MARCHA";
+    banner.style.display = "none";
+  } else {
+    pill.className = "pill pill-muted dot";
+    pill.textContent = "SIN DATOS";
+    banner.style.display = "none";
+  }
+
+  const badges = document.getElementById("badges");
+  badges.innerHTML = "";
+  const addBadge = (text, cls) => {
+    const s = document.createElement("span");
+    s.className = "pill " + cls;
+    s.textContent = text;
+    badges.appendChild(s);
+  };
+  addBadge(state.dry_run ? "DRY RUN" : "DINERO REAL", state.dry_run ? "pill-ok" : "pill-halt");
+  addBadge(state.use_testnet ? "TESTNET" : "PRODUCCIÓN", state.use_testnet ? "pill-ok" : "pill-warn");
+  addBadge(fmtEur(state.total_capital_eur) + " capital", "pill-muted");
+
+  document.getElementById("last-updated").textContent = "Última actualización: " + timeAgo(state.timestamp);
+}
+
+function renderStatCards(state, summary){
+  const totalExposure = Object.values(state.open_positions || {}).reduce((a,p)=>a+(p.size_eur||0),0);
+  const cards = [
+    {label:"PnL diario", value: fmtPct(state.daily_pnl_pct), cls: state.daily_pnl_pct >= 0 ? "profit" : "loss"},
+    {label:"Pérdidas consecutivas", value: state.consecutive_losses ?? 0, cls: ""},
+    {label:"Posiciones abiertas", value: Object.keys(state.open_positions||{}).length, cls: ""},
+    {label:"Exposición total", value: fmtEur(totalExposure), cls: ""},
+    {label:"Señales aprobadas", value: (summary ? summary.approved : 0) + " / " + (summary ? summary.total_decisions : 0), cls: ""},
+    {label:"Órdenes ejecutadas", value: summary ? summary.total_trades_opened : 0, cls: ""},
+  ];
+  const wrap = document.getElementById("stat-cards");
+  wrap.innerHTML = "";
+  cards.forEach(c => {
+    const div = document.createElement("div");
+    div.className = "card stat";
+    div.innerHTML = `<div class="label">${c.label}</div><div class="value ${c.cls}">${c.value}</div>`;
+    wrap.appendChild(div);
+  });
+}
+
+function gaugeBar(current, max, dangerAt=0.8){
+  const pct = max > 0 ? Math.min(1, current/max) : 0;
+  const cls = pct >= dangerAt ? (pct >= 1 ? "danger" : "warn") : "";
+  return `<div class="bar"><i class="${cls}" style="width:${(pct*100).toFixed(1)}%"></i></div>`;
+}
+
+function renderGauges(state){
+  const limits = state.limits || {};
+  const totalExposure = Object.values(state.open_positions || {}).reduce((a,p)=>a+(p.size_eur||0),0);
+  const totalExposurePct = state.total_capital_eur ? totalExposure/state.total_capital_eur : 0;
+
+  const items = [
+    {
+      label: "Drawdown diario", current: Math.max(0, -state.daily_pnl_pct), max: limits.max_daily_drawdown_pct || 0,
+      text: `${fmtPct(Math.max(0,-state.daily_pnl_pct))} / ${fmtPct(limits.max_daily_drawdown_pct||0)}`
+    },
+    {
+      label: "Pérdidas consecutivas", current: state.consecutive_losses||0, max: limits.max_consecutive_losses||1,
+      text: `${state.consecutive_losses||0} / ${limits.max_consecutive_losses||"—"}`
+    },
+    {
+      label: "Exposición total", current: totalExposurePct, max: limits.max_total_exposure_pct||0,
+      text: `${fmtPct(totalExposurePct)} / ${fmtPct(limits.max_total_exposure_pct||0)}`
+    },
+  ];
+
+  const wrap = document.getElementById("gauges");
+  wrap.innerHTML = "";
+  items.forEach(g => {
+    const div = document.createElement("div");
+    div.className = "card gauge";
+    div.innerHTML = `<div class="row"><span>${g.label}</span><span>${g.text}</span></div>${gaugeBar(g.current, g.max)}`;
+    wrap.appendChild(div);
+  });
+}
+
+function renderPositions(state){
+  const body = document.getElementById("positions-body");
+  const entries = Object.entries(state.open_positions || {});
+  if(entries.length === 0){
+    body.innerHTML = '<tr><td colspan="5" class="empty">Sin posiciones abiertas</td></tr>';
+    return;
+  }
+  body.innerHTML = entries.map(([symbol,p]) => `
+    <tr>
+      <td>${symbol}</td>
+      <td><span class="badge ${p.direction}">${(p.direction||"").toUpperCase()}</span></td>
+      <td>${p.entry_price}</td>
+      <td>${p.stop_loss}</td>
+      <td>${fmtEur(p.size_eur)}</td>
+    </tr>`).join("");
+}
+
+function renderDecisions(){
+  const filter = document.getElementById("decision-filter").value;
+  const search = document.getElementById("decision-search").value.trim().toUpperCase();
+  const body = document.getElementById("decisions-body");
+
+  let rows = decisionsCache;
+  if(filter !== "all") rows = rows.filter(d => (filter === "approved") === !!d.approved);
+  if(search) rows = rows.filter(d => (d.symbol||"").toUpperCase().includes(search));
+
+  if(rows.length === 0){
+    body.innerHTML = '<tr><td colspan="6" class="empty">Sin resultados</td></tr>';
+    return;
+  }
+  body.innerHTML = rows.slice(0,150).map(d => `
+    <tr>
+      <td>${fmtTime(d.timestamp)}</td>
+      <td>${d.symbol||"—"}</td>
+      <td><span class="badge ${d.direction}">${(d.direction||"—").toUpperCase()}</span></td>
+      <td>${d.confidence!==undefined ? (d.confidence*100).toFixed(0)+"%" : "—"}</td>
+      <td><span class="badge ${d.approved ? "approved":"rejected"}">${d.approved?"APROBADA":"RECHAZADA"}</span></td>
+      <td class="reason" title="${d.reason||""}">${d.reason||""}</td>
+    </tr>`).join("");
+}
+
+function renderTrades(trades){
+  const body = document.getElementById("trades-body");
+  if(!trades || trades.length === 0){
+    body.innerHTML = '<tr><td colspan="6" class="empty">Sin operaciones todavía</td></tr>';
+    return;
+  }
+  body.innerHTML = trades.map(t => `
+    <tr>
+      <td>${fmtTime(t.timestamp)}</td>
+      <td>${t.symbol||"—"}</td>
+      <td><span class="badge ${t.direction}">${(t.direction||"—").toUpperCase()}</span></td>
+      <td>${t.entry_price}</td>
+      <td>${t.stop_loss}</td>
+      <td>${fmtEur(t.size_eur)}</td>
+    </tr>`).join("");
+}
+
+function renderPnlChart(history, limits){
+  const ctx = document.getElementById("pnl-chart");
+  const labels = history.map(h => fmtTime(h.timestamp));
+  const data = history.map(h => (h.daily_pnl_pct*100));
+  const limitLine = history.map(() => -(limits && limits.max_daily_drawdown_pct ? limits.max_daily_drawdown_pct*100 : 0));
+
+  const cfg = {
+    type: "line",
+    data: { labels, datasets: [
+      { label:"PnL diario %", data, borderColor:"#3B82F6", backgroundColor:"rgba(59,130,246,.15)", fill:true, tension:.3, pointRadius:0 },
+      { label:"Límite drawdown", data: limitLine, borderColor:"#EF4444", borderDash:[6,4], pointRadius:0, fill:false },
+    ]},
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:"#94A3B8", font:{size:10}}}, title:{display:true,text:"PnL diario en el tiempo", color:"#F8FAFC", font:{size:12}} },
+      scales:{
+        x:{ ticks:{color:"#94A3B8", maxTicksLimit:6}, grid:{color:"rgba(51,65,85,.3)"} },
+        y:{ ticks:{color:"#94A3B8", callback:v=>v+"%"}, grid:{color:"rgba(51,65,85,.3)"} },
+      }
+    }
+  };
+  if(pnlChart){ pnlChart.data = cfg.data; pnlChart.update(); }
+  else { pnlChart = new Chart(ctx, cfg); }
+}
+
+function renderSignalsChart(summary){
+  const ctx = document.getElementById("signals-chart");
+  const symbols = Object.keys(summary.by_symbol || {});
+  const approved = symbols.map(s => summary.by_symbol[s].approved);
+  const rejected = symbols.map(s => summary.by_symbol[s].rejected);
+
+  const cfg = {
+    type:"bar",
+    data:{ labels: symbols, datasets:[
+      { label:"Aprobadas", data:approved, backgroundColor:"#22C55E" },
+      { label:"Rechazadas", data:rejected, backgroundColor:"#334155" },
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:"#94A3B8", font:{size:10}}}, title:{display:true,text:"Señales por par", color:"#F8FAFC", font:{size:12}} },
+      scales:{
+        x:{ stacked:true, ticks:{color:"#94A3B8"}, grid:{display:false} },
+        y:{ stacked:true, ticks:{color:"#94A3B8", precision:0}, grid:{color:"rgba(51,65,85,.3)"} },
+      }
+    }
+  };
+  if(signalsChart){ signalsChart.data = cfg.data; signalsChart.update(); }
+  else { signalsChart = new Chart(ctx, cfg); }
+}
+
+async function refreshAll(){
+  try{
+    const [state, history, decisions, trades, summary] = await Promise.all([
+      getJSON("/api/state"), getJSON("/api/history"), getJSON("/api/decisions"),
+      getJSON("/api/trades"), getJSON("/api/summary"),
+    ]);
+    decisionsCache = decisions;
+    renderStatus(state);
+    renderStatCards(state, summary);
+    renderGauges(state);
+    renderPositions(state);
+    renderDecisions();
+    renderTrades(trades);
+    renderPnlChart(history, state.limits);
+    renderSignalsChart(summary);
+  } catch(e){
+    console.error("Error actualizando dashboard:", e);
+  }
+}
+
+function scheduleNext(){
+  if(timer) clearTimeout(timer);
+  if(paused) return;
+  const ms = parseInt(document.getElementById("interval-select").value, 10);
+  timer = setTimeout(async () => { await refreshAll(); scheduleNext(); }, ms);
+}
+
+document.getElementById("toggle-refresh").addEventListener("click", (e) => {
+  paused = !paused;
+  e.target.textContent = paused ? "▶ Reanudar" : "⏸ Pausar";
+  if(!paused){ refreshAll(); scheduleNext(); } else if(timer) clearTimeout(timer);
+});
+document.getElementById("refresh-now").addEventListener("click", refreshAll);
+document.getElementById("interval-select").addEventListener("change", scheduleNext);
+document.getElementById("decision-filter").addEventListener("change", renderDecisions);
+document.getElementById("decision-search").addEventListener("input", renderDecisions);
+
+refreshAll();
+scheduleNext();
+</script>
+</body>
+</html>

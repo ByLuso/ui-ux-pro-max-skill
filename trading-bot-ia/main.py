@@ -63,8 +63,11 @@ def run_cycle(exchange, risk_engine: RiskEngine, executor):
                 )
 
         if risk_engine.state.is_halted:
+            logger_utils.write_state_snapshot(risk_engine.state)
             logger_utils.send_alert(f"BOT DETENIDO: {risk_engine.state.halted_reason}")
             break
+
+    logger_utils.write_state_snapshot(risk_engine.state)
 
 
 def main():
@@ -81,6 +84,7 @@ def main():
     state = config.RuntimeState()
     risk_engine = RiskEngine(state)
     executor = Executor(exchange, state)
+    logger_utils.write_state_snapshot(state)
 
     last_reset_day = time.strftime("%Y-%m-%d")
 
