@@ -62,6 +62,34 @@ se conecta al exchange ni ejecuta nada, así que puedes correrlo en paralelo a
 Por defecto solo escucha en `127.0.0.1` (no lo expongas en red sin añadir
 autenticación delante — muestra tu capital y PnL).
 
+### Verlo desde el móvil
+
+**Si el bot corre en tu propio ordenador** (mismo WiFi que el móvil):
+
+1. En `.env`, pon `DASHBOARD_HOST=0.0.0.0` y define `DASHBOARD_USERNAME` /
+   `DASHBOARD_PASSWORD` (cualquier usuario/contraseña — si no los pones,
+   cualquiera en tu red vería tu capital y posiciones sin login)
+2. `python dashboard.py` — al arrancar imprime la URL de tu red local, algo
+   como `http://192.168.1.23:8787`
+3. Desde el móvil (misma WiFi), abre esa URL en el navegador e introduce el
+   usuario/contraseña
+4. Opcional: en el navegador del móvil, "Añadir a pantalla de inicio" para
+   que abra como una app
+
+**Si el bot corre en un servidor remoto (VPS)** — no abras el puerto
+directamente a internet, aunque tengas usuario/contraseña (sin HTTPS delante
+viajarían en claro). Mejor:
+
+- **Tailscale** (recomendado): instálalo en el servidor y en el móvil, forma
+  una red privada entre ambos, y accede por la IP/nombre de Tailscale del
+  servidor — el puerto nunca queda expuesto a internet
+- **Túnel SSH**: desde el móvil (con Termux, JuiceSSH, etc.)
+  `ssh -L 8787:localhost:8787 usuario@tu-servidor` y luego abre
+  `http://localhost:8787` en el móvil
+- Si aun así necesitas exponerlo públicamente, ponlo detrás de un proxy
+  con HTTPS (Caddy o nginx + Let's Encrypt) y mantén
+  `DASHBOARD_USERNAME`/`PASSWORD` configurados
+
 ## Tests
 
 ```

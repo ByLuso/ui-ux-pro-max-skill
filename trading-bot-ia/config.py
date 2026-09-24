@@ -77,8 +77,10 @@ STATE_HISTORY_FILE = os.path.join(LOG_DIR, "state_history.jsonl")  # serie tempo
 CYCLE_INTERVAL_MINUTES = 15
 
 # -- Dashboard (solo lectura, no ejecuta nada) -----------------------------------
-DASHBOARD_HOST = os.environ.get("DASHBOARD_HOST", "127.0.0.1")  # no exponer fuera de localhost sin auth
+DASHBOARD_HOST = os.environ.get("DASHBOARD_HOST", "127.0.0.1")  # 0.0.0.0 para verlo desde el movil (misma WiFi)
 DASHBOARD_PORT = int(os.environ.get("DASHBOARD_PORT", "8787"))
+DASHBOARD_USERNAME = os.environ.get("DASHBOARD_USERNAME", "")  # protege el dashboard si sales de localhost
+DASHBOARD_PASSWORD = os.environ.get("DASHBOARD_PASSWORD", "")
 
 
 @dataclass
