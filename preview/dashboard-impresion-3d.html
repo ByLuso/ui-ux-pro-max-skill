@@ -10,7 +10,12 @@
   "imports": {
     "react": "https://esm.sh/react@18.3.1",
     "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
-    "lucide-react": "https://esm.sh/lucide-react@0.469.0?external=react"
+    "lucide-react": "https://esm.sh/lucide-react@0.469.0?external=react",
+    "three": "https://esm.sh/three@0.169.0",
+    "three/examples/jsm/controls/OrbitControls.js": "https://esm.sh/three@0.169.0/examples/jsm/controls/OrbitControls.js?external=three",
+    "three/examples/jsm/geometries/RoundedBoxGeometry.js": "https://esm.sh/three@0.169.0/examples/jsm/geometries/RoundedBoxGeometry.js?external=three",
+    "three/examples/jsm/loaders/STLLoader.js": "https://esm.sh/three@0.169.0/examples/jsm/loaders/STLLoader.js?external=three",
+    "three/examples/jsm/loaders/OBJLoader.js": "https://esm.sh/three@0.169.0/examples/jsm/loaders/OBJLoader.js?external=three"
   }
 }
 </script>
@@ -57,7 +62,17 @@ import {
   PencilLine,
   CheckCircle2,
   SlidersHorizontal,
+  Box,
+  Bot,
+  User,
+  Send,
+  Settings2,
 } from "lucide-react";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
+import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 
 /* ------------------------------------------------------------------ */
 /* Constantes y utilidades                                            */
@@ -166,6 +181,78 @@ function guardarProyectosEnStorage(proyectos) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Almacén de modelos 3D reales (IndexedDB)                            */
+/* ------------------------------------------------------------------ */
+/* Los STL/OBJ pueden pesar varios MB: no caben cómodamente en          */
+/* localStorage, así que el binario real vive en IndexedDB indexado    */
+/* por id de proyecto; localStorage solo guarda el nombre del archivo. */
+
+const DB_MODELOS_NOMBRE = "taller3d_modelos_v1";
+const DB_MODELOS_ALMACEN = "archivos3d";
+
+function abrirBaseModelos() {
+  return new Promise((resolve, reject) => {
+    if (!("indexedDB" in window)) {
+      reject(new Error("IndexedDB no disponible en este navegador"));
+      return;
+    }
+    const solicitud = window.indexedDB.open(DB_MODELOS_NOMBRE, 1);
+    solicitud.onupgradeneeded = () => {
+      if (!solicitud.result.objectStoreNames.contains(DB_MODELOS_ALMACEN)) {
+        solicitud.result.createObjectStore(DB_MODELOS_ALMACEN);
+      }
+    };
+    solicitud.onsuccess = () => resolve(solicitud.result);
+    solicitud.onerror = () => reject(solicitud.error || new Error("No se pudo abrir la base de modelos 3D"));
+  });
+}
+
+async function guardarModelo3D(id, archivo) {
+  const buffer = await archivo.arrayBuffer();
+  const extension = (archivo.name.split(".").pop() || "").toLowerCase();
+  const db = await abrirBaseModelos();
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction(DB_MODELOS_ALMACEN, "readwrite");
+    tx.objectStore(DB_MODELOS_ALMACEN).put({ buffer, extension, nombre: archivo.name }, id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+  db.close();
+}
+
+async function leerModelo3D(id) {
+  try {
+    const db = await abrirBaseModelos();
+    const registro = await new Promise((resolve, reject) => {
+      const tx = db.transaction(DB_MODELOS_ALMACEN, "readonly");
+      const solicitud = tx.objectStore(DB_MODELOS_ALMACEN).get(id);
+      solicitud.onsuccess = () => resolve(solicitud.result || null);
+      solicitud.onerror = () => reject(solicitud.error);
+    });
+    db.close();
+    return registro;
+  } catch (error) {
+    console.error("taller3d: no se pudo leer el modelo 3D desde IndexedDB", error);
+    return null;
+  }
+}
+
+async function eliminarModelo3D(id) {
+  try {
+    const db = await abrirBaseModelos();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction(DB_MODELOS_ALMACEN, "readwrite");
+      tx.objectStore(DB_MODELOS_ALMACEN).delete(id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    db.close();
+  } catch (error) {
+    console.error("taller3d: no se pudo eliminar el modelo 3D de IndexedDB", error);
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* Reducer                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -211,6 +298,93 @@ function proyectosReducer(state, accion) {
 /* Llamada a IA                                                        */
 /* ------------------------------------------------------------------ */
 
+const PROXY_STORAGE_KEY = "taller3d_ia_proxy_url";
+
+function leerUrlProxy() {
+  try {
+    return window.localStorage.getItem(PROXY_STORAGE_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
+function guardarUrlProxy(url) {
+  try {
+    if (url) window.localStorage.setItem(PROXY_STORAGE_KEY, url);
+    else window.localStorage.removeItem(PROXY_STORAGE_KEY);
+  } catch (error) {
+    console.error("taller3d: no se pudo guardar la URL del proxy de IA", error);
+  }
+}
+
+function limpiarJSON(texto) {
+  return texto
+    .replace(/```json/gi, "")
+    .replace(/```/g, "")
+    .trim();
+}
+
+async function llamarClaude(mensajes, maxTokens = 1024) {
+  const proxy = leerUrlProxy();
+  const endpoint = proxy || "https://api.anthropic.com/v1/messages";
+
+  const respuesta = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: maxTokens,
+      messages: mensajes,
+    }),
+  });
+
+  if (!respuesta.ok) {
+    throw new Error(`Error de red (${respuesta.status})`);
+  }
+
+  const cuerpo = await respuesta.json();
+  return cuerpo?.content?.[0]?.text ?? "";
+}
+
+function construirPromptEdicionPieza(parametros, esMallaReal, mensajeUsuario, historial) {
+  const contexto = (historial || [])
+    .slice(-6)
+    .map((m) => `${m.rol === "usuario" ? "Usuario" : "IA"}: ${m.texto}`)
+    .join("\n");
+
+  return `Eres un asistente de diseño para impresión 3D que ayuda a modificar los parámetros de una pieza mostrada en un visor 3D dentro del navegador.
+
+${
+  esMallaReal
+    ? "La pieza mostrada es una malla real (archivo STL/OBJ subido por el usuario). No puedes cambiar su geometría real: SOLO puedes sugerir un cambio de color. Deja el resto de campos en null."
+    : "La pieza mostrada es una caja paramétrica (no hay archivo STL/OBJ real). Puedes ajustar sus dimensiones, el redondeo de bordes (chaflán) y el color."
+}
+
+Parámetros actuales:
+Ancho: ${parametros.ancho} mm
+Alto: ${parametros.alto} mm
+Profundo: ${parametros.profundo} mm
+Chaflán (redondeo de bordes): ${parametros.chaflan} mm
+Color: ${parametros.color}
+${contexto ? `\nConversación previa:\n${contexto}\n` : ""}
+Petición del usuario: "${mensajeUsuario}"
+
+Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin explicaciones, sin bloques de código markdown, con exactamente esta forma:
+
+{
+  "cambios": {
+    "ancho": number o null,
+    "alto": number o null,
+    "profundo": number o null,
+    "chaflan": number o null,
+    "color": "#rrggbb" o null
+  },
+  "resumen": "string: una frase breve en español confirmando qué cambiaste (o explicando por qué no se pudo aplicar)"
+}
+
+Usa null en cualquier campo que no debas modificar. Los valores numéricos deben ser mayores que 0 y razonables en milímetros.`;
+}
+
 function construirPrompt(datos) {
   return `Eres un experto en impresión 3D FDM y de resina. A partir de estos datos de un proyecto,
 genera una ficha técnica. Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional,
@@ -234,28 +408,8 @@ Soportes: ${datos.soportes ? "sí" : "no"}`;
 }
 
 async function generarFichaIA(datos) {
-  const respuesta = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-6",
-      max_tokens: 1024,
-      messages: [{ role: "user", content: construirPrompt(datos) }],
-    }),
-  });
-
-  if (!respuesta.ok) {
-    throw new Error(`Error de red (${respuesta.status})`);
-  }
-
-  const cuerpo = await respuesta.json();
-  let texto = cuerpo?.content?.[0]?.text ?? "";
-  texto = texto
-    .replace(/```json/gi, "")
-    .replace(/```/g, "")
-    .trim();
-
-  const json = JSON.parse(texto);
+  const texto = await llamarClaude([{ role: "user", content: construirPrompt(datos) }]);
+  const json = JSON.parse(limpiarJSON(texto));
 
   if (
     typeof json.especificacionesSugeridas !== "string" ||
@@ -438,6 +592,404 @@ function Lightbox({ src, onClose }) {
         className="max-h-full max-w-full rounded border border-zinc-700 object-contain"
         onClick={(e) => e.stopPropagation()}
       />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Visor 3D grande + edición de la pieza hablando con la IA            */
+/* ------------------------------------------------------------------ */
+
+const ESCALA_VISOR = 0.06; // mm -> unidades three.js
+
+function construirCajaParametrica(dimensiones, chaflan, color) {
+  const ancho = Math.max(dimensiones.ancho, 1) * ESCALA_VISOR;
+  const alto = Math.max(dimensiones.alto, 1) * ESCALA_VISOR;
+  const profundo = Math.max(dimensiones.profundo, 1) * ESCALA_VISOR;
+  const radioMaximo = Math.min(ancho, alto, profundo) / 2 - 0.005;
+  const radio = Math.max(Math.min((chaflan || 0) * ESCALA_VISOR, radioMaximo), 0.001);
+  const geometria = new RoundedBoxGeometry(ancho, alto, profundo, 4, radio);
+  const material = new THREE.MeshStandardMaterial({ color, roughness: 0.45, metalness: 0.1 });
+  return new THREE.Mesh(geometria, material);
+}
+
+function centrarYEscalarObjeto(objeto3D) {
+  const caja = new THREE.Box3().setFromObject(objeto3D);
+  const tamano = new THREE.Vector3();
+  caja.getSize(tamano);
+  const centro = new THREE.Vector3();
+  caja.getCenter(centro);
+  objeto3D.position.sub(centro);
+  const mayor = Math.max(tamano.x, tamano.y, tamano.z, 0.0001);
+  objeto3D.scale.setScalar(2.4 / mayor);
+}
+
+function disponerObjeto3D(objeto3D) {
+  objeto3D.traverse((hijo) => {
+    if (hijo.geometry) hijo.geometry.dispose();
+    if (hijo.material) {
+      (Array.isArray(hijo.material) ? hijo.material : [hijo.material]).forEach((m) => m.dispose());
+    }
+  });
+}
+
+function VisorPieza3D({ proyecto, dispatch, onCerrar }) {
+  const contenedorRef = useRef(null);
+  const escenaRef = useRef(null);
+  const piezaRef = useRef(null);
+  const frameRef = useRef(null);
+  const listaChatRef = useRef(null);
+
+  const [cargandoMalla, setCargandoMalla] = useState(false);
+  const [errorMalla, setErrorMalla] = useState("");
+  const [esMallaReal, setEsMallaReal] = useState(false);
+
+  const [mensaje, setMensaje] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const [errorChat, setErrorChat] = useState("");
+
+  const chat = proyecto.chatIA || [];
+  const pieza3D = proyecto.pieza3D || { chaflan: 1 };
+
+  useEffect(() => {
+    function alPulsarTecla(evento) {
+      if (evento.key === "Escape") onCerrar();
+    }
+    window.addEventListener("keydown", alPulsarTecla);
+    return () => window.removeEventListener("keydown", alPulsarTecla);
+  }, [onCerrar]);
+
+  // Inicializa la escena three.js una sola vez.
+  useEffect(() => {
+    const contenedor = contenedorRef.current;
+    if (!contenedor) return;
+
+    const escena = new THREE.Scene();
+    escena.background = new THREE.Color(0x09090b);
+
+    const camara = new THREE.PerspectiveCamera(45, contenedor.clientWidth / Math.max(contenedor.clientHeight, 1), 0.01, 100);
+    camara.position.set(3, 2.3, 3.2);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(contenedor.clientWidth, contenedor.clientHeight);
+    contenedor.innerHTML = "";
+    contenedor.appendChild(renderer.domElement);
+
+    escena.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const luzPrincipal = new THREE.DirectionalLight(0xffffff, 1.1);
+    luzPrincipal.position.set(4, 6, 4);
+    escena.add(luzPrincipal);
+    const luzRelleno = new THREE.DirectionalLight(0x38bdf8, 0.35);
+    luzRelleno.position.set(-4, -1.5, -3);
+    escena.add(luzRelleno);
+
+    const rejilla = new THREE.GridHelper(6, 24, 0x27272a, 0x18181b);
+    rejilla.position.y = -1.4;
+    escena.add(rejilla);
+
+    const controles = new OrbitControls(camara, renderer.domElement);
+    controles.enableDamping = true;
+    controles.dampingFactor = 0.08;
+    controles.autoRotate = true;
+    controles.autoRotateSpeed = 1.4;
+    controles.addEventListener("start", () => {
+      controles.autoRotate = false;
+    });
+
+    escenaRef.current = escena;
+
+    function animar() {
+      controles.update();
+      renderer.render(escena, camara);
+      frameRef.current = requestAnimationFrame(animar);
+    }
+    animar();
+
+    function alRedimensionar() {
+      if (!contenedorRef.current) return;
+      const ancho = contenedorRef.current.clientWidth;
+      const alto = Math.max(contenedorRef.current.clientHeight, 1);
+      camara.aspect = ancho / alto;
+      camara.updateProjectionMatrix();
+      renderer.setSize(ancho, alto);
+    }
+    window.addEventListener("resize", alRedimensionar);
+    const observador = new ResizeObserver(alRedimensionar);
+    observador.observe(contenedor);
+
+    return () => {
+      window.removeEventListener("resize", alRedimensionar);
+      observador.disconnect();
+      cancelAnimationFrame(frameRef.current);
+      controles.dispose();
+      renderer.dispose();
+      contenedor.innerHTML = "";
+      escenaRef.current = null;
+    };
+  }, []);
+
+  // Construye o actualiza la pieza mostrada (modelo real o caja paramétrica).
+  useEffect(() => {
+    let cancelado = false;
+    const escena = escenaRef.current;
+    if (!escena) return;
+
+    async function construir() {
+      setErrorMalla("");
+      setCargandoMalla(true);
+
+      if (piezaRef.current) {
+        escena.remove(piezaRef.current);
+        disponerObjeto3D(piezaRef.current);
+        piezaRef.current = null;
+      }
+
+      const extension = (proyecto.referencia.nombreArchivo || "").split(".").pop()?.toLowerCase();
+      const posibleModeloReal = proyecto.referencia.tipo === "archivo" && (extension === "stl" || extension === "obj");
+
+      try {
+        if (posibleModeloReal) {
+          const registro = await leerModelo3D(proyecto.id);
+          if (registro && !cancelado) {
+            let objeto3D;
+            if (registro.extension === "stl") {
+              const geometria = new STLLoader().parse(registro.buffer);
+              geometria.center();
+              const material = new THREE.MeshStandardMaterial({ color: proyecto.color, roughness: 0.4, metalness: 0.15 });
+              objeto3D = new THREE.Mesh(geometria, material);
+            } else {
+              const texto = new TextDecoder().decode(registro.buffer);
+              objeto3D = new OBJLoader().parse(texto);
+              objeto3D.traverse((hijo) => {
+                if (hijo.isMesh) {
+                  hijo.material = new THREE.MeshStandardMaterial({ color: proyecto.color, roughness: 0.4, metalness: 0.15 });
+                }
+              });
+            }
+            centrarYEscalarObjeto(objeto3D);
+            escena.add(objeto3D);
+            piezaRef.current = objeto3D;
+            setEsMallaReal(true);
+            setCargandoMalla(false);
+            return;
+          }
+        }
+
+        if (!cancelado) {
+          const pieza = construirCajaParametrica(proyecto.dimensiones, pieza3D.chaflan ?? 1, proyecto.color);
+          escena.add(pieza);
+          piezaRef.current = pieza;
+          setEsMallaReal(false);
+          setCargandoMalla(false);
+        }
+      } catch (error) {
+        console.error(error);
+        if (!cancelado) {
+          const pieza = construirCajaParametrica(proyecto.dimensiones, pieza3D.chaflan ?? 1, proyecto.color);
+          escena.add(pieza);
+          piezaRef.current = pieza;
+          setEsMallaReal(false);
+          setErrorMalla("No se pudo cargar el archivo 3D original; se muestra una forma aproximada por dimensiones.");
+          setCargandoMalla(false);
+        }
+      }
+    }
+
+    construir();
+    return () => {
+      cancelado = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [proyecto.id, proyecto.referencia.tipo, proyecto.referencia.nombreArchivo, proyecto.dimensiones, proyecto.color, pieza3D.chaflan]);
+
+  useEffect(() => {
+    if (listaChatRef.current) {
+      listaChatRef.current.scrollTop = listaChatRef.current.scrollHeight;
+    }
+  }, [chat.length]);
+
+  async function alEnviarMensaje(evento) {
+    evento.preventDefault();
+    const texto = mensaje.trim();
+    if (!texto || enviando) return;
+
+    setEnviando(true);
+    setErrorChat("");
+    setMensaje("");
+
+    const mensajeUsuario = { rol: "usuario", texto, fecha: new Date().toISOString() };
+    const historialConUsuario = [...chat, mensajeUsuario];
+    dispatch({ type: "ACTUALIZAR", id: proyecto.id, cambios: { chatIA: historialConUsuario } });
+
+    try {
+      const parametros = {
+        ancho: proyecto.dimensiones.ancho,
+        alto: proyecto.dimensiones.alto,
+        profundo: proyecto.dimensiones.profundo,
+        chaflan: pieza3D.chaflan ?? 1,
+        color: proyecto.color,
+      };
+      const prompt = construirPromptEdicionPieza(parametros, esMallaReal, texto, chat);
+      const respuestaTexto = await llamarClaude([{ role: "user", content: prompt }]);
+      const json = JSON.parse(limpiarJSON(respuestaTexto));
+      const cambios = json.cambios || {};
+
+      const cambiosProyecto = {};
+      if (!esMallaReal) {
+        let dimensionesNuevas = null;
+        if (typeof cambios.ancho === "number" && cambios.ancho > 0) {
+          dimensionesNuevas = { ...proyecto.dimensiones, ...dimensionesNuevas, ancho: cambios.ancho };
+        }
+        if (typeof cambios.alto === "number" && cambios.alto > 0) {
+          dimensionesNuevas = { ...proyecto.dimensiones, ...dimensionesNuevas, alto: cambios.alto };
+        }
+        if (typeof cambios.profundo === "number" && cambios.profundo > 0) {
+          dimensionesNuevas = { ...proyecto.dimensiones, ...dimensionesNuevas, profundo: cambios.profundo };
+        }
+        if (dimensionesNuevas) cambiosProyecto.dimensiones = dimensionesNuevas;
+        if (typeof cambios.chaflan === "number" && cambios.chaflan >= 0) {
+          cambiosProyecto.pieza3D = { ...pieza3D, chaflan: cambios.chaflan };
+        }
+      }
+      if (typeof cambios.color === "string" && /^#[0-9a-fA-F]{6}$/.test(cambios.color)) {
+        cambiosProyecto.color = cambios.color;
+      }
+
+      const mensajeIA = {
+        rol: "ia",
+        texto: json.resumen || "Cambio aplicado.",
+        fecha: new Date().toISOString(),
+      };
+
+      dispatch({
+        type: "ACTUALIZAR",
+        id: proyecto.id,
+        cambios: { ...cambiosProyecto, chatIA: [...historialConUsuario, mensajeIA] },
+      });
+    } catch (error) {
+      console.error(error);
+      setErrorChat("No se pudo procesar la petición, inténtalo de nuevo.");
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-[60] flex flex-col bg-black/95">
+      <div className="flex items-center justify-between border-b border-zinc-800 bg-zinc-950 px-4 py-3">
+        <div className="flex min-w-0 items-center gap-2 font-mono text-xs uppercase tracking-wide text-zinc-200">
+          <Box size={14} className="shrink-0 text-cyan-400" />
+          <span className="truncate">Vista 3D — {proyecto.nombre}</span>
+        </div>
+        <button
+          type="button"
+          onClick={onCerrar}
+          className="rounded p-1 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+          aria-label="Cerrar"
+        >
+          <X size={20} />
+        </button>
+      </div>
+
+      <div className="flex flex-1 flex-col overflow-hidden lg:flex-row">
+        <div className="relative flex-1 lg:flex-[2]">
+          <div ref={contenedorRef} className="h-full w-full" style={{ minHeight: "320px" }} />
+
+          {cargandoMalla && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+              <Spinner texto="Cargando pieza…" />
+            </div>
+          )}
+
+          {errorMalla && (
+            <p className="absolute bottom-3 left-3 right-3 flex items-center gap-1.5 rounded border border-orange-800 bg-orange-950/70 px-2 py-1.5 text-xs text-orange-300">
+              <AlertCircle size={13} className="shrink-0" />
+              {errorMalla}
+            </p>
+          )}
+
+          {!cargandoMalla && esMallaReal && (
+            <span className="absolute left-3 top-3 rounded border border-cyan-700 bg-cyan-950/70 px-2 py-1 font-mono text-[10px] uppercase tracking-wide text-cyan-300">
+              Modelo real (STL/OBJ)
+            </span>
+          )}
+        </div>
+
+        <div className="flex w-full flex-col border-t border-zinc-800 bg-zinc-950 lg:w-96 lg:border-l lg:border-t-0">
+          <div className="border-b border-zinc-800 px-4 py-3">
+            <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wide text-cyan-400">
+              <Sparkles size={12} />
+              Modificar con IA
+            </p>
+            {esMallaReal && (
+              <p className="mt-1 text-[11px] text-zinc-500">
+                Esta pieza es un archivo real: la IA solo puede sugerir un cambio de color, no puede re-esculpir la malla.
+              </p>
+            )}
+          </div>
+
+          <div
+            ref={listaChatRef}
+            className="flex-1 space-y-3 overflow-y-auto px-4 py-3"
+            style={{ minHeight: "140px", maxHeight: "40vh" }}
+          >
+            {chat.length === 0 && (
+              <p className="text-xs text-zinc-600">
+                Pídele cambios como «hazla 20mm más alta» o «redondea más los bordes».
+              </p>
+            )}
+            {chat.map((m, i) => (
+              <div key={i} className={`flex gap-2 ${m.rol === "usuario" ? "justify-end" : "justify-start"}`}>
+                {m.rol === "ia" && (
+                  <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-cyan-700 bg-cyan-950/40 text-cyan-400">
+                    <Bot size={12} />
+                  </div>
+                )}
+                <div
+                  className={`max-w-[80%] rounded px-2.5 py-1.5 text-xs ${
+                    m.rol === "usuario" ? "bg-orange-600 text-white" : "border border-zinc-800 bg-zinc-900 text-zinc-200"
+                  }`}
+                >
+                  {m.texto}
+                </div>
+                {m.rol === "usuario" && (
+                  <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-orange-700 bg-orange-950/40 text-orange-400">
+                    <User size={12} />
+                  </div>
+                )}
+              </div>
+            ))}
+            {enviando && <Spinner texto="Pensando…" />}
+          </div>
+
+          {errorChat && (
+            <p className="mx-4 mb-2 flex items-center gap-1.5 text-xs text-orange-400">
+              <AlertCircle size={13} className="shrink-0" />
+              {errorChat}
+            </p>
+          )}
+
+          <form onSubmit={alEnviarMensaje} className="flex items-center gap-2 border-t border-zinc-800 px-3 py-3">
+            <input
+              type="text"
+              value={mensaje}
+              onChange={(e) => setMensaje(e.target.value)}
+              placeholder="Ej. hazla más ancha y redondea los bordes"
+              disabled={enviando}
+              className="flex-1 rounded border border-zinc-700 bg-zinc-900 px-2.5 py-1.5 text-sm text-zinc-100 outline-none focus:border-cyan-600 disabled:opacity-50"
+            />
+            <button
+              type="submit"
+              disabled={enviando || !mensaje.trim()}
+              className="inline-flex items-center gap-1 rounded bg-cyan-600 px-3 py-1.5 font-mono text-xs uppercase tracking-wide text-white hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Enviar mensaje"
+            >
+              <Send size={13} />
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
@@ -709,6 +1261,7 @@ function PanelDetalle({ proyecto, dispatch, onCerrar, abrirGaleriaAlEntrar }) {
   const [confirmarEliminar, setConfirmarEliminar] = useState(false);
   const [cargandoIA, setCargandoIA] = useState(false);
   const [errorIA, setErrorIA] = useState("");
+  const [visor3DAbierto, setVisor3DAbierto] = useState(false);
 
   useEffect(() => {
     function alPulsarTecla(evento) {
@@ -749,6 +1302,7 @@ function PanelDetalle({ proyecto, dispatch, onCerrar, abrirGaleriaAlEntrar }) {
   }
 
   function eliminar() {
+    eliminarModelo3D(proyecto.id).catch(() => {});
     dispatch({ type: "ELIMINAR", id: proyecto.id });
     onCerrar();
   }
@@ -794,6 +1348,15 @@ function PanelDetalle({ proyecto, dispatch, onCerrar, abrirGaleriaAlEntrar }) {
               </span>
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setVisor3DAbierto(true)}
+            className="flex w-full items-center justify-center gap-2 rounded border border-cyan-700 bg-cyan-950/20 px-3 py-2 font-mono text-xs uppercase tracking-wide text-cyan-300 hover:bg-cyan-950/40"
+          >
+            <Box size={14} />
+            Ver pieza en 3D
+          </button>
 
           <div>
             <p className="mb-1 font-mono text-[10px] uppercase tracking-wide text-zinc-500">Descripción / uso previsto</p>
@@ -1042,6 +1605,10 @@ function PanelDetalle({ proyecto, dispatch, onCerrar, abrirGaleriaAlEntrar }) {
           </div>
         </div>
       </div>
+
+      {visor3DAbierto && (
+        <VisorPieza3D proyecto={proyecto} dispatch={dispatch} onCerrar={() => setVisor3DAbierto(false)} />
+      )}
     </div>
   );
 }
@@ -1341,6 +1908,7 @@ const FORM_INICIAL = {
   referenciaLink: "",
   referenciaArchivoNombre: "",
   referenciaArchivoMiniatura: null,
+  referenciaArchivoFile: null,
   relleno: 20,
   alturaCapa: 0.2,
   soportes: false,
@@ -1364,13 +1932,28 @@ function FormularioProyecto({ onCrear, onCerrar }) {
     try {
       if (esImagen(archivo)) {
         const miniatura = await comprimirImagen(archivo, 800, 0.75);
-        setForm((prev) => ({ ...prev, referenciaArchivoNombre: archivo.name, referenciaArchivoMiniatura: miniatura }));
+        setForm((prev) => ({
+          ...prev,
+          referenciaArchivoNombre: archivo.name,
+          referenciaArchivoMiniatura: miniatura,
+          referenciaArchivoFile: null,
+        }));
       } else {
-        setForm((prev) => ({ ...prev, referenciaArchivoNombre: archivo.name, referenciaArchivoMiniatura: null }));
+        setForm((prev) => ({
+          ...prev,
+          referenciaArchivoNombre: archivo.name,
+          referenciaArchivoMiniatura: null,
+          referenciaArchivoFile: archivo,
+        }));
       }
     } catch (error) {
       console.error(error);
-      setForm((prev) => ({ ...prev, referenciaArchivoNombre: archivo.name, referenciaArchivoMiniatura: null }));
+      setForm((prev) => ({
+        ...prev,
+        referenciaArchivoNombre: archivo.name,
+        referenciaArchivoMiniatura: null,
+        referenciaArchivoFile: null,
+      }));
     } finally {
       setProcesandoArchivo(false);
     }
@@ -1447,7 +2030,15 @@ function FormularioProyecto({ onCrear, onCerrar }) {
       valoracion: null,
       notasMejora: "",
       creadoEn: ahora,
+      pieza3D: { chaflan: 1 },
+      chatIA: [],
     };
+
+    if (form.referenciaArchivoFile) {
+      guardarModelo3D(proyecto.id, form.referenciaArchivoFile).catch((error) =>
+        console.error("taller3d: no se pudo guardar el modelo 3D", error)
+      );
+    }
 
     onCrear(proyecto);
   }
@@ -1682,6 +2273,65 @@ function FormularioProyecto({ onCrear, onCerrar }) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Configuración del proxy de IA                                       */
+/* ------------------------------------------------------------------ */
+
+function ModalConfiguracionIA({ onCerrar }) {
+  const [url, setUrl] = useState(leerUrlProxy());
+  const [guardado, setGuardado] = useState(false);
+
+  function guardar() {
+    guardarUrlProxy(url.trim());
+    setGuardado(true);
+    setTimeout(() => setGuardado(false), 1500);
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={onCerrar}>
+      <div
+        className="w-full max-w-md rounded border border-zinc-800 bg-zinc-950 p-4 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-3 flex items-center justify-between">
+          <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-wide text-zinc-200">
+            <Settings2 size={14} className="text-cyan-400" />
+            Configuración de IA
+          </p>
+          <button
+            type="button"
+            onClick={onCerrar}
+            className="rounded p-1 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+            aria-label="Cerrar"
+          >
+            <X size={16} />
+          </button>
+        </div>
+        <p className="mb-2 text-xs text-zinc-400">
+          Pega aquí la URL de tu proxy (por ejemplo un Cloudflare Worker) que reenvía las peticiones a la
+          API de Anthropic guardando tu API key en el servidor. Si lo dejas vacío, se llama directamente a
+          api.anthropic.com, lo que solo funciona dentro de la vista previa de artefactos de Claude.
+        </p>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="https://taller3d-ia-proxy.tu-cuenta.workers.dev"
+          className="mb-3 w-full rounded border border-zinc-700 bg-zinc-900 px-2.5 py-1.5 text-sm text-zinc-100 outline-none focus:border-cyan-600"
+        />
+        <button
+          type="button"
+          onClick={guardar}
+          className="flex w-full items-center justify-center gap-2 rounded bg-cyan-600 px-3 py-2 font-mono text-xs uppercase tracking-wide text-white hover:bg-cyan-500"
+        >
+          <CheckCircle2 size={14} />
+          {guardado ? "Guardado" : "Guardar"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* App raíz                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -1691,6 +2341,7 @@ function App() {
   const [idDetalle, setIdDetalle] = useState(null);
   const [enfocarGaleria, setEnfocarGaleria] = useState(false);
   const [filtros, setFiltros] = useState(FILTROS_INICIALES);
+  const [configAbierta, setConfigAbierta] = useState(false);
 
   useEffect(() => {
     guardarProyectosEnStorage(proyectos);
@@ -1754,14 +2405,24 @@ function App() {
             <p className="font-mono text-[10px] text-zinc-500">Gestión de proyectos de impresión</p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => setFormularioAbierto(true)}
-          className="inline-flex items-center gap-1.5 rounded bg-orange-600 px-3 py-1.5 font-mono text-xs uppercase tracking-wide text-white hover:bg-orange-500"
-        >
-          <Plus size={14} />
-          Nuevo proyecto
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setConfigAbierta(true)}
+            className="inline-flex items-center gap-1.5 rounded border border-zinc-700 bg-zinc-900 px-2.5 py-1.5 font-mono text-xs uppercase tracking-wide text-zinc-300 hover:border-cyan-600 hover:text-cyan-300"
+            aria-label="Configuración de IA"
+          >
+            <Settings2 size={14} />
+          </button>
+          <button
+            type="button"
+            onClick={() => setFormularioAbierto(true)}
+            className="inline-flex items-center gap-1.5 rounded bg-orange-600 px-3 py-1.5 font-mono text-xs uppercase tracking-wide text-white hover:bg-orange-500"
+          >
+            <Plus size={14} />
+            Nuevo proyecto
+          </button>
+        </div>
       </header>
 
       <BarraFiltros
@@ -1807,6 +2468,8 @@ function App() {
           abrirGaleriaAlEntrar={enfocarGaleria}
         />
       )}
+
+      {configAbierta && <ModalConfiguracionIA onCerrar={() => setConfigAbierta(false)} />}
     </div>
   );
 }
