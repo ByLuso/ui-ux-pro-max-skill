@@ -1,6 +1,5 @@
-/* Adapted from leaflet-side-by-side v2.2.0 (layout.css + range.css), MIT License.
-   Simplified: the draggable thumb is styled here instead of using the upstream range-icon.png,
-   so this plugin has no image asset to vendor. */
+/* Estilos para el control de comparación "swipe" (ver leaflet-side-by-side.js: ya no usa
+   un <input type="range"> nativo, sino un <div> propio arrastrado con Pointer Events). */
 
 .leaflet-sbs-divider {
   position: absolute;
@@ -12,61 +11,28 @@
   background-color: #fff;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
   pointer-events: none;
-  /* Por encima de 1000: los controles topleft de Leaflet (.leaflet-top/.leaflet-bottom,
-     que incluyen nuestro panel de pesos y el botón de LiDAR) usan z-index 1000, y donde
-     la franja del slider cae encima de ellos (paneles altos en pantallas bajas) ganaban
-     ellos el toque, dejando el slider "muerto" en esa zona. */
+  /* Por encima de 1000: los controles topleft/bottomright de Leaflet (paneles de pesos,
+     leyenda, botón de LiDAR) usan z-index 1000, y donde el divisor cae sobre ellos (en
+     pantallas donde esos paneles llegan hasta el centro vertical del mapa) se quedaban
+     con el toque en vez de dejarlo pasar al divisor. */
   z-index: 1001;
 }
 
-.leaflet-sbs-range {
-  -webkit-appearance: none;
+.leaflet-sbs-handle {
   position: absolute;
   top: 50%;
-  /* Alto real (no 0): con altura 0 el ratón sigue "acertando" al pseudo-elemento del
-     thumb por cómo Chrome pinta los controles nativos, pero el hit-test táctil de un
-     dedo real no encuentra nada ahí y el toque cae al mapa de debajo (lo arrastra en
-     vez de mover el slider). Con una caja de altura real centrada verticalmente
-     (margin-top negativo = -mitad), el touch sí encuentra el control. */
-  margin-top: -22px;
-  width: 100%;
-  height: 44px;
-  padding: 0;
-  margin-left: 0;
-  margin-right: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  touch-action: none;
-  /* auto en toda la franja, no solo en el pseudo-elemento del thumb: con un toque
-     real (a diferencia del ratón) el hit-test del navegador respeta pointer-events
-     del elemento base y nunca llega a evaluar el pseudo-elemento como objetivo
-     independiente, así que "auto" solo en ::-webkit-slider-thumb no basta en móvil. */
-  pointer-events: auto;
-  z-index: 1001;
-}
-
-.leaflet-sbs-range::-moz-range-track,
-.leaflet-sbs-range::-ms-track {
-  opacity: 0;
-}
-
-.leaflet-sbs-range::-webkit-slider-thumb,
-.leaflet-sbs-range::-moz-range-thumb,
-.leaflet-sbs-range::-ms-thumb {
-  -webkit-appearance: none;
-  margin: 0;
-  padding: 0;
+  left: 50%;
   width: 44px;
   height: 44px;
+  margin-left: -22px;
+  margin-top: -22px;
   border-radius: 50%;
   background: #1f2937;
   border: 3px solid #ffffff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   cursor: ew-resize;
-  pointer-events: auto;
-}
-
-.leaflet-sbs-range:focus {
-  outline: none !important;
+  /* Evita que el navegador interprete el arrastre como scroll/zoom de página en vez de
+     como el gesto que gestionamos nosotros con pointerdown/pointermove. */
+  touch-action: none;
+  z-index: 1001;
 }

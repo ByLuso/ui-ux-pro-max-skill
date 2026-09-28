@@ -291,17 +291,29 @@ del mapa; sustituye a la firma v1 `?lat=&lon=&radius_m=`, que ya no existe). No 
 `?region=`: el LiDAR del IGN es de cobertura nacional, así que funciona en cualquier punto de
 España, esté o no dentro de la bbox de una región configurada.
 
-En el frontend, el botón "🔍 Comparar con LiDAR" (arriba a la izquierda) añade un control de
-[leaflet-side-by-side](https://github.com/digidem/leaflet-side-by-side) (vendorizado en
-`frontend/vendor/leaflet-side-by-side/`, adaptado de su distribución npm porque usa
-`require`/`module.exports` pensados para un bundler — aquí se sirve como script suelto igual que
-el resto de dependencias, sin CDN) con un `L.imageOverlay` como capa izquierda y ninguna capa
-asignada a la derecha (así el mapa base y el resto de capas quedan visibles sin recortar a la
-derecha del slider). Arrastrando el círculo blanco se mueve la línea de comparación a cualquier
-punto de la pantalla. Mientras la herramienta está activa, el clic en el mapa no abre el desglose
-del score (para no interferir con el arrastre del slider); se restaura al desactivarla con el
-mismo botón, que también retira el control y la capa de hillshade por completo — sin dejar "zona
-revelada" pegada al mapa, resolviendo la petición de poder quitarla.
+En el frontend, el botón "🔍 Comparar con LiDAR" (arriba a la izquierda) añade un control tipo
+"swipe" inspirado en [leaflet-side-by-side](https://github.com/digidem/leaflet-side-by-side)
+(`frontend/vendor/leaflet-side-by-side/`: misma API pública y misma lógica de recorte por CSS
+`clip`, pero **reimplementado** en vez de simplemente adaptado — ver el porqué justo abajo) con
+un `L.imageOverlay` como capa izquierda y ninguna capa asignada a la derecha (así el mapa base y
+el resto de capas quedan visibles sin recortar a la derecha del slider). Mientras la herramienta
+está activa, el clic en el mapa no abre el desglose del score (para no interferir con el
+arrastre); se restaura al desactivarla con el mismo botón, que también retira el control y la
+capa de hillshade por completo — sin dejar "zona revelada" pegada al mapa.
+
+**Por qué está reimplementado y no solo adaptado:** la versión original del plugin arrastra un
+`<input type="range">` nativo invisible (con trucos de altura 0 y `pointer-events` solo en el
+pseudo-elemento del thumb) para delegar el arrastre en el navegador. Eso funciona con ratón en
+Chrome de escritorio, pero en Chrome de Android el control de rango nativo se renderiza con el
+widget Material del sistema (círculo azul en vez del círculo oscuro con borde blanco de nuestro
+CSS) y su hit-test táctil no coincide con el área CSS del elemento — el arrastre con el dedo
+fallaba o se lo quedaba cualquier control vecino que se solapase en esa franja (p. ej. el panel
+de pesos). La solución fue quitar el `<input>` nativo y controlar el "thumb" (un `<div>` normal)
+con la Pointer Events API (`pointerdown`/`pointermove`/`pointerup` + `setPointerCapture`), que se
+comporta igual en ratón, touch y stylus sin depender de cómo cada navegador/SO pinte un control
+nativo. El divisor y el thumb también llevan `z-index: 1001` (por encima de los controles
+topleft/bottomright de Leaflet, que usan 1000) para que ganen el toque en las zonas donde se
+solapan con el panel de pesos o la leyenda mientras la herramienta está activa.
 
 ## Cómo levantarlo
 

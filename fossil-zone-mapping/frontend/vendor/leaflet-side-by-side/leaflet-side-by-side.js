@@ -1,55 +1,42 @@
 /*!
- * Adapted for direct <script> use (no bundler/require) from leaflet-side-by-side v2.2.0
- * https://github.com/digidem/leaflet-side-by-side
- * Copyright (c) 2015 Gregor MacLennan — MIT License
+ * Reimplementación propia del control de comparación "swipe" de leaflet-side-by-side
+ * v2.2.0 (https://github.com/digidem/leaflet-side-by-side, MIT, Gregor MacLennan).
+ * La API pública (L.control.sideBySide(leftLayers, rightLayers)) y la lógica de recorte
+ * (_updateClip, basada en containerPointToLayerPoint) son las mismas que el original.
  *
- * Only change from upstream: removed the `require('leaflet')` / `require('./*.css')` /
- * `module.exports` lines (written for a bundler) so it runs as a plain global-`L` script,
- * same as our vendored leaflet.js. Logic is otherwise unmodified.
+ * Lo que SÍ cambia por completo es cómo se arrastra el divisor: el original usaba un
+ * <input type="range"> nativo invisible (con trucos de altura 0 y pointer-events en el
+ * pseudo-elemento del thumb) para que el navegador gestionase el arrastre. Eso funciona
+ * razonablemente en Chrome de escritorio, pero en Chrome de Android el control de rango
+ * nativo se renderiza con el widget Material del sistema (de ahí el círculo azul en vez
+ * de nuestro círculo oscuro con borde blanco) y su hit-test táctil no coincide con el
+ * área CSS del elemento, así que el arrastre real con el dedo fallaba o se enganchaba
+ * con controles vecinos (ver commits anteriores de este mismo archivo).
+ *
+ * Aquí el "thumb" es un <div> normal que gestionamos nosotros con la Pointer Events API
+ * (pointerdown/pointermove/pointerup + setPointerCapture), que funciona igual en ratón,
+ * touch y stylus y no depende de cómo cada navegador/SO pinte un input nativo.
  */
 (function (L) {
-  var mapWasDragEnabled;
-  var mapWasTapEnabled;
-
-  function cancelMapDrag() {
-    mapWasDragEnabled = this._map.dragging.enabled();
-    mapWasTapEnabled = this._map.tap && this._map.tap.enabled();
-    this._map.dragging.disable();
-    this._map.tap && this._map.tap.disable();
-  }
-
-  function uncancelMapDrag(e) {
-    this._refocusOnMap(e);
-    if (mapWasDragEnabled) this._map.dragging.enable();
-    if (mapWasTapEnabled) this._map.tap.enable();
-  }
-
-  function getRangeEvent(rangeInput) {
-    return "oninput" in rangeInput ? "input" : "change";
-  }
-
   function asArray(arg) {
-    return arg === "undefined" ? [] : Array.isArray(arg) ? arg : [arg];
+    return arg === undefined ? [] : Array.isArray(arg) ? arg : [arg];
   }
-
-  function noop() {}
 
   L.Control.SideBySide = L.Control.extend({
-    options: { thumbSize: 42, padding: 0 },
+    options: { thumbSize: 44, padding: 0 },
 
     initialize: function (leftLayers, rightLayers, options) {
+      this._value = 0.5;
       this.setLeftLayers(leftLayers);
       this.setRightLayers(rightLayers);
       L.setOptions(this, options);
     },
 
     getPosition: function () {
-      var rangeValue = this._range.value;
-      var offset = (0.5 - rangeValue) * (2 * this.options.padding + this.options.thumbSize);
-      return this._map.getSize().x * rangeValue + offset;
+      var offset = (0.5 - this._value) * (2 * this.options.padding + this.options.thumbSize);
+      return this._map.getSize().x * this._value + offset;
     },
 
-    setPosition: noop,
     includes: L.Evented.prototype || L.Mixin.Events,
 
     addTo: function (map) {
@@ -57,13 +44,7 @@
       this._map = map;
       var container = (this._container = L.DomUtil.create("div", "leaflet-sbs", map._controlContainer));
       this._divider = L.DomUtil.create("div", "leaflet-sbs-divider", container);
-      var range = (this._range = L.DomUtil.create("input", "leaflet-sbs-range", container));
-      range.type = "range";
-      range.min = 0;
-      range.max = 1;
-      range.step = "any";
-      range.value = 0.5;
-      range.style.paddingLeft = range.style.paddingRight = this.options.padding + "px";
+      this._handle = L.DomUtil.create("div", "leaflet-sbs-handle", container);
       this._addEvents();
       this._updateLayers();
       return this;
@@ -99,6 +80,7 @@
       var dividerX = this.getPosition();
 
       this._divider.style.left = dividerX + "px";
+      this._handle.style.left = dividerX + "px";
       this.fire("dividermove", { x: dividerX });
       var clipLeft = "rect(" + [nw.y, clipX, se.y, nw.x].join("px,") + "px)";
       var clipRight = "rect(" + [nw.y, se.x, se.y, clipX].join("px,") + "px)";
@@ -128,29 +110,58 @@
       this._updateClip();
     },
 
+    _setValueFromClientX: function (clientX) {
+      var rect = this._map.getContainer().getBoundingClientRect();
+      var size = this._map.getSize().x;
+      this._value = Math.min(1, Math.max(0, (clientX - rect.left) / size));
+      this._updateClip();
+    },
+
+    _onPointerDown: function (e) {
+      e.preventDefault();
+      this._dragging = true;
+      if (this._handle.setPointerCapture) {
+        try {
+          this._handle.setPointerCapture(e.pointerId);
+        } catch (err) {
+          // Puede fallar si el navegador ya soltó el puntero; no es crítico, el listener
+          // en window sigue funcionando de respaldo.
+        }
+      }
+      this._mapWasDragEnabled = this._map.dragging.enabled();
+      this._mapWasTapEnabled = this._map.tap && this._map.tap.enabled();
+      this._map.dragging.disable();
+      this._map.tap && this._map.tap.disable();
+    },
+
+    _onPointerMove: function (e) {
+      if (!this._dragging) return;
+      this._setValueFromClientX(e.clientX);
+    },
+
+    _onPointerUp: function () {
+      if (!this._dragging) return;
+      this._dragging = false;
+      if (this._mapWasDragEnabled) this._map.dragging.enable();
+      if (this._mapWasTapEnabled) this._map.tap.enable();
+    },
+
     _addEvents: function () {
-      var range = this._range;
       var map = this._map;
-      if (!map || !range) return;
+      if (!map) return;
       map.on("move", this._updateClip, this);
       map.on("layeradd layerremove", this._updateLayers, this);
-      L.DomEvent.on(range, getRangeEvent(range), this._updateClip, this);
-      L.DomEvent.on(range, "touchstart", cancelMapDrag, this);
-      L.DomEvent.on(range, "touchend", uncancelMapDrag, this);
-      L.DomEvent.on(range, "mousedown", cancelMapDrag, this);
-      L.DomEvent.on(range, "mouseup", uncancelMapDrag, this);
+      L.DomEvent.on(this._handle, "pointerdown", this._onPointerDown, this);
+      L.DomEvent.on(window, "pointermove", this._onPointerMove, this);
+      L.DomEvent.on(window, "pointerup pointercancel", this._onPointerUp, this);
+      L.DomEvent.disableClickPropagation(this._handle);
     },
 
     _removeEvents: function () {
-      var range = this._range;
       var map = this._map;
-      if (range) {
-        L.DomEvent.off(range, getRangeEvent(range), this._updateClip, this);
-        L.DomEvent.off(range, "touchstart", cancelMapDrag, this);
-        L.DomEvent.off(range, "touchend", uncancelMapDrag, this);
-        L.DomEvent.off(range, "mousedown", cancelMapDrag, this);
-        L.DomEvent.off(range, "mouseup", uncancelMapDrag, this);
-      }
+      L.DomEvent.off(this._handle, "pointerdown", this._onPointerDown, this);
+      L.DomEvent.off(window, "pointermove", this._onPointerMove, this);
+      L.DomEvent.off(window, "pointerup pointercancel", this._onPointerUp, this);
       if (map) {
         map.off("layeradd layerremove", this._updateLayers, this);
         map.off("move", this._updateClip, this);
