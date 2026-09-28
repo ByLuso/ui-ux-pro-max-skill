@@ -1,20 +1,26 @@
-"""Hillshade LiDAR de alta resolución (5 m) para revelar relieve bajo vegetación en un punto.
+"""Hillshade LiDAR de alta resolución (5 m) para revelar relieve bajo vegetación.
 
 A diferencia del resto de capas (calculadas una vez para toda la bbox de la región a 200 m),
-esta funciona sobre un punto y un radio pequeño: a 5 m de resolución, una región entera pesaría
-gigabytes. El LiDAR del IGN es de cobertura nacional, así que esta herramienta no depende de la
-región activa — funciona en cualquier punto de España.
+esta funciona sobre la bbox visible del mapa (para el modo "comparar con LiDAR" del frontend):
+a 5 m de resolución, una región entera pesaría gigabytes, así que se limita el área máxima por
+petición y se pide acercar el zoom si el usuario está demasiado lejos. El LiDAR del IGN es de
+cobertura nacional, así que esta herramienta no depende de la región activa — funciona en
+cualquier punto de España.
 """
 import numpy as np
 import rasterio
 from rasterio.io import MemoryFile
-from rasterio.warp import transform as warp_transform, transform_bounds
+from rasterio.warp import transform_bounds
 
 from app.services.http_utils import request_with_retry
 
 IGN_WCS_URL = "https://servicios.idee.es/wcs-inspire/mdt"
 LIDAR_NATIVE_CRS = "EPSG:25830"
 LIDAR_COVERAGE_ID = "Elevacion25830_5"
+
+# Por encima de esto (lado de la bbox, en metros) la petición al WCS a 5 m sería demasiado
+# grande/lenta para un uso interactivo — se le pide al usuario que acerque el zoom.
+MAX_SIDE_M = 3000
 
 # Hillshade multidireccional: promedia el sombreado desde varios azimuts para no ocultar
 # relieve que casualmente esté alineado con una única dirección de luz (la limitación clásica
@@ -23,9 +29,19 @@ HILLSHADE_AZIMUTHS_DEG = [315, 45, 135, 225]
 HILLSHADE_ALTITUDE_DEG = 45
 
 
-def _fetch_lidar_patch(lon: float, lat: float, radius_m: float) -> tuple[np.ndarray, rasterio.Affine, rasterio.CRS]:
-    xs, ys = warp_transform("EPSG:4326", LIDAR_NATIVE_CRS, [lon], [lat])
-    cx, cy = xs[0], ys[0]
+class AreaTooLargeError(ValueError):
+    """La bbox pedida supera MAX_SIDE_M; hay que acercar el zoom."""
+
+
+def _fetch_lidar_bbox(
+    min_lon: float, min_lat: float, max_lon: float, max_lat: float
+) -> tuple[np.ndarray, rasterio.Affine, rasterio.CRS]:
+    minx, miny, maxx, maxy = transform_bounds("EPSG:4326", LIDAR_NATIVE_CRS, min_lon, min_lat, max_lon, max_lat)
+
+    if (maxx - minx) > MAX_SIDE_M or (maxy - miny) > MAX_SIDE_M:
+        raise AreaTooLargeError(
+            f"El área visible es demasiado grande para el LiDAR de 5 m (máx. {MAX_SIDE_M} m de lado)."
+        )
 
     response = request_with_retry(
         "GET",
@@ -35,8 +51,8 @@ def _fetch_lidar_patch(lon: float, lat: float, radius_m: float) -> tuple[np.ndar
             ("version", "2.0.1"),
             ("request", "GetCoverage"),
             ("coverageId", LIDAR_COVERAGE_ID),
-            ("subset", f"x({cx - radius_m},{cx + radius_m})"),
-            ("subset", f"y({cy - radius_m},{cy + radius_m})"),
+            ("subset", f"x({minx},{maxx})"),
+            ("subset", f"y({miny},{maxy})"),
             ("format", "image/tiff"),
         ],
         timeout=30,
@@ -74,9 +90,10 @@ def _stretch_contrast(shaded: np.ndarray) -> np.ndarray:
     return np.clip((shaded - low) / (high - low), 0, 1)
 
 
-def get_hillshade_png_and_bounds(lon: float, lat: float, radius_m: float) -> tuple[bytes, list]:
-    """Hillshade LiDAR (5 m) alrededor de (lon, lat), como PNG en escala de grises + bounds WGS84."""
-    elevation, transform, crs = _fetch_lidar_patch(lon, lat, radius_m)
+def get_hillshade_png_and_bounds(min_lon: float, min_lat: float, max_lon: float, max_lat: float) -> tuple[bytes, list]:
+    """Hillshade LiDAR (5 m) de la bbox dada, como PNG en escala de grises + bounds WGS84 reales
+    del recorte devuelto (pueden no coincidir exactamente con los pedidos por redondeo de píxel)."""
+    elevation, transform, crs = _fetch_lidar_bbox(min_lon, min_lat, max_lon, max_lat)
     shaded = _multidirectional_hillshade(elevation, transform.a)
     shaded = _stretch_contrast(shaded)
     img_uint8 = (np.nan_to_num(shaded, nan=0.0) * 255).astype("uint8")

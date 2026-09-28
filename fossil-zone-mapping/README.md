@@ -20,10 +20,12 @@ propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli
   defecto), cada una con su control de capas y su sección de leyenda.
 - Panel de sliders (5 variables) para ajustar en vivo el peso de cada componente del score, y clic
   en el mapa para ver el desglose de por qué una zona tiene esa puntuación.
-- Herramienta **"Revelar relieve oculto (LiDAR)"**: al activarla, un clic en el mapa muestra el
-  hillshade de alta resolución (5 m) de ese punto — revela relieve fino (barrancos, cortes,
-  posibles estructuras) que la vegetación oculta en la imagen óptica normal, ya que el LiDAR
-  atraviesa el dosel forestal y el resto de capas no.
+- Herramienta **"🔍 Comparar con LiDAR"**: un slider deslizante (arrastrable a cualquier punto de
+  la pantalla) divide el mapa en dos — a la izquierda el hillshade LiDAR de alta resolución (5 m),
+  a la derecha el mapa normal — para comparar en vivo el relieve fino (barrancos, cortes, posibles
+  estructuras) que la vegetación oculta en la imagen óptica, ya que el LiDAR atraviesa el dosel
+  forestal y el resto de capas no. El recorte LiDAR sigue el viewport visible del mapa (se
+  actualiza al mover/hacer zoom), así que el nivel de zoom del propio mapa es el zoom del LiDAR.
 - Sin base de datos todavía; el procesamiento geoespacial usa caché en disco (`backend/data/cache/`),
   con archivos separados por región (`dem_bizkaia_200m.tif`, `dem_la-rioja_200m.tif`, etc.).
 
@@ -244,7 +246,7 @@ Cambios para soportarlo (`backend/app/config.py`):
   "generación" evita que las peticiones aún en vuelo de la región anterior toquen los controles
   del mapa nuevo (o de uno ya eliminado) si el usuario cambia de región mientras algo seguía cargando.
 
-### Revelar relieve oculto con LiDAR (hillshade de 5 m)
+### Comparar con LiDAR (hillshade de 5 m, modo swipe)
 
 Petición explícita del usuario: quería algo parecido a apps de urbex (p. ej. las que muestran un
 "hillshade" LiDAR en escala de grises para localizar ruinas bajo bosque) pero aplicado a la
@@ -252,32 +254,54 @@ búsqueda de fósiles — un rasgo geológico expuesto puede quedar oculto para 
 si hay vegetación encima, mientras que el LiDAR (pulsos láser) sí consigue pasar por huecos del
 dosel forestal y medir el terreno real debajo.
 
+**v1 (superada):** un clic en el mapa pedía el hillshade de un parche fijo (1 km²) alrededor de
+ese punto. Tras probarla, el usuario pidió mejor resolución/zoom real, una forma de quitar la zona
+revelada, y sustituir el clic por un slider arrastrable que compare LiDAR (izquierda) contra el
+mapa normal (derecha) en cualquier posición de la pantalla — lo que dio lugar al rediseño v2
+siguiente.
+
+**v2 (actual): comparación continua atada al viewport.** En vez de un parche fijo, el hillshade
+sigue el área visible del mapa: al activar la herramienta, hacer zoom o desplazar el mapa, se pide
+al IGN el recorte LiDAR de exactamente lo que se ve (con debounce de 400 ms para no disparar una
+petición por cada frame de un arrastre). Esto resuelve la queja de "poca resolución": el zoom del
+LiDAR es el zoom del mapa, no un radio fijo independiente del nivel de zoom.
+
 **Por qué esta capa no funciona como las demás (por región completa):** el resto de capas usan el
 MDT a 200 m; a 200 m toda la bbox de una región son ~600×400 píxeles, manejable. El mismo servicio
 WCS del IGN también ofrece `Elevacion25830_5` (LiDAR real, 5 m) — pero a esa resolución, la bbox
 completa de La Rioja serían decenas de miles de píxeles por lado (varios GB). Por eso esta
-herramienta no es una capa fija: es **puntual, bajo demanda**. El usuario activa el modo "Revelar
-relieve oculto", toca un punto del mapa, y el backend pide al IGN solo un recorte pequeño (1 km²
-por defecto) a 5 m alrededor de ese punto — instantáneo.
+herramienta pide bajo demanda solo la bbox visible, con un tope duro (`MAX_SIDE_M = 3000` m de
+lado): si el usuario está demasiado alejado, el backend devuelve **400** con un mensaje explicando
+que hay que acercar el zoom, en vez de intentar servir (o degradar silenciosamente) un recorte
+gigante.
 
 Flujo (`backend/app/services/hillshade.py`):
-1. Convierte el punto (lat/lon) a EPSG:25830 y pide al WCS del IGN el recorte de 5 m centrado ahí.
+1. Convierte la bbox visible (lat/lon) a EPSG:25830; si su lado supera `MAX_SIDE_M`, lanza
+   `AreaTooLargeError` (→ 400 en el router). Si no, pide al WCS del IGN el recorte de 5 m de esa bbox.
 2. Calcula un **hillshade multidireccional**: en vez de iluminar desde un único azimut (lo habitual
    deja invisible cualquier rasgo alineado con esa dirección de luz), se promedian 4 azimuts
    (315°, 45°, 135°, 225°) a 45° de altitud solar.
 3. Aplica un estiramiento de contraste por percentiles (2-98): promediar 4 direcciones aplana el
    contraste, y sin este paso el relieve fino —justo lo que se quiere revelar— casi no se aprecia.
-4. Devuelve un PNG en escala de grises; los bounds WGS84 del recorte van en la cabecera HTTP
+4. Devuelve un PNG en escala de grises; los bounds WGS84 reales del recorte van en la cabecera HTTP
    `X-Bounds` (no en el cuerpo, para no tener que pedir el recorte dos veces).
 
-Endpoint: `GET /terrain/hillshade.png?lat=&lon=&radius_m=` (100-1500 m, 500 m por defecto). No
-depende de `?region=`: el LiDAR del IGN es de cobertura nacional, así que funciona en cualquier
-punto de España, esté o no dentro de la bbox de una región configurada.
+Endpoint: `GET /terrain/hillshade.png?min_lat=&min_lon=&max_lat=&max_lon=` (bbox de la vista actual
+del mapa; sustituye a la firma v1 `?lat=&lon=&radius_m=`, que ya no existe). No depende de
+`?region=`: el LiDAR del IGN es de cobertura nacional, así que funciona en cualquier punto de
+España, esté o no dentro de la bbox de una región configurada.
 
-En el frontend, el botón "🔍 Revelar relieve oculto (LiDAR)" (arriba a la izquierda) cambia el modo
-de clic del mapa: mientras está activo, tocar el mapa pide el hillshade de ese punto y hace zoom
-ahí en vez de abrir el desglose del score. Se desactiva con el mismo botón para volver al
-comportamiento normal.
+En el frontend, el botón "🔍 Comparar con LiDAR" (arriba a la izquierda) añade un control de
+[leaflet-side-by-side](https://github.com/digidem/leaflet-side-by-side) (vendorizado en
+`frontend/vendor/leaflet-side-by-side/`, adaptado de su distribución npm porque usa
+`require`/`module.exports` pensados para un bundler — aquí se sirve como script suelto igual que
+el resto de dependencias, sin CDN) con un `L.imageOverlay` como capa izquierda y ninguna capa
+asignada a la derecha (así el mapa base y el resto de capas quedan visibles sin recortar a la
+derecha del slider). Arrastrando el círculo blanco se mueve la línea de comparación a cualquier
+punto de la pantalla. Mientras la herramienta está activa, el clic en el mapa no abre el desglose
+del score (para no interferir con el arrastre del slider); se restaura al desactivarla con el
+mismo botón, que también retira el control y la capa de hillshade por completo — sin dejar "zona
+revelada" pegada al mapa, resolviendo la petición de poder quitarla.
 
 ## Cómo levantarlo
 

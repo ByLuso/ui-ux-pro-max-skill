@@ -33,15 +33,18 @@ def slope_png(region: Region = Depends(region_param)) -> FileResponse:
 
 @router.get("/hillshade.png")
 def hillshade_png(
-    lat: float = Query(...),
-    lon: float = Query(...),
-    radius_m: float = Query(default=500, ge=100, le=1500),
+    min_lat: float = Query(...),
+    min_lon: float = Query(...),
+    max_lat: float = Query(...),
+    max_lon: float = Query(...),
 ) -> Response:
-    """Hillshade LiDAR de alta resolución (5 m) alrededor de un punto, para revelar relieve
-    oculto bajo vegetación (no depende de la región activa: el LiDAR del IGN es nacional).
-    Los bounds WGS84 del recorte van en la cabecera X-Bounds."""
+    """Hillshade LiDAR de alta resolución (5 m) de la bbox visible del mapa, para revelar
+    relieve oculto bajo vegetación (no depende de la región activa: el LiDAR del IGN es
+    nacional). Los bounds WGS84 reales del recorte van en la cabecera X-Bounds."""
     try:
-        png_bytes, bounds = hillshade.get_hillshade_png_and_bounds(lon, lat, radius_m)
+        png_bytes, bounds = hillshade.get_hillshade_png_and_bounds(min_lon, min_lat, max_lon, max_lat)
+    except hillshade.AreaTooLargeError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
     except httpx.HTTPError as error:
         raise HTTPException(status_code=502, detail=f"No se pudo obtener el LiDAR del IGN: {error}") from error
     response = Response(content=png_bytes, media_type="image/png")
