@@ -182,6 +182,7 @@ function addHillshadeTool(map) {
     hillshadeLayer = L.imageOverlay(BLANK_PIXEL, map.getBounds(), {
       opacity: 1,
       attribution: "Hillshade LiDAR: IGN (MDT05)",
+      className: "hillshade-image-layer",
     }).addTo(map);
     // El plugin side-by-side espera layers estilo TileLayer (con getContainer());
     // un ImageOverlay solo tiene getElement() (el <img>), que sirve igual de bien
