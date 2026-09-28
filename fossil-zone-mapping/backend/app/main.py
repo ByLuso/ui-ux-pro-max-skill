@@ -12,6 +12,7 @@ app.add_middleware(
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["X-Bounds"],
 )
 
 app.include_router(health.router, tags=["health"])

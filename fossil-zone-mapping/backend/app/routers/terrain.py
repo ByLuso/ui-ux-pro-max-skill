@@ -1,10 +1,12 @@
+import json
+
 import httpx
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from fastapi.responses import FileResponse
 
 from app.config import Region
 from app.dependencies import region_param
-from app.services import dem
+from app.services import dem, hillshade
 
 router = APIRouter(prefix="/terrain", tags=["terrain"])
 
@@ -27,3 +29,21 @@ def slope_png(region: Region = Depends(region_param)) -> FileResponse:
     except httpx.HTTPError as error:
         raise HTTPException(status_code=502, detail=f"No se pudo obtener el MDT del IGN: {error}") from error
     return FileResponse(overlay["png_path"], media_type="image/png")
+
+
+@router.get("/hillshade.png")
+def hillshade_png(
+    lat: float = Query(...),
+    lon: float = Query(...),
+    radius_m: float = Query(default=500, ge=100, le=1500),
+) -> Response:
+    """Hillshade LiDAR de alta resolución (5 m) alrededor de un punto, para revelar relieve
+    oculto bajo vegetación (no depende de la región activa: el LiDAR del IGN es nacional).
+    Los bounds WGS84 del recorte van en la cabecera X-Bounds."""
+    try:
+        png_bytes, bounds = hillshade.get_hillshade_png_and_bounds(lon, lat, radius_m)
+    except httpx.HTTPError as error:
+        raise HTTPException(status_code=502, detail=f"No se pudo obtener el LiDAR del IGN: {error}") from error
+    response = Response(content=png_bytes, media_type="image/png")
+    response.headers["X-Bounds"] = json.dumps(bounds)
+    return response

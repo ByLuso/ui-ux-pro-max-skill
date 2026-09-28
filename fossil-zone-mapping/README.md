@@ -7,11 +7,11 @@ La Rioja (España), extensible a otras regiones.
 Este proyecto es independiente del skill UI/UX Pro Max del resto del repositorio; vive en su
 propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli/`.
 
-## Estado actual: Fase 7 + multi-región — Bizkaia (Pagasarri) añadida
+## Estado actual: Fase 7 + multi-región + hillshade LiDAR
 
 - Backend FastAPI con endpoints `/health`, `/regions`, `/config`, `/terrain/slope(.png)`,
-  `/vegetation/ndvi(.png)`, `/hydrography/distance(.png)`, `/scoring/{meta,heatmap.png,breakdown}`
-  y `/known-sites/sites.geojson` — todos parametrizados por `?region=<slug>`.
+  `/terrain/hillshade.png`, `/vegetation/ndvi(.png)`, `/hydrography/distance(.png)`,
+  `/scoring/{meta,heatmap.png,breakdown}` y `/known-sites/sites.geojson`.
 - Frontend con selector de región en la cabecera (La Rioja / Bizkaia (Pagasarri)); cambiar de
   región recarga el mapa entero para esa bbox.
 - Siete capas superpuestas: litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2,
@@ -20,6 +20,10 @@ propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli
   defecto), cada una con su control de capas y su sección de leyenda.
 - Panel de sliders (5 variables) para ajustar en vivo el peso de cada componente del score, y clic
   en el mapa para ver el desglose de por qué una zona tiene esa puntuación.
+- Herramienta **"Revelar relieve oculto (LiDAR)"**: al activarla, un clic en el mapa muestra el
+  hillshade de alta resolución (5 m) de ese punto — revela relieve fino (barrancos, cortes,
+  posibles estructuras) que la vegetación oculta en la imagen óptica normal, ya que el LiDAR
+  atraviesa el dosel forestal y el resto de capas no.
 - Sin base de datos todavía; el procesamiento geoespacial usa caché en disco (`backend/data/cache/`),
   con archivos separados por región (`dem_bizkaia_200m.tif`, `dem_la-rioja_200m.tif`, etc.).
 
@@ -239,6 +243,41 @@ Cambios para soportarlo (`backend/app/config.py`):
   (`activeMap.remove()`) y lo reconstruye desde cero para la bbox nueva. Un contador de
   "generación" evita que las peticiones aún en vuelo de la región anterior toquen los controles
   del mapa nuevo (o de uno ya eliminado) si el usuario cambia de región mientras algo seguía cargando.
+
+### Revelar relieve oculto con LiDAR (hillshade de 5 m)
+
+Petición explícita del usuario: quería algo parecido a apps de urbex (p. ej. las que muestran un
+"hillshade" LiDAR en escala de grises para localizar ruinas bajo bosque) pero aplicado a la
+búsqueda de fósiles — un rasgo geológico expuesto puede quedar oculto para el NDVI/óptico normal
+si hay vegetación encima, mientras que el LiDAR (pulsos láser) sí consigue pasar por huecos del
+dosel forestal y medir el terreno real debajo.
+
+**Por qué esta capa no funciona como las demás (por región completa):** el resto de capas usan el
+MDT a 200 m; a 200 m toda la bbox de una región son ~600×400 píxeles, manejable. El mismo servicio
+WCS del IGN también ofrece `Elevacion25830_5` (LiDAR real, 5 m) — pero a esa resolución, la bbox
+completa de La Rioja serían decenas de miles de píxeles por lado (varios GB). Por eso esta
+herramienta no es una capa fija: es **puntual, bajo demanda**. El usuario activa el modo "Revelar
+relieve oculto", toca un punto del mapa, y el backend pide al IGN solo un recorte pequeño (1 km²
+por defecto) a 5 m alrededor de ese punto — instantáneo.
+
+Flujo (`backend/app/services/hillshade.py`):
+1. Convierte el punto (lat/lon) a EPSG:25830 y pide al WCS del IGN el recorte de 5 m centrado ahí.
+2. Calcula un **hillshade multidireccional**: en vez de iluminar desde un único azimut (lo habitual
+   deja invisible cualquier rasgo alineado con esa dirección de luz), se promedian 4 azimuts
+   (315°, 45°, 135°, 225°) a 45° de altitud solar.
+3. Aplica un estiramiento de contraste por percentiles (2-98): promediar 4 direcciones aplana el
+   contraste, y sin este paso el relieve fino —justo lo que se quiere revelar— casi no se aprecia.
+4. Devuelve un PNG en escala de grises; los bounds WGS84 del recorte van en la cabecera HTTP
+   `X-Bounds` (no en el cuerpo, para no tener que pedir el recorte dos veces).
+
+Endpoint: `GET /terrain/hillshade.png?lat=&lon=&radius_m=` (100-1500 m, 500 m por defecto). No
+depende de `?region=`: el LiDAR del IGN es de cobertura nacional, así que funciona en cualquier
+punto de España, esté o no dentro de la bbox de una región configurada.
+
+En el frontend, el botón "🔍 Revelar relieve oculto (LiDAR)" (arriba a la izquierda) cambia el modo
+de clic del mapa: mientras está activo, tocar el mapa pide el hillshade de ese punto y hace zoom
+ahí en vez de abrir el desglose del score. Se desactiva con el mismo botón para volver al
+comportamiento normal.
 
 ## Cómo levantarlo
 

@@ -125,13 +125,75 @@ async function initMap(regionSlug) {
     pngUrl: `${API_BASE_URL}/hydrography/distance.png?region=${regionSlug}`,
   }).finally(loading.done);
 
+  const hillshadeTool = addHillshadeTool(map);
+
   addScoringLayer(map, layersControl, legend, isStale, regionSlug)
     .then((weights) => {
-      if (weights) addScoringClickHandler(map, () => weights, regionSlug);
+      if (weights) addScoringClickHandler(map, () => weights, regionSlug, hillshadeTool.isEnabled);
     })
     .finally(loading.done);
 
   addKnownSitesLayer(map, layersControl, legend, isStale, regionSlug).finally(loading.done);
+}
+
+function addHillshadeTool(map) {
+  const RADIUS_M = 500;
+  let enabled = false;
+  let currentOverlay = null;
+  let currentObjectUrl = null;
+
+  const control = L.control({ position: "topleft" });
+  control.onAdd = function () {
+    const container = L.DomUtil.create("div", "hillshade-control");
+    L.DomEvent.disableClickPropagation(container);
+    container.innerHTML = `
+      <button type="button" class="hillshade-toggle">🔍 Revelar relieve oculto (LiDAR)</button>
+      <p class="hillshade-hint" hidden>
+        Toca el mapa para ver el relieve del terreno bajo la vegetación en ese punto
+        (LiDAR 5&nbsp;m del IGN, atraviesa el dosel forestal).
+      </p>
+    `;
+    const button = container.querySelector(".hillshade-toggle");
+    const hint = container.querySelector(".hillshade-hint");
+    button.addEventListener("click", () => {
+      enabled = !enabled;
+      button.classList.toggle("active", enabled);
+      hint.hidden = !enabled;
+    });
+    return container;
+  };
+  control.addTo(map);
+
+  map.on("click", async (event) => {
+    if (!enabled) return;
+    const { lat, lng } = event.latlng;
+    L.DomUtil.addClass(map.getContainer(), "hillshade-loading");
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/terrain/hillshade.png?lat=${lat}&lon=${lng}&radius_m=${RADIUS_M}`
+      );
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const bounds = JSON.parse(response.headers.get("X-Bounds"));
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+
+      if (currentOverlay) map.removeLayer(currentOverlay);
+      if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+      currentObjectUrl = objectUrl;
+      currentOverlay = L.imageOverlay(objectUrl, bounds, {
+        opacity: 1,
+        attribution: "Hillshade LiDAR: IGN (MDT05)",
+      }).addTo(map);
+      map.fitBounds(bounds);
+    } catch (error) {
+      console.error("No se pudo generar el hillshade LiDAR:", error);
+    } finally {
+      L.DomUtil.removeClass(map.getContainer(), "hillshade-loading");
+    }
+  });
+
+  return { isEnabled: () => enabled };
 }
 
 function createLoadingTracker(totalTasks, isStale) {
@@ -266,9 +328,11 @@ function addWeightsControl(map, weights, onChange) {
   control.addTo(map);
 }
 
-function addScoringClickHandler(map, getWeights, regionSlug) {
+function addScoringClickHandler(map, getWeights, regionSlug, isHillshadeModeEnabled) {
   const popup = L.popup();
   map.on("click", async (event) => {
+    if (isHillshadeModeEnabled()) return;
+
     const { lat, lng } = event.latlng;
     popup.setLatLng(event.latlng).setContent("Calculando…").openOn(map);
 
