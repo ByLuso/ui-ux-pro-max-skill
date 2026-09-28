@@ -432,9 +432,86 @@ async function addScoringLayer(map, layersControl, legend, isStale, regionSlug) 
   layersControl.addOverlay(heatmapLayer, "Score combinado (heatmap)");
   legend.addSection("Score combinado (heatmap)", true, buildGradientLegendHtml(meta.gradient));
 
-  addWeightsControl(map, weights, () => heatmapLayer.setUrl(buildHeatmapUrl()));
+  const hotspots = await addHotspotsLayer(map, layersControl, legend, isStale, regionSlug, () => weights);
+
+  addWeightsControl(map, weights, () => {
+    heatmapLayer.setUrl(buildHeatmapUrl());
+    if (hotspots) hotspots.refresh();
+  });
 
   return weights;
+}
+
+const HOTSPOT_ICON = L.icon({
+  iconUrl: "vendor/leaflet/images/marker-icon.png",
+  iconRetinaUrl: "vendor/leaflet/images/marker-icon-2x.png",
+  shadowUrl: "vendor/leaflet/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+// Chinchetas en las zonas de mayor interés (máximos locales del score combinado): así el
+// usuario no tiene que rastrear el heatmap a ojo para encontrar dónde merece la pena mirar.
+// Se recalculan junto con el heatmap cada vez que cambian los pesos (mismo onChange).
+async function addHotspotsLayer(map, layersControl, legend, isStale, regionSlug, getWeights) {
+  const hotspotsGroup = L.layerGroup();
+  const popup = L.popup();
+
+  async function refresh() {
+    let data;
+    try {
+      const url = `${API_BASE_URL}/scoring/hotspots?region=${regionSlug}&${weightsQueryString(getWeights())}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      data = await response.json();
+    } catch (error) {
+      console.error("No se pudieron cargar las zonas de mayor interés:", error);
+      return;
+    }
+    if (isStale()) return;
+
+    hotspotsGroup.clearLayers();
+    for (const point of data.hotspots) {
+      const marker = L.marker([point.lat, point.lon], { icon: HOTSPOT_ICON });
+      marker.on("click", () => showHotspotBreakdown(map, popup, point, regionSlug, getWeights()));
+      hotspotsGroup.addLayer(marker);
+    }
+  }
+
+  await refresh();
+  if (isStale()) return null;
+
+  hotspotsGroup.addTo(map);
+  layersControl.addOverlay(hotspotsGroup, "Zonas de mayor interés (chinchetas)");
+  legend.addSection(
+    "Zonas de mayor interés (chinchetas)",
+    true,
+    `
+      <strong>Zonas de mayor interés</strong>
+      <div class="legend-row">
+        <span class="legend-pin"></span>
+        <span>Máximo local del score combinado (toca la chincheta para ver el desglose)</span>
+      </div>
+    `
+  );
+
+  return { refresh };
+}
+
+async function showHotspotBreakdown(map, popup, point, regionSlug, weights) {
+  popup.setLatLng([point.lat, point.lon]).setContent("Calculando…").openOn(map);
+  try {
+    const url =
+      `${API_BASE_URL}/scoring/breakdown?lat=${point.lat}&lon=${point.lon}&region=${regionSlug}&${weightsQueryString(weights)}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const breakdown = await response.json();
+    popup.setContent(buildBreakdownHtml(breakdown));
+  } catch (error) {
+    popup.setContent("No se pudo calcular el desglose de esta zona.");
+  }
 }
 
 function weightsQueryString(weights) {

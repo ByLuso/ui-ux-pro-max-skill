@@ -47,6 +47,27 @@ def heatmap_png(
     return Response(content=png_bytes, media_type="image/png")
 
 
+@router.get("/hotspots")
+def hotspots(
+    region: Region = Depends(region_param),
+    w_lithology: float = Query(default=0, ge=0, le=1),
+    w_slope: float = Query(default=0, ge=0, le=1),
+    w_vegetation: float = Query(default=0, ge=0, le=1),
+    w_water: float = Query(default=0, ge=0, le=1),
+    w_known_sites: float = Query(default=0, ge=0, le=1),
+) -> dict:
+    """Zonas de mayor interés (máximos locales del score combinado), para marcarlas con un pin
+    en el mapa en vez de tener que rastrear el heatmap a ojo."""
+    weights = _weights(w_lithology, w_slope, w_vegetation, w_water, w_known_sites)
+    try:
+        points = scoring.find_hotspots(region, weights)
+    except httpx.HTTPError as error:
+        raise HTTPException(
+            status_code=502, detail=f"No se pudieron calcular las zonas de interés: {error}"
+        ) from error
+    return {"hotspots": points}
+
+
 @router.get("/breakdown")
 def breakdown(
     lat: float = Query(...),

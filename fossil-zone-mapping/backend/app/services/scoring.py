@@ -3,6 +3,7 @@ import numpy as np
 import rasterio
 from rasterio.io import MemoryFile
 from rasterio.warp import Resampling, calculate_default_transform, reproject, transform as warp_transform
+from scipy.ndimage import maximum_filter
 
 from app.config import Region, settings
 from app.services import dem, hydrography, known_sites, lithology, ndvi
@@ -19,6 +20,13 @@ WATER_SATURATION_M = 600.0
 KNOWN_SITES_SATURATION_M = 2000.0
 
 LAYER_KEYS = ("lithology", "slope", "vegetation", "water", "known_sites")
+
+# Umbral mínimo de score para que un máximo local se considere "zona de interés" (marcable con
+# una chincheta), y separación mínima entre chinchetas (en píxeles de la rejilla del MDT, ~200 m
+# cada uno) para no llenar el mapa de puntos pegados dentro de la misma mancha de interés.
+HOTSPOT_MIN_SCORE = 65.0
+HOTSPOT_MIN_SEPARATION_PX = 4
+HOTSPOT_MAX_COUNT = 15
 
 # Rampa continua de color para el heatmap de score (0 = sin interés/transparente,
 # 100 = máximo interés). Mismo lenguaje de color (rojo = interés) que las
@@ -93,6 +101,56 @@ def compute_score(region: Region, weights: dict) -> np.ndarray:
         return np.full(layers["shape"], 50.0)
     combined = sum(max(weights.get(k, 0), 0) * layers["scores"][k] for k in LAYER_KEYS) / total_weight
     return np.clip(combined, 0, 100)
+
+
+def find_hotspots(region: Region, weights: dict) -> list[dict]:
+    """Máximos locales del score combinado por encima de HOTSPOT_MIN_SCORE, para marcarlos con
+    una chincheta en el mapa — en vez de que el usuario tenga que rastrear el heatmap a ojo.
+
+    Un máximo local "de verdad" en una rejilla continua puede tener varios píxeles vecinos
+    empatados al mismo valor (una pequeña meseta): sin suprimir eso, saldrían varias chinchetas
+    pegadas dentro de la misma mancha. Se aplica supresión de no-máximos simple: se recorren los
+    candidatos de mayor a menor score y se descarta cualquiera demasiado cerca (en píxeles) de
+    uno ya elegido.
+    """
+    layers = _get_layers(region)
+    score = compute_score(region, weights)
+
+    footprint_size = 2 * HOTSPOT_MIN_SEPARATION_PX + 1
+    local_max = maximum_filter(score, size=footprint_size, mode="nearest")
+    is_peak = (score == local_max) & (score >= HOTSPOT_MIN_SCORE)
+    rows, cols = np.nonzero(is_peak)
+    if len(rows) == 0:
+        return []
+
+    order = np.argsort(-score[rows, cols])
+    rows, cols = rows[order], cols[order]
+
+    selected_rows: list[int] = []
+    selected_cols: list[int] = []
+    min_separation_sq = HOTSPOT_MIN_SEPARATION_PX**2
+    for r, c in zip(rows, cols):
+        too_close = any(
+            (int(r) - sr) ** 2 + (int(c) - sc) ** 2 < min_separation_sq
+            for sr, sc in zip(selected_rows, selected_cols)
+        )
+        if too_close:
+            continue
+        selected_rows.append(int(r))
+        selected_cols.append(int(c))
+        if len(selected_rows) >= HOTSPOT_MAX_COUNT:
+            break
+
+    if not selected_rows:
+        return []
+
+    xs, ys = rasterio.transform.xy(layers["transform"], selected_rows, selected_cols)
+    lons, lats = warp_transform(layers["crs"], "EPSG:4326", xs, ys)
+    selected_scores = score[selected_rows, selected_cols]
+    return [
+        {"lat": float(lat), "lon": float(lon), "score": float(s)}
+        for lat, lon, s in zip(lats, lons, selected_scores)
+    ]
 
 
 def _colorize_score(score: np.ndarray) -> np.ndarray:

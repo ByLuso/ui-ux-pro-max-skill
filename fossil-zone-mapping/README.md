@@ -17,13 +17,15 @@ propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli
 - Frontend con selector de región en la cabecera (La Rioja / Bizkaia (Pagasarri)); cambiar de
   región recarga el mapa entero para esa bbox. Tres capas base intercambiables (OSM, ortofoto
   PNOA y relieve MDT del IGN, cobertura nacional) más el resto de capas como overlays.
-- Ocho capas superpuestas: litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2,
+- Nueve capas superpuestas: litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2,
   Copernicus), ríos y arroyos (IGN, WMS), distancia a cauces, **relieve LiDAR de alta resolución
-  propio** (por zona, ver más abajo), el **score combinado** (heatmap, activo por defecto) y los
-  **yacimientos paleontológicos conocidos** (IELIG, también activos por defecto), cada una con su
-  control de capas y su sección de leyenda.
+  propio** (por zona, ver más abajo), el **score combinado** (heatmap, activo por defecto), las
+  **zonas de mayor interés** (chinchetas sobre los máximos locales del score, también activas por
+  defecto) y los **yacimientos paleontológicos conocidos** (IELIG, también activos por defecto),
+  cada una con su control de capas y su sección de leyenda.
 - Panel de sliders (5 variables) para ajustar en vivo el peso de cada componente del score, y clic
-  en el mapa para ver el desglose de por qué una zona tiene esa puntuación.
+  en el mapa (o en una chincheta) para ver el desglose de por qué una zona tiene esa puntuación.
+  Las chinchetas se recalculan junto con el heatmap al mover cualquier slider.
 - Herramienta **"🔍 Revelar relieve oculto (LiDAR)"**: al activarla, un clic en el mapa muestra el
   hillshade LiDAR (interpolado a una rejilla fina, ver más abajo) de un cuadrado de 1 km centrado
   en ese punto — revela relieve fino (barrancos, cortes, posibles estructuras) que la vegetación
@@ -189,6 +191,29 @@ Endpoints:
 En el frontend, el panel "Pesos del score" (arriba a la izquierda) tiene un slider por variable;
 al mover uno, tras un pequeño debounce, se pide un nuevo heatmap con `imageOverlay.setUrl(...)`
 sin recrear la capa. Un clic en cualquier punto del mapa abre un popup con el desglose.
+
+#### Zonas de mayor interés (chinchetas)
+
+Petición explícita del usuario: en vez de tener que rastrear el heatmap a ojo buscando las zonas
+más rojas, `scoring.find_hotspots()` marca automáticamente los **máximos locales** del score
+combinado por encima de un umbral (`HOTSPOT_MIN_SCORE = 65`) con una chincheta (el marcador
+clásico de Leaflet — los assets ya estaban vendorizados desde el principio, no hubo que añadir
+nada nuevo). Detalles:
+
+- Usa `scipy.ndimage.maximum_filter` sobre la rejilla del score para encontrar píxeles que son el
+  máximo de su entorno (`HOTSPOT_MIN_SEPARATION_PX = 4` píxeles de radio, ~800 m en la rejilla de
+  200 m del MDT).
+- Una meseta plana puede tener varios píxeles vecinos empatados al mismo valor — sin más, saldrían
+  varias chinchetas pegadas dentro de la misma mancha. Se aplica una supresión de no-máximos
+  simple: se recorren los candidatos de mayor a menor score y se descarta cualquiera demasiado
+  cerca (en píxeles) de uno ya elegido.
+- Tope de 15 chinchetas (las de mayor score), para no saturar el mapa.
+
+Endpoint: `GET /scoring/hotspots?w_...` (mismos pesos que el heatmap/breakdown) — devuelve
+`{lat, lon, score}` por punto. En el frontend, tocar una chincheta pide `/scoring/breakdown` para
+ese punto y muestra el mismo popup de desglose que un clic normal en el mapa. Las chinchetas se
+recalculan junto con el heatmap cada vez que cambia algún peso (mismo callback `onChange` del
+panel de sliders) y al cambiar de región.
 
 ### Yacimientos paleontológicos conocidos (fase 7)
 
