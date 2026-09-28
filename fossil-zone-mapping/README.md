@@ -7,17 +7,21 @@ La Rioja (España), extensible a otras regiones.
 Este proyecto es independiente del skill UI/UX Pro Max del resto del repositorio; vive en su
 propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli/`.
 
-## Estado actual: Fase 7 + multi-región + hillshade LiDAR
+## Estado actual: Fase 7 + multi-región + hillshade LiDAR + relieve LiDAR propio
 
-- Backend FastAPI con endpoints `/health`, `/regions`, `/config`, `/terrain/slope(.png)`,
-  `/terrain/hillshade.png`, `/vegetation/ndvi(.png)`, `/hydrography/distance(.png)`,
-  `/scoring/{meta,heatmap.png,breakdown}` y `/known-sites/sites.geojson`.
+- Backend FastAPI con endpoints `/health`, `/regions`, `/config`, `/pmtiles/zones`,
+  `/terrain/slope(.png)`, `/terrain/hillshade.png`, `/vegetation/ndvi(.png)`,
+  `/hydrography/distance(.png)`, `/scoring/{meta,heatmap.png,breakdown}` y
+  `/known-sites/sites.geojson`. Sirve además los `.pmtiles` de relieve LiDAR propio (ver más
+  abajo) en `/pmtiles/files/<archivo>`, con soporte de HTTP range requests.
 - Frontend con selector de región en la cabecera (La Rioja / Bizkaia (Pagasarri)); cambiar de
-  región recarga el mapa entero para esa bbox.
-- Siete capas superpuestas: litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2,
-  Copernicus), ríos y arroyos (IGN, WMS), distancia a cauces, el **score combinado** (heatmap,
-  activo por defecto) y los **yacimientos paleontológicos conocidos** (IELIG, también activos por
-  defecto), cada una con su control de capas y su sección de leyenda.
+  región recarga el mapa entero para esa bbox. Tres capas base intercambiables (OSM, ortofoto
+  PNOA y relieve MDT del IGN, cobertura nacional) más el resto de capas como overlays.
+- Ocho capas superpuestas: litología (IGME, WMS), pendiente (MDT del IGN), NDVI (Sentinel-2,
+  Copernicus), ríos y arroyos (IGN, WMS), distancia a cauces, **relieve LiDAR de alta resolución
+  propio** (por zona, ver más abajo), el **score combinado** (heatmap, activo por defecto) y los
+  **yacimientos paleontológicos conocidos** (IELIG, también activos por defecto), cada una con su
+  control de capas y su sección de leyenda.
 - Panel de sliders (5 variables) para ajustar en vivo el peso de cada componente del score, y clic
   en el mapa para ver el desglose de por qué una zona tiene esa puntuación.
 - Herramienta **"🔍 Revelar relieve oculto (LiDAR)"**: al activarla, un clic en el mapa muestra el
@@ -303,6 +307,62 @@ derecha del recuadro) permite quitar la imagen sin desactivar la herramienta, pa
 otro punto y comparar zonas distintas. Mientras la herramienta está activa, el clic en el mapa no
 abre el desglose del score; se restaura al desactivarla con el mismo botón, que también limpia
 cualquier imagen y botón "✕" que quedara.
+
+### Relieve LiDAR propio de máxima calidad (pipeline + PMTiles)
+
+Petición explícita del usuario, distinta de la herramienta anterior: en vez de pedir el hillshade
+al vuelo (limitado a los 5 m de resolución del WCS público del IGN y a un área pequeña por
+petición), esto es una **capa de mapa normal**, pre-generada localmente a partir de las hojas
+MDT02/MDT01 del CNIG (o de nubes `.laz` PNOA-LiDAR, opcionalmente a 0,5-1 m con PDAL), combinando
+hillshade multidireccional + Sky-View Factor, teselada de antemano y servida como un único
+archivo `.pmtiles` — sin límite de área por petición ni recorte en caliente, y con la resolución
+real de los datos de origen en vez de una interpolación.
+
+**Por qué es un pipeline aparte y no un endpoint del backend:** generar tiles hasta zoom 20 de un
+MDT reproyectado necesita GDAL, RVT y (opcionalmente) PDAL — herramientas pesadas, con
+instalación delicada en Windows, y datos de entrada que el usuario descarga él mismo (no hay API
+pública para las hojas MDT02 en bruto). Por eso vive en `./pipeline/` como scripts independientes
+que se ejecutan **en el ordenador de quien genera las zonas**, no en el servidor de la app — el
+backend solo sirve el `.pmtiles` ya generado. Ver `pipeline/README.md` para instalación (Windows,
+vía conda-forge) y uso paso a paso.
+
+Resumen del pipeline (detalle completo en `pipeline/README.md`):
+1. (Opcional) `.laz` → MDT propio con PDAL (filtra clase suelo, malla TIN/IDW).
+2. `gdalbuildvrt` de todas las hojas de la zona en un VRT sin costuras.
+3. Tres productos desde el VRT: hillshade multidireccional (`gdaldem hillshade -multidirectional`),
+   Sky-View Factor y Simple Local Relief Model (estos dos con RVT — rvt-py).
+4. Combina hillshade × SVF, estira contraste por percentiles 2-98, GeoTIFF RGB de 8 bits (el LRM
+   se guarda aparte, es el mejor de los tres para muros/ruinas pero no entra en esta mezcla).
+5. `gdalwarp -r cubic` a EPSG:3857.
+6. `.pmtiles` final con `rio-pmtiles` (mismo resultado que `pmtiles convert`, pero instalable con
+   pip — sin depender de un binario Go aparte, más simple de instalar en Windows).
+7. Parametrizable por zona (`pipeline/zones/<nombre>.yaml`): bbox o patrón de hojas de entrada,
+   z-factor del hillshade, radio del LRM, rango de zoom — añadir una zona nueva no obliga a
+   rehacer las demás.
+
+**Integración en el frontend:** el selector de capas base ahora tiene tres opciones mutuamente
+excluyentes — **OSM**, **ortofoto PNOA** (`OI.OrthoimageCoverage`, IGN) y **relieve MDT** (IGN,
+`EL.ElevationGridCoverage`, cobertura nacional — de respaldo fuera de las zonas con `.pmtiles`
+propio; no encontramos un WMS de sombreado/hillshade dedicado del IGN con cobertura nacional
+accesible, así que esta capa pinta el MDT como rampa de color de elevación, no como hillshade
+gris — cambiar la URL/capa en `frontend/js/config.js` si se localiza uno mejor). Cada zona con
+`.pmtiles` propio aparece como un overlay independiente ("Relieve LiDAR de alta resolución
+(\<zona\>)"), cargado con
+[pmtiles.js](https://github.com/protomaps/PMTiles) (vendorizado en `frontend/vendor/pmtiles/`,
+el build global oficial del paquete npm `pmtiles`, con su helper `leafletRasterLayer` — no hace
+falta `protomaps-leaflet`, que es para tiles *vectoriales*; los nuestros son PNG raster). La capa
+lleva `bounds` a la bbox de su zona: Leaflet no pide ningún tile fuera de ese rectángulo (lo
+comprueba `GridLayer._isValidTile`), así que fuera de la zona el relieve WMS del IGN sigue siendo
+lo que se ve. Un control de opacidad (slider normal, igual que los de "Pesos del score" — sin los
+problemas de arrastre táctil que sí tuvo el slider de comparación "swipe" descartado antes, que
+usaba un truco distinto con un `<input type="range">` invisible) permite superponerla a la
+ortofoto ajustando cuánto se ve de cada una. Nota de Leaflet: el checkbox de cada zona en el
+selector de capas aparece deshabilitado si el zoom actual del mapa está fuera del
+`min_zoom`/`max_zoom` de esa zona — es el comportamiento nativo de `L.Control.Layers`, no un bug;
+hay que acercar el zoom a la zona antes de poder activarla.
+
+Atribución: todas las capas de origen IGN/CNIG (ortofoto, relieve WMS, y cada zona PMTiles)
+llevan `© IGN / CNIG` en su atribución, visible en la esquina inferior del mapa.
 
 ## Cómo levantarlo
 

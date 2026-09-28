@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from app.config import REGIONS, Region, settings
+from app.config import PMTILES_ZONES, REGIONS, Region, settings
 from app.dependencies import region_param
 
 router = APIRouter()
@@ -44,4 +44,23 @@ def region_config(region: Region = Depends(region_param)) -> dict:
             "water_proximity": settings.weight_water_proximity,
             "known_sites": settings.weight_known_sites,
         },
+    }
+
+
+@router.get("/pmtiles/zones")
+def list_pmtiles_zones() -> dict:
+    """Zonas con relieve LiDAR propio (generadas por ./pipeline/), para que el frontend sepa
+    dónde puede cargar la capa PMTiles de alta resolución en vez de caer al WMS del IGN."""
+    return {
+        "zones": [
+            {
+                "name": zone.name,
+                "url": f"/pmtiles/files/{zone.file}",
+                "bbox": zone.bbox,
+                "min_zoom": zone.min_zoom,
+                "max_zoom": zone.max_zoom,
+                "attribution": zone.attribution,
+            }
+            for zone in PMTILES_ZONES
+        ]
     }

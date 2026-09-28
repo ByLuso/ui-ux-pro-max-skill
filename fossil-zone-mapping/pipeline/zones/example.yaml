@@ -1,0 +1,39 @@
+# Copia este archivo (p. ej. zones/pagasarri.yaml) por cada zona nueva que quieras procesar.
+# "zona" aquí es solo una etiqueta para organizar carpetas de entrada/salida: no hace falta
+# que coincida con las regiones de la app (La Rioja / Bizkaia) ni tiene por qué limitarse a una.
+
+# Nombre corto, sin espacios: se usa para nombrar carpetas y archivos (zone_<nombre>.vrt, etc.)
+name: pagasarri
+
+# De dónde sale el MDT de esta zona. "mdt": usa las hojas MDT02/MDT01 (GeoTIFF o ASC) que hayas
+# puesto en data/mdt/<name>/. "laz": genera antes un MDT propio a partir de nubes de puntos
+# PNOA-LiDAR (.laz) en data/laz/<name>/ con PDAL (ver 00_laz_to_dem.py) — requiere PDAL instalado.
+lidar_source: mdt
+
+# Solo si lidar_source es "mdt": patrón glob (relativo a data/mdt/<name>/) de los archivos de
+# entrada. gdalbuildvrt los combina en un único VRT sin costuras entre hojas.
+input_pattern: "*.tif"
+
+# Solo si lidar_source es "laz": resolución objetivo del MDT generado a partir de la nube de
+# puntos, en metros/píxel, y el método de interpolación ("tin" o "idw").
+laz_resolution_m: 0.5
+laz_interpolation: tin
+
+# Bbox opcional en WGS84 [oeste, sur, este, norte] para recortar el VRT antes de procesar (por
+# si las hojas de entrada cubren más área de la que interesa). Déjalo vacío (null) para usar
+# toda el área cubierta por los archivos de entrada.
+bbox_wgs84: null
+
+# z-factor del hillshade (gdaldem hillshade -z): exagera el relieve verticalmente. 1 = realista;
+# valores 1.5-2 ayudan a que se noten mejor microrrelieves sutiles (muros, terrazas) en zonas
+# llanas, a costa de exagerar el relieve en zonas de montaña.
+hillshade_z_factor: 1.3
+
+# Radio (en píxeles del MDT) del Simple Local Relief Model — cuanto más alto, "muros y ruinas"
+# más grandes puede resaltar, pero también más lento de calcular. 10-20 va bien para MDT02 (2 m).
+lrm_radius_px: 15
+
+# Rango de zoom de los tiles generados. 20 es el máximo pedido; bajarlo (p. ej. a 18) reduce
+# muchísimo el tiempo de proceso y el tamaño del .pmtiles si no hace falta tanto detalle.
+zoom_min: 12
+zoom_max: 20

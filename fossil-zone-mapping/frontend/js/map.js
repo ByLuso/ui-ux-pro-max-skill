@@ -51,10 +51,31 @@ async function initMap(regionSlug) {
   const map = L.map("map").setView(regionConfig.region_center, regionConfig.region_default_zoom);
   activeMap = map;
 
-  const baseLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  // Tres capas base mutuamente excluyentes (Leaflet las agrupa como radio buttons en el
+  // selector): OSM para orientarse, ortofoto PNOA para ver el terreno real, y el relieve
+  // nacional del IGN como referencia de MDT en cualquier punto de España — a diferencia de la
+  // capa LIDAR propia (más abajo), que solo existe en las zonas concretas ya procesadas.
+  const osmLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors",
     maxZoom: 19,
   }).addTo(map);
+
+  const ortofotoLayer = L.tileLayer.wms(IGN_ORTOFOTO_WMS_URL, {
+    layers: IGN_ORTOFOTO_LAYER,
+    format: "image/jpeg",
+    version: "1.1.1",
+    maxZoom: 20,
+    attribution: "Ortofoto PNOA: © IGN / CNIG",
+  });
+
+  const relieveWmsLayer = L.tileLayer.wms(IGN_RELIEVE_WMS_URL, {
+    layers: IGN_RELIEVE_LAYER,
+    format: "image/png",
+    transparent: true,
+    version: "1.1.1",
+    maxZoom: 18,
+    attribution: "Relieve (MDT PNOA-LiDAR): © IGN / CNIG",
+  });
 
   const [minLon, minLat, maxLon, maxLat] = regionConfig.region_bbox;
   const bounds = L.latLngBounds([minLat, minLon], [maxLat, maxLon]);
@@ -79,7 +100,14 @@ async function initMap(regionSlug) {
   // llegar. Cada una se añade sola en cuanto está lista, en vez de bloquear
   // el resto de la interfaz mientras se calcula.
   const layersControl = L.control
-    .layers({ "Mapa base (OSM)": baseLayer }, { "Litología (IGME)": lithologyLayer })
+    .layers(
+      {
+        "Mapa base (OSM)": osmLayer,
+        "Ortofoto PNOA (IGN)": ortofotoLayer,
+        "Relieve MDT (IGN, toda España)": relieveWmsLayer,
+      },
+      { "Litología (IGME)": lithologyLayer }
+    )
     .addTo(map);
 
   const legend = createLegendControl(map);
@@ -105,7 +133,9 @@ async function initMap(regionSlug) {
   layersControl.addOverlay(hydrographyLayer, "Ríos y arroyos (IGN)");
 
   const isStale = () => generation !== currentGeneration;
-  const loading = createLoadingTracker(5, isStale);
+  const loading = createLoadingTracker(6, isStale);
+
+  addPmtilesLidarLayers(map, layersControl, isStale).finally(loading.done);
 
   addRasterOverlay(map, layersControl, legend, isStale, {
     name: "Pendiente (MDT-IGN)",
@@ -134,6 +164,67 @@ async function initMap(regionSlug) {
     .finally(loading.done);
 
   addKnownSitesLayer(map, layersControl, legend, isStale, regionSlug).finally(loading.done);
+}
+
+// Zonas con relieve LiDAR propio (generadas por ./pipeline/, ver pipeline/README.md): cada una
+// se sirve como .pmtiles (un solo archivo, sin servidor de teselas aparte) y se recorta a su
+// propia bbox — fuera de ella no se piden tiles (Leaflet ni lo intenta, ver `bounds` más abajo),
+// así que la capa "Relieve MDT (IGN, toda España)" sigue siendo el respaldo para el resto del mapa.
+async function addPmtilesLidarLayers(map, layersControl, isStale) {
+  let zones;
+  try {
+    const response = await fetch(`${API_BASE_URL}/pmtiles/zones`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    zones = (await response.json()).zones;
+  } catch (error) {
+    console.error("No se pudieron cargar las zonas de relieve LiDAR propio:", error);
+    return;
+  }
+  if (isStale() || zones.length === 0) return;
+
+  const lidarLayers = [];
+  for (const zone of zones) {
+    const [minLon, minLat, maxLon, maxLat] = zone.bbox;
+    const bounds = L.latLngBounds([minLat, minLon], [maxLat, maxLon]);
+    const source = new pmtiles.PMTiles(`${API_BASE_URL}${zone.url}`);
+    const layer = pmtiles.leafletRasterLayer(source, {
+      bounds,
+      minZoom: zone.min_zoom,
+      maxZoom: 20,
+      maxNativeZoom: zone.max_zoom,
+      opacity: DEFAULT_LIDAR_OPACITY,
+      attribution: zone.attribution,
+    });
+    layersControl.addOverlay(layer, `Relieve LiDAR de alta resolución (${zone.name})`);
+    lidarLayers.push(layer);
+  }
+
+  addLidarOpacityControl(map, lidarLayers);
+}
+
+const DEFAULT_LIDAR_OPACITY = 0.85;
+
+function addLidarOpacityControl(map, lidarLayers) {
+  const control = L.control({ position: "topleft" });
+  control.onAdd = function () {
+    const container = L.DomUtil.create("div", "lidar-opacity-control");
+    L.DomEvent.disableClickPropagation(container);
+    L.DomEvent.disableScrollPropagation(container);
+    const initialPercent = Math.round(DEFAULT_LIDAR_OPACITY * 100);
+    container.innerHTML = `
+      <label>Opacidad relieve LiDAR <span class="lidar-opacity-value">${initialPercent}%</span></label>
+      <input type="range" min="0" max="100" value="${initialPercent}" />
+    `;
+    const input = container.querySelector("input");
+    const valueLabel = container.querySelector(".lidar-opacity-value");
+    input.addEventListener("input", () => {
+      const opacity = Number(input.value) / 100;
+      lidarLayers.forEach((layer) => layer.setOpacity(opacity));
+      valueLabel.textContent = `${input.value}%`;
+    });
+    return container;
+  };
+  control.addTo(map);
 }
 
 function addHillshadeTool(map) {

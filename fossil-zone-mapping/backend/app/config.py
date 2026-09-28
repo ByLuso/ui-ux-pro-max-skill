@@ -36,6 +36,29 @@ def get_region(slug: str) -> Region | None:
     return REGIONS.get(slug)
 
 
+@dataclass(frozen=True)
+class PmtilesZone:
+    """Una zona con relieve LiDAR propio (generado por ./pipeline/, ver pipeline/README.md).
+    Fuera de esta bbox el frontend usa el WMS de relieve del IGN como respaldo — este archivo
+    .pmtiles no cubre España entera, solo los puntos concretos que se hayan procesado."""
+
+    name: str
+    file: str  # nombre del archivo dentro de PMTILES_DIR, p. ej. "pagasarri.pmtiles"
+    bbox: tuple[float, float, float, float]  # [min_lon, min_lat, max_lon, max_lat] WGS84
+    min_zoom: int
+    max_zoom: int
+    attribution: str = "© IGN / CNIG"
+
+
+# Añade aquí cada zona tras generarla con el pipeline (pipeline/scripts/run_pipeline.py) y
+# copiar el .pmtiles resultante a PMTILES_DIR (por defecto backend/data/pmtiles/). Ejemplo:
+# PmtilesZone(name="pagasarri", file="pagasarri.pmtiles", bbox=(-2.90, 43.25, -2.87, 43.27),
+#             min_zoom=14, max_zoom=20)
+PMTILES_ZONES: list[PmtilesZone] = []
+
+PMTILES_DIR = "data/pmtiles"
+
+
 class Settings(BaseSettings):
     app_name: str = "Fossil Zone Mapping API"
     environment: str = "development"
