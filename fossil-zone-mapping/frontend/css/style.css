@@ -208,11 +208,25 @@ main {
   color: #6b7280;
 }
 
-/* El LiDAR IGN es de 5 m de resolución nativa: si se hace zoom más de lo que esos
-   píxeles dan de sí, el navegador los suaviza (blur) por defecto al escalarlos, lo
-   que hace el relieve casi ilegible. Un escalado "pixelado" (sin interpolar) deja
-   ver los píxeles reales en vez de una mancha borrosa. */
-.hillshade-image-layer {
-  image-rendering: pixelated;
-  image-rendering: -webkit-optimize-contrast;
+/* Botón "✕" flotante anclado a la esquina de la imagen LiDAR (no es un control fijo
+   de Leaflet: su posición se recalcula en cada pan/zoom para seguir pegado a la
+   esquina superior derecha del recuadro revelado). */
+.hillshade-close-btn {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #1f2937;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }

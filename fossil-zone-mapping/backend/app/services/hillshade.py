@@ -11,6 +11,7 @@ import numpy as np
 import rasterio
 from rasterio.io import MemoryFile
 from rasterio.warp import transform_bounds
+from scipy.ndimage import distance_transform_edt, zoom
 
 from app.services.http_utils import request_with_retry
 
@@ -21,6 +22,12 @@ LIDAR_COVERAGE_ID = "Elevacion25830_5"
 # Por encima de esto (lado de la bbox, en metros) la petición al WCS a 5 m sería demasiado
 # grande/lenta para un uso interactivo — se le pide al usuario que acerque el zoom.
 MAX_SIDE_M = 3000
+
+# El LiDAR del IGN viene a 5 m/píxel; sin más, estirar eso al zoom del mapa se ve a bloques o
+# borroso según cómo lo escale el navegador. Antes de calcular el hillshade se interpola la
+# rejilla a una más fina (spline cúbica) — no añade detalle real por debajo de 5 m, pero da
+# curvas de relieve suaves en vez de escalones cuadrados.
+SUPERSAMPLE_FACTOR = 3
 
 # Hillshade multidireccional: promedia el sombreado desde varios azimuts para no ocultar
 # relieve que casualmente esté alineado con una única dirección de luz (la limitación clásica
@@ -90,11 +97,41 @@ def _stretch_contrast(shaded: np.ndarray) -> np.ndarray:
     return np.clip((shaded - low) / (high - low), 0, 1)
 
 
+def _fill_nodata_nearest(elevation: np.ndarray) -> np.ndarray:
+    """Rellena huecos sin dato (bordes del recorte) con el valor válido más cercano: un NaN
+    "contamina" sus vecinos al interpolar con spline cúbica, así que hay que quitarlos antes
+    de supersamplear."""
+    nan_mask = np.isnan(elevation)
+    if not nan_mask.any():
+        return elevation
+    _, indices = distance_transform_edt(nan_mask, return_indices=True)
+    return elevation[tuple(indices)]
+
+
+def _supersample(elevation: np.ndarray, pixel_size: float) -> tuple[np.ndarray, float]:
+    """Interpola la rejilla LiDAR a una más fina (spline cúbica) antes de calcular el
+    hillshade. No añade detalle real por debajo de la resolución nativa del LiDAR (5 m), pero
+    da curvas de relieve suaves en vez del aspecto "a bloques" de escalar en el navegador una
+    imagen con pocos píxeles."""
+    if SUPERSAMPLE_FACTOR <= 1:
+        return elevation, pixel_size
+    filled = _fill_nodata_nearest(elevation)
+    upsampled = zoom(filled, SUPERSAMPLE_FACTOR, order=3)
+    return upsampled, pixel_size / SUPERSAMPLE_FACTOR
+
+
 def get_hillshade_png_and_bounds(min_lon: float, min_lat: float, max_lon: float, max_lat: float) -> tuple[bytes, list]:
-    """Hillshade LiDAR (5 m) de la bbox dada, como PNG en escala de grises + bounds WGS84 reales
-    del recorte devuelto (pueden no coincidir exactamente con los pedidos por redondeo de píxel)."""
+    """Hillshade LiDAR de la bbox dada, como PNG en escala de grises + bounds WGS84 reales del
+    recorte devuelto (pueden no coincidir exactamente con los pedidos por redondeo de píxel)."""
     elevation, transform, crs = _fetch_lidar_bbox(min_lon, min_lat, max_lon, max_lat)
-    shaded = _multidirectional_hillshade(elevation, transform.a)
+
+    # Los bounds geográficos se calculan sobre la rejilla ORIGINAL (5 m): el área cubierta
+    # sobre el terreno no cambia al supersamplear, solo la densidad de píxeles.
+    native_bounds = rasterio.transform.array_bounds(elevation.shape[0], elevation.shape[1], transform)
+    west, south, east, north = transform_bounds(crs, "EPSG:4326", *native_bounds)
+
+    elevation, pixel_size = _supersample(elevation, transform.a)
+    shaded = _multidirectional_hillshade(elevation, pixel_size)
     shaded = _stretch_contrast(shaded)
     img_uint8 = (np.nan_to_num(shaded, nan=0.0) * 255).astype("uint8")
 
@@ -104,6 +141,4 @@ def get_hillshade_png_and_bounds(min_lon: float, min_lat: float, max_lon: float,
             dst.write(img_uint8, 1)
         png_bytes = memfile.read()
 
-    native_bounds = rasterio.transform.array_bounds(height, width, transform)
-    west, south, east, north = transform_bounds(crs, "EPSG:4326", *native_bounds)
     return png_bytes, [[south, west], [north, east]]

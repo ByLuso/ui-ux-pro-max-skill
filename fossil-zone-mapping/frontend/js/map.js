@@ -136,18 +136,19 @@ async function initMap(regionSlug) {
   addKnownSitesLayer(map, layersControl, legend, isStale, regionSlug).finally(loading.done);
 }
 
-// Pixel gris 1x1: placeholder del imageOverlay antes de la primera carga real.
-const BLANK_PIXEL =
-  "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-
 function addHillshadeTool(map) {
-  const MOVE_DEBOUNCE_MS = 400;
+  // Medio lado del recorte pedido al backend, en metros: 500 -> un cuadrado de 1 km de
+  // lado centrado en el punto tocado. Fijo (no depende del zoom del mapa), así el área
+  // consultada es siempre la misma sin importar cómo esté encuadrado el mapa al tocar.
+  const HALF_SIDE_M = 500;
+  const METERS_PER_DEG_LAT = 111320;
+
   let enabled = false;
   let hillshadeLayer = null;
-  let sideBySideControl = null;
+  let closeButtonEl = null;
   let currentObjectUrl = null;
   let fetchToken = 0;
-  let moveTimer = null;
+  let repositionCloseButton = null;
 
   const control = L.control({ position: "topleft" });
   const container = L.DomUtil.create("div");
@@ -157,7 +158,7 @@ function addHillshadeTool(map) {
     L.DomUtil.addClass(container, "hillshade-control");
     L.DomEvent.disableClickPropagation(container);
     container.innerHTML = `
-      <button type="button" class="hillshade-toggle">🔍 Comparar con LiDAR</button>
+      <button type="button" class="hillshade-toggle">🔍 Revelar relieve oculto (LiDAR)</button>
       <p class="hillshade-hint" hidden></p>
     `;
     button = container.querySelector(".hillshade-toggle");
@@ -167,94 +168,100 @@ function addHillshadeTool(map) {
   };
   control.addTo(map);
 
+  map.on("click", (event) => {
+    if (!enabled) return;
+    showHillshadeAt(event.latlng.lat, event.latlng.lng);
+  });
+
   function toggle() {
     enabled = !enabled;
     button.classList.toggle("active", enabled);
     hint.hidden = !enabled;
     if (enabled) {
-      start();
+      hint.textContent = "Toca un punto del mapa para revelar el relieve LiDAR de esa zona.";
     } else {
-      stop();
+      clearOverlay();
     }
   }
 
-  function start() {
-    hillshadeLayer = L.imageOverlay(BLANK_PIXEL, map.getBounds(), {
-      opacity: 1,
-      attribution: "Hillshade LiDAR: IGN (MDT05)",
-      className: "hillshade-image-layer",
-    }).addTo(map);
-    // El plugin side-by-side espera layers estilo TileLayer (con getContainer());
-    // un ImageOverlay solo tiene getElement() (el <img>), que sirve igual de bien
-    // para aplicarle el recorte (mismo CSS "clip").
-    hillshadeLayer.getContainer = function () {
-      return hillshadeLayer.getElement();
-    };
-    // Sin capas a la derecha: el mapa base y el resto de capas se quedan visibles
-    // tal cual a ambos lados; el hillshade solo se recorta a la izquierda del slider.
-    sideBySideControl = L.control.sideBySide(hillshadeLayer, []).addTo(map);
-    map.on("moveend zoomend", scheduleFetch);
-    fetchForCurrentView();
-  }
-
-  function stop() {
-    map.off("moveend zoomend", scheduleFetch);
-    clearTimeout(moveTimer);
-    if (sideBySideControl) {
-      sideBySideControl.remove();
-      sideBySideControl = null;
-    }
-    if (hillshadeLayer) {
-      map.removeLayer(hillshadeLayer);
-      hillshadeLayer = null;
-    }
-    if (currentObjectUrl) {
-      URL.revokeObjectURL(currentObjectUrl);
-      currentObjectUrl = null;
-    }
-  }
-
-  function scheduleFetch() {
-    clearTimeout(moveTimer);
-    moveTimer = setTimeout(fetchForCurrentView, MOVE_DEBOUNCE_MS);
-  }
-
-  async function fetchForCurrentView() {
+  async function showHillshadeAt(lat, lon) {
     const token = ++fetchToken;
-    const bounds = map.getBounds();
+    const dLat = HALF_SIDE_M / METERS_PER_DEG_LAT;
+    const dLon = HALF_SIDE_M / (METERS_PER_DEG_LAT * Math.cos((lat * Math.PI) / 180));
     const params = new URLSearchParams({
-      min_lat: bounds.getSouth(),
-      min_lon: bounds.getWest(),
-      max_lat: bounds.getNorth(),
-      max_lon: bounds.getEast(),
+      min_lat: lat - dLat,
+      min_lon: lon - dLon,
+      max_lat: lat + dLat,
+      max_lon: lon + dLon,
     });
 
+    hint.hidden = false;
     hint.textContent = "Cargando relieve LiDAR…";
     try {
       const response = await fetch(`${API_BASE_URL}/terrain/hillshade.png?${params}`);
-      if (token !== fetchToken) return; // el usuario ya movió el mapa otra vez
+      if (token !== fetchToken) return; // el usuario ya tocó otro punto mientras cargaba
 
       if (!response.ok) {
         const body = await response.json().catch(() => null);
-        hint.textContent = body?.detail ?? "Acércate más (zoom) para revelar el relieve LiDAR.";
+        hint.textContent = body?.detail ?? "No se pudo cargar el relieve LiDAR de esa zona.";
         return;
       }
 
       const bboxHeader = JSON.parse(response.headers.get("X-Bounds"));
       const blob = await response.blob();
       const objectUrl = URL.createObjectURL(blob);
-      const previousObjectUrl = currentObjectUrl;
-      currentObjectUrl = objectUrl;
+      const bounds = L.latLngBounds(bboxHeader[0], bboxHeader[1]);
 
-      hillshadeLayer.setUrl(objectUrl);
-      hillshadeLayer.setBounds(L.latLngBounds(bboxHeader[0], bboxHeader[1]));
-      if (previousObjectUrl) URL.revokeObjectURL(previousObjectUrl);
-      hint.textContent = "Arrastra el círculo blanco para comparar. Izquierda = LiDAR, derecha = mapa.";
+      clearOverlay();
+      hillshadeLayer = L.imageOverlay(objectUrl, bounds, {
+        opacity: 0.95,
+        attribution: "Hillshade LiDAR: IGN (MDT05)",
+      }).addTo(map);
+      currentObjectUrl = objectUrl;
+      map.fitBounds(bounds, { maxZoom: 18 });
+      addCloseButton(bounds);
+      hint.textContent = "Pulsa la ✕ sobre la imagen para quitarla, o toca otro punto para ver esa zona.";
     } catch (error) {
       if (token !== fetchToken) return;
       console.error("No se pudo cargar el hillshade LiDAR:", error);
       hint.textContent = "No se pudo cargar el relieve LiDAR.";
     }
+  }
+
+  function addCloseButton(bounds) {
+    closeButtonEl = L.DomUtil.create("button", "hillshade-close-btn", map.getContainer());
+    closeButtonEl.type = "button";
+    closeButtonEl.setAttribute("aria-label", "Quitar el relieve LiDAR de esta zona");
+    closeButtonEl.textContent = "✕";
+    L.DomEvent.disableClickPropagation(closeButtonEl);
+    L.DomEvent.on(closeButtonEl, "click", clearOverlay);
+
+    repositionCloseButton = () => {
+      if (!closeButtonEl) return;
+      const point = map.latLngToContainerPoint(bounds.getNorthEast());
+      closeButtonEl.style.left = `${point.x}px`;
+      closeButtonEl.style.top = `${point.y}px`;
+    };
+    repositionCloseButton();
+    map.on("move zoom", repositionCloseButton);
+  }
+
+  function clearOverlay() {
+    if (hillshadeLayer) {
+      map.removeLayer(hillshadeLayer);
+      hillshadeLayer = null;
+    }
+    if (closeButtonEl) {
+      map.off("move zoom", repositionCloseButton);
+      repositionCloseButton = null;
+      L.DomUtil.remove(closeButtonEl);
+      closeButtonEl = null;
+    }
+    if (currentObjectUrl) {
+      URL.revokeObjectURL(currentObjectUrl);
+      currentObjectUrl = null;
+    }
+    if (enabled) hint.textContent = "Toca un punto del mapa para revelar el relieve LiDAR de esa zona.";
   }
 
   return { isEnabled: () => enabled };
