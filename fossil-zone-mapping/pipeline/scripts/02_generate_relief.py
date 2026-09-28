@@ -80,7 +80,13 @@ def main() -> None:
 
     dem, profile, pixel_size = _read_dem(zone.vrt_path)
     generate_svf(zone, dem, pixel_size, profile)
-    generate_lrm(zone, dem, profile)
+    if zone.skip_lrm:
+        # Para zonas grandes/con poco disco o RAM (p. ej. sub-zonas de una rejilla de
+        # provincia): el LRM no entra en la mezcla final del paso 4, así que si no hace falta
+        # como capa aparte, saltarlo ahorra un array más en memoria y varios GB en disco.
+        print("skip_lrm activo: no se calcula el Simple Local Relief Model para esta zona.")
+    else:
+        generate_lrm(zone, dem, profile)
 
 
 if __name__ == "__main__":

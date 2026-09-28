@@ -23,9 +23,17 @@ class Zone:
     lrm_radius_px: int
     zoom_min: int
     zoom_max: int
+    source_dir_override: str | None = None
+    skip_lrm: bool = False
 
     @property
     def mdt_dir(self) -> Path:
+        # source_dir_override: varias sub-zonas (p. ej. la rejilla que genera
+        # make_grid_zones.py para una provincia entera) pueden compartir una única carpeta
+        # con todas las hojas descargadas, recortando cada una a su bbox_wgs84 en vez de
+        # tener que duplicar 1-2 GB de hojas por cada sub-zona.
+        if self.source_dir_override:
+            return DATA_DIR / "mdt" / self.source_dir_override
         return DATA_DIR / "mdt" / self.name
 
     @property
@@ -71,6 +79,23 @@ class Zone:
     def pmtiles_path(self) -> Path:
         return self.out_dir / f"{self.name}.pmtiles"
 
+    def cleanup_intermediates(self) -> None:
+        """Borra los GeoTIFF intermedios de output/<zona>/ (VRT, hillshade, SVF, LRM,
+        combinado, reproyectado) dejando solo el .pmtiles final. Para procesar provincias
+        enteras por sub-zonas con poco disco: sin esto, cada sub-zona deja varios GB de
+        intermedios que se van acumulando y agotan el disco antes de terminar la rejilla."""
+        for path in [
+            self.vrt_path,
+            self.hillshade_path,
+            self.svf_path,
+            self.lrm_path,
+            self.combined_path,
+            self.reprojected_path,
+        ]:
+            if path.exists():
+                path.unlink()
+                print(f"(borrado intermedio: {path.name})")
+
 
 def load_zone(zone_yaml: str) -> Zone:
     path = Path(zone_yaml)
@@ -93,6 +118,8 @@ def load_zone(zone_yaml: str) -> Zone:
         lrm_radius_px=raw.get("lrm_radius_px", 15),
         zoom_min=raw.get("zoom_min", 12),
         zoom_max=raw.get("zoom_max", 20),
+        source_dir_override=raw.get("source_dir"),
+        skip_lrm=raw.get("skip_lrm", False),
     )
 
 

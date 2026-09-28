@@ -38,6 +38,15 @@ def main() -> None:
         default=1,
         help="Empezar desde este paso (1-5) en vez de desde el principio, para reanudar tras un fallo.",
     )
+    parser.add_argument(
+        "--keep-intermediates",
+        action="store_true",
+        help="No borrar los GeoTIFF intermedios (VRT, hillshade, SVF, combinado, reproyectado) "
+        "al terminar. Por defecto SÍ se borran tras generar el .pmtiles, para poder procesar "
+        "muchas sub-zonas de una provincia sin agotar el disco — si vas a reprocesar esta misma "
+        "zona varias veces seguidas (probando parámetros), usa esta opción para no repetir los "
+        "pasos 1-4 cada vez.",
+    )
     args = parser.parse_args()
 
     zone = load_zone(args.zone)
@@ -62,6 +71,10 @@ def main() -> None:
         step_start = time.time()
         run_step(script, args.zone)
         print(f"({time.time() - step_start:.1f}s)")
+
+    if not args.keep_intermediates:
+        print("\nLimpiando intermedios (usa --keep-intermediates para conservarlos)...")
+        zone.cleanup_intermediates()
 
     print(f"\n=== Listo en {time.time() - start:.1f}s: {zone.pmtiles_path} ===")
 

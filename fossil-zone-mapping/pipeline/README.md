@@ -123,6 +123,50 @@ está generado, solo falta ese paso.
    rango de zoom de esa zona, y solo pide tiles dentro de su bbox — fuera de ella, la capa base
    "Relieve MDT (IGN, toda España)" sigue disponible como respaldo para el resto del mapa.
 
+## Provincias/comunidades autónomas enteras
+
+El flujo de arriba (una zona = un punto de interés, unos pocos km²) no escala directamente a
+"La Rioja entera" o "País Vasco entero": el cálculo del Sky-View Factor carga el MDT completo en
+memoria de una vez, y una comunidad autónoma a 2 m de resolución son mil-y-pico millones de
+píxeles — en un PC con 8-16 GB de RAM esto se cuelga o tarda una eternidad, y los GeoTIFF
+intermedios (hillshade, SVF, combinado, reproyectado) de esa área pesarían decenas de GB en
+disco.
+
+La solución: **dividir el área en una rejilla de sub-zonas pequeñas** (unos 30×30 km cada una,
+ajustable) y procesarlas una a una — cada una cabe cómoda en RAM, y se limpia su disco antes de
+pasar a la siguiente. El resultado en la app es el mismo: varias capas PMTiles pequeñas en vez de
+una gigante, cada una como su propio overlay en el selector.
+
+1. Descarga **todas** las hojas MDT02 que cubran la comunidad autónoma entera y ponlas juntas en
+   `data/mdt/<nombre-del-área>/` (una sola carpeta compartida, no hace falta repartirlas).
+2. Genera la rejilla de sub-zonas:
+   ```
+   python make_grid_zones.py --bbox <oeste> <sur> <este> <norte> --tile-km 30 --prefix la-rioja --source-dir la-rioja
+   ```
+   El bbox son las esquinas WGS84 del área (puedes sacarlo de un mapa o de Wikipedia; no hace
+   falta que sea exacto, gdalbuildvrt solo usará las hojas que realmente estén en la carpeta).
+   Esto crea `zones/la-rioja-01.yaml`, `zones/la-rioja-02.yaml`, etc., todas apuntando a la misma
+   carpeta de origen pero recortando cada una su propio trozo.
+3. Procesa cada sub-zona (el script te imprime el bucle exacto para copiar y pegar en
+   PowerShell). Por defecto cada una **borra sus intermedios al terminar**, así que el disco no
+   se va acumulando — solo queda el `.pmtiles` final de cada sub-zona:
+   ```powershell
+   foreach ($z in @("la-rioja-01","la-rioja-02", ...)) { python run_pipeline.py --zone $z }
+   ```
+4. Copia todos los `.pmtiles` generados a `backend/data/pmtiles/` y registra cada uno como una
+   `PmtilesZone` en `backend/app/config.py` (ver "Integrarlo en la app" arriba) — la app los
+   muestra todos como overlays independientes, cargando solo los tiles de la sub-zona visible en
+   cada momento.
+
+**Ajustar `--tile-km` a tu RAM disponible:** con 8 GB de RAM, 30 km de lado (~900 km²) por
+sub-zona es un punto de partida razonable — si aun así va muy justo, baja a 20 km. Con 16 GB o
+más puedes subir a 40-50 km y tener menos sub-zonas que gestionar. `--zoom-max` por defecto en la
+rejilla es 17 (~1,2 m/píxel, ya muy por encima del detalle útil de un MDT02 de 2 m) en vez de 20:
+para cobertura de una comunidad autónoma entera, zoom 20 dispara el número de teselas por ~1000x
+respecto a zoom 17, sin aportar detalle real que el dato de origen no tenga. Si luego quieres
+zoom 20 en algún punto muy concreto (como Pagasarri), genera esa zona aparte con el flujo normal
+de una sola zona (no con la rejilla) y su propio `zoom_max: 20`.
+
 ## Notas
 
 - **Zoom 20 pesa.** Cuanto más alto `zoom_max`, exponencialmente más tiles (y más tiempo de

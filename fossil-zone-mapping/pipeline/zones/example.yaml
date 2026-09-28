@@ -10,9 +10,21 @@ name: pagasarri
 # PNOA-LiDAR (.laz) en data/laz/<name>/ con PDAL (ver 00_laz_to_dem.py) — requiere PDAL instalado.
 lidar_source: mdt
 
-# Solo si lidar_source es "mdt": patrón glob (relativo a data/mdt/<name>/) de los archivos de
-# entrada. gdalbuildvrt los combina en un único VRT sin costuras entre hojas.
+# Solo si lidar_source es "mdt": patrón glob (relativo a data/mdt/<name>/, o a
+# data/mdt/<source_dir>/ si lo pones más abajo) de los archivos de entrada. gdalbuildvrt los
+# combina en un único VRT sin costuras entre hojas.
 input_pattern: "*.tif"
+
+# Opcional: usa las hojas de data/mdt/<source_dir>/ en vez de data/mdt/<name>/ — para que varias
+# sub-zonas de una provincia entera compartan una única carpeta de hojas descargadas en vez de
+# duplicarlas. No hace falta para una zona normal (un punto de interés); make_grid_zones.py lo
+# rellena automáticamente. Ver pipeline/README.md, apartado "Provincias/comunidades autónomas
+# enteras".
+# source_dir: la-rioja
+
+# Opcional: no calcular el Simple Local Relief Model (no entra en la mezcla final del paso 4,
+# así que saltarlo ahorra RAM y disco — útil al procesar muchas sub-zonas de una vez).
+skip_lrm: false
 
 # Solo si lidar_source es "laz": resolución objetivo del MDT generado a partir de la nube de
 # puntos, en metros/píxel, y el método de interpolación ("tin" o "idw").
