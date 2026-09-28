@@ -12,7 +12,11 @@
   background-color: #fff;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
   pointer-events: none;
-  z-index: 999;
+  /* Por encima de 1000: los controles topleft de Leaflet (.leaflet-top/.leaflet-bottom,
+     que incluyen nuestro panel de pesos y el botón de LiDAR) usan z-index 1000, y donde
+     la franja del slider cae encima de ellos (paneles altos en pantallas bajas) ganaban
+     ellos el toque, dejando el slider "muerto" en esa zona. */
+  z-index: 1001;
 }
 
 .leaflet-sbs-range {
@@ -39,7 +43,7 @@
      del elemento base y nunca llega a evaluar el pseudo-elemento como objetivo
      independiente, así que "auto" solo en ::-webkit-slider-thumb no basta en móvil. */
   pointer-events: auto;
-  z-index: 999;
+  z-index: 1001;
 }
 
 .leaflet-sbs-range::-moz-range-track,
