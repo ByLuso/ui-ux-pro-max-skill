@@ -15,6 +15,8 @@ Admin API ◄── usage-exporter :9101 (/metrics, /form) ◄── Prometheus
 log-usage.sh / formulario ──► Pushgateway :9091 ◄── Prometheus
 ```
 
+![Dashboard Claude Code](docs/dashboard.png)
+
 ## Estructura
 
 ```

@@ -267,8 +267,8 @@ def build():
                        prom(f"{total(tok, '24h')} / {sess}", "Avg Tokens", "B", instant=True),
                        prom(f"{total(sel(ACT, FS), '24h')} / {sess}", "Avg Duration", "C", instant=True)],
                       "Media por sesión (24 h): coste, tokens y tiempo activo.",
-                      mode="basic", name_placement="left", value_mode="color", min_vizheight=16, max_vizheight=16,
-                      size_mode="manual", text={"titleSize": 12, "valueSize": 13},
+                      mode="basic", name_placement="left", value_mode="color", min_vizheight=12, max_vizheight=12,
+                      size_mode="manual", text={"titleSize": 11, "valueSize": 12},
                       overrides=[
                           by_frame("A", ("color", fixed(GREEN)), ("unit", "currencyUSD"), ("decimals", 4), ("max", 5)),
                           by_frame("B", ("color", fixed(BLUE)), ("unit", "short"), ("max", 2000000)),
@@ -279,8 +279,8 @@ def build():
                        prom(total(sel(LOC, F, 'type="removed"'), "24h"), "Deleted Today", "B", instant=True)],
                       "Líneas añadidas / eliminadas por Claude Code (claude_code.lines_of_code.count), 24 h.",
                       mode="gradient", name_placement="top", unit="short", max_=3000,
-                      th=thresholds(RED, (YELLOW, 1000), (GREEN, 2000)), min_vizheight=10, max_vizheight=10,
-                      size_mode="manual", text={"titleSize": 11, "valueSize": 12},
+                      th=thresholds(RED, (YELLOW, 1000), (GREEN, 2000)), min_vizheight=6, max_vizheight=8,
+                      text={"titleSize": 11, "valueSize": 11},
                       overrides=[by_frame("B", ("color", fixed(RED)))]))
 
     # ───────────── FILA 4 (y=9, h=4) ─────────────
