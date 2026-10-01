@@ -1,0 +1,50 @@
+# OpenTelemetry Collector: recibe la telemetría de Claude Code (OTLP)
+#   métricas -> exporter Prometheus en :8889 (Prometheus lo scrapea)
+#   logs/eventos -> Loki (endpoint OTLP nativo /otlp)
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 2s
+  # Claude Code exporta con temporalidad DELTA por defecto; el exporter
+  # Prometheus necesita contadores acumulados.
+  deltatocumulative:
+    max_stale: 24h
+
+exporters:
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    # Mantener las series vivas aunque la sesión esté inactiva
+    metric_expiration: 24h
+    # Expone _created para que Prometheus inyecte un 0 inicial (increase() exacto)
+    enable_open_metrics: true
+    resource_to_telemetry_conversion:
+      enabled: true
+  otlphttp/loki:
+    endpoint: http://loki:3100/otlp
+    tls:
+      insecure: true
+  debug:
+    verbosity: basic
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+service:
+  extensions: [health_check]
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [deltatocumulative, batch]
+      exporters: [prometheus]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp/loki]
