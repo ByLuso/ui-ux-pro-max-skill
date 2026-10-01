@@ -5,7 +5,6 @@ global:
 scrape_configs:
   # Métricas de Claude Code (OTLP -> collector -> :8889)
   - job_name: otel-collector
-    scrape_protocols: [OpenMetricsText1.0.0, PrometheusText0.0.4]
     static_configs:
       - targets: ["otel-collector:8889"]
 

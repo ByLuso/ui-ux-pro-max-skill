@@ -22,8 +22,6 @@ exporters:
     endpoint: 0.0.0.0:8889
     # Mantener las series vivas aunque la sesión esté inactiva
     metric_expiration: 24h
-    # Expone _created para que Prometheus inyecte un 0 inicial (increase() exacto)
-    enable_open_metrics: true
     resource_to_telemetry_conversion:
       enabled: true
   otlphttp/loki:

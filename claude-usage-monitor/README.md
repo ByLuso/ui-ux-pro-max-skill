@@ -190,6 +190,32 @@ Están provisionadas en la carpeta **Claude** de Grafana Alerting. Los umbrales 
 
 Tras cambiarlos, ejecuta `docker compose up -d grafana`. No se provisiona ningún contact point: configura el tuyo (email, Slack, Telegram…) en *Alerting → Contact points* y asígnalo en la notification policy por defecto.
 
+## Sin PC: todo en el móvil con Termux
+
+`termux/claude-monitor.sh` levanta la misma stack **sin Docker**: descarga los binarios oficiales para ARM64 de OpenTelemetry Collector, Prometheus, Loki, Pushgateway y Grafana (todos estáticos, corren directamente en Android) y reutiliza las configuraciones de este repo. Los servicios escuchan solo en `127.0.0.1`.
+
+```bash
+# En Termux (instálalo desde F-Droid, no desde Google Play)
+pkg install -y git
+git clone https://github.com/byluso/ui-ux-pro-max-skill
+cd ui-ux-pro-max-skill/claude-usage-monitor
+git checkout claude/claude-token-cost-monitoring-swrk8q
+cp .env.example .env                     # opcional
+
+./termux/claude-monitor.sh install       # una vez: ~400 MB de descarga, ~1,2 GB instalado
+./termux/claude-monitor.sh start         # arranca todo y abre Grafana en el navegador
+```
+
+Grafana se abre en **http://localhost:3000** (admin / admin) y el formulario de claude.ai en **http://localhost:9101/form**. Otros comandos: `status`, `stop`, `restart`, `open` y `logs <servicio>` (loki, otelcol, pushgateway, prometheus, usage-exporter, grafana).
+
+- **Claude Code en el mismo móvil:** exporta las variables de telemetría del apartado 1 con `OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317` (puedes ponerlas en `~/.bashrc`).
+- **claude.ai:** `./log-usage.sh movil 40 12` o el formulario.
+- **Batería:** `start` activa `termux-wake-lock` para que Android no duerma los procesos, y `stop` lo libera. Quita también la optimización de batería a Termux (Ajustes → Apps → Termux → Batería → Sin restricciones).
+- **Android 12+** puede matar procesos en segundo plano ("phantom process killer"). Si se paran solos, desactívalo con ADB:
+  `adb shell device_config put activity_manager max_phantom_processes 2147483647`
+- **Consumo:** unos 500–700 MB de RAM con todo en marcha.
+- **Abrirlo desde otro dispositivo de la red:** `BIND=0.0.0.0 ./termux/claude-monitor.sh restart`.
+
 ## Comprobar que llegan datos
 
 ```bash

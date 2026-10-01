@@ -21,8 +21,6 @@ services:
       - --storage.tsdb.path=/prometheus
       - --storage.tsdb.retention.time=${PROMETHEUS_RETENTION:-90d}
       - --web.enable-lifecycle
-      # Inserta un 0 sintético al nacer cada serie: increase() no pierde la 1ª muestra
-      - --enable-feature=created-timestamp-zero-ingestion
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
