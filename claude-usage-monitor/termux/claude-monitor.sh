@@ -5,6 +5,7 @@
 #   ./termux/claude-monitor.sh install   # descarga binarios (~400 MB, una vez)
 #   ./termux/claude-monitor.sh start     # arranca todo y abre Grafana
 #   ./termux/claude-monitor.sh status | stop | logs <servicio> | open
+#   ./termux/claude-monitor.sh reset-password [nueva]   # si Grafana no acepta admin/admin
 #
 # Usa las mismas configuraciones que docker-compose.yml (fuente única) y solo
 # reescribe hostnames y rutas: los servicios escuchan en 127.0.0.1.
@@ -168,6 +169,16 @@ cmd_status() {
   done
 }
 
+cmd_reset_password() {
+  [[ -x "$CM_HOME/grafana/bin/grafana" ]] || die "Primero: $0 install"
+  local pass="${1:-admin}"
+  mkdir -p "$DATA/grafana"
+  GF_PATHS_DATA="$DATA/grafana" GF_PATHS_LOGS="$LOGS" \
+    "$CM_HOME/grafana/bin/grafana" cli --homepath "$CM_HOME/grafana" --config "$REPO/grafana/grafana.ini" \
+    admin reset-admin-password "$pass" 2>&1 | grep -E "successfully|rror" || true
+  log "Usuario: admin  ·  Contraseña: $pass"
+}
+
 cmd_open() {
   local url=http://localhost:3000/d/claude-code/claude-code
   if command -v termux-open-url >/dev/null; then termux-open-url "$url"
@@ -182,6 +193,7 @@ case "${1:-}" in
   restart) cmd_stop; cmd_start ;;
   status)  cmd_status ;;
   open)    cmd_open ;;
+  reset-password) cmd_reset_password "${2:-}" ;;
   logs)    [[ -n "${2:-}" ]] || die "Uso: $0 logs <${SERVICES[*]}>"; tail -n 50 -f "$LOGS/$2.log" ;;
-  *) echo "Uso: $0 {install|start|stop|restart|status|open|logs <servicio>}"; exit 1 ;;
+  *) echo "Uso: $0 {install|start|stop|restart|status|open|logs <servicio>|reset-password [nueva]}"; exit 1 ;;
 esac

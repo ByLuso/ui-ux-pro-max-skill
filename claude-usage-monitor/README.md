@@ -206,7 +206,7 @@ cp .env.example .env                     # opcional
 ./termux/claude-monitor.sh start         # arranca todo y abre Grafana en el navegador
 ```
 
-Grafana se abre en **http://localhost:3000** (admin / admin) y el formulario de claude.ai en **http://localhost:9101/form**. Otros comandos: `status`, `stop`, `restart`, `open` y `logs <servicio>` (loki, otelcol, pushgateway, prometheus, usage-exporter, grafana).
+Grafana se abre en **http://localhost:3000** (admin / admin; si no te deja entrar: `./termux/claude-monitor.sh reset-password`) y el formulario de claude.ai en **http://localhost:9101/form**. Otros comandos: `status`, `stop`, `restart`, `open` y `logs <servicio>` (loki, otelcol, pushgateway, prometheus, usage-exporter, grafana).
 
 - **Claude Code en el mismo móvil:** exporta las variables de telemetría del apartado 1 con `OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317` (puedes ponerlas en `~/.bashrc`).
 - **claude.ai:** `./log-usage.sh movil 40 12` o el formulario.
