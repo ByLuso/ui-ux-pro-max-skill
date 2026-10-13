@@ -32,6 +32,8 @@ export const cfg = {
   trackSample: num("TRACK_SAMPLE", 0.5),
   maxTracked: num("MAX_TRACKED", 400),
   evMin: num("EV_MIN", 0.05),
+  // Momentos extra de decisión, en segundos desde el lanzamiento (además del de observación)
+  checkpoints: str("CHECKPOINTS", "180,300,600").split(",").map(Number).filter((x) => x > 0),
   // auto = usa la estrategia de salida con mejor resultado en papel; fixed o ladder la fuerzan
   exitStrategy: ["fixed", "ladder"].includes(str("EXIT_STRATEGY")) ? str("EXIT_STRATEGY") : "auto",
   ladder: {

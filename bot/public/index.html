@@ -53,6 +53,19 @@ button:focus-visible, .dcard:focus-visible { outline: 2px solid var(--gold); out
 .live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); vertical-align: 1px; animation: blink 1.6s infinite; }
 @keyframes blink { 50% { opacity: .25; } }
 @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } .obs-row .pg i { transition: none; } }
+.agents { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+.agc { border: 1px solid var(--line-2); border-radius: 2px; padding: 8px; background: var(--panel-2); min-width: 0; display: grid; gap: 4px; align-content: start; transition: border-color .3s, box-shadow .3s; }
+.agc.on { border-color: var(--c); box-shadow: 0 0 0 1px var(--c), 0 0 14px color-mix(in srgb, var(--c) 45%, transparent); }
+.agc .hd { display: flex; align-items: center; gap: 6px; }
+.agc .nm { font: 700 11px var(--f-display); letter-spacing: .1em; color: var(--white); }
+.agc .cd { font-size: 9px; color: var(--c); border: 1px solid var(--c); padding: 0 4px; border-radius: 2px; }
+.agc .role { font-size: 10px; color: var(--dim); }
+.agc .tx { font-size: 11px; color: var(--fg); min-height: 3em; overflow-wrap: anywhere; }
+.agc .ft { font-size: 10px; color: var(--faint); display: flex; justify-content: space-between; }
+.agc .st { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); margin-left: auto; }
+.agc.on .st { background: var(--c); animation: blink 1s infinite; }
+@media (max-width: 1200px) { .agents { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .agents { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .row1 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .big { font: 700 40px/1 var(--f-display); color: var(--green); }
 .dist { display: flex; height: 6px; margin-top: 8px; gap: 2px; }
@@ -154,6 +167,11 @@ button:focus-visible, .dcard:focus-visible { outline: 2px solid var(--gold); out
     </div>
   </section>
 
+  <section class="panel">
+    <div class="ph"><span class="t">Agentes en directo</span><span class="sub">qué está haciendo cada uno ahora mismo</span><span class="rt sub" id="agHot"></span></div>
+    <div class="agents" id="agents"></div>
+  </section>
+
   <section class="row1">
     <div class="panel">
       <div class="ph"><span class="t">Modelo</span><span class="rt sub">aprende de cada resultado medido</span></div>
@@ -227,7 +245,7 @@ const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n
 const C = { gold: css("--gold"), blue: css("--blue"), green: css("--green"), red: css("--red"), amber: css("--amber"), white: css("--white"), dim: css("--dim"), line: css("--line"), violet: css("--violet") };
 const OUTC = [C.green, C.red, C.amber], OUT = ["TP", "SL", "TIEMPO"];
 const STC = { fixed: css("--blue"), ladder: css("--gold") }; // color de cada estrategia de salida
-const AGC = { SCT: C.blue, MAP: C.violet, JDG: C.green, QNT: C.amber, GRD: C.red, EXE: C.gold };
+const AGC = { SCT: C.blue, MAP: C.violet, JDG: C.green, QNT: C.amber, GRD: C.red, EXE: C.gold, ORB: C.white, NAR: C.gold, MKT: C.dim };
 const pct = (x, d = 0) => x == null ? "—" : (x * 100).toFixed(d) + "%";
 const sgn = (x, d = 1) => x == null ? "—" : (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(d) + "%";
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -259,7 +277,7 @@ function render() {
   if (d.halted) B.push(["red", "Bot detenido: " + d.halted + ". Pulsa Reanudar para volver a operar."]);
   $("banners").innerHTML = B.map(([c, t]) => `<div class="banner ${c}">${esc(t)}</div>`).join("");
 
-  renderWallet(d); renderNow(d);
+  renderWallet(d); renderNow(d); renderAgents(d);
 
   // modelo
   const m = d.model, tot = m.counts.reduce((a, b) => a + b, 0) || 1;
@@ -335,6 +353,29 @@ function renderWallet(d) {
     : `<div class="c-dim">Aún no ha operado. Las compras y ventas aparecerán aquí en cuanto ocurran.</div>`;
 }
 
+const AGENTS = [
+  ["SCT", "SCOUT", "detecta lanzamientos y toma las fotos"],
+  ["MAP", "CARTOGRAPHER", "creador, redes y narrativa"],
+  ["JDG", "JUDGE", "historial de las wallets"],
+  ["ORB", "ORB", "probabilidades y aprendizaje"],
+  ["GRD", "GUARD", "filtros de riesgo"],
+  ["QNT", "QUANT", "beneficio esperado tras costes"],
+  ["EXE", "EXECUTOR", "compra y vende"],
+];
+function renderAgents(d) {
+  const el = $("agents");
+  if (!el.children.length) el.innerHTML = AGENTS.map(([k, n, r]) => `<div class="agc" id="ag-${k}" style="--c:${AGC[k]}"><div class="hd"><span class="cd">${k}</span><span class="nm">${n}</span><span class="st"></span></div><div class="role">${r}</div><div class="tx"></div><div class="ft"><span class="ago"></span><span class="cnt"></span></div></div>`).join("");
+  for (const [k] of AGENTS) {
+    const a = d.agents[k], c = $("ag-" + k);
+    c.classList.toggle("on", a.t && Date.now() - a.t < 4000);
+    c.querySelector(".tx").textContent = a.txt;
+    c.querySelector(".ago").textContent = a.t ? "hace " + ago(a.t) : "";
+    c.querySelector(".cnt").textContent = a.n ? a.n.toLocaleString("es-ES") + " acciones" : "";
+  }
+  const m = d.market;
+  $("agHot").textContent = `mercado: ${m.launchRate.toFixed(1)} lanzamientos/min · SOL ${sgn(m.solTrend)} 1 h · ${m.hot.length ? "de moda: " + m.hot.slice(0, 6).join(", ") : ""}`;
+}
+
 function renderNow(d) {
   const a = d.activity, obsS = d.cfg.obsSeconds;
   $("aCounts").textContent = `${a.observing} observando · ${d.counts.measuring} midiendo · ${a.following} con posición`;
@@ -352,12 +393,14 @@ function renderBuilder() {
   if (!x) { $("sbSig").innerHTML = ""; return; }
   const tag = $("sbTag"); tag.innerHTML = coin(x.mint, x.sym); tag.className = "rt chip " + (x.dec === "entry" ? "c-gold" : x.dec === "block" ? "c-red" : "c-amber");
   const s = x.sig, ex = x.explain;
-  const vals = { followed: s.followed, buyersPerMin: s.buyersPerMin.toFixed(1), buySell: ((s.buySol + 0.1) / (s.sellSol + 0.1)).toFixed(1) + "×", earlyShare: pct(s.earlyShare), devShare: pct(s.devShare, 1), top10: pct(s.top10), curve: pct(s.curve), creatorPrior: s.creatorPrior, velocity: sgn(Math.exp(s.velocity) - 1, 0) };
+  const vals = { followed: s.followed, buyersPerMin: s.buyersPerMin.toFixed(1), buySell: ((s.buySol + 0.1) / (s.sellSol + 0.1)).toFixed(1) + "×", earlyShare: pct(s.earlyShare), devShare: pct(s.devShare, 1), top10: pct(s.top10), curve: pct(s.curve), creatorPrior: s.creatorPrior, velocity: sgn(Math.exp(s.velocity) - 1, 0),
+    ageMin: (s.ageMin ?? 0) < 1 ? Math.round((s.ageMin ?? 0) * 60) + " s" : Math.round(s.ageMin) + " min", socials: s.socials ?? 0, socialReuse: s.socialReuse ? "sí" : "no", narrative: s.narrative ?? 0,
+    launchRate: (s.launchRate ?? 0).toFixed(1), solTrend: sgn(s.solTrend ?? 0), hourSin: new Date().getHours() + " h", hourCos: "" };
   const mx = Math.max(0.05, ...ex.steps.map(Math.abs));
   $("sbPrior").textContent = `prior ${ex.prior.toFixed(2)} → estado ${x.p[0].toFixed(2)}`;
   $("sbSig").innerHTML = D.signals.map((g, i) => {
     const v = ex.steps[i], w = Math.abs(v) / mx * 50;
-    return `<tr><td><span class="tag" style="color:${AGC[g.ag]}">${g.ag}</span>${esc(g.name)}</td><td>${vals[g.k]}</td><td><div class="bar"><b></b><i style="${v >= 0 ? "left:50%" : `left:${50 - w}%`};width:${w}%;background:${v >= 0 ? C.green : C.red}"></i></div></td></tr>`;
+    return `<tr><td><span class="tag" style="color:${AGC[g.ag] || C.dim}">${g.ag}</span>${esc(g.name)}</td><td>${vals[g.k] ?? ""}</td><td><div class="bar"><b></b><i style="${v >= 0 ? "left:50%" : `left:${50 - w}%`};width:${w}%;background:${v >= 0 ? C.green : C.red}"></i></div></td></tr>`;
   }).join("");
   const lab = ["TP · +60% primero", "SL · −30% primero", "TIEMPO · ninguno"];
   $("sbState").innerHTML = [0, 1, 2].map((i) => `<div class="pb"><div class="h"><span style="color:${OUTC[i]}">${lab[i]}</span><span class="c-white">${x.p[i].toFixed(2)}</span></div><div class="tr"><i style="width:${x.p[i] * 100}%;background:${OUTC[i]}"></i></div></div>`).join("");

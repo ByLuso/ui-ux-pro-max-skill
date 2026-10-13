@@ -41,7 +41,6 @@ export class PaperWallet {
     const { tokens, impact } = buyOnCurve(t.vSol, t.vTok, sol, cfg.pumpFee);
     if (!(tokens > 0)) return "sin datos de la curva";
     this.cash -= eur + cfg.priorityFee * this.solEur;
-    t.keep = true;
     this.positions.set(t.mint, { mint: t.mint, sym: t.sym, t: now(), eur, sol, tokens, impact, strat, ev: q.ev, pTP: t.p[0], got: 0, exit: new Exit(strat, t.px), lastPx: t.px });
     this.event("buy", t.sym, t.mint, `compra ${eur.toFixed(2)} € · P(+60%) ${t.p[0].toFixed(2)} · EV ${(q.ev * 100).toFixed(1)}% · salida ${STRATS[strat].name.toLowerCase()}`, -eur);
     this.save();

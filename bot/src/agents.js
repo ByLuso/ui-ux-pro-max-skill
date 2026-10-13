@@ -15,6 +15,14 @@ export const SIGNALS = [
   { k: "curve", ag: "SCT", name: "Posición en la curva" },
   { k: "creatorPrior", ag: "MAP", name: "Lanzamientos previos del creador" },
   { k: "velocity", ag: "SCT", name: "Subida desde el lanzamiento" },
+  { k: "ageMin", ag: "SCT", name: "Minutos desde el lanzamiento" },
+  { k: "socials", ag: "MAP", name: "Redes sociales (X, Telegram, web)" },
+  { k: "socialReuse", ag: "MAP", name: "Redes copiadas de otro token" },
+  { k: "narrative", ag: "NAR", name: "Encaja con temas de moda" },
+  { k: "launchRate", ag: "MKT", name: "Lanzamientos por minuto (mercado)" },
+  { k: "solTrend", ag: "MKT", name: "SOL en la última hora" },
+  { k: "hourSin", ag: "MKT", name: "Hora del día (ciclo)" },
+  { k: "hourCos", ag: "MKT", name: "Hora del día (ciclo, 2)" },
 ];
 
 // Cualquier valor no numérico (dato raro de la API) se convierte en 0 para no envenenar el modelo
@@ -29,6 +37,14 @@ export function featureVector(s) {
     s.curve,
     Math.log1p(s.creatorPrior),
     s.velocity,
+    Math.log1p(s.ageMin),
+    s.socials,
+    s.socialReuse,
+    Math.min(3, s.narrative),
+    Math.log1p(s.launchRate),
+    s.solTrend * 10,
+    s.hourSin,
+    s.hourCos,
   ];
   return f.map((v) => (Number.isFinite(v) ? v : 0));
 }

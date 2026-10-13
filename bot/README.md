@@ -25,6 +25,18 @@ El bot simula en papel **dos formas de salir sobre las mismas entradas** y las c
 
 Con `EXIT_STRATEGY=auto` (por defecto), el dinero real usa la que mejor media tenga en papel tras al menos 30 operaciones. También puedes forzar `fixed` o `ladder` en `.env` y ajustar los niveles (`LADDER_*`).
 
+### Señales que usa el modelo (17)
+- **Del lanzamiento:** compradores por minuto, compras ÷ ventas, subida desde el lanzamiento, posición en la curva, supply del creador y sus lanzamientos previos. Con la clave de PumpPortal también: wallets seguidas, compradores en los primeros 3 s y top-10 de holders.
+- **Redes sociales:** cuántas tiene (X, Telegram, web) según la ficha del token y si están copiadas de otro token. La ficha solo se descarga de direcciones públicas, nunca de tu red local.
+- **Narrativa:** si el nombre encaja con palabras de las noticias de las últimas 24 h, con las tendencias de CoinGecko o con tokens que llegaron a +60% en las últimas 6 h.
+- **Mercado:** lanzamientos por minuto, cómo va SOL en la última hora y la hora del día.
+- **Momento:** cada token se evalúa a los 90 s y otra vez a los 3, 5 y 10 min si sigue activo (`CHECKPOINTS` en `.env`). Cada evaluación es una foto con su propia etiqueta, así el bot puede encontrar tokens que arrancan tarde.
+
+Al actualizar desde una versión con menos señales, el modelo se reentrena solo con las etiquetas guardadas.
+
+### Agentes en directo
+El panel muestra qué está haciendo cada agente en cada momento: SCOUT, CARTOGRAPHER, JUDGE, ORB, GUARD, QUANT y EXECUTOR. Se ilumina el que acaba de actuar.
+
 **El Orb** es un modelo de tres resultados que aprende en línea. 45 s después de cada lanzamiento (90 s en modo gratuito) toma una foto de 9 señales y estima P(+60% primero), P(−30% primero) y P(ninguno en 60 min). Cuando se sabe el resultado real, el modelo se actualiza con él, aunque el bot haya decidido no entrar.
 
 El panel muestra la **mejora de información**: cuánto mejor predice el modelo que si solo usara la frecuencia histórica de cada resultado. Si se queda en 0% o es negativa, las señales no sirven y el bot no debería operar con dinero real.

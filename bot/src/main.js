@@ -16,21 +16,26 @@ import { PaperWallet } from "./wallet.js";
 // Sin clave de PumpPortal → modo gratuito con DexScreener. Cada modo mide las señales distinto, así que guarda su propio modelo.
 const SOURCE = cfg.apiKey ? "pumpportal" : "dexscreener";
 const MODEL_FILE = SOURCE === "pumpportal" ? "model.json" : "model-dex.json";
-let model = Model.from(loadJSON(MODEL_FILE, null), SIGNALS.length);
+const savedModel = loadJSON(MODEL_FILE, null);
+let model = Model.from(savedModel, SIGNALS.length);
 let repairNote = null;
-if (model.corrupted()) {
+const upgraded = savedModel && savedModel.nf && savedModel.nf !== SIGNALS.length;
+if (model.corrupted() || upgraded) {
   // Un dato inválido dañó el modelo en una versión anterior: se reentrena desde las etiquetas guardadas.
   // Los valores que se guardaron como null se recuperan como 0, igual que hace ahora featureVector con los datos nuevos
-  const rows = readLines("labels.jsonl").filter((r) => (r.src || "pumpportal") === SOURCE && Array.isArray(r.f) && r.f.length === SIGNALS.length && [0, 1, 2].includes(r.y))
-    .map((r) => ({ ...r, f: r.f.map((v) => (Number.isFinite(v) ? v : 0)) }));
+  // Si la versión nueva tiene más señales, las etiquetas antiguas se completan con 0 en las señales que no existían
+  const rows = readLines("labels.jsonl").filter((r) => (r.src || "pumpportal") === SOURCE && Array.isArray(r.f) && r.f.length <= SIGNALS.length && [0, 1, 2].includes(r.y))
+    .map((r) => ({ ...r, f: Array.from({ length: SIGNALS.length }, (_, i) => (Number.isFinite(r.f[i]) ? r.f[i] : 0)) }));
   model = new Model(SIGNALS.length);
   for (const r of rows) model.observe(r.f);
   for (const r of rows) model.learn(r.f, r.y, r.ret);
   // Las operaciones en papel de ese periodo se abrieron con predicciones inválidas: se apartan para no falsear los resultados
   const pf = path.join(DATA, "paper.jsonl");
-  if (fs.existsSync(pf)) fs.renameSync(pf, path.join(DATA, `paper-invalido-${Date.now()}.jsonl`));
+  if (!upgraded && fs.existsSync(pf)) fs.renameSync(pf, path.join(DATA, `paper-invalido-${Date.now()}.jsonl`));
   saveJSON(MODEL_FILE, model);
-  repairNote = `modelo reparado: reentrenado con ${rows.length} etiquetas válidas; operaciones en papel anteriores apartadas`;
+  repairNote = upgraded
+    ? `modelo actualizado a ${SIGNALS.length} señales: reentrenado con ${rows.length} etiquetas guardadas`
+    : `modelo reparado: reentrenado con ${rows.length} etiquetas válidas; operaciones en papel anteriores apartadas`;
   console.log("  " + repairNote);
 }
 const wallet = new PaperWallet();
@@ -98,33 +103,88 @@ function computeGate() {
 }
 const isLive = () => S.gate.ok;
 
+// ---------- agentes en directo: qué está haciendo cada uno ahora ----------
+S.agents = Object.fromEntries(["SCT", "MAP", "JDG", "ORB", "QNT", "GRD", "EXE"].map((k) => [k, { txt: "esperando…", t: 0, n: 0 }]));
+function agent(k, txt) { const a = S.agents[k]; a.txt = txt; a.t = now(); a.n++; }
+const pctS = (x) => (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(1) + "%";
+feed.on("create", (d) => agent("SCT", `nuevo lanzamiento ${String(d.symbol || "?").slice(0, 16)} · ${tracker.launchRate().toFixed(1)} por minuto`));
+if (dex) dex.on("pair", () => { S.agents.SCT.n++; });
+
+// ---------- narrativa: palabras de moda (noticias, tendencias y tokens que acaban de pegar fuerte) ----------
+const STOPW = new Set("the and for with from that this will have after over into about more than what when your their they been were coin token crypto price market says said new news inu sol pump fun meme".split(" "));
+const wordsOf = (t) => `${t.name || ""} ${t.sym || ""}`.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length >= 3 && !STOPW.has(w));
+const recentWinners = [];
+const hot = { words: new Set(), t: 0 };
+function refreshHot() {
+  const w = new Set();
+  const cut = now() - 6 * 3600e3;
+  while (recentWinners.length && recentWinners[0].t < cut) recentWinners.shift();
+  for (const r of recentWinners) r.words.forEach((x) => w.add(x));
+  if (radar) {
+    for (const n of radar.news.latest(200)) if (Date.now() - n.t < 24 * 3600e3) n.title.toLowerCase().split(/[^a-z0-9]+/).filter((x) => x.length >= 4 && !STOPW.has(x)).forEach((x) => w.add(x));
+    radar.trending.forEach((x) => w.add(String(x).toLowerCase()));
+  }
+  hot.words = w; hot.t = now();
+}
+function narrativeScore(t) {
+  if (now() - hot.t > 5 * 60e3) refreshHot();
+  return new Set(wordsOf(t).filter((x) => hot.words.has(x))).size;
+}
+
+// ---------- mercado: tendencia de SOL en la última hora (Binance) ----------
+const market = { solTrend: 0 };
+async function refreshMarket() {
+  try {
+    const k = await (await fetch("https://data-api.binance.vision/api/v3/klines?symbol=SOLUSDT&interval=5m&limit=13")).json();
+    const a = +k[0][1], b = +k.at(-1)[4];
+    if (a > 0 && b > 0) market.solTrend = b / a - 1;
+  } catch {}
+}
+refreshMarket();
+setInterval(refreshMarket, 5 * 60e3);
+
 // ---------- decisión (GUARD → QUANT → EXECUTOR) ----------
+// Cada "vista" es un token evaluado en un momento concreto (90 s, 3, 5 o 10 min desde su lanzamiento)
 tracker.on("observe", (t) => {
+  const tok = t.t;
+  // Señales de contexto: narrativa de moda y ambiente del mercado
+  t.sig.narrative = narrativeScore(tok);
+  const hr = new Date().getUTCHours() + new Date().getUTCMinutes() / 60;
+  Object.assign(t.sig, { launchRate: tracker.launchRate(), solTrend: market.solTrend, hourSin: Math.sin((hr / 24) * 2 * Math.PI), hourCos: Math.cos((hr / 24) * 2 * Math.PI) });
   const f = featureVector(t.sig);
   model.observe(f);
   const p = model.predict(f);
   t.p = p;
+  const when = t.idx === 0 ? `a los ${Math.round(t.sig.ageMin * 60)} s` : `a los ${Math.round(t.sig.ageMin)} min`;
+  agent("SCT", `toma la foto de ${t.sym} ${when} · ${t.sig.buyersPerMin.toFixed(1)} compras/min · precio ${pctS(Math.exp(t.sig.velocity) - 1)}`);
+  agent("MAP", `${t.sym}: creador ${(t.sig.devShare * 100).toFixed(1)}% · ${t.sig.creatorPrior} lanzamientos previos · ${t.sig.socials} redes${t.sig.socialReuse ? " (copiadas)" : ""}${t.sig.narrative ? " · encaja con temas de moda" : ""}`);
+  agent("JDG", `${t.sym}: ${t.sig.followed} wallets seguidas entre sus compradores · ${judge.count()} wallets seguidas en total`);
+  agent("ORB", `${t.sym}: P(+60%) ${p[0].toFixed(2)} · P(−30%) ${p[1].toFixed(2)} · P(nada) ${p[2].toFixed(2)}`);
   const block = guard(t.sig);
-  if (block) { t.blocked = true; S.counts.blocked++; decide(t, "block", block, p, null); return; }
+  if (block) { t.blocked = true; S.counts.blocked++; agent("GRD", `bloquea ${t.sym}: ${block}`); decide(t, "block", block, p, null); return; }
+  agent("GRD", `${t.sym} pasa los filtros de riesgo`);
   const q = quant(p, t.sig, model.timeRet, isLive());
   t.q = q;
+  agent("QNT", `${t.sym}: bruto ${pctS(q.gross)} − costes ${(q.costs * 100).toFixed(1)}% = EV ${pctS(q.ev)} ${q.ev >= cfg.evMin ? "→ SEÑAL" : `→ salta (mínimo +${(cfg.evMin * 100).toFixed(0)}%)`}`);
   if (!(q.ev >= cfg.evMin)) { /* también descarta un EV inválido (NaN) */ S.counts.skipped++; decide(t, "skip", `EV ${(q.ev * 100).toFixed(1)}% tras costes · bajo +${(cfg.evMin * 100).toFixed(0)}%`, p, q.ev); return; }
   S.counts.signals++;
   // Toda señal se registra en papel (sin límite de posiciones) para medir si el sistema tiene ventaja
   // Las dos estrategias de salida se simulan sobre la MISMA entrada, para compararlas en igualdad de condiciones
-  t.keep = true;
-  S.paperOpen.set(t.mint, { t: now(), sym: t.sym, tObs: t.tObs, size: q.size, tokens: buyOnCurve(t.sig.vSol, t.sig.vTok, q.size, cfg.pumpFee).tokens, impact: q.impact, ev: q.ev,
+  tracker.hold(t);
+  if (!S.paperOpen.has(t.mint)) S.paperOpen.set(t.mint, { t: now(), sym: t.sym, tObs: t.tObs, size: q.size, tokens: buyOnCurve(t.sig.vSol, t.sig.vTok, q.size, cfg.pumpFee).tokens, impact: q.impact, ev: q.ev,
     exits: Object.fromEntries(Object.keys(STRATS).map((k) => [k, new Exit(k, t.pxEntry)])) });
-  const wwhy = wallet.tryOpen(t, chosenStrat(), q);
+  const wwhy = wallet.tryOpen({ mint: t.mint, sym: t.sym, p, px: t.pxEntry, vSol: t.sig.vSol, vTok: t.sig.vTok }, chosenStrat(), q);
+  agent("EXE", wwhy ? `${t.sym}: no compra en la cartera de prueba (${wwhy})` : `compra ${t.sym} en la cartera de prueba`);
   if (wwhy && !wwhy.startsWith("cartera llena")) log("EXE", `cartera de prueba no compra ${t.sym}: ${wwhy}`);
   if (!isLive()) { decide(t, "entry", `señal · EV ${(q.ev * 100).toFixed(1)}% · en papel`, p, q.ev); log("QNT", `señal en papel ${t.sym} · EV ${q.ev >= 0 ? "+" : ""}${(q.ev * 100).toFixed(1)}%`); return; }
+  if (S.positions.has(t.mint)) return;
   if (S.positions.size >= cfg.maxOpen) { decide(t, "skip", `libro lleno · ${cfg.maxOpen}/${cfg.maxOpen}`, p, q.ev); return; }
   openLive(t, q);
   decide(t, "entry", `ENTRADA REAL · ${q.size} SOL · EV ${(q.ev * 100).toFixed(1)}%`, p, q.ev);
 });
 
 async function openLive(t, q) {
-  t.keep = true;
+  tracker.hold(t);
   const strat = chosenStrat();
   const pos = { mint: t.mint, sym: t.sym, size: q.size, t: now(), status: "abriendo", ev: q.ev, p: t.p, strat, sells: [], queue: Promise.resolve() };
   S.positions.set(t.mint, pos);
@@ -132,7 +192,7 @@ async function openLive(t, q) {
   try {
     const r = await live.buy(t.mint, q.size);
     pos.buySig = r.sig; pos.buyDelta = r.delta; pos.status = "abierta";
-    pos.exit = new Exit(strat, t.px); // la referencia es el precio cuando se confirmó la compra
+    pos.exit = new Exit(strat, t.t.px); // la referencia es el precio cuando se confirmó la compra
     log("EXE", `compra real ${t.sym} · ${q.size} SOL · salida "${STRATS[strat].name}" · ${r.sig.slice(0, 10)}…`);
     if (pos.closeWhenOpen) closeLive(pos, pos.closeWhenOpen);
   } catch (e) {
@@ -212,7 +272,9 @@ tracker.on("label", (t) => {
   if (!t.blocked && t.sig) {
     const f = featureVector(t.sig);
     model.learn(f, t.label, t.ret);
-    appendLine("labels.jsonl", { src: SOURCE, t: t.tEnd, mint: t.mint, sym: t.sym, y: t.label, ret: t.ret, f, p: t.p });
+    appendLine("labels.jsonl", { src: SOURCE, t: t.tEnd, mint: t.mint, sym: t.sym, cp: t.idx, y: t.label, ret: t.ret, f, p: t.p });
+    agent("ORB", `aprende de ${t.sym}: ${["llegó a +60%", "cayó a −30%", "no tocó nada en 60 min"][t.label]} (foto ${t.idx + 1})`);
+    if (t.label === TP) recentWinners.push({ t: now(), words: wordsOf(t.t) });
   }
 });
 
@@ -248,6 +310,7 @@ setInterval(computeGate, 5000);
 function state() {
   const sc = model.score();
   const measuring = tracker.measuring().slice(0, 800).map((t) => ({ m: t.mint, s: t.sym, p: t.p || [1 / 3, 1 / 3, 1 / 3], a: (now() - t.tObs) / (cfg.horizonMin * 60000), b: !!t.blocked, r: t.px / t.pxEntry - 1 }));
+  const nowT = now();
   return {
     mode: cfg.mode, live: isLive(), gate: S.gate, halted: S.halted,
     feed: { source: SOURCE, connected: feed.connected, msgs: feed.msgs, perHour: feed.perHour(), notice: feed.notice, hasKey: !!cfg.apiKey, dexCalls: dex ? dex.calls : 0, dexErrors: dex ? dex.errors : 0 },
@@ -255,10 +318,11 @@ function state() {
     model: { labels: model.labels, counts: model.counts, ...sc, timeRet: model.timeRet, recent: model.hist.slice(-60).map((h) => h.y) },
     signals: SIGNALS, measuring,
     paperWallet: wallet.state(),
+    agents: S.agents, market: { solTrend: market.solTrend, launchRate: tracker.launchRate(), hot: [...hot.words].slice(0, 30) },
     // Primero los que ya tienen precio y están más cerca de decidir
     observing: [...tracker.tokens.values()].filter((t) => t.phase === "observe").sort((a, b) => (dex ? (b.dexSeen ? 1 : 0) - (a.dexSeen ? 1 : 0) : 0) || a.t0 - b.t0).slice(0, 8)
       .map((t) => ({ m: t.mint, s: t.sym, age: (now() - t.t0) / 1000, chg: t.px / t.px0 - 1, buys: dex ? t.dexBuys || 0 : t.buyers.size, seen: dex ? !!t.dexSeen : true })),
-    activity: { observing: [...tracker.tokens.values()].filter((t) => t.phase === "observe").length, following: [...tracker.tokens.values()].filter((t) => t.phase === "follow").length, radar: radar ? radar.now : null }, decisions: S.decisions.slice(0, 30), log: S.log.slice(0, 20),
+    activity: { observing: [...tracker.tokens.values()].filter((t) => t.phase === "observe").length, following: [...tracker.tokens.values()].filter((t) => t.keepUntil > nowT).length, radar: radar ? radar.now : null }, decisions: S.decisions.slice(0, 30), log: S.log.slice(0, 20),
     positions: [...S.positions.values()].map(({ closeWhenOpen, ...p }) => p),
     paper: {
       chosen: chosenStrat(), mode: cfg.exitStrategy, open: S.paperOpen.size, recent: S.paper.slice(-300),
