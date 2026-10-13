@@ -22,6 +22,8 @@ export class Tracker extends EventEmitter {
 
   onCreate(d) {
     this.seen++;
+    // Solo pump.fun y con datos de la curva completos (PumpPortal también emite lanzamientos de otras plataformas)
+    if ((d.pool && d.pool !== "pump") || !(+d.vSolInBondingCurve > 0) || !(+d.vTokensInBondingCurve > 0)) return;
     const creatorPrior = this.creators.seen(d.traderPublicKey);
     if (this.tokens.size >= cfg.maxTracked || Math.random() >= cfg.trackSample) { this.skippedSample++; return; }
     const vSol = +d.vSolInBondingCurve || V_SOL0, vTok = +d.vTokensInBondingCurve;
@@ -49,7 +51,7 @@ export class Tracker extends EventEmitter {
     if (Number.isFinite(+d.newTokenBalance)) t.holders.set(who, +d.newTokenBalance);
     if (d.pool && d.pool !== "pump") { t.graduated = true; return; } // ya migró a PumpSwap: el precio de la curva deja de valer
     const vs = +d.vSolInBondingCurve, vt = +d.vTokensInBondingCurve;
-    if (vs > 0 && vt > 0) { t.vSol = vs; t.vTok = vt; t.px = vs / vt; }
+    if (vs > 0 && vt > 0 && Number.isFinite(vs / vt)) { t.vSol = vs; t.vTok = vt; t.px = vs / vt; }
     if (t.vSol - V_SOL0 >= GRAD_SOL * 0.995) t.graduated = true;
     if (t.phase === "measure") this.checkExit(t);
   }
@@ -62,6 +64,7 @@ export class Tracker extends EventEmitter {
     t.buySol = +tx.buys || 0; t.sellSol = +tx.sells || 0; // en este modo son conteos, no SOL
     t.dexBuys = +tx.buys || 0;
     if (p.dexId !== "pumpfun") { t.graduated = true; if (t.phase === "measure") this.checkExit(t); return; }
+    if (!(+p.priceNative > 0)) return;
     t.px = +p.priceNative;
     t.vSol = Math.sqrt(t.px * V_SOL0 * V_TOK0); // en la curva x·y=k el precio es vSol²/k
     t.vTok = (V_SOL0 * V_TOK0) / t.vSol;

@@ -1,7 +1,7 @@
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
-import { cfg, ROOT } from "./config.js";
+import { cfg, ROOT, DATA } from "./config.js";
 import { now, loadJSON, saveJSON, appendLine, readLines } from "./store.js";
 import { Feed, DexPoller } from "./feed.js";
 import { Tracker } from "./tracker.js";
@@ -14,7 +14,23 @@ import { Radar } from "./radar/radar.js";
 // Sin clave de PumpPortal → modo gratuito con DexScreener. Cada modo mide las señales distinto, así que guarda su propio modelo.
 const SOURCE = cfg.apiKey ? "pumpportal" : "dexscreener";
 const MODEL_FILE = SOURCE === "pumpportal" ? "model.json" : "model-dex.json";
-const model = Model.from(loadJSON(MODEL_FILE, null), SIGNALS.length);
+let model = Model.from(loadJSON(MODEL_FILE, null), SIGNALS.length);
+let repairNote = null;
+if (model.corrupted()) {
+  // Un dato inválido dañó el modelo en una versión anterior: se reentrena desde las etiquetas guardadas.
+  // Los valores que se guardaron como null se recuperan como 0, igual que hace ahora featureVector con los datos nuevos
+  const rows = readLines("labels.jsonl").filter((r) => (r.src || "pumpportal") === SOURCE && Array.isArray(r.f) && r.f.length === SIGNALS.length && [0, 1, 2].includes(r.y))
+    .map((r) => ({ ...r, f: r.f.map((v) => (Number.isFinite(v) ? v : 0)) }));
+  model = new Model(SIGNALS.length);
+  for (const r of rows) model.observe(r.f);
+  for (const r of rows) model.learn(r.f, r.y, r.ret);
+  // Las operaciones en papel de ese periodo se abrieron con predicciones inválidas: se apartan para no falsear los resultados
+  const pf = path.join(DATA, "paper.jsonl");
+  if (fs.existsSync(pf)) fs.renameSync(pf, path.join(DATA, `paper-invalido-${Date.now()}.jsonl`));
+  saveJSON(MODEL_FILE, model);
+  repairNote = `modelo reparado: reentrenado con ${rows.length} etiquetas válidas; operaciones en papel anteriores apartadas`;
+  console.log("  " + repairNote);
+}
 const judge = new Judge();
 const creators = new Creators();
 const feed = new Feed(cfg.apiKey);
@@ -75,7 +91,7 @@ tracker.on("observe", (t) => {
   if (block) { t.blocked = true; S.counts.blocked++; decide(t, "block", block, p, null); return; }
   const q = quant(p, t.sig, model.timeRet, isLive());
   t.q = q;
-  if (q.ev < cfg.evMin) { S.counts.skipped++; decide(t, "skip", `EV ${(q.ev * 100).toFixed(1)}% tras costes · bajo +${(cfg.evMin * 100).toFixed(0)}%`, p, q.ev); return; }
+  if (!(q.ev >= cfg.evMin)) { /* también descarta un EV inválido (NaN) */ S.counts.skipped++; decide(t, "skip", `EV ${(q.ev * 100).toFixed(1)}% tras costes · bajo +${(cfg.evMin * 100).toFixed(0)}%`, p, q.ev); return; }
   S.counts.signals++;
   // Toda señal se registra en papel (sin límite de posiciones) para medir si el sistema tiene ventaja
   S.paperOpen.set(t.mint, { t: now(), size: q.size, tokens: buyOnCurve(t.sig.vSol, t.sig.vTok, q.size, cfg.pumpFee).tokens, px: t.pxEntry, impact: q.impact, ev: q.ev });
@@ -214,6 +230,7 @@ http.createServer(async (req, res) => {
 
 if (cfg.mode === "live") live.initLive().then((a) => log("EXE", `wallet del bot ${a}`)).catch((e) => log("EXE", "modo real no disponible: " + e.message));
 refreshWallet();
+if (repairNote) log("ORB", repairNote);
 feed.start();
 if (dex) dex.start();
 if (radar) radar.start();

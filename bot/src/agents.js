@@ -17,8 +17,9 @@ export const SIGNALS = [
   { k: "velocity", ag: "SCT", name: "Subida desde el lanzamiento" },
 ];
 
+// Cualquier valor no numérico (dato raro de la API) se convierte en 0 para no envenenar el modelo
 export function featureVector(s) {
-  return [
+  const f = [
     s.followed,
     Math.log1p(s.buyersPerMin),
     Math.log((s.buySol + 0.1) / (s.sellSol + 0.1)),
@@ -29,6 +30,7 @@ export function featureVector(s) {
     Math.log1p(s.creatorPrior),
     s.velocity,
   ];
+  return f.map((v) => (Number.isFinite(v) ? v : 0));
 }
 
 // ---------- JUDGE: historial de cada wallet compradora ----------

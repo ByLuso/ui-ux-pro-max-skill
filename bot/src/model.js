@@ -27,7 +27,14 @@ export class Model {
     return m;
   }
 
+  // true si algún peso o estadística dejó de ser un número válido (p. ej. NaN guardado como null)
+  corrupted() {
+    const ok = (a) => a.every((v) => typeof v === "number" && Number.isFinite(v));
+    return !(this.W.every(ok) && ok(this.mean) && ok(this.m2) && Number.isFinite(this.timeRet));
+  }
+
   observe(f) { // estadística corriente para estandarizar cada señal
+    if (!f.every(Number.isFinite)) return;
     this.nObs++;
     for (let i = 0; i < this.nf; i++) {
       const d = f[i] - this.mean[i];
@@ -49,7 +56,8 @@ export class Model {
 
   predict(f) {
     if (this.labels === 0) return [1 / 3, 1 / 3, 1 / 3];
-    return softmax(this.logits(this.norm(f)));
+    const p = softmax(this.logits(this.norm(f)));
+    return p.every(Number.isFinite) ? p : [1 / 3, 1 / 3, 1 / 3];
   }
 
   prior() {
@@ -72,6 +80,7 @@ export class Model {
   }
 
   learn(f, y, ret) {
+    if (!f.every(Number.isFinite)) return;
     const p = this.predict(f), pr = this.prior();
     this.hist.push({ y, p: Math.max(p[y], 1e-6), p0: pr[y] });
     if (this.hist.length > 500) this.hist.shift();
@@ -88,6 +97,7 @@ export class Model {
 
   // Log-loss del modelo frente a usar solo la frecuencia histórica (prior). Ganancia > 0 = las señales aportan.
   score() {
+    this.hist = this.hist.filter((h) => Number.isFinite(h.p) && Number.isFinite(h.p0));
     const n = this.hist.length;
     if (n < 30) return { n, ll: null, ll0: null, gain: null };
     const ll = -this.hist.reduce((s, h) => s + Math.log(h.p), 0) / n;
