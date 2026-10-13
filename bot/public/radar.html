@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orbital Radar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #060a12; --panel: #0a111d; --panel-2: #0d1626; --line: #18243a; --line-2: #22324f;
+  --fg: #cdd7ea; --dim: #6a7894; --faint: #3b4862; --white: #eef3ff;
+  --gold: #f2c14e; --blue: #4f8cff; --green: #3ddc84; --red: #ff4d5e; --amber: #ff9f43; --violet: #8f7dff;
+  --f-display: "Chakra Petch", "Arial Narrow", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 12px/1.45 var(--f-mono); padding-inline: 16px; padding-block: 12px 28px; font-variant-numeric: tabular-nums; }
+table { font-size: inherit; color: inherit; border-collapse: collapse; width: 100%; }
+a { color: var(--blue); }
+.wrap { max-width: 1500px; margin: 0 auto; display: grid; gap: 10px; }
+.sub { color: var(--faint); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; min-width: 0; }
+.ph { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.ph .t { font: 700 12px var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--white); }
+.ph .t::before { content: "◆"; margin-right: 6px; font-size: 9px; color: var(--dim); }
+.ph .rt { margin-left: auto; }
+.chip { display: inline-block; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 1px 6px; border: 1px solid currentColor; border-radius: 2px; white-space: nowrap; }
+.c-gold { color: var(--gold); } .c-blue { color: var(--blue); } .c-green { color: var(--green); } .c-red { color: var(--red); } .c-amber { color: var(--amber); } .c-dim { color: var(--dim); } .c-white { color: var(--white); } .c-violet { color: var(--violet); }
+header { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+h1 { margin: 0; font: 700 17px var(--f-display); letter-spacing: .14em; color: var(--white); }
+h1 span { color: var(--gold); }
+.stats { display: flex; gap: 20px; flex-wrap: wrap; }
+.stat .v { font: 600 17px var(--f-display); color: var(--white); }
+form { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+input { font: inherit; background: var(--panel-2); color: var(--white); border: 1px solid var(--line-2); border-radius: 2px; padding: 5px 8px; min-width: 0; width: 260px; max-width: 100%; }
+button { font: inherit; font-size: 11px; background: var(--panel-2); color: var(--fg); border: 1px solid var(--line-2); border-radius: 2px; padding: 5px 10px; cursor: pointer; }
+button:hover { border-color: var(--blue); color: var(--white); }
+button[aria-pressed="true"] { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+button:focus-visible, input:focus-visible, tr[tabindex]:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+.row1 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.main { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 10px; align-items: start; }
+.tw { overflow-x: auto; }
+.tbl td, .tbl th { padding: 5px 6px; border-top: 1px solid var(--line); white-space: nowrap; text-align: left; font-weight: 400; }
+.tbl th { color: var(--dim); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; border-top: 0; }
+.tbl tr[tabindex] { cursor: pointer; }
+.tbl tr[tabindex]:hover td { background: var(--panel-2); }
+.tbl tr.sel td { background: color-mix(in srgb, var(--gold) 8%, var(--panel-2)); }
+.score { display: inline-flex; align-items: center; gap: 6px; }
+.score .b { width: 60px; height: 6px; background: var(--line); position: relative; }
+.score .b i { position: absolute; top: 0; height: 100%; }
+.score .b em { position: absolute; left: 50%; top: -2px; width: 1px; height: 10px; background: var(--dim); }
+.list div { margin: 4px 0; }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+#cvChart { width: 100%; height: 260px; display: block; }
+.sig div { padding: 3px 0; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; }
+.levels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+.levels .v { color: var(--white); font: 600 14px var(--f-display); }
+.note { color: var(--dim); font-size: 11px; }
+.msg { min-height: 16px; font-size: 11px; }
+@media (max-width: 1050px) { .row1, .main { grid-template-columns: minmax(0, 1fr); } form { margin-left: 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="sub"><a href="/">← volver al bot de pump.fun</a> · solo vigila y avisa, no opera</div>
+      <h1><span>ORBITAL</span> // RADAR</h1>
+      <div class="sub" id="status">cargando…</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="sub">monedas vigiladas</div><div class="v" id="sN">0</div></div>
+      <div class="stat"><div class="sub">noticias 48 h</div><div class="v" id="sNews">0</div></div>
+      <div class="stat"><div class="sub">ánimo de las noticias</div><div class="v" id="sMood">—</div></div>
+    </div>
+    <form id="addForm">
+      <label class="sub" for="q" style="align-self:center">añadir a mi lista</label>
+      <input id="q" placeholder="BTC, PEPE o dirección del token" autocomplete="off">
+      <button type="submit">Añadir</button>
+      <div class="msg" id="addMsg" style="flex-basis:100%"></div>
+    </form>
+  </header>
+
+  <section class="row1">
+    <div class="panel">
+      <div class="ph"><span class="t">Alertas</span><span class="rt sub">puntuación ≥ 50 o ruptura con noticias</span></div>
+      <div class="list" id="alerts"></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">¿Funciona el radar?</span><span class="rt sub">precio 24 h después de cada puntuación</span></div>
+      <table class="tbl" id="evalT"></table>
+      <div class="note" style="margin-top:6px">Si las "fuertes" no suben más que la media durante semanas, la puntuación no sirve para elegir monedas.</div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">Últimas noticias</span><span class="rt sub">verde positiva · rojo negativa</span></div>
+      <div class="list" id="news" style="max-height:220px;overflow-y:auto"></div>
+    </div>
+  </section>
+
+  <section class="main">
+    <div class="panel">
+      <div class="ph"><span class="t">Ranking</span>
+        <span class="rt" role="group" aria-label="Filtro" style="display:flex;gap:4px;flex-wrap:wrap">
+          <button type="button" data-f="all" aria-pressed="true">Todas</button>
+          <button type="button" data-f="cex" aria-pressed="false">Binance</button>
+          <button type="button" data-f="dex" aria-pressed="false">DEX</button>
+          <button type="button" data-f="mine" aria-pressed="false">Mi lista</button>
+        </span>
+      </div>
+      <div class="tw"><table class="tbl" id="rankT"></table></div>
+    </div>
+    <div class="panel" id="detail">
+      <div class="ph"><span class="t" id="dTitle">Detalle</span><span class="rt" id="dLinks"></span></div>
+      <canvas id="cvChart" aria-label="Gráfico de velas de 1 hora con medias móviles, stop y objetivo"></canvas>
+      <div class="sub" style="margin-top:4px">velas 1 h · <span class="c-gold">EMA 20</span> · <span class="c-violet">EMA 50</span> · <span class="c-red">stop sugerido</span> · <span class="c-green">objetivo</span></div>
+      <div class="levels" id="dLevels"></div>
+      <div class="ph" style="margin-top:6px"><span class="t">Señales del gráfico</span><span class="rt" id="dTa"></span></div>
+      <div class="sig" id="dSig"></div>
+      <div class="ph" style="margin-top:12px"><span class="t">Noticias de esta moneda</span><span class="rt" id="dNewsScore"></span></div>
+      <div class="list" id="dNews"></div>
+      <div class="note" style="margin-top:10px">El stop y el objetivo salen de la volatilidad (2 y 3 veces el ATR). Son una referencia, no una recomendación.</div>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+"use strict";
+const $ = (id) => document.getElementById(id);
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C = { gold: css("--gold"), green: css("--green"), red: css("--red"), amber: css("--amber"), violet: css("--violet"), white: css("--white"), dim: css("--dim"), line: css("--line"), faint: css("--faint") };
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pct = (x, d = 1) => x == null || Number.isNaN(x) ? "—" : (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(d) + "%";
+const col = (x) => x == null ? "" : x > 0 ? C.green : x < 0 ? C.red : C.dim;
+const px = (p) => p == null ? "—" : p >= 1000 ? p.toLocaleString("en-US", { maximumFractionDigits: 0 }) : p >= 1 ? p.toFixed(2) : p >= 0.01 ? p.toFixed(4) : p.toPrecision(3);
+const usd = (v) => v == null || Number.isNaN(v) ? "—" : v >= 1e9 ? "$" + (v / 1e9).toFixed(1) + "B" : v >= 1e6 ? "$" + (v / 1e6).toFixed(1) + "M" : "$" + (v / 1e3).toFixed(0) + "K";
+const ago = (t) => { const m = (Date.now() - t) / 60000; return m < 60 ? `${m.toFixed(0)} min` : `${(m / 60).toFixed(0)} h`; };
+const labelCol = (l) => l === "Fuerte" ? "c-green" : l === "Positiva" ? "c-gold" : l === "Débil" ? "c-red" : "c-dim";
+let D = null, filter = "all", sel = null;
+try { filter = localStorage.getItem("radarFilter") || "all"; } catch {}
+
+function bar(s) {
+  if (s == null) return `<span class="c-dim">—</span>`;
+  const w = Math.abs(s) / 2;
+  return `<span class="score"><span class="b"><em></em><i style="${s >= 0 ? "left:50%" : `left:${50 - w}%`};width:${w}%;background:${col(s)}"></i></span><b style="color:${col(s)}">${s > 0 ? "+" : ""}${s}</b></span>`;
+}
+
+async function poll() {
+  try {
+    D = await (await fetch("/api/radar" + (sel ? "?id=" + encodeURIComponent(sel) : ""))).json();
+    if (D.off) { $("status").textContent = "Radar desactivado (RADAR=off)"; return; }
+    render();
+  } catch { $("status").textContent = "el bot no responde · ¿sigue abierto?"; }
+  setTimeout(poll, 5000);
+}
+
+function render() {
+  const st = D.status;
+  $("status").textContent = `Binance ${st.binance} · GeckoTerminal ${st.gecko} · ${st.queue} gráficos DEX en cola` + (Object.keys(st.newsErrors || {}).length ? ` · sin noticias de ${Object.keys(st.newsErrors).join(", ")}` : "");
+  $("sN").textContent = D.list.length; $("sNews").textContent = st.news;
+  const m = $("sMood"); m.textContent = D.market.count ? (D.market.score > 0 ? "+" : "") + D.market.score : "—"; m.style.color = col(D.market.score);
+
+  $("alerts").innerHTML = D.alerts.length ? D.alerts.map((a) => `<div><span class="c-dim">${ago(a.t)}</span> · <b class="c-white">${esc(a.sym)}</b> ${esc(a.msg)} <span class="c-dim">@ ${px(a.price)}</span></div>`).join("") : `<div class="c-dim">Sin alertas todavía.</div>`;
+  const ev = D.eval, er = (k, n) => { const g = ev[k]; return `<tr><td>${n}</td><td>${g.n || 0}</td><td style="color:${col(g.avg)}">${g.n ? pct(g.avg) : "—"}</td><td>${g.n ? (g.up * 100).toFixed(0) + "%" : "—"}</td></tr>`; };
+  $("evalT").innerHTML = `<tr><th>puntuación</th><th>casos</th><th>media 24 h</th><th>subieron</th></tr>` + er("strong", "Fuerte ≥ 50") + er("positive", "Positiva 20–49") + er("weak", "Débil ≤ −20") + er("all", "Todas");
+  if (!ev.all.n) $("evalT").innerHTML += `<tr><td colspan="4" class="c-dim">Necesita 24 h de datos para la primera medición.</td></tr>`;
+  $("news").innerHTML = D.news.map((n) => `<div><span class="dot" style="background:${n.tone > 0 ? C.green : n.tone < 0 ? C.red : C.faint}"></span><a href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a> <span class="c-dim">· ${esc(n.src)} · ${ago(n.t)}</span></div>`).join("") || `<div class="c-dim">Cargando noticias…</div>`;
+
+  document.querySelectorAll("[data-f]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.f === filter));
+  const rows = D.list.filter((c) => filter === "all" || (filter === "mine" ? c.mine : c.kind === filter));
+  if (!sel && rows.length) { sel = rows[0].id; }
+  $("rankT").innerHTML = `<tr><th>moneda</th><th>precio</th><th>24 h</th><th>puntuación</th><th>gráfico</th><th>noticias</th><th>señal principal</th><th></th></tr>` + (rows.length ? rows.map((c) => `
+    <tr tabindex="0" data-id="${esc(c.id)}" class="${c.id === sel ? "sel" : ""}">
+      <td><b class="c-white">${esc(c.sym)}</b> <span class="chip ${c.kind === "cex" ? "c-gold" : "c-violet"}">${esc(c.net)}</span>${c.mine ? ' <span class="chip c-blue">mi lista</span>' : ""}${c.trending ? ' <span class="chip c-amber">tendencia</span>' : ""}</td>
+      <td>${px(c.price)}</td><td style="color:${col(c.ch24)}">${pct(c.ch24)}</td>
+      <td>${bar(c.score)} <span class="${labelCol(c.label)}">${esc(c.label || "")}</span></td>
+      <td style="color:${col(c.ta?.score)}">${c.ta ? (c.ta.score > 0 ? "+" : "") + c.ta.score : "—"}</td>
+      <td>${c.news.count ? `<span style="color:${col(c.news.score)}">${c.news.count} · ${c.news.score > 0 ? "+" : ""}${c.news.score}</span>` : '<span class="c-dim">0</span>'}</td>
+      <td class="c-dim">${esc(c.ta?.top[0]?.txt || c.err || "")}</td>
+      <td>${c.mine ? `<button type="button" data-rm="${esc(c.id)}" aria-label="Quitar ${esc(c.sym)} de mi lista">quitar</button>` : ""}</td>
+    </tr>`).join("") : `<tr><td colspan="8" class="c-dim">${filter === "mine" ? "Tu lista está vacía. Añade monedas con el campo de arriba." : "Buscando monedas… la primera carga tarda 1–2 minutos."}</td></tr>`);
+  renderDetail();
+}
+
+function renderDetail() {
+  const d = D.detail;
+  if (!d || d.id !== sel) { $("dTitle").textContent = "Detalle"; return; }
+  $("dTitle").textContent = d.sym + (d.name && d.name !== d.sym ? " · " + d.name : "");
+  $("dLinks").innerHTML = d.url ? `<a href="${esc(d.url)}" target="_blank" rel="noopener">ver gráfico completo ↗</a>` : "";
+  const ta = d.ta;
+  $("dLevels").innerHTML = ta ? [["precio", px(ta.price), ""], ["stop sugerido", px(ta.stop), "c-red"], ["objetivo", px(ta.target), "c-green"], ["RSI 14", ta.rsi.toFixed(0), ""]].map(([k, v, c]) => `<div><div class="sub">${k}</div><div class="v ${c}">${v}</div></div>`).join("") : `<div class="c-dim" style="grid-column:1/-1">Todavía no hay suficiente historial de precios.</div>`;
+  $("dTa").innerHTML = ta ? `<span class="chip" style="color:${col(ta.score)}">gráfico ${ta.score > 0 ? "+" : ""}${ta.score}</span>` : "";
+  $("dSig").innerHTML = ta ? ta.signals.map((s) => `<div><span>${esc(s.txt)}</span><b style="color:${col(s.w)}">${s.w > 0 ? "+" : ""}${s.w}</b></div>`).join("") : "";
+  $("dNewsScore").innerHTML = d.news.count ? `<span class="chip" style="color:${col(d.news.score)}">noticias ${d.news.score > 0 ? "+" : ""}${d.news.score}</span>` : "";
+  $("dNews").innerHTML = d.news.items.length ? d.news.items.map((n) => `<div><span class="dot" style="background:${n.tone > 0 ? C.green : n.tone < 0 ? C.red : C.faint}"></span><a href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a> <span class="c-dim">· ${esc(n.src)} · ${ago(n.t)}</span></div>`).join("") : `<div class="c-dim">Sin noticias de esta moneda en las últimas 48 h.</div>`;
+  drawChart(d.candles, ta);
+}
+
+function ema(a, n) { const k = 2 / (n + 1); let e = a[0]; return a.map((v) => (e = v * k + e * (1 - k))); }
+function drawChart(cs, ta) {
+  const cv = $("cvChart"), r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+  cv.width = r.width * dpr; cv.height = r.height * dpr;
+  const ctx = cv.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, r.width, r.height);
+  if (!cs || cs.length < 5) { ctx.fillStyle = C.dim; ctx.font = "12px " + css("--f-mono"); ctx.fillText("Cargando gráfico…", 10, 20); return; }
+  const w = r.width, h = r.height, padR = 84, padB = 14;
+  const closes = cs.map((c) => c.c), e20 = ema(closes, 20), e50 = ema(closes, 50);
+  let lo = Math.min(...cs.map((c) => c.l)), hi = Math.max(...cs.map((c) => c.h));
+  if (ta) { lo = Math.min(lo, ta.stop); hi = Math.max(hi, ta.target); }
+  const Y = (v) => 6 + (1 - (v - lo) / (hi - lo || 1)) * (h - padB - 12), bw = (w - padR) / cs.length;
+  ctx.strokeStyle = C.line; ctx.fillStyle = C.dim; ctx.font = "10px " + css("--f-mono");
+  for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4; ctx.beginPath(); ctx.moveTo(0, Y(v)); ctx.lineTo(w - padR, Y(v)); ctx.stroke(); ctx.fillText(px(v), w - padR + 4, Y(v) + 3); }
+  cs.forEach((c, i) => {
+    const x = i * bw + bw / 2, up = c.c >= c.o; ctx.strokeStyle = ctx.fillStyle = up ? C.green : C.red;
+    ctx.beginPath(); ctx.moveTo(x, Y(c.h)); ctx.lineTo(x, Y(c.l)); ctx.stroke();
+    ctx.fillRect(x - Math.max(1, bw * 0.35), Math.min(Y(c.o), Y(c.c)), Math.max(2, bw * 0.7), Math.max(1, Math.abs(Y(c.o) - Y(c.c))));
+  });
+  [[e20, C.gold], [e50, C.violet]].forEach(([e, k]) => { ctx.strokeStyle = k; ctx.lineWidth = 1.4; ctx.beginPath(); e.forEach((v, i) => { const x = i * bw + bw / 2; i ? ctx.lineTo(x, Y(v)) : ctx.moveTo(x, Y(v)); }); ctx.stroke(); });
+  ctx.lineWidth = 1;
+  if (ta) [[ta.stop, C.red], [ta.target, C.green]].forEach(([v, k]) => { ctx.strokeStyle = k; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(0, Y(v)); ctx.lineTo(w - padR, Y(v)); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = k; ctx.fillText(px(v), w - padR + 4, Y(v) + 3); });
+  ctx.fillStyle = C.dim; ctx.fillText(`últimas ${cs.length} h`, 4, h - 2);
+}
+
+$("rankT").addEventListener("click", async (e) => {
+  const rm = e.target.closest("[data-rm]");
+  if (rm) { e.stopPropagation(); await fetch("/api/unwatch", { method: "POST", headers: { "x-orbital": "1", "Content-Type": "application/json" }, body: JSON.stringify({ id: rm.dataset.rm }) }); return refresh(); }
+  const tr = e.target.closest("tr[data-id]"); if (tr) { sel = tr.dataset.id; refresh(); }
+});
+$("rankT").addEventListener("keydown", (e) => { if (e.key === "Enter") { const tr = e.target.closest("tr[data-id]"); if (tr) { sel = tr.dataset.id; refresh(); } } });
+document.querySelectorAll("[data-f]").forEach((b) => b.addEventListener("click", () => { filter = b.dataset.f; try { localStorage.setItem("radarFilter", filter); } catch {} render(); }));
+$("addForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const q = $("q").value.trim(), msg = $("addMsg"); if (!q) return;
+  msg.textContent = "Buscando…"; msg.className = "msg c-dim";
+  try {
+    const r = await (await fetch("/api/watch", { method: "POST", headers: { "x-orbital": "1", "Content-Type": "application/json" }, body: JSON.stringify({ q }) })).json();
+    if (r.ok) { msg.textContent = `${r.sym} añadida a tu lista. Su gráfico se carga en unos segundos.`; msg.className = "msg c-green"; $("q").value = ""; filter = "mine"; }
+    else { msg.textContent = r.error; msg.className = "msg c-red"; }
+  } catch { msg.textContent = "El bot no responde."; msg.className = "msg c-red"; }
+  refresh();
+});
+async function refresh() { try { D = await (await fetch("/api/radar" + (sel ? "?id=" + encodeURIComponent(sel) : ""))).json(); render(); } catch {} }
+poll();
+})();
+</script>
+</body>
+</html>

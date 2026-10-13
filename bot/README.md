@@ -19,6 +19,20 @@ Bot de investigación para lanzamientos de pump.fun. Corre en **tu computadora**
 
 El panel muestra la **mejora de información**: cuánto mejor predice el modelo que si solo usara la frecuencia histórica de cada resultado. Si se queda en 0% o es negativa, las señales no sirven y el bot no debería operar con dinero real.
 
+## Radar (otras criptos, con noticias y gráficos)
+
+Abre **http://localhost:8787/radar**. El radar **solo vigila y avisa: no compra ni vende**.
+
+- **Qué monedas mira:** las 40 de más volumen en Binance, los tokens en tendencia de DEX en Solana, Base, Ethereum y BNB Chain (con al menos $50K de liquidez y $100K de volumen diario) y las que añadas tú. Para añadir una, escribe su símbolo (`BTC`, `PEPE`) o la dirección del token.
+- **Gráfico (velas de 1 h):** tendencia con EMA 20/50, RSI, cruces de MACD, ruptura de máximos o mínimos de 48 h, picos de volumen y si el precio está demasiado estirado. Cada señal suma o resta puntos.
+- **Noticias:** lee Cointelegraph, CoinDesk, Decrypt y The Block cada 10 minutos, detecta qué monedas mencionan y les da un tono positivo o negativo por palabras clave. Es una aproximación: no entiende la noticia como una persona.
+- **Puntuación final (−100 a +100):** 70% gráfico y 30% noticias, más un pequeño extra si la moneda está en tendencia en CoinGecko.
+- **Stop y objetivo sugeridos:** 2 y 3 veces la volatilidad (ATR) por debajo y por encima del precio actual.
+- **Alertas:** cuando una moneda llega a 50 puntos o rompe máximos con noticias positivas.
+- **¿Funciona?:** cada hora guarda la puntuación de cada moneda y, 24 h después, mira qué hizo el precio. Si durante semanas las monedas "fuertes" no suben más que la media, la puntuación no sirve para elegir.
+
+Fuentes, todas gratis y sin clave: Binance (data-api.binance.vision), GeckoTerminal, CoinGecko y los RSS de cada medio. Para desactivar el radar, arranca con `RADAR=off`.
+
 ## Dos modos de datos
 
 | | Gratuito (por defecto) | Completo |

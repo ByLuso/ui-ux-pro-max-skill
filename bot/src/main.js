@@ -8,6 +8,7 @@ import { Tracker } from "./tracker.js";
 import { Model, OUT, TP, SL, TM } from "./model.js";
 import { SIGNALS, featureVector, Judge, Creators, guard, quant, buyOnCurve } from "./agents.js";
 import * as live from "./trade.js";
+import { Radar } from "./radar/radar.js";
 
 // ---------- estado ----------
 // Sin clave de PumpPortal → modo gratuito con DexScreener. Cada modo mide las señales distinto, así que guarda su propio modelo.
@@ -177,9 +178,23 @@ function state() {
   };
 }
 
-const html = () => fs.readFileSync(path.join(ROOT, "public", "index.html"));
+const html = (f = "index.html") => fs.readFileSync(path.join(ROOT, "public", f));
+const radar = process.env.RADAR === "off" ? null : new Radar();
+const readBody = (req) => new Promise((ok) => { let b = ""; req.on("data", (c) => { if (b.length < 2000) b += c; }); req.on("end", () => { try { ok(JSON.parse(b || "{}")); } catch { ok({}); } }); });
 http.createServer(async (req, res) => {
   if (req.method === "GET" && (req.url === "/" || req.url === "/index.html")) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(html()); }
+  if (req.method === "GET" && req.url === "/radar") { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); return res.end(html("radar.html")); }
+  if (req.method === "GET" && req.url.startsWith("/api/radar")) {
+    const id = new URL(req.url, "http://x").searchParams.get("id");
+    res.writeHead(200, { "Content-Type": "application/json" }); return res.end(JSON.stringify(radar ? radar.state(id) : { off: true }));
+  }
+  if (req.method === "POST" && req.headers["x-orbital"] === "1" && radar && (req.url === "/api/watch" || req.url === "/api/unwatch")) {
+    const body = await readBody(req);
+    try {
+      const out = req.url === "/api/watch" ? { ok: true, sym: await radar.addWatch(body.q) } : (radar.removeWatch(body.id), { ok: true });
+      res.writeHead(200, { "Content-Type": "application/json" }); return res.end(JSON.stringify(out));
+    } catch (e) { res.writeHead(400, { "Content-Type": "application/json" }); return res.end(JSON.stringify({ ok: false, error: e.message })); }
+  }
   if (req.method === "GET" && req.url === "/api/state") { res.writeHead(200, { "Content-Type": "application/json" }); return res.end(JSON.stringify(state())); }
   // Las acciones exigen una cabecera propia: una web ajena no puede enviarla a tu localhost.
   if (req.method === "POST" && req.headers["x-orbital"] === "1") {
@@ -192,7 +207,8 @@ http.createServer(async (req, res) => {
   res.writeHead(404); res.end();
 }).listen(cfg.port, "127.0.0.1", () => {
   console.log(`\n  Orbital bot · modo ${cfg.mode.toUpperCase()}`);
-  console.log(`  Panel: http://localhost:${cfg.port}\n`);
+  console.log(`  Panel: http://localhost:${cfg.port}`);
+  console.log(`  Radar: http://localhost:${cfg.port}/radar\n`);
   console.log(SOURCE === "dexscreener" ? "  Datos: lanzamientos de PumpPortal + precios de DexScreener (modo gratuito)\n" : "  Datos: PumpPortal completo (compras y ventas en tiempo real)\n");
 });
 
@@ -200,3 +216,4 @@ if (cfg.mode === "live") live.initLive().then((a) => log("EXE", `wallet del bot 
 refreshWallet();
 feed.start();
 if (dex) dex.start();
+if (radar) radar.start();
