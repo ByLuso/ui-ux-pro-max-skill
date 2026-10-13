@@ -3,7 +3,7 @@
 import { cfg } from "./config.js";
 import { now, loadJSON, saveJSON } from "./store.js";
 import { Exit, STRATS } from "./exits.js";
-import { buyOnCurve } from "./agents.js";
+import { entryFill } from "./agents.js";
 
 export class PaperWallet {
   constructor() {
@@ -12,7 +12,26 @@ export class PaperWallet {
     if (s && s.startEur === cfg.paperStartEur) {
       Object.assign(this, s);
       this.positions = new Map((s.positions || []).map((p) => [p.mint, { ...p, exit: Object.assign(new Exit(p.exit.kind, p.exit.entry), p.exit) }]));
+      this.repair();
     } else this.reset();
+  }
+
+  // Arregla lo que dejó el fallo de valoración de tokens graduados (versiones anteriores):
+  // tokens recalculados desde el precio de entrada y, si ya se había cobrado una venta absurda, se reinicia.
+  repair() {
+    let fixed = 0;
+    for (const p of this.positions.values()) {
+      if (p.tokens * p.exit.entry > p.sol * 3) { p.tokens = (p.sol * (1 - cfg.pumpFee)) / (p.exit.entry * 1.01); fixed++; }
+    }
+    if (fixed) this.event("close", "—", "", `corregidas ${fixed} posiciones con valor erróneo`, 0);
+    if (!(this.cash < this.startEur * 1000)) { // ya se había cobrado una venta absurda: no hay forma de saber el saldo real
+      this.reset();
+      this.event("close", "—", "", "cartera reiniciada: tenía un saldo imposible por un fallo ya corregido", 0);
+      return;
+    }
+    const before = this.curve.length;
+    this.curve = this.curve.filter((c) => c.v < this.startEur * 1000);
+    if (fixed || this.curve.length < before) this.save();
   }
 
   reset() {
@@ -38,7 +57,7 @@ export class PaperWallet {
     const eur = Math.min(cfg.paperTradeEur, this.cash);
     if (eur < 1) return "sin saldo libre";
     const sol = eur / this.solEur;
-    const { tokens, impact } = buyOnCurve(t.vSol, t.vTok, sol, cfg.pumpFee);
+    const { tokens, impact } = entryFill(sol, t.px, t.sig);
     if (!(tokens > 0)) return "sin datos de la curva";
     this.cash -= eur + cfg.priorityFee * this.solEur;
     this.positions.set(t.mint, { mint: t.mint, sym: t.sym, t: now(), eur, sol, tokens, impact, strat, ev: q.ev, pTP: t.p[0], got: 0, exit: new Exit(strat, t.px), lastPx: t.px });

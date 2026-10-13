@@ -92,13 +92,21 @@ export function buyOnCurve(vSol, vTok, sol, fee) {
   return { tokens, impact: avg / spot - 1 };
 }
 
+// Tokens que se reciben al comprar `sol` al precio actual `px`. El impacto sale de la curva x·y=k mientras el
+// token está en pump.fun; si ya se graduó a PumpSwap la curva ya no vale y se usa un 1% estimado.
+// (Calcular los tokens con la curva y valorarlos con el precio de PumpSwap daba valores absurdos.)
+export function entryFill(sol, px, s) {
+  const impact = s.graduated ? 0.01 : buyOnCurve(s.vSol, s.vTok, sol, cfg.pumpFee).impact;
+  return { tokens: (sol * (1 - cfg.pumpFee)) / (px * (1 + impact)), impact };
+}
+
 export function quant(p, s, timeRet, live) {
   const size = cfg.maxSolPerTrade;
-  const { tokens, impact } = buyOnCurve(s.vSol, s.vTok, size, cfg.pumpFee);
+  const impact = s.graduated ? 0.01 : buyOnCurve(s.vSol, s.vTok, size, cfg.pumpFee).impact;
   const fees = 2 * cfg.pumpFee + (live ? 2 * cfg.portalFee : 0);
   const costs = fees + impact * 2 + (2 * cfg.priorityFee) / size + 0.01; // +1% de colchón por slippage
   const gross = p[0] * cfg.tp + p[1] * -(cfg.sl + 0.05) + p[2] * timeRet; // los stops suelen ejecutarse algo peor
-  return { size, tokens, impact, costs, gross, ev: gross - costs };
+  return { size, impact, costs, gross, ev: gross - costs };
 }
 
 export const pct = (x, d = 0) => (x * 100).toFixed(d) + "%";

@@ -6,7 +6,7 @@ import { now, loadJSON, saveJSON, appendLine, readLines } from "./store.js";
 import { Feed, DexPoller } from "./feed.js";
 import { Tracker } from "./tracker.js";
 import { Model, OUT, TP, SL, TM } from "./model.js";
-import { SIGNALS, featureVector, Judge, Creators, guard, quant, buyOnCurve } from "./agents.js";
+import { SIGNALS, featureVector, Judge, Creators, guard, quant, entryFill } from "./agents.js";
 import * as live from "./trade.js";
 import { Radar } from "./radar/radar.js";
 import { Exit, STRATS } from "./exits.js";
@@ -51,7 +51,8 @@ const S = {
   halted: loadJSON("state.json", {}).halted || null,
   decisions: [], log: [],
   counts: { blocked: 0, skipped: 0, signals: 0, liveEntries: 0 },
-  paper: readLines("paper.jsonl"),
+  // Retornos por encima de +10.000% en una hora solo los produjo el fallo de valoración de tokens graduados
+  paper: readLines("paper.jsonl").filter((c) => Number.isFinite(c.ret) && c.ret < 100),
   liveClosed: readLines("live.jsonl"),
   positions: new Map(),   // posiciones reales abiertas
   paperOpen: new Map(),   // señales en papel esperando resultado
@@ -171,9 +172,9 @@ tracker.on("observe", (t) => {
   // Toda señal se registra en papel (sin límite de posiciones) para medir si el sistema tiene ventaja
   // Las dos estrategias de salida se simulan sobre la MISMA entrada, para compararlas en igualdad de condiciones
   tracker.hold(t);
-  if (!S.paperOpen.has(t.mint)) S.paperOpen.set(t.mint, { t: now(), sym: t.sym, tObs: t.tObs, size: q.size, tokens: buyOnCurve(t.sig.vSol, t.sig.vTok, q.size, cfg.pumpFee).tokens, impact: q.impact, ev: q.ev,
+  if (!S.paperOpen.has(t.mint)) S.paperOpen.set(t.mint, { t: now(), sym: t.sym, tObs: t.tObs, size: q.size, tokens: entryFill(q.size, t.pxEntry, t.sig).tokens, impact: q.impact, ev: q.ev,
     exits: Object.fromEntries(Object.keys(STRATS).map((k) => [k, new Exit(k, t.pxEntry)])) });
-  const wwhy = wallet.tryOpen({ mint: t.mint, sym: t.sym, p, px: t.pxEntry, vSol: t.sig.vSol, vTok: t.sig.vTok }, chosenStrat(), q);
+  const wwhy = wallet.tryOpen({ mint: t.mint, sym: t.sym, p, px: t.pxEntry, sig: t.sig }, chosenStrat(), q);
   agent("EXE", wwhy ? `${t.sym}: no compra en la cartera de prueba (${wwhy})` : `compra ${t.sym} en la cartera de prueba`);
   if (wwhy && !wwhy.startsWith("cartera llena")) log("EXE", `cartera de prueba no compra ${t.sym}: ${wwhy}`);
   if (!isLive()) { decide(t, "entry", `señal · EV ${(q.ev * 100).toFixed(1)}% · en papel`, p, q.ev); log("QNT", `señal en papel ${t.sym} · EV ${q.ev >= 0 ? "+" : ""}${(q.ev * 100).toFixed(1)}%`); return; }

@@ -120,7 +120,7 @@ export class Tracker extends EventEmitter {
       ageMin: mins,
       socials: t.meta ? t.meta.socials : 0,
       socialReuse: links.some((l) => (this.socialSeen.get(l) || 0) > 1) ? 1 : 0,
-      vSol: t.vSol, vTok: t.vTok, nBuyers: t.buyers.size,
+      vSol: t.vSol, vTok: t.vTok, nBuyers: t.buyers.size, graduated: t.graduated ? 1 : 0,
     };
   }
 
