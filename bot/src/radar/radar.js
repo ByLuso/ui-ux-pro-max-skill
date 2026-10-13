@@ -4,6 +4,7 @@
 import { loadJSON, saveJSON, appendLine, readLines } from "../store.js";
 import { analyze } from "./ta.js";
 import { News, matcher } from "./news.js";
+import { checkSecurity } from "./security.js";
 
 const BINANCE = "https://data-api.binance.vision/api/v3";
 const GECKO = "https://api.geckoterminal.com/api/v2";
@@ -38,6 +39,7 @@ export class Radar {
     loop(() => this.refreshUniverse().then(() => this.refreshBinanceCandles(true)), 30 * 60e3);
     setTimeout(() => loop(() => this.refreshBinanceCandles(), 15 * 60e3), 15 * 60e3);
     this.geckoWorker();
+    this.securityWorker();
     loop(() => this.snapshot(), 60 * 60e3);
   }
 
@@ -98,6 +100,7 @@ export class Radar {
       token: p.relationships?.base_token?.data?.id?.split("_").slice(1).join("_"),
       dex: p.relationships?.dex?.data?.id, price: +a.base_token_price_usd, ch24: +a.price_change_percentage?.h24 / 100,
       vol24: +a.volume_usd?.h24, liq: +a.reserve_in_usd, url: `https://www.geckoterminal.com/${net}/pools/${a.address}`,
+      created: Date.parse(a.pool_created_at) || null,
     };
   }
 
@@ -132,6 +135,25 @@ export class Radar {
     }
   }
 
+  // Revisa la seguridad de cada token de DEX (una consulta cada 3 s; se repite cada 6 h)
+  async securityWorker() {
+    let pauseUntil = 0;
+    for (;;) {
+      await sleep(3000);
+      if (Date.now() < pauseUntil) continue;
+      const c = [...this.coins.values()].find((x) => x.kind === "dex" && x.token && (!x.secTried || Date.now() - x.secTried > 6 * 3600e3));
+      if (!c) continue;
+      c.secTried = Date.now();
+      try {
+        c.sec = await checkSecurity(c);
+        if (c.candles) this.rescore(c);
+      } catch (e) {
+        c.secErr = e.message;
+        if (e.rate) { pauseUntil = Date.now() + 60e3; c.secTried = 0; } else c.secTried = Date.now() - 5.5 * 3600e3; // reintenta en 30 min
+      }
+    }
+  }
+
   rescore(c) {
     c.ta = analyze(c.candles);
     c.news = this.news.forCoin(c.match);
@@ -143,6 +165,8 @@ export class Radar {
     const prev = c.score;
     c.score = Math.round(Math.max(-100, Math.min(100, s)));
     c.label = c.score >= 50 ? "Fuerte" : c.score >= 20 ? "Positiva" : c.score > -20 ? "Neutral" : "Débil";
+    // Si no pasa los filtros de seguridad, ni se toca: se marca como descartada y no genera alertas
+    if (c.sec && !c.sec.ok) { c.label = "Descartada"; return; }
     if (c.score >= 50 && (prev == null || prev < 50)) this.alert(c, `entra en zona fuerte (${c.score})`);
     if (c.ta.signals.some((x) => x.txt.startsWith("Rompe")) && c.news.score > 20 && !c.alertedBreak) { c.alertedBreak = true; this.alert(c, "ruptura de máximos con noticias positivas"); }
   }
@@ -221,12 +245,13 @@ export class Radar {
       id: c.id, kind: c.kind, sym: c.sym, net: c.net ? NETS[c.net] : "Binance", url: c.url, price: c.price, ch24: c.ch24, vol24: c.vol24, liq: c.liq,
       score: c.score, label: c.label, ta: c.ta ? { score: c.ta.score, rsi: c.ta.rsi, top: c.ta.signals.slice(0, 3) } : null,
       news: { count: c.news.count, score: c.news.score, last: c.news.items[0]?.title || null }, mine: c.src.has("mi lista"), trending: this.trending.has(c.sym.toUpperCase()), err: c.ta ? null : c.err || null,
-    })).sort((a, b) => (b.score ?? -999) - (a.score ?? -999));
+      sec: c.kind === "cex" ? "binance" : c.sec ? { ok: c.sec.ok, why: c.sec.reasons[0] || c.sec.warns[0] || null } : null,
+    })).sort((a, b) => ((b.sec?.ok === false ? -1000 : 0) + (b.score ?? -999)) - ((a.sec?.ok === false ? -1000 : 0) + (a.score ?? -999)));
     const d = detailId && this.coins.get(detailId);
     return {
       status: { ...this.status, news: this.news.items.size, newsErrors: this.news.errors, queue: this.geckoQueue.length },
       market: this.news.market(), list, alerts: this.alerts.slice(0, 20), news: this.news.latest(20), eval: this.evaluation(),
-      detail: d ? { id: d.id, sym: d.sym, name: d.name, url: d.url, ta: d.ta, news: d.news, candles: (d.candles || []).slice(-120) } : null,
+      detail: d ? { id: d.id, sym: d.sym, name: d.name, url: d.url, ta: d.ta, news: d.news, candles: (d.candles || []).slice(-120), kind: d.kind, sec: d.sec || null, secErr: d.secErr || null, liq: d.liq, created: d.created } : null,
     };
   }
 }

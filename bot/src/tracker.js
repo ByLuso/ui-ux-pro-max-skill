@@ -49,11 +49,16 @@ export class Tracker extends EventEmitter {
       if (t.phase === "observe") { t.buyers.add(who); if (now() - t.t0 < 3000) t.early.add(who); }
     } else t.sellSol += sol;
     if (Number.isFinite(+d.newTokenBalance)) t.holders.set(who, +d.newTokenBalance);
-    if (d.pool && d.pool !== "pump") { t.graduated = true; return; } // ya migró a PumpSwap: el precio de la curva deja de valer
+    if (d.pool && d.pool !== "pump") { // ya migró a PumpSwap: el precio de la curva deja de valer
+      t.graduated = true;
+      if ((t.phase === "measure" || t.phase === "follow") && !t.gradEmitted) { t.gradEmitted = true; this.checkExit(t); this.emit("graduated", t); }
+      return;
+    }
     const vs = +d.vSolInBondingCurve, vt = +d.vTokensInBondingCurve;
     if (vs > 0 && vt > 0 && Number.isFinite(vs / vt)) { t.vSol = vs; t.vTok = vt; t.px = vs / vt; }
     if (t.vSol - V_SOL0 >= GRAD_SOL * 0.995) t.graduated = true;
     if (t.phase === "measure") this.checkExit(t);
+    if (t.phase === "measure" || t.phase === "follow") this.emit("price", t);
   }
 
   onDex(mint, p) {
@@ -63,12 +68,15 @@ export class Tracker extends EventEmitter {
     const tx = p.txns?.h1 || p.txns?.h24 || {};
     t.buySol = +tx.buys || 0; t.sellSol = +tx.sells || 0; // en este modo son conteos, no SOL
     t.dexBuys = +tx.buys || 0;
-    if (p.dexId !== "pumpfun") { t.graduated = true; if (t.phase === "measure") this.checkExit(t); return; }
     if (!(+p.priceNative > 0)) return;
-    t.px = +p.priceNative;
-    t.vSol = Math.sqrt(t.px * V_SOL0 * V_TOK0); // en la curva x·y=k el precio es vSol²/k
-    t.vTok = (V_SOL0 * V_TOK0) / t.vSol;
+    t.px = +p.priceNative; // en SOL; tras graduarse sigue siendo el precio en PumpSwap
+    if (p.dexId !== "pumpfun") t.graduated = true;
+    else {
+      t.vSol = Math.sqrt(t.px * V_SOL0 * V_TOK0); // en la curva x·y=k el precio es vSol²/k
+      t.vTok = (V_SOL0 * V_TOK0) / t.vSol;
+    }
     if (t.phase === "measure") this.checkExit(t);
+    if (t.phase === "measure" || t.phase === "follow") this.emit("price", t);
   }
 
   snapshot(t) {
@@ -100,9 +108,16 @@ export class Tracker extends EventEmitter {
 
   finish(t, y, ret) {
     t.label = y; t.ret = ret; t.tEnd = now();
-    t.phase = "done";
     this.judge.record(t.earlyBuyers || [], y === TP);
     this.emit("label", t);
+    // Si hay posiciones (papel o reales) en este token, se sigue su precio hasta el final del horizonte
+    if (t.keep && now() - t.tObs < cfg.horizonMin * 60000) { t.phase = "follow"; return; }
+    this.drop(t);
+  }
+
+  drop(t) {
+    t.phase = "done";
+    if (t.keep) this.emit("expire", t);
     if (!this.dex) this.feed.unwatch(t.mint);
     this.tokens.delete(t.mint);
   }
@@ -125,6 +140,8 @@ export class Tracker extends EventEmitter {
         this.checkExit(t);
       } else if (t.phase === "measure" && n - t.tObs >= cfg.horizonMin * 60000) {
         this.finish(t, TM, t.px / t.pxEntry - 1);
+      } else if (t.phase === "follow" && n - t.tObs >= cfg.horizonMin * 60000) {
+        this.drop(t);
       }
     }
   }

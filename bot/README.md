@@ -12,8 +12,18 @@ Bot de investigación para lanzamientos de pump.fun. Corre en **tu computadora**
 | **CARTOGRAPHER** | Detecta creadores seriales, compradores que entran en los primeros 3 s (bundles/snipers) y cuánto supply compró el creador. |
 | **JUDGE** | Lleva el historial de cada wallet compradora. Si una wallet compra temprano en tokens que suben +60%, pasa a ser "seguida". |
 | **QUANT** | Calcula el valor esperado restando comisiones (pump.fun y PumpPortal), el impacto en la curva x·y=k, la comisión de prioridad y un margen por slippage. |
-| **GUARD** | Bloquea los lanzamientos con señales de manipulación. Los bloqueados no se usan para aprender. |
+| **GUARD** | Bloquea los lanzamientos con señales de manipulación, entre ellas que el creador compre más del 7% del supply. Los bloqueados no se usan para aprender. |
 | **EXECUTOR** | Abre y cierra posiciones con take-profit, stop-loss o al llegar a los 60 minutos. |
+
+### Cómo sale de cada posición
+El bot simula en papel **dos formas de salir sobre las mismas entradas** y las compara:
+
+| Estrategia | Reglas |
+|---|---|
+| **Fija** | Vende todo a +60%, todo a −30% o a los 60 min. |
+| **Por partes** | Vende 50% a +25% y otro 25% a +60%; el resto sigue con un stop móvil que vende si cae 25% desde el máximo. Stop inicial −20%, que sube a 0% tras la primera venta. Así recoge ganancias pronto, corta rápido las que caen y deja correr las que suben. |
+
+Con `EXIT_STRATEGY=auto` (por defecto), el dinero real usa la que mejor media tenga en papel tras al menos 30 operaciones. También puedes forzar `fixed` o `ladder` en `.env` y ajustar los niveles (`LADDER_*`).
 
 **El Orb** es un modelo de tres resultados que aprende en línea. 45 s después de cada lanzamiento (90 s en modo gratuito) toma una foto de 9 señales y estima P(+60% primero), P(−30% primero) y P(ninguno en 60 min). Cuando se sabe el resultado real, el modelo se actualiza con él, aunque el bot haya decidido no entrar.
 
@@ -28,6 +38,7 @@ Abre **http://localhost:8787/radar**. El radar **solo vigila y avisa: no compra 
 - **Noticias:** lee Cointelegraph, CoinDesk, Decrypt y The Block cada 10 minutos, detecta qué monedas mencionan y les da un tono positivo o negativo por palabras clave. Es una aproximación: no entiende la noticia como una persona.
 - **Puntuación final (−100 a +100):** 70% gráfico y 30% noticias, más un pequeño extra si la moneda está en tendencia en CoinGecko.
 - **Stop y objetivo sugeridos:** 2 y 3 veces la volatilidad (ATR) por debajo y por encima del precio actual.
+- **Seguridad (tokens de DEX):** Solana se revisa con RugCheck; Base, Ethereum y BNB Chain con GoPlus. Una moneda queda **descartada** si su pool tiene menos de 30 días y menos del 80% de la liquidez bloqueada, si el creador o el dueño del contrato tiene más del 7%, si es un token trampa (no se puede vender), si cobra más de 10% de impuesto o si tiene un riesgo grave (por ejemplo, dueño oculto). Las descartadas van al final de la lista y no generan alertas. En pools con más de 30 días, la liquidez sin bloquear solo genera un aviso: es lo normal en monedas grandes.
 - **Alertas:** cuando una moneda llega a 50 puntos o rompe máximos con noticias positivas.
 - **¿Funciona?:** cada hora guarda la puntuación de cada moneda y, 24 h después, mira qué hizo el precio. Si durante semanas las monedas "fuertes" no suben más que la media, la puntuación no sirve para elegir.
 

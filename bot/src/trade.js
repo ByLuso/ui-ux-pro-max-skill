@@ -78,3 +78,4 @@ async function send(action, mint, amount) {
 
 export const buy = (mint, sol) => send("buy", mint, sol);
 export const sellAll = (mint) => send("sell", mint, "100%");
+export const sellPct = (mint, pct) => send("sell", mint, Math.min(100, Math.max(1, Math.round(pct))) + "%");

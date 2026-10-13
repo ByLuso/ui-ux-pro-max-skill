@@ -9,6 +9,7 @@ import { Model, OUT, TP, SL, TM } from "./model.js";
 import { SIGNALS, featureVector, Judge, Creators, guard, quant, buyOnCurve } from "./agents.js";
 import * as live from "./trade.js";
 import { Radar } from "./radar/radar.js";
+import { Exit, STRATS } from "./exits.js";
 
 // ---------- estado ----------
 // Sin clave de PumpPortal → modo gratuito con DexScreener. Cada modo mide las señales distinto, así que guarda su propio modelo.
@@ -62,7 +63,20 @@ function decide(t, dec, reason, p, ev) {
 }
 const today = () => new Date().toISOString().slice(0, 10);
 const liveToday = () => S.liveClosed.filter((c) => c.day === today()).reduce((s, c) => s + (c.pnl || 0), 0);
-const paperNet = () => S.paper.reduce((s, c) => s + c.ret, 0);
+// Resultados en papel por estrategia de salida (los registros antiguos no tienen "strat": eran salidas fijas)
+const stratOf = (c) => c.strat || "fixed";
+function paperStats(k) {
+  const g = S.paper.filter((c) => stratOf(c) === k), n = g.length, net = g.reduce((s, c) => s + c.ret, 0);
+  return { n, net, avg: n ? net / n : null, wins: g.filter((c) => c.ret > 0).length };
+}
+// Estrategia que se usaría con dinero real: la forzada en .env o, en "auto", la de mejor media con suficientes operaciones
+function chosenStrat() {
+  if (cfg.exitStrategy !== "auto") return cfg.exitStrategy;
+  const ok = Object.keys(STRATS).map((k) => [k, paperStats(k)]).filter(([, st]) => st.n >= cfg.minPaperTradesLive);
+  if (!ok.length) return "ladder";
+  return ok.sort((a, b) => b[1].avg - a[1].avg)[0][0];
+}
+const paperNet = () => paperStats(chosenStrat()).net;
 function setHalted(reason) { S.halted = reason; saveJSON("state.json", { halted: reason }); log("GRD", reason ? "DETENIDO · " + reason : "reanudado"); }
 
 // ---------- compuerta para dinero real ----------
@@ -71,8 +85,9 @@ function computeGate() {
   if (cfg.mode !== "live") r.push("MODE=paper en .env (cámbialo a live cuando todo lo demás esté en verde)");
   if (model.labels < cfg.minLabelsLive) r.push(`etiquetas ${model.labels} / ${cfg.minLabelsLive}`);
   if (sc.gain == null || sc.gain < cfg.minGainLive) r.push(`mejora de información ${sc.gain == null ? "—" : (sc.gain * 100).toFixed(1) + "%"} (mínimo ${(cfg.minGainLive * 100).toFixed(0)}%)`);
-  if (S.paper.length < cfg.minPaperTradesLive) r.push(`operaciones en papel ${S.paper.length} / ${cfg.minPaperTradesLive}`);
-  else if (paperNet() <= 0) r.push(`resultado en papel negativo (${(paperNet() * 100).toFixed(0)}% acumulado)`);
+  const cs = chosenStrat(), st = paperStats(cs);
+  if (st.n < cfg.minPaperTradesLive) r.push(`operaciones en papel con salida "${STRATS[cs].name}" ${st.n} / ${cfg.minPaperTradesLive}`);
+  else if (st.net <= 0) r.push(`resultado en papel negativo con salida "${STRATS[cs].name}" (${(st.avg * 100).toFixed(1)}% por operación)`);
   if (!cfg.privateKey) r.push("falta PRIVATE_KEY (npm run wallet)");
   if (!cfg.rpcUrl) r.push("falta RPC_URL");
   if (S.wallet.balance != null && S.wallet.balance < cfg.maxSolPerTrade + cfg.reserveSol) r.push(`saldo ${S.wallet.balance.toFixed(3)} SOL insuficiente`);
@@ -94,7 +109,10 @@ tracker.on("observe", (t) => {
   if (!(q.ev >= cfg.evMin)) { /* también descarta un EV inválido (NaN) */ S.counts.skipped++; decide(t, "skip", `EV ${(q.ev * 100).toFixed(1)}% tras costes · bajo +${(cfg.evMin * 100).toFixed(0)}%`, p, q.ev); return; }
   S.counts.signals++;
   // Toda señal se registra en papel (sin límite de posiciones) para medir si el sistema tiene ventaja
-  S.paperOpen.set(t.mint, { t: now(), size: q.size, tokens: buyOnCurve(t.sig.vSol, t.sig.vTok, q.size, cfg.pumpFee).tokens, px: t.pxEntry, impact: q.impact, ev: q.ev });
+  // Las dos estrategias de salida se simulan sobre la MISMA entrada, para compararlas en igualdad de condiciones
+  t.keep = true;
+  S.paperOpen.set(t.mint, { t: now(), sym: t.sym, tObs: t.tObs, size: q.size, tokens: buyOnCurve(t.sig.vSol, t.sig.vTok, q.size, cfg.pumpFee).tokens, impact: q.impact, ev: q.ev,
+    exits: Object.fromEntries(Object.keys(STRATS).map((k) => [k, new Exit(k, t.pxEntry)])) });
   if (!isLive()) { decide(t, "entry", `señal · EV ${(q.ev * 100).toFixed(1)}% · en papel`, p, q.ev); log("QNT", `señal en papel ${t.sym} · EV +${(q.ev * 100).toFixed(1)}%`); return; }
   if (S.positions.size >= cfg.maxOpen) { decide(t, "skip", `libro lleno · ${cfg.maxOpen}/${cfg.maxOpen}`, p, q.ev); return; }
   openLive(t, q);
@@ -102,13 +120,16 @@ tracker.on("observe", (t) => {
 });
 
 async function openLive(t, q) {
-  const pos = { mint: t.mint, sym: t.sym, size: q.size, t: now(), status: "abriendo", ev: q.ev, p: t.p };
+  t.keep = true;
+  const strat = chosenStrat();
+  const pos = { mint: t.mint, sym: t.sym, size: q.size, t: now(), status: "abriendo", ev: q.ev, p: t.p, strat, sells: [], queue: Promise.resolve() };
   S.positions.set(t.mint, pos);
   S.counts.liveEntries++;
   try {
     const r = await live.buy(t.mint, q.size);
     pos.buySig = r.sig; pos.buyDelta = r.delta; pos.status = "abierta";
-    log("EXE", `compra real ${t.sym} · ${q.size} SOL · ${r.sig.slice(0, 10)}…`);
+    pos.exit = new Exit(strat, t.px); // la referencia es el precio cuando se confirmó la compra
+    log("EXE", `compra real ${t.sym} · ${q.size} SOL · salida "${STRATS[strat].name}" · ${r.sig.slice(0, 10)}…`);
     if (pos.closeWhenOpen) closeLive(pos, pos.closeWhenOpen);
   } catch (e) {
     S.positions.delete(t.mint);
@@ -116,28 +137,70 @@ async function openLive(t, q) {
   }
 }
 
-async function closeLive(pos, why) {
-  if (pos.status === "abriendo") { pos.closeWhenOpen = why; return; }
-  if (pos.status !== "abierta") return;
-  pos.status = "cerrando";
-  for (let i = 0; i < 3; i++) {
-    try {
-      const r = await live.sellAll(pos.mint);
-      const pnl = (pos.buyDelta ?? -pos.size) + (r.delta ?? 0);
-      const rec = { day: today(), t: now(), mint: pos.mint, sym: pos.sym, size: pos.size, pnl, ret: pnl / pos.size, out: why, buy: pos.buySig, sell: r.sig };
-      S.liveClosed.push(rec); appendLine("live.jsonl", rec);
-      S.positions.delete(pos.mint);
-      log("EXE", `venta real ${pos.sym} · ${why} · ${pnl >= 0 ? "+" : ""}${pnl.toFixed(4)} SOL`);
-      if (liveToday() <= -cfg.dailyLossLimit) setHalted(`pérdida diaria de ${liveToday().toFixed(3)} SOL alcanzó el límite`);
-      return;
-    } catch (e) {
-      log("EXE", `venta fallida ${pos.sym} (intento ${i + 1}): ${e.message}`);
-      await new Promise((r) => setTimeout(r, 4000));
+// Ventas reales en cola: una detrás de otra, cada una como % del saldo que queda
+function liveSell(pos, frac, why) {
+  pos.queue = pos.queue.then(async () => {
+    if (pos.status === "cerrada") return;
+    const last = frac >= 0.999;
+    for (let i = 0; i < 3; i++) {
+      try {
+        const r = last ? await live.sellAll(pos.mint) : await live.sellPct(pos.mint, frac * 100);
+        pos.sells.push({ why, sig: r.sig, delta: r.delta ?? 0 });
+        log("EXE", `venta real ${pos.sym} · ${last ? "todo" : Math.round(frac * 100) + "% de lo que queda"} · ${why}`);
+        if (last) finishLive(pos);
+        return;
+      } catch (e) {
+        log("EXE", `venta fallida ${pos.sym} (intento ${i + 1}): ${e.message}`);
+        await new Promise((r) => setTimeout(r, 4000));
+      }
     }
-  }
-  pos.status = "abierta"; // se reintentará con el botón "Detener y vender todo" o en el próximo cierre
-  log("EXE", `NO se pudo vender ${pos.sym}. Revisa la wallet manualmente.`);
+    log("EXE", `NO se pudo vender ${pos.sym}. Usa "Detener y vender todo" o revisa la wallet.`);
+  });
+  return pos.queue;
 }
+
+function finishLive(pos) {
+  pos.status = "cerrada";
+  const pnl = (pos.buyDelta ?? -pos.size) + pos.sells.reduce((s, x) => s + x.delta, 0);
+  const rec = { day: today(), t: now(), mint: pos.mint, sym: pos.sym, size: pos.size, pnl, ret: pnl / pos.size, strat: pos.strat,
+    out: pos.sells.map((x) => x.why).join(" · "), buy: pos.buySig, sell: pos.sells.at(-1)?.sig };
+  S.liveClosed.push(rec); appendLine("live.jsonl", rec);
+  S.positions.delete(pos.mint);
+  log("EXE", `posición real cerrada ${pos.sym} · ${pnl >= 0 ? "+" : ""}${pnl.toFixed(4)} SOL`);
+  if (liveToday() <= -cfg.dailyLossLimit) setHalted(`pérdida diaria de ${liveToday().toFixed(3)} SOL alcanzó el límite`);
+}
+
+function closeLive(pos, why) {
+  if (pos.status === "abriendo") { pos.closeWhenOpen = why; return; }
+  if (pos.status !== "abierta" || !pos.exit) return;
+  for (const a of pos.exit.close(pos.exit.peak > 0 ? pos.exit.entry : 0, why)) liveSell(pos, a.frac, a.why);
+}
+
+// ---------- cada precio nuevo mueve las salidas (papel y real) ----------
+function onPrice(t, forceWhy) {
+  const po = S.paperOpen.get(t.mint);
+  if (po) {
+    for (const [k, ex] of Object.entries(po.exits)) {
+      if (ex.done) continue;
+      forceWhy ? ex.close(t.px, forceWhy) : ex.update(t.px);
+      if (ex.done) {
+        const ret = ex.paperReturn(po.tokens, po.size, po.impact);
+        const rec = { t: now(), mint: t.mint, sym: t.sym, size: po.size, ret, strat: k, out: ex.summary(), min: (now() - po.tObs) / 60000 };
+        S.paper.push(rec); appendLine("paper.jsonl", rec);
+        log("EXE", `papel ${STRATS[k].name.toLowerCase()} ${t.sym} · ${(ret * 100).toFixed(1)}% · ${rec.out}`);
+      }
+    }
+    if (Object.values(po.exits).every((e) => e.done)) S.paperOpen.delete(t.mint);
+  }
+  const pos = S.positions.get(t.mint);
+  if (pos && pos.status === "abierta" && pos.exit) {
+    const acts = forceWhy ? pos.exit.close(t.px, forceWhy) : pos.exit.update(t.px);
+    for (const a of acts) liveSell(pos, a.frac, a.why);
+  } else if (pos && pos.status === "abriendo" && forceWhy) pos.closeWhenOpen = forceWhy;
+}
+tracker.on("price", (t) => onPrice(t));
+tracker.on("expire", (t) => onPrice(t, `${cfg.horizonMin} min`));
+tracker.on("graduated", (t) => onPrice(t, "graduó")); // sin datos de PumpSwap en este modo: se sale al graduarse
 
 // ---------- etiqueta medida → aprendizaje ----------
 tracker.on("label", (t) => {
@@ -146,18 +209,6 @@ tracker.on("label", (t) => {
     model.learn(f, t.label, t.ret);
     appendLine("labels.jsonl", { src: SOURCE, t: t.tEnd, mint: t.mint, sym: t.sym, y: t.label, ret: t.ret, f, p: t.p });
   }
-  const po = S.paperOpen.get(t.mint);
-  if (po) {
-    S.paperOpen.delete(t.mint);
-    const r = t.label === TP ? Math.max(cfg.tp, t.ret) : t.ret;
-    const exitSol = po.tokens * po.px * (1 + r) * (1 - cfg.pumpFee) * (1 - po.impact);
-    const ret = (exitSol - 2 * cfg.priorityFee) / po.size - 1;
-    const rec = { t: now(), mint: t.mint, sym: t.sym, size: po.size, ret, out: OUT[t.label], min: (t.tEnd - t.tObs) / 60000 };
-    S.paper.push(rec); appendLine("paper.jsonl", rec);
-    log("EXE", `papel ${t.sym} · ${OUT[t.label]} · ${(ret * 100).toFixed(1)}%`);
-  }
-  const pos = S.positions.get(t.mint);
-  if (pos) closeLive(pos, OUT[t.label]);
 });
 
 feed.on("notice", (m) => log("SCT", "PumpPortal: " + m));
@@ -187,7 +238,10 @@ function state() {
     model: { labels: model.labels, counts: model.counts, ...sc, timeRet: model.timeRet, recent: model.hist.slice(-60).map((h) => h.y) },
     signals: SIGNALS, measuring, decisions: S.decisions.slice(0, 30), log: S.log.slice(0, 20),
     positions: [...S.positions.values()].map(({ closeWhenOpen, ...p }) => p),
-    paper: { n: S.paper.length, net: paperNet(), open: S.paperOpen.size, wins: S.paper.filter((c) => c.ret > 0).length, recent: S.paper.slice(-200) },
+    paper: {
+      chosen: chosenStrat(), mode: cfg.exitStrategy, open: S.paperOpen.size, recent: S.paper.slice(-300),
+      by: Object.fromEntries(Object.entries(STRATS).map(([k, v]) => [k, { name: v.name, desc: v.desc(), ...paperStats(k) }])),
+    },
     liveClosed: S.liveClosed.slice(-200), liveToday: liveToday(),
     wallet: S.wallet,
     cfg: { tp: cfg.tp, sl: cfg.sl, horizonMin: cfg.horizonMin, obsSeconds: tracker.obsSeconds, evMin: cfg.evMin, maxSolPerTrade: cfg.maxSolPerTrade, maxOpen: cfg.maxOpen, dailyLossLimit: cfg.dailyLossLimit, minLabelsLive: cfg.minLabelsLive, minPaperTradesLive: cfg.minPaperTradesLive },
@@ -215,7 +269,7 @@ http.createServer(async (req, res) => {
   // Las acciones exigen una cabecera propia: una web ajena no puede enviarla a tu localhost.
   if (req.method === "POST" && req.headers["x-orbital"] === "1") {
     if (req.url === "/api/halt") { setHalted("detenido desde el panel"); computeGate(); }
-    else if (req.url === "/api/halt-sell") { setHalted("detenido y vendiendo todo desde el panel"); computeGate(); for (const p of S.positions.values()) closeLive(p, "MANUAL"); }
+    else if (req.url === "/api/halt-sell") { setHalted("detenido y vendiendo todo desde el panel"); computeGate(); for (const p of S.positions.values()) closeLive(p, "manual"); }
     else if (req.url === "/api/resume") { setHalted(null); computeGate(); }
     else { res.writeHead(404); return res.end(); }
     res.writeHead(200, { "Content-Type": "application/json" }); return res.end('{"ok":true}');

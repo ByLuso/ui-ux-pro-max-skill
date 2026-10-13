@@ -115,7 +115,9 @@ button:focus-visible, input:focus-visible, tr[tabindex]:focus-visible { outline:
       <canvas id="cvChart" aria-label="Gráfico de velas de 1 hora con medias móviles, stop y objetivo"></canvas>
       <div class="sub" style="margin-top:4px">velas 1 h · <span class="c-gold">EMA 20</span> · <span class="c-violet">EMA 50</span> · <span class="c-red">stop sugerido</span> · <span class="c-green">objetivo</span></div>
       <div class="levels" id="dLevels"></div>
-      <div class="ph" style="margin-top:6px"><span class="t">Señales del gráfico</span><span class="rt" id="dTa"></span></div>
+      <div class="ph" style="margin-top:6px"><span class="t">Seguridad</span><span class="rt" id="dSecChip"></span></div>
+      <div class="list" id="dSec"></div>
+      <div class="ph" style="margin-top:12px"><span class="t">Señales del gráfico</span><span class="rt" id="dTa"></span></div>
       <div class="sig" id="dSig"></div>
       <div class="ph" style="margin-top:12px"><span class="t">Noticias de esta moneda</span><span class="rt" id="dNewsScore"></span></div>
       <div class="list" id="dNews"></div>
@@ -134,8 +136,9 @@ const pct = (x, d = 1) => x == null || Number.isNaN(x) ? "—" : (x >= 0 ? "+" :
 const col = (x) => x == null ? "" : x > 0 ? C.green : x < 0 ? C.red : C.dim;
 const px = (p) => p == null ? "—" : p >= 1000 ? p.toLocaleString("en-US", { maximumFractionDigits: 0 }) : p >= 1 ? p.toFixed(2) : p >= 0.01 ? p.toFixed(4) : p.toPrecision(3);
 const usd = (v) => v == null || Number.isNaN(v) ? "—" : v >= 1e9 ? "$" + (v / 1e9).toFixed(1) + "B" : v >= 1e6 ? "$" + (v / 1e6).toFixed(1) + "M" : "$" + (v / 1e3).toFixed(0) + "K";
-const ago = (t) => { const m = (Date.now() - t) / 60000; return m < 60 ? `${m.toFixed(0)} min` : `${(m / 60).toFixed(0)} h`; };
-const labelCol = (l) => l === "Fuerte" ? "c-green" : l === "Positiva" ? "c-gold" : l === "Débil" ? "c-red" : "c-dim";
+const ago = (t) => { const m = (Date.now() - t) / 60000; return m < 60 ? `${m.toFixed(0)} min` : m < 2880 ? `${(m / 60).toFixed(0)} h` : `${(m / 1440).toFixed(0)} días`; };
+const labelCol = (l) => l === "Fuerte" ? "c-green" : l === "Positiva" ? "c-gold" : l === "Débil" || l === "Descartada" ? "c-red" : "c-dim";
+const secChip = (s) => s === "binance" ? '<span class="c-dim">Binance</span>' : !s ? '<span class="c-dim">revisando…</span>' : s.ok ? `<span class="chip c-green" title="${esc(s.why || "")}">pasa</span>` : `<span class="chip c-red" title="${esc(s.why || "")}">descartada</span>`;
 let D = null, filter = "all", sel = null;
 try { filter = localStorage.getItem("radarFilter") || "all"; } catch {}
 
@@ -169,16 +172,17 @@ function render() {
   document.querySelectorAll("[data-f]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.f === filter));
   const rows = D.list.filter((c) => filter === "all" || (filter === "mine" ? c.mine : c.kind === filter));
   if (!sel && rows.length) { sel = rows[0].id; }
-  $("rankT").innerHTML = `<tr><th>moneda</th><th>precio</th><th>24 h</th><th>puntuación</th><th>gráfico</th><th>noticias</th><th>señal principal</th><th></th></tr>` + (rows.length ? rows.map((c) => `
+  $("rankT").innerHTML = `<tr><th>moneda</th><th>precio</th><th>24 h</th><th>puntuación</th><th>gráfico</th><th>noticias</th><th>seguridad</th><th>señal principal</th><th></th></tr>` + (rows.length ? rows.map((c) => `
     <tr tabindex="0" data-id="${esc(c.id)}" class="${c.id === sel ? "sel" : ""}">
       <td><b class="c-white">${esc(c.sym)}</b> <span class="chip ${c.kind === "cex" ? "c-gold" : "c-violet"}">${esc(c.net)}</span>${c.mine ? ' <span class="chip c-blue">mi lista</span>' : ""}${c.trending ? ' <span class="chip c-amber">tendencia</span>' : ""}</td>
       <td>${px(c.price)}</td><td style="color:${col(c.ch24)}">${pct(c.ch24)}</td>
       <td>${bar(c.score)} <span class="${labelCol(c.label)}">${esc(c.label || "")}</span></td>
       <td style="color:${col(c.ta?.score)}">${c.ta ? (c.ta.score > 0 ? "+" : "") + c.ta.score : "—"}</td>
       <td>${c.news.count ? `<span style="color:${col(c.news.score)}">${c.news.count} · ${c.news.score > 0 ? "+" : ""}${c.news.score}</span>` : '<span class="c-dim">0</span>'}</td>
-      <td class="c-dim">${esc(c.ta?.top[0]?.txt || c.err || "")}</td>
+      <td>${secChip(c.sec)}</td>
+      <td class="c-dim">${esc(c.sec && c.sec.ok === false ? c.sec.why : c.ta?.top[0]?.txt || c.err || "")}</td>
       <td>${c.mine ? `<button type="button" data-rm="${esc(c.id)}" aria-label="Quitar ${esc(c.sym)} de mi lista">quitar</button>` : ""}</td>
-    </tr>`).join("") : `<tr><td colspan="8" class="c-dim">${filter === "mine" ? "Tu lista está vacía. Añade monedas con el campo de arriba." : "Buscando monedas… la primera carga tarda 1–2 minutos."}</td></tr>`);
+    </tr>`).join("") : `<tr><td colspan="9" class="c-dim">${filter === "mine" ? "Tu lista está vacía. Añade monedas con el campo de arriba." : "Buscando monedas… la primera carga tarda 1–2 minutos."}</td></tr>`);
   renderDetail();
 }
 
@@ -189,6 +193,12 @@ function renderDetail() {
   $("dLinks").innerHTML = d.url ? `<a href="${esc(d.url)}" target="_blank" rel="noopener">ver gráfico completo ↗</a>` : "";
   const ta = d.ta;
   $("dLevels").innerHTML = ta ? [["precio", px(ta.price), ""], ["stop sugerido", px(ta.stop), "c-red"], ["objetivo", px(ta.target), "c-green"], ["RSI 14", ta.rsi.toFixed(0), ""]].map(([k, v, c]) => `<div><div class="sub">${k}</div><div class="v ${c}">${v}</div></div>`).join("") : `<div class="c-dim" style="grid-column:1/-1">Todavía no hay suficiente historial de precios.</div>`;
+  const sec = d.sec;
+  $("dSecChip").innerHTML = d.kind === "cex" ? "" : sec ? `<span class="chip ${sec.ok ? "c-green" : "c-red"}">${sec.ok ? "pasa los filtros" : "descartada"} · ${esc(sec.src)}</span>` : "";
+  $("dSec").innerHTML = d.kind === "cex"
+    ? `<div class="c-dim">Moneda listada en Binance: no aplica la revisión de contratos de DEX.</div>`
+    : !sec ? `<div class="c-dim">${d.secErr ? "No se pudo revisar: " + esc(d.secErr) : "Revisando contrato y liquidez…"}</div>`
+    : [...sec.reasons.map((r) => `<div class="c-red">✕ ${esc(r)}</div>`), ...sec.warns.map((r) => `<div class="c-amber">! ${esc(r)}</div>`)].join("") + (d.liq ? `<div class="c-dim">liquidez ${usd(d.liq)}${d.created ? " · pool creado hace " + ago(d.created) : ""}</div>` : "") + (!sec.reasons.length && !sec.warns.length ? `<div class="c-green">✓ Sin riesgos detectados</div>` : "");
   $("dTa").innerHTML = ta ? `<span class="chip" style="color:${col(ta.score)}">gráfico ${ta.score > 0 ? "+" : ""}${ta.score}</span>` : "";
   $("dSig").innerHTML = ta ? ta.signals.map((s) => `<div><span>${esc(s.txt)}</span><b style="color:${col(s.w)}">${s.w > 0 ? "+" : ""}${s.w}</b></div>`).join("") : "";
   $("dNewsScore").innerHTML = d.news.count ? `<span class="chip" style="color:${col(d.news.score)}">noticias ${d.news.score > 0 ? "+" : ""}${d.news.score}</span>` : "";

@@ -119,15 +119,11 @@ button:focus-visible, .dcard:focus-visible { outline: 2px solid var(--gold); out
       <div class="gate" id="gate"></div>
     </div>
     <div class="panel">
-      <div class="ph"><span class="t">Resultados en papel</span><span class="rt sub">cada señal, con costes</span></div>
-      <table class="kv">
-        <tr><td class="c-dim">Operaciones cerradas</td><td id="pN">0</td></tr>
-        <tr><td class="c-dim">Ganadoras</td><td id="pW">—</td></tr>
-        <tr><td class="c-dim">Retorno medio por operación</td><td id="pAvg">—</td></tr>
-        <tr><td class="c-dim">Esperando resultado</td><td id="pOpen">0</td></tr>
-      </table>
-      <canvas id="cvPaper" aria-label="Retorno acumulado en papel"></canvas>
-      <div class="sub">retorno acumulado (suma de % por operación)</div>
+      <div class="ph"><span class="t">Resultados en papel</span><span class="rt sub">mismas entradas · dos formas de salir · con costes</span></div>
+      <table class="tbl" id="stratT"></table>
+      <canvas id="cvPaper" aria-label="Retorno acumulado en papel de cada estrategia de salida"></canvas>
+      <div class="sub" id="paperLegend">retorno acumulado (suma de % por operación)</div>
+      <div class="sub" style="margin-top:4px;text-transform:none;letter-spacing:0" id="pOpen"></div>
     </div>
   </section>
 
@@ -176,6 +172,7 @@ const $ = (id) => document.getElementById(id);
 const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const C = { gold: css("--gold"), blue: css("--blue"), green: css("--green"), red: css("--red"), amber: css("--amber"), white: css("--white"), dim: css("--dim"), line: css("--line"), violet: css("--violet") };
 const OUTC = [C.green, C.red, C.amber], OUT = ["TP", "SL", "TIEMPO"];
+const STC = { fixed: css("--blue"), ladder: css("--gold") }; // color de cada estrategia de salida
 const AGC = { SCT: C.blue, MAP: C.violet, JDG: C.green, QNT: C.amber, GRD: C.red, EXE: C.gold };
 const pct = (x, d = 0) => x == null ? "—" : (x * 100).toFixed(d) + "%";
 const sgn = (x, d = 1) => x == null ? "—" : (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(d) + "%";
@@ -226,9 +223,9 @@ function render() {
 
   // papel
   const p = d.paper;
-  $("pN").textContent = p.n; $("pW").textContent = p.n ? `${p.wins} (${pct(p.wins / p.n)})` : "—";
-  const avg = p.n ? p.net / p.n : null; const pa = $("pAvg"); pa.textContent = sgn(avg); pa.style.color = avg == null ? "" : avg > 0 ? C.green : C.red;
-  $("pOpen").textContent = p.open;
+  $("stratT").innerHTML = `<tr class="c-dim"><td>salida</td><td>cerradas</td><td>ganadoras</td><td>media</td></tr>` + Object.entries(p.by).map(([k, st]) =>
+    `<tr title="${esc(st.desc)}"><td><span style="color:${STC[k]}">■</span> ${esc(st.name)}${k === p.chosen ? ' <span class="chip c-gold">' + (p.mode === "auto" ? "elegida" : "forzada") + "</span>" : ""}<div class="c-dim" style="font-size:10px;white-space:normal">${esc(st.desc)}</div></td><td>${st.n}</td><td>${st.n ? pct(st.wins / st.n) : "—"}</td><td style="color:${st.avg == null ? "" : st.avg > 0 ? C.green : C.red}">${sgn(st.avg)}</td></tr>`).join("");
+  $("pOpen").textContent = `${p.open} señales siguiendo su precio · ${p.mode === "auto" ? "con dinero real se usaría la de mejor media (mínimo " + d.cfg.minPaperTradesLive + " operaciones)" : "estrategia fijada en .env"}`;
   drawPaper(p.recent);
 
   // pila
@@ -245,7 +242,7 @@ function render() {
   const lc = d.liveClosed.slice().reverse().slice(0, 15);
   $("liveT").innerHTML = `<tr class="c-dim"><td>token</td><td>salida</td><td>P&amp;L</td><td>tx</td></tr>` + (lc.length ? lc.map((c) => `<tr><td>${coin(c.mint, c.sym)}</td><td>${esc(c.out)}</td><td style="color:${c.pnl >= 0 ? C.green : C.red}">${c.pnl >= 0 ? "+" : ""}${c.pnl.toFixed(4)} SOL</td><td><a href="https://solscan.io/tx/${esc(c.sell)}" target="_blank" rel="noopener">ver</a></td></tr>`).join("") : `<tr><td colspan="4" class="c-dim">Ninguna todavía.</td></tr>`);
   const pr = p.recent.slice().reverse().slice(0, 15);
-  $("paperT").innerHTML = `<tr class="c-dim"><td>token</td><td>salida</td><td>minutos</td><td>retorno</td></tr>` + (pr.length ? pr.map((c) => `<tr><td>${coin(c.mint, c.sym)}</td><td>${esc(c.out)}</td><td>${c.min.toFixed(0)}</td><td style="color:${c.ret >= 0 ? C.green : C.red}">${sgn(c.ret)}</td></tr>`).join("") : `<tr><td colspan="4" class="c-dim">Ninguna todavía. Cada señal tarda hasta ${d.cfg.horizonMin} min en resolverse.</td></tr>`);
+  $("paperT").innerHTML = `<tr class="c-dim"><td>token</td><td>estrategia</td><td>ventas</td><td>min</td><td>retorno</td></tr>` + (pr.length ? pr.map((c) => `<tr><td>${coin(c.mint, c.sym)}</td><td style="color:${STC[c.strat || "fixed"]}">${esc(p.by[c.strat || "fixed"]?.name || "")}</td><td>${esc(c.out)}</td><td>${c.min.toFixed(0)}</td><td style="color:${c.ret >= 0 ? C.green : C.red}">${sgn(c.ret)}</td></tr>`).join("") : `<tr><td colspan="5" class="c-dim">Ninguna todavía. Cada señal tarda hasta ${d.cfg.horizonMin} min en resolverse.</td></tr>`);
   $("log").innerHTML = d.log.map((l) => `<div><span class="c-dim">${new Date(l.t).toLocaleTimeString()}</span> <span class="tag" style="color:${AGC[l.tag] || C.dim}">${l.tag}</span>${esc(l.msg)}</div>`).join("");
 }
 
@@ -268,15 +265,19 @@ function renderBuilder() {
 
 $("stack").addEventListener("click", (e) => { const b = e.target.closest(".dcard"); if (!b) return; selMint = b.dataset.m; selLock = Date.now(); render(); });
 
+// Una línea por estrategia de salida: retorno acumulado
 function drawPaper(rec) {
   const { ctx, w, h } = fit($("cvPaper")); ctx.clearRect(0, 0, w, h);
-  if (rec.length < 2) return;
-  let c = 0; const pts = rec.map((r) => (c += r.ret));
-  const mn = Math.min(0, ...pts), mx = Math.max(0, ...pts), rg = mx - mn || 1;
-  const X = (i) => (i / (pts.length - 1)) * (w - 4), Y = (v) => h - 4 - ((v - mn) / rg) * (h - 8);
-  ctx.strokeStyle = C.line; ctx.beginPath(); ctx.moveTo(0, Y(0)); ctx.lineTo(w, Y(0)); ctx.stroke();
-  ctx.beginPath(); pts.forEach((v, i) => (i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))));
-  ctx.strokeStyle = pts[pts.length - 1] >= 0 ? C.green : C.red; ctx.lineWidth = 1.6; ctx.stroke();
+  const series = Object.keys(STC).map((k) => { let c = 0; return [k, rec.filter((r) => (r.strat || "fixed") === k).map((r) => (c += r.ret))]; }).filter(([, a]) => a.length > 1);
+  if (!series.length) return;
+  const all = series.flatMap(([, a]) => a), mn = Math.min(0, ...all), mx = Math.max(0, ...all), rg = mx - mn || 1;
+  const Y = (v) => h - 4 - ((v - mn) / rg) * (h - 8);
+  ctx.strokeStyle = C.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, Y(0)); ctx.lineTo(w, Y(0)); ctx.stroke();
+  for (const [k, pts] of series) {
+    const X = (i) => (i / (pts.length - 1)) * (w - 4);
+    ctx.beginPath(); pts.forEach((v, i) => (i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))));
+    ctx.strokeStyle = STC[k]; ctx.lineWidth = 1.6; ctx.stroke();
+  }
 }
 
 // Orb: cada lanzamiento en medición es un punto en una esfera que gira

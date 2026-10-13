@@ -32,10 +32,17 @@ export const cfg = {
   trackSample: num("TRACK_SAMPLE", 0.5),
   maxTracked: num("MAX_TRACKED", 400),
   evMin: num("EV_MIN", 0.05),
+  // auto = usa la estrategia de salida con mejor resultado en papel; fixed o ladder la fuerzan
+  exitStrategy: ["fixed", "ladder"].includes(str("EXIT_STRATEGY")) ? str("EXIT_STRATEGY") : "auto",
+  ladder: {
+    tp1: num("LADDER_TP1", 0.25), tp1Frac: num("LADDER_TP1_FRAC", 0.5),
+    tp2: num("LADDER_TP2", 0.6), tp2Frac: num("LADDER_TP2_FRAC", 0.25),
+    trail: num("LADDER_TRAIL", 0.25), stop0: num("LADDER_STOP", 0.2),
+  },
   guard: {
     maxEarly: num("GUARD_MAX_EARLY_SHARE", 0.6),
     maxTop10: num("GUARD_MAX_TOP10", 0.5),
-    maxDev: num("GUARD_MAX_DEV_SHARE", 0.15),
+    maxDev: num("GUARD_MAX_DEV_SHARE", 0.07),
     maxCreatorPrior: num("GUARD_MAX_CREATOR_PRIOR", 5),
   },
   maxSolPerTrade: num("MAX_SOL_PER_TRADE", 0.03),
