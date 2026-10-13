@@ -44,6 +44,15 @@ Abre **http://localhost:8787/radar**. El radar **solo vigila y avisa: no compra 
 
 Fuentes, todas gratis y sin clave: Binance (data-api.binance.vision), GeckoTerminal, CoinGecko y los RSS de cada medio. Para desactivar el radar, arranca con `RADAR=off`.
 
+## Cartera de prueba (50 € ficticios)
+
+Arriba del panel verás una **cartera de prueba** que empieza con 50 € ficticios y opera sola, en tiempo real, con las mismas señales, la misma estrategia de salida y las mismas comisiones que usaría el dinero real. Compra 5 € por operación con un máximo de 5 posiciones a la vez. Junto a ella:
+
+- **Ahora mismo:** los lanzamientos que está observando y cuánto le falta para decidir, su última decisión y qué está haciendo el radar.
+- **Operaciones:** posiciones abiertas con su ganancia o pérdida en euros y cada compra y venta según ocurre.
+
+Puedes cambiar los importes en `.env` (`PAPER_START_EUR`, `PAPER_TRADE_EUR`, `PAPER_MAX_OPEN`) y reiniciarla con el botón **Reiniciar**. El precio SOL/EUR se toma de Binance cada 5 minutos. Ten en cuenta que, con 5 € por operación, las comisiones de prioridad (unos 0,05 € por transacción) ya suponen alrededor de un 2% de cada operación.
+
 ## Dos modos de datos
 
 | | Gratuito (por defecto) | Completo |

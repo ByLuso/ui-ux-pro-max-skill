@@ -10,6 +10,7 @@ import { SIGNALS, featureVector, Judge, Creators, guard, quant, buyOnCurve } fro
 import * as live from "./trade.js";
 import { Radar } from "./radar/radar.js";
 import { Exit, STRATS } from "./exits.js";
+import { PaperWallet } from "./wallet.js";
 
 // ---------- estado ----------
 // Sin clave de PumpPortal → modo gratuito con DexScreener. Cada modo mide las señales distinto, así que guarda su propio modelo.
@@ -32,6 +33,7 @@ if (model.corrupted()) {
   repairNote = `modelo reparado: reentrenado con ${rows.length} etiquetas válidas; operaciones en papel anteriores apartadas`;
   console.log("  " + repairNote);
 }
+const wallet = new PaperWallet();
 const judge = new Judge();
 const creators = new Creators();
 const feed = new Feed(cfg.apiKey);
@@ -113,7 +115,9 @@ tracker.on("observe", (t) => {
   t.keep = true;
   S.paperOpen.set(t.mint, { t: now(), sym: t.sym, tObs: t.tObs, size: q.size, tokens: buyOnCurve(t.sig.vSol, t.sig.vTok, q.size, cfg.pumpFee).tokens, impact: q.impact, ev: q.ev,
     exits: Object.fromEntries(Object.keys(STRATS).map((k) => [k, new Exit(k, t.pxEntry)])) });
-  if (!isLive()) { decide(t, "entry", `señal · EV ${(q.ev * 100).toFixed(1)}% · en papel`, p, q.ev); log("QNT", `señal en papel ${t.sym} · EV +${(q.ev * 100).toFixed(1)}%`); return; }
+  const wwhy = wallet.tryOpen(t, chosenStrat(), q);
+  if (wwhy && !wwhy.startsWith("cartera llena")) log("EXE", `cartera de prueba no compra ${t.sym}: ${wwhy}`);
+  if (!isLive()) { decide(t, "entry", `señal · EV ${(q.ev * 100).toFixed(1)}% · en papel`, p, q.ev); log("QNT", `señal en papel ${t.sym} · EV ${q.ev >= 0 ? "+" : ""}${(q.ev * 100).toFixed(1)}%`); return; }
   if (S.positions.size >= cfg.maxOpen) { decide(t, "skip", `libro lleno · ${cfg.maxOpen}/${cfg.maxOpen}`, p, q.ev); return; }
   openLive(t, q);
   decide(t, "entry", `ENTRADA REAL · ${q.size} SOL · EV ${(q.ev * 100).toFixed(1)}%`, p, q.ev);
@@ -178,6 +182,7 @@ function closeLive(pos, why) {
 
 // ---------- cada precio nuevo mueve las salidas (papel y real) ----------
 function onPrice(t, forceWhy) {
+  wallet.onPrice(t, forceWhy);
   const po = S.paperOpen.get(t.mint);
   if (po) {
     for (const [k, ex] of Object.entries(po.exits)) {
@@ -225,6 +230,18 @@ async function refreshWallet() {
   computeGate();
 }
 setInterval(refreshWallet, 30000);
+
+// Precio SOL/EUR para la cartera de prueba (Binance, cada 5 min)
+async function refreshSolEur() {
+  try {
+    const r = await fetch("https://data-api.binance.vision/api/v3/ticker/price?symbol=SOLEUR");
+    const p = +(await r.json()).price;
+    if (p > 0) wallet.solEur = p;
+  } catch {}
+}
+refreshSolEur();
+setInterval(refreshSolEur, 5 * 60e3);
+setInterval(() => { wallet.sample(); wallet.save(); }, 60e3);
 setInterval(computeGate, 5000);
 
 // ---------- panel web local ----------
@@ -236,7 +253,12 @@ function state() {
     feed: { source: SOURCE, connected: feed.connected, msgs: feed.msgs, perHour: feed.perHour(), notice: feed.notice, hasKey: !!cfg.apiKey, dexCalls: dex ? dex.calls : 0, dexErrors: dex ? dex.errors : 0 },
     counts: { seen: tracker.seen, tracked: tracker.tokens.size, measuring: measuring.length, ...S.counts, labels: model.labels, followed: judge.count() },
     model: { labels: model.labels, counts: model.counts, ...sc, timeRet: model.timeRet, recent: model.hist.slice(-60).map((h) => h.y) },
-    signals: SIGNALS, measuring, decisions: S.decisions.slice(0, 30), log: S.log.slice(0, 20),
+    signals: SIGNALS, measuring,
+    paperWallet: wallet.state(),
+    // Primero los que ya tienen precio y están más cerca de decidir
+    observing: [...tracker.tokens.values()].filter((t) => t.phase === "observe").sort((a, b) => (dex ? (b.dexSeen ? 1 : 0) - (a.dexSeen ? 1 : 0) : 0) || a.t0 - b.t0).slice(0, 8)
+      .map((t) => ({ m: t.mint, s: t.sym, age: (now() - t.t0) / 1000, chg: t.px / t.px0 - 1, buys: dex ? t.dexBuys || 0 : t.buyers.size, seen: dex ? !!t.dexSeen : true })),
+    activity: { observing: [...tracker.tokens.values()].filter((t) => t.phase === "observe").length, following: [...tracker.tokens.values()].filter((t) => t.phase === "follow").length, radar: radar ? radar.now : null }, decisions: S.decisions.slice(0, 30), log: S.log.slice(0, 20),
     positions: [...S.positions.values()].map(({ closeWhenOpen, ...p }) => p),
     paper: {
       chosen: chosenStrat(), mode: cfg.exitStrategy, open: S.paperOpen.size, recent: S.paper.slice(-300),
@@ -271,6 +293,7 @@ http.createServer(async (req, res) => {
     if (req.url === "/api/halt") { setHalted("detenido desde el panel"); computeGate(); }
     else if (req.url === "/api/halt-sell") { setHalted("detenido y vendiendo todo desde el panel"); computeGate(); for (const p of S.positions.values()) closeLive(p, "manual"); }
     else if (req.url === "/api/resume") { setHalted(null); computeGate(); }
+    else if (req.url === "/api/wallet-reset") { wallet.reset(); log("EXE", `cartera de prueba reiniciada con ${cfg.paperStartEur} €`); }
     else { res.writeHead(404); return res.end(); }
     res.writeHead(200, { "Content-Type": "application/json" }); return res.end('{"ok":true}');
   }

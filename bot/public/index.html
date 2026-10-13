@@ -38,6 +38,21 @@ button.danger { border-color: var(--red); color: var(--red); }
 button:focus-visible, .dcard:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
 .banner { border: 1px solid var(--amber); color: var(--amber); padding: 8px 12px; border-radius: 3px; background: color-mix(in srgb, var(--amber) 7%, transparent); }
 .banner.red { border-color: var(--red); color: var(--red); background: color-mix(in srgb, var(--red) 7%, transparent); }
+.row0 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr); gap: 10px; }
+.eq { font: 700 40px/1 var(--f-display); color: var(--white); margin-top: 2px; }
+.wpnl { font: 600 15px var(--f-display); margin-top: 4px; }
+#cvWallet { width: 100%; height: 80px; display: block; margin-top: 8px; }
+.obs-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; padding: 5px 0; border-top: 1px solid var(--line); }
+.obs-row .pg { grid-column: 1 / -1; height: 3px; background: var(--line); }
+.obs-row .pg i { display: block; height: 100%; background: var(--blue); transition: width .9s linear; }
+.op { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 8px; padding: 6px 8px; border: 1px solid var(--line-2); border-radius: 2px; margin-bottom: 6px; background: var(--panel-2); }
+.op .big2 { font: 600 14px var(--f-display); }
+.events { max-height: 260px; overflow-y: auto; }
+.events div { padding: 3px 0; border-top: 1px solid var(--line); }
+.ev-k { display: inline-block; min-width: 62px; font-weight: 600; font-size: 10px; letter-spacing: .06em; }
+.live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); vertical-align: 1px; animation: blink 1.6s infinite; }
+@keyframes blink { 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } .obs-row .pg i { transition: none; } }
 .row1 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .big { font: 700 40px/1 var(--f-display); color: var(--green); }
 .dist { display: flex; height: 6px; margin-top: 8px; gap: 2px; }
@@ -74,7 +89,7 @@ button:focus-visible, .dcard:focus-visible { outline: 2px solid var(--gold); out
 .tbl td { padding: 3px 6px; border-top: 1px solid var(--line); white-space: nowrap; }
 .log div { white-space: nowrap; }
 #cvPaper { width: 100%; height: 70px; display: block; margin-top: 8px; }
-@media (max-width: 1000px) { .row1, .row3 { grid-template-columns: minmax(0, 1fr); } .orbrow { grid-template-columns: minmax(0, 1fr); } .orbwrap { min-height: 320px; } .stats { margin-left: 0; } }
+@media (max-width: 1000px) { .row0, .row1, .row3 { grid-template-columns: minmax(0, 1fr); } .orbrow { grid-template-columns: minmax(0, 1fr); } .orbwrap { min-height: 320px; } .stats { margin-left: 0; } }
 </style>
 </head>
 <body>
@@ -99,6 +114,45 @@ button:focus-visible, .dcard:focus-visible { outline: 2px solid var(--gold); out
     </div>
   </header>
   <div id="banners" style="display:grid;gap:6px"></div>
+
+  <section class="row0">
+    <div class="panel">
+      <div class="ph"><span class="t">Cartera de prueba</span><span class="rt chip c-blue">dinero ficticio</span></div>
+      <div class="sub">saldo total ahora</div>
+      <div class="eq" id="wEq">— €</div>
+      <div id="wPnl" class="wpnl">—</div>
+      <canvas id="cvWallet" aria-label="Evolución del saldo de la cartera de prueba"></canvas>
+      <table class="kv" style="margin-top:6px">
+        <tr><td class="c-dim">Disponible para comprar</td><td id="wCash">—</td></tr>
+        <tr><td class="c-dim">Invertido ahora</td><td id="wInv">—</td></tr>
+        <tr><td class="c-dim">Operaciones cerradas</td><td id="wClosed">—</td></tr>
+        <tr><td class="c-dim">SOL / EUR</td><td id="wSol">—</td></tr>
+      </table>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+        <span class="sub" id="wRules" style="text-transform:none;letter-spacing:0"></span>
+        <button type="button" id="bWReset" style="margin-left:auto">Reiniciar con 50 €</button>
+      </div>
+      <div class="sub" id="wConfirm" style="text-transform:none;letter-spacing:0;margin-top:4px" hidden>
+        ¿Seguro? Se borra el historial de la cartera. <button type="button" id="bWResetYes" class="danger">Sí, reiniciar</button> <button type="button" id="bWResetNo">Cancelar</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">Ahora mismo</span><span class="rt"><span class="live-dot"></span> <span class="sub" id="aCounts"></span></span></div>
+      <div class="sub" style="margin-bottom:6px">lanzamientos que está observando antes de decidir</div>
+      <div id="aObs"></div>
+      <div class="sub" style="margin:10px 0 4px">última decisión</div>
+      <div id="aLast" class="c-dim"></div>
+      <div class="sub" style="margin:10px 0 4px">radar</div>
+      <div id="aRadar" class="c-dim"></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">Operaciones</span><span class="rt sub" id="oCount"></span></div>
+      <div class="sub" style="margin-bottom:4px">abiertas · se actualizan con cada precio</div>
+      <div id="oOpen"></div>
+      <div class="sub" style="margin:10px 0 4px">compras y ventas</div>
+      <div id="oEvents" class="events"></div>
+    </div>
+  </section>
 
   <section class="row1">
     <div class="panel">
@@ -189,7 +243,7 @@ function fit(cv) {
 async function poll() {
   try { D = await (await fetch("/api/state")).json(); render(); $("feedSt").textContent = (D.feed.connected ? `conectado · ${D.feed.perHour.toLocaleString()} msgs/h` : "desconectado · reintentando") + (D.feed.source === "dexscreener" ? ` · DexScreener ${D.feed.dexCalls} consultas` : ""); }
   catch { $("feedSt").textContent = "el bot no responde · ¿sigue abierto?"; }
-  setTimeout(poll, 2000);
+  setTimeout(poll, 1000);
 }
 
 function render() {
@@ -204,6 +258,8 @@ function render() {
   if (d.feed.notice && /api key|funded|only available/i.test(d.feed.notice)) B.push(["", "PumpPortal: " + d.feed.notice]);
   if (d.halted) B.push(["red", "Bot detenido: " + d.halted + ". Pulsa Reanudar para volver a operar."]);
   $("banners").innerHTML = B.map(([c, t]) => `<div class="banner ${c}">${esc(t)}</div>`).join("");
+
+  renderWallet(d); renderNow(d);
 
   // modelo
   const m = d.model, tot = m.counts.reduce((a, b) => a + b, 0) || 1;
@@ -244,6 +300,51 @@ function render() {
   const pr = p.recent.slice().reverse().slice(0, 15);
   $("paperT").innerHTML = `<tr class="c-dim"><td>token</td><td>estrategia</td><td>ventas</td><td>min</td><td>retorno</td></tr>` + (pr.length ? pr.map((c) => `<tr><td>${coin(c.mint, c.sym)}</td><td style="color:${STC[c.strat || "fixed"]}">${esc(p.by[c.strat || "fixed"]?.name || "")}</td><td>${esc(c.out)}</td><td>${c.min.toFixed(0)}</td><td style="color:${c.ret >= 0 ? C.green : C.red}">${sgn(c.ret)}</td></tr>`).join("") : `<tr><td colspan="5" class="c-dim">Ninguna todavía. Cada señal tarda hasta ${d.cfg.horizonMin} min en resolverse.</td></tr>`);
   $("log").innerHTML = d.log.map((l) => `<div><span class="c-dim">${new Date(l.t).toLocaleTimeString()}</span> <span class="tag" style="color:${AGC[l.tag] || C.dim}">${l.tag}</span>${esc(l.msg)}</div>`).join("");
+}
+
+const eur = (v, sign) => (sign && v >= 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
+const ago = (ms) => { const s = (Date.now() - ms) / 1000; return s < 60 ? `${s.toFixed(0)} s` : s < 3600 ? `${(s / 60).toFixed(0)} min` : `${(s / 3600).toFixed(1)} h`; };
+
+function renderWallet(d) {
+  const w = d.paperWallet;
+  $("wEq").textContent = eur(w.equity);
+  const pn = $("wPnl"); pn.textContent = `${eur(w.pnl, true)} (${sgn(w.pnlPct)}) desde ${eur(w.startEur)} · hace ${ago(w.started)}`; pn.style.color = w.pnl > 0 ? C.green : w.pnl < 0 ? C.red : C.dim;
+  $("wCash").textContent = eur(w.cash);
+  $("wInv").textContent = eur(w.open.reduce((s, p) => s + p.value, 0)) + ` · ${w.open.length}/${w.maxOpen} posiciones`;
+  $("wClosed").textContent = w.closed ? `${w.closed} · ${w.wins} ganadoras (${pct(w.wins / w.closed)})` : "ninguna todavía";
+  $("wSol").textContent = w.solEur ? w.solEur.toFixed(2) + " €" : "cargando…";
+  $("wRules").textContent = `${eur(w.tradeEur)} por operación · mismas señales, salida y comisiones que el dinero real`;
+  $("bWReset").textContent = `Reiniciar con ${eur(w.startEur)}`;
+  // gráfico del saldo
+  const { ctx, w: W, h: H } = fit($("cvWallet")); ctx.clearRect(0, 0, W, H);
+  const pts = w.curve.map((c) => c.v).concat(w.equity);
+  if (pts.length > 1) {
+    const mn = Math.min(w.startEur, ...pts), mx = Math.max(w.startEur, ...pts), rg = mx - mn || 1;
+    const X = (i) => (i / (pts.length - 1)) * (W - 2), Y = (v) => H - 4 - ((v - mn) / rg) * (H - 10);
+    ctx.setLineDash([3, 3]); ctx.strokeStyle = C.dim; ctx.beginPath(); ctx.moveTo(0, Y(w.startEur)); ctx.lineTo(W, Y(w.startEur)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.beginPath(); pts.forEach((v, i) => (i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))));
+    const col = w.equity >= w.startEur ? C.green : C.red; ctx.strokeStyle = col; ctx.lineWidth = 1.8; ctx.stroke();
+    ctx.lineTo(X(pts.length - 1), H); ctx.lineTo(0, H); ctx.closePath(); ctx.globalAlpha = 0.12; ctx.fillStyle = col; ctx.fill(); ctx.globalAlpha = 1;
+  }
+  // operaciones
+  $("oCount").textContent = `${w.open.length} abiertas · ${w.closed} cerradas`;
+  $("oOpen").innerHTML = w.open.length ? w.open.map((p) => `<div class="op"><span>${coin(p.mint, p.sym)} <span class="c-dim">· ${esc(p.strat.toLowerCase())} · hace ${ago(p.t)}</span></span><span class="big2" style="color:${p.pnl >= 0 ? C.green : C.red}">${eur(p.pnl, true)}</span><span class="c-dim">${eur(p.eur)} → ${eur(p.value)} en juego${p.rem < 1 ? ` (queda ${Math.round(p.rem * 100)}%)` : ""} · precio ${sgn(p.move, 0)}</span><span style="color:${p.ret >= 0 ? C.green : C.red}">${sgn(p.ret)}</span>${p.steps ? `<span class="c-dim" style="grid-column:1/-1">${esc(p.steps)}</span>` : ""}</div>`).join("")
+    : `<div class="c-dim">Sin posiciones abiertas. Compra cuando una señal pasa GUARD y QUANT.</div>`;
+  const K = { buy: ["COMPRA", C.gold], sell: ["VENTA", C.blue], close: ["CIERRE", C.white] };
+  $("oEvents").innerHTML = w.events.length ? w.events.map((e) => `<div><span class="c-dim">${new Date(e.t).toLocaleTimeString()}</span> <span class="ev-k" style="color:${K[e.kind][1]}">${K[e.kind][0]}</span>${coin(e.mint, e.sym)} <span class="c-dim">${esc(e.txt)}</span>${e.kind !== "buy" ? ` <b style="color:${e.kind === "close" ? (e.eur >= 0 ? C.green : C.red) : C.fg}">${e.kind === "close" ? "" : eur(e.eur, true)}</b>` : ""}</div>`).join("")
+    : `<div class="c-dim">Aún no ha operado. Las compras y ventas aparecerán aquí en cuanto ocurran.</div>`;
+}
+
+function renderNow(d) {
+  const a = d.activity, obsS = d.cfg.obsSeconds;
+  $("aCounts").textContent = `${a.observing} observando · ${d.counts.measuring} midiendo · ${a.following} con posición`;
+  $("aObs").innerHTML = d.observing.length ? d.observing.map((o) => {
+    const left = Math.max(0, obsS - o.age), f = Math.min(1, o.age / obsS);
+    return `<div class="obs-row"><span>${coin(o.m, o.s)} <span class="c-dim">· ${o.buys} compras · precio ${sgn(o.chg, 0)}</span></span><span class="c-dim">${!o.seen ? "esperando precio…" : left > 0 ? `decide en ${left.toFixed(0)} s` : "decidiendo…"}</span><span class="pg"><i style="width:${f * 100}%"></i></span></div>`;
+  }).join("") : `<div class="c-dim">Esperando el próximo lanzamiento de pump.fun…</div>`;
+  const x = d.decisions[0];
+  $("aLast").innerHTML = x ? `${ago(x.t)} · <b class="${x.dec === "entry" ? "c-gold" : x.dec === "block" ? "c-red" : "c-amber"}">${x.dec === "entry" ? "SEÑAL" : x.dec === "block" ? "BLOQUEO" : "SALTO"}</b> ${coin(x.mint, x.sym)} · ${esc(x.reason)}` : "Ninguna todavía.";
+  $("aRadar").innerHTML = a.radar ? `${esc(a.radar.txt)} <span class="c-dim">· hace ${ago(a.radar.t)}</span> · <a href="/radar">abrir radar</a>` : "desactivado";
 }
 
 function renderBuilder() {
@@ -311,6 +412,9 @@ async function act(path, label) {
 }
 $("bHalt").addEventListener("click", () => act("/api/halt", "detener"));
 $("bResume").addEventListener("click", () => act("/api/resume", "reanudar"));
+$("bWReset").addEventListener("click", () => { $("wConfirm").hidden = false; });
+$("bWResetNo").addEventListener("click", () => { $("wConfirm").hidden = true; });
+$("bWResetYes").addEventListener("click", async () => { $("wConfirm").hidden = true; await act("/api/wallet-reset", "reiniciar cartera"); });
 $("bHaltSell").addEventListener("click", () => { if (confirm("¿Detener el bot y vender todas las posiciones reales abiertas?")) act("/api/halt-sell", "vender todo"); });
 
 poll(); requestAnimationFrame(orb);

@@ -30,11 +30,14 @@ export class Radar {
     this.status = { binance: "—", gecko: "—", universe: 0 };
     this.geckoQueue = [];
     this.geckoPauseUntil = 0;
+    this.now = { txt: "arrancando", t: Date.now() };
   }
+
+  doing(txt) { this.now = { txt, t: Date.now() }; }
 
   start() {
     const loop = (fn, ms) => { const run = async () => { try { await fn(); } catch (e) { console.log("[RADAR]", e.message); } setTimeout(run, ms); }; run(); };
-    loop(() => this.news.refresh().then(() => this.rescoreAll()), 10 * 60e3);
+    loop(() => { this.doing("leyendo noticias de Cointelegraph, CoinDesk, Decrypt y The Block"); return this.news.refresh().then(() => this.rescoreAll()); }, 10 * 60e3);
     // Primero la lista de monedas y justo después sus gráficos; luego los gráficos de Binance cada 15 min
     loop(() => this.refreshUniverse().then(() => this.refreshBinanceCandles(true)), 30 * 60e3);
     setTimeout(() => loop(() => this.refreshBinanceCandles(), 15 * 60e3), 15 * 60e3);
@@ -107,6 +110,7 @@ export class Radar {
   async refreshBinanceCandles(onlyMissing = false) {
     for (const c of this.coins.values()) {
       if (c.kind !== "cex" || (onlyMissing && c.candles)) continue;
+      this.doing(`analizando el gráfico de ${c.sym} (Binance)`);
       try {
         const k = await getJSON(`${BINANCE}/klines?symbol=${c.pair || c.sym + "USDT"}&interval=1h&limit=200`);
         c.candles = k.map((x) => ({ t: x[0], o: +x[1], h: +x[2], l: +x[3], c: +x[4], v: +x[7] }));
@@ -122,6 +126,7 @@ export class Radar {
       if (Date.now() < this.geckoPauseUntil || !this.geckoQueue.length) { await sleep(2500); continue; }
       const id = this.geckoQueue.shift(), c = this.coins.get(id);
       if (c) {
+        this.doing(`analizando el gráfico de ${c.sym} (${NETS[c.net]})`);
         try {
           const d = await getJSON(`${GECKO}/networks/${c.net}/pools/${c.pool}/ohlcv/hour?aggregate=1&limit=200&currency=usd`);
           c.candles = d.data.attributes.ohlcv_list.map((x) => ({ t: x[0] * 1000, o: +x[1], h: +x[2], l: +x[3], c: +x[4], v: +x[5] })).reverse();
@@ -144,6 +149,7 @@ export class Radar {
       const c = [...this.coins.values()].find((x) => x.kind === "dex" && x.token && (!x.secTried || Date.now() - x.secTried > 6 * 3600e3));
       if (!c) continue;
       c.secTried = Date.now();
+      this.doing(`revisando la seguridad de ${c.sym} (${NETS[c.net]})`);
       try {
         c.sec = await checkSecurity(c);
         if (c.candles) this.rescore(c);

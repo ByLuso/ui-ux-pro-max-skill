@@ -45,6 +45,10 @@ export const cfg = {
     maxDev: num("GUARD_MAX_DEV_SHARE", 0.07),
     maxCreatorPrior: num("GUARD_MAX_CREATOR_PRIOR", 5),
   },
+  // Cartera de prueba (dinero ficticio, en euros)
+  paperStartEur: num("PAPER_START_EUR", 50),
+  paperTradeEur: num("PAPER_TRADE_EUR", 5),
+  paperMaxOpen: num("PAPER_MAX_OPEN", 5),
   maxSolPerTrade: num("MAX_SOL_PER_TRADE", 0.03),
   maxOpen: num("MAX_OPEN", 2),
   dailyLossLimit: num("DAILY_LOSS_LIMIT_SOL", 0.1),
