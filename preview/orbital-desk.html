@@ -1,0 +1,936 @@
+<title>Orbital Launch Desk</title>
+<meta name="description" content="Simulador en modo investigación de un bot de lanzamientos en Solana: seis agentes, un modelo de tres estados que aprende en línea y ejecución en papel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: terminal de operaciones de una sola pantalla — cabecera + ticker, fila de 3 paneles, el Orb a todo lo ancho, agentes + constructor de estado. Diseño oscuro deliberado (un solo tema). */
+:root {
+  --bg: #060a12;
+  --panel: #0a111d;
+  --panel-2: #0d1626;
+  --line: #18243a;
+  --line-2: #22324f;
+  --fg: #cdd7ea;
+  --dim: #6a7894;
+  --faint: #3b4862;
+  --gold: #f2c14e;
+  --blue: #4f8cff;
+  --green: #3ddc84;
+  --red: #ff4d5e;
+  --amber: #ff9f43;
+  --violet: #8f7dff;
+  --white: #eef3ff;
+  --f-display: "Chakra Petch", "Arial Narrow", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+table { font-size: inherit; color: inherit; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--f-mono);
+  font-size: 12px;
+  line-height: 1.45;
+  padding-inline: 16px;
+  padding-block: 12px 28px;
+  font-variant-numeric: tabular-nums;
+}
+.wrap { max-width: 1600px; margin: 0 auto; display: grid; gap: 10px; }
+.lbl { font-family: var(--f-display); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 11px; color: var(--dim); }
+.sub { color: var(--faint); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; min-width: 0; position: relative; }
+.ph { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.ph .t { font-family: var(--f-display); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; color: var(--white); }
+.ph .t::before { content: "◆"; margin-right: 6px; font-size: 9px; vertical-align: 1px; color: var(--dim); }
+.ph .rt { margin-left: auto; }
+.chip { display: inline-block; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 1px 6px; border: 1px solid currentColor; border-radius: 2px; white-space: nowrap; }
+.c-gold { color: var(--gold); } .c-blue { color: var(--blue); } .c-green { color: var(--green); } .c-red { color: var(--red); } .c-amber { color: var(--amber); } .c-violet { color: var(--violet); } .c-dim { color: var(--dim); } .c-white { color: var(--white); }
+
+/* header */
+header.top { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.logo { width: 34px; height: 34px; display: grid; place-items: center; background: var(--blue); color: var(--bg); font-family: var(--f-display); font-weight: 700; border-radius: 3px; font-size: 14px; }
+.brand h1 { margin: 0; font-family: var(--f-display); font-size: 17px; letter-spacing: .14em; color: var(--white); font-weight: 700; }
+.brand h1 span { color: var(--blue); }
+.stats { display: flex; gap: 22px; flex-wrap: wrap; margin-left: auto; align-items: flex-end; }
+.stat .v { font-family: var(--f-display); font-size: 17px; font-weight: 600; color: var(--white); }
+.ctrls { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+button { font: inherit; font-size: 11px; background: var(--panel-2); color: var(--fg); border: 1px solid var(--line-2); border-radius: 2px; padding: 4px 9px; cursor: pointer; letter-spacing: .06em; }
+button:hover { border-color: var(--blue); color: var(--white); }
+button[aria-pressed="true"] { background: var(--blue); color: var(--bg); border-color: var(--blue); }
+button:focus-visible, .dcard:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+/* ticker */
+.ticker { display: flex; align-items: center; overflow: hidden; border: 1px solid var(--line); background: var(--panel); height: 26px; border-radius: 3px; }
+.ticker .live { background: var(--red); color: #fff; font-family: var(--f-display); font-weight: 700; letter-spacing: .12em; font-size: 11px; padding: 0 10px; height: 100%; display: grid; place-items: center; flex: none; }
+.ticker .track { white-space: nowrap; overflow: hidden; flex: 1; mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.ticker .tin { display: inline-block; padding-left: 12px; }
+.ticker .it { margin-right: 26px; }
+.ticker .it b { font-weight: 600; margin-right: 6px; }
+
+/* row 1 */
+.row1 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr) minmax(0, 1fr); gap: 10px; }
+.big { font-family: var(--f-display); font-size: 46px; font-weight: 700; color: var(--green); line-height: 1; letter-spacing: .02em; }
+.kv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.kv .v { font-family: var(--f-display); font-size: 16px; color: var(--white); font-weight: 600; }
+.dist { display: flex; height: 6px; margin-top: 8px; border-radius: 1px; overflow: hidden; gap: 2px; }
+.dist i { display: block; height: 100%; }
+.mini-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.mini-table td { padding: 3px 0; border-top: 1px solid var(--line); }
+.mini-table td:last-child { text-align: right; }
+
+.trace { font-size: 11px; line-height: 1.6; min-height: 182px; overflow-x: auto; }
+.trace div { white-space: nowrap; }
+.trace .tg { display: inline-block; min-width: 40px; }
+.trace .ms { color: var(--faint); display: inline-block; min-width: 62px; }
+.trace .rec { border-left: 2px solid var(--gold); padding-left: 8px; margin: 3px 0; background: color-mix(in srgb, var(--gold) 6%, transparent); }
+
+.curvebox { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 12px; }
+canvas { display: block; width: 100%; }
+.cv-curve { height: 170px; }
+.cv-ent { height: 230px; }
+.cinfo td { padding: 2px 0; font-size: 11px; }
+.cinfo td:nth-child(n+2) { text-align: right; padding-left: 8px; }
+
+/* orb */
+.orbrow { display: grid; grid-template-columns: minmax(200px, 250px) minmax(0, 1fr) minmax(220px, 290px); gap: 14px; position: relative; }
+.obs { display: grid; gap: 14px; align-content: start; position: relative; z-index: 2; }
+.ob { border-left: 2px solid var(--c); padding-left: 8px; }
+.ob .h { display: flex; justify-content: space-between; gap: 6px; }
+.ob .n { font-family: var(--f-display); font-weight: 700; letter-spacing: .1em; color: var(--white); font-size: 11px; text-transform: uppercase; }
+.ob .val { color: var(--c); font-weight: 600; }
+.ob canvas { height: 28px; margin-top: 3px; }
+.orbwrap { position: relative; min-height: 520px; }
+.cv-orb { position: absolute; inset: 0; height: 100%; }
+.cv-links { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.orbcap { position: absolute; left: 0; right: 0; bottom: 0; text-align: center; z-index: 2; }
+.stack { display: grid; gap: 6px; align-content: start; position: relative; z-index: 2; }
+.dcard { border: 1px solid var(--line-2); background: var(--panel-2); padding: 5px 8px 6px; border-radius: 2px; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 0 6px; text-align: left; color: inherit; font: inherit; width: 100%; }
+.dcard .k { font-size: 10px; letter-spacing: .08em; font-weight: 600; }
+.dcard .s { color: var(--white); font-weight: 600; }
+.dcard .r { grid-column: 1 / -1; color: var(--dim); font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
+.dcard .bar { grid-column: 1 / -1; height: 2px; margin-top: 4px; background: var(--line); }
+.dcard .bar i { display: block; height: 100%; }
+.dcard.skip { border-color: color-mix(in srgb, var(--amber) 35%, var(--line)); }
+.dcard.block { border-color: color-mix(in srgb, var(--red) 45%, var(--line)); background: color-mix(in srgb, var(--red) 7%, var(--panel-2)); }
+.dcard.entry { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 9%, var(--panel-2)); }
+.dcard.sel { outline: 1px solid var(--white); }
+
+/* row 3 */
+.row3 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.agents { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 6px; }
+.ag { text-align: center; }
+.ag .ic { aspect-ratio: 1; max-width: 76px; margin: 0 auto 6px; border: 1px solid var(--c); display: grid; place-items: center; background: color-mix(in srgb, var(--c) 8%, transparent); border-radius: 2px; }
+.ag .ic svg { width: 62%; height: 62%; }
+.ag.pulse .ic { box-shadow: 0 0 0 1px var(--c), 0 0 14px color-mix(in srgb, var(--c) 60%, transparent); }
+.ag .code { font-size: 9px; color: var(--c); letter-spacing: .1em; }
+.ag .nm { font-family: var(--f-display); font-weight: 700; letter-spacing: .08em; color: var(--white); font-size: 11px; }
+.ag .m { font-family: var(--f-display); font-size: 15px; color: var(--c); font-weight: 600; }
+.ag .u { font-size: 9px; color: var(--faint); text-transform: uppercase; letter-spacing: .06em; }
+.log { margin-top: 10px; font-size: 11px; line-height: 1.6; overflow-x: auto; }
+.log div { white-space: nowrap; }
+.tag { display: inline-block; font-size: 9px; padding: 0 4px; border: 1px solid currentColor; margin: 0 6px; letter-spacing: .06em; border-radius: 2px; }
+
+.sb-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 12px; }
+.sig td { padding: 2px 0; font-size: 11px; white-space: nowrap; }
+.sig td:last-child { text-align: right; padding-left: 8px; color: var(--white); }
+.cv-int { height: 150px; }
+.tri3 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); gap: 12px; margin-top: 10px; }
+.pb { margin-bottom: 8px; }
+.pb .h { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; }
+.pb .tr { height: 7px; background: var(--line); margin-top: 3px; position: relative; }
+.pb .tr i { display: block; height: 100%; }
+.pb .tr b { position: absolute; top: -3px; width: 2px; height: 13px; background: var(--white); }
+.cv-tri { height: 140px; }
+.verdict { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); }
+
+.bottom { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.best td, .pos td { padding: 3px 4px; border-top: 1px solid var(--line); font-size: 11px; white-space: nowrap; }
+.best, .pos { width: 100%; border-collapse: collapse; }
+.tablewrap { overflow-x: auto; }
+.note { color: var(--dim); font-size: 11px; max-width: 100ch; }
+.note b { color: var(--fg); }
+
+@media (max-width: 1150px) {
+  .row1 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .row1 > :nth-child(2) { grid-column: 1 / -1; order: 3; }
+  .row3, .bottom { grid-template-columns: minmax(0, 1fr); }
+  .orbrow { grid-template-columns: minmax(180px, 220px) minmax(0, 1fr); }
+  .stack { grid-column: 1 / -1; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+}
+@media (max-width: 720px) {
+  .row1, .curvebox, .sb-grid { grid-template-columns: minmax(0, 1fr); }
+  .orbrow { grid-template-columns: minmax(0, 1fr); }
+  .obs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cv-links { display: none; }
+  .orbwrap { min-height: 360px; order: -1; }
+  .agents { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tri3 { grid-template-columns: minmax(0, 1fr); }
+  .stats { margin-left: 0; gap: 14px; }
+  .big { font-size: 38px; }
+}
+@media (prefers-reduced-motion: reduce) { .ag.pulse .ic { box-shadow: none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">OR</div>
+      <div>
+        <div class="sub">señales → estados de probabilidad → colapso · seis agentes · <span class="c-blue" id="hdrStates">0 estados</span></div>
+        <h1><span>ORBITAL</span> // LAUNCH DESK</h1>
+        <div class="sub">pump.fun / pumpswap · +60% primero · −30% primero · ninguno en 60 min</div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="sub">lanzamientos</div><div class="v" id="stLaunch">0</div></div>
+      <div class="stat"><div class="sub">bloqueados</div><div class="v" id="stBlocked">0</div></div>
+      <div class="stat"><div class="sub">señales de trade</div><div class="v" id="stSignals">0</div></div>
+      <div class="stat"><div class="sub">bankroll papel</div><div class="v" id="stBank">0</div></div>
+      <div class="stat"><div class="sub">reloj sim</div><div class="v" id="stClock">00:00:00</div></div>
+    </div>
+    <div class="ctrls" role="group" aria-label="Velocidad de simulación">
+      <button id="bPause" type="button" aria-pressed="false">Pausa</button>
+      <button type="button" data-speed="0.5" aria-pressed="false">0.5×</button>
+      <button type="button" data-speed="1" aria-pressed="true">1×</button>
+      <button type="button" data-speed="4" aria-pressed="false">4×</button>
+      <button id="bReset" type="button">Reiniciar modelo</button>
+    </div>
+  </header>
+
+  <div class="ticker" aria-label="Feed en vivo">
+    <div class="live">EN VIVO</div>
+    <div class="track"><div class="tin" id="ticker"></div></div>
+  </div>
+
+  <section class="row1">
+    <div class="panel">
+      <div class="ph"><span class="t">Modelo central</span><span class="chip c-green" id="mVer">v0.0</span><span class="rt chip c-blue">investigación</span></div>
+      <div class="sub">etiquetas medidas</div>
+      <div class="big" id="mLabels">0</div>
+      <div class="dist" id="mDist"></div>
+      <div class="sub" id="mDistTxt" style="margin-top:4px"></div>
+      <div class="kv">
+        <div><div class="sub">eventos/s</div><div class="v" id="mEps">0</div></div>
+        <div><div class="sub">veto guard</div><div class="v c-red" id="mVeto">0%</div></div>
+        <div><div class="sub">abiertas</div><div class="v" id="mOpen">0 / 6</div></div>
+      </div>
+      <table class="mini-table">
+        <tr><td class="c-dim">Log-loss modelo (últ. 300)</td><td id="mLL">—</td></tr>
+        <tr><td class="c-dim">Log-loss solo prior</td><td id="mLL0">—</td></tr>
+        <tr><td class="c-dim">Mejora de información</td><td id="mGain">—</td></tr>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="ph"><span class="t">Vida de una decisión</span><span class="sub">traza del orb</span><span class="rt chip c-blue" id="trCounts">entradas 0 · bloqueos 0 · saltos 0</span></div>
+      <div class="trace" id="trace"></div>
+      <div class="ph" style="margin-top:10px"><span class="t">Dónde cae una compra en la curva</span><span class="sub">x · y = k</span><span class="rt chip c-red" id="cvTag">—</span></div>
+      <div class="curvebox">
+        <canvas class="cv-curve" id="cvCurve" aria-label="Curva de vinculación con punto de entrada, take-profit y stop-loss"></canvas>
+        <div style="min-width:0">
+          <div class="sub">market cap · <span id="cvMc" class="c-white">—</span></div>
+          <table class="cinfo" style="width:100%;margin-top:4px" id="cvTable"></table>
+          <div class="sub" style="margin-top:6px;text-transform:none;letter-spacing:0" id="cvRes"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="ph"><span class="t">Mapa de entrelazamiento</span><span class="rt chip c-red" id="entCount">0 enlazados</span></div>
+      <div class="sub" id="entSub">cartographer · fondeadores compartidos</div>
+      <canvas class="cv-ent" id="cvEnt" aria-label="Grupos de wallets conectadas a un mismo fondeador"></canvas>
+      <div class="sub" id="entFoot" style="margin-top:6px"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="ph"><span class="t">El Orb</span><span class="sub">señales → estados de probabilidad → colapso → seis agentes</span><span class="rt sub c-blue" id="orbSub"></span></div>
+    <div class="orbrow" id="orbRow">
+      <canvas class="cv-links" id="cvLinks"></canvas>
+      <div class="obs" id="obs"></div>
+      <div class="orbwrap" id="orbWrap">
+        <canvas class="cv-orb" id="cvOrb" aria-label="Orb: cada punto es un lanzamiento pendiente; la longitud del rayo es la probabilidad de +60% primero"></canvas>
+        <div class="orbcap sub"><span class="c-gold" id="orbCap">↺ resultados medidos</span> · observaciones entran · decisiones salen → a los seis agentes</div>
+      </div>
+      <div class="stack" id="stack" aria-label="Pila de decisiones">
+        <div><div class="lbl" style="color:var(--white)">Pila de decisiones</div><div class="sub">colapsados · oro entrada · ámbar salto · rojo bloqueo</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="row3">
+    <div class="panel">
+      <div class="ph"><span class="t">Seis agentes</span><span class="sub">observaciones entran · decisiones salen</span><span class="rt chip c-gold">modo investigación</span></div>
+      <div class="agents" id="agents"></div>
+      <div class="log" id="alog"></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">Constructor de estado</span><span class="sub">un lanzamiento · siete señales · tres resultados</span><span class="rt chip c-amber" id="sbTag">—</span></div>
+      <div class="sb-grid">
+        <table class="sig" id="sbSig"></table>
+        <div style="min-width:0">
+          <div class="sub">interferencia · cada señal empuja P(+60% primero) · <span class="c-white" id="sbPrior"></span></div>
+          <canvas class="cv-int" id="cvInt" aria-label="Contribución de cada señal a la probabilidad de take-profit"></canvas>
+        </div>
+      </div>
+      <div class="tri3">
+        <div><div class="sub" style="margin-bottom:6px">estado · suma 1</div><div id="sbState"></div></div>
+        <div><div class="sub">espacio de estados</div><canvas class="cv-tri" id="cvTri" aria-label="Símplex de tres resultados"></canvas></div>
+        <div><div class="sub" style="margin-bottom:6px">medido · últimos <span id="calN">0</span> (real · predicho)</div><div id="sbMeas"></div></div>
+      </div>
+      <div class="verdict" id="sbVerdict"></div>
+    </div>
+  </section>
+
+  <section class="bottom">
+    <div class="panel">
+      <div class="ph"><span class="t">Executor · posiciones abiertas</span><span class="sub">tp +60% · sl −30% · tiempo 60 min</span></div>
+      <div class="tablewrap"><table class="pos" id="posT"></table></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">Operaciones más rentables</span><span class="sub">papel · SOL a $150 (supuesto)</span></div>
+      <div class="tablewrap"><table class="best" id="bestT"></table></div>
+    </div>
+  </section>
+
+  <p class="note"><b>Modo investigación.</b> Todo lo que ves es una simulación: los lanzamientos, wallets y resultados se generan en el navegador a partir de un mundo oculto, y el modelo aprende de ellos en línea (regresión softmax de tres clases, actualizada con cada etiqueta medida). No hay conexión a Solana, no se firman transacciones y nada aquí es consejo financiero. La mayoría de los lanzamientos reales en pump.fun pierden valor.</p>
+</div>
+
+<script>
+(() => {
+"use strict";
+// ---------- utilidades ----------
+const $ = (id) => document.getElementById(id);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const rnd = Math.random;
+const randn = () => { let u = 0, v = 0; while (!u) u = rnd(); while (!v) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+const pick = (a) => a[(rnd() * a.length) | 0];
+const fmt = (n) => Math.round(n).toLocaleString("en-US");
+const pct = (x, d = 0) => (x * 100).toFixed(d) + "%";
+const sgn = (x, d = 1) => (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(d) + "%";
+const softmax = (z) => { const m = Math.max(...z); const e = z.map((v) => Math.exp(v - m)); const s = e.reduce((a, b) => a + b, 0); return e.map((v) => v / s); };
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C = { gold: css("--gold"), blue: css("--blue"), green: css("--green"), red: css("--red"), amber: css("--amber"), violet: css("--violet"), white: css("--white"), dim: css("--dim"), faint: css("--faint"), line: css("--line"), line2: css("--line-2"), fg: css("--fg"), bg: css("--bg") };
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function fitCanvas(cv) {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+  const w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
+  if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+  const ctx = cv.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: r.width, h: r.height };
+}
+
+// ---------- constantes de mercado ----------
+const SOL_USD = 150;
+const V_SOL0 = 30, V_TOK0 = 1073000000, K = V_SOL0 * V_TOK0, GRAD_SOL = 85, SUPPLY = 1e9;
+const FEE = 0.01, PRIO_SOL = 0.0005;
+const TP = 0, SL = 1, TM = 2;
+const OUT = ["TP", "SL", "TIEMPO"];
+const OUTC = [C.green, C.red, C.amber];
+const EV_MIN = 0.03, MAX_OPEN = 6;
+const SIM_MIN_PER_SEC = 2;    // a 1×, 60 min simulados = 30 s reales
+const LAUNCH_PER_MIN = 24;
+
+const SIGS = [
+  { k: "fol", ag: "JDG", c: C.green, name: "Wallets seguidas dentro", f: (v) => v.toFixed(0) },
+  { k: "nbm", ag: "SCT", c: C.blue, name: "Compradores nuevos / min", f: (v) => "+" + v.toFixed(0) },
+  { k: "bsr", ag: "SCT", c: C.blue, name: "Compras ÷ ventas", f: (v) => v.toFixed(1) + "×" },
+  { k: "frs", ag: "MAP", c: C.violet, name: "Wallets frescas", f: (v) => pct(v) },
+  { k: "fun", ag: "MAP", c: C.violet, name: "Compradores de un funder", f: (v) => pct(v) },
+  { k: "bnd", ag: "MAP", c: C.violet, name: "Bundle en slot de lanzamiento", f: (v) => pct(v) },
+  { k: "cur", ag: "SCT", c: C.blue, name: "Posición en la curva", f: (v) => pct(v) },
+];
+const NF = SIGS.length + 1; // + sesgo
+
+// normalización fija de cada señal a ~[-1.5, 1.5]
+function featurize(L) {
+  return [
+    (L.fol - 1) / 1.2,
+    (L.nbm - 14) / 10,
+    (Math.log(L.bsr)) / 0.5,
+    (L.frs - 0.35) / 0.18,
+    (L.fun - 0.15) / 0.13,
+    (L.bnd - 0.12) / 0.1,
+    (L.cur - 0.3) / 0.22,
+    1,
+  ];
+}
+
+// ---------- el mundo oculto (verdad) ----------
+const world = { regime: 0, t: 0 };
+const TRUE_W = [
+  // fol, nbm, bsr, frs, fun, bnd, cur, bias
+  [0.85, 0.7, 0.55, -0.45, -0.6, -0.5, -0.3, -1.25],
+  [-0.35, -0.2, -0.5, 0.45, 0.75, 0.65, 0.35, 0.15],
+  [-0.2, -0.55, 0.0, 0.0, 0.0, 0.0, -0.25, 0.0],
+];
+function trueProbs(x, L) {
+  const z = TRUE_W.map((w) => w.reduce((s, wi, i) => s + wi * x[i], 0));
+  z[TP] += world.regime * 0.6 - L.creator * 0.12;
+  z[SL] += -world.regime * 0.3 + L.creator * 0.18 + (L.top10 - 0.25) * 2;
+  return softmax(z);
+}
+
+// ---------- modelo (aprendizaje en línea) ----------
+const model = { W: null, labels: 0, ver: 0, counts: [0, 0, 0], hist: [] };
+function resetModel() {
+  model.W = [0, 1, 2].map(() => new Array(NF).fill(0));
+  model.W[TP][NF - 1] = Math.log(0.15); model.W[SL][NF - 1] = Math.log(0.45); model.W[TM][NF - 1] = Math.log(0.4);
+  model.labels = 0; model.ver = 0; model.counts = [0, 0, 0]; model.hist = [];
+}
+function predict(x) { return softmax(model.W.map((w) => w.reduce((s, wi, i) => s + wi * x[i], 0))); }
+function learn(x, y, pPred) {
+  const p = predict(x), lr = 0.05 / (1 + model.labels / 4000), l2 = 0.0005;
+  for (let c = 0; c < 3; c++) {
+    const g = (c === y ? 1 : 0) - p[c];
+    for (let i = 0; i < NF; i++) model.W[c][i] += lr * (g * x[i] - (i < NF - 1 ? l2 * model.W[c][i] : 0));
+  }
+  model.labels++; model.counts[y]++;
+  const tot = model.counts.reduce((a, b) => a + b, 0) + 3;
+  const prior = model.counts.map((n) => (n + 1) / tot);
+  model.hist.push({ y, p: pPred, prior: prior[y] });
+  if (model.hist.length > 300) model.hist.shift();
+  model.ver = Math.floor(model.labels / 250);
+}
+
+// ---------- estado de la simulación ----------
+const S = { speed: 1, paused: false, simMin: 0, launches: 0, blocked: 0, signals: 0, entries: 0, skips: 0, passed: 0, pending: [], positions: [], closed: [], bank: 25, events: 0, epsWin: [], stack: [], ticker: [], log: [], selected: null, lastEntry: null, clusters: [], obs: {}, lastStackRender: 0 };
+const NAMES_A = ["BONK", "PEPE", "MOON", "FLUP", "SNA", "TURB", "WEN", "DOG", "TOAD", "RIZ", "ZAP", "FROG", "MOG", "LUX", "NEB", "BLOZ", "GRUN", "HOP", "KIT", "SHRM", "MUN", "VOLP", "TOK", "CHAD", "GOOB"];
+const NAMES_B = ["IT", "UP", "AX", "OWL", "INU", "APE", "JET", "LORD", "PUP", "CAT", "DOG", "NUT", "MAX", "BIT", "RAT", "HAT", "ZILLA", "BOY", "ORB"];
+const tick = () => "$" + pick(NAMES_A) + pick(NAMES_B);
+
+function newLaunch(simMin) {
+  const hot = rnd() < 0.18 + world.regime * 0.06;
+  const L = {
+    id: ++S.launches, sym: tick(), t0: simMin,
+    fol: Math.max(0, Math.round((hot ? 1.6 : 0.4) + randn() * 1.1)),
+    nbm: Math.max(0, (hot ? 22 : 10) + randn() * 8),
+    bsr: Math.exp(randn() * 0.45 + (hot ? 0.25 : -0.05)),
+    frs: clamp(0.35 + randn() * 0.17, 0.02, 0.95),
+    fun: clamp(Math.abs(0.12 + randn() * 0.13) * (rnd() < 0.12 ? 2.6 : 1), 0, 0.9),
+    bnd: clamp(Math.abs(0.1 + randn() * 0.1) * (rnd() < 0.1 ? 2.8 : 1), 0, 0.85),
+    cur: clamp(0.28 + randn() * 0.2, 0.01, 0.97),
+    top10: clamp(0.22 + Math.abs(randn()) * 0.1, 0.1, 0.8),
+    snipers: clamp(Math.abs(randn()) * 0.07, 0, 0.5),
+    creator: Math.max(0, Math.round(Math.abs(randn()) * 2.4 - 0.6 + (rnd() < 0.04 ? 6 : 0))),
+    ang: [rnd() * 2 - 1, rnd() * Math.PI * 2],
+  };
+  L.x = featurize(L);
+  L.pTrue = trueProbs(L.x, L);
+  const u = rnd(); L.out = u < L.pTrue[0] ? TP : u < L.pTrue[0] + L.pTrue[1] ? SL : TM;
+  L.tHit = L.out === TM ? 60 : clamp((L.out === TP ? 4 : 2) - Math.log(rnd()) * (L.out === TP ? 13 : 10), 1, 59);
+  L.timeRet = L.out === TM ? clamp(randn() * 0.18 - 0.06, -0.29, 0.55) : 0;
+  L.p = predict(L.x);
+  return L;
+}
+
+// ---------- agentes ----------
+function guard(L) {
+  if (L.fun > 0.4) return `${pct(L.fun)} de compradores comparten un funder`;
+  if (L.bnd > 0.3) return `bundle de ${pct(L.bnd)} en el slot de lanzamiento`;
+  if (L.top10 > 0.42) return `top-10 holders con ${pct(L.top10)}`;
+  if (L.creator >= 5) return `creador serial · ${L.creator} lanzamientos previos`;
+  if (L.snipers > 0.2) return `snipers aún con ${pct(L.snipers)}`;
+  return null;
+}
+function curveAt(realSol) { const vs = V_SOL0 + realSol; return { vs, vt: K / vs, price: vs / (K / vs) }; }
+function quant(L) {
+  const p = L.p;
+  const realSol = L.cur * GRAD_SOL;
+  const kelly = clamp((p[TP] * 0.6 - p[SL] * 0.3) / 0.6, 0, 0.25);
+  const size = clamp(+(0.1 + kelly * 1.1).toFixed(2), 0.1, 0.4);
+  const c0 = curveAt(realSol), net = size * (1 - FEE), c1 = curveAt(realSol + net);
+  const tokens = c0.vt - c1.vt;
+  const avgPx = size / tokens, impact = avgPx / c0.price - 1;
+  const tip = 0.0001 + rnd() * 0.0009;
+  const costs = FEE * 2 + impact * 1.6 + (PRIO_SOL * 2 + tip) / size;
+  const gross = p[TP] * 0.6 + p[SL] * -0.3 + p[TM] * -0.05;
+  return { size, tokens, impact, tip, costs, gross, ev: gross - costs, realSol, avgPx, mcap: c0.price * SUPPLY * SOL_USD };
+}
+
+function process(L) {
+  S.events += 6;
+  const reason = guard(L);
+  L.q = quant(L);
+  if (reason) {
+    L.dec = "block"; L.reason = reason; S.blocked++;
+    addLog("GRD", C.red, `bloqueado ${L.sym} · ${reason}`, 0.05);
+    if (rnd() < 0.15) pushStack(L);
+    return;
+  }
+  S.passed++; S.pending.push(L);
+  if (L.q.ev < EV_MIN) {
+    L.dec = "skip"; L.reason = `EV ${sgn(L.q.ev)} tras costes · bajo +3%`; S.skips++;
+    if (L.q.ev > -0.08) { addLog("QNT", C.amber, `salto ${L.sym} · EV ${sgn(L.q.ev)} tras costes`, 0.03); if (rnd() < 0.5) pushStack(L); }
+    return;
+  }
+  S.signals++;
+  if (S.positions.length >= MAX_OPEN) { L.dec = "skip"; L.reason = `libro lleno · ${MAX_OPEN}/${MAX_OPEN} abiertas`; S.skips++; if (rnd() < 0.3) pushStack(L); return; }
+  L.dec = "entry"; L.reason = "pasó quant + guard → al executor"; S.entries++;
+  const pos = { L, size: L.q.size, t0: S.simMin, slot: 371500000 + S.launches * 3 };
+  S.positions.push(pos); S.bank -= pos.size;
+  S.lastEntry = L; S.selected = L;
+  addLog("QNT", C.gold, `puntuó un setup ${L.sym} · EV ${sgn(L.q.ev)} · pasa`, 1);
+  addLog("EXE", C.gold, `bundle Jito aterrizó · ${pos.size} SOL en ${L.sym}`, 1);
+  addTicker("ENTRADA", C.gold, `${L.sym} · EV neto ${sgn(L.q.ev)} · ${pos.size} SOL`);
+  pushStack(L); renderTrace(L);
+}
+
+function resolve(L) {
+  learn(L.x, L.out, L.p[L.out]);
+  if (rnd() < 0.08) addLog("SCT", C.blue, `etiquetado ${L.sym} · ${OUT[L.out]}`, 0.2);
+  if (rnd() < 0.15) addTicker("ETIQUETA", C.blue, `${L.sym} ${L.out === TP ? "TP" : L.out === SL ? "SL" : "60 MIN"}`);
+}
+function closePos(pos) {
+  const L = pos.L;
+  const gross = L.out === TP ? 0.6 : L.out === SL ? -0.3 - L.q.impact * 0.5 - 0.02 * rnd() : L.timeRet;
+  const ret = gross - L.q.costs;
+  const back = pos.size * (1 + ret);
+  S.bank += back;
+  const cl = { sym: L.sym, size: pos.size, ret, pnl: back - pos.size, out: L.out, min: L.tHit };
+  S.closed.push(cl);
+  addLog("EXE", ret >= 0 ? C.green : C.red, `cerrado ${L.sym} · ${OUT[L.out]} en ${L.tHit.toFixed(0)} min · ${sgn(ret)}`, 1);
+  addTicker(ret >= 0 ? "TP" : "SL", ret >= 0 ? C.green : C.red, `${L.sym} ${sgn(ret)}`);
+}
+
+// ---------- registros ----------
+function simClockStr(m) { const s = Math.floor(m * 60); const h = Math.floor(s / 3600) % 24; return [h, Math.floor(s / 60) % 60, s % 60].map((v) => String(v).padStart(2, "0")).join(":"); }
+function addLog(tag, col, msg, prob) {
+  if (rnd() > prob) return;
+  S.log.unshift({ t: simClockStr(S.simMin + 9 * 60), tag, col, msg });
+  if (S.log.length > 8) S.log.pop();
+  const ag = { SCT: 0, MAP: 1, JDG: 2, QNT: 3, GRD: 4, EXE: 5 }[tag];
+  if (ag != null) agentPulse[ag] = 1;
+}
+function addTicker(k, col, msg) { S.ticker.unshift({ k, col, msg }); if (S.ticker.length > 14) S.ticker.pop(); }
+function pushStack(L) { S.stack.unshift(L); if (S.stack.length > 30) S.stack.pop(); }
+
+// ---------- observables de mercado ----------
+const OBS = [
+  { k: "rate", n: "Tasa de lanzamientos", s: "tokens nuevos / min", c: C.blue, ag: "SCT", f: (v) => v.toFixed(1) + "/m" },
+  { k: "inflow", n: "Entrada a curvas", s: "SOL a curvas / min", c: C.gold, ag: "SCT", f: (v) => v.toFixed(0) + " SOL" },
+  { k: "flow", n: "Flujo seguido", s: "compras seguidas · 1h", c: C.green, ag: "JDG", f: (v) => v.toFixed(0) },
+  { k: "bund", n: "Cuota en bundle", s: "comprado en slot inicial", c: C.red, ag: "MAP", f: (v) => pct(v, 1) },
+  { k: "crea", n: "Riesgo de creador", s: "de creadores seriales", c: C.amber, ag: "MAP", f: (v) => pct(v) },
+  { k: "grad", n: "Tasa de graduación", s: "curvas completadas · 1h", c: C.violet, ag: "SCT", f: (v) => pct(v, 2) },
+  { k: "phase", n: "Fase de mercado", s: "sobre apertura · 24h", c: C.white, ag: "SCT", f: (v) => pct(v, 1) },
+];
+const obsAcc = { n: 0, sol: 0, fol: 0, bnd: 0, crea: 0 };
+OBS.forEach((o) => (S.obs[o.k] = []));
+function sampleObs() {
+  const n = Math.max(1, obsAcc.n), mins = 1;
+  const vals = {
+    rate: obsAcc.n / mins,
+    inflow: obsAcc.sol / mins,
+    flow: obsAcc.fol,
+    bund: obsAcc.bnd / n,
+    crea: obsAcc.crea / n,
+    grad: clamp(0.007 + world.regime * 0.003 + randn() * 0.0006, 0.001, 0.03),
+    phase: clamp(0.09 + world.regime * 0.05 + randn() * 0.004, -0.2, 0.4),
+  };
+  OBS.forEach((o) => { const a = S.obs[o.k]; a.push(vals[o.k]); if (a.length > 50) a.shift(); });
+  obsAcc.n = obsAcc.sol = obsAcc.fol = obsAcc.bnd = obsAcc.crea = 0;
+}
+
+// ---------- paso de simulación ----------
+let launchAcc = 0, obsTimer = 0;
+function step(dMin) {
+  S.simMin += dMin;
+  world.regime = clamp(world.regime + randn() * 0.02 * Math.sqrt(dMin) - world.regime * 0.002 * dMin, -1, 1);
+  launchAcc += dMin * LAUNCH_PER_MIN * (1 + world.regime * 0.25);
+  while (launchAcc >= 1) {
+    launchAcc--;
+    const L = newLaunch(S.simMin);
+    obsAcc.n++; obsAcc.sol += L.cur * GRAD_SOL * 0.25 + L.nbm * 0.4; obsAcc.fol += L.fol; obsAcc.bnd += L.bnd; obsAcc.crea += L.creator >= 3 ? 1 : 0;
+    process(L);
+    if (rnd() < 0.05) addTicker("CURVA", C.gold, `${L.sym} ${pct(L.cur)}`);
+    if (rnd() < 0.03) addLog("MAP", C.violet, `enlazó ${Math.round(L.fun * 40) + 2} compradores de ${L.sym} a un funder`, 1);
+    if (L.fun > 0.2 || L.bnd > 0.2) addCluster(L);
+  }
+  // colapsos
+  const now = S.simMin;
+  for (let i = S.pending.length - 1; i >= 0; i--) {
+    const L = S.pending[i];
+    if (now - L.t0 >= Math.max(L.tHit, L.out === TM ? 60 : L.tHit)) { resolve(L); L.done = now; S.pending.splice(i, 1); fading.push(L); }
+    else if (now - L.t0 > 1) L.p = predict(L.x); // el estado se actualiza con el modelo vigente
+  }
+  for (let i = S.positions.length - 1; i >= 0; i--) {
+    const P = S.positions[i];
+    if (now - P.t0 >= P.L.tHit) { closePos(P); S.positions.splice(i, 1); }
+  }
+  obsTimer += dMin; if (obsTimer >= 1) { obsTimer = 0; sampleObs(); }
+}
+const fading = [];
+
+function addCluster(L) {
+  const n = 3 + Math.round((L.fun + L.bnd) * 22);
+  const nodes = []; for (let i = 0; i < n; i++) nodes.push({ a: rnd() * Math.PI * 2, r: 0.35 + rnd() * 0.65 });
+  S.clusters.unshift({ sym: L.sym, n, nodes, born: performance.now(), pos: [rnd() * 2 - 1, rnd() * 2 - 1], fun: L.fun, blocked: L.dec === "block" });
+  if (S.clusters.length > 14) S.clusters.pop();
+}
+
+// ---------- arranque con historia ----------
+function bootstrap() {
+  resetModel();
+  for (let i = 0; i < 900; i++) { const L = newLaunch(0); if (!guard(L)) learn(L.x, L.out, predict(L.x)[L.out]); }
+  S.launches = 0;
+  for (let i = 0; i < 50; i++) sampleObsFake();
+  for (let m = 0; m < 70; m += 0.25) step(0.25);
+}
+function sampleObsFake() { world.regime = clamp(world.regime + randn() * 0.06, -1, 1); obsAcc.n = LAUNCH_PER_MIN + randn() * 1.2; obsAcc.sol = 150 + randn() * 18; obsAcc.fol = Math.max(0, 4 + randn() * 2); obsAcc.bnd = (0.18 + randn() * 0.02) * obsAcc.n; obsAcc.crea = (0.3 + randn() * 0.04) * obsAcc.n; sampleObs(); }
+
+// ---------- render: cabecera, modelo, ticker ----------
+function renderTop() {
+  $("stLaunch").textContent = fmt(S.launches);
+  $("stBlocked").textContent = fmt(S.blocked);
+  $("stSignals").textContent = fmt(S.signals);
+  const eq = S.bank + S.positions.reduce((s, p) => s + p.size, 0);
+  const b = $("stBank"); b.textContent = eq.toFixed(2) + " SOL"; b.style.color = eq >= 25 ? C.green : C.red;
+  $("stClock").textContent = simClockStr(S.simMin + 9 * 60);
+  $("hdrStates").textContent = fmt(S.pending.length) + " estados";
+  $("mLabels").textContent = fmt(model.labels);
+  $("mVer").textContent = "v0." + model.ver;
+  const tot = model.counts.reduce((a, b) => a + b, 0) || 1;
+  $("mDist").innerHTML = model.counts.map((n, i) => `<i style="width:${(n / tot) * 100}%;background:${OUTC[i]}"></i>`).join("");
+  $("mDistTxt").innerHTML = model.counts.map((n, i) => `<span style="color:${OUTC[i]}">${OUT[i]} ${pct(n / tot)}</span>`).join(" · ");
+  const now = performance.now(); S.epsWin.push([now, S.events]); while (S.epsWin.length > 2 && now - S.epsWin[0][0] > 3000) S.epsWin.shift();
+  const [t0, e0] = S.epsWin[0]; $("mEps").textContent = now - t0 > 200 ? fmt(((S.events - e0) / (now - t0)) * 1000) : "0";
+  $("mVeto").textContent = pct(S.blocked / Math.max(1, S.launches));
+  $("mOpen").textContent = `${S.positions.length} / ${MAX_OPEN}`;
+  if (model.hist.length > 20) {
+    const ll = -model.hist.reduce((s, h) => s + Math.log(Math.max(h.p, 1e-6)), 0) / model.hist.length;
+    const ll0 = -model.hist.reduce((s, h) => s + Math.log(h.prior), 0) / model.hist.length;
+    $("mLL").textContent = ll.toFixed(3); $("mLL0").textContent = ll0.toFixed(3);
+    const g = $("mGain"); g.textContent = sgn((ll0 - ll) / ll0); g.style.color = ll < ll0 ? C.green : C.red;
+  }
+  $("trCounts").textContent = `entradas ${S.entries} · bloqueos ${S.blocked} · saltos ${S.skips}`;
+  $("orbSub").textContent = `${fmt(S.pending.length)} estados · cada uno un lanzamiento · amplitud = P(+60% primero) · ${S.pending.filter((L) => Math.max(...L.p) > 0.55 && 60 - (S.simMin - L.t0) < 15).length} cerca del colapso`;
+  $("orbCap").textContent = `↺ resultados medidos · ${fmt(model.labels)} etiquetas`;
+}
+let tickerX = 0, tickerW = 0;
+function renderTicker(dt) {
+  const el = $("ticker");
+  if (S.ticker.length && (tickerX <= -tickerW / 2 || !el.innerHTML)) {
+    const items = S.ticker.map((t) => `<span class="it"><b style="color:${t.col}">${t.k}</b>${t.msg}</span>`).join("");
+    el.innerHTML = items + items; tickerW = el.scrollWidth; tickerX = 0;
+  }
+  if (!reduced) tickerX -= dt * 0.05;
+  if (tickerX <= -tickerW / 2) tickerX = -tickerW / 2;
+  el.style.transform = `translateX(${tickerX}px)`;
+}
+
+// ---------- traza de decisión ----------
+function renderTrace(L) {
+  if (!L) return;
+  const q = L.q, p = L.p, ms = (a) => `<span class="ms">+${a}ms</span>`;
+  const tg = (t, c) => `<span class="tg" style="color:${c}">[${t}]</span>`;
+  let t = 0; const nx = (a, b) => (t += a + ((rnd() * b) | 0));
+  const slot = 371500000 + L.id * 3;
+  const lines = [
+    `<div class="c-dim">↳ disparador: wallet seguida compró ${(0.4 + rnd() * 2.6).toFixed(1)} SOL en ${L.sym} · curva ${pct(L.cur)}</div>`,
+    `<div>${tg("SCT", C.blue)}${ms(nx(4, 6))} compra detectada · slot ${fmt(slot)} · ${L.nbm.toFixed(0)} compradores/min</div>`,
+    `<div>${tg("MAP", C.violet)}${ms(nx(90, 60))} ${Math.round(L.fun * 40)} enlazados a un funder · bundle ${pct(L.bnd)}</div>`,
+    `<div>${tg("JDG", C.green)}${ms(nx(70, 50))} wallet seguida · P(edge) ${(0.7 + rnd() * 0.28).toFixed(2)} · ${L.fol} en esta moneda</div>`,
+    `<div>${tg("ORB", C.gold)}${ms(nx(8, 6))} estado · TP ${p[TP].toFixed(2)} · stop ${p[SL].toFixed(2)} · 60 min ${p[TM].toFixed(2)}</div>`,
+    `<div>${tg("QNT", C.amber)}${ms(nx(30, 20))} EV neto ${sgn(q.ev)} · tamaño ${q.size} SOL · ${(q.tokens / 1e6).toFixed(1)}M tokens · impacto ${pct(q.impact, 2)}</div>`,
+    `<div>${tg("GRD", C.red)}${ms(nx(25, 20))} PASA · 0 alertas · bundle ${pct(L.bnd)} · snipers ${pct(L.snipers)} · top10 ${pct(L.top10)}</div>`,
+    `<div>${tg("EXE", C.white)}${ms(nx(900, 400))} bundle Jito aterrizó · slot +${1 + ((rnd() * 3) | 0)} · propina ${q.tip.toFixed(4)} SOL</div>`,
+    `<div class="rec"><span class="c-gold">REGISTRO DE DECISIÓN · ENTRADA</span> <span class="c-dim">pump.fun · curva ${pct(L.cur)} · mcap $${(q.mcap / 1000).toFixed(1)}K</span><br><span class="c-dim">salidas +60% · −30% · 60 min · tamaño ${q.size} SOL · modo investigación</span></div>`,
+    `<div class="c-dim">… resultado se mide en 60 min y vuelve al set de entrenamiento</div>`,
+  ];
+  $("trace").innerHTML = lines.join("");
+}
+
+// ---------- curva ----------
+function renderCurve() {
+  const L = S.selected; if (!L) return;
+  const { ctx, w, h } = fitCanvas($("cvCurve"));
+  ctx.clearRect(0, 0, w, h);
+  const pad = { l: 38, r: 8, t: 10, b: 20 };
+  const X = (s) => pad.l + (s / GRAD_SOL) * (w - pad.l - pad.r);
+  const mc = (s) => curveAt(s).price * SUPPLY * SOL_USD;
+  const maxMc = mc(GRAD_SOL);
+  const Y = (v) => h - pad.b - (v / maxMc) * (h - pad.t - pad.b);
+  ctx.font = "10px " + css("--f-mono"); ctx.fillStyle = C.dim; ctx.strokeStyle = C.line; ctx.lineWidth = 1;
+  [0, 0.25, 0.5, 0.75, 1].forEach((f) => { const v = maxMc * f; ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(w - pad.r, Y(v)); ctx.stroke(); ctx.fillText("$" + (v / 1000).toFixed(0) + "K", 2, Y(v) + 3); });
+  [0, 20, 40, 60, 85].forEach((s) => ctx.fillText(s, X(s) - 4, h - 6));
+  ctx.beginPath(); for (let s = 0; s <= GRAD_SOL; s += 1) { const x = X(s), y = Y(mc(s)); s ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+  ctx.strokeStyle = C.blue; ctx.lineWidth = 2; ctx.stroke();
+  ctx.lineTo(X(GRAD_SOL), Y(0)); ctx.lineTo(X(0), Y(0)); ctx.fillStyle = "rgba(79,140,255,0.08)"; ctx.fill();
+  ctx.setLineDash([3, 3]); ctx.strokeStyle = C.faint; ctx.beginPath(); ctx.moveTo(X(GRAD_SOL), pad.t); ctx.lineTo(X(GRAD_SOL), h - pad.b); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = C.gold; ctx.fillText("85 SOL → gradúa a PumpSwap", Math.max(pad.l, X(GRAD_SOL) - 160), pad.t + 8);
+  const e = L.q.realSol, pE = curveAt(e).price;
+  const solFor = (mult) => Math.sqrt(K * pE * mult) - V_SOL0; // precio = vs²/K
+  const pts = [[e, C.white, "entrada", 4, 16], [clamp(solFor(1.6), 0, GRAD_SOL), C.green, "TP +60%", -10, -30], [clamp(solFor(0.7), 0, GRAD_SOL), C.red, "SL −30%", -46, 30]];
+  pts.forEach(([s, c, t, dx, dy]) => { const x = X(s), y = Y(mc(s)); ctx.strokeStyle = c; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx + 10, y + dy - 4); ctx.stroke(); ctx.globalAlpha = 1; ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x, y, 4, 0, 7); ctx.fill(); ctx.fillText(t, x + dx, y + dy); });
+  const tag = $("cvTag"); tag.textContent = L.sym + " · " + (L.dec === "entry" ? "entrada" : L.dec === "block" ? "bloqueado" : "saltado");
+  tag.className = "rt chip " + (L.dec === "entry" ? "c-gold" : L.dec === "block" ? "c-red" : "c-amber");
+  $("cvMc").textContent = "$" + (L.q.mcap / 1000).toFixed(1) + "K";
+  const rows = [["", "tokens por SOL", "impacto"]].concat([0.5, 1, L.q.size].map((s) => {
+    const c0 = curveAt(e), c1 = curveAt(e + s * (1 - FEE)); const tk = c0.vt - c1.vt; return [s.toFixed(2) + " SOL", ((tk / s) / 1e6).toFixed(1) + "M", pct((s / tk) / c0.price - 1, 2)];
+  }));
+  $("cvTable").innerHTML = rows.map((r, i) => `<tr class="${i ? "" : "c-dim"}">${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("");
+  $("cvRes").innerHTML = `${L.q.realSol.toFixed(1)} SOL en la curva · costes ${pct(L.q.costs, 1)} (comisión 1%+1%, impacto, prioridad, propina Jito)`;
+}
+
+// ---------- mapa de entrelazamiento ----------
+function renderEnt(now) {
+  const { ctx, w, h } = fitCanvas($("cvEnt"));
+  ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.46;
+  ctx.strokeStyle = C.line2; ctx.lineWidth = 1;
+  [1, 0.66, 0.33].forEach((f) => { ctx.beginPath(); ctx.arc(cx, cy, R * f, 0, 7); ctx.stroke(); });
+  const rot = reduced ? 0 : now / 30000;
+  let linked = 0;
+  S.clusters.forEach((cl, idx) => {
+    const age = (now - cl.born) / 1000, a = Math.atan2(cl.pos[1], cl.pos[0]) + rot, rr = Math.min(1, Math.hypot(...cl.pos)) * R * 0.8;
+    const fx = cx + Math.cos(a) * rr, fy = cy + Math.sin(a) * rr, col = cl.blocked ? C.red : C.violet;
+    const alpha = clamp(1 - idx / 16, 0.25, 1);
+    ctx.globalAlpha = alpha;
+    cl.nodes.forEach((n, i) => {
+      const nx = fx + Math.cos(n.a + rot * 3) * n.r * 26, ny = fy + Math.sin(n.a + rot * 3) * n.r * 26;
+      ctx.strokeStyle = col; ctx.globalAlpha = alpha * 0.45; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(nx, ny); ctx.stroke();
+      ctx.globalAlpha = alpha; ctx.fillStyle = C.fg; ctx.fillRect(nx - 1, ny - 1, 2, 2);
+    });
+    ctx.fillStyle = col; ctx.beginPath(); ctx.arc(fx, fy, 3 + (age < 1.2 ? (1.2 - age) * 5 : 0), 0, 7); ctx.fill();
+    if (idx < 4) { ctx.fillStyle = C.white; ctx.font = "10px " + css("--f-mono"); ctx.fillText(cl.sym, fx + 6, fy - 6); }
+    linked += cl.n;
+  });
+  ctx.globalAlpha = 1;
+  $("entCount").textContent = linked + " enlazados";
+  const top = S.clusters[0];
+  $("entFoot").innerHTML = top ? `<span class="c-white">${top.sym}</span> · ${top.n} wallets · funder ${pct(top.fun)} · ${top.blocked ? '<span class="c-red">bloqueado por guard</span>' : '<span class="c-green">guard pasa</span>'}` : "";
+  $("entSub").textContent = `${S.clusters.length} lanzamientos · ${linked} wallets con fondeador compartido`;
+}
+
+// ---------- observables (sparklines) ----------
+function buildObs() {
+  $("obs").innerHTML = `<div><div class="lbl" style="color:var(--white)">Observables</div><div class="sub">siete observables · medidos por SCT · MAP · JDG</div></div>` +
+    OBS.map((o, i) => `<div class="ob" style="--c:${o.c}"><div class="h"><span class="n">${o.n}</span><span class="val" id="obv${i}"></span></div><div class="sub">${o.s} · <span style="color:${o.c}">${o.ag}</span></div><canvas id="obc${i}"></canvas></div>`).join("");
+}
+function renderObs() {
+  OBS.forEach((o, i) => {
+    const a = S.obs[o.k]; if (!a.length) return;
+    $("obv" + i).textContent = o.f(a[a.length - 1]);
+    const { ctx, w, h } = fitCanvas($("obc" + i)); ctx.clearRect(0, 0, w, h);
+    const mn = Math.min(...a), mx = Math.max(...a), rg = mx - mn || 1;
+    const P = a.map((v, j) => [ (j / (a.length - 1 || 1)) * (w - 6), h - 4 - ((v - mn) / rg) * (h - 8) ]);
+    ctx.beginPath(); P.forEach(([x, y], j) => (j ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+    ctx.strokeStyle = o.c; ctx.lineWidth = 1.6; ctx.stroke();
+    ctx.lineTo(P[P.length - 1][0], h); ctx.lineTo(0, h); ctx.closePath();
+    const g = ctx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, o.c + "55"); g.addColorStop(1, o.c + "00"); ctx.fillStyle = g; ctx.fill();
+    const [lx, ly] = P[P.length - 1]; ctx.fillStyle = C.white; ctx.beginPath(); ctx.arc(lx, ly, 2.4, 0, 7); ctx.fill();
+  });
+}
+
+// ---------- el orb ----------
+function renderOrb(now) {
+  const { ctx, w, h } = fitCanvas($("cvOrb"));
+  ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h * 0.47, R = Math.min(w * 0.46, h * 0.43);
+  const rot = reduced ? 0.6 : now / 9000, tilt = 0.35, ct = Math.cos(tilt), st = Math.sin(tilt);
+  const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.1); g.addColorStop(0, "rgba(79,140,255,0.10)"); g.addColorStop(1, "rgba(79,140,255,0)");
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 1.1, 0, 7); ctx.fill();
+  const drawL = (L, fade) => {
+    const z0 = L.ang[0], th = L.ang[1] + rot, rr = Math.sqrt(1 - z0 * z0);
+    let x = rr * Math.cos(th), y = z0, z = rr * Math.sin(th);
+    const y2 = y * ct - z * st, z2 = y * st + z * ct; y = y2; z = z2;
+    const amp = 0.5 + L.p[TP] * 1.5 + (L.id % 7) * 0.03;
+    const age = (S.simMin - L.t0) / 60;
+    const ex = cx + x * R * Math.min(1, amp), ey = cy + y * R * Math.min(1, amp);
+    const depth = (z + 1) / 2, a = (0.18 + depth * 0.75) * fade;
+    const col = L.p[TP] > 0.17 ? C.gold : L.p[SL] > 0.55 ? C.blue : C.white;
+    ctx.globalAlpha = a * 0.5; ctx.strokeStyle = col; ctx.lineWidth = 0.6;
+    ctx.beginPath(); ctx.moveTo(cx + x * R * 0.12, cy + y * R * 0.12); ctx.lineTo(ex, ey); ctx.stroke();
+    ctx.globalAlpha = a; ctx.fillStyle = col;
+    const r = col === C.gold ? 1.6 + depth * 1.6 : 0.9 + depth;
+    ctx.beginPath(); ctx.arc(ex, ey, r, 0, 7); ctx.fill();
+    if (col === C.gold && depth > 0.6) { ctx.globalAlpha = a * 0.6; ctx.strokeStyle = C.gold; ctx.beginPath(); ctx.arc(ex, ey, r + 2.5, 0, 7); ctx.stroke(); }
+    if (age > 0.75 && Math.max(...L.p) > 0.55 && !reduced) { ctx.globalAlpha = 0.5 + 0.5 * Math.sin(now / 150 + L.id); ctx.fillStyle = C.white; ctx.beginPath(); ctx.arc(ex, ey, 1.5, 0, 7); ctx.fill(); }
+  };
+  S.pending.forEach((L) => drawL(L, 1));
+  for (let i = fading.length - 1; i >= 0; i--) {
+    const L = fading[i], f = 1 - (S.simMin - L.done) / 3;
+    if (f <= 0) { fading.splice(i, 1); continue; }
+    const z0 = L.ang[0], th = L.ang[1] + rot, rr = Math.sqrt(1 - z0 * z0);
+    const amp = Math.min(1, 0.5 + L.p[TP] * 1.5 + (L.id % 7) * 0.03) * (1 + (1 - f) * 0.3);
+    ctx.globalAlpha = f; ctx.fillStyle = OUTC[L.out];
+    ctx.beginPath(); ctx.arc(cx + rr * Math.cos(th) * R * amp, cy + (z0 * ct - rr * Math.sin(th) * st) * R * amp, 2 + (1 - f) * 5, 0, 7); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = C.white; ctx.beginPath(); ctx.arc(cx, cy, 3, 0, 7); ctx.fill();
+  ctx.strokeStyle = C.white; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, h - 22); ctx.stroke(); ctx.globalAlpha = 1;
+  orbCenter = { cx, cy, R };
+}
+let orbCenter = { cx: 0, cy: 0, R: 0 };
+
+function renderLinks(now) {
+  const cv = $("cvLinks"); if (getComputedStyle(cv).display === "none") return;
+  const { ctx, w, h } = fitCanvas(cv); ctx.clearRect(0, 0, w, h);
+  const base = $("orbRow").getBoundingClientRect(), ow = $("orbWrap").getBoundingClientRect();
+  const ocx = ow.left - base.left + orbCenter.cx, ocy = ow.top - base.top + orbCenter.cy;
+  OBS.forEach((o, i) => {
+    const c = $("obc" + i); if (!c) return;
+    const r = c.getBoundingClientRect(); const x0 = r.right - base.left, y0 = r.top - base.top - 10;
+    const ang = (i / (OBS.length - 1) - 0.5) * 1.6 + Math.PI;
+    const x1 = ocx + Math.cos(ang) * orbCenter.R * 0.55, y1 = ocy + Math.sin(ang) * orbCenter.R * 0.55;
+    ctx.strokeStyle = o.c; ctx.globalAlpha = 0.85; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.bezierCurveTo(x0 + 80, y0, x1 - 120, y1, x1, y1); ctx.stroke();
+    ctx.fillStyle = C.bg; ctx.strokeStyle = o.c; ctx.fillRect(x0 + 2, y0 - 7, 26, 14); ctx.strokeRect(x0 + 2, y0 - 7, 26, 14);
+    ctx.fillStyle = o.c; ctx.font = "9px " + css("--f-mono"); ctx.fillText(o.ag, x0 + 6, y0 + 3);
+    const t = reduced ? 0.5 : ((now / 2500 + i * 0.13) % 1), mt = 1 - t;
+    const bx = mt ** 3 * x0 + 3 * mt * mt * t * (x0 + 80) + 3 * mt * t * t * (x1 - 120) + t ** 3 * x1;
+    const by = mt ** 3 * y0 + 3 * mt * mt * t * y0 + 3 * mt * t * t * y1 + t ** 3 * y1;
+    ctx.fillStyle = o.c; ctx.beginPath(); ctx.arc(bx, by, 3, 0, 7); ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+}
+
+// ---------- pila de decisiones ----------
+function renderStack() {
+  const el = $("stack");
+  const head = el.firstElementChild;
+  const items = S.stack.slice(0, 11).map((L) => {
+    const k = L.dec === "entry" ? ["ENTRADA", "QNT", "c-gold"] : L.dec === "block" ? ["BLOQUEO", "GRD", "c-red"] : ["SALTO", "QNT", "c-amber"];
+    const col = L.dec === "entry" ? C.gold : L.dec === "block" ? C.red : C.amber;
+    return `<button type="button" class="dcard ${L.dec}${S.selected === L ? " sel" : ""}" data-id="${L.id}"><span class="k ${k[2]}">${k[0]} · ${k[1]} <span class="s">${L.sym}</span></span><span class="k ${k[2]}">${L.p[TP].toFixed(2)}</span><span class="r">${L.reason}</span><span class="bar"><i style="width:${clamp(L.p[TP] * 220, 4, 100)}%;background:${col}"></i></span></button>`;
+  });
+  el.innerHTML = ""; el.appendChild(head); el.insertAdjacentHTML("beforeend", items.join(""));
+}
+$("stack").addEventListener("click", (e) => {
+  const b = e.target.closest(".dcard"); if (!b) return;
+  const L = S.stack.find((x) => x.id === +b.dataset.id); if (!L) return;
+  S.selected = L; S.lockSel = performance.now(); renderStack(); renderCurve(); renderBuilder();
+  if (L.dec === "entry") renderTrace(L);
+});
+
+// ---------- agentes ----------
+const AGENTS = [
+  { code: "SCT", nm: "SCOUT", c: C.blue, u: "eventos / s", svg: '<circle cx="24" cy="30" r="16" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/><circle cx="24" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".7"/><path d="M24 30 L38 12 A20 20 0 0 1 42 26 Z" fill="currentColor" opacity=".8"/>' },
+  { code: "MAP", nm: "CARTOGRAPHER", c: C.violet, u: "grupos enlazados", svg: '<g stroke="currentColor" stroke-width="1.3"><path d="M24 24 L10 12 M24 24 L38 10 M24 24 L40 32 M24 24 L14 38 M24 24 L30 42 M10 12 L14 38" fill="none"/></g><g fill="currentColor"><circle cx="24" cy="24" r="4"/><circle cx="10" cy="12" r="2.5"/><circle cx="38" cy="10" r="2.5"/><circle cx="40" cy="32" r="2.5"/><circle cx="14" cy="38" r="2.5"/><circle cx="30" cy="42" r="2.5"/></g>' },
+  { code: "JDG", nm: "JUDGE", c: C.green, u: "wallets seguidas", svg: '<g fill="currentColor"><rect x="8" y="22" width="5" height="18"/><rect x="15" y="12" width="5" height="28"/><rect x="22" y="16" width="5" height="24"/><rect x="29" y="26" width="5" height="14" opacity=".7"/><rect x="36" y="32" width="5" height="8" opacity=".5"/></g>' },
+  { code: "QNT", nm: "QUANT", c: C.amber, u: "setups puntuados", svg: '<path d="M6 40 Q16 40 20 26 Q24 8 28 26 Q32 40 42 40" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M24 12 L24 40" stroke="currentColor" stroke-dasharray="2 2"/><text x="31" y="14" font-size="9" fill="currentColor" font-family="monospace">EV</text>' },
+  { code: "GRD", nm: "GUARD", c: C.red, u: "tasa de bloqueo", svg: '<path d="M24 5 L41 15 L41 33 L24 43 L7 33 L7 15 Z" fill="currentColor" opacity=".25" stroke="currentColor" stroke-width="1.5"/><path d="M17 17 L31 31 M31 17 L17 31" stroke="#fff" stroke-width="2.4"/>' },
+  { code: "EXE", nm: "EXECUTOR", c: C.gold, u: "en juego · límite 6", svg: '<g stroke="currentColor" stroke-width="1.4"><path d="M10 14 V34 M18 18 V30 M26 10 V28 M34 20 V36 M40 16 V26"/></g><g fill="currentColor"><rect x="8" y="20" width="4" height="8"/><rect x="16" y="21" width="4" height="6"/><rect x="24" y="14" width="4" height="9"/><rect x="32" y="24" width="4" height="7"/><rect x="38" y="18" width="4" height="5"/></g>' },
+];
+const agentPulse = [0, 0, 0, 0, 0, 0];
+function buildAgents() {
+  $("agents").innerHTML = AGENTS.map((a, i) => `<div class="ag" id="ag${i}" style="--c:${a.c}"><div class="ic" style="color:${a.c}"><svg viewBox="0 0 48 48" aria-hidden="true">${a.svg}</svg></div><div class="code">${a.code}</div><div class="nm">${a.nm}</div><div class="m" id="agm${i}">—</div><div class="u">${a.u}</div></div>`).join("");
+}
+function renderAgents() {
+  const eps = $("mEps").textContent;
+  const vals = [eps, fmt(S.clusters.reduce((s, c) => s + c.n, 0) + S.launches * 0.4), fmt(32 + (model.ver % 7)), fmt(S.passed), pct(S.blocked / Math.max(1, S.launches)), `${S.positions.length} / 6`];
+  vals.forEach((v, i) => { $("agm" + i).textContent = v; const el = $("ag" + i); el.classList.toggle("pulse", agentPulse[i] > 0.05); agentPulse[i] *= 0.9; });
+  $("alog").innerHTML = `<div class="sub" style="margin-bottom:2px">últimas acciones · los seis agentes</div>` + S.log.map((l) => `<div><span class="c-dim">${l.t}</span><span class="tag" style="color:${l.col}">${l.tag}</span>${l.msg}</div>`).join("");
+}
+
+// ---------- constructor de estado ----------
+function renderBuilder() {
+  let L = S.selected; if (!L) return;
+  const x = L.x, W = model.W;
+  $("sbSig").innerHTML = SIGS.map((s) => `<tr><td><span class="tag" style="color:${s.c};margin-left:0">${s.ag}</span>${s.name}</td><td>${s.f(L[s.k])}</td></tr>`).join("");
+  // actualización secuencial: empezar con el prior (solo sesgo) y añadir una señal cada vez
+  const z = W.map((w) => w[NF - 1]);
+  const prior = softmax(z)[TP];
+  const steps = [];
+  let prev = prior;
+  for (let i = 0; i < SIGS.length; i++) { for (let c = 0; c < 3; c++) z[c] += W[c][i] * x[i]; const p = softmax(z)[TP]; steps.push([prev, p]); prev = p; }
+  const p = L.p;
+  $("sbPrior").textContent = `prior ${prior.toFixed(2)} → estado ${p[TP].toFixed(2)}`;
+  const { ctx, w, h } = fitCanvas($("cvInt")); ctx.clearRect(0, 0, w, h);
+  const lo = 0, hi = Math.max(0.5, ...steps.flat()) * 1.1;
+  const X = (v) => 8 + ((v - lo) / (hi - lo)) * (w - 16);
+  const rowH = (h - 18) / SIGS.length;
+  ctx.strokeStyle = C.line; ctx.font = "9px " + css("--f-mono"); ctx.fillStyle = C.dim;
+  [0, 0.1, 0.2, 0.3, 0.4, 0.5].filter((v) => v <= hi).forEach((v) => { ctx.beginPath(); ctx.moveTo(X(v), 0); ctx.lineTo(X(v), h - 14); ctx.stroke(); ctx.fillText(v.toFixed(1), X(v) - 7, h - 3); });
+  ctx.strokeStyle = C.white; ctx.setLineDash([2, 2]); ctx.beginPath(); ctx.moveTo(X(prior), 0); ctx.lineTo(X(prior), h - 14); ctx.stroke(); ctx.setLineDash([]);
+  steps.forEach(([a, b], i) => {
+    const y = 4 + i * rowH + rowH / 2, col = b >= a ? C.green : C.red;
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(X(a), y); ctx.lineTo(X(b), y); ctx.stroke();
+    const d = b >= a ? 1 : -1; ctx.beginPath(); ctx.moveTo(X(b), y); ctx.lineTo(X(b) - d * 4, y - 3); ctx.lineTo(X(b) - d * 4, y + 3); ctx.fill();
+    ctx.fillText((b - a >= 0 ? "+" : "−") + Math.abs(b - a).toFixed(2), Math.min(Math.max(X(a), X(b)) + 6, w - 30), y + 3);
+  });
+  ctx.lineWidth = 1;
+  // estado
+  const lab = ["TP · +60% primero", "SL · −30% primero", "TIEMPO · ninguno en 60 min"];
+  $("sbState").innerHTML = [0, 1, 2].map((i) => `<div class="pb"><div class="h"><span style="color:${OUTC[i]}">${lab[i]}</span><span class="c-white">${p[i].toFixed(2)}</span></div><div class="tr"><i style="width:${p[i] * 100}%;background:${OUTC[i]}"></i></div></div>`).join("");
+  // simplex
+  {
+    const { ctx, w, h } = fitCanvas($("cvTri")); ctx.clearRect(0, 0, w, h);
+    const s = Math.min(w - 20, (h - 24) * 1.15), A = [w / 2, 10], B = [w / 2 - s / 2, h - 16], Cc = [w / 2 + s / 2, h - 16];
+    ctx.strokeStyle = C.line2; ctx.beginPath(); ctx.moveTo(...A); ctx.lineTo(...B); ctx.lineTo(...Cc); ctx.closePath(); ctx.stroke();
+    ctx.font = "9px " + css("--f-mono");
+    [[A, C.green, "TP"], [B, C.red, "SL"], [Cc, C.amber, "60 MIN"]].forEach(([q, c, t]) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(q[0], q[1], 3, 0, 7); ctx.fill(); ctx.fillText(t, q[0] + (q === B ? -14 : q === Cc ? -18 : 6), q[1] + (q === A ? 6 : 12)); });
+    const px = p[0] * A[0] + p[1] * B[0] + p[2] * Cc[0], py = p[0] * A[1] + p[1] * B[1] + p[2] * Cc[1];
+    const gg = ctx.createRadialGradient(px, py, 0, px, py, 14); gg.addColorStop(0, "rgba(238,243,255,.9)"); gg.addColorStop(1, "rgba(79,140,255,0)");
+    ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(px, py, 14, 0, 7); ctx.fill();
+  }
+  // medido
+  const last = model.hist.slice(-60), n = last.length || 1, cnt = [0, 0, 0];
+  last.forEach((h) => cnt[h.y]++);
+  $("calN").textContent = last.length;
+  const tot = model.counts.reduce((a, b) => a + b, 0) || 1;
+  $("sbMeas").innerHTML = [0, 1, 2].map((i) => `<div class="pb"><div class="h"><span style="color:${OUTC[i]}">${OUT[i]}</span><span class="c-white">${cnt[i]} · ${(cnt[i] / n).toFixed(2)}</span></div><div class="tr"><i style="width:${(cnt[i] / n) * 100}%;background:${OUTC[i]}"></i><b style="left:${(model.counts[i] / tot) * 100}%" title="frecuencia histórica"></b></div></div>`).join("");
+  // veredicto
+  const q = L.q, tag = $("sbTag");
+  tag.textContent = L.sym; tag.className = "rt chip " + (L.dec === "entry" ? "c-gold" : L.dec === "block" ? "c-red" : "c-amber");
+  const g = L.dec === "block" ? `<span class="chip c-red">GUARD BLOQUEA</span>` : `<span class="chip c-green">GUARD PASA</span>`;
+  const v = L.dec === "entry" ? `<span class="chip c-gold">ENTRADA · EV ${sgn(q.ev)}</span>` : L.dec === "block" ? `<span class="chip c-red">${L.reason}</span>` : `<span class="chip c-amber">SALTO · ${L.reason}</span>`;
+  $("sbVerdict").innerHTML = `${g}<span class="c-dim">bruto ${sgn(q.gross)} · costes ${pct(q.costs, 1)} · EV neto</span><span style="color:${q.ev >= 0 ? C.green : C.red}">${sgn(q.ev)}</span>${v}`;
+}
+
+// ---------- posiciones y mejores ----------
+function renderTables() {
+  const P = S.positions;
+  $("posT").innerHTML = `<tr class="c-dim"><td>token</td><td>tamaño</td><td>P(TP)</td><td>EV</td><td>tiempo</td><td>estado</td></tr>` + (P.length ? P.map((x) => {
+    const el = S.simMin - x.t0; return `<tr><td class="c-white">${x.L.sym}</td><td>${x.size} SOL</td><td>${x.L.p[TP].toFixed(2)}</td><td class="c-green">${sgn(x.L.q.ev)}</td><td>${el.toFixed(0)} / 60 min</td><td><span class="chip c-gold">en juego</span></td></tr>`;
+  }).join("") : `<tr><td colspan="6" class="c-dim">Sin posiciones abiertas. El executor entra cuando QUANT ve EV ≥ +3% tras costes y GUARD pasa.</td></tr>`);
+  const best = S.closed.slice().sort((a, b) => b.pnl - a.pnl).slice(0, 5);
+  const usd = (s) => "$" + (s * SOL_USD).toFixed(0);
+  const w = S.closed.filter((c) => c.pnl > 0).length;
+  const sum = S.closed.reduce((s, c) => s + c.pnl, 0);
+  $("bestT").innerHTML = `<tr class="c-dim"><td>token</td><td>entrada → salida</td><td>P&amp;L</td><td>salida</td></tr>` + (best.length ? best.map((c) => `<tr><td class="c-white">${c.sym}</td><td>${usd(c.size)} → ${usd(c.size + c.pnl)}</td><td style="color:${c.pnl >= 0 ? C.green : C.red}">${c.pnl >= 0 ? "+" : "−"}${usd(Math.abs(c.pnl))}</td><td>${OUT[c.out]} · ${c.min.toFixed(0)} min</td></tr>`).join("") : `<tr><td colspan="4" class="c-dim">Aún no hay operaciones cerradas.</td></tr>`) +
+    `<tr><td colspan="4" class="c-dim">${S.closed.length} cerradas · ${w} ganadoras (${pct(w / Math.max(1, S.closed.length))}) · neto <span style="color:${sum >= 0 ? C.green : C.red}">${sum >= 0 ? "+" : "−"}${Math.abs(sum).toFixed(2)} SOL</span></td></tr>`;
+}
+
+// ---------- bucle ----------
+let last = performance.now(), slowT = 0, midT = 0;
+function frame(now) {
+  const dt = Math.min(100, now - last); last = now;
+  if (!S.paused) {
+    let dMin = (dt / 1000) * SIM_MIN_PER_SEC * S.speed;
+    while (dMin > 0) { const d = Math.min(dMin, 0.25); step(d); dMin -= d; }
+  }
+  renderOrb(now); renderLinks(now); renderEnt(now); renderTicker(dt);
+  midT += dt; slowT += dt;
+  if (midT > 250) { midT = 0; renderTop(); renderAgents(); }
+  if (slowT > 900) {
+    slowT = 0;
+    if (!S.lockSel || now - S.lockSel > 8000) {
+      const cand = S.stack.find((L) => L.dec === "entry" && S.simMin - L.t0 < 4) || S.stack[0];
+      if (cand) S.selected = cand;
+    }
+    renderStack(); renderCurve(); renderBuilder(); renderObs(); renderTables();
+  }
+  requestAnimationFrame(frame);
+}
+
+// ---------- controles ----------
+document.querySelectorAll("[data-speed]").forEach((b) => b.addEventListener("click", () => {
+  S.speed = +b.dataset.speed; document.querySelectorAll("[data-speed]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+}));
+$("bPause").addEventListener("click", (e) => { S.paused = !S.paused; e.currentTarget.setAttribute("aria-pressed", S.paused); e.currentTarget.textContent = S.paused ? "Reanudar" : "Pausa"; });
+$("bReset").addEventListener("click", () => { resetModel(); addLog("SCT", C.blue, "modelo reiniciado · aprende desde cero", 1); addTicker("MODELO", C.blue, "reiniciado · 0 etiquetas"); });
+
+buildObs(); buildAgents(); bootstrap();
+S.selected = S.stack.find((L) => L.dec === "entry") || S.stack[0];
+if (S.lastEntry) renderTrace(S.lastEntry); else renderTrace(S.selected);
+renderTop(); renderStack(); renderCurve(); renderBuilder(); renderObs(); renderTables(); renderAgents();
+requestAnimationFrame(frame);
+})();
+</script>
