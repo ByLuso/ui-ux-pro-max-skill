@@ -24,6 +24,10 @@ export const cfg = {
   mode: str("MODE", "paper").toLowerCase() === "live" ? "live" : "paper",
   apiKey: str("PUMPPORTAL_API_KEY"),
   rpcUrl: str("RPC_URL"),
+  // De dónde salen los datos: auto = PumpPortal si hay clave; si no, la blockchain en tiempo real (gratis)
+  dataSource: ["chain", "dexscreener", "pumpportal"].includes(str("DATA_SOURCE")) ? str("DATA_SOURCE") : "auto",
+  // Servidor para leer la blockchain en tiempo real. Vacío = el público de Solana (gratis, sin clave)
+  chainRpc: str("CHAIN_RPC"),
   privateKey: str("PRIVATE_KEY"),
   tp: num("TP_PCT", 0.6),
   sl: num("SL_PCT", 0.3),

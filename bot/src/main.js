@@ -4,6 +4,7 @@ import path from "node:path";
 import { cfg, ROOT, DATA } from "./config.js";
 import { now, loadJSON, saveJSON, appendLine, readLines } from "./store.js";
 import { Feed, DexPoller } from "./feed.js";
+import { ChainFeed } from "./chainfeed.js";
 import { Tracker } from "./tracker.js";
 import { Model, OUT, TP, SL, TM } from "./model.js";
 import { SIGNALS, featureVector, Judge, Creators, guard, quant, entryFill } from "./agents.js";
@@ -13,9 +14,13 @@ import { Exit, STRATS } from "./exits.js";
 import { PaperWallet } from "./wallet.js";
 
 // ---------- estado ----------
-// Sin clave de PumpPortal → modo gratuito con DexScreener. Cada modo mide las señales distinto, así que guarda su propio modelo.
-const SOURCE = cfg.apiKey ? "pumpportal" : "dexscreener";
-const MODEL_FILE = SOURCE === "pumpportal" ? "model.json" : "model-dex.json";
+// Fuente de datos: PumpPortal (con clave), la blockchain en tiempo real (gratis) o DexScreener (gratis, cada 10 s).
+// PumpPortal y la blockchain dan los mismos datos (cada operación con su wallet) y comparten modelo;
+// DexScreener mide las señales distinto y guarda el suyo.
+const SOURCE = cfg.dataSource !== "auto" ? cfg.dataSource : cfg.apiKey ? "pumpportal" : "chain";
+const REALTIME = SOURCE !== "dexscreener";
+const MODEL_FILE = REALTIME ? "model.json" : "model-dex.json";
+const sameData = (src) => (src === "dexscreener" ? !REALTIME : REALTIME && (src || "pumpportal") !== "dexscreener");
 const savedModel = loadJSON(MODEL_FILE, null);
 let model = Model.from(savedModel, SIGNALS.length);
 let repairNote = null;
@@ -25,7 +30,7 @@ if (model.corrupted() || upgraded) {
   // Un dato inválido dañó el modelo en una versión anterior: se reentrena desde las etiquetas guardadas.
   // Los valores que se guardaron como null se recuperan como 0, igual que hace ahora featureVector con los datos nuevos
   // Las señales que no existían cuando se guardó la etiqueta (o se guardaron mal) quedan como desconocidas (NaN)
-  const rows = readLines("labels.jsonl").filter((r) => (r.src || "pumpportal") === SOURCE && Array.isArray(r.f) && r.f.length <= SIGNALS.length && [0, 1, 2].includes(r.y))
+  const rows = readLines("labels.jsonl").filter((r) => sameData(r.src) && Array.isArray(r.f) && r.f.length <= SIGNALS.length && [0, 1, 2].includes(r.y))
     .map((r) => ({ ...r, f: Array.from({ length: SIGNALS.length }, (_, i) => (Number.isFinite(r.f[i]) ? r.f[i] : NaN)) }));
   model = new Model(SIGNALS.length);
   for (const r of rows) model.observe(r.f);
@@ -42,7 +47,8 @@ if (model.corrupted() || upgraded) {
 const wallet = new PaperWallet();
 const judge = new Judge();
 const creators = new Creators();
-const feed = new Feed(cfg.apiKey);
+// En modo blockchain, los lanzamientos y operaciones salen de ChainFeed; si no, de PumpPortal
+const feed = SOURCE === "chain" ? new ChainFeed(cfg.chainRpc) : new Feed(cfg.apiKey);
 let tracker;
 const dex = SOURCE === "dexscreener" ? new DexPoller(() => tracker.mints()) : null;
 tracker = new Tracker(feed, judge, creators, dex);
@@ -280,8 +286,9 @@ tracker.on("label", (t) => {
   }
 });
 
-feed.on("notice", (m) => log("SCT", "PumpPortal: " + m));
-feed.on("status", () => log("SCT", feed.connected ? "conectado a PumpPortal" : "desconectado · reintentando"));
+const FEED_NAME = SOURCE === "chain" ? feed.provider : "PumpPortal";
+feed.on("notice", (m) => log("SCT", `${FEED_NAME}: ${m}`));
+feed.on("status", () => log("SCT", feed.connected ? `conectado a ${FEED_NAME}` : "desconectado · reintentando"));
 
 // ---------- guardado periódico ----------
 function saveAll() { saveJSON(MODEL_FILE, model); judge.save(); creators.save(); }
@@ -315,7 +322,7 @@ function state() {
   const nowT = now();
   return {
     mode: cfg.mode, live: isLive(), gate: S.gate, halted: S.halted,
-    feed: { source: SOURCE, connected: feed.connected, msgs: feed.msgs, perHour: feed.perHour(), notice: feed.notice, hasKey: !!cfg.apiKey, dexCalls: dex ? dex.calls : 0, dexErrors: dex ? dex.errors : 0 },
+    feed: { source: SOURCE, provider: FEED_NAME, connected: feed.connected, msgs: feed.msgs, perHour: feed.perHour(), notice: feed.notice, hasKey: !!cfg.apiKey, dexCalls: dex ? dex.calls : 0, dexErrors: dex ? dex.errors : 0 },
     counts: { seen: tracker.seen, tracked: tracker.tokens.size, measuring: measuring.length, ...S.counts, labels: model.labels, followed: judge.count() },
     model: { labels: model.labels, counts: model.counts, ...sc, timeRet: model.timeRet, slRet: model.slRet, tpRet: model.tpRet, recent: model.hist.slice(-60).map((h) => h.y) },
     signals: SIGNALS, measuring,
@@ -368,7 +375,7 @@ http.createServer(async (req, res) => {
   console.log(`\n  Orbital bot · modo ${cfg.mode.toUpperCase()}`);
   console.log(`  Panel: http://localhost:${cfg.port}`);
   console.log(`  Radar: http://localhost:${cfg.port}/radar\n`);
-  console.log(SOURCE === "dexscreener" ? "  Datos: lanzamientos de PumpPortal + precios de DexScreener (modo gratuito)\n" : "  Datos: PumpPortal completo (compras y ventas en tiempo real)\n");
+  console.log({ dexscreener: "  Datos: lanzamientos de PumpPortal + precios de DexScreener cada 10 s\n", pumpportal: "  Datos: PumpPortal en tiempo real (cada compra y venta)\n", chain: `  Datos: blockchain de Solana en tiempo real (${feed.provider}) · cada compra y venta al instante\n` }[SOURCE]);
 });
 
 if (cfg.mode === "live") live.initLive().then((a) => log("EXE", `wallet del bot ${a}`)).catch((e) => log("EXE", "modo real no disponible: " + e.message));

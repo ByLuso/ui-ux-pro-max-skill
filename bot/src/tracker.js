@@ -79,6 +79,8 @@ export class Tracker extends EventEmitter {
     if (vs > 0 && vt > 0 && Number.isFinite(vs / vt)) { t.vSol = vs; t.vTok = vt; t.px = vs / vt; }
     if (t.vSol - V_SOL0 >= GRAD_SOL * 0.995) t.graduated = true;
     if (t.phase === "live") { this.checkViews(t); this.emit("price", t); }
+    // Al completarse la curva el token pasa a PumpSwap y aquí ya no llegan sus operaciones: se sale a ese precio
+    if (t.graduated && t.phase === "live" && !t.gradEmitted) { t.gradEmitted = true; this.emit("graduated", t); }
   }
 
   onDex(mint, p) {

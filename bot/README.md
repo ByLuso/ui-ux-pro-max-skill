@@ -65,16 +65,17 @@ Arriba del panel verás una **cartera de prueba** que empieza con 50 € fictici
 
 Puedes cambiar los importes en `.env` (`PAPER_START_EUR`, `PAPER_TRADE_EUR`, `PAPER_MAX_OPEN`) y reiniciarla con el botón **Reiniciar**. El precio SOL/EUR se toma de Binance cada 5 minutos. Ten en cuenta que, con 5 € por operación, las comisiones de prioridad (unos 0,05 € por transacción) ya suponen alrededor de un 2% de cada operación.
 
-## Dos modos de datos
+## De dónde salen los datos
 
-| | Gratuito (por defecto) | Completo |
-|---|---|---|
-| Qué necesitas | Nada | Clave de PumpPortal con ≥ 0.02 SOL |
-| Lanzamientos | En vivo (PumpPortal) | En vivo |
-| Precios | DexScreener cada 10 s | Cada operación, al instante |
-| Datos por wallet (JUDGE, primeros 3 s, top-10) | No | Sí |
+| | Blockchain en tiempo real (por defecto) | PumpPortal | DexScreener |
+|---|---|---|---|
+| Coste | Gratis, sin clave | Clave con ≥ 0.02 SOL | Gratis, sin clave |
+| Lanzamientos y operaciones | Al instante, leídos de la blockchain | Al instante | Precio cada 10 s |
+| Datos por wallet (JUDGE, primeros 3 s, top-10) | Sí | Sí | No |
 
-Empieza con el gratuito. Si después de unos días quieres mejores señales, pasa al completo. Cada modo guarda su propio modelo, porque las señales se miden distinto en cada uno.
+Por defecto (`DATA_SOURCE=auto`) el bot lee directamente el programa de pump.fun en la blockchain de Solana usando el servidor público, gratis: cada lanzamiento y cada compra o venta, con la wallet que la hizo. Si la conexión se corta a menudo, pon tu clave gratuita de Helius en `CHAIN_RPC` (y vigila el consumo en su panel). Con `DATA_SOURCE=dexscreener` vuelves al modo antiguo.
+
+El modo en tiempo real y PumpPortal comparten modelo (`data/model.json`); DexScreener guarda el suyo (`data/model-dex.json`), porque mide las señales de otra forma. Al cambiar de uno a otro, cada modelo conserva lo que aprendió.
 
 ## Instalación (una sola vez)
 

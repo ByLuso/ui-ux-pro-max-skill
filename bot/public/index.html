@@ -109,7 +109,7 @@ button:focus-visible, .dcard:focus-visible { outline: 2px solid var(--gold); out
 <div class="wrap">
   <header>
     <div class="brand">
-      <div class="sub">datos reales · pump.fun · <span id="feedSt">conectando…</span></div>
+      <div class="sub">datos reales · pump.fun · <span id="feedSrc"></span> · <span id="feedSt">conectando…</span></div>
       <h1><span>ORBITAL</span> // BOT <span class="chip" id="modeChip">—</span> <a href="/radar" class="chip c-gold" style="text-decoration:none">Radar →</a></h1>
       <div class="sub" id="rules"></div>
     </div>
@@ -267,12 +267,14 @@ async function poll() {
 
 function render() {
   const d = D;
+  $("feedSrc").textContent = { chain: "blockchain en tiempo real (" + d.feed.provider + ")", pumpportal: "PumpPortal en tiempo real", dexscreener: "DexScreener cada 10 s" }[d.feed.source] || "";
   const mc = $("modeChip"); mc.textContent = d.live ? "REAL" : "PAPEL"; mc.className = "chip " + (d.live ? "c-red" : "c-blue");
   $("rules").textContent = `TP +${d.cfg.tp * 100}% · SL −${d.cfg.sl * 100}% · ${d.cfg.horizonMin} min · decide a los ${d.cfg.obsSeconds} s · EV mínimo +${d.cfg.evMin * 100}%`;
   $("sSeen").textContent = d.counts.seen.toLocaleString(); $("sMeas").textContent = d.counts.measuring;
   $("sBlk").textContent = d.counts.blocked; $("sSig").textContent = d.counts.signals;
   $("sBal").textContent = d.wallet.balance == null ? "—" : d.wallet.balance.toFixed(3) + " SOL";
   const B = [];
+  if (d.feed.source === "chain" && !d.feed.connected) B.push(["red", `Sin conexión con ${d.feed.provider}. Reintentando… Si dura mucho, pon tu Helius en CHAIN_RPC del .env o usa DATA_SOURCE=dexscreener.`]);
   if (d.feed.source === "dexscreener") B.push(["", "Modo gratuito: precios de DexScreener cada 10 s. Sin datos por wallet, así que JUDGE, «primeros 3 s» y top-10 no se miden. Con una clave de PumpPortal el bot ve cada compra y venta (README, paso 3)."]);
   if (d.feed.notice && /api key|funded|only available/i.test(d.feed.notice)) B.push(["", "PumpPortal: " + d.feed.notice]);
   if (d.halted) B.push(["red", "Bot detenido: " + d.halted + ". Pulsa Reanudar para volver a operar."]);
