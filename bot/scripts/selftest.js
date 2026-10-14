@@ -15,7 +15,7 @@ cfg.trackSample = 1;
 const tr = new Tracker(feed, judge, creators); clearInterval(tr.timer);
 const model = new Model(SIGNALS.length);
 let obs = 0, labels = 0, blocked = 0, signals = 0;
-tr.on("observe", (t) => { obs++; const f = featureVector(t.sig); model.observe(f); t.p = model.predict(f); if (guard(t.sig)) { blocked++; t.blocked = 1; return; } if (quant(t.p, t.sig, model.timeRet, false).ev >= cfg.evMin) signals++; });
+tr.on("observe", (t) => { obs++; const f = featureVector(t.sig); model.observe(f); t.p = model.predict(f); if (guard(t.sig)) { blocked++; t.blocked = 1; return; } if (quant(t.p, t.sig, { tp: model.tpRet, sl: model.slRet, tm: model.timeRet }, false).ev >= cfg.evMin) signals++; });
 tr.on("label", (t) => { labels++; if (!t.blocked) model.learn(featureVector(t.sig), t.label, t.ret); });
 
 const live = [];

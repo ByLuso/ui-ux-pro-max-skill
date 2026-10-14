@@ -19,13 +19,14 @@ const MODEL_FILE = SOURCE === "pumpportal" ? "model.json" : "model-dex.json";
 const savedModel = loadJSON(MODEL_FILE, null);
 let model = Model.from(savedModel, SIGNALS.length);
 let repairNote = null;
-const upgraded = savedModel && savedModel.nf && savedModel.nf !== SIGNALS.length;
+// v2: las señales que faltan en etiquetas antiguas cuentan como "desconocidas" y QUANT usa retornos medidos
+const upgraded = savedModel && savedModel.nf && (savedModel.nf !== SIGNALS.length || savedModel.v !== 2);
 if (model.corrupted() || upgraded) {
   // Un dato inválido dañó el modelo en una versión anterior: se reentrena desde las etiquetas guardadas.
   // Los valores que se guardaron como null se recuperan como 0, igual que hace ahora featureVector con los datos nuevos
-  // Si la versión nueva tiene más señales, las etiquetas antiguas se completan con 0 en las señales que no existían
+  // Las señales que no existían cuando se guardó la etiqueta (o se guardaron mal) quedan como desconocidas (NaN)
   const rows = readLines("labels.jsonl").filter((r) => (r.src || "pumpportal") === SOURCE && Array.isArray(r.f) && r.f.length <= SIGNALS.length && [0, 1, 2].includes(r.y))
-    .map((r) => ({ ...r, f: Array.from({ length: SIGNALS.length }, (_, i) => (Number.isFinite(r.f[i]) ? r.f[i] : 0)) }));
+    .map((r) => ({ ...r, f: Array.from({ length: SIGNALS.length }, (_, i) => (Number.isFinite(r.f[i]) ? r.f[i] : NaN)) }));
   model = new Model(SIGNALS.length);
   for (const r of rows) model.observe(r.f);
   for (const r of rows) model.learn(r.f, r.y, r.ret);
@@ -164,7 +165,7 @@ tracker.on("observe", (t) => {
   const block = guard(t.sig);
   if (block) { t.blocked = true; S.counts.blocked++; agent("GRD", `bloquea ${t.sym}: ${block}`); decide(t, "block", block, p, null); return; }
   agent("GRD", `${t.sym} pasa los filtros de riesgo`);
-  const q = quant(p, t.sig, model.timeRet, isLive());
+  const q = quant(p, t.sig, { tp: model.tpRet, sl: model.slRet, tm: model.timeRet }, isLive());
   t.q = q;
   agent("QNT", `${t.sym}: bruto ${pctS(q.gross)} − costes ${(q.costs * 100).toFixed(1)}% = EV ${pctS(q.ev)} ${q.ev >= cfg.evMin ? "→ SEÑAL" : `→ salta (mínimo +${(cfg.evMin * 100).toFixed(0)}%)`}`);
   if (!(q.ev >= cfg.evMin)) { /* también descarta un EV inválido (NaN) */ S.counts.skipped++; decide(t, "skip", `EV ${(q.ev * 100).toFixed(1)}% tras costes · bajo +${(cfg.evMin * 100).toFixed(0)}%`, p, q.ev); return; }
@@ -316,7 +317,7 @@ function state() {
     mode: cfg.mode, live: isLive(), gate: S.gate, halted: S.halted,
     feed: { source: SOURCE, connected: feed.connected, msgs: feed.msgs, perHour: feed.perHour(), notice: feed.notice, hasKey: !!cfg.apiKey, dexCalls: dex ? dex.calls : 0, dexErrors: dex ? dex.errors : 0 },
     counts: { seen: tracker.seen, tracked: tracker.tokens.size, measuring: measuring.length, ...S.counts, labels: model.labels, followed: judge.count() },
-    model: { labels: model.labels, counts: model.counts, ...sc, timeRet: model.timeRet, recent: model.hist.slice(-60).map((h) => h.y) },
+    model: { labels: model.labels, counts: model.counts, ...sc, timeRet: model.timeRet, slRet: model.slRet, tpRet: model.tpRet, recent: model.hist.slice(-60).map((h) => h.y) },
     signals: SIGNALS, measuring,
     paperWallet: wallet.state(),
     agents: S.agents, market: { solTrend: market.solTrend, launchRate: tracker.launchRate(), hot: [...hot.words].slice(0, 30) },

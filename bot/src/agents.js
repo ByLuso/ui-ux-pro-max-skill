@@ -100,12 +100,13 @@ export function entryFill(sol, px, s) {
   return { tokens: (sol * (1 - cfg.pumpFee)) / (px * (1 + impact)), impact };
 }
 
-export function quant(p, s, timeRet, live) {
+// rets = retornos medios REALES medidos por el modelo para cada resultado ({ tp, sl, tm })
+export function quant(p, s, rets, live) {
   const size = cfg.maxSolPerTrade;
   const impact = s.graduated ? 0.01 : buyOnCurve(s.vSol, s.vTok, size, cfg.pumpFee).impact;
   const fees = 2 * cfg.pumpFee + (live ? 2 * cfg.portalFee : 0);
   const costs = fees + impact * 2 + (2 * cfg.priorityFee) / size + 0.01; // +1% de colchón por slippage
-  const gross = p[0] * cfg.tp + p[1] * -(cfg.sl + 0.05) + p[2] * timeRet; // los stops suelen ejecutarse algo peor
+  const gross = p[0] * Math.min(rets.tp, cfg.tp * 1.5) + p[1] * Math.min(rets.sl, -cfg.sl) + p[2] * rets.tm;
   return { size, impact, costs, gross, ev: gross - costs };
 }
 

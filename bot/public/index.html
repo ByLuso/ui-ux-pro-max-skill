@@ -184,6 +184,7 @@ button:focus-visible, .dcard:focus-visible { outline: 2px solid var(--gold); out
         <tr><td class="c-dim">Log-loss solo con frecuencias</td><td id="mLL0">—</td></tr>
         <tr><td class="c-dim">Mejora de información</td><td id="mGain">—</td></tr>
         <tr><td class="c-dim">Wallets seguidas (JUDGE)</td><td id="mFol">0</td></tr>
+        <tr><td class="c-dim">Retorno medio real: +60% · −30% · nada</td><td id="mRets">—</td></tr>
       </table>
     </div>
     <div class="panel">
@@ -288,6 +289,7 @@ function render() {
   $("mLL0").textContent = m.ll0 == null ? "—" : m.ll0.toFixed(3);
   const g = $("mGain"); g.textContent = sgn(m.gain); g.style.color = m.gain == null ? "" : m.gain > 0 ? C.green : C.red;
   $("mFol").textContent = d.counts.followed;
+  $("mRets").innerHTML = `<span style="color:${C.green}">${sgn(m.tpRet, 0)}</span> · <span style="color:${C.red}">${sgn(m.slRet, 0)}</span> · <span style="color:${C.amber}">${sgn(m.timeRet, 0)}</span>`;
 
   // compuerta
   const gc = $("gChip"); gc.textContent = d.gate.ok ? "habilitado" : "bloqueado"; gc.className = "rt chip " + (d.gate.ok ? "c-green" : "c-amber");

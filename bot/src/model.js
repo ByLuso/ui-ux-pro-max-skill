@@ -19,6 +19,10 @@ export class Model {
     this.counts = [0, 0, 0];
     this.hist = [];          // evaluación prequencial: se puntúa ANTES de aprender cada etiqueta
     this.timeRet = -0.1;     // retorno medio cuando no se alcanza ningún umbral
+    this.slRet = -0.4;       // retorno medio REAL cuando salta el stop (los desplomes lo empeoran mucho)
+    this.tpRet = 0.6;        // retorno medio real cuando se toca el objetivo
+    this.nI = new Array(nf).fill(0); // observaciones por señal (las etiquetas antiguas no tienen las señales nuevas)
+    this.v = 2;
   }
 
   static from(json, nf) {
@@ -30,23 +34,29 @@ export class Model {
   // true si algún peso o estadística dejó de ser un número válido (p. ej. NaN guardado como null)
   corrupted() {
     const ok = (a) => a.every((v) => typeof v === "number" && Number.isFinite(v));
-    return !(this.W.every(ok) && ok(this.mean) && ok(this.m2) && Number.isFinite(this.timeRet));
+    return !(this.W.every(ok) && ok(this.mean) && ok(this.m2) && Number.isFinite(this.timeRet) && Number.isFinite(this.slRet) && Number.isFinite(this.tpRet) && ok(this.nI || []));
   }
 
-  observe(f) { // estadística corriente para estandarizar cada señal
-    if (!f.every(Number.isFinite)) return;
+  // Estadística corriente para estandarizar cada señal. Un valor no numérico significa "desconocido" y no cuenta.
+  observe(f) {
+    if (!f.some(Number.isFinite)) return;
     this.nObs++;
     for (let i = 0; i < this.nf; i++) {
+      if (!Number.isFinite(f[i])) continue;
+      this.nI[i]++;
       const d = f[i] - this.mean[i];
-      this.mean[i] += d / this.nObs;
+      this.mean[i] += d / this.nI[i];
       this.m2[i] += d * (f[i] - this.mean[i]);
     }
   }
 
   norm(f) {
+    // Un dato desconocido se coloca en la media (0 tras estandarizar): no empuja hacia ningún lado
     const x = f.map((v, i) => {
-      const sd = this.nObs > 10 ? Math.sqrt(this.m2[i] / (this.nObs - 1)) || 1 : 1;
-      return Math.max(-4, Math.min(4, (v - this.mean[i]) / sd));
+      if (!Number.isFinite(v)) return 0;
+      const n = this.nI[i];
+      const sd = n > 10 ? Math.sqrt(this.m2[i] / (n - 1)) || 1 : 1;
+      return n > 10 ? Math.max(-4, Math.min(4, (v - this.mean[i]) / sd)) : 0;
     });
     x.push(1);
     return x;
@@ -80,7 +90,7 @@ export class Model {
   }
 
   learn(f, y, ret) {
-    if (!f.every(Number.isFinite)) return;
+    if (!f.some(Number.isFinite)) return;
     const p = this.predict(f), pr = this.prior();
     this.hist.push({ y, p: Math.max(p[y], 1e-6), p0: pr[y] });
     if (this.hist.length > 500) this.hist.shift();
@@ -92,7 +102,11 @@ export class Model {
     }
     this.labels++;
     this.counts[y]++;
-    if (y === TM && Number.isFinite(ret)) this.timeRet += (ret - this.timeRet) * 0.02;
+    if (Number.isFinite(ret)) {
+      if (y === TM) this.timeRet += (ret - this.timeRet) * 0.02;
+      if (y === SL) this.slRet += (Math.max(-1, ret) - this.slRet) * 0.02;
+      if (y === TP) this.tpRet += (Math.min(5, ret) - this.tpRet) * 0.02;
+    }
   }
 
   // Log-loss del modelo frente a usar solo la frecuencia histórica (prior). Ganancia > 0 = las señales aportan.
