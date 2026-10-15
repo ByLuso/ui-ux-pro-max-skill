@@ -46,6 +46,7 @@ object NotificationParser {
     private val financeHints = incomeWords + expenseWords + listOf("saldo", "tarjeta", "cuenta", "bizum", "transferencia")
 
     private val merchantRegexes = listOf(
+        Regex("""\b(?i:recibo|domiciliaci[oó]n)\s+(?:(?i:de)\s+)?([A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑáéíóúñ&'*.\- ]{1,40})"""),
         Regex("""\b(?:en|at|a)\s+([A-Za-zÁÉÍÓÚÑáéíóúñ0-9][\wÁÉÍÓÚÑáéíóúñ&'*.\- ]{1,40})""", RegexOption.IGNORE_CASE),
         Regex("""\bde\s+([A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑáéíóúñ&'*.\- ]{1,40})"""),
     )
@@ -60,7 +61,11 @@ object NotificationParser {
         return amountRegex.containsMatchIn(text) && financeHints.any { lower.contains(it) }
     }
 
-    fun parse(title: String?, text: String?): ParsedNotification? {
+    /**
+     * @param isWallet true para Google Wallet / Samsung Wallet: si el texto no dice si es
+     *   gasto o ingreso se asume gasto, y el comercio es el título de la notificación.
+     */
+    fun parse(title: String?, text: String?, isWallet: Boolean = false): ParsedNotification? {
         val full = listOfNotNull(title, text).joinToString(". ").replace('\n', ' ').trim()
         if (full.isEmpty()) return null
 
@@ -88,12 +93,13 @@ object NotificationParser {
             else -> {
                 val inc = incomeWords.filter { lower.contains(it) }.maxOfOrNull { it.length } ?: 0
                 val exp = expenseWords.filter { lower.contains(it) }.maxOfOrNull { it.length } ?: 0
-                if (inc == 0 && exp == 0) return null
+                if (inc == 0 && exp == 0 && !isWallet) return null
                 inc > exp
             }
         }
 
-        val merchant = findMerchant(full, amountMatch.range) ?: title?.trim()?.take(40).orEmpty()
+        val walletTitle = title?.trim()?.takeIf { isWallet && it.isNotEmpty() && !amountRegex.containsMatchIn(it) }
+        val merchant = walletTitle?.take(40) ?: findMerchant(full, amountMatch.range) ?: title?.trim()?.take(40).orEmpty()
         return ParsedNotification(
             amount = kotlin.math.abs(signed),
             isIncome = isIncome,

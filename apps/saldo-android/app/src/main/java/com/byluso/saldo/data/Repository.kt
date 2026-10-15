@@ -142,7 +142,7 @@ class Repository private constructor(context: Context) {
         val isKnownBank = pkg in BankApps.known
         if (!isKnownBank && !NotificationParser.looksFinancial(full)) return false
 
-        val parsed = NotificationParser.parse(title, text) ?: return false
+        val parsed = NotificationParser.parse(title, text, isWallet = pkg in BankApps.wallets) ?: return false
         val enabled = synchronized(this) { appEnabled(pkg, appLabel, postTime) }
         if (!enabled) {
             scope.launch { reload() }
@@ -161,6 +161,26 @@ class Repository private constructor(context: Context) {
                 arrayOf(pkg, full, postTime.toString()),
             ).use { it.moveToFirst() }
             if (dup) return false
+
+            // Un pago con Google Wallet genera dos avisos: el de Wallet y el del banco.
+            // Si otra app ya registró el mismo importe hace menos de 5 minutos, es el mismo
+            // movimiento: solo aprovechamos el saldo si este aviso lo trae.
+            val twinId = db.readableDatabase.rawQuery(
+                """SELECT id FROM movements WHERE source_app IS NOT NULL AND source_app != ?
+                   AND is_income = ? AND ABS(amount - ?) < 0.005 AND ABS(timestamp - ?) < 300000
+                   ORDER BY ABS(timestamp - ?) LIMIT 1""",
+                arrayOf(pkg, if (parsed.isIncome) "1" else "0", parsed.amount.toString(), postTime.toString(), postTime.toString()),
+            ).use { if (it.moveToFirst()) it.getLong(0) else null }
+            if (twinId != null) {
+                if (parsed.balance != null) {
+                    db.writableDatabase.update(
+                        "movements", ContentValues().apply { put("balance", parsed.balance) },
+                        "id = ?", arrayOf(twinId.toString()),
+                    )
+                    scope.launch { reload() }
+                }
+                return false
+            }
 
             val values = ContentValues().apply {
                 put("amount", parsed.amount)

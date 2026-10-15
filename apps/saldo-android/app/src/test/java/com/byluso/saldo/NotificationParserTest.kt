@@ -97,4 +97,54 @@ class NotificationParserTest {
         assertEquals(600.0, BalanceCalculator.current(movs, BalanceAnchor(500.0, 250))!!, 0.001)
         assertNull(BalanceCalculator.current(emptyList(), null))
     }
+
+    // ---------- Google Wallet ----------
+
+    @Test fun googleWalletSpanish() {
+        val r = NotificationParser.parse("Mercadona", "23,45 € · Visa ••1234", isWallet = true)!!
+        assertEquals(23.45, r.amount, 0.001)
+        assertFalse(r.isIncome)
+        assertEquals("Mercadona", r.merchant)
+        assertEquals("Comida", r.category)
+    }
+
+    @Test fun googleWalletEnglish() {
+        val r = NotificationParser.parse("Starbucks", "€3.80 with Mastercard •••• 5678", isWallet = true)!!
+        assertEquals(3.80, r.amount, 0.001)
+        assertEquals("Starbucks", r.merchant)
+    }
+
+    @Test fun googleWalletRefund() {
+        val r = NotificationParser.parse("Zara", "Reembolso de 29,95 € · Visa ••1234", isWallet = true)!!
+        assertTrue(r.isIncome)
+    }
+
+    @Test fun walletFormatWithoutWalletFlagIsIgnored() {
+        assertNull(NotificationParser.parse("Mercadona", "23,45 € · Visa ••1234"))
+    }
+
+    // ---------- Unicaja ----------
+
+    @Test fun unicajaCardPurchase() {
+        val r = p("Unicaja", "Se ha realizado una compra por 15,20 EUR en LIDL con la tarjeta ****1234")
+        assertEquals(15.20, r.amount, 0.001)
+        assertFalse(r.isIncome)
+        assertEquals("Lidl", r.merchant)
+        assertEquals("Comida", r.category)
+    }
+
+    @Test fun unicajaDirectDebit() {
+        val r = p("Unicaja", "Cargo en cuenta de 45,00 EUR. Recibo IBERDROLA CLIENTES")
+        assertEquals(45.0, r.amount, 0.001)
+        assertFalse(r.isIncome)
+        assertEquals("Iberdrola Clientes", r.merchant)
+        assertEquals("Hogar", r.category)
+    }
+
+    @Test fun unicajaTransferIn() {
+        val r = p("Unicaja", "Has recibido una transferencia de 350,00 EUR. Saldo: 1.467,13 EUR")
+        assertTrue(r.isIncome)
+        assertEquals(350.0, r.amount, 0.001)
+        assertEquals(1467.13, r.balance!!, 0.001)
+    }
 }

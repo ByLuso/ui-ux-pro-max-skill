@@ -13,20 +13,32 @@ object BankApps {
         "net.inverline.bancosabadell.officelocator.android" to "Sabadell",
         "com.bankinter.launcher" to "Bankinter",
         "es.evobanco.bancamovil" to "EVO Banco",
-        "es.univia.unicajamovil" to "Unicaja",
+        "es.unicajabanco.app" to "Unicaja",
         "com.kutxabank.android" to "Kutxabank",
-        "es.cajamar.cajamar" to "Cajamar",
-        "com.rsi" to "Caja Rural",
+        "com.grupocajamar.wefferent" to "Cajamar",
+        "com.rsi.nba" to "Ruralvía",
         "com.revolut.revolut" to "Revolut",
         "de.number26.android" to "N26",
         "com.transferwise.android" to "Wise",
         "com.paypal.android.p2pmobile" to "PayPal",
         "com.google.android.apps.walletnfcrel" to "Google Wallet",
         "com.samsung.android.spay" to "Samsung Wallet",
-        "com.myinvestor.app" to "MyInvestor",
+        "com.myinvestor.es" to "MyInvestor",
         "com.bunq.android" to "bunq",
-        "com.vivid.money" to "Vivid",
-        "com.trade_republic.app" to "Trade Republic",
+        "de.traderepublic.app" to "Trade Republic",
+        "com.abanca.bancamovil.particulares" to "Abanca",
+        "es.ibercaja.ibercajaapp" to "Ibercaja",
+        "com.icb.pibank.app" to "Pibank",
+        "es.bizum.wallet" to "Bizum",
+        "com.google.android.apps.nbu.paisa.user" to "Google Pay",
+    )
+
+    /** Carteras de pago: su notificación es "Comercio" + "23,45 € · Visa ••1234",
+     *  sin palabras como "compra" o "pago", así que se asume gasto por defecto. */
+    val wallets = setOf(
+        "com.google.android.apps.walletnfcrel",
+        "com.google.android.apps.nbu.paisa.user",
+        "com.samsung.android.spay",
     )
 
     /** Apps de mensajería donde un "20 €" casi nunca es un movimiento real. */

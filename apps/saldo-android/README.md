@@ -6,8 +6,11 @@ de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actuali
 ## Qué hace
 
 - **Captura automática**: escucha las notificaciones de BBVA, CaixaBank, imagin, Santander,
-  Openbank, ING, Sabadell, Bankinter, EVO, Unicaja, Kutxabank, Revolut, N26, Wise, PayPal,
-  Google Wallet… Detecta importe, gasto/ingreso, comercio y categoría.
+  Openbank, ING, Sabadell, Bankinter, EVO, Unicaja, Abanca, Ibercaja, Kutxabank, Cajamar,
+  Ruralvía, Pibank, Revolut, N26, Wise, PayPal, Bizum, Google Wallet, Google Pay y Samsung
+  Wallet. Detecta importe, gasto/ingreso, comercio y categoría.
+- **Sin duplicados con Google Wallet**: si pagas con el móvil, Wallet y tu banco avisan del
+  mismo pago; Saldo lo cuenta una sola vez (y aprovecha el saldo si el banco lo indica).
 - **Saldo actual**: indicas tu saldo una vez y se actualiza con cada movimiento. Si el banco
   incluye el saldo en la notificación ("Saldo disponible 1.234,56 €"), lo usa directamente.
 - **Inicio**: mes con ingresos, gastos y balance; donut de gastos por grupo; últimos movimientos.
@@ -26,6 +29,9 @@ de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actuali
 > En Android 13+ puede que tengas que ir a *Ajustes del sistema → Apps → Saldo → ⋮ →
 > Permitir ajustes restringidos* antes de poder activar el acceso a notificaciones
 > (pasa con todas las apps instaladas fuera de Play Store).
+>
+> Unicaja y otros bancos solo envían avisos de compras si los activas en su app
+> (en Unicaja: *Perfil → Notificaciones / Alertas*).
 >
 > Algunos fabricantes (Xiaomi, Samsung, Huawei) cierran apps en segundo plano: excluye
 > Saldo de la optimización de batería para que no se pierda ninguna notificación.
