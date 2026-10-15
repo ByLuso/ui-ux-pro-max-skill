@@ -6,6 +6,29 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import com.byluso.saldo.ui.BootSequence
+import com.byluso.saldo.ui.HoloToast
+import com.byluso.saldo.ui.ToastMsg
+import com.byluso.saldo.ui.bounceClick
+import com.byluso.saldo.ui.rememberPulseOn
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -110,6 +133,8 @@ private fun SaldoApp(repo: Repository) {
     var adding by remember { mutableStateOf(false) }
     var settingBalance by remember { mutableStateOf(false) }
     var listenerEnabled by remember { mutableStateOf(BankNotificationListener.isEnabled(context)) }
+    var booting by rememberSaveable { mutableStateOf(true) }
+    var toast by remember { mutableStateOf<ToastMsg?>(null) }
 
     LifecycleResumeEffect(Unit) {
         listenerEnabled = BankNotificationListener.isEnabled(context)
@@ -132,8 +157,33 @@ private fun SaldoApp(repo: Repository) {
                 },
                 bottomBar = { HoloNavBar(tab) { tab = it } },
             ) { padding ->
-                Box(Modifier.padding(top = padding.calculateTopPadding())) {
-                    when (tab) {
+                val scan = rememberPulseOn(tab, 520)
+                Box(
+                    Modifier
+                        .padding(top = padding.calculateTopPadding())
+                        .drawWithContent {
+                            drawContent()
+                            // Línea de escaneo que barre la pantalla al cambiar de pestaña
+                            if (scan < 1f) {
+                                val y = size.height * scan
+                                drawRect(
+                                    Brush.verticalGradient(listOf(Color.Transparent, C.Cyan.copy(alpha = 0.18f * (1 - scan))), y - 140f, y),
+                                    Offset(0f, y - 140f), androidx.compose.ui.geometry.Size(size.width, 140f),
+                                )
+                                drawLine(C.Cyan.copy(alpha = 0.8f * (1 - scan)), Offset(0f, y), Offset(size.width, y), 2f)
+                            }
+                        }
+                ) {
+                  AnimatedContent(
+                    targetState = tab,
+                    transitionSpec = {
+                        val dir = if (targetState.ordinal > initialState.ordinal) 1 else -1
+                        (slideInHorizontally(tween(380)) { it / 4 * dir } + fadeIn(tween(300)) + scaleIn(tween(380), initialScale = 0.96f)) togetherWith
+                            (slideOutHorizontally(tween(300)) { -it / 4 * dir } + fadeOut(tween(200)) + scaleOut(tween(300), targetScale = 1.04f))
+                    },
+                    label = "tabs",
+                  ) { shown ->
+                    when (shown) {
                         Tab.Home -> HomeScreen(
                             month = month, onMonth = { month = it }, hide = hide, onToggleHide = { hide = !hide },
                             movements = movements, currentBalance = balance, anchor = anchor,
@@ -151,57 +201,97 @@ private fun SaldoApp(repo: Repository) {
                             onSetBalance = { settingBalance = true },
                         )
                     }
+                  }
                 }
             }
+            HoloToast(toast) { toast = null }
         }
 
         if (adding || editing != null) {
             MovementDialog(
                 initial = editing,
                 onDismiss = { adding = false; editing = null },
-                onSave = { repo.save(it); adding = false; editing = null },
-                onDelete = { repo.delete(it.id); editing = null },
+                onSave = {
+                    repo.save(it)
+                    toast = ToastMsg(
+                        if (editing == null) "registro creado" else "registro actualizado",
+                        "${it.merchant} · ${euros(it.signed, signed = true, hide = hide)}",
+                        if (it.isIncome) C.Income else C.Cyan,
+                    )
+                    adding = false; editing = null
+                },
+                onDelete = {
+                    repo.delete(it.id)
+                    toast = ToastMsg("registro eliminado", it.merchant, C.Expense)
+                    editing = null
+                },
             )
         }
         if (settingBalance) {
             BalanceDialog(
                 current = balance,
                 onDismiss = { settingBalance = false },
-                onSave = { repo.setCurrentBalance(it); settingBalance = false },
+                onSave = {
+                    repo.setCurrentBalance(it)
+                    toast = ToastMsg("saldo calibrado", euros(it, hide = hide), C.Violet)
+                    settingBalance = false
+                },
             )
         }
+        AnimatedVisibility(booting, exit = fadeOut(tween(1))) { BootSequence { booting = false } }
     }
 }
 
-/** Barra de navegación flotante de cristal con indicador luminoso. */
+/** Barra de navegación flotante de cristal con un indicador luminoso que se desliza entre pestañas. */
 @Composable
 internal fun HoloNavBar(current: Tab, onSelect: (Tab) -> Unit) {
-    Row(
+    val pos by animateFloatAsState(
+        current.ordinal.toFloat(), spring(dampingRatio = 0.62f, stiffness = 260f), label = "pos",
+    )
+    val haptic = LocalHapticFeedback.current
+    BoxWithConstraints(
         Modifier
             .navigationBarsPadding()
             .padding(horizontal = 16.dp, vertical = 10.dp)
             .fillMaxWidth()
             .clip(chamfer(16.dp))
             .background(C.Void.copy(alpha = 0.94f))
-            .holoPanel(16.dp, fill = C.Violet.copy(alpha = 0.10f))
-            .padding(vertical = 6.dp),
+            .holoPanel(16.dp, fill = C.Violet.copy(alpha = 0.10f)),
     ) {
-        Tab.entries.forEach { t ->
-            val selected = t == current
-            val glow by animateFloatAsState(if (selected) 1f else 0f, tween(350), label = "glow")
-            Column(
-                Modifier.weight(1f).clickable { onSelect(t) }.padding(vertical = 6.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Icon(t.icon, t.label, tint = lerp(C.Muted, C.Cyan, glow), modifier = Modifier.size(22.dp))
-                Text(
-                    t.label.uppercase(esLocale), color = lerp(C.Muted, C.Text, glow), fontFamily = Mono,
-                    fontSize = 9.sp, letterSpacing = 1.sp, modifier = Modifier.padding(top = 3.dp), maxLines = 1,
-                )
-                Box(
-                    Modifier.padding(top = 5.dp).width(28.dp * glow).height(2.dp)
-                        .background(Brush.horizontalGradient(listOf(C.Cyan, C.Magenta)))
-                )
+        val itemW = maxWidth / Tab.entries.size
+        // Foco de luz que se desliza
+        Box(
+            Modifier
+                .offset(x = itemW * pos)
+                .width(itemW)
+                .height(68.dp)
+                .drawBehind {
+                    drawRect(Brush.verticalGradient(listOf(C.Cyan.copy(alpha = 0.16f), Color.Transparent)))
+                    drawLine(
+                        Brush.horizontalGradient(listOf(Color.Transparent, C.Cyan, C.Magenta, Color.Transparent)),
+                        Offset(size.width * 0.15f, 1f), Offset(size.width * 0.85f, 1f), 3f,
+                    )
+                }
+        )
+        Row(Modifier.padding(vertical = 6.dp)) {
+            Tab.entries.forEach { t ->
+                val glow = (1f - kotlin.math.abs(pos - t.ordinal)).coerceIn(0f, 1f)
+                Column(
+                    Modifier.weight(1f).bounceClick(haptic = false) {
+                        if (t != current) haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        onSelect(t)
+                    }.padding(vertical = 6.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Icon(
+                        t.icon, t.label, tint = lerp(C.Muted, C.Cyan, glow),
+                        modifier = Modifier.size(22.dp).graphicsLayer { val sc = 1f + 0.15f * glow; scaleX = sc; scaleY = sc; translationY = -3f * glow },
+                    )
+                    Text(
+                        t.label.uppercase(esLocale), color = lerp(C.Muted, C.Text, glow), fontFamily = Mono,
+                        fontSize = 9.sp, letterSpacing = 1.sp, modifier = Modifier.padding(top = 3.dp), maxLines = 1,
+                    )
+                }
             }
         }
     }

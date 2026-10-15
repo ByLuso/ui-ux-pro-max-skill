@@ -1,6 +1,23 @@
 package com.byluso.saldo.ui
 
 import android.graphics.BlurMaskFilter
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalHapticFeedback
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -212,9 +229,20 @@ private fun DrawScope.glowArc(color: Color, start: Float, sweep: Float, stroke: 
     }
 }
 
-/** "Reactor": anillo segmentado con resplandor, marcas giratorias y animación de entrada. */
+/**
+ * "Reactor": anillo segmentado con resplandor, marcas giratorias y animación de entrada.
+ * Tocar un sector lo ilumina y muestra su detalle en el centro; tocarlo otra vez lo suelta.
+ */
 @Composable
-fun Donut(slices: List<Slice>, centerTop: String, centerBottom: String, modifier: Modifier = Modifier) {
+fun Donut(
+    slices: List<Slice>,
+    centerTop: String,
+    centerBottom: String,
+    modifier: Modifier = Modifier,
+    selected: Int? = null,
+    onSelect: (Int?) -> Unit = {},
+    hide: Boolean = false,
+) {
     val total = slices.sumOf { it.value }.takeIf { it > 0 } ?: 1.0
     val preview = LocalInspectionMode.current
     val appear = remember { Animatable(if (preview) 1f else 0f) }
@@ -226,9 +254,34 @@ fun Donut(slices: List<Slice>, centerTop: String, centerBottom: String, modifier
     val t = rememberInfiniteTransition(label = "reactor")
     val spin by t.animateFloat(0f, 360f, infiniteRepeatable(tween(24000, easing = LinearEasing)), label = "spin")
     val pulse by t.animateFloat(0.4f, 1f, infiniteRepeatable(tween(1800), RepeatMode.Reverse), label = "pulse")
+    val dim by animateFloatAsState(if (selected != null) 1f else 0f, spring(stiffness = 300f), label = "dim")
+    val emph = slices.indices.map { i ->
+        animateFloatAsState(if (selected == i) 1f else 0f, spring(dampingRatio = 0.5f, stiffness = 300f), label = "emph$i").value
+    }
+    val haptic = LocalHapticFeedback.current
 
     Box(modifier.size(230.dp), contentAlignment = Alignment.Center) {
-        Canvas(Modifier.size(230.dp)) {
+        Canvas(
+            Modifier
+                .size(230.dp)
+                .pointerInput(slices) {
+                    detectTapGestures { pos ->
+                        val dx = pos.x - size.width / 2f
+                        val dy = pos.y - size.height / 2f
+                        val dist = kotlin.math.sqrt(dx * dx + dy * dy)
+                        val ringR = size.width / 2f - 26.dp.toPx() - 11.dp.toPx()
+                        if (kotlin.math.abs(dist - ringR) > 26.dp.toPx() || slices.isEmpty()) {
+                            onSelect(null); return@detectTapGestures
+                        }
+                        val ang = ((Math.toDegrees(kotlin.math.atan2(dy, dx).toDouble()) + 90 + 360) % 360).toFloat()
+                        var acc = 0f
+                        val idx = slices.indexOfFirst { sl -> acc += (sl.value / total * 360f).toFloat(); ang <= acc }
+                            .takeIf { it >= 0 } ?: slices.lastIndex
+                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        onSelect(if (idx == selected) null else idx)
+                    }
+                }
+        ) {
             val c = center
             val outer = size.minDimension / 2
             // Marcas exteriores giratorias
@@ -244,39 +297,76 @@ fun Donut(slices: List<Slice>, centerTop: String, centerBottom: String, modifier
                     )
                 }
             }
+            // Contra-rotación: arco discontinuo interior
+            rotate(-spin * 2, c) {
+                drawArc(C.Magenta.copy(alpha = 0.35f), 0f, 70f, false, Offset(outer * 0.28f + c.x - outer, outer * 0.28f + c.y - outer),
+                    Size(outer * 2 * 0.72f, outer * 2 * 0.72f), style = Stroke(2f))
+                drawArc(C.Cyan.copy(alpha = 0.35f), 180f, 40f, false, Offset(outer * 0.28f + c.x - outer, outer * 0.28f + c.y - outer),
+                    Size(outer * 2 * 0.72f, outer * 2 * 0.72f), style = Stroke(2f))
+            }
             val stroke = 22.dp.toPx()
             val inset = 26.dp.toPx()
             val arc = Size(size.width - inset * 2, size.height - inset * 2)
             drawArc(C.Track, 0f, 360f, false, Offset(inset, inset), arc, style = Stroke(stroke))
             val gap = if (slices.size > 1) 2.5f else 0f
             var start = -90f
-            slices.forEach { s ->
+            slices.forEachIndexed { i, s ->
                 val sweep = (s.value / total * 360f).toFloat() * appear.value
                 val visible = (sweep - gap).coerceAtLeast(0.8f)
-                glowArc(s.color, start + gap / 2, visible, stroke, 18f * pulse + 6f, inset, arc)
-                drawArc(s.color, start + gap / 2, visible, false, Offset(inset, inset), arc, style = Stroke(stroke, cap = StrokeCap.Butt))
-                // Filo brillante interior
-                drawArc(Color.White.copy(alpha = 0.35f), start + gap / 2, visible, false, Offset(inset + stroke / 2 - 1.5f, inset + stroke / 2 - 1.5f),
-                    Size(arc.width - stroke + 3f, arc.height - stroke + 3f), style = Stroke(1.5f))
+                val e = emph.getOrElse(i) { 0f }
+                val alpha = 1f - 0.6f * dim * (1f - e)
+                val w = stroke + 12.dp.toPx() * e
+                val col = s.color.copy(alpha = alpha)
+                glowArc(col, start + gap / 2, visible, w, 18f * pulse + 6f + 14f * e, inset, arc)
+                drawArc(col, start + gap / 2, visible, false, Offset(inset, inset), arc, style = Stroke(w, cap = StrokeCap.Butt))
+                drawArc(Color.White.copy(alpha = 0.35f * alpha), start + gap / 2, visible, false, Offset(inset + w / 2 - 1.5f, inset + w / 2 - 1.5f),
+                    Size(arc.width - w + 3f, arc.height - w + 3f), style = Stroke(1.5f))
                 start += sweep
             }
-            // Anillo interior fino
             drawCircle(C.Violet.copy(alpha = 0.35f), outer - inset - stroke - 10.dp.toPx(), c, style = Stroke(1f))
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            GlowText(centerTop, C.Text, 19.sp)
-            Text(centerBottom, color = C.Cyan.copy(alpha = 0.8f), fontFamily = Mono, fontSize = 10.sp, letterSpacing = 3.sp)
+        AnimatedContent(
+            targetState = selected?.takeIf { it in slices.indices },
+            transitionSpec = {
+                (fadeIn(tween(220)) + scaleIn(initialScale = 0.8f)) togetherWith (fadeOut(tween(150)) + scaleOut(targetScale = 1.15f))
+            },
+            label = "center",
+        ) { sel ->
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                if (sel == null) {
+                    GlowText(centerTop, C.Text, 19.sp)
+                    Text(centerBottom, color = C.Cyan.copy(alpha = 0.8f), fontFamily = Mono, fontSize = 10.sp, letterSpacing = 3.sp)
+                } else {
+                    val s = slices[sel]
+                    Text(s.label.uppercase(esLocale), color = s.color, fontFamily = Mono, fontSize = 11.sp, letterSpacing = 2.sp, maxLines = 1)
+                    GlowText(euros(s.value, hide = hide), s.color, 19.sp)
+                    Text("${(s.value / total * 100).roundToInt()}% DEL TOTAL", color = C.Muted, fontFamily = Mono, fontSize = 9.sp, letterSpacing = 2.sp)
+                }
+            }
         }
     }
 }
 
 /** Barra de categoría: línea de neón con punto luminoso al final. */
 @Composable
-fun CategoryBar(name: String, amount: Double, pct: Int, color: Color, hide: Boolean) {
+fun CategoryBar(
+    name: String, amount: Double, pct: Int, color: Color, hide: Boolean,
+    selected: Boolean = false, dimmed: Boolean = false, onClick: () -> Unit = {},
+) {
+    val glow by animateFloatAsState(if (selected) 1f else 0f, tween(300), label = "glow")
+    val fade by animateFloatAsState(if (dimmed) 0.4f else 1f, tween(300), label = "fade")
     val preview = LocalInspectionMode.current
     val grow = remember { Animatable(if (preview) pct / 100f else 0f) }
     LaunchedEffect(pct) { grow.animateTo(pct / 100f, tween(1000, easing = FastOutSlowInEasing)) }
-    Column(Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .graphicsLayer { alpha = fade }
+            .clip(CutCornerShape(topStart = 10.dp, bottomEnd = 10.dp))
+            .background(color.copy(alpha = 0.12f * glow))
+            .bounceClick(onClick = onClick)
+            .padding(horizontal = 8.dp, vertical = 6.dp)
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(8.dp).clip(CutCornerShape(50)).background(color))
             Text(name, color = C.Text, fontSize = 15.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(start = 10.dp).weight(1f))
@@ -302,7 +392,7 @@ fun MovementRow(m: Movement, hide: Boolean, onClick: () -> Unit) {
     val cat = Categories.byName(m.category)
     val color = Color(cat.color)
     Row(
-        Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 14.dp),
+        Modifier.fillMaxWidth().bounceClick(onClick = onClick).padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -332,15 +422,18 @@ fun MovementRow(m: Movement, hide: Boolean, onClick: () -> Unit) {
 @Composable
 fun Pill(label: String, selected: Boolean, onClick: () -> Unit) {
     val shape = CutCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
+    val on by animateFloatAsState(if (selected) 1f else 0f, tween(260), label = "pill")
     Box(
         Modifier
+            .bounceClick(onClick = onClick)
             .clip(shape)
-            .then(if (selected) Modifier.background(C.holo) else Modifier.background(C.Glass).border(1.dp, C.Line, shape))
-            .clickable(onClick = onClick)
+            .background(C.Glass)
+            .border(1.dp, C.Line, shape)
+            .drawBehind { drawRect(C.holo, alpha = on) }
             .padding(horizontal = 16.dp, vertical = 9.dp),
     ) {
         Text(
-            label.uppercase(esLocale), color = if (selected) C.Void else C.Muted, fontFamily = Mono,
+            label.uppercase(esLocale), color = lerp(C.Muted, C.Void, on), fontFamily = Mono,
             fontWeight = FontWeight.Bold, fontSize = 12.sp, letterSpacing = 1.5.sp,
         )
     }
@@ -351,20 +444,47 @@ fun Pill(label: String, selected: Boolean, onClick: () -> Unit) {
 fun DiamondButton(onClick: () -> Unit, content: @Composable BoxScope.() -> Unit) {
     val t = rememberInfiniteTransition(label = "fab")
     val pulse by t.animateFloat(0f, 1f, infiniteRepeatable(tween(2200, easing = LinearEasing)), label = "pulse")
-    Box(Modifier.size(84.dp), contentAlignment = Alignment.Center) {
-        Canvas(Modifier.size(84.dp)) {
-            val r = size.minDimension / 2 * (0.62f + 0.38f * pulse)
+    val turn by t.animateFloat(0f, 360f, infiniteRepeatable(tween(9000, easing = LinearEasing)), label = "turn")
+    val burst = remember { Animatable(1f) }
+    val spinIn = remember { Animatable(0f) }
+    val scope = rememberCoroutineScope()
+    val particles = remember { List(18) { i -> Triple(i * 20f + Random.nextFloat() * 12f, 0.7f + Random.nextFloat() * 0.6f, if (i % 2 == 0) C.Cyan else C.Magenta) } }
+    Box(Modifier.size(96.dp), contentAlignment = Alignment.Center) {
+        Canvas(Modifier.size(96.dp)) {
+            val r = size.minDimension / 2 * (0.55f + 0.45f * pulse)
             drawCircle(C.Cyan.copy(alpha = 0.35f * (1 - pulse)), r, style = Stroke(2f))
+            // Órbita discontinua
+            rotate(turn) {
+                drawArc(C.holoSoft, 0f, 80f, false, Offset(8f, 8f), Size(size.width - 16f, size.height - 16f), style = Stroke(1.5f))
+                drawArc(C.holoSoft, 180f, 80f, false, Offset(8f, 8f), Size(size.width - 16f, size.height - 16f), style = Stroke(1.5f))
+            }
+            // Partículas al pulsar
+            if (burst.value < 1f) {
+                val b = burst.value
+                particles.forEach { (deg, speed, col) ->
+                    val a = Math.toRadians(deg.toDouble())
+                    val d = size.minDimension / 2 * (0.3f + 0.9f * b * speed)
+                    drawCircle(col.copy(alpha = 1f - b), 3.5f * (1f - b) + 1f,
+                        Offset(center.x + (d * cos(a)).toFloat(), center.y + (d * sin(a)).toFloat()))
+                }
+                drawCircle(Color.White.copy(alpha = 0.5f * (1f - b)), size.minDimension / 2 * (0.4f + 0.6f * b), style = Stroke(3f * (1 - b)))
+            }
         }
         Box(
             Modifier
                 .size(58.dp)
-                .rotate(45f)
+                .graphicsLayer { rotationZ = 45f + spinIn.value * 180f }
                 .clip(CutCornerShape(14))
                 .background(C.holo)
-                .clickable(onClick = onClick),
+                .bounceClick {
+                    scope.launch {
+                        launch { burst.snapTo(0f); burst.animateTo(1f, tween(650, easing = FastOutSlowInEasing)) }
+                        launch { spinIn.snapTo(0f); spinIn.animateTo(1f, tween(500, easing = FastOutSlowInEasing)) }
+                    }
+                    onClick()
+                },
             contentAlignment = Alignment.Center,
-        ) { Box(Modifier.rotate(-45f), contentAlignment = Alignment.Center, content = content) }
+        ) { Box(Modifier.graphicsLayer { rotationZ = -45f - spinIn.value * 180f }, contentAlignment = Alignment.Center, content = content) }
     }
 }
 

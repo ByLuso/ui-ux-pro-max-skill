@@ -54,9 +54,9 @@ import java.time.format.TextStyle as DateTextStyle
 fun ScreenTitle(code: String, text: String) {
     Column(Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 8.dp)) {
         HudLabel(code, C.Cyan)
-        Text(
-            text.uppercase(esLocale), style = TextStyle(brush = C.holo), fontFamily = Display,
-            fontWeight = FontWeight.Black, fontSize = 26.sp, letterSpacing = 3.sp,
+        GlitchText(
+            rememberScramble(text.uppercase(esLocale), text),
+            TextStyle(brush = C.holo, fontFamily = Display, fontWeight = FontWeight.Black, fontSize = 26.sp, letterSpacing = 3.sp),
         )
     }
 }
@@ -89,8 +89,9 @@ fun MovementsScreen(
         if (shown.isEmpty()) item {
             Text("Sin registros en ${monthTitle(month)}.", color = C.Muted, fontFamily = Mono, fontSize = 12.sp, modifier = Modifier.padding(20.dp))
         }
-        byDay.forEach { (day, list) ->
-            item(key = day.toString()) {
+        byDay.entries.forEachIndexed { idx, (day, list) ->
+            item(key = "$filter-$day") {
+              Column(Modifier.enterStagger(idx + 1)) {
                 Row(Modifier.padding(start = 20.dp, end = 20.dp, top = 14.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                     HudLabel(relativeDay(list.first().timestamp), C.Cyan, Modifier.weight(1f))
                     Text(euros(list.sumOf { it.signed }, signed = true, hide = hide), color = C.Muted, fontFamily = Mono, fontSize = 12.sp)
@@ -101,6 +102,7 @@ fun MovementsScreen(
                         MovementRow(m, hide) { onOpen(m) }
                     }
                 }
+              }
             }
         }
         item { Spacer(Modifier.height(120.dp)) }
@@ -125,7 +127,7 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
     LazyColumn {
         item { ScreenTitle("análisis", "Gráficas") }
         item {
-            SectionCard(Modifier.padding(16.dp)) {
+            SectionCard(Modifier.padding(16.dp).enterStagger(1).holoShimmer(6000, 0.05f)) {
                 HudLabel("entrada vs salida · 6 ciclos")
                 Spacer(Modifier.height(18.dp))
                 Canvas(Modifier.fillMaxWidth().height(200.dp)) {
@@ -140,7 +142,8 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
                     data.forEachIndexed { i, (_, inc, exp) ->
                         val x = slot * i + slot / 2
                         listOf(inc to C.Income, exp to C.Expense).forEachIndexed { j, (v, color) ->
-                            val h = (v / max * size.height).toFloat() * grow.value
+                            val local = ((grow.value * 1.6f) - i * 0.12f).coerceIn(0f, 1f)
+                            val h = (v / max * size.height).toFloat() * FastOutSlowInEasing.transform(local)
                             val left = if (j == 0) x - barW - 3f else x + 3f
                             // Halo
                             drawRoundRect(color.copy(alpha = 0.18f), Offset(left - 4f, size.height - h - 4f), Size(barW + 8f, h + 4f), CornerRadius(6f))
@@ -167,8 +170,9 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
             }
         }
         item { HudLabel("resultado por ciclo", modifier = Modifier.padding(start = 20.dp, top = 8.dp, bottom = 4.dp)) }
-        items(data.reversed()) { (ym, inc, exp) ->
-            Row(Modifier.padding(horizontal = 20.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+        items(data.reversed().withIndex().toList()) { (i, row) ->
+            val (ym, inc, exp) = row
+            Row(Modifier.enterStagger(2 + i).padding(horizontal = 20.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(monthTitle(ym), color = C.Text, modifier = Modifier.weight(1f))
                 Text(
                     euros(inc - exp, signed = true, hide = hide), color = if (inc >= exp) C.Income else C.Expense,
@@ -180,7 +184,7 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
             val thisMonth = movements.filter { now.contains(it.timestamp) && !it.isIncome }
             val top = thisMonth.groupBy { it.merchant }.mapValues { e -> e.value.sumOf { it.amount } }
                 .entries.sortedByDescending { it.value }.take(5)
-            if (top.isNotEmpty()) SectionCard(Modifier.padding(16.dp)) {
+            if (top.isNotEmpty()) SectionCard(Modifier.padding(16.dp).enterStagger(8)) {
                 HudLabel("mayores destinos · este ciclo")
                 val maxTop = top.first().value
                 top.forEachIndexed { i, (name, v) ->
@@ -222,7 +226,7 @@ fun SettingsScreen(
     LazyColumn {
         item { ScreenTitle("sistema", "Ajustes") }
         item {
-            SectionCard(Modifier.padding(16.dp)) {
+            SectionCard(Modifier.padding(16.dp).enterStagger(1)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     HudLabel("enlace de notificaciones", if (listenerEnabled) C.Income else C.Magenta, Modifier.weight(1f))
                     if (listenerEnabled) LiveDot()
@@ -236,7 +240,7 @@ fun SettingsScreen(
             }
         }
         item {
-            SectionCard(Modifier.padding(horizontal = 16.dp)) {
+            SectionCard(Modifier.padding(horizontal = 16.dp).enterStagger(2)) {
                 HudLabel("calibración de saldo")
                 Text(
                     "Indica tu saldo actual y Saldo lo irá actualizando con cada gasto e ingreso detectado.",
@@ -258,9 +262,9 @@ fun SettingsScreen(
                 )
             }
         }
-        items(apps, key = { it.pkg }) { app ->
+        items(apps.withIndex().toList(), key = { it.value.pkg }) { (i, app) ->
             Row(
-                Modifier.padding(horizontal = 16.dp, vertical = 5.dp).fillMaxWidth().holoPanel(12.dp, border = Brush.linearGradient(listOf(C.Line, C.Line)))
+                Modifier.padding(horizontal = 16.dp, vertical = 5.dp).enterStagger(3 + i).fillMaxWidth().holoPanel(12.dp, border = Brush.linearGradient(listOf(C.Line, C.Line)))
                     .padding(horizontal = 16.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {

@@ -7,6 +7,10 @@ de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actuali
 |---|---|---|---|
 | ![Inicio](screenshots/home.png) | ![Movimientos](screenshots/movements.png) | ![Gráficas](screenshots/charts.png) | ![Ajustes](screenshots/settings.png) |
 
+| Arranque | Entrada de Inicio |
+|---|---|
+| ![Arranque](screenshots/boot.gif) | ![Inicio animado](screenshots/home.gif) |
+
 ### Diseño "holo 2100"
 
 - Fondo vivo: auroras que se desplazan, estrellas que titilan y un horizonte de rejilla en perspectiva.
@@ -14,6 +18,12 @@ de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actuali
 - "Reactor" de gastos: anillo segmentado con resplandor de neón y marcas que giran.
 - Cifras con contador animado y brillo; barra de flujo ingresos/gastos con destello.
 - Botón de acción en rombo con pulso de luz y barra de navegación flotante.
+- Animaciones: secuencia de arranque (anillo, logo, tecleo y sincronización), transiciones
+  entre pestañas con línea de escaneo, entrada escalonada de tarjetas, cifras que se
+  "descifran" al ocultar/mostrar o cambiar de mes, glitch ocasional en el logo, destello
+  holográfico en las tarjetas, rebote con vibración al pulsar, partículas en el botón ◆,
+  indicador deslizante en la barra inferior y avisos holográficos al guardar.
+- Reactor interactivo: toca un sector o una categoría para destacarla y ver su detalle.
 - Tipografías: Orbitron (titulares y cifras), Exo 2 (texto) y JetBrains Mono (datos),
   todas con licencia SIL Open Font License (ver `licenses/`).
 
