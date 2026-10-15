@@ -3,6 +3,20 @@
 App nativa (Kotlin + Jetpack Compose) inspirada en ExpenseIA. Lee las notificaciones
 de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actualizado**.
 
+| Inicio | Movimientos | Gráficas | Ajustes |
+|---|---|---|---|
+| ![Inicio](screenshots/home.png) | ![Movimientos](screenshots/movements.png) | ![Gráficas](screenshots/charts.png) | ![Ajustes](screenshots/settings.png) |
+
+### Diseño "holo 2100"
+
+- Fondo vivo: auroras que se desplazan, estrellas que titilan y un horizonte de rejilla en perspectiva.
+- Paneles de cristal con esquinas cortadas a 45° y borde iridiscente cian → violeta → magenta.
+- "Reactor" de gastos: anillo segmentado con resplandor de neón y marcas que giran.
+- Cifras con contador animado y brillo; barra de flujo ingresos/gastos con destello.
+- Botón de acción en rombo con pulso de luz y barra de navegación flotante.
+- Tipografías: Orbitron (titulares y cifras), Exo 2 (texto) y JetBrains Mono (datos),
+  todas con licencia SIL Open Font License (ver `licenses/`).
+
 ## Qué hace
 
 - **Captura automática**: escucha las notificaciones de BBVA, CaixaBank, imagin, Santander,

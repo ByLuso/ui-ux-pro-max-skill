@@ -1,149 +1,379 @@
 package com.byluso.saldo.ui
 
+import android.graphics.BlurMaskFilter
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byluso.saldo.data.Movement
 import com.byluso.saldo.parser.Categories
 import com.byluso.saldo.parser.NotificationParser
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.random.Random
+
+// ======================================================================= Superficies
+
+/** Forma de panel con dos esquinas cortadas a 45°. */
+fun chamfer(cut: Dp = 18.dp): Shape = CutCornerShape(topStart = cut, topEnd = 0.dp, bottomEnd = cut, bottomStart = 0.dp)
+
+/** Panel de cristal con borde iridiscente. */
+fun Modifier.holoPanel(cut: Dp = 18.dp, border: Brush = C.holoSoft, fill: Color = C.Glass): Modifier {
+    val shape = chamfer(cut)
+    return this
+        .clip(shape)
+        .background(Brush.verticalGradient(listOf(fill, fill.copy(alpha = fill.alpha * 0.4f))), shape)
+        .border(1.dp, border, shape)
+}
 
 @Composable
 fun SectionCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
-    Column(
-        modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(24.dp))
-            .background(C.Card)
-            .padding(20.dp),
+    Column(modifier.fillMaxWidth().holoPanel().padding(20.dp), content = content)
+}
+
+/** Etiqueta técnica: "// INGRESOS". */
+@Composable
+fun HudLabel(text: String, color: Color = C.Muted, modifier: Modifier = Modifier) {
+    Text(
+        "// " + text.uppercase(esLocale), color = color, fontFamily = Mono, fontSize = 11.sp,
+        letterSpacing = 2.5.sp, modifier = modifier,
+    )
+}
+
+/** Texto con resplandor de neón. */
+@Composable
+fun GlowText(
+    text: String,
+    color: Color,
+    fontSize: TextUnit,
+    modifier: Modifier = Modifier,
+    brush: Brush? = null,
+    fontWeight: FontWeight = FontWeight.Bold,
+) {
+    Text(
+        text, modifier = modifier, maxLines = 1,
+        style = TextStyle(
+            fontFamily = Display, fontWeight = fontWeight, fontSize = fontSize, color = color,
+            shadow = Shadow(color.copy(alpha = 0.65f), Offset.Zero, 28f),
+        ).let { if (brush != null) it.merge(TextStyle(brush = brush)) else it },
+    )
+}
+
+/** Cuenta animada hacia el nuevo valor (efecto "contador"). */
+@Composable
+fun rememberCountUp(target: Double): Double {
+    // En las vistas previas (Android Studio / capturas) se muestra el valor final directamente.
+    val preview = LocalInspectionMode.current
+    var from by remember { mutableDoubleStateOf(if (preview) target else 0.0) }
+    var to by remember { mutableDoubleStateOf(target) }
+    val progress = remember { Animatable(if (preview) 1f else 0f) }
+    LaunchedEffect(target) {
+        if (preview) return@LaunchedEffect
+        from += (to - from) * progress.value
+        to = target
+        progress.snapTo(0f)
+        progress.animateTo(1f, tween(1100, easing = FastOutSlowInEasing))
+    }
+    return from + (to - from) * progress.value
+}
+
+// ======================================================================= Fondo
+
+/** Fondo vivo: auroras que se desplazan, estrellas y una rejilla en perspectiva. */
+@Composable
+fun CosmicBackground(content: @Composable BoxScope.() -> Unit) {
+    val t = rememberInfiniteTransition(label = "cosmos")
+    val phase by t.animateFloat(0f, 1f, infiniteRepeatable(tween(18000, easing = LinearEasing)), label = "phase")
+    val gridShift by t.animateFloat(0f, 1f, infiniteRepeatable(tween(4000, easing = LinearEasing)), label = "grid")
+    val stars = remember {
+        val r = Random(2100)
+        List(90) { Triple(r.nextFloat(), r.nextFloat(), r.nextFloat()) }
+    }
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(C.Void)
+            .drawBehind {
+                val a = phase * 2 * Math.PI.toFloat()
+                aurora(C.Violet, Offset(size.width * (0.2f + 0.15f * sin(a)), size.height * (0.12f + 0.05f * cos(a))), size.width * 0.9f, 0.32f)
+                aurora(C.Cyan, Offset(size.width * (0.9f + 0.1f * cos(a)), size.height * (0.38f + 0.08f * sin(a))), size.width * 0.8f, 0.18f)
+                aurora(C.Magenta, Offset(size.width * (0.1f + 0.1f * cos(a + 1f)), size.height * (0.85f + 0.04f * sin(a))), size.width * 0.9f, 0.16f)
+                stars.forEach { (x, y, z) ->
+                    val twinkle = 0.35f + 0.65f * ((sin(a * 3 + z * 20) + 1) / 2)
+                    drawCircle(Color.White.copy(alpha = 0.10f + 0.35f * z * twinkle), 0.6f + z * 1.4f, Offset(x * size.width, y * size.height))
+                }
+                perspectiveGrid(gridShift)
+            },
         content = content,
     )
 }
 
+private fun DrawScope.aurora(color: Color, center: Offset, radius: Float, alpha: Float) {
+    drawCircle(Brush.radialGradient(listOf(color.copy(alpha = alpha), Color.Transparent), center, radius), radius, center)
+}
+
+/** Suelo de rejilla tipo horizonte que avanza hacia el usuario. */
+private fun DrawScope.perspectiveGrid(shift: Float) {
+    val horizon = size.height * 0.72f
+    val bottom = size.height
+    val vanishX = size.width / 2
+    val line = C.Cyan.copy(alpha = 0.10f)
+    for (i in -10..10) {
+        val x = vanishX + i * size.width / 6
+        drawLine(line, Offset(vanishX + i * 6f, horizon), Offset(x, bottom), 1f)
+    }
+    for (i in 0 until 10) {
+        val p = ((i + shift) / 10f)
+        val y = horizon + (bottom - horizon) * p * p
+        drawLine(C.Cyan.copy(alpha = 0.03f + 0.10f * p), Offset(0f, y), Offset(size.width, y), 1f)
+    }
+}
+
+// ======================================================================= Gráficos
+
 data class Slice(val label: String, val value: Double, val color: Color)
 
+private fun DrawScope.glowArc(color: Color, start: Float, sweep: Float, stroke: Float, blur: Float, inset: Float, arc: Size) {
+    drawIntoCanvas { canvas ->
+        val p = Paint().asFrameworkPaint().apply {
+            isAntiAlias = true
+            style = android.graphics.Paint.Style.STROKE
+            strokeWidth = stroke
+            this.color = color.copy(alpha = 0.55f).toArgb()
+            maskFilter = BlurMaskFilter(blur, BlurMaskFilter.Blur.NORMAL)
+        }
+        canvas.nativeCanvas.drawArc(inset, inset, inset + arc.width, inset + arc.height, start, sweep, false, p)
+    }
+}
+
+/** "Reactor": anillo segmentado con resplandor, marcas giratorias y animación de entrada. */
 @Composable
 fun Donut(slices: List<Slice>, centerTop: String, centerBottom: String, modifier: Modifier = Modifier) {
     val total = slices.sumOf { it.value }.takeIf { it > 0 } ?: 1.0
-    Box(modifier.size(200.dp), contentAlignment = Alignment.Center) {
-        Canvas(Modifier.size(200.dp)) {
-            val stroke = 34.dp.toPx()
-            val inset = stroke / 2
-            val arcSize = Size(size.width - stroke, size.height - stroke)
-            if (slices.isEmpty()) {
-                drawArc(C.Track, 0f, 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke))
-                return@Canvas
+    val preview = LocalInspectionMode.current
+    val appear = remember { Animatable(if (preview) 1f else 0f) }
+    LaunchedEffect(slices.map { it.label to it.value }) {
+        if (preview) return@LaunchedEffect
+        appear.snapTo(0f)
+        appear.animateTo(1f, tween(1200, easing = FastOutSlowInEasing))
+    }
+    val t = rememberInfiniteTransition(label = "reactor")
+    val spin by t.animateFloat(0f, 360f, infiniteRepeatable(tween(24000, easing = LinearEasing)), label = "spin")
+    val pulse by t.animateFloat(0.4f, 1f, infiniteRepeatable(tween(1800), RepeatMode.Reverse), label = "pulse")
+
+    Box(modifier.size(230.dp), contentAlignment = Alignment.Center) {
+        Canvas(Modifier.size(230.dp)) {
+            val c = center
+            val outer = size.minDimension / 2
+            // Marcas exteriores giratorias
+            rotate(spin, c) {
+                for (i in 0 until 72) {
+                    val ang = Math.toRadians(i * 5.0).toFloat()
+                    val len = if (i % 6 == 0) 10f else 4f
+                    val r1 = outer - 2f
+                    drawLine(
+                        C.Cyan.copy(alpha = if (i % 6 == 0) 0.6f else 0.22f),
+                        Offset(c.x + cos(ang) * r1, c.y + sin(ang) * r1),
+                        Offset(c.x + cos(ang) * (r1 - len), c.y + sin(ang) * (r1 - len)), 2f,
+                    )
+                }
             }
-            // Se dibuja en orden inverso para que los extremos redondeados se solapen bien.
-            val sweeps = slices.map { (it.value / total * 360f).toFloat() }
-            val starts = sweeps.runningFold(-90f) { acc, s -> acc + s }
-            for (i in slices.indices.reversed()) {
-                drawArc(
-                    slices[i].color, starts[i], sweeps[i].coerceAtLeast(0.5f), false,
-                    Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round),
-                )
+            val stroke = 22.dp.toPx()
+            val inset = 26.dp.toPx()
+            val arc = Size(size.width - inset * 2, size.height - inset * 2)
+            drawArc(C.Track, 0f, 360f, false, Offset(inset, inset), arc, style = Stroke(stroke))
+            val gap = if (slices.size > 1) 2.5f else 0f
+            var start = -90f
+            slices.forEach { s ->
+                val sweep = (s.value / total * 360f).toFloat() * appear.value
+                val visible = (sweep - gap).coerceAtLeast(0.8f)
+                glowArc(s.color, start + gap / 2, visible, stroke, 18f * pulse + 6f, inset, arc)
+                drawArc(s.color, start + gap / 2, visible, false, Offset(inset, inset), arc, style = Stroke(stroke, cap = StrokeCap.Butt))
+                // Filo brillante interior
+                drawArc(Color.White.copy(alpha = 0.35f), start + gap / 2, visible, false, Offset(inset + stroke / 2 - 1.5f, inset + stroke / 2 - 1.5f),
+                    Size(arc.width - stroke + 3f, arc.height - stroke + 3f), style = Stroke(1.5f))
+                start += sweep
             }
+            // Anillo interior fino
+            drawCircle(C.Violet.copy(alpha = 0.35f), outer - inset - stroke - 10.dp.toPx(), c, style = Stroke(1f))
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(centerTop, color = C.Text, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Text(centerBottom, color = C.Muted, fontSize = 12.sp, letterSpacing = 1.sp)
+            GlowText(centerTop, C.Text, 19.sp)
+            Text(centerBottom, color = C.Cyan.copy(alpha = 0.8f), fontFamily = Mono, fontSize = 10.sp, letterSpacing = 3.sp)
         }
     }
 }
 
+/** Barra de categoría: línea de neón con punto luminoso al final. */
 @Composable
 fun CategoryBar(name: String, amount: Double, pct: Int, color: Color, hide: Boolean) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(C.CardAlt),
-    ) {
-        Box(Modifier.width(4.dp).height(64.dp).padding(vertical = 10.dp).background(color))
-        Column(Modifier.padding(horizontal = 14.dp, vertical = 10.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(name, color = C.Text, fontSize = 16.sp, modifier = Modifier.weight(1f))
-                Text(euros(amount, hide = hide), color = C.Text, fontSize = 15.sp, fontWeight = FontWeight.Medium)
-                Text("$pct%", color = color, fontSize = 15.sp, modifier = Modifier.width(52.dp).padding(start = 10.dp))
-            }
-            Spacer(Modifier.height(8.dp))
-            Box(
-                Modifier.fillMaxWidth().height(8.dp).clip(CircleShape).background(color.copy(alpha = 0.18f))
-            ) {
-                Box(Modifier.fillMaxWidth((pct / 100f).coerceIn(0.02f, 1f)).fillMaxHeight().clip(CircleShape).background(color))
-            }
+    val preview = LocalInspectionMode.current
+    val grow = remember { Animatable(if (preview) pct / 100f else 0f) }
+    LaunchedEffect(pct) { grow.animateTo(pct / 100f, tween(1000, easing = FastOutSlowInEasing)) }
+    Column(Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(8.dp).clip(CutCornerShape(50)).background(color))
+            Text(name, color = C.Text, fontSize = 15.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(start = 10.dp).weight(1f))
+            Text(euros(amount, hide = hide), color = C.Text, fontFamily = Mono, fontSize = 13.sp)
+            Text("${pct}%", color = color, fontFamily = Mono, fontSize = 12.sp, modifier = Modifier.width(48.dp).padding(start = 10.dp))
+        }
+        Spacer(Modifier.height(8.dp))
+        Canvas(Modifier.fillMaxWidth().height(10.dp)) {
+            val y = size.height / 2
+            drawLine(C.Track, Offset(0f, y), Offset(size.width, y), 3f)
+            val end = (size.width * grow.value).coerceAtLeast(6f)
+            drawLine(Brush.horizontalGradient(listOf(color.copy(alpha = 0.15f), color), 0f, end), Offset(0f, y), Offset(end, y), 3f, StrokeCap.Round)
+            drawCircle(color.copy(alpha = 0.35f), 9f, Offset(end, y))
+            drawCircle(color, 4f, Offset(end, y))
         }
     }
 }
+
+// ======================================================================= Filas y controles
 
 @Composable
 fun MovementRow(m: Movement, hide: Boolean, onClick: () -> Unit) {
     val cat = Categories.byName(m.category)
+    val color = Color(cat.color)
     Row(
-        Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 14.dp),
+        Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            Modifier.size(48.dp).clip(CircleShape).background(Color(cat.color).copy(alpha = 0.18f)),
+            Modifier
+                .size(46.dp)
+                .clip(CutCornerShape(30))
+                .background(Brush.linearGradient(listOf(color.copy(alpha = 0.30f), color.copy(alpha = 0.05f))))
+                .border(1.dp, color.copy(alpha = 0.6f), CutCornerShape(30)),
             contentAlignment = Alignment.Center,
-        ) { Text(cat.emoji, fontSize = 22.sp) }
+        ) { Text(cat.emoji, fontSize = 20.sp) }
         Column(Modifier.weight(1f).padding(horizontal = 14.dp)) {
-            Text(m.merchant, color = C.Text, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(m.merchant, color = C.Text, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(
-                relativeDay(m.timestamp) + " · " + m.category + if (m.sourceApp != null) " · auto" else "",
-                color = C.Muted, fontSize = 13.sp, maxLines = 1,
+                (relativeDay(m.timestamp) + " · " + m.category + if (m.sourceApp != null) " · auto" else "").uppercase(esLocale),
+                color = C.Muted, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.sp, maxLines = 1,
             )
         }
         Text(
-            euros(m.amount, signed = m.isIncome, hide = hide),
+            euros(if (m.isIncome) m.amount else -m.amount, signed = true, hide = hide),
             color = if (m.isIncome) C.Income else C.Text,
-            fontSize = 17.sp, fontWeight = FontWeight.SemiBold,
+            fontFamily = Mono, fontSize = 15.sp, fontWeight = FontWeight.Bold,
         )
     }
 }
+
+/** Chip con esquinas cortadas; seleccionado = relleno holográfico. */
+@Composable
+fun Pill(label: String, selected: Boolean, onClick: () -> Unit) {
+    val shape = CutCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
+    Box(
+        Modifier
+            .clip(shape)
+            .then(if (selected) Modifier.background(C.holo) else Modifier.background(C.Glass).border(1.dp, C.Line, shape))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 9.dp),
+    ) {
+        Text(
+            label.uppercase(esLocale), color = if (selected) C.Void else C.Muted, fontFamily = Mono,
+            fontWeight = FontWeight.Bold, fontSize = 12.sp, letterSpacing = 1.5.sp,
+        )
+    }
+}
+
+/** Botón de acción principal en forma de rombo con pulso de luz. */
+@Composable
+fun DiamondButton(onClick: () -> Unit, content: @Composable BoxScope.() -> Unit) {
+    val t = rememberInfiniteTransition(label = "fab")
+    val pulse by t.animateFloat(0f, 1f, infiniteRepeatable(tween(2200, easing = LinearEasing)), label = "pulse")
+    Box(Modifier.size(84.dp), contentAlignment = Alignment.Center) {
+        Canvas(Modifier.size(84.dp)) {
+            val r = size.minDimension / 2 * (0.62f + 0.38f * pulse)
+            drawCircle(C.Cyan.copy(alpha = 0.35f * (1 - pulse)), r, style = Stroke(2f))
+        }
+        Box(
+            Modifier
+                .size(58.dp)
+                .rotate(45f)
+                .clip(CutCornerShape(14))
+                .background(C.holo)
+                .clickable(onClick = onClick),
+            contentAlignment = Alignment.Center,
+        ) { Box(Modifier.rotate(-45f), contentAlignment = Alignment.Center, content = content) }
+    }
+}
+
+@Composable
+fun holoFieldColors() = OutlinedTextFieldDefaults.colors(
+    focusedBorderColor = C.Cyan, unfocusedBorderColor = C.Line,
+    focusedLabelColor = C.Cyan, unfocusedLabelColor = C.Muted,
+    cursorColor = C.Cyan, focusedTextColor = C.Text, unfocusedTextColor = C.Text,
+)
 
 /** Diálogo para añadir o editar un movimiento a mano. */
 @OptIn(ExperimentalLayoutApi::class)
@@ -162,8 +392,15 @@ fun MovementDialog(
     val parsedAmount = NotificationParser.parseNumber(amount.trim())
     AlertDialog(
         onDismissRequest = onDismiss,
-        containerColor = C.Card,
-        title = { Text(if (initial == null) "Nuevo movimiento" else "Editar movimiento", color = C.Text) },
+        containerColor = C.Deep,
+        shape = chamfer(22.dp),
+        modifier = Modifier.border(1.dp, C.holoSoft, chamfer(22.dp)),
+        title = {
+            Column {
+                HudLabel(if (initial == null) "nueva entrada" else "editar registro", C.Cyan)
+                Text(if (initial == null) "Movimiento" else initial.merchant, color = C.Text, fontFamily = Display, fontSize = 20.sp)
+            }
+        },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -173,28 +410,34 @@ fun MovementDialog(
                 OutlinedTextField(
                     value = amount, onValueChange = { amount = it }, label = { Text("Importe (€)") },
                     singleLine = true, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    textStyle = TextStyle(fontFamily = Mono, fontSize = 18.sp), colors = holoFieldColors(),
                 )
                 OutlinedTextField(
                     value = merchant, onValueChange = { merchant = it }, label = { Text("Concepto / comercio") },
-                    singleLine = true,
+                    singleLine = true, colors = holoFieldColors(),
                 )
                 if (!isIncome) {
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Categories.expenseNames.forEach { name ->
                             val c = Categories.byName(name)
-                            FilterChip(
-                                selected = category == name, onClick = { category = name },
-                                label = { Text("${c.emoji} $name") },
-                                colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = Color(c.color).copy(alpha = 0.3f),
-                                    labelColor = C.Muted, selectedLabelColor = C.Text,
-                                ),
+                            val sel = category == name
+                            val shape = CutCornerShape(topStart = 8.dp, bottomEnd = 8.dp)
+                            Text(
+                                "${c.emoji} $name",
+                                color = if (sel) C.Text else C.Muted, fontSize = 13.sp,
+                                modifier = Modifier
+                                    .clip(shape)
+                                    .background(if (sel) Color(c.color).copy(alpha = 0.28f) else C.Glass)
+                                    .border(1.dp, if (sel) Color(c.color) else C.Line, shape)
+                                    .clickable { category = name }
+                                    .padding(horizontal = 10.dp, vertical = 6.dp),
                             )
                         }
                     }
                 }
                 initial?.rawText?.let {
-                    Text("Notificación original:\n$it", color = C.Muted, fontSize = 12.sp)
+                    HudLabel("señal original")
+                    Text(it, color = C.Muted, fontFamily = Mono, fontSize = 11.sp)
                 }
             }
         },
@@ -214,28 +457,26 @@ fun MovementDialog(
                         )
                     )
                 },
-            ) { Text("Guardar") }
+            ) { Text("GUARDAR", color = C.Cyan, fontFamily = Mono, fontWeight = FontWeight.Bold, letterSpacing = 2.sp) }
         },
         dismissButton = {
             Row {
                 if (initial != null && onDelete != null) {
-                    TextButton(onClick = { onDelete(initial) }) { Text("Borrar", color = C.Expense) }
+                    TextButton(onClick = { onDelete(initial) }) { Text("BORRAR", color = C.Expense, fontFamily = Mono, letterSpacing = 2.sp) }
                 }
-                TextButton(onClick = onDismiss) { Text("Cancelar", color = C.Muted) }
+                TextButton(onClick = onDismiss) { Text("CANCELAR", color = C.Muted, fontFamily = Mono, letterSpacing = 2.sp) }
             }
         },
     )
 }
 
+/** Punto "en directo" que late. */
 @Composable
-fun Pill(label: String, selected: Boolean, onClick: () -> Unit) {
-    Box(
-        Modifier
-            .clip(CircleShape)
-            .background(if (selected) C.Accent else C.CardAlt)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 18.dp, vertical = 8.dp),
-    ) {
-        Text(label, color = if (selected) C.OnAccent else C.Muted, fontWeight = FontWeight.SemiBold)
+fun LiveDot(color: Color = C.Income) {
+    val t = rememberInfiniteTransition(label = "live")
+    val a by t.animateFloat(0.25f, 1f, infiniteRepeatable(tween(900), RepeatMode.Reverse), label = "a")
+    Box(Modifier.size(14.dp), contentAlignment = Alignment.Center) {
+        Box(Modifier.size(14.dp).clip(CircleShape).background(color.copy(alpha = 0.25f * a)))
+        Box(Modifier.size(6.dp).clip(CircleShape).background(color.copy(alpha = 0.5f + 0.5f * a)))
     }
 }

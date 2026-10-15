@@ -5,10 +5,38 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.byluso.saldo.ui.CosmicBackground
+import com.byluso.saldo.ui.DiamondButton
+import com.byluso.saldo.ui.Display
+import com.byluso.saldo.ui.HudLabel
+import com.byluso.saldo.ui.Mono
+import com.byluso.saldo.ui.chamfer
+import com.byluso.saldo.ui.esLocale
+import com.byluso.saldo.ui.holoFieldColors
+import com.byluso.saldo.ui.holoPanel
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -17,11 +45,7 @@ import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -58,13 +82,14 @@ import java.time.YearMonth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val repo = Repository.get(this)
         setContent { SaldoTheme { SaldoApp(repo) } }
     }
 }
 
-private enum class Tab(val label: String, val icon: ImageVector) {
+internal enum class Tab(val label: String, val icon: ImageVector) {
     Home("Inicio", Icons.Filled.Home),
     Movements("Movimientos", Icons.AutoMirrored.Filled.List),
     Charts("Gráficas", Icons.Filled.BarChart),
@@ -97,48 +122,35 @@ private fun SaldoApp(repo: Repository) {
     }
 
     CompositionLocalProvider(LocalHideAmounts provides hide) {
-        Scaffold(
-            containerColor = C.Bg,
-            floatingActionButton = {
-                if (tab == Tab.Home || tab == Tab.Movements) FloatingActionButton(
-                    onClick = { adding = true }, shape = CircleShape,
-                    containerColor = C.Accent, contentColor = C.OnAccent,
-                ) { Icon(Icons.Filled.Add, "Añadir movimiento") }
-            },
-            bottomBar = {
-                NavigationBar(containerColor = C.Header) {
-                    Tab.entries.forEach { t ->
-                        NavigationBarItem(
-                            selected = tab == t, onClick = { tab = t },
-                            icon = { Icon(t.icon, t.label) }, label = { Text(t.label) },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = C.Accent, selectedTextColor = C.Accent,
-                                unselectedIconColor = C.Muted, unselectedTextColor = C.Muted,
-                                indicatorColor = C.Accent.copy(alpha = 0.15f),
-                            ),
+        CosmicBackground {
+            Scaffold(
+                containerColor = Color.Transparent,
+                floatingActionButton = {
+                    if (tab == Tab.Home || tab == Tab.Movements) DiamondButton(onClick = { adding = true }) {
+                        Icon(Icons.Filled.Add, "Añadir movimiento", tint = C.Void, modifier = Modifier.size(28.dp))
+                    }
+                },
+                bottomBar = { HoloNavBar(tab) { tab = it } },
+            ) { padding ->
+                Box(Modifier.padding(top = padding.calculateTopPadding())) {
+                    when (tab) {
+                        Tab.Home -> HomeScreen(
+                            month = month, onMonth = { month = it }, hide = hide, onToggleHide = { hide = !hide },
+                            movements = movements, currentBalance = balance, anchor = anchor,
+                            listenerEnabled = listenerEnabled, onEnableListener = openListenerSettings,
+                            onSetBalance = { settingBalance = true }, onOpen = { editing = it },
+                            onSeeAll = { tab = Tab.Movements },
+                        )
+                        Tab.Movements -> MovementsScreen(
+                            month, { month = it }, hide, { hide = !hide }, movements, onOpen = { editing = it },
+                        )
+                        Tab.Charts -> ChartsScreen(movements, hide)
+                        Tab.Settings -> SettingsScreen(
+                            listenerEnabled = listenerEnabled, onOpenListenerSettings = openListenerSettings,
+                            apps = apps, onToggleApp = { pkg, on -> repo.setAppEnabled(pkg, on) },
+                            onSetBalance = { settingBalance = true },
                         )
                     }
-                }
-            },
-        ) { padding ->
-            Box(Modifier.padding(padding)) {
-                when (tab) {
-                    Tab.Home -> HomeScreen(
-                        month = month, onMonth = { month = it }, hide = hide, onToggleHide = { hide = !hide },
-                        movements = movements, currentBalance = balance, anchor = anchor,
-                        listenerEnabled = listenerEnabled, onEnableListener = openListenerSettings,
-                        onSetBalance = { settingBalance = true }, onOpen = { editing = it },
-                        onSeeAll = { tab = Tab.Movements },
-                    )
-                    Tab.Movements -> MovementsScreen(
-                        month, { month = it }, hide, { hide = !hide }, movements, onOpen = { editing = it },
-                    )
-                    Tab.Charts -> ChartsScreen(movements, hide)
-                    Tab.Settings -> SettingsScreen(
-                        listenerEnabled = listenerEnabled, onOpenListenerSettings = openListenerSettings,
-                        apps = apps, onToggleApp = { pkg, on -> repo.setAppEnabled(pkg, on) },
-                        onSetBalance = { settingBalance = true },
-                    )
                 }
             }
         }
@@ -161,14 +173,55 @@ private fun SaldoApp(repo: Repository) {
     }
 }
 
+/** Barra de navegación flotante de cristal con indicador luminoso. */
+@Composable
+internal fun HoloNavBar(current: Tab, onSelect: (Tab) -> Unit) {
+    Row(
+        Modifier
+            .navigationBarsPadding()
+            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .fillMaxWidth()
+            .clip(chamfer(16.dp))
+            .background(C.Void.copy(alpha = 0.94f))
+            .holoPanel(16.dp, fill = C.Violet.copy(alpha = 0.10f))
+            .padding(vertical = 6.dp),
+    ) {
+        Tab.entries.forEach { t ->
+            val selected = t == current
+            val glow by animateFloatAsState(if (selected) 1f else 0f, tween(350), label = "glow")
+            Column(
+                Modifier.weight(1f).clickable { onSelect(t) }.padding(vertical = 6.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Icon(t.icon, t.label, tint = lerp(C.Muted, C.Cyan, glow), modifier = Modifier.size(22.dp))
+                Text(
+                    t.label.uppercase(esLocale), color = lerp(C.Muted, C.Text, glow), fontFamily = Mono,
+                    fontSize = 9.sp, letterSpacing = 1.sp, modifier = Modifier.padding(top = 3.dp), maxLines = 1,
+                )
+                Box(
+                    Modifier.padding(top = 5.dp).width(28.dp * glow).height(2.dp)
+                        .background(Brush.horizontalGradient(listOf(C.Cyan, C.Magenta)))
+                )
+            }
+        }
+    }
+}
+
 @Composable
 private fun BalanceDialog(current: Double?, onDismiss: () -> Unit, onSave: (Double) -> Unit) {
     var text by remember { mutableStateOf(current?.let { euros(it).removeSuffix(" €") } ?: "") }
     val value = NotificationParser.parseNumber(text.trim().removePrefix("-"))?.let { if (text.trim().startsWith("-")) -it else it }
     AlertDialog(
         onDismissRequest = onDismiss,
-        containerColor = C.Card,
-        title = { Text("Saldo actual", color = C.Text) },
+        containerColor = C.Deep,
+        shape = chamfer(22.dp),
+        modifier = Modifier.border(1.dp, C.holoSoft, chamfer(22.dp)),
+        title = {
+            Column {
+                HudLabel("calibración", C.Cyan)
+                Text("Saldo actual", color = C.Text, fontFamily = Display, fontSize = 20.sp)
+            }
+        },
         text = {
             Column {
                 Text("¿Cuánto dinero tienes ahora mismo en tu cuenta?", color = C.Muted)
@@ -176,11 +229,16 @@ private fun BalanceDialog(current: Double?, onDismiss: () -> Unit, onSave: (Doub
                     value = text, onValueChange = { text = it }, singleLine = true,
                     label = { Text("Saldo (€)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    textStyle = TextStyle(fontFamily = Mono, fontSize = 20.sp), colors = holoFieldColors(),
                     modifier = Modifier.padding(top = 12.dp),
                 )
             }
         },
-        confirmButton = { TextButton(enabled = value != null, onClick = { onSave(value!!) }) { Text("Guardar") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancelar", color = C.Muted) } },
+        confirmButton = {
+            TextButton(enabled = value != null, onClick = { onSave(value!!) }) {
+                Text("GUARDAR", color = C.Cyan, fontFamily = Mono, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
+            }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("CANCELAR", color = C.Muted, fontFamily = Mono, letterSpacing = 2.sp) } },
     )
 }
