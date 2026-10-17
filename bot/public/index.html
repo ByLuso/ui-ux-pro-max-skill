@@ -185,6 +185,7 @@ button:focus-visible, .dcard:focus-visible { outline: 2px solid var(--gold); out
         <tr><td class="c-dim">Mejora de información</td><td id="mGain">—</td></tr>
         <tr><td class="c-dim">Wallets seguidas (JUDGE)</td><td id="mFol">0</td></tr>
         <tr><td class="c-dim">Retorno medio real: +60% · −30% · nada</td><td id="mRets">—</td></tr>
+        <tr><td class="c-dim">Corrección del EV por resultados reales</td><td id="mBias">—</td></tr>
       </table>
     </div>
     <div class="panel">
@@ -277,6 +278,7 @@ function render() {
   if (d.feed.source === "chain" && !d.feed.connected) B.push(["red", `Sin conexión con ${d.feed.provider}. Reintentando… Si dura mucho, pon tu Helius en CHAIN_RPC del .env o usa DATA_SOURCE=dexscreener.`]);
   if (d.feed.source === "dexscreener") B.push(["", "Modo gratuito: precios de DexScreener cada 10 s. Sin datos por wallet, así que JUDGE, «primeros 3 s» y top-10 no se miden. Con una clave de PumpPortal el bot ve cada compra y venta (README, paso 3)."]);
   if (d.feed.notice && /api key|funded|only available/i.test(d.feed.notice)) B.push(["", "PumpPortal: " + d.feed.notice]);
+  if (d.gapNote && Date.now() - d.gapNote.t < 3 * 3600e3) B.push(["", `El ordenador estuvo ${d.gapNote.mins} min en suspensión. Las posiciones en papel abiertas se anularon (sin precios fiables) y el bot volvió a empezar con los lanzamientos nuevos. Para que no pase, desactiva la suspensión mientras el bot esté encendido.`]);
   if (d.halted) B.push(["red", "Bot detenido: " + d.halted + ". Pulsa Reanudar para volver a operar."]);
   $("banners").innerHTML = B.map(([c, t]) => `<div class="banner ${c}">${esc(t)}</div>`).join("");
 
@@ -291,6 +293,8 @@ function render() {
   $("mLL0").textContent = m.ll0 == null ? "—" : m.ll0.toFixed(3);
   const g = $("mGain"); g.textContent = sgn(m.gain); g.style.color = m.gain == null ? "" : m.gain > 0 ? C.green : C.red;
   $("mFol").textContent = d.counts.followed;
+  $("mBias").textContent = m.evBias.n < 15 ? `faltan señales (${m.evBias.n}/15)` : `${sgn(m.evBias.bias)} (últimas ${m.evBias.n})`;
+  $("mBias").style.color = m.evBias.bias < 0 ? C.red : "";
   $("mRets").innerHTML = `<span style="color:${C.green}">${sgn(m.tpRet, 0)}</span> · <span style="color:${C.red}">${sgn(m.slRet, 0)}</span> · <span style="color:${C.amber}">${sgn(m.timeRet, 0)}</span>`;
 
   // compuerta

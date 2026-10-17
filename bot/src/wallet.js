@@ -66,6 +66,18 @@ export class PaperWallet {
     return null;
   }
 
+  // Tras una suspensión del ordenador no se sabe a qué precio se habría vendido: la posición se anula
+  // y se devuelve lo que quedaba invertido (más lo ya cobrado en ventas parciales, que ya está en caja).
+  voidPosition(mint, why) {
+    const p = this.positions.get(mint);
+    if (!p) return;
+    const back = p.eur * p.exit.rem;
+    this.cash += back;
+    this.positions.delete(mint);
+    this.event("close", p.sym, p.mint, `anulada: ${why} · se devuelven ${back.toFixed(2)} €`, 0);
+    this.save();
+  }
+
   onPrice(t, forceWhy) {
     const p = this.positions.get(t.mint);
     if (!p || !this.solEur) return;

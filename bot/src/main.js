@@ -59,7 +59,8 @@ const S = {
   decisions: [], log: [],
   counts: { blocked: 0, skipped: 0, signals: 0, liveEntries: 0 },
   // Retornos por encima de +10.000% en una hora solo los produjo el fallo de valoración de tokens graduados
-  paper: readLines("paper.jsonl").filter((c) => Number.isFinite(c.ret) && c.ret < 100),
+  // Se ignoran también las que duraron mucho más que el horizonte: las cerró una suspensión del ordenador con precios caducados
+  paper: readLines("paper.jsonl").filter((c) => Number.isFinite(c.ret) && c.ret < 100 && !(c.min > cfg.horizonMin + 5)),
   liveClosed: readLines("live.jsonl"),
   positions: new Map(),   // posiciones reales abiertas
   paperOpen: new Map(),   // señales en papel esperando resultado
@@ -92,6 +93,16 @@ function chosenStrat() {
   return ok.sort((a, b) => b[1].avg - a[1].avg)[0][0];
 }
 const paperNet = () => paperStats(chosenStrat()).net;
+
+// Diferencia media entre lo que se ganó de verdad y lo que el modelo esperaba, en las últimas 60 señales en papel.
+// Al elegir solo los casos más optimistas, el modelo tiende a sobrestimarlos; esto lo corrige con la realidad.
+// Solo resta: nunca hace las señales más optimistas de lo que el modelo calcula.
+function evBias() {
+  const rec = S.paper.filter((c) => stratOf(c) === chosenStrat() && Number.isFinite(c.ev)).slice(-60);
+  if (rec.length < 15) return { bias: 0, n: rec.length };
+  const b = rec.reduce((s, c) => s + (c.ret - c.ev), 0) / rec.length;
+  return { bias: Math.min(0, b), n: rec.length };
+}
 function setHalted(reason) { S.halted = reason; saveJSON("state.json", { halted: reason }); log("GRD", reason ? "DETENIDO · " + reason : "reanudado"); }
 
 // ---------- compuerta para dinero real ----------
@@ -172,15 +183,17 @@ tracker.on("observe", (t) => {
   if (block) { t.blocked = true; S.counts.blocked++; agent("GRD", `bloquea ${t.sym}: ${block}`); decide(t, "block", block, p, null); return; }
   agent("GRD", `${t.sym} pasa los filtros de riesgo`);
   const q = quant(p, t.sig, { tp: model.tpRet, sl: model.slRet, tm: model.timeRet }, isLive());
+  // Autocorrección: el EV del modelo se ajusta con lo que de verdad dieron sus señales en papel
+  q.evRaw = q.ev; q.ev += evBias().bias;
   t.q = q;
-  agent("QNT", `${t.sym}: bruto ${pctS(q.gross)} − costes ${(q.costs * 100).toFixed(1)}% = EV ${pctS(q.ev)} ${q.ev >= cfg.evMin ? "→ SEÑAL" : `→ salta (mínimo +${(cfg.evMin * 100).toFixed(0)}%)`}`);
+  agent("QNT", `${t.sym}: bruto ${pctS(q.gross)} − costes ${(q.costs * 100).toFixed(1)}%${q.ev !== q.evRaw ? ` ${pctS(q.ev - q.evRaw)} corrección` : ""} = EV ${pctS(q.ev)} ${q.ev >= cfg.evMin ? "→ SEÑAL" : `→ salta (mínimo +${(cfg.evMin * 100).toFixed(0)}%)`}`);
   if (!(q.ev >= cfg.evMin)) { /* también descarta un EV inválido (NaN) */ S.counts.skipped++; decide(t, "skip", `EV ${(q.ev * 100).toFixed(1)}% tras costes · bajo +${(cfg.evMin * 100).toFixed(0)}%`, p, q.ev); return; }
   S.counts.signals++;
   // Toda señal se registra en papel (sin límite de posiciones) para medir si el sistema tiene ventaja
   // Las dos estrategias de salida se simulan sobre la MISMA entrada, para compararlas en igualdad de condiciones
   tracker.hold(t);
   if (!S.paperOpen.has(t.mint)) S.paperOpen.set(t.mint, { t: now(), sym: t.sym, tObs: t.tObs, size: q.size, tokens: entryFill(q.size, t.pxEntry, t.sig).tokens, impact: q.impact, ev: q.ev,
-    exits: Object.fromEntries(Object.keys(STRATS).map((k) => [k, new Exit(k, t.pxEntry)])) });
+    evRaw: q.evRaw, exits: Object.fromEntries(Object.keys(STRATS).map((k) => [k, new Exit(k, t.pxEntry)])) });
   const wwhy = wallet.tryOpen({ mint: t.mint, sym: t.sym, p, px: t.pxEntry, sig: t.sig }, chosenStrat(), q);
   agent("EXE", wwhy ? `${t.sym}: no compra en la cartera de prueba (${wwhy})` : `compra ${t.sym} en la cartera de prueba`);
   if (wwhy && !wwhy.startsWith("cartera llena")) log("EXE", `cartera de prueba no compra ${t.sym}: ${wwhy}`);
@@ -258,7 +271,7 @@ function onPrice(t, forceWhy) {
       forceWhy ? ex.close(t.px, forceWhy) : ex.update(t.px);
       if (ex.done) {
         const ret = ex.paperReturn(po.tokens, po.size, po.impact);
-        const rec = { t: now(), mint: t.mint, sym: t.sym, size: po.size, ret, strat: k, out: ex.summary(), min: (now() - po.tObs) / 60000 };
+        const rec = { t: now(), mint: t.mint, sym: t.sym, size: po.size, ret, ev: po.evRaw, strat: k, out: ex.summary(), min: (now() - po.tObs) / 60000 };
         S.paper.push(rec); appendLine("paper.jsonl", rec);
         log("EXE", `papel ${STRATS[k].name.toLowerCase()} ${t.sym} · ${(ret * 100).toFixed(1)}% · ${rec.out}`);
       }
@@ -273,6 +286,19 @@ function onPrice(t, forceWhy) {
 }
 tracker.on("price", (t) => onPrice(t));
 tracker.on("expire", (t) => onPrice(t, `${cfg.horizonMin} min`));
+// El ordenador estuvo suspendido: las posiciones en papel se anulan (sin precio fiable) y las reales se venden ya
+tracker.on("gap", (gap, held) => {
+  const mins = Math.round(gap / 60000), why = `el ordenador estuvo ${mins} min en suspensión`;
+  S.gapNote = { t: now(), mins };
+  log("SCT", `${why}: se descartan los tokens en seguimiento y se anulan ${held.length} posiciones en papel`);
+  agent("SCT", `${why} · empiezo de nuevo con los lanzamientos que lleguen ahora`);
+  for (const t of held) {
+    S.paperOpen.delete(t.mint);
+    wallet.voidPosition(t.mint, why);
+    const pos = S.positions.get(t.mint);
+    if (pos) closeLive(pos, "tras suspensión");
+  }
+});
 tracker.on("graduated", (t) => onPrice(t, "graduó")); // sin datos de PumpSwap en este modo: se sale al graduarse
 
 // ---------- etiqueta medida → aprendizaje ----------
@@ -324,9 +350,9 @@ function state() {
     mode: cfg.mode, live: isLive(), gate: S.gate, halted: S.halted,
     feed: { source: SOURCE, provider: FEED_NAME, connected: feed.connected, msgs: feed.msgs, perHour: feed.perHour(), notice: feed.notice, hasKey: !!cfg.apiKey, dexCalls: dex ? dex.calls : 0, dexErrors: dex ? dex.errors : 0 },
     counts: { seen: tracker.seen, tracked: tracker.tokens.size, measuring: measuring.length, ...S.counts, labels: model.labels, followed: judge.count() },
-    model: { labels: model.labels, counts: model.counts, ...sc, timeRet: model.timeRet, slRet: model.slRet, tpRet: model.tpRet, recent: model.hist.slice(-60).map((h) => h.y) },
+    model: { labels: model.labels, counts: model.counts, ...sc, evBias: evBias(), timeRet: model.timeRet, slRet: model.slRet, tpRet: model.tpRet, recent: model.hist.slice(-60).map((h) => h.y) },
     signals: SIGNALS, measuring,
-    paperWallet: wallet.state(),
+    paperWallet: wallet.state(), gapNote: S.gapNote || null,
     agents: S.agents, market: { solTrend: market.solTrend, launchRate: tracker.launchRate(), hot: [...hot.words].slice(0, 30) },
     // Primero los que ya tienen precio y están más cerca de decidir
     observing: [...tracker.tokens.values()].filter((t) => t.phase === "observe").sort((a, b) => (dex ? (b.dexSeen ? 1 : 0) - (a.dexSeen ? 1 : 0) : 0) || a.t0 - b.t0).slice(0, 8)

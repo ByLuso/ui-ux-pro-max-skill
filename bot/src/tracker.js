@@ -153,6 +153,17 @@ export class Tracker extends EventEmitter {
 
   tick() {
     const n = now(), H = cfg.horizonMin * 60000;
+    // Si entre dos ticks pasaron más de 2 min, el ordenador estuvo suspendido: los precios guardados están
+    // caducados. Nada de lo que se estaba siguiendo vale ya: no se etiqueta ni se cierra con esos precios.
+    const gap = this.lastTick ? n - this.lastTick : 0;
+    this.lastTick = n;
+    if (gap > 120000) {
+      const held = [...this.tokens.values()].filter((t) => t.keepUntil);
+      for (const t of this.tokens.values()) if (!this.dex) this.feed.unwatch(t.mint);
+      this.tokens.clear();
+      this.emit("gap", gap, held);
+      return;
+    }
     for (const t of this.tokens.values()) {
       const age = (n - t.t0) / 1000;
       // Modo gratuito: si DexScreener nunca muestra el token, no hay precio fiable y no se etiqueta
