@@ -21,6 +21,22 @@ const num = (k, d) => (env[k] !== undefined && env[k] !== "" ? Number(env[k]) : 
 const str = (k, d = "") => (env[k] !== undefined ? String(env[k]) : d);
 
 export const cfg = {
+  // Qué bot arranca: spot = radar de Binance + Binance Wallet (por defecto) · pumpfun = el bot antiguo de pump.fun
+  bot: str("BOT", "spot").toLowerCase() === "pumpfun" ? "pumpfun" : "spot",
+  spot: {
+    topN: num("SPOT_TOP_N", 40),               // monedas de Binance con más volumen
+    alphaTopN: num("ALPHA_TOP_N", 30),         // tokens de Binance Wallet (BNB Chain) con más volumen
+    alphaMinLiq: num("ALPHA_MIN_LIQ", 200000), // liquidez mínima en dólares
+    alphaMinVol: num("ALPHA_MIN_VOL", 500000), // volumen mínimo en 24 h
+    horizonH: num("SPOT_HORIZON_H", 72),       // horas máximas por operación
+    stopAtr: num("SPOT_STOP_ATR", 2),          // stop a 2 ATR por debajo
+    targetAtr: num("SPOT_TARGET_ATR", 3),      // objetivo a 3 ATR por encima
+    beAtr: num("SPOT_BE_ATR", 1.5),            // al avanzar 1,5 ATR el stop pasa a la entrada
+    evMin: num("SPOT_EV_MIN", 0.01),           // beneficio esperado mínimo tras costes (+1%)
+    minLabels: num("SPOT_MIN_LABELS", 300),    // casos medidos antes de dar señales
+    cexFee: num("BINANCE_FEE", 0.001),         // comisión de Binance por lado (0,1%)
+    alphaFee: num("ALPHA_FEE", 0.0025),        // comisión estimada de Binance Wallet por lado
+  },
   mode: str("MODE", "paper").toLowerCase() === "live" ? "live" : "paper",
   apiKey: str("PUMPPORTAL_API_KEY"),
   rpcUrl: str("RPC_URL"),

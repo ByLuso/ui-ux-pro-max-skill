@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orbital Radar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Terminal de mercado: cabecera, cartera + operaciones + agentes, ranking con detalle, y aprendizaje. Oscuro a propósito. */
+:root {
+  --bg: #070b12; --panel: #0b121d; --panel-2: #0f1828; --line: #19263b; --line-2: #24344f;
+  --fg: #cfd8e8; --dim: #6b7893; --faint: #3c4963; --white: #eef3fc;
+  --gold: #f0b90b; --blue: #4f8cff; --green: #2ebd85; --red: #f6465d; --amber: #ff9f43; --violet: #8f7dff;
+  --f-display: "Chakra Petch", "Arial Narrow", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 12px/1.45 var(--f-mono); padding-inline: 16px; padding-block: 12px 28px; font-variant-numeric: tabular-nums; }
+table { font-size: inherit; color: inherit; border-collapse: collapse; width: 100%; }
+a { color: var(--blue); }
+.wrap { max-width: 1560px; margin: 0 auto; display: grid; gap: 10px; }
+.sub { color: var(--faint); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 10px 12px; min-width: 0; }
+.ph { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.ph .t { font: 700 12px var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--white); }
+.ph .t::before { content: "◆"; margin-right: 6px; font-size: 9px; color: var(--gold); }
+.ph .rt { margin-left: auto; }
+.chip { display: inline-block; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 1px 6px; border: 1px solid currentColor; border-radius: 2px; white-space: nowrap; }
+.c-gold { color: var(--gold); } .c-blue { color: var(--blue); } .c-green { color: var(--green); } .c-red { color: var(--red); } .c-amber { color: var(--amber); } .c-dim { color: var(--dim); } .c-white { color: var(--white); } .c-violet { color: var(--violet); }
+header { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+h1 { margin: 0; font: 700 18px var(--f-display); letter-spacing: .14em; color: var(--white); }
+h1 span { color: var(--gold); }
+.stats { display: flex; gap: 20px; flex-wrap: wrap; margin-left: auto; }
+.stat .v { font: 600 17px var(--f-display); color: var(--white); }
+button { font: inherit; font-size: 11px; background: var(--panel-2); color: var(--fg); border: 1px solid var(--line-2); border-radius: 2px; padding: 5px 10px; cursor: pointer; }
+button:hover { border-color: var(--gold); color: var(--white); }
+button[aria-pressed="true"] { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+button:focus-visible, input:focus-visible, tr[tabindex]:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+input { font: inherit; background: var(--panel-2); color: var(--white); border: 1px solid var(--line-2); border-radius: 2px; padding: 5px 8px; width: 220px; max-width: 100%; }
+.banner { border: 1px solid var(--amber); color: var(--amber); padding: 8px 12px; border-radius: 3px; background: color-mix(in srgb, var(--amber) 7%, transparent); }
+.row0 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 10px; }
+.main { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 10px; align-items: start; }
+.row3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.eq { font: 700 40px/1 var(--f-display); color: var(--white); }
+.wpnl { font: 600 15px var(--f-display); margin-top: 4px; }
+canvas { display: block; width: 100%; }
+#cvWallet { height: 90px; margin-top: 8px; }
+#cvChart { height: 280px; }
+.kv td { padding: 3px 0; border-top: 1px solid var(--line); }
+.kv td:last-child { text-align: right; }
+.op { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 8px; padding: 6px 8px; border: 1px solid var(--line-2); border-radius: 2px; margin-bottom: 6px; background: var(--panel-2); }
+.op .big2 { font: 600 14px var(--f-display); }
+.bar { height: 4px; background: var(--line); margin-top: 4px; grid-column: 1 / -1; position: relative; }
+.bar i { position: absolute; top: -3px; width: 2px; height: 10px; }
+.events { max-height: 250px; overflow-y: auto; }
+.events div { padding: 3px 0; border-top: 1px solid var(--line); }
+.ev-k { display: inline-block; min-width: 56px; font-weight: 600; font-size: 10px; letter-spacing: .06em; }
+.agents { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+.agc { border: 1px solid var(--line-2); border-radius: 2px; padding: 8px; background: var(--panel-2); min-width: 0; display: grid; gap: 4px; align-content: start; transition: border-color .3s, box-shadow .3s; }
+.agc.on { border-color: var(--c); box-shadow: 0 0 0 1px var(--c), 0 0 14px color-mix(in srgb, var(--c) 40%, transparent); }
+.agc .hd { display: flex; align-items: center; gap: 6px; }
+.agc .nm { font: 700 11px var(--f-display); letter-spacing: .1em; color: var(--white); }
+.agc .cd { font-size: 9px; color: var(--c); border: 1px solid var(--c); padding: 0 4px; border-radius: 2px; }
+.agc .role { font-size: 10px; color: var(--dim); }
+.agc .tx { font-size: 11px; min-height: 3em; overflow-wrap: anywhere; }
+.agc .ft { font-size: 10px; color: var(--faint); display: flex; justify-content: space-between; }
+.agc .st { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); margin-left: auto; }
+.agc.on .st { background: var(--c); animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: .25; } }
+.tw { overflow-x: auto; }
+.tbl td, .tbl th { padding: 5px 6px; border-top: 1px solid var(--line); white-space: nowrap; text-align: left; font-weight: 400; }
+.tbl th { color: var(--dim); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; border-top: 0; }
+.tbl tr[tabindex] { cursor: pointer; }
+.tbl tr[tabindex]:hover td { background: var(--panel-2); }
+.tbl tr.sel td { background: color-mix(in srgb, var(--gold) 8%, var(--panel-2)); }
+.flash-up { animation: fu .8s; } .flash-dn { animation: fd .8s; }
+@keyframes fu { from { color: var(--green); } } @keyframes fd { from { color: var(--red); } }
+.pb { margin: 5px 0; }
+.pb .h { display: flex; justify-content: space-between; font-size: 10px; text-transform: uppercase; }
+.pb .tr { height: 7px; background: var(--line); margin-top: 3px; }
+.pb .tr i { display: block; height: 100%; }
+.levels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+.levels .v { color: var(--white); font: 600 14px var(--f-display); }
+.list div { padding: 3px 0; }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+.note { color: var(--dim); font-size: 11px; }
+@media (max-width: 1250px) { .agents { grid-template-columns: repeat(4, minmax(0, 1fr)); } .main, .row0 { grid-template-columns: minmax(0, 1fr); } .row3 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 700px) { .agents { grid-template-columns: repeat(2, minmax(0, 1fr)); } .stats { margin-left: 0; } .levels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { .agc.on .st { animation: none; } .flash-up, .flash-dn { animation: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="sub" id="feed">conectando con Binance…</div>
+      <h1><span>ORBITAL</span> // RADAR <span class="chip c-blue">papel</span></h1>
+      <div class="sub" id="rules"></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="sub">monedas</div><div class="v" id="sCoins">—</div></div>
+      <div class="stat"><div class="sub">señales ahora</div><div class="v" id="sSig">0</div></div>
+      <div class="stat"><div class="sub">casos aprendidos</div><div class="v" id="sLab">0</div></div>
+      <div class="stat"><div class="sub">EUR / USDT</div><div class="v" id="sEur">—</div></div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button id="bPause" type="button">Pausar señales</button>
+      <form id="addForm" style="display:flex;gap:6px"><input id="q" placeholder="Añadir: BTC, PEPE, token BNB…" autocomplete="off" aria-label="Añadir moneda a mi lista"><button type="submit">Añadir</button></form>
+    </div>
+  </header>
+  <div id="banners" style="display:grid;gap:6px"></div>
+
+  <section class="row0">
+    <div class="panel">
+      <div class="ph"><span class="t">Cartera de prueba</span><span class="rt chip c-blue">dinero ficticio</span></div>
+      <div class="sub">saldo total ahora</div>
+      <div class="eq" id="wEq">—</div>
+      <div class="wpnl" id="wPnl"></div>
+      <canvas id="cvWallet" aria-label="Evolución del saldo"></canvas>
+      <table class="kv" style="margin-top:6px">
+        <tr><td class="c-dim">Disponible</td><td id="wCash">—</td></tr>
+        <tr><td class="c-dim">Operaciones cerradas</td><td id="wClosed">—</td></tr>
+        <tr><td class="c-dim">Resultado medio por operación</td><td id="wAvg">—</td></tr>
+        <tr><td class="c-dim">Corrección del EV por resultados reales</td><td id="wBias">—</td></tr>
+      </table>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+        <span class="sub" id="wRules" style="text-transform:none;letter-spacing:0"></span>
+        <button type="button" id="bReset" style="margin-left:auto">Reiniciar cartera</button>
+      </div>
+      <div class="sub" id="wConfirm" style="text-transform:none;letter-spacing:0;margin-top:4px" hidden>¿Seguro? Se borra el historial de la cartera. <button type="button" id="bResetYes">Sí, reiniciar</button> <button type="button" id="bResetNo">Cancelar</button></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">Operaciones</span><span class="rt sub" id="oCount"></span></div>
+      <div id="oOpen"></div>
+      <div class="sub" style="margin:8px 0 4px">compras y ventas</div>
+      <div class="events" id="oEvents"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="ph"><span class="t">Agentes en directo</span><span class="sub">qué está haciendo cada uno ahora mismo</span><span class="rt sub" id="mood"></span></div>
+    <div class="agents" id="agents"></div>
+  </section>
+
+  <section class="main">
+    <div class="panel">
+      <div class="ph"><span class="t">Ranking</span><span class="sub">precio en vivo · se evalúa al cerrar cada hora</span>
+        <span class="rt" role="group" aria-label="Filtro" style="display:flex;gap:4px;flex-wrap:wrap">
+          <button type="button" data-f="all" aria-pressed="true">Todas</button>
+          <button type="button" data-f="cex" aria-pressed="false">Binance</button>
+          <button type="button" data-f="alpha" aria-pressed="false">Binance Wallet</button>
+          <button type="button" data-f="mine" aria-pressed="false">Mi lista</button>
+        </span>
+      </div>
+      <div class="tw"><table class="tbl" id="rankT"></table></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t" id="dTitle">Detalle</span><span class="rt" id="dLinks"></span></div>
+      <canvas id="cvChart" aria-label="Velas de 1 hora con objetivo y stop"></canvas>
+      <div class="sub" style="margin-top:4px">velas 1 h · <span class="c-gold">EMA 20</span> · <span class="c-violet">EMA 50</span> · <span class="c-green">objetivo</span> · <span class="c-red">stop</span></div>
+      <div class="levels" id="dLevels"></div>
+      <div id="dProb"></div>
+      <div class="ph" style="margin-top:10px"><span class="t">Gráfico</span><span class="rt" id="dTa"></span></div>
+      <div class="list" id="dSig"></div>
+      <div class="ph" style="margin-top:10px"><span class="t">Seguridad</span></div>
+      <div class="list" id="dSec"></div>
+      <div class="ph" style="margin-top:10px"><span class="t">Noticias</span><span class="rt" id="dNewsS"></span></div>
+      <div class="list" id="dNews"></div>
+    </div>
+  </section>
+
+  <section class="row3">
+    <div class="panel">
+      <div class="ph"><span class="t">Modelo</span><span class="rt sub">aprende de cada caso medido</span></div>
+      <table class="kv">
+        <tr><td class="c-dim">Casos aprendidos</td><td id="mLab">—</td></tr>
+        <tr><td class="c-dim">Resultados: objetivo · stop · nada</td><td id="mDist">—</td></tr>
+        <tr><td class="c-dim">Mejora de información</td><td id="mGain">—</td></tr>
+        <tr><td class="c-dim">Retorno medio real (en R): objetivo · stop · nada</td><td id="mR">—</td></tr>
+        <tr><td class="c-dim">Casos esperando resultado</td><td id="mPend">—</td></tr>
+      </table>
+      <div class="note" style="margin-top:8px">1 R = la distancia al stop. Llegar al objetivo da +1,5 R; tocar el stop, −1 R.</div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">¿Hay ventaja?</span></div>
+      <table class="kv">
+        <tr><td class="c-dim">Prueba con historial: señales</td><td id="btN">—</td></tr>
+        <tr><td class="c-dim">Prueba con historial: media tras costes</td><td id="btAvg">—</td></tr>
+        <tr><td class="c-dim">Cartera de prueba en vivo: media</td><td id="lvAvg">—</td></tr>
+      </table>
+      <div class="note" id="verdict" style="margin-top:8px"></div>
+      <div class="sub" style="margin:10px 0 4px">cuando el modelo dice… · acierta de verdad (objetivo antes que stop)</div>
+      <div id="calib"></div>
+      <div class="note" style="margin-top:4px">Para ganar con objetivo +3 ATR y stop −2 ATR hace falta acertar más del 40% (más comisiones).</div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">Noticias</span><span class="rt sub">verde positiva · rojo negativa</span></div>
+      <div class="list" id="news" style="max-height:240px;overflow-y:auto"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="ph"><span class="t">Decisiones recientes</span></div>
+    <div class="tw"><table class="tbl" id="decT"></table></div>
+  </section>
+</div>
+<script>
+(() => {
+"use strict";
+const $ = (id) => document.getElementById(id);
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C = { gold: css("--gold"), blue: css("--blue"), green: css("--green"), red: css("--red"), amber: css("--amber"), violet: css("--violet"), white: css("--white"), dim: css("--dim"), line: css("--line"), faint: css("--faint"), fg: css("--fg") };
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pct = (x, d = 1) => x == null || !isFinite(x) ? "—" : (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(d) + "%";
+const col = (x) => x == null ? "" : x > 0 ? C.green : x < 0 ? C.red : C.dim;
+const px = (p) => p == null || !isFinite(p) ? "—" : p >= 1000 ? p.toLocaleString("en-US", { maximumFractionDigits: 0 }) : p >= 1 ? p.toFixed(3) : p >= 0.01 ? p.toFixed(5) : p.toPrecision(4);
+const eur = (v, s) => v == null ? "—" : (s && v >= 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
+const usd = (v) => v == null || !isFinite(v) ? "—" : v >= 1e9 ? "$" + (v / 1e9).toFixed(1) + "B" : v >= 1e6 ? "$" + (v / 1e6).toFixed(1) + "M" : "$" + (v / 1e3).toFixed(0) + "K";
+const ago = (t) => { const s = (Date.now() - t) / 1000; return s < 60 ? `${s.toFixed(0)} s` : s < 3600 ? `${(s / 60).toFixed(0)} min` : s < 172800 ? `${(s / 3600).toFixed(1)} h` : `${(s / 86400).toFixed(0)} días`; };
+const KIND = { cex: ["Binance", "c-gold"], alpha: ["Wallet", "c-violet"] };
+let D = null, sel = null, filter = "all", detail = null, lastPx = {};
+try { filter = localStorage.getItem("spotFilter") || "all"; } catch {}
+function fit(cv) { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); cv.width = r.width * d; cv.height = r.height * d; const x = cv.getContext("2d"); x.setTransform(d, 0, 0, d, 0, 0); return { ctx: x, w: r.width, h: r.height }; }
+const post = (p, b) => fetch(p, { method: "POST", headers: { "x-orbital": "1", "Content-Type": "application/json" }, body: JSON.stringify(b || {}) });
+
+async function poll() {
+  try { D = await (await fetch("/api/state")).json(); render(); } catch { $("feed").textContent = "el bot no responde · ¿sigue abierto?"; }
+  setTimeout(poll, 1500);
+}
+async function pollDetail() {
+  if (sel) { try { detail = await (await fetch("/api/coin?id=" + encodeURIComponent(sel))).json(); renderDetail(); } catch {} }
+  setTimeout(pollDetail, 5000);
+}
+
+function render() {
+  const m = D.market;
+  $("feed").textContent = `Binance en tiempo real: ${m.ws} · ${m.perHour.toLocaleString("es-ES")} actualizaciones/h · Binance Wallet: ${m.alphaPolls} consultas${m.alphaErr ? " · " + m.alphaErr : ""}`;
+  $("rules").textContent = `objetivo +${D.cfg.targetAtr} ATR · stop −${D.cfg.stopAtr} ATR · máx. ${D.cfg.horizonH} h · stop a la entrada al avanzar ${D.cfg.beAtr} ATR · EV mínimo ${pct(D.cfg.evMin, 0)}`;
+  $("sCoins").textContent = `${m.cex} + ${m.alpha}`;
+  $("sSig").textContent = D.list.filter((c) => c.ev != null && c.ev >= D.cfg.evMin && !c.guard).length;
+  $("sLab").textContent = D.model.labels.toLocaleString("es-ES");
+  $("sEur").textContent = m.eurUsdt ? m.eurUsdt.toFixed(4) : "—";
+  const pb = $("bPause"); pb.textContent = D.paused ? "Reanudar señales" : "Pausar señales"; pb.setAttribute("aria-pressed", D.paused);
+  const B = [];
+  if (D.warm) B.push(D.warm);
+  if (m.ws !== "conectado") B.push("Sin conexión en tiempo real con Binance: reintentando…");
+  if (D.model.labels < D.cfg.minLabels) B.push(`El modelo aún aprende (${D.model.labels}/${D.cfg.minLabels} casos): de momento analiza pero no opera.`);
+  if (D.paused) B.push("Las señales están en pausa: analiza y aprende, pero la cartera no compra.");
+  $("banners").innerHTML = B.map((t) => `<div class="banner">${esc(t)}</div>`).join("");
+  renderWallet(); renderAgents(); renderRank(); renderLearn();
+  $("mood").textContent = `ánimo de las noticias ${m.newsMood.score > 0 ? "+" : ""}${m.newsMood.score} · ${m.newsMood.count} noticias`;
+  $("news").innerHTML = D.news.map((n) => `<div><span class="dot" style="background:${n.tone > 0 ? C.green : n.tone < 0 ? C.red : C.faint}"></span><a href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a> <span class="c-dim">· ${esc(n.src)} · ${ago(n.t)}</span></div>`).join("") || `<div class="c-dim">Cargando noticias…</div>`;
+  const K = { entry: ["SEÑAL", "c-gold"], block: ["BLOQUEO", "c-red"], skip: ["SALTO", "c-dim"] };
+  $("decT").innerHTML = `<tr><th>hora</th><th>moneda</th><th>decisión</th><th>P(objetivo)</th><th>EV</th><th>motivo</th></tr>` + D.decisions.slice(0, 15).map((x) => `<tr><td class="c-dim">${new Date(x.t).toLocaleTimeString()}</td><td><b class="c-white">${esc(x.sym)}</b> <span class="chip ${KIND[x.kind][1]}">${KIND[x.kind][0]}</span></td><td class="${K[x.dec][1]}">${K[x.dec][0]}</td><td>${x.p[0].toFixed(2)}</td><td style="color:${col(x.ev)}">${pct(x.ev)}</td><td class="c-dim">${esc(x.reason)}</td></tr>`).join("");
+  if (!sel && D.list.length) { sel = D.list[0].id; pollDetail(); }
+}
+
+function renderWallet() {
+  const w = D.wallet;
+  $("wEq").textContent = eur(w.equity);
+  const p = $("wPnl"); p.textContent = `${eur(w.pnl, true)} (${pct(w.pnlPct)}) desde ${eur(w.startEur)} · hace ${ago(w.started)}`; p.style.color = col(w.pnl);
+  $("wCash").textContent = eur(w.cash) + ` · ${w.open.length}/${w.maxOpen} posiciones`;
+  $("wClosed").textContent = w.closed ? `${w.closed} · ${w.wins} ganadoras (${((w.wins / w.closed) * 100).toFixed(0)}%)` : "ninguna todavía";
+  const a = $("wAvg"); a.textContent = pct(w.avg); a.style.color = col(w.avg);
+  const eb = D.evBias, b = $("wBias"); b.textContent = eb.src ? `${pct(eb.bias)} (${eb.src}, ${eb.n})` : `faltan datos (${eb.n}/15)`; b.style.color = eb.bias < 0 ? C.red : "";
+  $("wRules").textContent = `${eur(w.tradeEur)} por operación · comisiones y deslizamiento reales`;
+  const { ctx, w: W, h: Hh } = fit($("cvWallet")); ctx.clearRect(0, 0, W, Hh);
+  const pts = w.curve.map((x) => x.v).concat(w.equity);
+  if (pts.length > 1) {
+    const mn = Math.min(w.startEur, ...pts), mx = Math.max(w.startEur, ...pts), rg = mx - mn || 1;
+    const X = (i) => (i / (pts.length - 1)) * (W - 2), Y = (v) => Hh - 4 - ((v - mn) / rg) * (Hh - 10);
+    ctx.setLineDash([3, 3]); ctx.strokeStyle = C.dim; ctx.beginPath(); ctx.moveTo(0, Y(w.startEur)); ctx.lineTo(W, Y(w.startEur)); ctx.stroke(); ctx.setLineDash([]);
+    const k = w.equity >= w.startEur ? C.green : C.red;
+    ctx.beginPath(); pts.forEach((v, i) => (i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v)))); ctx.strokeStyle = k; ctx.lineWidth = 1.8; ctx.stroke();
+    ctx.lineTo(X(pts.length - 1), Hh); ctx.lineTo(0, Hh); ctx.closePath(); ctx.globalAlpha = 0.12; ctx.fillStyle = k; ctx.fill(); ctx.globalAlpha = 1;
+  }
+  $("oCount").textContent = `${w.open.length} abiertas · ${w.closed} cerradas`;
+  $("oOpen").innerHTML = w.open.length ? w.open.map((o) => {
+    const span = o.target - o.stop, f = (v) => Math.max(0, Math.min(100, ((v - o.stop) / span) * 100));
+    return `<div class="op"><span><b class="c-white">${esc(o.sym)}</b> <span class="chip ${KIND[o.kind][1]}">${KIND[o.kind][0]}</span> <span class="c-dim">· hace ${ago(o.t)} · cierra como tarde en ${ago(2 * Date.now() - o.tEnd).replace("-", "")}</span></span><span class="big2" style="color:${col(o.pnl)}">${eur(o.pnl, true)}</span>
+      <span class="c-dim">entrada ${px(o.entry)} → ahora ${px(o.px)} · stop ${px(o.stop)}${o.be ? " (en entrada)" : ""} · objetivo ${px(o.target)}</span><span style="color:${col(o.ret)}">${pct(o.ret)}</span>
+      <span class="bar" title="posición entre el stop (izquierda) y el objetivo (derecha)"><i style="left:${f(o.entry)}%;background:${C.dim}"></i><i style="left:${f(o.px)}%;background:${col(o.ret) || C.white}"></i></span></div>`;
+  }).join("") : `<div class="c-dim">Sin posiciones abiertas. Compra cuando una moneda pasa los filtros y su EV supera ${pct(D.cfg.evMin, 0)}.</div>`;
+  const K = { buy: ["COMPRA", C.gold], sell: ["VENTA", C.blue], move: ["STOP ↑", C.green] };
+  $("oEvents").innerHTML = w.events.length ? w.events.map((e) => `<div><span class="c-dim">${new Date(e.t).toLocaleString("es-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span> <span class="ev-k" style="color:${K[e.kind]?.[1] || C.dim}">${K[e.kind]?.[0] || ""}</span><b class="c-white">${esc(e.sym)}</b> <span class="c-dim">${esc(e.txt)}</span></div>`).join("") : `<div class="c-dim">Aún no ha operado.</div>`;
+}
+
+const AG = [["SCT", "SCOUT", "datos en vivo de Binance", C.blue], ["CHT", "CHARTIST", "análisis técnico por hora", C.violet], ["NWS", "NEWS", "noticias y su tono", C.amber], ["ORB", "ORB", "probabilidades y aprendizaje", C.white], ["GRD", "GUARD", "seguridad y riesgos", C.red], ["QNT", "QUANT", "beneficio esperado tras costes", C.gold], ["EXE", "EXECUTOR", "compra y vende en papel", C.green]];
+function renderAgents() {
+  const el = $("agents");
+  if (!el.children.length) el.innerHTML = AG.map(([k, n, r, c]) => `<div class="agc" id="ag-${k}" style="--c:${c}"><div class="hd"><span class="cd">${k}</span><span class="nm">${n}</span><span class="st"></span></div><div class="role">${r}</div><div class="tx"></div><div class="ft"><span class="ago"></span><span class="cnt"></span></div></div>`).join("");
+  for (const [k] of AG) {
+    const a = D.agents[k], c = $("ag-" + k);
+    c.classList.toggle("on", a.t && Date.now() - a.t < 4000);
+    c.querySelector(".tx").textContent = a.txt;
+    c.querySelector(".ago").textContent = a.t ? "hace " + ago(a.t) : "";
+    c.querySelector(".cnt").textContent = a.n ? a.n.toLocaleString("es-ES") + " acciones" : "";
+  }
+}
+
+function renderRank() {
+  document.querySelectorAll("[data-f]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.f === filter));
+  const rows = D.list.filter((c) => filter === "all" || (filter === "mine" ? c.mine : c.kind === filter));
+  $("rankT").innerHTML = `<tr><th>moneda</th><th>precio</th><th>24 h</th><th>P(objetivo)</th><th>EV</th><th>estado</th><th>gráfico</th><th></th></tr>` + rows.map((c) => {
+    const prev = lastPx[c.id], fl = prev && c.px !== prev ? (c.px > prev ? "flash-up" : "flash-dn") : ""; lastPx[c.id] = c.px;
+    const st = c.open ? `<span class="chip c-blue">en cartera</span>` : c.guard ? `<span class="c-red" title="${esc(c.guard)}">bloqueo</span>` : c.ev != null && c.ev >= D.cfg.evMin ? `<span class="chip c-gold">señal</span>` : `<span class="c-dim">—</span>`;
+    return `<tr tabindex="0" data-id="${esc(c.id)}" class="${c.id === sel ? "sel" : ""}"><td><b class="c-white">${esc(c.sym)}</b> <span class="chip ${KIND[c.kind][1]}">${KIND[c.kind][0]}</span>${c.mine ? ' <span class="chip c-blue">mía</span>' : ""}</td>
+      <td class="${fl}">${px(c.px)}</td><td style="color:${col(c.ch24)}">${pct(c.ch24)}</td><td>${c.p ? c.p[0].toFixed(2) : "—"}</td><td style="color:${col(c.ev)}">${pct(c.ev)}</td><td>${st}</td>
+      <td style="color:${col(c.ta?.score)}">${c.ta ? (c.ta.score > 0 ? "+" : "") + c.ta.score : "—"}</td><td>${c.mine ? `<button type="button" data-rm="${esc(c.id)}">quitar</button>` : ""}</td></tr>`;
+  }).join("");
+}
+
+function renderLearn() {
+  const m = D.model, t = m.counts.reduce((a, b) => a + b, 0) || 1;
+  $("mLab").textContent = m.labels.toLocaleString("es-ES");
+  $("mDist").innerHTML = m.counts.map((n, i) => `<span style="color:${[C.green, C.red, C.amber][i]}">${((n / t) * 100).toFixed(0)}%</span>`).join(" · ");
+  const g = $("mGain"); g.textContent = m.gain == null ? "faltan datos" : pct(m.gain); g.style.color = col(m.gain);
+  $("mR").textContent = `${m.tpR.toFixed(2)} · ${m.slR.toFixed(2)} · ${m.tmR.toFixed(2)}`;
+  $("mPend").textContent = m.pending.toLocaleString("es-ES");
+  const bt = D.backtest, w = D.wallet;
+  $("btN").textContent = bt ? `${bt.n} (${bt.n ? ((bt.wins / bt.n) * 100).toFixed(0) + "% ganadoras" : "—"})` : "—";
+  const ba = $("btAvg"); ba.textContent = bt && bt.n ? pct(bt.avg, 2) : "—"; ba.style.color = col(bt?.avg);
+  const la = $("lvAvg"); la.textContent = w.closed ? `${pct(w.avg, 2)} (${w.closed})` : "aún sin operaciones"; la.style.color = col(w.avg);
+  let v;
+  if (!bt || !bt.n) v = "La prueba con historial no dio señales: con los filtros actuales el modelo no ve oportunidades claras.";
+  else if (bt.avg > 0 && bt.n >= 30) v = `En el historial, operar sus señales habría dado ${pct(bt.avg, 2)} de media tras costes. Buena señal, pero solo cuenta lo que confirme la cartera en vivo durante semanas.`;
+  else if (bt.avg > 0) v = `Resultado positivo en el historial, pero con pocas señales (${bt.n}). Hace falta más tiempo para saberlo.`;
+  else v = `En el historial, sus señales habrían perdido ${pct(bt.avg, 2)} de media. Con estos datos todavía no hay ventaja.`;
+  $("verdict").textContent = v;
+  const need = D.cfg.stopAtr / (D.cfg.stopAtr + D.cfg.targetAtr);
+  $("calib").innerHTML = m.calib.filter((b) => b.n >= 20).map((b) => `<div style="display:grid;grid-template-columns:70px 1fr 64px;gap:8px;align-items:center;padding:2px 0"><span class="c-dim">${b.from.toFixed(1)}–${(b.from + 0.1).toFixed(1)}</span><span style="height:7px;background:${C.line};position:relative"><i style="position:absolute;left:0;top:0;height:100%;width:${(b.real * 100).toFixed(0)}%;background:${b.real > need ? C.green : C.red}"></i><i style="position:absolute;left:${need * 100}%;top:-2px;width:1px;height:11px;background:${C.white}"></i></span><span style="color:${b.real > need ? C.green : C.fg}">${(b.real * 100).toFixed(0)}% · ${b.n}</span></div>`).join("") || `<div class="c-dim">Faltan casos.</div>`;
+}
+
+function renderDetail() {
+  const d = detail; if (!d) return;
+  $("dTitle").textContent = d.sym + (d.name && d.name !== d.sym ? " · " + d.name : "");
+  $("dLinks").innerHTML = `<a href="${esc(d.url)}" target="_blank" rel="noopener">${d.kind === "cex" ? "abrir en Binance" : "ver contrato"} ↗</a>`;
+  const L = d.last;
+  $("dLevels").innerHTML = L ? [["precio", px(d.px), ""], ["objetivo", px(L.target), "c-green"], ["stop", px(L.stop), "c-red"], ["riesgo (1 R)", pct(L.risk), ""]].map(([k, v, c]) => `<div><div class="sub">${k}</div><div class="v ${c}">${v}</div></div>`).join("") : `<div class="c-dim" style="grid-column:1/-1">Esperando a que cierre la próxima hora…</div>`;
+  $("dProb").innerHTML = L ? [["objetivo primero", 0, C.green], ["stop primero", 1, C.red], [`nada en ${D.cfg.horizonH} h`, 2, C.amber]].map(([n, i, c]) => `<div class="pb"><div class="h"><span style="color:${c}">${n}</span><span class="c-white">${L.p[i].toFixed(2)}</span></div><div class="tr"><i style="width:${L.p[i] * 100}%;background:${c}"></i></div></div>`).join("") + `<div class="note">EV ${pct(L.ev)}${L.guard ? " · bloqueada: " + esc(L.guard) : ""}</div>` : "";
+  $("dTa").innerHTML = L?.ta ? `<span class="chip" style="color:${col(L.ta.score)}">${L.ta.score > 0 ? "+" : ""}${L.ta.score}</span>` : "";
+  $("dSig").innerHTML = L?.ta ? L.ta.top.map((s) => `<div><span style="color:${col(s.w)}">${s.w > 0 ? "▲" : "▼"}</span> ${esc(s.txt)}</div>`).join("") : "";
+  $("dSec").innerHTML = d.kind === "cex" ? `<div class="c-dim">Listada en Binance.</div>` : !d.sec ? `<div class="c-dim">Revisando el contrato (GoPlus)…</div>` : [...d.sec.reasons.map((r) => `<div class="c-red">✕ ${esc(r)}</div>`), ...d.sec.warns.map((r) => `<div class="c-amber">! ${esc(r)}</div>`)].join("") + (d.sec.reasons.length + d.sec.warns.length ? "" : `<div class="c-green">✓ Sin riesgos detectados</div>`) + `<div class="c-dim">liquidez ${usd(d.liq)} · ${d.holders ? d.holders.toLocaleString("es-ES") + " holders" : ""}</div>`;
+  $("dNewsS").innerHTML = d.news.length ? `<span class="chip" style="color:${col(d.newsScore)}">${d.newsScore > 0 ? "+" : ""}${d.newsScore}</span>` : "";
+  $("dNews").innerHTML = d.news.length ? d.news.map((n) => `<div><span class="dot" style="background:${n.tone > 0 ? C.green : n.tone < 0 ? C.red : C.faint}"></span><a href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a> <span class="c-dim">· ${ago(n.t)}</span></div>`).join("") : `<div class="c-dim">Sin noticias en 48 h.</div>`;
+  drawChart(d);
+}
+
+function ema(a, n) { const k = 2 / (n + 1); let e = a[0]; return a.map((v) => (e = v * k + e * (1 - k))); }
+function drawChart(d) {
+  const { ctx, w, h } = fit($("cvChart")); ctx.clearRect(0, 0, w, h);
+  const cs = d.candles; if (!cs || cs.length < 5) { ctx.fillStyle = C.dim; ctx.fillText("Cargando…", 10, 20); return; }
+  const L = d.last, P = d.pos, padR = 84, padB = 14;
+  let lo = Math.min(...cs.map((c) => c.l)), hi = Math.max(...cs.map((c) => c.h));
+  const lines = [];
+  if (L) lines.push([L.target, C.green, "objetivo"], [L.stop, C.red, "stop"]);
+  if (P) lines.push([P.entry, C.white, "entrada"], [P.stop, C.red, "stop pos."], [P.target, C.green, "obj. pos."]);
+  for (const [v] of lines) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+  const Y = (v) => 6 + (1 - (v - lo) / (hi - lo || 1)) * (h - padB - 12), bw = (w - padR) / cs.length;
+  ctx.font = "10px " + css("--f-mono"); ctx.strokeStyle = C.line; ctx.fillStyle = C.dim;
+  for (let i = 0; i <= 4; i++) { const v = lo + ((hi - lo) * i) / 4; ctx.beginPath(); ctx.moveTo(0, Y(v)); ctx.lineTo(w - padR, Y(v)); ctx.stroke(); ctx.fillText(px(v), w - padR + 4, Y(v) + 3); }
+  cs.forEach((c, i) => { const x = i * bw + bw / 2, up = c.c >= c.o; ctx.strokeStyle = ctx.fillStyle = up ? C.green : C.red; ctx.beginPath(); ctx.moveTo(x, Y(c.h)); ctx.lineTo(x, Y(c.l)); ctx.stroke(); ctx.fillRect(x - Math.max(1, bw * 0.35), Math.min(Y(c.o), Y(c.c)), Math.max(2, bw * 0.7), Math.max(1, Math.abs(Y(c.o) - Y(c.c)))); });
+  const cl = cs.map((c) => c.c);
+  [[ema(cl, 20), C.gold], [ema(cl, 50), C.violet]].forEach(([e, k]) => { ctx.strokeStyle = k; ctx.lineWidth = 1.3; ctx.beginPath(); e.forEach((v, i) => { const x = i * bw + bw / 2; i ? ctx.lineTo(x, Y(v)) : ctx.moveTo(x, Y(v)); }); ctx.stroke(); });
+  ctx.lineWidth = 1;
+  for (const [v, k] of lines) { ctx.strokeStyle = k; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(0, Y(v)); ctx.lineTo(w - padR, Y(v)); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = k; ctx.fillText(px(v), w - padR + 4, Y(v) + 3); }
+  ctx.fillStyle = C.dim; ctx.fillText(`últimas ${cs.length} h`, 4, h - 2);
+}
+
+$("rankT").addEventListener("click", async (e) => {
+  const rm = e.target.closest("[data-rm]");
+  if (rm) { e.stopPropagation(); await post("/api/unwatch", { id: rm.dataset.rm }); return; }
+  const tr = e.target.closest("tr[data-id]"); if (tr) { sel = tr.dataset.id; detail = null; renderRank(); fetch("/api/coin?id=" + encodeURIComponent(sel)).then((r) => r.json()).then((d) => { detail = d; renderDetail(); }); }
+});
+$("rankT").addEventListener("keydown", (e) => { if (e.key === "Enter") e.target.closest("tr[data-id]")?.click(); });
+document.querySelectorAll("[data-f]").forEach((b) => b.addEventListener("click", () => { filter = b.dataset.f; try { localStorage.setItem("spotFilter", filter); } catch {} renderRank(); }));
+$("bPause").addEventListener("click", () => post(D && D.paused ? "/api/resume" : "/api/pause"));
+$("bReset").addEventListener("click", () => { $("wConfirm").hidden = false; });
+$("bResetNo").addEventListener("click", () => { $("wConfirm").hidden = true; });
+$("bResetYes").addEventListener("click", () => { $("wConfirm").hidden = true; post("/api/wallet-reset"); });
+$("addForm").addEventListener("submit", async (e) => {
+  e.preventDefault(); const q = $("q").value.trim(); if (!q) return;
+  $("q").value = "añadiendo…";
+  try { const r = await (await post("/api/watch", { q })).json(); $("q").value = ""; $("q").placeholder = r.ok ? `${r.sym} añadida a tu lista` : r.error; if (r.ok) filter = "mine"; } catch { $("q").value = ""; }
+});
+poll(); pollDetail();
+})();
+</script>
+</body>
+</html>

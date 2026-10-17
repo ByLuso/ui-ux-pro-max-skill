@@ -1,10 +1,34 @@
-# Orbital Bot
+# Orbital
 
-Bot de investigación para lanzamientos de pump.fun. Corre en **tu computadora**, mira cada lanzamiento real, predice qué pasará primero (+60%, −30% o nada en 60 minutos), mide lo que pasó de verdad y aprende de eso. Opera en papel por defecto y solo usa dinero real cuando cumple todos los requisitos que pongas.
+Radar de criptomonedas que corre en **tu computadora**, gratis y en tiempo real. Vigila las monedas de **Binance** y los tokens de **Binance Wallet** (BNB Chain), las analiza cada hora con análisis técnico y noticias, aprende de lo que pasa de verdad y opera solo con una **cartera de prueba** (dinero ficticio) para medir si tiene ventaja.
 
-> **Advertencia.** La mayoría de los tokens de pump.fun se van a cero y compites contra bots más rápidos. Este bot puede perder dinero. Usa solo una wallet nueva con una cantidad que estés dispuesto a perder completa. Nada de esto es consejo financiero.
+> **Advertencia.** Nada de esto es consejo financiero. El bot no opera con dinero real; sirve para comprobar, con datos reales, si una estrategia funciona antes de arriesgar nada.
 
-## Cómo funciona
+## Radar de Binance + Binance Wallet (modo por defecto)
+
+**Datos, todos gratis y sin claves:**
+- **Binance (exchange):** las 40 monedas con más volumen. Precio en tiempo real por WebSocket (se actualiza cada ~2 s) e historial de velas.
+- **Binance Wallet:** los 30 tokens Alpha de BNB Chain con más volumen y liquidez, según la lista oficial de Binance, con sus velas y precios cada minuto.
+- **Noticias:** Cointelegraph, CoinDesk, Decrypt y The Block.
+- **Seguridad de los tokens de BNB Chain:** GoPlus (token trampa, impuestos, creador con mucho supply, liquidez sin bloquear).
+
+**Cómo decide:** al cerrar cada vela de 1 hora, cada moneda recibe 17 señales (cambio en 1/4/24 h, RSI, distancia a las EMA 20 y 50, MACD, volatilidad, volumen, rupturas, Bollinger, cómo va BTC, tono de las noticias…). El modelo estima la probabilidad de llegar antes al **objetivo (+3 ATR)** que al **stop (−2 ATR)** en 72 h. QUANT resta comisiones y deslizamiento; si el beneficio esperado supera +1% y GUARD no ve riesgos, la cartera de prueba compra 5 €. Si el precio avanza 1,5 ATR, el stop sube a la entrada.
+
+**Por qué es honesto:**
+- **Aprende del historial al arrancar:** recorre los últimos días hora a hora y, en cada momento, solo sabe lo que ya había pasado. Así empieza con miles de casos y una **prueba con historial** de lo que habría ganado o perdido.
+- **Calibración:** mide cuánto acierta de verdad en cada tramo de probabilidad (panel "¿Hay ventaja?"). Si dice 0,9 y acierta el 30%, usa 0,3.
+- **Corrección del EV:** compara lo que esperaba ganar con lo que ganó (primero en el historial, luego en la cartera en vivo) y solo opera si, aun así, sale a cuenta.
+- **Cortes y suspensiones:** al reconectar, rellena el hueco con las velas reales de Binance; nunca decide con datos atrasados.
+
+Para añadir una moneda a tu lista escribe su símbolo (`SOL`, `PEPE`) o el contrato de un token de Binance Wallet. Los ajustes están en `.env` (`SPOT_*`, `ALPHA_*`).
+
+**Archivos en `data/`:** `spot-model.json`, `spot-calib.json`, `spot-views.json` (casos esperando resultado), `spot-labels.jsonl`, `spot-wallet.json`, `spot-backtest.json`, `spot-watchlist.json`.
+
+## Bot antiguo de pump.fun
+
+Sigue incluido pero apagado. Para usarlo, pon `BOT=pumpfun` en `.env`. Todo lo que aprendió se conserva en `data/`.
+
+### Cómo funciona el bot de pump.fun
 
 | Agente | Qué hace en esta versión |
 |---|---|
