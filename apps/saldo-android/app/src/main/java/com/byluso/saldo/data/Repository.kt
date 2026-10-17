@@ -6,6 +6,8 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.byluso.saldo.parser.Categories
+import com.byluso.saldo.parser.Statement
+import com.byluso.saldo.parser.StatementLine
 import com.byluso.saldo.parser.NotificationParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +16,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import kotlin.math.roundToLong
 
 private class Db(context: Context) : SQLiteOpenHelper(context, "saldo.db", null, 1) {
     override fun onCreate(db: SQLiteDatabase) {
@@ -198,6 +205,68 @@ class Repository private constructor(context: Context) {
         return true
     }
 
+    // ---------- Importar extractos PDF ----------
+
+    /**
+     * Compara el extracto con lo ya registrado. Un movimiento del extracto se considera ya
+     * registrado si hay otro con el mismo importe y tipo el mismo día (±1 día, porque el banco
+     * a veces apunta el cargo al día siguiente).
+     */
+    fun planImport(st: Statement): ImportPlan {
+        val zone = ZoneId.systemDefault()
+        fun key(d: LocalDate, amount: Double, income: Boolean) = "$d|${(amount * 100).roundToLong()}|$income"
+        val pool = _movements.value
+            .groupBy { key(Instant.ofEpochMilli(it.timestamp).atZone(zone).toLocalDate(), it.amount, it.isIncome) }
+            .mapValues { it.value.toMutableList() }
+        val fresh = mutableListOf<StatementLine>()
+        val dups = mutableListOf<StatementLine>()
+        val balanceUpdates = mutableListOf<Pair<Long, Double>>()
+        for (l in st.lines) {
+            val match = listOf(l.date, l.date.minusDays(1), l.date.plusDays(1)).firstNotNullOfOrNull { d ->
+                pool[key(d, l.amount, l.isIncome)]?.removeFirstOrNull()
+            }
+            if (match == null) fresh += l
+            else {
+                dups += l
+                if (l.balance != null) balanceUpdates += match.id to l.balance
+            }
+        }
+        return ImportPlan(st, fresh, dups, balanceUpdates)
+    }
+
+    /** Guarda los movimientos nuevos del extracto y aplica sus saldos. Devuelve cuántos se añadieron. */
+    suspend fun applyImport(plan: ImportPlan): Int = withContext(Dispatchers.IO) {
+        val zone = ZoneId.systemDefault()
+        val w = db.writableDatabase
+        w.beginTransaction()
+        try {
+            val perDay = mutableMapOf<LocalDate, Int>()
+            for (l in plan.fresh) {
+                // Mediodía del día + unos segundos para conservar el orden del extracto
+                val n = perDay.merge(l.date, 1, Int::plus)!!
+                val ts = l.date.atTime(12, 0).atZone(zone).toInstant().toEpochMilli() + n * 1000L
+                w.insert("movements", null, ContentValues().apply {
+                    put("amount", l.amount)
+                    put("is_income", if (l.isIncome) 1 else 0)
+                    put("merchant", l.merchant)
+                    put("category", l.category)
+                    put("timestamp", ts)
+                    put("source_app", SOURCE_PDF)
+                    put("raw_text", l.raw)
+                    if (l.balance != null) put("balance", l.balance) else putNull("balance")
+                })
+            }
+            for ((id, bal) in plan.balanceUpdates) {
+                w.update("movements", ContentValues().apply { put("balance", bal) }, "id = ?", arrayOf(id.toString()))
+            }
+            w.setTransactionSuccessful()
+        } finally {
+            w.endTransaction()
+        }
+        reload()
+        plan.fresh.size
+    }
+
     // ---------- Carga ----------
 
     private fun reload() {
@@ -236,6 +305,9 @@ class Repository private constructor(context: Context) {
     }
 
     companion object {
+        /** Marca de los movimientos importados desde un extracto PDF. */
+        const val SOURCE_PDF = "pdf"
+
         @Volatile private var instance: Repository? = null
         fun get(context: Context): Repository =
             instance ?: synchronized(this) { instance ?: Repository(context).also { instance = it } }

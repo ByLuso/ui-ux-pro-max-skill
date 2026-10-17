@@ -5,6 +5,8 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -70,6 +72,7 @@ fun MovementsScreen(
     hide: Boolean,
     onToggleHide: () -> Unit,
     movements: List<Movement>,
+    onImport: () -> Unit = {},
     onOpen: (Movement) -> Unit,
 ) {
     var filter by remember { mutableIntStateOf(0) } // 0 todos, 1 gastos, 2 ingresos
@@ -80,10 +83,14 @@ fun MovementsScreen(
     LazyColumn {
         item { MonthHeader(month, onMonth, hide, onToggleHide, monthMovs) }
         item {
-            Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
                 Pill("Todo", filter == 0) { filter = 0 }
                 Pill("Gastos", filter == 1) { filter = 1 }
                 Pill("Ingresos", filter == 2) { filter = 2 }
+                Pill("⇪ PDF", false, onImport)
             }
         }
         if (shown.isEmpty()) item {
@@ -221,6 +228,7 @@ fun SettingsScreen(
     apps: List<SourceApp>,
     onToggleApp: (String, Boolean) -> Unit,
     onSetBalance: () -> Unit,
+    onImport: () -> Unit = {},
 ) {
     var test by remember { mutableStateOf("") }
     LazyColumn {
@@ -247,6 +255,17 @@ fun SettingsScreen(
                     color = C.Text, modifier = Modifier.padding(vertical = 10.dp),
                 )
                 Pill("Calibrar saldo", true, onSetBalance)
+            }
+        }
+        item {
+            SectionCard(Modifier.padding(16.dp).enterStagger(3).holoShimmer(5000, 0.06f)) {
+                HudLabel("importar extracto", C.Cyan)
+                Text(
+                    "Comparte el extracto en PDF desde la app de tu banco (Compartir → Saldo) o elígelo aquí. " +
+                        "Se añaden los movimientos que falten, sin duplicar, y se actualiza tu saldo.",
+                    color = C.Text, modifier = Modifier.padding(vertical = 10.dp),
+                )
+                Pill("Elegir PDF", true, onImport)
             }
         }
         item {

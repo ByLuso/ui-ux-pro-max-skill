@@ -11,6 +11,8 @@ de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actuali
 |---|---|
 | ![Arranque](screenshots/boot.gif) | ![Inicio animado](screenshots/home.gif) |
 
+![Importar extracto](screenshots/import.png)
+
 ### Diseño "holo 2100"
 
 - Fondo vivo: auroras que se desplazan, estrellas que titilan y un horizonte de rejilla en perspectiva.
@@ -37,6 +39,11 @@ de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actuali
   mismo pago; Saldo lo cuenta una sola vez (y aprovecha el saldo si el banco lo indica).
 - **Saldo actual**: indicas tu saldo una vez y se actualiza con cada movimiento. Si el banco
   incluye el saldo en la notificación ("Saldo disponible 1.234,56 €"), lo usa directamente.
+- **Importar extractos PDF**: desde la app del banco o Archivos, *Compartir → Saldo* (o
+  *Ajustes → Importar extracto*). Lee fecha, concepto, importe y saldo de cada línea; enseña
+  una vista previa con los movimientos nuevos y los que ya tenías; añade solo los que faltan
+  y usa el último saldo del extracto como saldo actual. Admite PDFs con contraseña (DNI/NIE).
+  Si el importe no lleva signo (columnas Debe/Haber), deduce gasto o ingreso por el saldo.
 - **Inicio**: mes con ingresos, gastos y balance; donut de gastos por grupo; últimos movimientos.
 - **Movimientos**: lista por días con filtros; toca uno para editarlo, cambiar la categoría o borrarlo.
 - **Gráficas**: ingresos vs gastos de los últimos 6 meses y dónde más gastas.
@@ -75,6 +82,8 @@ cd apps/saldo-android
 ```
 app/src/main/java/com/byluso/saldo/
 ├── parser/NotificationParser.kt   # Extrae importe, tipo, comercio y saldo del texto
+├── parser/StatementParser.kt     # Lee extractos bancarios (texto del PDF) línea a línea
+├── data/StatementImporter.kt     # Abre el PDF (PDFBox), pide contraseña y lo importa
 ├── parser/Categories.kt           # Categorías y palabras clave (Mercadona → Comida…)
 ├── service/BankNotificationListener.kt  # NotificationListenerService
 ├── data/Repository.kt             # SQLite + StateFlow, deduplicación

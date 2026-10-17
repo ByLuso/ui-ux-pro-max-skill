@@ -6,6 +6,14 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.LaunchedEffect
+import androidx.core.content.IntentCompat
+import com.byluso.saldo.data.ImportState
+import com.byluso.saldo.data.StatementImporter
+import com.byluso.saldo.ui.ImportOverlay
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
@@ -108,7 +116,26 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val repo = Repository.get(this)
-        setContent { SaldoTheme { SaldoApp(repo) } }
+        importer = StatementImporter.get(this, repo)
+        if (savedInstanceState == null) handleShare(intent)
+        setContent { SaldoTheme { SaldoApp(repo, importer) } }
+    }
+
+    private lateinit var importer: StatementImporter
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleShare(intent)
+    }
+
+    /** Recibe un extracto PDF compartido desde otra app (Compartir → Saldo) o abierto con Saldo. */
+    private fun handleShare(intent: Intent?) {
+        val uri: Uri? = when (intent?.action) {
+            Intent.ACTION_SEND -> IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
+            Intent.ACTION_VIEW -> intent.data
+            else -> null
+        }
+        uri?.let { importer.open(it) }
     }
 }
 
@@ -120,7 +147,7 @@ internal enum class Tab(val label: String, val icon: ImageVector) {
 }
 
 @Composable
-private fun SaldoApp(repo: Repository) {
+private fun SaldoApp(repo: Repository, importer: StatementImporter) {
     val context = LocalContext.current
     val movements by repo.movements.collectAsStateWithLifecycle()
     val apps by repo.apps.collectAsStateWithLifecycle()
@@ -135,6 +162,25 @@ private fun SaldoApp(repo: Repository) {
     var listenerEnabled by remember { mutableStateOf(BankNotificationListener.isEnabled(context)) }
     var booting by rememberSaveable { mutableStateOf(true) }
     var toast by remember { mutableStateOf<ToastMsg?>(null) }
+    val importState by importer.state.collectAsStateWithLifecycle()
+    val pickPdf = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        uri?.let { importer.open(it) }
+    }
+    val openImport = { pickPdf.launch(arrayOf("application/pdf")) }
+    LaunchedEffect(importState) {
+        val done = importState as? ImportState.Done ?: return@LaunchedEffect
+        val st = done.plan.statement
+        toast = ToastMsg(
+            "extracto importado",
+            if (done.added > 0) "${done.added} movimientos nuevos" + (st.bank?.let { " · $it" } ?: "")
+            else "Saldo actualizado" + (st.bank?.let { " · $it" } ?: ""),
+            C.Cyan,
+        )
+        // Lleva al mes del extracto para ver lo importado
+        st.to?.let { month = YearMonth.from(it) }
+        if (done.added > 0) tab = Tab.Movements
+        importer.dismiss()
+    }
 
     LifecycleResumeEffect(Unit) {
         listenerEnabled = BankNotificationListener.isEnabled(context)
@@ -192,13 +238,13 @@ private fun SaldoApp(repo: Repository) {
                             onSeeAll = { tab = Tab.Movements },
                         )
                         Tab.Movements -> MovementsScreen(
-                            month, { month = it }, hide, { hide = !hide }, movements, onOpen = { editing = it },
+                            month, { month = it }, hide, { hide = !hide }, movements, onImport = openImport, onOpen = { editing = it },
                         )
                         Tab.Charts -> ChartsScreen(movements, hide)
                         Tab.Settings -> SettingsScreen(
                             listenerEnabled = listenerEnabled, onOpenListenerSettings = openListenerSettings,
                             apps = apps, onToggleApp = { pkg, on -> repo.setAppEnabled(pkg, on) },
-                            onSetBalance = { settingBalance = true },
+                            onSetBalance = { settingBalance = true }, onImport = openImport,
                         )
                     }
                   }
@@ -238,6 +284,10 @@ private fun SaldoApp(repo: Repository) {
                 },
             )
         }
+        ImportOverlay(
+            state = importState, hide = hide,
+            onPassword = importer::submitPassword, onConfirm = importer::confirm, onDismiss = importer::dismiss,
+        )
         AnimatedVisibility(booting, exit = fadeOut(tween(1))) { BootSequence { booting = false } }
     }
 }

@@ -406,7 +406,11 @@ fun MovementRow(m: Movement, hide: Boolean, onClick: () -> Unit) {
         Column(Modifier.weight(1f).padding(horizontal = 14.dp)) {
             Text(m.merchant, color = C.Text, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(
-                (relativeDay(m.timestamp) + " · " + m.category + if (m.sourceApp != null) " · auto" else "").uppercase(esLocale),
+                (relativeDay(m.timestamp) + " · " + m.category + when (m.sourceApp) {
+                    null -> ""
+                    com.byluso.saldo.data.Repository.SOURCE_PDF -> " · pdf"
+                    else -> " · auto"
+                }).uppercase(esLocale),
                 color = C.Muted, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.sp, maxLines = 1,
             )
         }

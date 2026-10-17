@@ -126,7 +126,7 @@ object NotificationParser {
         "tu cuenta", "la cuenta", "cuenta", "tu tarjeta", "tarjeta", "euros", "eur", "tu", "la", "el",
     )
 
-    private fun prettify(s: String): String {
+    internal fun prettify(s: String): String {
         val trimmed = s.take(32)
         return if (trimmed == trimmed.uppercase(Locale.ROOT)) {
             trimmed.lowercase(Locale.ROOT).split(' ').joinToString(" ") { w ->
