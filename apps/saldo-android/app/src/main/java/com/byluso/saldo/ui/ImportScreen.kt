@@ -263,7 +263,31 @@ private fun ColumnScope.PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: 
     Spacer(Modifier.height(6.dp))
 
     // ---- Lista: ocupa el espacio que quede y se desplaza por dentro
+    var showUnrecognized by remember { mutableStateOf(false) }
     LazyColumn(Modifier.fillMaxWidth().weight(1f, fill = false)) {
+        if (st.unrecognized.isNotEmpty()) item {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp)
+                    .clip(CutCornerShape(topStart = 8.dp, bottomEnd = 8.dp))
+                    .background(C.Magenta.copy(alpha = 0.10f))
+                    .bounceClick { showUnrecognized = !showUnrecognized }
+                    .padding(10.dp)
+            ) {
+                Text(
+                    "⚠ ${st.unrecognized.size} líneas con importes sin reconocer · ${if (showUnrecognized) "ocultar" else "ver"}".uppercase(esLocale),
+                    color = C.Magenta, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.sp,
+                )
+                if (showUnrecognized) {
+                    Text(
+                        "No se importarán. Si son movimientos, haz captura y envíasela al desarrollador para ajustar el lector.",
+                        color = C.Muted, fontSize = 11.sp, modifier = Modifier.padding(vertical = 6.dp),
+                    )
+                    st.unrecognized.forEach { Text("> $it", color = C.Text, fontFamily = Mono, fontSize = 10.sp, modifier = Modifier.padding(top = 3.dp)) }
+                }
+            }
+        }
         itemsIndexed(st.lines.reversed()) { i, l ->
             PreviewRow(l, l in freshSet, hide, Modifier.enterStagger(i))
         }

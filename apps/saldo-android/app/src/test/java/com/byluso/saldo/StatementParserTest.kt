@@ -92,4 +92,68 @@ class StatementParserTest {
     @Test fun nothingToReadGivesEmpty() {
         assertTrue(StatementParser.parse("Documento sin movimientos", today).lines.isEmpty())
     }
+
+    /** Debe / Haber con 0,00 de relleno en la columna vacía. */
+    @Test fun debitCreditColumnsWithZeroFiller() {
+        val text = """
+            Fecha Concepto Debe Haber Saldo
+            21/09/2026 COMPRA TARJ. ALCAMPO SUPERMERCADO 5,34 0,00 1.494,66
+            22/09/2026 TRANSFERENCIA DE EMPRESA 0,00 1.000,00 2.494,66
+            23/09/2026 RECIBO CSIF 34,50 0,00 2.460,16
+        """.trimIndent()
+        val st = StatementParser.parse(text, today)
+        assertEquals(3, st.lines.size)
+        assertFalse(st.lines[0].isIncome); assertEquals(5.34, st.lines[0].amount, 0.001)
+        assertTrue(st.lines[1].isIncome); assertEquals(1000.0, st.lines[1].amount, 0.001)
+        assertEquals(34.50, st.lines[2].amount, 0.001)
+        assertTrue(st.unrecognized.isEmpty())
+    }
+
+    /** La fecha y el concepto en una línea y los importes en la siguiente. */
+    @Test fun amountsOnNextLine() {
+        val text = """
+            15/10/2026 COMPRA TARJ. ESTANCO ITURRIAGA
+            -7,10 1.200,00
+            16/10/2026 BIZUM ENVIADO A PEDRO
+            CENA
+            -12,00 1.188,00
+        """.trimIndent()
+        val st = StatementParser.parse(text, today)
+        assertEquals(2, st.lines.size)
+        assertEquals("Estanco Iturriaga", st.lines[0].merchant)
+        assertEquals(7.10, st.lines[0].amount, 0.001)
+        assertTrue(st.lines[1].concept.contains("CENA"))
+        assertEquals(1188.0, st.finalBalance!!, 0.001)
+    }
+
+    /** Fechas sin año, columna previa con nº de operación, signo detrás y concepto que empieza por TOTAL. */
+    @Test fun noYearLeadingColumnTrailingMinusAndTotalMerchant() {
+        val text = """
+            Unicaja · Movimientos de octubre de 2026
+            0001 03/10 TOTALENERGIES ESTACION 45,20- 954,80
+            0002 04/10 COMPRA REPSOL ESTACION 23,45- 931,35
+            0003 05/10 TOTAL ENERGIES MADRID 30,00- 901,35
+        """.trimIndent()
+        val st = StatementParser.parse(text, today)
+        assertEquals(3, st.lines.size)
+        assertEquals(LocalDate.of(2026, 10, 3), st.lines[0].date)
+        assertFalse(st.lines[0].isIncome); assertEquals(45.20, st.lines[0].amount, 0.001)
+        assertEquals("Transporte", st.lines[1].category)
+        // "TOTAL..." ya no se confunde con una línea de totales
+        assertTrue(st.lines[0].merchant.startsWith("Totalenergies"))
+        assertTrue(st.lines[2].merchant.startsWith("Total Energies"))
+        assertEquals(901.35, st.finalBalance!!, 0.001)
+    }
+
+    /** Las líneas con importes que no se entienden se informan, no se pierden en silencio. */
+    @Test fun reportsUnrecognizedLines() {
+        val text = """
+            01/10/2026 COMPRA MERCADONA -20,00 980,00
+            Movimiento raro sin fecha 15,00
+            Saldo disponible 980,00
+        """.trimIndent()
+        val st = StatementParser.parse(text, today)
+        assertEquals(1, st.lines.size)
+        assertEquals(listOf("Movimiento raro sin fecha 15,00"), st.unrecognized)
+    }
 }

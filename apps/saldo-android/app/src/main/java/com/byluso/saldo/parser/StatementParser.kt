@@ -22,6 +22,8 @@ data class Statement(
     val bank: String?,
     /** Movimientos en orden cronológico (del más antiguo al más reciente). */
     val lines: List<StatementLine>,
+    /** Líneas con fecha o importes que no se han podido interpretar (para revisarlas). */
+    val unrecognized: List<String> = emptyList(),
 ) {
     val from: LocalDate? get() = lines.minOfOrNull { it.date }
     val to: LocalDate? get() = lines.maxOfOrNull { it.date }
@@ -44,19 +46,21 @@ object StatementParser {
         "jan" to 1, "apr" to 4, "aug" to 8, "dec" to 12,
     )
 
-    private val numericDate = Regex("""^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{2,4})\b""")
+    // 21/09/2026 · 21-09-26 · 21.09.2026 · 21/09 (sin año, solo con / o -)
+    private val numericDate = Regex("""^(\d{1,2})([/\-.])(\d{1,2})(?:\2(\d{2,4}))?(?![\d,])""")
     private val textDate = Regex(
         """^(\d{1,2})\s+(?:de\s+)?(ene|feb|mar|abr|may|jun|jul|ago|sep|set|oct|nov|dic|jan|apr|aug|dec)[a-záéíóú]*\.?(?:\s+(?:de\s+)?(\d{4}))?\b""",
         RegexOption.IGNORE_CASE,
     )
 
     // Importes con dos decimales: 1.234,56 · -52,30 · 52,30 € · +2.200,00
-    private val moneyComma = Regex("""(?<![\d.,])([+\-−]\s?)?(\d{1,3}(?:\.\d{3})+|\d+),(\d{2})(?![\d])(?:\s?(?:€|EUR))?""")
+    // Importes con dos decimales: 1.234,56 · -52,30 · 52,30- · 52,30 € · +2.200,00
+    private val moneyComma = Regex("""(?<![\d.,])([+\-−]\s?)?(\d{1,3}(?:\.\d{3})+|\d+),(\d{2})(?![\d])([\-−](?![\d]))?(?:\s?(?:€|EUR))?""")
     // Variante inglesa: 1,234.56 · -52.30
-    private val moneyDot = Regex("""(?<![\d.,])([+\-−]\s?)?(\d{1,3}(?:,\d{3})+|\d+)\.(\d{2})(?![\d])(?:\s?(?:€|EUR))?""")
+    private val moneyDot = Regex("""(?<![\d.,])([+\-−]\s?)?(\d{1,3}(?:,\d{3})+|\d+)\.(\d{2})(?![\d])([\-−](?![\d]))?(?:\s?(?:€|EUR))?""")
 
     private val skipConcept = Regex(
-        """saldo\s+(anterior|inicial|final|a\s+fecha|al)|^total|suma\s+de|página|pagina|^fecha\b""",
+        """saldo\s+(anterior|inicial|final|a\s+fecha|al)|^total(?:es)?(?:\s+(?:movimientos|cargos|abonos|debe|haber|general|periodo|período))?\s*:?$|suma\s+de|página|pagina|^fecha\b""",
         RegexOption.IGNORE_CASE,
     )
 
@@ -98,6 +102,8 @@ object StatementParser {
         val sign: Int, // +1 ingreso, -1 gasto, 0 desconocido
         val balance: Double?,
         var raw: String,
+        /** Signo deducido de la columna (Debe/Haber) cuando no hay otra pista. */
+        val columnSign: Int = 0,
     )
 
     fun parse(text: String, today: LocalDate = LocalDate.now()): Statement {
@@ -109,41 +115,70 @@ object StatementParser {
         val defaultYear = Regex("""\b(20\d{2})\b""").find(text)?.groupValues?.get(1)?.toInt() ?: today.year
 
         val rows = mutableListOf<Row>()
+        val unrecognized = mutableListOf<String>()
         var continuation = 0
+        // Línea con fecha pero sin importes: los importes suelen venir en la línea siguiente
+        var pending: Triple<LocalDate, String, String>? = null
+
+        fun addRow(date: LocalDate, rest: String, raw: String): Boolean {
+            val amounts = money.findAll(rest).toList()
+            if (amounts.isEmpty()) return false
+            val concept = rest.substring(0, amounts.first().range.first).trim().trim('-', '|', ':').trim()
+            if (skipConcept.containsMatchIn(concept)) return true
+            val balanceMatch = if (amounts.size >= 2) amounts.last() else null
+            val candidates = if (amounts.size >= 2) amounts.dropLast(1) else amounts
+            val values = candidates.map { toNumber(it, decimalComma) }
+            // Columnas Debe/Haber: una de ellas suele venir a 0,00; se coge la que tiene importe
+            val idx = values.indexOfLast { it != 0.0 }
+            if (idx < 0) return true
+            val m = candidates[idx]
+            val explicit = signOf(m)
+            rows += Row(
+                date = date, concept = concept, amount = abs(values[idx]), sign = explicit,
+                balance = balanceMatch?.let { toNumber(it, decimalComma) }, raw = raw,
+                columnSign = if (explicit == 0 && candidates.size == 2) (if (idx == 0) -1 else 1) else 0,
+            )
+            return true
+        }
+
         for (line in lines) {
-            val date = leadingDate(line, defaultYear, today)
+            val date = findDate(line, defaultYear, today, allowOffset = money.containsMatchIn(line))
             if (date == null) {
+                val p = pending
+                if (p != null && money.containsMatchIn(line) && !looksLikeSummary(line)) {
+                    // Completa la línea de fecha anterior con estos importes
+                    pending = null
+                    if (!addRow(p.first, p.second + " " + line, p.third + " " + line)) unrecognized += p.third + " " + line
+                    continuation = 0
+                    continue
+                }
+                if (p != null && continuation < 2 && line.length <= 60) {
+                    pending = Triple(p.first, p.second + " " + line, p.third + " " + line)
+                    continuation++
+                    continue
+                }
                 // Línea sin fecha y sin importes justo después de un movimiento: continuación del concepto.
                 val last = rows.lastOrNull()
                 if (last != null && continuation < 2 && !money.containsMatchIn(line) && !skipConcept.containsMatchIn(line) && line.length <= 60) {
                     last.concept = (last.concept + " " + line).trim()
                     last.raw += " " + line
                     continuation++
-                } else continuation = 2
+                } else {
+                    continuation = 2
+                    if (money.containsMatchIn(line) && !looksLikeSummary(line)) unrecognized += line
+                }
                 continue
             }
+            pending = null
             continuation = 0
             var rest = line.substring(date.second)
             // Fecha valor opcional justo detrás de la fecha de operación
             leadingDate(rest.trimStart(), defaultYear, today)?.let { rest = rest.trimStart().substring(it.second) }
-            val amounts = money.findAll(rest).toList()
-            if (amounts.isEmpty()) continue
-            val concept = rest.substring(0, amounts.first().range.first).trim().trim('-', '|', ':').trim()
-            if (skipConcept.containsMatchIn(concept)) continue
-
-            val amountMatch = if (amounts.size >= 2) amounts[amounts.size - 2] else amounts[0]
-            val balanceMatch = if (amounts.size >= 2) amounts.last() else null
-            val value = toNumber(amountMatch, decimalComma)
-            if (value == 0.0) continue
-            val explicitSign = amountMatch.groupValues[1].trim()
-            rows += Row(
-                date = date.first,
-                concept = concept,
-                amount = abs(value),
-                sign = when (explicitSign) { "-", "−" -> -1; "+" -> 1; else -> 0 },
-                balance = balanceMatch?.let { toNumber(it, decimalComma) },
-                raw = line,
-            )
+            if (!money.containsMatchIn(rest)) {
+                pending = Triple(date.first, rest.trim(), line)
+                continue
+            }
+            if (!addRow(date.first, rest, line)) unrecognized += line
         }
 
         inferSigns(rows)
@@ -166,6 +201,7 @@ object StatementParser {
                     category = Categories.guess(merchant, r.concept, isIncome), balance = r.balance, raw = r.raw,
                 )
             },
+            unrecognized = unrecognized.filterNot { looksLikeSummary(it) }.take(50),
         )
     }
 
@@ -185,7 +221,8 @@ object StatementParser {
                 next != null && near(next - r.amount, bal) -> -1
                 else -> 0
             }
-            if (sign != 0) rows[i] = Row(r.date, r.concept, r.amount, sign, r.balance, r.raw)
+            val final = if (sign != 0) sign else r.columnSign
+            if (final != 0) rows[i] = Row(r.date, r.concept, r.amount, final, r.balance, r.raw)
         }
     }
 
@@ -193,9 +230,11 @@ object StatementParser {
     private fun leadingDate(line: String, defaultYear: Int, today: LocalDate): Pair<LocalDate, Int>? {
         numericDate.find(line)?.let { m ->
             val d = m.groupValues[1].toInt()
-            val mo = m.groupValues[2].toInt()
-            var y = m.groupValues[3].toInt()
-            if (y < 100) y += 2000
+            val mo = m.groupValues[3].toInt()
+            val yearText = m.groupValues[4]
+            if (yearText.isEmpty() && m.groupValues[2] == ".") return null // "12.50" es un importe, no una fecha
+            val y = yearText.toIntOrNull()?.let { if (it < 100) it + 2000 else it }
+                ?: if (mo in 1..12 && LocalDate.of(defaultYear, mo, 1) > today) defaultYear - 1 else defaultYear
             return runCatching { LocalDate.of(y, mo, d) }.getOrNull()?.let { it to m.range.last + 1 }
         }
         textDate.find(line)?.let { m ->
@@ -210,10 +249,39 @@ object StatementParser {
         return null
     }
 
+    /**
+     * Fecha al principio de la línea, o tras una primera columna corta (nº de operación, referencia):
+     * se prueba en el inicio de cada palabra de los primeros 24 caracteres.
+     */
+    private fun findDate(line: String, defaultYear: Int, today: LocalDate, allowOffset: Boolean): Pair<LocalDate, Int>? {
+        leadingDate(line, defaultYear, today)?.let { return it }
+        if (!allowOffset) return null
+        var i = line.indexOf(' ')
+        while (i in 0..23) {
+            val start = i + 1
+            leadingDate(line.substring(start), defaultYear, today)?.let { (d, len) -> return d to start + len }
+            i = line.indexOf(' ', start)
+        }
+        return null
+    }
+
+    private fun looksLikeSummary(line: String) =
+        Regex("""saldo|total|suma|p[aá]gina|retenci|comisi[oó]n\s+de\s+mantenimiento\s*:""", RegexOption.IGNORE_CASE).containsMatchIn(line)
+
+    private fun signOf(m: MatchResult): Int {
+        val lead = m.groupValues[1].trim()
+        val trail = m.groupValues[4]
+        return when {
+            lead == "-" || lead == "−" || trail.isNotEmpty() -> -1
+            lead == "+" -> 1
+            else -> 0
+        }
+    }
+
     private fun toNumber(m: MatchResult, decimalComma: Boolean): Double {
         val intPart = m.groupValues[2].replace(if (decimalComma) "." else ",", "")
         val v = "$intPart.${m.groupValues[3]}".toDouble()
-        return if (m.groupValues[1].trim().let { it == "-" || it == "−" }) -v else v
+        return if (signOf(m) < 0) -v else v
     }
 
     /** Limpia el concepto bancario para quedarse con el comercio o la persona. */
