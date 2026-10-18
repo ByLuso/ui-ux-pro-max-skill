@@ -22,6 +22,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -95,6 +97,9 @@ fun ImportOverlay(
                 .padding(16.dp),
             contentAlignment = Alignment.Center,
         ) {
+          BoxWithConstraints(contentAlignment = Alignment.Center) {
+            // La tarjeta nunca puede ser más alta que la pantalla: los botones quedan siempre a la vista
+            val maxPanel = maxHeight
             AnimatedContent(
                 targetState = state,
                 contentKey = { it::class },
@@ -107,12 +112,13 @@ fun ImportOverlay(
                 Column(
                     Modifier
                         .fillMaxWidth()
+                        .heightIn(max = maxPanel)
                         .clip(chamfer(22.dp))
                         .background(C.Deep.copy(alpha = 0.97f))
                         .holoPanel(22.dp, border = C.holo, fill = C.Violet.copy(alpha = 0.08f))
                         // Evita que los toques dentro del panel lo cierren
                         .clickable(remember { MutableInteractionSource() }, indication = null) {}
-                        .padding(22.dp),
+                        .padding(horizontal = 20.dp, vertical = 18.dp),
                 ) {
                     when (s) {
                         ImportState.Reading -> Reading()
@@ -122,6 +128,7 @@ fun ImportOverlay(
                         else -> Unit
                     }
                 }
+              }
             }
         }
     }
@@ -206,7 +213,7 @@ private fun PasswordStep(wrong: Boolean, onPassword: (String) -> Unit, onDismiss
 // ---------------------------------------------------------------- Vista previa
 
 @Composable
-private fun PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+private fun ColumnScope.PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: () -> Unit, onDismiss: () -> Unit) {
     val st = plan.statement
     val fresh = plan.fresh
     val inc = fresh.filter { it.isIncome }.sumOf { it.amount }
@@ -214,67 +221,93 @@ private fun PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: () -> Unit, 
     // Por identidad: dos líneas iguales (p. ej. dos cafés el mismo día) pueden ser una nueva y otra ya registrada
     val freshSet = remember(plan) { java.util.Collections.newSetFromMap(java.util.IdentityHashMap<StatementLine, Boolean>()).apply { addAll(fresh) } }
 
+    // ---- Cabecera compacta
     HudLabel("extracto detectado", C.Cyan)
     GlitchText(
         (st.bank ?: "Extracto bancario").uppercase(esLocale),
-        TextStyle(brush = C.holo, fontFamily = Display, fontWeight = FontWeight.Black, fontSize = 22.sp, letterSpacing = 2.sp),
-        Modifier.padding(top = 4.dp),
+        TextStyle(brush = C.holo, fontFamily = Display, fontWeight = FontWeight.Black, fontSize = 18.sp, letterSpacing = 1.5.sp),
+        Modifier.padding(top = 2.dp),
     )
     if (st.from != null && st.to != null) {
         Text(
             "${shortDate.format(st.from)} → ${longDate.format(st.to)}".uppercase(esLocale),
-            color = C.Muted, fontFamily = Mono, fontSize = 11.sp, letterSpacing = 1.5.sp, modifier = Modifier.padding(top = 2.dp),
+            color = C.Muted, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.sp, maxLines = 1,
         )
     }
-    Spacer(Modifier.height(16.dp))
-    Row(Modifier.fillMaxWidth()) {
+    Spacer(Modifier.height(10.dp))
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
         BigStat("nuevos", fresh.size.toString(), C.Cyan, Modifier.weight(1f))
         BigStat("ya tenías", plan.duplicates.size.toString(), C.Muted, Modifier.weight(1f))
         BigStat("total", st.lines.size.toString(), C.Text, Modifier.weight(1f))
     }
     if (fresh.isNotEmpty()) {
-        Row(Modifier.padding(top = 12.dp)) {
-            Text(euros(inc, signed = true, hide = hide), color = C.Income, fontFamily = Mono, fontSize = 13.sp, modifier = Modifier.weight(1f))
-            Text(euros(-exp, signed = true, hide = hide), color = C.Expense, fontFamily = Mono, fontSize = 13.sp)
+        Row(Modifier.padding(top = 6.dp)) {
+            Text(euros(inc, signed = true, hide = hide), color = C.Income, fontFamily = Mono, fontSize = 12.sp, modifier = Modifier.weight(1f), maxLines = 1)
+            Text(euros(-exp, signed = true, hide = hide), color = C.Expense, fontFamily = Mono, fontSize = 12.sp, maxLines = 1)
         }
     }
     st.finalBalance?.let { bal ->
         Row(
             Modifier
-                .padding(top = 12.dp)
+                .padding(top = 10.dp)
                 .fillMaxWidth()
                 .clip(CutCornerShape(topStart = 10.dp, bottomEnd = 10.dp))
                 .background(C.Violet.copy(alpha = 0.14f))
-                .padding(12.dp),
+                .padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(Modifier.weight(1f)) {
-                HudLabel("saldo según el extracto")
-                Text("Se usará como saldo actual", color = C.Muted, fontSize = 12.sp)
-            }
-            GlowText(euros(bal, hide = hide), C.Cyan, 17.sp)
+            Text("NUEVO SALDO", color = C.Muted, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.5.sp, modifier = Modifier.weight(1f), maxLines = 1)
+            GlowText(euros(bal, hide = hide), C.Cyan, 15.sp)
         }
     }
-    Spacer(Modifier.height(12.dp))
-    LazyColumn(Modifier.fillMaxWidth().heightIn(max = 280.dp)) {
+    Spacer(Modifier.height(6.dp))
+
+    // ---- Lista: ocupa el espacio que quede y se desplaza por dentro
+    LazyColumn(Modifier.fillMaxWidth().weight(1f, fill = false)) {
         itemsIndexed(st.lines.reversed()) { i, l ->
             PreviewRow(l, l in freshSet, hide, Modifier.enterStagger(i))
         }
     }
-    Spacer(Modifier.height(16.dp))
-    Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-        val label = when {
-            fresh.isNotEmpty() -> "Importar ${fresh.size}"
-            st.finalBalance != null -> "Actualizar saldo"
-            else -> null
-        }
-        if (label != null) Pill(label, true, onConfirm)
-        Pill(if (label == null) "Cerrar" else "Cancelar", false, onDismiss)
+
+    // ---- Botones fijos abajo, siempre visibles
+    Spacer(Modifier.height(12.dp))
+    val label = when {
+        fresh.isNotEmpty() -> "Importar ${fresh.size} movimientos"
+        st.finalBalance != null -> "Actualizar saldo"
+        else -> null
     }
-    if (fresh.isEmpty()) {
+    if (label != null) {
+        PrimaryButton(label, onConfirm)
+        Spacer(Modifier.height(8.dp))
+    } else {
         Text(
             "Todos los movimientos de este extracto ya estaban en Saldo.",
-            color = C.Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 10.dp),
+            color = C.Muted, fontSize = 12.sp, modifier = Modifier.padding(bottom = 8.dp),
+        )
+    }
+    Text(
+        if (label == null) "CERRAR" else "CANCELAR",
+        color = C.Muted, fontFamily = Mono, fontSize = 12.sp, letterSpacing = 2.sp,
+        modifier = Modifier.align(Alignment.CenterHorizontally).bounceClick(onClick = onDismiss).padding(horizontal = 24.dp, vertical = 8.dp),
+    )
+}
+
+/** Botón principal a todo lo ancho con relleno holográfico y destello. */
+@Composable
+private fun PrimaryButton(label: String, onClick: () -> Unit) {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .bounceClick(onClick = onClick)
+            .clip(CutCornerShape(topStart = 12.dp, bottomEnd = 12.dp))
+            .background(C.holo)
+            .holoShimmer(2400, 0.35f)
+            .padding(vertical = 15.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            label.uppercase(esLocale), color = C.Void, fontFamily = Mono, fontWeight = FontWeight.Bold,
+            fontSize = 13.sp, letterSpacing = 1.5.sp, maxLines = 1,
         )
     }
 }
@@ -282,7 +315,7 @@ private fun PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: () -> Unit, 
 @Composable
 private fun BigStat(label: String, value: String, color: Color, modifier: Modifier) {
     Column(modifier) {
-        GlowText(value, color, 26.sp)
+        GlowText(value, color, 22.sp)
         Text(label.uppercase(esLocale), color = C.Muted, fontFamily = Mono, fontSize = 9.sp, letterSpacing = 2.sp)
     }
 }
