@@ -72,6 +72,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AutoAwesome
+import com.byluso.saldo.ui.AdvisorScreen
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
@@ -141,8 +143,9 @@ class MainActivity : ComponentActivity() {
 
 internal enum class Tab(val label: String, val icon: ImageVector) {
     Home("Inicio", Icons.Filled.Home),
-    Movements("Movimientos", Icons.AutoMirrored.Filled.List),
+    Movements("Historial", Icons.AutoMirrored.Filled.List),
     Charts("Gráficas", Icons.Filled.BarChart),
+    Advisor("Asesor", Icons.Filled.AutoAwesome),
     Settings("Ajustes", Icons.Filled.Settings),
 }
 
@@ -152,6 +155,7 @@ private fun SaldoApp(repo: Repository, importer: StatementImporter) {
     val movements by repo.movements.collectAsStateWithLifecycle()
     val apps by repo.apps.collectAsStateWithLifecycle()
     val anchor by repo.anchor.collectAsStateWithLifecycle()
+    val salary by repo.salary.collectAsStateWithLifecycle()
 
     var tab by rememberSaveable { mutableStateOf(Tab.Home) }
     var month by remember { mutableStateOf(YearMonth.now()) }
@@ -241,6 +245,14 @@ private fun SaldoApp(repo: Repository, importer: StatementImporter) {
                             month, { month = it }, hide, { hide = !hide }, movements, onImport = openImport, onOpen = { editing = it },
                         )
                         Tab.Charts -> ChartsScreen(movements, hide)
+                        Tab.Advisor -> AdvisorScreen(movements, balance, salary, onSetSalary = { v ->
+                            repo.setSalary(v)
+                            toast = ToastMsg(
+                                "sueldo actualizado",
+                                v?.let { euros(it, hide = hide) + " al mes" } ?: "Se detectará con tus ingresos",
+                                C.Violet,
+                            )
+                        }, hide = hide)
                         Tab.Settings -> SettingsScreen(
                             listenerEnabled = listenerEnabled, onOpenListenerSettings = openListenerSettings,
                             apps = apps, onToggleApp = { pkg, on -> repo.setAppEnabled(pkg, on) },

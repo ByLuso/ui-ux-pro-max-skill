@@ -13,6 +13,10 @@ de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actuali
 
 ![Importar extracto](screenshots/import.png)
 
+| Asesor | Animación |
+|---|---|
+| ![Asesor](screenshots/advisor.png) | ![Asesor animado](screenshots/advisor.gif) |
+
 ### Diseño "holo 2100"
 
 - Fondo vivo: auroras que se desplazan, estrellas que titilan y un horizonte de rejilla en perspectiva.
@@ -44,6 +48,13 @@ de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actuali
   una vista previa con los movimientos nuevos y los que ya tenías; añade solo los que faltan
   y usa el último saldo del extracto como saldo actual. Admite PDFs con contraseña (DNI/NIE).
   Si el importe no lleva signo (columnas Debe/Haber), deduce gasto o ingreso por el saldo.
+- **Asesor**: analiza tu sueldo (detectado o indicado por ti) y compara lo que gastas con un
+  reparto recomendado (50/30/20 adaptado: vivienda 30 %, comida 12 %, transporte 10 %,
+  restaurantes 5 %, ocio 5 %, suscripciones 2 %, salud 3 %, ropa y compras 5 %, otros 8 %,
+  ahorro 20 %), en € y %. Rueda doble animada (exterior: recomendado, interior: real),
+  puntuación de salud financiera, ahorro y colchón de emergencia, cuánto te puedes permitir en
+  vivienda (alquiler, hipoteca, precio y entrada) y coche (regla 20/4/10), y más de 50 consejos
+  con buscador y filtros, los primeros personalizados con tus números.
 - **Inicio**: mes con ingresos, gastos y balance; donut de gastos por grupo; últimos movimientos.
 - **Movimientos**: lista por días con filtros; toca uno para editarlo, cambiar la categoría o borrarlo.
 - **Gráficas**: ingresos vs gastos de los últimos 6 meses y dónde más gastas.
@@ -84,6 +95,8 @@ app/src/main/java/com/byluso/saldo/
 ├── parser/NotificationParser.kt   # Extrae importe, tipo, comercio y saldo del texto
 ├── parser/StatementParser.kt     # Lee extractos bancarios (texto del PDF) línea a línea
 ├── data/StatementImporter.kt     # Abre el PDF (PDFBox), pide contraseña y lo importa
+├── advisor/FinanceAdvisor.kt     # Presupuesto recomendado vs real, vivienda, coche, puntuación
+├── advisor/Tips.kt               # Consejos generales y personalizados
 ├── parser/Categories.kt           # Categorías y palabras clave (Mercadona → Comida…)
 ├── service/BankNotificationListener.kt  # NotificationListenerService
 ├── data/Repository.kt             # SQLite + StateFlow, deduplicación

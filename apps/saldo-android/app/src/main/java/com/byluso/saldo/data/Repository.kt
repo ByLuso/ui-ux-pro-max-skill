@@ -65,6 +65,15 @@ class Repository private constructor(context: Context) {
     private val _anchor = MutableStateFlow(readAnchor())
     val anchor: StateFlow<BalanceAnchor?> = _anchor.asStateFlow()
 
+    private val _salary = MutableStateFlow(prefs.getString("salary", null)?.toDoubleOrNull())
+    /** Sueldo neto mensual indicado a mano (null = detectarlo por los ingresos). */
+    val salary: StateFlow<Double?> = _salary.asStateFlow()
+
+    fun setSalary(value: Double?) {
+        prefs.edit().apply { if (value == null) remove("salary") else putString("salary", value.toString()) }.apply()
+        _salary.value = value
+    }
+
     init {
         scope.launch { reload() }
     }
