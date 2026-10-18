@@ -29,7 +29,7 @@ export class Market extends EventEmitter {
     super();
     this.coins = new Map();
     this.watch = loadJSON("spot-watchlist.json", []);
-    this.status = { ws: "desconectado", wsMsgs: 0, alphaPolls: 0, alphaErr: null, spotErr: null, universe: null };
+    this.status = { ws: "cargando historial", wsMsgs: 0, alphaPolls: 0, alphaErr: null, spotErr: null, universe: null };
     this.msgTimes = [];
     this.eurUsdt = null;
   }

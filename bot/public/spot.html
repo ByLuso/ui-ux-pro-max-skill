@@ -244,7 +244,8 @@ function render() {
   const pb = $("bPause"); pb.textContent = D.paused ? "Reanudar señales" : "Pausar señales"; pb.setAttribute("aria-pressed", D.paused);
   const B = [];
   if (D.warm) B.push(D.warm);
-  if (m.ws !== "conectado") B.push("Sin conexión en tiempo real con Binance: reintentando…");
+  if (m.ws === "cargando historial") B.push("Arrancando: descargando el historial de Binance y aprendiendo de él (menos de un minuto)…");
+  else if (m.ws !== "conectado") B.push("Sin conexión en tiempo real con Binance: reintentando…");
   if (D.model.labels < D.cfg.minLabels) B.push(`El modelo aún aprende (${D.model.labels}/${D.cfg.minLabels} casos): de momento analiza pero no opera.`);
   if (D.paused) B.push("Las señales están en pausa: analiza y aprende, pero la cartera no compra.");
   $("banners").innerHTML = B.map((t) => `<div class="banner">${esc(t)}</div>`).join("");
