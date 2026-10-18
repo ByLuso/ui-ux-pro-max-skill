@@ -109,7 +109,7 @@ fun AdvisorScreen(
     hide: Boolean,
     listState: LazyListState = rememberLazyListState(),
 ) {
-    var period by rememberSaveable { mutableStateOf(Period.LAST_30) }
+    var period by rememberSaveable { mutableStateOf(Period.THIS_MONTH) }
     var selected by remember { mutableStateOf<BudgetGroup?>(null) }
     var editingSalary by remember { mutableStateOf(false) }
     var query by rememberSaveable { mutableStateOf("") }
@@ -225,17 +225,20 @@ private fun SalaryCard(a: Analysis, hide: Boolean, modifier: Modifier, onEdit: (
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
-            HudLabel("sueldo neto mensual", C.Cyan)
+            HudLabel(if (a.period == Period.LAST_3) "nómina media" else "nómina del mes", C.Cyan)
             if (a.income > 0) GlowText(euros(shown, hide = hide), C.Text, 26.sp)
-            else Text("Toca para indicarlo", color = C.Accent, fontWeight = FontWeight.Medium, fontSize = 17.sp)
+            else Text("No encuentro tu nómina", color = C.Accent, fontWeight = FontWeight.Medium, fontSize = 17.sp)
             Text(
-                when (a.incomeSource) {
-                    IncomeSource.MANUAL -> "indicado por ti · toca para cambiar"
-                    IncomeSource.DETECTED -> "detectado en tus ingresos · toca para ajustar"
-                    IncomeSource.NONE -> "sin ingresos en este periodo"
-                },
-                color = C.Muted, fontFamily = Mono, fontSize = 12.sp,
+                if (a.incomeSource == IncomeSource.NONE)
+                    "Marca un ingreso como nómina en el historial o indica un sueldo fijo aquí."
+                else a.incomeNote,
+                color = if (a.incomeSource == IncomeSource.PREVIOUS_PAYROLL) C.Magenta else C.Muted, fontSize = 12.sp,
             )
+            if (a.otherIncome > 0.5) Text(
+                "Otros ingresos: ${euros(a.otherIncome, hide = hide)} (Bizums, devoluciones…). No cuentan como sueldo.",
+                color = C.Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 2.dp),
+            )
+            Text("Todos los porcentajes y € recomendados se calculan sobre esta nómina.", color = C.Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 2.dp))
         }
         Text("Editar", color = C.Accent, fontSize = 14.sp, fontWeight = FontWeight.Medium)
     }
@@ -253,12 +256,12 @@ private fun SalaryDialog(current: Double?, onDismiss: () -> Unit, onSave: (Doubl
         title = {
             Column {
                 HudLabel("sueldo", C.Cyan)
-                Text("Sueldo neto mensual", color = C.Text, fontFamily = Display, fontSize = 18.sp)
+                Text("Sueldo fijo (opcional)", color = C.Text, fontFamily = Display, fontSize = 18.sp)
             }
         },
         text = {
             Column {
-                Text("Lo que cobras al mes en tu cuenta, después de impuestos. Si tienes pagas extra prorrateadas, inclúyelas.", color = C.Muted, fontSize = 13.sp)
+                Text("Saldo calcula cada mes con la nómina que cobras ese mes. Este importe solo se usa los meses en que no encuentra ninguna nómina. Si una nómina no se detecta, ábrela en el historial y márcala como «Nómina».", color = C.Muted, fontSize = 13.sp)
                 OutlinedTextField(
                     text, { text = it }, singleLine = true, label = { Text("€ al mes") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -274,7 +277,7 @@ private fun SalaryDialog(current: Double?, onDismiss: () -> Unit, onSave: (Doubl
         },
         dismissButton = {
             Row {
-                TextButton(onClick = { onSave(null) }) { Text("Detectar", color = C.Muted, fontFamily = Mono) }
+                TextButton(onClick = { onSave(null) }) { Text("Quitar", color = C.Muted, fontFamily = Mono) }
                 TextButton(onClick = onDismiss) { Text("Cancelar", color = C.Muted, fontFamily = Mono) }
             }
         },

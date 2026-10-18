@@ -235,8 +235,9 @@ fun CategoryBar(
     val fade by animateFloatAsState(if (dimmed) 0.45f else 1f, tween(250), label = "fade")
     val bg by animateColorAsState(if (selected) color.copy(alpha = 0.10f) else Color.Transparent, tween(250), label = "bg")
     val preview = LocalInspectionMode.current
-    val grow = remember { Animatable(if (preview) pct / 100f else 0f) }
-    LaunchedEffect(pct) { if (!preview) grow.animateTo(pct / 100f, tween(800, easing = FastOutSlowInEasing)) }
+    val target = (pct / 100f).coerceIn(0f, 1f)
+    val grow = remember { Animatable(if (preview) target else 0f) }
+    LaunchedEffect(pct) { if (!preview) grow.animateTo(target, tween(800, easing = FastOutSlowInEasing)) }
     Column(
         Modifier
             .fillMaxWidth()
@@ -307,7 +308,7 @@ fun Pill(label: String, selected: Boolean, onClick: () -> Unit) {
             .background(bg)
             .padding(horizontal = 16.dp, vertical = 9.dp),
     ) {
-        Text(label.lowercase(esLocale).replaceFirstChar { it.titlecase(esLocale) }, color = fg, fontWeight = FontWeight.Medium, fontSize = 14.sp, maxLines = 1)
+        Text(label.replaceFirstChar { it.titlecase(esLocale) }, color = fg, fontWeight = FontWeight.Medium, fontSize = 14.sp, maxLines = 1)
     }
 }
 
@@ -358,8 +359,18 @@ fun MovementDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Pill("Gasto", !isIncome) { isIncome = false; if (category == Categories.INCOME) category = Categories.OTHER }
-                    Pill("Ingreso", isIncome) { isIncome = true; category = Categories.INCOME }
+                    Pill("Gasto", !isIncome) { isIncome = false; if (Categories.isIncomeCategory(category)) category = Categories.OTHER }
+                    Pill("Ingreso", isIncome) { isIncome = true; if (!Categories.isIncomeCategory(category)) category = Categories.INCOME }
+                }
+                if (isIncome) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Pill("💼 Nómina", category == Categories.SALARY) { category = Categories.SALARY }
+                        Pill("Otro ingreso", category == Categories.INCOME) { category = Categories.INCOME }
+                    }
+                    Text(
+                        "Los cálculos del Asesor se hacen sobre los ingresos marcados como nómina.",
+                        color = C.Muted, fontSize = 12.sp,
+                    )
                 }
                 OutlinedTextField(
                     value = amount, onValueChange = { amount = it }, label = { Text("Importe (€)") },
@@ -405,7 +416,7 @@ fun MovementDialog(
                         base.copy(
                             amount = parsedAmount!!, isIncome = isIncome,
                             merchant = merchant.ifBlank { if (isIncome) "Ingreso" else "Gasto" },
-                            category = if (isIncome) Categories.INCOME else category,
+                            category = if (isIncome) (if (category == Categories.SALARY) Categories.SALARY else Categories.INCOME) else category,
                         )
                     )
                 },

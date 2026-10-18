@@ -163,8 +163,13 @@ fun HomeScreen(
     onSetBalance: () -> Unit,
     onOpen: (Movement) -> Unit,
     onSeeAll: () -> Unit,
+    salaryOverride: Double? = null,
 ) {
     val monthMovs = movements.filter { month.contains(it.timestamp) }
+    // Nómina del mes: la base de los porcentajes de cada categoría
+    val (salary, _, salaryNote) = remember(movements, month, salaryOverride) {
+        com.byluso.saldo.advisor.FinanceAdvisor.salaryFor(movements, month, salaryOverride)
+    }
     var showIncome by remember { mutableStateOf(false) }
     var selected by remember(showIncome, month) { mutableStateOf<Int?>(null) }
 
@@ -190,6 +195,8 @@ fun HomeScreen(
                     .mapValues { (_, v) -> v.sumOf { it.amount } }
                     .entries.sortedByDescending { it.value }
                 val total = groups.sumOf { it.value }
+                // Gastos: % sobre la nómina del mes. Ingresos: reparto entre ellos.
+                val base = if (!showIncome && salary > 0) salary else total
                 val palette = listOf(0xFF7FB79B, 0xFF6FA2AF, 0xFF9DADCB, 0xFFC9A46E, 0xFFC98E8E, 0xFFA4AAA6)
                 fun colorOf(i: Int, key: String) =
                     if (showIncome) Color(palette[i % palette.size]) else Color(Categories.byName(key).color)
@@ -197,13 +204,22 @@ fun HomeScreen(
                 Donut(
                     slices = groups.mapIndexed { i, e -> Slice(e.key, e.value, colorOf(i, e.key)) },
                     centerTop = euros(total, hide = hide),
-                    centerBottom = if (showIncome) "Ingresos del mes" else "Gastos del mes",
+                    centerBottom = when {
+                        showIncome -> "Ingresos del mes"
+                        salary > 0 -> "${(total / salary * 100).roundToInt()} % de tu nómina"
+                        else -> "Gastos del mes"
+                    },
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     selected = selected, onSelect = { selected = it }, hide = hide,
                 )
                 Text(
-                    "Toca el gráfico o una categoría", color = C.Muted.copy(alpha = 0.6f), fontFamily = Mono,
-                    fontSize = 12.sp, modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 6.dp),
+                    when {
+                        showIncome -> "Toca el gráfico o un ingreso"
+                        salary > 0 -> "Porcentajes sobre tu nómina: ${euros(salary, hide = hide)}. $salaryNote."
+                        else -> "No encuentro tu nómina: porcentajes sobre el gasto total. Márcala en el historial."
+                    },
+                    color = C.Muted, fontSize = 12.sp, textAlign = TextAlign.Center,
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp),
                 )
                 Spacer(Modifier.height(16.dp))
                 if (groups.isEmpty()) {
@@ -215,7 +231,7 @@ fun HomeScreen(
                 }
                 groups.forEachIndexed { i, e ->
                     CategoryBar(
-                        e.key, e.value, (e.value / total * 100).roundToInt(), colorOf(i, e.key), hide,
+                        e.key, e.value, (e.value / base * 100).roundToInt(), colorOf(i, e.key), hide,
                         selected = selected == i, dimmed = selected != null && selected != i,
                         onClick = { selected = if (selected == i) null else i },
                     )

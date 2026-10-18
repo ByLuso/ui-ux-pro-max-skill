@@ -6,6 +6,11 @@ import java.util.Locale
 object Categories {
     const val BALANCE_ONLY = "__saldo__"
     const val INCOME = "Ingresos"
+    /** Ingreso de nómina, sueldo o pensión: la base de los cálculos del Asesor. */
+    const val SALARY = "Nómina"
+
+    /** Conceptos que identifican una nómina. */
+    val salaryWords = Regex("""\b(n[oó]mina|salario|sueldo|haberes|paga\s+extra|pensi[oó]n|payroll)\b""", RegexOption.IGNORE_CASE)
     const val OTHER = "Otros"
 
     data class Category(val name: String, val emoji: String, val color: Long, val keywords: List<String>)
@@ -26,14 +31,20 @@ object Categories {
     )
 
     private val incomeCategory = Category(INCOME, "💰", 0xFF7FB79B, emptyList())
+    private val salaryCategory = Category(SALARY, "💼", 0xFF5E9C82, emptyList())
 
-    fun byName(name: String): Category =
-        if (name == INCOME) incomeCategory else all.firstOrNull { it.name == name } ?: all.last()
+    fun byName(name: String): Category = when (name) {
+        INCOME -> incomeCategory
+        SALARY -> salaryCategory
+        else -> all.firstOrNull { it.name == name } ?: all.last()
+    }
+
+    fun isIncomeCategory(name: String) = name == INCOME || name == SALARY
 
     val expenseNames: List<String> get() = all.map { it.name }
 
     fun guess(merchant: String, fullText: String, isIncome: Boolean): String {
-        if (isIncome) return INCOME
+        if (isIncome) return if (salaryWords.containsMatchIn(merchant) || salaryWords.containsMatchIn(fullText)) SALARY else INCOME
         val m = " " + merchant.lowercase(Locale.ROOT) + " "
         all.firstOrNull { c -> c.keywords.any { m.contains(it) } }?.let { return it.name }
         val t = " " + fullText.lowercase(Locale.ROOT) + " "

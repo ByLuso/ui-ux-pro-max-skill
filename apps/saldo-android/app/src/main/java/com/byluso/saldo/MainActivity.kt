@@ -223,7 +223,7 @@ private fun SaldoApp(repo: Repository, importer: StatementImporter) {
                             movements = movements, currentBalance = balance, anchor = anchor,
                             listenerEnabled = listenerEnabled, onEnableListener = openListenerSettings,
                             onSetBalance = { settingBalance = true }, onOpen = { editing = it },
-                            onSeeAll = { tab = Tab.Movements },
+                            onSeeAll = { tab = Tab.Movements }, salaryOverride = salary,
                         )
                         Tab.Movements -> MovementsScreen(
                             month, { month = it }, hide, { hide = !hide }, movements, onImport = openImport, onOpen = { editing = it },

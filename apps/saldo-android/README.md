@@ -29,15 +29,20 @@ anillos que se dibujan, contadores). Modo claro y oscuro según el sistema.
   una vista previa con los movimientos nuevos y los que ya tenías; añade solo los que faltan
   y usa el último saldo del extracto como saldo actual. Admite PDFs con contraseña (DNI/NIE).
   Si el importe no lleva signo (columnas Debe/Haber), deduce gasto o ingreso por el saldo.
-- **Asesor**: analiza tu sueldo (detectado o indicado por ti) y compara lo que gastas con un
-  reparto recomendado (50/30/20 adaptado: vivienda 30 %, comida 12 %, transporte 10 %,
+- **Asesor**: todo (€ y %) se calcula sobre tu **nómina** de cada mes natural, no sobre el
+  total de ingresos: Bizums, transferencias y devoluciones salen aparte como "otros ingresos".
+  La nómina se detecta por el concepto (nómina, salario, haberes…), por la categoría 💼 Nómina
+  (puedes marcar cualquier ingreso así) o por un pagador que te ingresa cada mes un importe
+  parecido. Periodos: este mes, mes pasado o media de 3 meses. Si aún no has cobrado este mes,
+  usa la última nómina y lo avisa; el sueldo fijo manual solo se usa si no hay ninguna nómina.
+  Compara lo que gastas con un reparto recomendado (50/30/20 adaptado: vivienda 30 %, comida 12 %, transporte 10 %,
   restaurantes 5 %, ocio 5 %, suscripciones 2 %, salud 3 %, ropa y compras 5 %, otros 8 %,
   ahorro 20 %), en € y %. Rueda doble animada (exterior: recomendado, interior: real),
   puntuación de salud financiera, ahorro y colchón de emergencia, cuánto te puedes permitir en
   vivienda (alquiler, hipoteca, precio y entrada) y coche (regla 20/4/10), y más de 70 consejos
   con buscador y filtros, los primeros personalizados con tus números. Parte de ellos se basan en
   el discurso de M. Casanovas sobre asesoramiento financiero (RACEF, 2017), citado en cada consejo.
-- **Inicio**: mes con ingresos, gastos y balance; donut de gastos por grupo; últimos movimientos.
+- **Inicio**: mes con ingresos, gastos y balance; donut de gastos por grupo (en % de tu nómina); últimos movimientos.
 - **Movimientos**: lista por días con filtros; toca uno para editarlo, cambiar la categoría o borrarlo.
 - **Gráficas**: ingresos vs gastos de los últimos 6 meses y dónde más gastas.
 - **Ajustes**: activar el permiso, ajustar saldo, elegir qué apps se escuchan y un

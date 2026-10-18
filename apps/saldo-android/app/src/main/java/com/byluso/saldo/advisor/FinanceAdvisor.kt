@@ -1,6 +1,7 @@
 package com.byluso.saldo.advisor
 
 import com.byluso.saldo.data.Movement
+import com.byluso.saldo.parser.Categories
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -42,19 +43,29 @@ enum class BudgetGroup(
     }
 }
 
+/** Periodos de análisis por meses naturales: cada mes se compara con la nómina de ese mes. */
 enum class Period(val label: String) {
-    LAST_30("30 días"), THIS_MONTH("Este mes"), LAST_MONTH("Mes pasado"), LAST_90("3 meses");
+    THIS_MONTH("Este mes"), LAST_MONTH("Mes pasado"), LAST_3("Media 3 meses");
 
-    /** Rango [desde, hasta] y cuántos meses representa (para sacar la media mensual). */
-    fun range(today: LocalDate): Triple<LocalDate, LocalDate, Double> = when (this) {
-        LAST_30 -> Triple(today.minusDays(29), today, 1.0)
-        THIS_MONTH -> Triple(today.withDayOfMonth(1), today, 1.0)
-        LAST_MONTH -> YearMonth.from(today).minusMonths(1).let { Triple(it.atDay(1), it.atEndOfMonth(), 1.0) }
-        LAST_90 -> Triple(today.minusDays(89), today, 3.0)
+    fun months(today: LocalDate): List<YearMonth> {
+        val now = YearMonth.from(today)
+        return when (this) {
+            THIS_MONTH -> listOf(now)
+            LAST_MONTH -> listOf(now.minusMonths(1))
+            LAST_3 -> (3 downTo 1).map { now.minusMonths(it.toLong()) }
+        }
     }
 }
 
-enum class IncomeSource { MANUAL, DETECTED, NONE }
+enum class IncomeSource {
+    /** Nómina cobrada en el propio mes. */
+    PAYROLL,
+    /** Aún no se ha cobrado la nómina del mes: se usa la última cobrada. */
+    PREVIOUS_PAYROLL,
+    /** No hay nómina detectada ese mes: se usa el sueldo indicado a mano. */
+    MANUAL,
+    NONE,
+}
 
 data class GroupAnalysis(
     val group: BudgetGroup,
@@ -88,8 +99,13 @@ data class Analysis(
     val period: Period,
     val from: LocalDate,
     val to: LocalDate,
+    /** Nómina del mes (o media de las nóminas): la base de todos los porcentajes. */
     val income: Double,
     val incomeSource: IncomeSource,
+    /** Explicación de qué nómina se está usando. */
+    val incomeNote: String,
+    /** Ingresos que no son nómina (Bizums, devoluciones, traspasos…): no cuentan como sueldo. */
+    val otherIncome: Double,
     val expenses: Double,
     val groups: List<GroupAnalysis>,
     val balance: Double?,
@@ -118,6 +134,49 @@ object FinanceAdvisor {
     const val CAR_RATE = 0.07
     const val CAR_MONTHS = 48
 
+    private val monthName = java.time.format.DateTimeFormatter.ofPattern("LLLL", java.util.Locale.forLanguageTag("es-ES"))
+    private fun nameOf(m: YearMonth) = monthName.format(m.atDay(1))
+
+    private fun payerKey(m: Movement) = m.merchant.lowercase().replace(Regex("""[^a-záéíóúñü ]"""), "").replace(Regex("""\s+"""), " ").trim()
+
+    /**
+     * Movimientos que son nómina: los marcados como tal, los que lo dicen en el concepto y,
+     * si no, los ingresos de un mismo pagador que se repiten en meses distintos con importe parecido.
+     */
+    fun salaryMovements(movements: List<Movement>, zone: ZoneId = ZoneId.systemDefault()): List<Movement> {
+        val incomes = movements.filter { it.isIncome }
+        val explicit = incomes.filter {
+            it.category == Categories.SALARY ||
+                Categories.salaryWords.containsMatchIn(it.merchant) || Categories.salaryWords.containsMatchIn(it.rawText ?: "")
+        }
+        val rest = incomes - explicit.toSet()
+        val recurring = rest.filter { it.amount >= 400 }.groupBy { payerKey(it) }.filterKeys { it.isNotBlank() }.values.filter { group ->
+            val months = group.map { YearMonth.from(Instant.ofEpochMilli(it.timestamp).atZone(zone)) }.toSet()
+            val amounts = group.map { it.amount }.sorted()
+            val median = amounts[amounts.size / 2]
+            months.size >= 2 && amounts.all { it in median * 0.7..median * 1.3 }
+        }.flatten()
+        return explicit + recurring
+    }
+
+    /** Nómina de un mes y de dónde sale. */
+    fun salaryFor(
+        movements: List<Movement>, month: YearMonth, salaryOverride: Double?,
+        zone: ZoneId = ZoneId.systemDefault(), salaries: List<Movement> = salaryMovements(movements, zone),
+    ): Triple<Double, IncomeSource, String> {
+        fun ym(m: Movement) = YearMonth.from(Instant.ofEpochMilli(m.timestamp).atZone(zone))
+        val inMonth = salaries.filter { ym(it) == month }.sumOf { it.amount }
+        if (inMonth > 0) return Triple(inMonth, IncomeSource.PAYROLL, "Nómina de ${nameOf(month)}")
+        if (salaryOverride != null && salaryOverride > 0) return Triple(salaryOverride, IncomeSource.MANUAL, "Sueldo indicado por ti (no encuentro la nómina de ${nameOf(month)})")
+        val last = salaries.filter { ym(it) < month }.maxByOrNull { it.timestamp }
+        if (last != null) {
+            val lm = ym(last)
+            val amount = salaries.filter { ym(it) == lm }.sumOf { it.amount }
+            return Triple(amount, IncomeSource.PREVIOUS_PAYROLL, "Aún no has cobrado la nómina de ${nameOf(month)}: uso la de ${nameOf(lm)}")
+        }
+        return Triple(0.0, IncomeSource.NONE, "No encuentro tu nómina")
+    }
+
     fun analyze(
         movements: List<Movement>,
         period: Period,
@@ -126,20 +185,34 @@ object FinanceAdvisor {
         today: LocalDate = LocalDate.now(),
         zone: ZoneId = ZoneId.systemDefault(),
     ): Analysis {
-        val (from, to, months) = period.range(today)
-        val inPeriod = movements.filter {
-            val d = Instant.ofEpochMilli(it.timestamp).atZone(zone).toLocalDate()
-            !d.isBefore(from) && !d.isAfter(to)
+        fun ym(m: Movement) = YearMonth.from(Instant.ofEpochMilli(m.timestamp).atZone(zone))
+        val salaries = salaryMovements(movements, zone)
+        val salaryIds = salaries.toHashSet()
+        val candidates = period.months(today)
+        // En la media de 3 meses solo cuentan los meses con datos (si acabas de empezar a usar la app)
+        val months = if (period == Period.LAST_3) candidates.filter { m -> movements.any { ym(it) == m } }.ifEmpty { candidates } else candidates
+        val n = months.size.toDouble()
+        val perMonth = months.map { salaryFor(movements, it, salaryOverride, zone, salaries) }
+        val income = perMonth.sumOf { it.first } / n
+        val source = perMonth.map { it.second }.let { list ->
+            when {
+                list.all { it == IncomeSource.NONE } -> IncomeSource.NONE
+                list.any { it == IncomeSource.PREVIOUS_PAYROLL } -> IncomeSource.PREVIOUS_PAYROLL
+                list.any { it == IncomeSource.MANUAL } -> IncomeSource.MANUAL
+                else -> IncomeSource.PAYROLL
+            }
         }
-        val detectedIncome = inPeriod.filter { it.isIncome }.sumOf { it.amount } / months
-        val (income, source) = when {
-            salaryOverride != null && salaryOverride > 0 -> salaryOverride to IncomeSource.MANUAL
-            detectedIncome > 0 -> detectedIncome to IncomeSource.DETECTED
-            else -> 0.0 to IncomeSource.NONE
-        }
-        val expenseMovs = inPeriod.filter { !it.isIncome }
-        val byGroup = expenseMovs.groupBy { BudgetGroup.of(it.category) }.mapValues { e -> e.value.sumOf { it.amount } / months }
+        val note = if (months.size == 1) perMonth.first().third
+        else "Media de las nóminas de ${nameOf(months.first())} a ${nameOf(months.last())}"
+
+        val inP = movements.filter { ym(it) in months }
+        val from = months.first().atDay(1)
+        val to = months.last().atEndOfMonth().let { if (it.isAfter(today)) today else it }
+        val otherIncome = inP.filter { it.isIncome && it !in salaryIds }.sumOf { it.amount } / n
+        val expenseMovs = inP.filter { !it.isIncome }
+        val byGroup = expenseMovs.groupBy { BudgetGroup.of(it.category) }.mapValues { e -> e.value.sumOf { it.amount } / n }
         val expenses = byGroup.values.sum()
+        val months_ = n
 
         val groups = BudgetGroup.entries.map { g ->
             val rec = income * g.recommendedPct / 100
@@ -147,11 +220,11 @@ object FinanceAdvisor {
             GroupAnalysis(g, rec, act)
         }
 
-        // Vivienda: alquiler o cuota de hipoteca ≤ 30 % del sueldo neto
+        // Vivienda: alquiler o cuota de hipoteca ≤ 30 % de la nómina
         val maxPayment = income * 0.30
         val r = MORTGAGE_RATE / 12
-        val n = MORTGAGE_YEARS * 12
-        val loan = if (maxPayment > 0) maxPayment * (1 - (1 + r).pow(-n)) / r else 0.0
+        val nPay = MORTGAGE_YEARS * 12
+        val loan = if (maxPayment > 0) maxPayment * (1 - (1 + r).pow(-nPay)) / r else 0.0
         val homePrice = loan / MORTGAGE_LTV
         val housing = HousingAdvice(
             maxRent = income * 0.30,
@@ -160,7 +233,7 @@ object FinanceAdvisor {
             cashNeeded = homePrice * (1 - MORTGAGE_LTV + PURCHASE_COSTS),
         )
 
-        // Coche: regla 20/4/10 y precio ≤ 35 % del sueldo neto anual
+        // Coche: regla 20/4/10 y precio ≤ 35 % de la nómina anual
         val carMonthly = income * 0.10
         val carPayment = income * 0.06
         val cr = CAR_RATE / 12
@@ -176,13 +249,13 @@ object FinanceAdvisor {
         val emergencyTarget = 6 * max(essential, expenses * 0.7).let { if (it > 0) it else income * 0.6 }
 
         val subs = expenseMovs.filter { it.category == "Suscripciones" }
-            .groupBy { it.merchant }.mapValues { e -> e.value.sumOf { it.amount } / months }
+            .groupBy { it.merchant }.mapValues { e -> e.value.sumOf { it.amount } / months_ }
             .entries.sortedByDescending { it.value }.map { it.key to it.value }
         val small = expenseMovs.filter { it.amount < 6.0 }
 
         val analysis = Analysis(
-            period, from, to, income, source, expenses, groups, balance, emergencyTarget,
-            housing, car, null, subs, small.size to small.sumOf { it.amount }, inPeriod.size,
+            period, from, to, income, source, note, otherIncome, expenses, groups, balance, emergencyTarget,
+            housing, car, null, subs, small.size to small.sumOf { it.amount }, inP.size,
         )
         return analysis.copy(score = score(analysis))
     }
