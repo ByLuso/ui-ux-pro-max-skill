@@ -8,7 +8,8 @@ La misma app que `apps/saldo-android`, como web app para iPhone (y cualquier nav
 ## Qué incluye
 
 Inicio, Historial, Gráficas, Asesor (rueda doble, puntuación, vivienda, coche, consejos con
-buscador) y Ajustes, con el mismo diseño "holo 2100" y animaciones que la app Android.
+buscador) y Ajustes, con el mismo diseño minimalista y tranquilo que la app Android, en modo
+claro u oscuro según el sistema y con la tipografía del propio dispositivo.
 Los movimientos se añaden **importando el extracto PDF** del banco o a mano: en iOS ninguna
 app puede leer las notificaciones de otras apps.
 

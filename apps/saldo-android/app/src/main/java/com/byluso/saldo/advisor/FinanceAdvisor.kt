@@ -24,16 +24,16 @@ enum class BudgetGroup(
     val categories: Set<String>,
     val hint: String,
 ) {
-    HOUSING("Vivienda", "🏠", 0xFF8A5CFF, 30, setOf("Hogar"), "Alquiler o hipoteca, luz, agua, gas, comunidad e internet."),
-    FOOD("Comida", "🛒", 0xFFFF9F1C, 12, setOf("Comida"), "Supermercado y alimentación en casa."),
-    TRANSPORT("Transporte y coche", "🚗", 0xFF00B4FF, 10, setOf("Transporte"), "Gasolina, seguro, cuota del coche, transporte público, parking."),
-    DINING("Restaurantes", "🍔", 0xFFFF3DCB, 5, setOf("Restaurantes"), "Comer fuera, cafés y comida a domicilio."),
-    LEISURE("Ocio", "🎮", 0xFFB388FF, 5, setOf("Ocio"), "Cine, viajes, gimnasio, conciertos, hobbies."),
-    SUBSCRIPTIONS("Suscripciones", "📺", 0xFF00E5FF, 2, setOf("Suscripciones"), "Streaming, música, móvil y servicios digitales."),
-    HEALTH("Salud", "💊", 0xFF2DD4BF, 3, setOf("Salud"), "Farmacia, seguro médico, dentista, óptica."),
-    SHOPPING("Ropa y compras", "🛍️", 0xFFFFD166, 5, setOf("Ropa", "Compras"), "Ropa, tecnología y compras online."),
-    OTHER("Otros", "📦", 0xFF7D89A6, 8, setOf("Efectivo", "Bizum", "Otros"), "Efectivo, Bizum y gastos sin clasificar."),
-    SAVINGS("Ahorro", "💎", 0xFF3DFFB0, 20, emptySet(), "Fondo de emergencia, objetivos e inversión."),
+    HOUSING("Vivienda", "🏠", 0xFF7F8FB8, 30, setOf("Hogar"), "Alquiler o hipoteca, luz, agua, gas, comunidad e internet."),
+    FOOD("Comida", "🛒", 0xFFC9A46E, 12, setOf("Comida"), "Supermercado y alimentación en casa."),
+    TRANSPORT("Transporte y coche", "🚗", 0xFF6FA2AF, 10, setOf("Transporte"), "Gasolina, seguro, cuota del coche, transporte público, parking."),
+    DINING("Restaurantes", "🍔", 0xFFC98E8E, 5, setOf("Restaurantes"), "Comer fuera, cafés y comida a domicilio."),
+    LEISURE("Ocio", "🎮", 0xFFA08FBF, 5, setOf("Ocio"), "Cine, viajes, gimnasio, conciertos, hobbies."),
+    SUBSCRIPTIONS("Suscripciones", "📺", 0xFF7FAFC6, 2, setOf("Suscripciones"), "Streaming, música, móvil y servicios digitales."),
+    HEALTH("Salud", "💊", 0xFF8DBFB0, 3, setOf("Salud"), "Farmacia, seguro médico, dentista, óptica."),
+    SHOPPING("Ropa y compras", "🛍️", 0xFFCDB57E, 5, setOf("Ropa", "Compras"), "Ropa, tecnología y compras online."),
+    OTHER("Otros", "📦", 0xFFA4AAA6, 8, setOf("Efectivo", "Bizum", "Otros"), "Efectivo, Bizum y gastos sin clasificar."),
+    SAVINGS("Ahorro", "💎", 0xFF5E9C82, 20, emptySet(), "Fondo de emergencia, objetivos e inversión."),
     ;
 
     companion object {

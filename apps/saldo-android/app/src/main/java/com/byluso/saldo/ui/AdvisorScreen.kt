@@ -41,6 +41,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -125,7 +126,7 @@ fun AdvisorScreen(
     }
 
     LazyColumn(state = listState) {
-        item { ScreenTitle("asesor financiero", "Análisis") }
+        item { ScreenTitle("tu economía de un vistazo", "Asesor") }
         item {
             Row(
                 Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 4.dp),
@@ -143,8 +144,7 @@ fun AdvisorScreen(
                     Spacer(Modifier.height(12.dp))
                     DualReactor(a, selected, { selected = it }, hide, Modifier.align(Alignment.CenterHorizontally))
                     Text(
-                        "TOCA LA RUEDA O UNA PARTIDA", color = C.Muted.copy(alpha = 0.6f), fontFamily = Mono, fontSize = 9.sp,
-                        letterSpacing = 2.sp, modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp, bottom = 8.dp),
+                        "Toca el gráfico o una partida para ver el detalle", color = C.Muted.copy(alpha = 0.6f), fontFamily = Mono, fontSize = 12.sp, modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp, bottom = 8.dp),
                     )
                     a.groups.forEach { g ->
                         GroupRow(g, a, hide, selected == g.group, selected != null && selected != g.group) {
@@ -219,26 +219,25 @@ private fun SalaryCard(a: Analysis, hide: Boolean, modifier: Modifier, onEdit: (
     Row(
         modifier
             .fillMaxWidth()
-            .holoPanel(18.dp, border = C.holo, fill = C.Violet.copy(alpha = 0.10f))
-            .holoShimmer(4200, 0.10f)
+            .holoPanel(18.dp)
             .bounceClick(onClick = onEdit)
             .padding(18.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
             HudLabel("sueldo neto mensual", C.Cyan)
-            if (a.income > 0) GlowText(euros(shown, hide = hide), C.Text, 26.sp, brush = Brush.linearGradient(listOf(Color.White, C.Cyan)))
-            else Text("Toca para indicarlo", color = C.Cyan, fontFamily = Display, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+            if (a.income > 0) GlowText(euros(shown, hide = hide), C.Text, 26.sp)
+            else Text("Toca para indicarlo", color = C.Accent, fontWeight = FontWeight.Medium, fontSize = 17.sp)
             Text(
                 when (a.incomeSource) {
                     IncomeSource.MANUAL -> "indicado por ti · toca para cambiar"
                     IncomeSource.DETECTED -> "detectado en tus ingresos · toca para ajustar"
                     IncomeSource.NONE -> "sin ingresos en este periodo"
-                }.uppercase(esLocale),
-                color = C.Muted, fontFamily = Mono, fontSize = 9.sp, letterSpacing = 1.sp,
+                },
+                color = C.Muted, fontFamily = Mono, fontSize = 12.sp,
             )
         }
-        Text("✎", color = C.Cyan, fontSize = 22.sp)
+        Text("Editar", color = C.Accent, fontSize = 14.sp, fontWeight = FontWeight.Medium)
     }
 }
 
@@ -270,13 +269,13 @@ private fun SalaryDialog(current: Double?, onDismiss: () -> Unit, onSave: (Doubl
         },
         confirmButton = {
             TextButton(enabled = value != null && value > 0, onClick = { onSave(value) }) {
-                Text("GUARDAR", color = C.Cyan, fontFamily = Mono, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
+                Text("Guardar", color = C.Cyan, fontFamily = Mono, fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
             Row {
-                TextButton(onClick = { onSave(null) }) { Text("DETECTAR", color = C.Muted, fontFamily = Mono, letterSpacing = 1.sp) }
-                TextButton(onClick = onDismiss) { Text("CANCELAR", color = C.Muted, fontFamily = Mono, letterSpacing = 1.sp) }
+                TextButton(onClick = { onSave(null) }) { Text("Detectar", color = C.Muted, fontFamily = Mono) }
+                TextButton(onClick = onDismiss) { Text("Cancelar", color = C.Muted, fontFamily = Mono) }
             }
         },
     )
@@ -290,12 +289,10 @@ private fun ScoreCard(a: Analysis, modifier: Modifier) {
     val preview = LocalInspectionMode.current
     val fill = remember { Animatable(if (preview) score / 100f else 0f) }
     LaunchedEffect(score) { fill.animateTo(score / 100f, tween(1400, easing = FastOutSlowInEasing)) }
-    val t = rememberInfiniteTransition(label = "score")
-    val glow by t.animateFloat(0.5f, 1f, infiniteRepeatable(tween(1600), RepeatMode.Reverse), label = "glow")
     val color = when {
         score >= 80 -> C.Income
-        score >= 60 -> C.Cyan
-        score >= 40 -> Color(0xFFFFD166)
+        score >= 60 -> C.Accent
+        score >= 40 -> C.Magenta
         else -> C.Expense
     }
     Row(modifier.fillMaxWidth().holoPanel(18.dp).padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -306,24 +303,16 @@ private fun ScoreCard(a: Analysis, modifier: Modifier) {
                 val arc = Size(size.width - inset * 2, size.height - inset * 2)
                 drawArc(C.Track, 150f, 240f, false, Offset(inset, inset), arc, style = Stroke(stroke, cap = StrokeCap.Round))
                 val sweep = 240f * fill.value
-                val brush = Brush.sweepGradient(
-                    0.0f to C.Expense, 0.25f to Color(0xFFFFD166), 0.5f to C.Cyan, 0.7f to C.Income, 1f to C.Expense,
-                    center = center,
-                )
-                drawArc(color.copy(alpha = 0.25f * glow), 150f, sweep, false, Offset(inset, inset), arc, style = Stroke(stroke * 2.2f, cap = StrokeCap.Round))
-                drawArc(brush, 150f, sweep, false, Offset(inset, inset), arc, style = Stroke(stroke, cap = StrokeCap.Round))
-                val ang = Math.toRadians((150f + sweep).toDouble())
-                val r = arc.width / 2
-                drawCircle(Color.White, 5f, Offset(center.x + (r * cos(ang)).toFloat(), center.y + (r * sin(ang)).toFloat()))
+                drawArc(color, 150f, sweep, false, Offset(inset, inset), arc, style = Stroke(stroke, cap = StrokeCap.Round))
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 GlowText("${(fill.value * 100).roundToInt()}", color, 30.sp)
-                Text("/ 100", color = C.Muted, fontFamily = Mono, fontSize = 10.sp)
+                Text("de 100", color = C.Muted, fontSize = 11.sp)
             }
         }
         Column(Modifier.padding(start = 16.dp).weight(1f)) {
             HudLabel("salud financiera")
-            Text(FinanceAdvisor.scoreLabel(score), color = color, fontFamily = Display, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            Text(FinanceAdvisor.scoreLabel(score), color = C.Text, fontWeight = FontWeight.SemiBold, fontSize = 20.sp)
             Text(
                 "Ahorras el ${pct(max(0.0, a.savingsPct))} de tu sueldo. " +
                     (a.monthsCovered?.let { "Tu saldo cubre ${"%.1f".format(esLocale, it)} meses de gastos." } ?: ""),
@@ -355,10 +344,7 @@ private fun DualReactor(a: Analysis, selected: BudgetGroup?, onSelect: (BudgetGr
         kotlinx.coroutines.delay(350)
         innerIn.animateTo(1f, tween(1200, easing = FastOutSlowInEasing))
     }
-    val t = rememberInfiniteTransition(label = "dual")
-    val spin by t.animateFloat(0f, 360f, infiniteRepeatable(tween(30000, easing = LinearEasing)), label = "spin")
-    val orbit by t.animateFloat(0f, 360f, infiniteRepeatable(tween(6000, easing = LinearEasing)), label = "orbit")
-    val pulse by t.animateFloat(0.5f, 1f, infiniteRepeatable(tween(1700), RepeatMode.Reverse), label = "pulse")
+    val pulse = 0f
     val dim by animateFloatAsState(if (selected != null) 1f else 0f, spring(stiffness = 300f), label = "dim")
     val haptic = LocalHapticFeedback.current
 
@@ -393,52 +379,33 @@ private fun DualReactor(a: Analysis, selected: BudgetGroup?, onSelect: (BudgetGr
         ) {
             val c = center
             val R = size.minDimension / 2
-            // Marcas giratorias exteriores
-            rotate(spin, c) {
-                for (i in 0 until 90) {
-                    val ang = Math.toRadians(i * 4.0)
-                    val len = if (i % 9 == 0) 9f else 3f
-                    drawLine(
-                        C.Cyan.copy(alpha = if (i % 9 == 0) 0.55f else 0.2f),
-                        Offset(c.x + (cos(ang) * (R - 2)).toFloat(), c.y + (sin(ang) * (R - 2)).toFloat()),
-                        Offset(c.x + (cos(ang) * (R - 2 - len)).toFloat(), c.y + (sin(ang) * (R - 2 - len)).toFloat()), 2f,
-                    )
-                }
-            }
             val outerR = R - 30.dp.toPx()
             val innerR = outerR - 34.dp.toPx()
             ring(outer, outerR, 16.dp.toPx(), outerIn.value, selected, dim, pulse, alphaBase = 0.75f)
             ring(inner, innerR, 22.dp.toPx(), innerIn.value, selected, dim, pulse, alphaBase = 1f)
             if (deficit) {
-                drawCircle(C.Expense.copy(alpha = 0.35f * pulse), innerR - 18.dp.toPx(), c, style = Stroke(2f))
+                drawCircle(C.Expense.copy(alpha = 0.5f), innerR - 18.dp.toPx(), c, style = Stroke(1.5f))
             }
-            // Partícula en órbita sobre el anillo exterior
-            val oa = Math.toRadians(orbit.toDouble() - 90)
-            val op = Offset(c.x + (cos(oa) * (outerR + 14.dp.toPx())).toFloat(), c.y + (sin(oa) * (outerR + 14.dp.toPx())).toFloat())
-            drawCircle(C.Cyan.copy(alpha = 0.25f), 9f, op)
-            drawCircle(Color.White, 3.5f, op)
-            // Círculo interior fino
-            drawCircle(C.Violet.copy(alpha = 0.3f), innerR - 26.dp.toPx(), c, style = Stroke(1f))
         }
         AnimatedContent(
             targetState = selected,
-            transitionSpec = { (fadeIn(tween(220)) + scaleIn(initialScale = 0.8f)) togetherWith (fadeOut(tween(150)) + scaleOut(targetScale = 1.15f)) },
+            transitionSpec = { fadeIn(tween(200)) togetherWith fadeOut(tween(120)) },
             label = "dualCenter",
         ) { sel ->
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.width(130.dp)) {
                 if (sel == null) {
                     val sp = max(0.0, a.savingsPct)
-                    Text(if (deficit) "DÉFICIT" else "AHORRO", color = if (deficit) C.Expense else C.Muted, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 3.sp)
-                    GlowText(if (deficit) pct(a.pctOfIncome(a.expenses - a.income)) else pct(sp), if (deficit) C.Expense else C.Income, 26.sp)
-                    Text(euros(a.savings, signed = true, hide = hide), color = C.Text, fontFamily = Mono, fontSize = 12.sp)
-                    Text("IDEAL 20 %", color = C.Muted, fontFamily = Mono, fontSize = 9.sp, letterSpacing = 2.sp)
+                    Text(if (deficit) "Déficit" else "Ahorro", color = C.Muted, fontSize = 12.sp)
+                    GlowText(if (deficit) pct(a.pctOfIncome(a.expenses - a.income)) else pct(sp), if (deficit) C.Expense else C.Text, 26.sp)
+                    Text(euros(a.savings, signed = true, hide = hide), color = C.Muted, fontSize = 13.sp)
+                    Text("Ideal: 20 %", color = C.Muted, fontSize = 11.sp)
                 } else {
                     val g = a.groups.first { it.group == sel }
                     val col = Color(sel.color)
-                    Text("${sel.emoji} ${sel.label}".uppercase(esLocale), color = col, fontFamily = Mono, fontSize = 9.sp, letterSpacing = 1.sp, textAlign = TextAlign.Center, maxLines = 2)
-                    GlowText(pct(a.pctOfIncome(g.actual)), col, 24.sp)
-                    Text(euros(g.actual, hide = hide), color = C.Text, fontFamily = Mono, fontSize = 11.sp)
-                    Text("IDEAL ${sel.recommendedPct} % · ${euros(g.recommended, hide = hide)}", color = C.Muted, fontFamily = Mono, fontSize = 8.sp, textAlign = TextAlign.Center)
+                    Text("${sel.emoji} ${sel.label}", color = C.Muted, fontSize = 12.sp, textAlign = TextAlign.Center, maxLines = 2)
+                    GlowText(pct(a.pctOfIncome(g.actual)), C.Text, 24.sp)
+                    Text(euros(g.actual, hide = hide), color = C.Muted, fontSize = 13.sp)
+                    Text("Ideal: ${sel.recommendedPct} % · ${euros(g.recommended, hide = hide)}", color = C.Muted, fontSize = 12.sp, textAlign = TextAlign.Center)
                 }
             }
         }
@@ -509,13 +476,13 @@ private fun GroupRow(g: GroupAnalysis, a: Analysis, hide: Boolean, selected: Boo
             Column(Modifier.weight(1f).padding(start = 10.dp)) {
                 Text(g.group.label, color = C.Text, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, maxLines = 1)
                 Text(
-                    "REAL ${pct(actualPct)} · IDEAL ${g.group.recommendedPct} %", color = C.Muted, fontFamily = Mono,
-                    fontSize = 9.sp, letterSpacing = 1.sp, maxLines = 1,
+                    "Real ${pct(actualPct)} · ideal ${g.group.recommendedPct} %", color = C.Muted, fontFamily = Mono,
+                    fontSize = 12.sp, maxLines = 1,
                 )
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text(euros(g.actual, hide = hide), color = C.Text, fontFamily = Mono, fontSize = 13.sp, fontWeight = FontWeight.Bold, maxLines = 1)
-                Text("/ ${euros(g.recommended, hide = hide)}", color = C.Muted, fontFamily = Mono, fontSize = 10.sp, maxLines = 1)
+                Text("/ ${euros(g.recommended, hide = hide)}", color = C.Muted, fontFamily = Mono, fontSize = 12.sp, maxLines = 1)
             }
         }
         Spacer(Modifier.height(7.dp))
@@ -527,11 +494,9 @@ private fun GroupRow(g: GroupAnalysis, a: Analysis, hide: Boolean, selected: Boo
             val idealX = (g.recommended / scale * size.width).toFloat()
             val actX = (g.actual / scale * size.width).toFloat() * grow.value
             val normal = if (isSavings) actX else minOf(actX, idealX)
-            drawLine(Brush.horizontalGradient(listOf(col.copy(alpha = 0.3f), col), 0f, max(normal, 1f)), Offset(0f, y), Offset(normal, y), 4f, StrokeCap.Round)
+            drawLine(col, Offset(0f, y), Offset(max(normal, 1f), y), 4f, StrokeCap.Round)
             if (!isSavings && actX > idealX) drawLine(C.Expense, Offset(idealX, y), Offset(actX, y), 4f, StrokeCap.Round)
-            drawLine(Color.White, Offset(idealX, 0f), Offset(idealX, size.height), 2f)
-            drawCircle((if (good) col else C.Expense).copy(alpha = 0.4f), 8f, Offset(actX, y))
-            drawCircle(if (good) col else C.Expense, 3.5f, Offset(actX, y))
+            drawLine(C.Muted, Offset(idealX, 0f), Offset(idealX, size.height), 2f)
         }
         AnimatedVisibility(selected, enter = expandVertically() + fadeIn(), exit = shrinkVertically() + fadeOut()) {
             Column(Modifier.padding(top = 8.dp)) {
@@ -572,14 +537,14 @@ private fun SavingsCard(a: Analysis, hide: Boolean, modifier: Modifier) {
         HudLabel("ahorro", C.Income)
         Row(Modifier.padding(top = 8.dp)) {
             Column(Modifier.weight(1f)) {
-                Text("DEBERÍAS AHORRAR", color = C.Muted, fontFamily = Mono, fontSize = 9.sp, letterSpacing = 1.sp)
+                Text("Deberías ahorrar", color = C.Muted, fontFamily = Mono, fontSize = 12.sp)
                 GlowText(euros(rec, hide = hide), C.Income, 18.sp)
-                Text("20 % · al mes", color = C.Muted, fontFamily = Mono, fontSize = 10.sp)
+                Text("20 % · al mes", color = C.Muted, fontFamily = Mono, fontSize = 12.sp)
             }
             Column(Modifier.weight(1f)) {
-                Text("AHORRAS", color = C.Muted, fontFamily = Mono, fontSize = 9.sp, letterSpacing = 1.sp)
-                GlowText(euros(a.savings, hide = hide), if (a.savings >= rec) C.Income else if (a.savings > 0) Color(0xFFFFD166) else C.Expense, 18.sp)
-                Text("${pct(a.savingsPct)} · al mes", color = C.Muted, fontFamily = Mono, fontSize = 10.sp)
+                Text("Ahorras", color = C.Muted, fontFamily = Mono, fontSize = 12.sp)
+                GlowText(euros(a.savings, hide = hide), if (a.savings >= rec) C.Income else if (a.savings > 0) C.Magenta else C.Expense, 18.sp)
+                Text("${pct(a.savingsPct)} · al mes", color = C.Muted, fontFamily = Mono, fontSize = 12.sp)
             }
         }
         Spacer(Modifier.height(10.dp))
@@ -658,31 +623,31 @@ private fun AffordBlock(emoji: String, title: String, color: Color, rows: List<P
 
 @Composable
 private fun TipCard(t: Tip, expanded: Boolean, hide: Boolean, modifier: Modifier, onClick: () -> Unit) {
-    val border = if (t.personal) C.holo else Brush.linearGradient(listOf(C.Line, C.Line))
     Column(
         modifier
             .fillMaxWidth()
-            .holoPanel(12.dp, border = border, fill = if (t.personal) C.Violet.copy(alpha = 0.10f) else C.Glass)
+            .holoPanel(12.dp, fill = if (t.personal) C.Accent else C.Glass)
             .bounceClick(onClick = onClick)
             .animateContentSize(spring(dampingRatio = 0.8f, stiffness = 400f))
             .padding(14.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                (if (t.personal) "★ PARA TI · " else "") + t.topic.uppercase(esLocale),
-                color = if (t.personal) C.Magenta else C.Cyan, fontFamily = Mono, fontSize = 9.sp, letterSpacing = 1.5.sp,
+                (if (t.personal) "Para ti · " else "") + t.topic,
+                color = if (t.personal) C.Accent else C.Muted, fontSize = 12.sp, fontWeight = FontWeight.Medium,
                 modifier = Modifier.weight(1f),
             )
             t.monthlySaving?.takeIf { it >= 1 }?.let {
                 Text(
-                    "+${euros(it, hide = hide)}/MES", color = C.Void, fontFamily = Mono, fontSize = 9.sp, fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clip(CutCornerShape(topStart = 6.dp, bottomEnd = 6.dp)).background(C.Income).padding(horizontal = 6.dp, vertical = 2.dp),
+                    "+${euros(it, hide = hide)}/mes", color = C.Income, fontSize = 12.sp, fontWeight = FontWeight.Medium,
+                    modifier = Modifier.clip(RoundedCornerShape(50)).background(C.Income.copy(alpha = 0.12f)).padding(horizontal = 8.dp, vertical = 2.dp),
                 )
             }
         }
         Text(t.title, color = C.Text, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 4.dp))
         if (expanded) {
-            Text(t.body, color = C.Muted, fontSize = 13.sp, modifier = Modifier.padding(top = 6.dp))
+            Text(t.body, color = C.Muted, fontSize = 14.sp, modifier = Modifier.padding(top = 6.dp))
+            t.source?.let { Text("Fuente: $it", color = C.Muted.copy(alpha = 0.8f), fontSize = 11.sp, modifier = Modifier.padding(top = 8.dp)) }
         } else {
             Text(t.body, color = C.Muted, fontSize = 13.sp, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, modifier = Modifier.padding(top = 4.dp))
         }

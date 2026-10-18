@@ -3,35 +3,16 @@
 App nativa (Kotlin + Jetpack Compose) inspirada en ExpenseIA. Lee las notificaciones
 de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actualizado**.
 
-| Inicio | Movimientos | Gráficas | Ajustes |
-|---|---|---|---|
-| ![Inicio](screenshots/home.png) | ![Movimientos](screenshots/movements.png) | ![Gráficas](screenshots/charts.png) | ![Ajustes](screenshots/settings.png) |
+| Inicio | Inicio (oscuro) | Historial | Asesor | Gráficas |
+|---|---|---|---|---|
+| ![Inicio](screenshots/home.png) | ![Inicio en modo oscuro](screenshots/home-dark.png) | ![Historial](screenshots/movements.png) | ![Asesor](screenshots/advisor.png) | ![Gráficas](screenshots/charts.png) |
 
-| Arranque | Entrada de Inicio |
-|---|---|
-| ![Arranque](screenshots/boot.gif) | ![Inicio animado](screenshots/home.gif) |
+### Diseño
 
-![Importar extracto](screenshots/import.png)
-
-| Asesor | Animación |
-|---|---|
-| ![Asesor](screenshots/advisor.png) | ![Asesor animado](screenshots/advisor.gif) |
-
-### Diseño "holo 2100"
-
-- Fondo vivo: auroras que se desplazan, estrellas que titilan y un horizonte de rejilla en perspectiva.
-- Paneles de cristal con esquinas cortadas a 45° y borde iridiscente cian → violeta → magenta.
-- "Reactor" de gastos: anillo segmentado con resplandor de neón y marcas que giran.
-- Cifras con contador animado y brillo; barra de flujo ingresos/gastos con destello.
-- Botón de acción en rombo con pulso de luz y barra de navegación flotante.
-- Animaciones: secuencia de arranque (anillo, logo, tecleo y sincronización), transiciones
-  entre pestañas con línea de escaneo, entrada escalonada de tarjetas, cifras que se
-  "descifran" al ocultar/mostrar o cambiar de mes, glitch ocasional en el logo, destello
-  holográfico en las tarjetas, rebote con vibración al pulsar, partículas en el botón ◆,
-  indicador deslizante en la barra inferior y avisos holográficos al guardar.
-- Reactor interactivo: toca un sector o una categoría para destacarla y ver su detalle.
-- Tipografías: Orbitron (titulares y cifras), Exo 2 (texto) y JetBrains Mono (datos),
-  todas con licencia SIL Open Font License (ver `licenses/`).
+Minimalista y tranquilo: neutros con un leve tono verde, un único acento verde azulado,
+ingresos en verde salvia y gastos en arcilla, categorías en tonos pastel apagados. Tarjetas
+planas con borde fino, tipografía del sistema y animaciones discretas (aparición suave,
+anillos que se dibujan, contadores). Modo claro y oscuro según el sistema.
 
 ## Qué hace
 
@@ -53,8 +34,9 @@ de tus apps bancarias, detecta cada pago o ingreso y mantiene tu **saldo actuali
   restaurantes 5 %, ocio 5 %, suscripciones 2 %, salud 3 %, ropa y compras 5 %, otros 8 %,
   ahorro 20 %), en € y %. Rueda doble animada (exterior: recomendado, interior: real),
   puntuación de salud financiera, ahorro y colchón de emergencia, cuánto te puedes permitir en
-  vivienda (alquiler, hipoteca, precio y entrada) y coche (regla 20/4/10), y más de 50 consejos
-  con buscador y filtros, los primeros personalizados con tus números.
+  vivienda (alquiler, hipoteca, precio y entrada) y coche (regla 20/4/10), y más de 70 consejos
+  con buscador y filtros, los primeros personalizados con tus números. Parte de ellos se basan en
+  el discurso de M. Casanovas sobre asesoramiento financiero (RACEF, 2017), citado en cada consejo.
 - **Inicio**: mes con ingresos, gastos y balance; donut de gastos por grupo; últimos movimientos.
 - **Movimientos**: lista por días con filtros; toca uno para editarlo, cambiar la categoría o borrarlo.
 - **Gráficas**: ingresos vs gastos de los últimos 6 meses y dónde más gastas.

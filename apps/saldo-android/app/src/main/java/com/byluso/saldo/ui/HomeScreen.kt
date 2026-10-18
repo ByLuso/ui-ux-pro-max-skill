@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -72,78 +73,62 @@ fun MonthHeader(
 
     Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(12.dp).clip(CutCornerShape(50)).background(C.holo))
-            GlitchText(
-                "  SALDO",
-                androidx.compose.ui.text.TextStyle(
-                    brush = C.holo, fontFamily = Display, fontWeight = FontWeight.Black, fontSize = 18.sp, letterSpacing = 6.sp,
-                ),
-                Modifier.weight(1f),
-            )
+            Text("Saldo", color = C.Text, fontWeight = FontWeight.SemiBold, fontSize = 22.sp, modifier = Modifier.weight(1f))
             HudButton(if (hide) Icons.Filled.VisibilityOff else Icons.Filled.Visibility, "Ocultar importes", onToggleHide)
         }
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(12.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             HudButton(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Mes anterior") { onMonth(month.minusMonths(1)) }
             Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("CICLO", color = C.Muted, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 4.sp)
                 AnimatedContent(
                     targetState = month,
                     transitionSpec = {
                         val dir = if (targetState > initialState) 1 else -1
-                        (slideInHorizontally { it / 2 * dir } + fadeIn()) togetherWith (slideOutHorizontally { -it / 2 * dir } + fadeOut())
+                        (slideInHorizontally { it / 6 * dir } + fadeIn()) togetherWith (slideOutHorizontally { -it / 6 * dir } + fadeOut())
                     },
                     label = "month",
                 ) { m ->
                     Text(
-                        rememberScramble(monthTitle(m).uppercase(esLocale), m), color = C.Text, fontFamily = Display,
-                        fontWeight = FontWeight.Bold, fontSize = 18.sp, letterSpacing = 2.sp, textAlign = TextAlign.Center,
+                        monthTitle(m), color = C.Text,
+                        fontWeight = FontWeight.Medium, fontSize = 17.sp, textAlign = TextAlign.Center,
                     )
                 }
             }
             HudButton(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Mes siguiente") { onMonth(month.plusMonths(1)) }
         }
         Spacer(Modifier.height(16.dp))
-        Column(Modifier.fillMaxWidth().holoPanel(22.dp).holoShimmer(5200, 0.07f).padding(20.dp)) {
-            HudLabel("balance del ciclo")
+        Column(Modifier.fillMaxWidth().holoPanel(22.dp).padding(20.dp)) {
+            HudLabel("balance del mes")
             Spacer(Modifier.height(6.dp))
             GlowText(
                 rememberScramble(euros(net, signed = true, hide = hide), hide to month),
                 color = if (income - expense >= 0) C.Income else C.Expense,
                 fontSize = 32.sp,
-                brush = if (income - expense >= 0) Brush.linearGradient(listOf(C.Income, C.Cyan)) else Brush.linearGradient(listOf(C.Expense, C.Magenta)),
             )
             Spacer(Modifier.height(16.dp))
             FluxBar(income, expense)
             Spacer(Modifier.height(14.dp))
             Row {
-                Stat("↑ ingresos", rememberScramble(euros(income, signed = true, hide = hide), hide to month), C.Income, Modifier.weight(1f))
+                Stat("ingresos", rememberScramble(euros(income, signed = true, hide = hide), hide to month), C.Income, Modifier.weight(1f))
                 Box(Modifier.width(1.dp).height(40.dp).background(C.Line))
-                Stat("↓ gastos", rememberScramble(euros(-expense, signed = true, hide = hide), hide to month), C.Expense, Modifier.weight(1f).padding(start = 16.dp))
+                Stat("gastos", rememberScramble(euros(-expense, signed = true, hide = hide), hide to month), C.Expense, Modifier.weight(1f).padding(start = 16.dp))
             }
         }
     }
 }
 
-/** Barra de flujo: proporción ingresos / gastos con destello animado. */
+/** Barra de proporción ingresos / gastos. */
 @Composable
 private fun FluxBar(income: Double, expense: Double) {
     val total = (income + expense).takeIf { it > 0 } ?: 1.0
     val split = (income / total).toFloat()
-    val t = rememberInfiniteTransition(label = "flux")
-    val sweep by t.animateFloat(0f, 1f, infiniteRepeatable(tween(2600)), label = "sweep")
     Canvas(Modifier.fillMaxWidth().height(6.dp)) {
         val y = size.height / 2
         val mid = size.width * split
         drawLine(C.Track, Offset(0f, y), Offset(size.width, y), size.height, StrokeCap.Round)
         if (income + expense > 0) {
-            drawLine(Brush.horizontalGradient(listOf(C.Cyan, C.Income), 0f, mid), Offset(0f, y), Offset(mid, y), size.height, StrokeCap.Round)
-            drawLine(Brush.horizontalGradient(listOf(C.Magenta, C.Expense), mid, size.width), Offset(mid, y), Offset(size.width, y), size.height, StrokeCap.Round)
-            val x = size.width * sweep
-            drawLine(
-                Brush.horizontalGradient(listOf(Color.Transparent, Color.White.copy(alpha = 0.8f), Color.Transparent), x - 40f, x + 40f),
-                Offset(x - 40f, y), Offset(x + 40f, y), size.height,
-            )
+            drawLine(C.Income, Offset(0f, y), Offset(mid, y), size.height, StrokeCap.Round)
+            drawLine(C.Expense.copy(alpha = 0.8f), Offset((mid + size.height * 1.5f).coerceAtMost(size.width), y), Offset(size.width, y), size.height, StrokeCap.Round)
         }
     }
 }
@@ -152,17 +137,16 @@ private fun FluxBar(income: Double, expense: Double) {
 private fun Stat(label: String, value: String, color: Color, modifier: Modifier) {
     Column(modifier) {
         HudLabel(label.removePrefix("// "))
-        Text(value, color = color, fontFamily = Mono, fontWeight = FontWeight.Bold, fontSize = 17.sp, maxLines = 1)
+        Text(value, color = color, fontWeight = FontWeight.Medium, fontSize = 17.sp, maxLines = 1)
     }
 }
 
 @Composable
 fun HudButton(icon: ImageVector, description: String, onClick: () -> Unit) {
-    val shape = CutCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
     Box(
-        Modifier.size(42.dp).bounceClick(onClick = onClick).clip(shape).background(C.Glass).border(1.dp, C.Line, shape),
+        Modifier.size(40.dp).bounceClick(onClick = onClick).clip(CircleShape).background(C.CardAlt),
         contentAlignment = Alignment.Center,
-    ) { Icon(icon, description, tint = C.Cyan) }
+    ) { Icon(icon, description, tint = C.Text) }
 }
 
 @Composable
@@ -206,25 +190,25 @@ fun HomeScreen(
                     .mapValues { (_, v) -> v.sumOf { it.amount } }
                     .entries.sortedByDescending { it.value }
                 val total = groups.sumOf { it.value }
-                val palette = listOf(0xFF3DFFB0, 0xFF00E5FF, 0xFF8A5CFF, 0xFFFFD166, 0xFFFF3DCB, 0xFF7D89A6)
+                val palette = listOf(0xFF7FB79B, 0xFF6FA2AF, 0xFF9DADCB, 0xFFC9A46E, 0xFFC98E8E, 0xFFA4AAA6)
                 fun colorOf(i: Int, key: String) =
                     if (showIncome) Color(palette[i % palette.size]) else Color(Categories.byName(key).color)
 
                 Donut(
                     slices = groups.mapIndexed { i, e -> Slice(e.key, e.value, colorOf(i, e.key)) },
                     centerTop = euros(total, hide = hide),
-                    centerBottom = if (showIncome) "ENTRADA · CICLO" else "SALIDA · CICLO",
+                    centerBottom = if (showIncome) "Ingresos del mes" else "Gastos del mes",
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     selected = selected, onSelect = { selected = it }, hide = hide,
                 )
                 Text(
-                    "TOCA EL REACTOR O UNA CATEGORÍA", color = C.Muted.copy(alpha = 0.6f), fontFamily = Mono,
-                    fontSize = 9.sp, letterSpacing = 2.sp, modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 6.dp),
+                    "Toca el gráfico o una categoría", color = C.Muted.copy(alpha = 0.6f), fontFamily = Mono,
+                    fontSize = 12.sp, modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 6.dp),
                 )
                 Spacer(Modifier.height(16.dp))
                 if (groups.isEmpty()) {
                     Text(
-                        if (showIncome) "Sin ingresos en este ciclo" else "Sin gastos en este ciclo",
+                        if (showIncome) "Sin ingresos este mes" else "Sin gastos este mes",
                         color = C.Muted, fontFamily = Mono, fontSize = 12.sp,
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                     )
@@ -242,11 +226,10 @@ fun HomeScreen(
         item {
             Row(Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 10.dp).enterStagger(3), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
-                    HudLabel("registro")
-                    Text("Últimos movimientos", color = C.Text, fontFamily = Display, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text("Últimos movimientos", color = C.Text, fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
                 }
                 Text(
-                    "VER TODO →", color = C.Cyan, fontFamily = Mono, fontSize = 12.sp, letterSpacing = 1.5.sp,
+                    "Ver todo", color = C.Accent, fontSize = 14.sp, fontWeight = FontWeight.Medium,
                     modifier = Modifier.bounceClick(onClick = onSeeAll).padding(6.dp),
                 )
             }
@@ -278,34 +261,29 @@ private fun BalanceCard(balance: Double?, anchor: BalanceAnchor?, hide: Boolean,
     Column(
         Modifier
             .fillMaxWidth()
-            .holoPanel(22.dp, border = C.holo, fill = C.Violet.copy(alpha = 0.10f))
-            .holoShimmer(3600, 0.12f)
+            .holoPanel(22.dp)
             .bounceClick(onClick = onSet)
             .padding(20.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            HudLabel("saldo en cuenta", C.Cyan, Modifier.weight(1f))
+            HudLabel("saldo en cuenta", modifier = Modifier.weight(1f))
             if (live) {
                 LiveDot()
-                Text(" SYNC", color = C.Income, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 2.sp)
+                Text("  Captura activa", color = C.Muted, fontSize = 12.sp)
             }
         }
         Spacer(Modifier.height(8.dp))
         if (balance == null) {
-            Text("Toca para calibrar tu saldo", color = C.Cyan, fontFamily = Display, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text("Toca para indicar tu saldo", color = C.Accent, fontWeight = FontWeight.Medium, fontSize = 18.sp)
             Text(
                 "Se actualizará solo con cada aviso de tu banco. Si el aviso incluye el saldo, se usará directamente.",
                 color = C.Muted, fontSize = 13.sp, modifier = Modifier.padding(top = 6.dp),
             )
         } else {
-            GlowText(
-                rememberScramble(euros(shown, hide = hide), hide), color = if (balance >= 0) C.Cyan else C.Expense, fontSize = 36.sp,
-                fontWeight = FontWeight.Black,
-                brush = if (balance >= 0) Brush.linearGradient(listOf(Color.White, C.Cyan, C.Violet)) else null,
-            )
+            GlowText(euros(shown, hide = hide), color = if (balance >= 0) C.Text else C.Expense, fontSize = 36.sp)
             Text(
-                (anchor?.let { "calibrado ${relativeDay(it.timestamp)} · toca para ajustar" } ?: "fuente: avisos de tu banco").uppercase(esLocale),
-                color = C.Muted, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.sp, modifier = Modifier.padding(top = 4.dp),
+                (anchor?.let { "Ajustado ${relativeDay(it.timestamp).lowercase(esLocale)} · toca para cambiarlo" } ?: "Según los avisos de tu banco"),
+                color = C.Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp),
             )
         }
     }
@@ -313,16 +291,13 @@ private fun BalanceCard(balance: Double?, anchor: BalanceAnchor?, hide: Boolean,
 
 @Composable
 private fun PermissionCard(onEnable: () -> Unit) {
-    val t = rememberInfiniteTransition(label = "perm")
-    val a by t.animateFloat(0.35f, 1f, infiniteRepeatable(tween(1400), RepeatMode.Reverse), label = "a")
     Column(
         Modifier
             .fillMaxWidth()
-            .holoPanel(22.dp, border = Brush.linearGradient(listOf(C.Magenta.copy(alpha = a), C.Cyan.copy(alpha = a))), fill = C.Magenta.copy(alpha = 0.08f))
+            .holoPanel(22.dp, border = androidx.compose.ui.graphics.SolidColor(C.Magenta.copy(alpha = 0.5f)), fill = C.Magenta)
             .padding(20.dp)
     ) {
-        HudLabel("enlace no establecido", C.Magenta)
-        Text("Activa la captura automática", color = C.Text, fontFamily = Display, fontWeight = FontWeight.Bold, fontSize = 17.sp, modifier = Modifier.padding(top = 6.dp))
+        Text("Activa la captura automática", color = C.Text, fontWeight = FontWeight.SemiBold, fontSize = 17.sp)
         Text(
             "Saldo necesita leer los avisos de tu banco para registrar cada gasto e ingreso. Todo se queda en tu móvil.",
             color = C.Muted, fontSize = 14.sp, modifier = Modifier.padding(vertical = 10.dp),

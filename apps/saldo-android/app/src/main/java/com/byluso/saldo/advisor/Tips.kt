@@ -14,10 +14,19 @@ data class Tip(
     val personal: Boolean = false,
     /** Ahorro mensual estimado si se aplica, en €. */
     val monthlySaving: Double? = null,
+    /** Obra en la que se basa el consejo, si la hay. */
+    val source: String? = null,
 )
 
 object Tips {
-    val topics = listOf("Ahorro", "Vivienda", "Coche", "Comida", "Ocio", "Suscripciones", "Compras", "Deudas", "Inversión", "Bancos", "Impuestos", "Hábitos")
+    val topics = listOf(
+        "Ahorro", "Planificación", "Inversión", "Psicología", "Asesoramiento", "Vivienda", "Coche", "Comida",
+        "Ocio", "Suscripciones", "Compras", "Deudas", "Bancos", "Impuestos", "Hábitos",
+    )
+
+    /** M. Casanovas, "El asesoramiento financiero, la figura del Asesor Financiero y de las E.A.F.I.s",
+     *  discurso de ingreso en la Real Academia de Ciencias Económicas y Financieras (2017). */
+    const val CASANOVAS = "M. Casanovas, discurso RACEF (2017)"
 
     private val es = Locale.forLanguageTag("es-ES")
     private val nf = NumberFormat.getNumberInstance(es).apply { maximumFractionDigits = 0 }
@@ -91,6 +100,17 @@ object Tips {
                 personal = true, monthlySaving = total * 0.3,
             )
         }
+        val discretionary = a.groups.filter { it.group in DISCRETIONARY }.sumOf { it.actual }
+        val fixed = a.groups.filter { it.group in NON_DISCRETIONARY }.sumOf { it.actual }
+        if (a.expenses > 0 && discretionary > 0) {
+            out += Tip(
+                "p-discretionary", "Planificación",
+                "Gastos discrecionales: ${e(discretionary)} al mes (${p(discretionary / a.expenses * 100)} de tu gasto)",
+                "Restaurantes, ocio, suscripciones y compras son los más fáciles de ajustar; recortarlos un 10 % te ahorraría ${e(discretionary * 0.1)} al mes. " +
+                    "Los no discrecionales (vivienda, comida, transporte y salud: ${e(fixed)}) cuestan más de reducir, pero también se puede: compara tarifas de suministros y agrupa seguros o deudas para negociar mejores condiciones.",
+                personal = true, monthlySaving = discretionary * 0.1, source = CASANOVAS,
+            )
+        }
         val (n, sum) = a.smallPurchases
         if (n >= 8) {
             out += Tip(
@@ -113,6 +133,9 @@ object Tips {
         )
         return out.sortedByDescending { it.monthlySaving ?: 0.0 }
     }
+
+    private val DISCRETIONARY = setOf(BudgetGroup.DINING, BudgetGroup.LEISURE, BudgetGroup.SUBSCRIPTIONS, BudgetGroup.SHOPPING)
+    private val NON_DISCRETIONARY = setOf(BudgetGroup.HOUSING, BudgetGroup.FOOD, BudgetGroup.TRANSPORT, BudgetGroup.HEALTH)
 
     private fun topicOf(g: BudgetGroup) = when (g) {
         BudgetGroup.HOUSING -> "Vivienda"
@@ -181,5 +204,49 @@ object Tips {
         Tip("g42", "Hábitos", "Paga con débito, no con crédito", "Pagar con lo que ya tienes evita gastar dinero que aún no has ganado."),
         Tip("g43", "Hábitos", "Gastos hormiga", "Un café de 2 € al día son más de 700 € al año. No hace falta eliminarlos, solo ser consciente."),
         Tip("g44", "Hábitos", "Desactiva las compras en un clic", "Eliminar tarjetas guardadas y apps de compras reduce las compras impulsivas."),
+    ) + fromCasanovas
+
+    /** Consejos basados en el discurso de M. Casanovas sobre asesoramiento financiero. */
+    private val fromCasanovas: List<Tip> get() = listOf(
+        Tip("c1", "Inversión", "Rentabilidad, seguridad y liquidez: elige dos",
+            "Ningún producto da las tres a la vez. Más rentabilidad implica más riesgo o menos liquidez, porque se paga una prima por asumirlos. Decide qué priorizas según cuándo vas a necesitar el dinero.", source = CASANOVAS),
+        Tip("c2", "Inversión", "Mira la rentabilidad real, neta y después de impuestos",
+            "La rentabilidad anunciada suele ser nominal y bruta. Réstale la inflación, las comisiones y los impuestos: lo que importa es lo que te queda. Un depósito que rinde menos que el IPC te hace perder poder adquisitivo.", source = CASANOVAS),
+        Tip("c3", "Inversión", "Pregunta cuánto cuesta salir",
+            "Antes de contratar, averigua si puedes recuperar el dinero antes de tiempo y con qué penalización. Algunos productos solo permiten rescatar sin coste en fechas concretas (ventanas de liquidez).", source = CASANOVAS),
+        Tip("c4", "Bancos", "Fondo de Garantía de Depósitos: hasta 100.000 €",
+            "Los depósitos están cubiertos hasta 100.000 € por titular y entidad. Si tienes más en un mismo banco, repártelo entre varias entidades.", source = CASANOVAS),
+        Tip("c5", "Inversión", "Fíjate en el indicador de riesgo del 1/6 al 6/6",
+            "Los productos financieros llevan un indicador de riesgo: 1/6 es el más seguro y 6/6 el más arriesgado. Los candados avisan de que es difícil recuperar el dinero antes de tiempo y las exclamaciones, de que es un producto complejo. Si no lo entiendes, no lo contrates.", source = CASANOVAS),
+        Tip("c6", "Inversión", "No contrates lo que no entiendas",
+            "Las participaciones preferentes y la deuda subordinada se vendieron a ahorradores que no conocían sus riesgos. Pide que te expliquen en qué inviertes, qué puede salir mal y cómo recuperarías el dinero.", source = CASANOVAS),
+        Tip("c7", "Planificación", "Conoce tu perfil de riesgo",
+            "Tiene dos partes: la objetiva (cuánto puedes perder sin que afecte a tu vida, según ingresos, gastos y deudas) y la subjetiva (cuánto estás dispuesto a soportar sin ponerte nervioso). Revísalo cuando cambie tu situación.", source = CASANOVAS),
+        Tip("c8", "Psicología", "Cuidado con el efecto rebaño",
+            "Invertir en algo porque lo hace tu vecino, un famoso o todo el mundo es una decisión emocional. Las mismas noticias empujan a todos en la misma dirección y amplifican subidas y bajadas.", source = CASANOVAS),
+        Tip("c9", "Psicología", "La aversión a la pérdida",
+            "Nos duele más perder que nos alegra ganar: tendemos a vender pronto lo que sube y a aguantar lo que baja esperando recuperar. Decide antes de invertir cuándo venderías, y no lo cambies en caliente.", source = CASANOVAS),
+        Tip("c10", "Psicología", "No reacciones en caliente a las noticias",
+            "Ante caídas bruscas o malas noticias, los inversores tienden a sobrerreaccionar y vender. Los acontecimientos imprevisibles (\"cisnes negros\") ocurren: la defensa es un colchón de emergencia y una cartera diversificada, no adivinar el momento.", source = CASANOVAS),
+        Tip("c11", "Inversión", "El reparto entre tipos de activo es lo que más pesa",
+            "A largo plazo, la mayor parte del resultado depende de cuánto pones en liquidez, renta fija, renta variable o inmuebles, más que de elegir el valor concreto. Diversifica también por mercados y sectores.", source = CASANOVAS),
+        Tip("c12", "Inversión", "Invertir en otra moneda añade riesgo",
+            "Si inviertes en dólares u otra divisa, además del riesgo del producto asumes el riesgo de cambio: aunque la inversión suba, puedes perder si el euro se aprecia.", source = CASANOVAS),
+        Tip("c13", "Asesoramiento", "Asesorar no es lo mismo que vender",
+            "El comercial de tu banco te ofrece productos de su entidad. Un asesor analiza todo tu patrimonio, tus objetivos y tus impuestos y te recomienda entre todas las alternativas. Pregunta siempre cómo cobra quien te aconseja.", source = CASANOVAS),
+        Tip("c14", "Asesoramiento", "Comprueba que el asesor está registrado",
+            "Las empresas de asesoramiento financiero (EAFI) y demás entidades de inversión deben estar inscritas en la CNMV. Búscalas en su web antes de contratar nada.", source = CASANOVAS),
+        Tip("c15", "Asesoramiento", "Contesta el test de idoneidad con sinceridad",
+            "Los tests de conveniencia e idoneidad existen para protegerte: sirven para saber si un producto encaja con tu situación, tus objetivos y tus conocimientos. Exagerar tu experiencia solo te expone a productos inadecuados.", source = CASANOVAS),
+        Tip("c16", "Planificación", "Haz un plan con objetivos y horizonte",
+            "Ordena tus metas: protegerte ante imprevistos, acumular capital (emergencias, estudios, jubilación), pagar menos impuestos, comprar vivienda y planificar la herencia. Para cada una, fija cuándo necesitarás el dinero.", source = CASANOVAS),
+        Tip("c17", "Planificación", "Protégete antes de invertir",
+            "Antes de buscar rentabilidad, cubre los riesgos que podrían arruinar tus planes: enfermedad, invalidez, fallecimiento si alguien depende de ti y responsabilidad civil.", source = CASANOVAS),
+        Tip("c18", "Planificación", "La jubilación dura más de lo que crees",
+            "Al planificarla, tu horizonte no son los años que faltan para jubilarte sino los que vivirás después. Empezar pronto multiplica el efecto del interés compuesto.", source = CASANOVAS),
+        Tip("c19", "Planificación", "Revisa tu plan periódicamente",
+            "Compara cada cierto tiempo lo conseguido con lo previsto y corrige desviaciones. Tus objetivos y tu perfil cambian con la vida; el plan también debe hacerlo.", source = CASANOVAS),
+        Tip("c20", "Vivienda", "La vivienda no siempre sube",
+            "Hasta 2007 se daba por hecho que el precio de la vivienda siempre subía. No concentres todo tu patrimonio en ladrillo: es el activo menos líquido y también puede bajar.", source = CASANOVAS),
     )
 }

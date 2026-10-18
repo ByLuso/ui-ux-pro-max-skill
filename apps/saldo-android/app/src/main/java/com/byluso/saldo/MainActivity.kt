@@ -202,34 +202,18 @@ private fun SaldoApp(repo: Repository, importer: StatementImporter) {
                 containerColor = Color.Transparent,
                 floatingActionButton = {
                     if (tab == Tab.Home || tab == Tab.Movements) DiamondButton(onClick = { adding = true }) {
-                        Icon(Icons.Filled.Add, "Añadir movimiento", tint = C.Void, modifier = Modifier.size(28.dp))
+                        Icon(Icons.Filled.Add, "Añadir movimiento", tint = C.OnAccent, modifier = Modifier.size(26.dp))
                     }
                 },
                 bottomBar = { HoloNavBar(tab) { tab = it } },
             ) { padding ->
-                val scan = rememberPulseOn(tab, 520)
-                Box(
-                    Modifier
-                        .padding(top = padding.calculateTopPadding())
-                        .drawWithContent {
-                            drawContent()
-                            // Línea de escaneo que barre la pantalla al cambiar de pestaña
-                            if (scan < 1f) {
-                                val y = size.height * scan
-                                drawRect(
-                                    Brush.verticalGradient(listOf(Color.Transparent, C.Cyan.copy(alpha = 0.18f * (1 - scan))), y - 140f, y),
-                                    Offset(0f, y - 140f), androidx.compose.ui.geometry.Size(size.width, 140f),
-                                )
-                                drawLine(C.Cyan.copy(alpha = 0.8f * (1 - scan)), Offset(0f, y), Offset(size.width, y), 2f)
-                            }
-                        }
-                ) {
+                Box(Modifier.padding(top = padding.calculateTopPadding())) {
                   AnimatedContent(
                     targetState = tab,
                     transitionSpec = {
                         val dir = if (targetState.ordinal > initialState.ordinal) 1 else -1
-                        (slideInHorizontally(tween(380)) { it / 4 * dir } + fadeIn(tween(300)) + scaleIn(tween(380), initialScale = 0.96f)) togetherWith
-                            (slideOutHorizontally(tween(300)) { -it / 4 * dir } + fadeOut(tween(200)) + scaleOut(tween(300), targetScale = 1.04f))
+                        (slideInHorizontally(tween(280)) { it / 12 * dir } + fadeIn(tween(240))) togetherWith
+                            (slideOutHorizontally(tween(220)) { -it / 12 * dir } + fadeOut(tween(160)))
                     },
                     label = "tabs",
                   ) { shown ->
@@ -300,59 +284,31 @@ private fun SaldoApp(repo: Repository, importer: StatementImporter) {
             state = importState, hide = hide,
             onPassword = importer::submitPassword, onConfirm = importer::confirm, onDismiss = importer::dismiss,
         )
-        AnimatedVisibility(booting, exit = fadeOut(tween(1))) { BootSequence { booting = false } }
     }
 }
 
-/** Barra de navegación flotante de cristal con un indicador luminoso que se desliza entre pestañas. */
+/** Barra de navegación inferior: fondo de superficie, línea fina arriba y la pestaña activa resaltada. */
 @Composable
 internal fun HoloNavBar(current: Tab, onSelect: (Tab) -> Unit) {
-    val pos by animateFloatAsState(
-        current.ordinal.toFloat(), spring(dampingRatio = 0.62f, stiffness = 260f), label = "pos",
-    )
     val haptic = LocalHapticFeedback.current
-    BoxWithConstraints(
-        Modifier
-            .navigationBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
-            .fillMaxWidth()
-            .clip(chamfer(16.dp))
-            .background(C.Void.copy(alpha = 0.94f))
-            .holoPanel(16.dp, fill = C.Violet.copy(alpha = 0.10f)),
-    ) {
-        val itemW = maxWidth / Tab.entries.size
-        // Foco de luz que se desliza
-        Box(
-            Modifier
-                .offset(x = itemW * pos)
-                .width(itemW)
-                .height(68.dp)
-                .drawBehind {
-                    drawRect(Brush.verticalGradient(listOf(C.Cyan.copy(alpha = 0.16f), Color.Transparent)))
-                    drawLine(
-                        Brush.horizontalGradient(listOf(Color.Transparent, C.Cyan, C.Magenta, Color.Transparent)),
-                        Offset(size.width * 0.15f, 1f), Offset(size.width * 0.85f, 1f), 3f,
-                    )
-                }
-        )
-        Row(Modifier.padding(vertical = 6.dp)) {
+    Column(Modifier.fillMaxWidth().background(C.Card)) {
+        Box(Modifier.fillMaxWidth().height(1.dp).background(C.Line))
+        Row(Modifier.navigationBarsPadding().padding(horizontal = 8.dp, vertical = 6.dp)) {
             Tab.entries.forEach { t ->
-                val glow = (1f - kotlin.math.abs(pos - t.ordinal)).coerceIn(0f, 1f)
+                val on by animateFloatAsState(if (t == current) 1f else 0f, tween(220), label = "nav")
                 Column(
                     Modifier.weight(1f).bounceClick(haptic = false) {
                         if (t != current) haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                         onSelect(t)
-                    }.padding(vertical = 6.dp),
+                    }.padding(vertical = 4.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Icon(
-                        t.icon, t.label, tint = lerp(C.Muted, C.Cyan, glow),
-                        modifier = Modifier.size(22.dp).graphicsLayer { val sc = 1f + 0.15f * glow; scaleX = sc; scaleY = sc; translationY = -3f * glow },
-                    )
-                    Text(
-                        t.label.uppercase(esLocale), color = lerp(C.Muted, C.Text, glow), fontFamily = Mono,
-                        fontSize = 9.sp, letterSpacing = 1.sp, modifier = Modifier.padding(top = 3.dp), maxLines = 1,
-                    )
+                    Box(
+                        Modifier.clip(androidx.compose.foundation.shape.CircleShape)
+                            .background(C.Accent.copy(alpha = 0.14f * on))
+                            .padding(horizontal = 16.dp, vertical = 4.dp),
+                    ) { Icon(t.icon, t.label, tint = lerp(C.Muted, C.Accent, on), modifier = Modifier.size(22.dp)) }
+                    Text(t.label, color = lerp(C.Muted, C.Text, on), fontSize = 11.sp, modifier = Modifier.padding(top = 2.dp), maxLines = 1)
                 }
             }
         }
@@ -365,14 +321,10 @@ private fun BalanceDialog(current: Double?, onDismiss: () -> Unit, onSave: (Doub
     val value = NotificationParser.parseNumber(text.trim().removePrefix("-"))?.let { if (text.trim().startsWith("-")) -it else it }
     AlertDialog(
         onDismissRequest = onDismiss,
-        containerColor = C.Deep,
-        shape = chamfer(22.dp),
-        modifier = Modifier.border(1.dp, C.holoSoft, chamfer(22.dp)),
+        containerColor = C.Card,
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(20.dp),
         title = {
-            Column {
-                HudLabel("calibración", C.Cyan)
-                Text("Saldo actual", color = C.Text, fontFamily = Display, fontSize = 20.sp)
-            }
+            Text("Saldo actual", color = C.Text, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
         },
         text = {
             Column {
@@ -388,9 +340,9 @@ private fun BalanceDialog(current: Double?, onDismiss: () -> Unit, onSave: (Doub
         },
         confirmButton = {
             TextButton(enabled = value != null, onClick = { onSave(value!!) }) {
-                Text("GUARDAR", color = C.Cyan, fontFamily = Mono, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
+                Text("Guardar", color = C.Cyan, fontFamily = Mono, fontWeight = FontWeight.Bold)
             }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("CANCELAR", color = C.Muted, fontFamily = Mono, letterSpacing = 2.sp) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancelar", color = C.Muted, fontFamily = Mono) } },
     )
 }

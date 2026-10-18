@@ -54,12 +54,9 @@ import java.time.format.TextStyle as DateTextStyle
 
 @Composable
 fun ScreenTitle(code: String, text: String) {
-    Column(Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 8.dp)) {
-        HudLabel(code, C.Cyan)
-        GlitchText(
-            rememberScramble(text.uppercase(esLocale), text),
-            TextStyle(brush = C.holo, fontFamily = Display, fontWeight = FontWeight.Black, fontSize = 26.sp, letterSpacing = 3.sp),
-        )
+    Column(Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp, top = 24.dp, bottom = 8.dp)) {
+        Text(text, color = C.Text, fontWeight = FontWeight.SemiBold, fontSize = 28.sp)
+        Text(code.replaceFirstChar { it.titlecase(esLocale) }, color = C.Muted, fontSize = 14.sp)
     }
 }
 
@@ -90,7 +87,7 @@ fun MovementsScreen(
                 Pill("Todo", filter == 0) { filter = 0 }
                 Pill("Gastos", filter == 1) { filter = 1 }
                 Pill("Ingresos", filter == 2) { filter = 2 }
-                Pill("⇪ PDF", false, onImport)
+                Pill("Importar PDF", false, onImport)
             }
         }
         if (shown.isEmpty()) item {
@@ -132,10 +129,10 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
     LaunchedEffect(Unit) { grow.animateTo(1f, tween(1200, easing = FastOutSlowInEasing)) }
 
     LazyColumn {
-        item { ScreenTitle("análisis", "Gráficas") }
+        item { ScreenTitle("evolución de los últimos meses", "Gráficas") }
         item {
             SectionCard(Modifier.padding(16.dp).enterStagger(1).holoShimmer(6000, 0.05f)) {
-                HudLabel("entrada vs salida · 6 ciclos")
+                HudLabel("ingresos y gastos · 6 meses")
                 Spacer(Modifier.height(18.dp))
                 Canvas(Modifier.fillMaxWidth().height(200.dp)) {
                     // Rejilla horizontal punteada
@@ -152,21 +149,15 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
                             val local = ((grow.value * 1.6f) - i * 0.12f).coerceIn(0f, 1f)
                             val h = (v / max * size.height).toFloat() * FastOutSlowInEasing.transform(local)
                             val left = if (j == 0) x - barW - 3f else x + 3f
-                            // Halo
-                            drawRoundRect(color.copy(alpha = 0.18f), Offset(left - 4f, size.height - h - 4f), Size(barW + 8f, h + 4f), CornerRadius(6f))
-                            drawRoundRect(
-                                Brush.verticalGradient(listOf(color, color.copy(alpha = 0.15f)), size.height - h, size.height),
-                                Offset(left, size.height - h), Size(barW, h), CornerRadius(4f),
-                            )
-                            if (h > 2f) drawLine(Color.White.copy(alpha = 0.9f), Offset(left, size.height - h), Offset(left + barW, size.height - h), 2f)
+                            drawRoundRect(color.copy(alpha = 0.85f), Offset(left, size.height - h), Size(barW, h), CornerRadius(6f))
                         }
                     }
                 }
                 Row(Modifier.fillMaxWidth().padding(top = 10.dp)) {
                     data.forEach { (ym, _, _) ->
                         Text(
-                            ym.month.getDisplayName(DateTextStyle.SHORT, esLocale).uppercase(esLocale).take(3), color = C.Muted,
-                            fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.sp,
+                            ym.month.getDisplayName(DateTextStyle.SHORT, esLocale).take(3), color = C.Muted,
+                            fontFamily = Mono, fontSize = 12.sp,
                             textAlign = TextAlign.Center, modifier = Modifier.weight(1f),
                         )
                     }
@@ -176,7 +167,7 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
                 }
             }
         }
-        item { HudLabel("resultado por ciclo", modifier = Modifier.padding(start = 20.dp, top = 8.dp, bottom = 4.dp)) }
+        item { HudLabel("resultado por mes", modifier = Modifier.padding(start = 20.dp, top = 8.dp, bottom = 4.dp)) }
         items(data.reversed().withIndex().toList()) { (i, row) ->
             val (ym, inc, exp) = row
             Row(Modifier.enterStagger(2 + i).padding(horizontal = 20.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -192,7 +183,7 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
             val top = thisMonth.groupBy { it.merchant }.mapValues { e -> e.value.sumOf { it.amount } }
                 .entries.sortedByDescending { it.value }.take(5)
             if (top.isNotEmpty()) SectionCard(Modifier.padding(16.dp).enterStagger(8)) {
-                HudLabel("mayores destinos · este ciclo")
+                HudLabel("dónde más gastas este mes")
                 val maxTop = top.first().value
                 top.forEachIndexed { i, (name, v) ->
                     Row(Modifier.padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -215,7 +206,7 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
 private fun Legend(label: String, color: Color) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(8.dp).clip(CutCornerShape(50)).background(color))
-        Text("  " + label.uppercase(esLocale), color = C.Muted, fontFamily = Mono, fontSize = 11.sp, letterSpacing = 1.sp)
+        Text("  " + label, color = C.Muted, fontFamily = Mono, fontSize = 11.sp)
     }
 }
 
@@ -232,7 +223,7 @@ fun SettingsScreen(
 ) {
     var test by remember { mutableStateOf("") }
     LazyColumn {
-        item { ScreenTitle("sistema", "Ajustes") }
+        item { ScreenTitle("captura, saldo y datos", "Ajustes") }
         item {
             SectionCard(Modifier.padding(16.dp).enterStagger(1)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -290,8 +281,8 @@ fun SettingsScreen(
                 Column(Modifier.weight(1f)) {
                     Text(app.label, color = C.Text, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                     Text(
-                        "${app.hits} SEÑALES · ${relativeDay(app.lastSeen).uppercase(esLocale)}",
-                        color = C.Muted, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.sp,
+                        "${app.hits} avisos · ${relativeDay(app.lastSeen)}",
+                        color = C.Muted, fontFamily = Mono, fontSize = 12.sp,
                     )
                 }
                 Switch(

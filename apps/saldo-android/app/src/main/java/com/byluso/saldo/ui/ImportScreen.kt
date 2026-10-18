@@ -40,6 +40,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -138,49 +139,11 @@ fun ImportOverlay(
 
 @Composable
 private fun Reading() {
-    val t = rememberInfiniteTransition(label = "scan")
-    val scan by t.animateFloat(0f, 1f, infiniteRepeatable(tween(1300, easing = LinearEasing), RepeatMode.Reverse), label = "y")
-    val dots by t.animateFloat(0f, 3.99f, infiniteRepeatable(tween(1200, easing = LinearEasing)), label = "dots")
-    val hl by t.animateFloat(0f, 1f, infiniteRepeatable(tween(650, easing = LinearEasing)), label = "hl")
-    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        HudLabel("procesando documento", C.Cyan)
+    Column(Modifier.fillMaxWidth().padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        androidx.compose.material3.CircularProgressIndicator(color = C.Accent, trackColor = C.Track, strokeWidth = 3.dp, modifier = Modifier.size(44.dp))
         Spacer(Modifier.height(18.dp))
-        Canvas(Modifier.size(width = 150.dp, height = 190.dp)) {
-            val w = size.width
-            val h = size.height
-            val fold = 28.dp.toPx()
-            // Hoja con esquina doblada
-            val page = androidx.compose.ui.graphics.Path().apply {
-                moveTo(0f, 0f); lineTo(w - fold, 0f); lineTo(w, fold); lineTo(w, h); lineTo(0f, h); close()
-            }
-            drawPath(page, Brush.verticalGradient(listOf(C.Cyan.copy(alpha = 0.10f), C.Violet.copy(alpha = 0.05f))))
-            drawPath(page, C.holoSoft, style = Stroke(2f))
-            drawLine(C.Cyan.copy(alpha = 0.6f), Offset(w - fold, 0f), Offset(w - fold, fold), 2f)
-            drawLine(C.Cyan.copy(alpha = 0.6f), Offset(w - fold, fold), Offset(w, fold), 2f)
-            // Filas de "movimientos": se iluminan cuando pasa el haz
-            val rows = 9
-            for (i in 0 until rows) {
-                val y = 42.dp.toPx() + i * (h - 60.dp.toPx()) / rows
-                val near = 1f - (kotlin.math.abs(y / h - scan) * 6f).coerceIn(0f, 1f)
-                val col = if (i % 3 == 1) C.Income else C.Cyan
-                drawRoundRect(C.Line, Offset(14f, y), Size(w * 0.48f, 6f), CornerRadius(3f))
-                drawRoundRect(col.copy(alpha = 0.25f + 0.75f * near), Offset(w * 0.68f, y), Size(w * 0.22f, 6f), CornerRadius(3f))
-            }
-            // Haz de escaneo
-            val y = h * scan
-            drawRect(Brush.verticalGradient(listOf(Color.Transparent, C.Cyan.copy(alpha = 0.25f)), y - 50f, y), Offset(0f, y - 50f), Size(w, 50f))
-            drawLine(C.Cyan, Offset(-10f, y), Offset(w + 10f, y), 3f)
-            drawCircle(Color.White.copy(alpha = 0.6f + 0.4f * hl), 4f, Offset(w * hl, y))
-        }
-        Spacer(Modifier.height(18.dp))
-        Text(
-            "ANALIZANDO EXTRACTO" + ".".repeat(dots.toInt()),
-            color = C.Text, fontFamily = Display, fontWeight = FontWeight.Bold, fontSize = 15.sp, letterSpacing = 2.sp,
-        )
-        Text(
-            "> leyendo columnas · detectando importes y saldos", color = C.Muted, fontFamily = Mono, fontSize = 11.sp,
-            modifier = Modifier.padding(top = 6.dp),
-        )
+        Text("Analizando el extracto…", color = C.Text, fontWeight = FontWeight.Medium, fontSize = 16.sp)
+        Text("Leyendo fechas, importes y saldos", color = C.Muted, fontSize = 13.sp, modifier = Modifier.padding(top = 4.dp))
     }
 }
 
@@ -224,14 +187,14 @@ private fun ColumnScope.PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: 
     // ---- Cabecera compacta
     HudLabel("extracto detectado", C.Cyan)
     GlitchText(
-        (st.bank ?: "Extracto bancario").uppercase(esLocale),
-        TextStyle(brush = C.holo, fontFamily = Display, fontWeight = FontWeight.Black, fontSize = 18.sp, letterSpacing = 1.5.sp),
+        (st.bank ?: "Extracto bancario"),
+        TextStyle(color = C.Text, fontWeight = FontWeight.SemiBold, fontSize = 20.sp),
         Modifier.padding(top = 2.dp),
     )
     if (st.from != null && st.to != null) {
         Text(
-            "${shortDate.format(st.from)} → ${longDate.format(st.to)}".uppercase(esLocale),
-            color = C.Muted, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.sp, maxLines = 1,
+            "${shortDate.format(st.from)} → ${longDate.format(st.to)}",
+            color = C.Muted, fontFamily = Mono, fontSize = 12.sp, maxLines = 1,
         )
     }
     Spacer(Modifier.height(10.dp))
@@ -256,7 +219,7 @@ private fun ColumnScope.PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: 
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("NUEVO SALDO", color = C.Muted, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.5.sp, modifier = Modifier.weight(1f), maxLines = 1)
+            Text("Nuevo saldo", color = C.Muted, fontFamily = Mono, fontSize = 12.sp, modifier = Modifier.weight(1f), maxLines = 1)
             GlowText(euros(bal, hide = hide), C.Cyan, 15.sp)
         }
     }
@@ -276,15 +239,15 @@ private fun ColumnScope.PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: 
                     .padding(10.dp)
             ) {
                 Text(
-                    "⚠ ${st.unrecognized.size} líneas con importes sin reconocer · ${if (showUnrecognized) "ocultar" else "ver"}".uppercase(esLocale),
-                    color = C.Magenta, fontFamily = Mono, fontSize = 10.sp, letterSpacing = 1.sp,
+                    "⚠ ${st.unrecognized.size} líneas con importes sin reconocer · ${if (showUnrecognized) "ocultar" else "ver"}",
+                    color = C.Magenta, fontFamily = Mono, fontSize = 12.sp,
                 )
                 if (showUnrecognized) {
                     Text(
                         "No se importarán. Si son movimientos, haz captura y envíasela al desarrollador para ajustar el lector.",
                         color = C.Muted, fontSize = 11.sp, modifier = Modifier.padding(vertical = 6.dp),
                     )
-                    st.unrecognized.forEach { Text("> $it", color = C.Text, fontFamily = Mono, fontSize = 10.sp, modifier = Modifier.padding(top = 3.dp)) }
+                    st.unrecognized.forEach { Text("> $it", color = C.Text, fontFamily = Mono, fontSize = 12.sp, modifier = Modifier.padding(top = 3.dp)) }
                 }
             }
         }
@@ -310,8 +273,8 @@ private fun ColumnScope.PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: 
         )
     }
     Text(
-        if (label == null) "CERRAR" else "CANCELAR",
-        color = C.Muted, fontFamily = Mono, fontSize = 12.sp, letterSpacing = 2.sp,
+        if (label == null) "Cerrar" else "Cancelar",
+        color = C.Muted, fontFamily = Mono, fontSize = 12.sp,
         modifier = Modifier.align(Alignment.CenterHorizontally).bounceClick(onClick = onDismiss).padding(horizontal = 24.dp, vertical = 8.dp),
     )
 }
@@ -323,15 +286,14 @@ private fun PrimaryButton(label: String, onClick: () -> Unit) {
         Modifier
             .fillMaxWidth()
             .bounceClick(onClick = onClick)
-            .clip(CutCornerShape(topStart = 12.dp, bottomEnd = 12.dp))
-            .background(C.holo)
-            .holoShimmer(2400, 0.35f)
+            .clip(RoundedCornerShape(14.dp))
+            .background(C.Accent)
             .padding(vertical = 15.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            label.uppercase(esLocale), color = C.Void, fontFamily = Mono, fontWeight = FontWeight.Bold,
-            fontSize = 13.sp, letterSpacing = 1.5.sp, maxLines = 1,
+            label, color = C.OnAccent, fontWeight = FontWeight.SemiBold,
+            fontSize = 15.sp, maxLines = 1,
         )
     }
 }
@@ -340,7 +302,7 @@ private fun PrimaryButton(label: String, onClick: () -> Unit) {
 private fun BigStat(label: String, value: String, color: Color, modifier: Modifier) {
     Column(modifier) {
         GlowText(value, color, 22.sp)
-        Text(label.uppercase(esLocale), color = C.Muted, fontFamily = Mono, fontSize = 9.sp, letterSpacing = 2.sp)
+        Text(label, color = C.Muted, fontFamily = Mono, fontSize = 12.sp)
     }
 }
 
@@ -360,8 +322,8 @@ private fun PreviewRow(l: StatementLine, isNew: Boolean, hide: Boolean, modifier
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
             Text(
-                (shortDate.format(l.date) + " · " + l.category + if (!isNew) " · ya registrado" else "").uppercase(esLocale),
-                color = C.Muted, fontFamily = Mono, fontSize = 9.sp, letterSpacing = 1.sp, maxLines = 1,
+                (shortDate.format(l.date) + " · " + l.category + if (!isNew) " · ya registrado" else ""),
+                color = C.Muted, fontFamily = Mono, fontSize = 12.sp, maxLines = 1,
             )
         }
         Text(
