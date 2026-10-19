@@ -30,7 +30,7 @@ class StatementParserTest {
         assertEquals(4, st.lines.size)
         val (iber, nomina, merca, star) = st.lines
         assertEquals(78.0, iber.amount, 0.001); assertFalse(iber.isIncome)
-        assertEquals("Iberdrola Clientes Sau", iber.merchant); assertEquals("Hogar", iber.category)
+        assertEquals("Iberdrola Clientes Sau", iber.merchant); assertEquals("Suministros", iber.category)
         assertTrue(nomina.isIncome); assertEquals(2200.0, nomina.amount, 0.001)
         assertTrue(nomina.concept.contains("NOMINA OCTUBRE"))
         assertEquals("Mercadona Valencia", merca.merchant); assertEquals("Comida", merca.category)
@@ -138,7 +138,7 @@ class StatementParserTest {
         assertEquals(3, st.lines.size)
         assertEquals(LocalDate.of(2026, 10, 3), st.lines[0].date)
         assertFalse(st.lines[0].isIncome); assertEquals(45.20, st.lines[0].amount, 0.001)
-        assertEquals("Transporte", st.lines[1].category)
+        assertEquals("Gasolina", st.lines[1].category)
         // "TOTAL..." ya no se confunde con una línea de totales
         assertTrue(st.lines[0].merchant.startsWith("Totalenergies"))
         assertTrue(st.lines[2].merchant.startsWith("Total Energies"))

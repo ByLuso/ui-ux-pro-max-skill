@@ -82,11 +82,12 @@ class StatementImporter private constructor(context: Context, private val repo: 
         _state.value = result
     }
 
-    fun confirm() {
+    /** Importa el extracto previsualizado; [account] null = cuenta principal. */
+    fun confirm(account: String? = null) {
         val plan = (_state.value as? ImportState.Preview)?.plan ?: return
         _state.value = ImportState.Reading
         scope.launch {
-            val added = repo.applyImport(plan)
+            val added = repo.applyImport(plan, account?.trim()?.takeIf { it.isNotEmpty() })
             _state.value = ImportState.Done(plan, added)
         }
     }

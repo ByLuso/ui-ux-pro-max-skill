@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byluso.saldo.data.BalanceAnchor
 import com.byluso.saldo.data.Movement
+import com.byluso.saldo.advisor.Spending
 import com.byluso.saldo.parser.Categories
 import java.time.YearMonth
 import kotlin.math.roundToInt
@@ -67,8 +68,9 @@ fun MonthHeader(
     onToggleHide: () -> Unit,
     monthMovements: List<Movement>,
 ) {
-    val income = monthMovements.filter { it.isIncome }.sumOf { it.amount }
-    val expense = monthMovements.filter { !it.isIncome }.sumOf { it.amount }
+    // Sin recargas a otras tarjetas ni traspasos al ahorro: solo ingresos y gastos reales
+    val income = Spending.incomes(monthMovements).sumOf { it.amount }
+    val expense = Spending.expenses(monthMovements).sumOf { it.amount }
     val net = rememberCountUp(income - expense)
 
     Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
@@ -190,7 +192,7 @@ fun HomeScreen(
                     Pill("Ingresos", showIncome) { showIncome = true }
                 }
                 Spacer(Modifier.height(18.dp))
-                val list = monthMovs.filter { it.isIncome == showIncome }
+                val list = if (showIncome) Spending.incomes(monthMovs) else Spending.expenses(monthMovs)
                 val groups = list.groupBy { if (showIncome) it.merchant else it.category }
                     .mapValues { (_, v) -> v.sumOf { it.amount } }
                     .entries.sortedByDescending { it.value }
@@ -221,6 +223,7 @@ fun HomeScreen(
                     color = C.Muted, fontSize = 12.sp, textAlign = TextAlign.Center,
                     modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp),
                 )
+                if (!showIncome) TransfersLine(monthMovs, hide)
                 Spacer(Modifier.height(16.dp))
                 if (groups.isEmpty()) {
                     Text(
@@ -267,6 +270,34 @@ fun HomeScreen(
                 }
             }
             Spacer(Modifier.height(120.dp))
+        }
+    }
+}
+
+/** Recargas a otras tarjetas y traspasos al ahorro del mes, que no se cuentan como gasto. */
+@Composable
+private fun TransfersLine(monthMovs: List<Movement>, hide: Boolean) {
+    val topUps = Spending.topUps(monthMovs)
+    val saved = Spending.toSavings(monthMovs)
+    if (topUps <= 0 && saved <= 0) return
+    val detailed = Spending.hasCardDetail(monthMovs)
+    Column(
+        Modifier.fillMaxWidth().padding(top = 12.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
+            .background(C.CardAlt).padding(12.dp),
+    ) {
+        if (topUps > 0) {
+            Text("💳 Recargas a tarjetas: ${euros(topUps, hide = hide)}", color = C.Text, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+            Text(
+                if (detailed) "No cuentan como gasto: cuento las compras de la tarjeta, que vienen de su extracto."
+                else "Cuentan como gasto hasta que importes el extracto de la tarjeta: entonces verás en qué se gastó.",
+                color = if (detailed) C.Muted else C.Magenta, fontSize = 12.sp,
+            )
+        }
+        if (saved > 0) {
+            Text(
+                "💎 A ahorro o inversión: ${euros(saved, hide = hide)} (no cuenta como gasto)", color = C.Text, fontSize = 13.sp,
+                modifier = Modifier.padding(top = if (topUps > 0) 8.dp else 0.dp),
+            )
         }
     }
 }

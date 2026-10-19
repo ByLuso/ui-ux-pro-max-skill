@@ -89,6 +89,7 @@ import com.byluso.saldo.advisor.Period
 import com.byluso.saldo.advisor.Tip
 import com.byluso.saldo.advisor.Tips
 import com.byluso.saldo.data.Movement
+import com.byluso.saldo.parser.Categories
 import com.byluso.saldo.parser.NotificationParser
 import java.text.Normalizer
 import kotlin.math.atan2
@@ -151,6 +152,7 @@ fun AdvisorScreen(
                             selected = if (selected == g.group) null else g.group
                         }
                     }
+                    TransfersNote(a, hide)
                 }
             }
             item { SavingsCard(a, hide, Modifier.padding(horizontal = 16.dp).enterStagger(4)) }
@@ -449,6 +451,29 @@ private fun DrawScope.ring(
 
 // ================================================================== Partidas
 
+/** Recargas a otras tarjetas y dinero enviado al ahorro: se explican aparte porque no son gasto. */
+@Composable
+private fun TransfersNote(a: Analysis, hide: Boolean) {
+    if (a.topUps <= 0 && a.toSavings <= 0) return
+    Column(Modifier.fillMaxWidth().padding(top = 10.dp).clip(RoundedCornerShape(12.dp)).background(C.CardAlt).padding(12.dp)) {
+        if (a.topUps > 0) {
+            Text("💳 Recargas a tarjetas: ${euros(a.topUps, hide = hide)} al mes", color = C.Text, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+            Text(
+                if (a.topUpsUndetailed) "Sin el extracto de la tarjeta cuentan en Varios. Impórtalo (Movimientos → Importar PDF) y verás en qué se gastó."
+                else "No cuentan como gasto: cuento las compras de la tarjeta con su extracto.",
+                color = if (a.topUpsUndetailed) C.Magenta else C.Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 2.dp),
+            )
+        }
+        if (a.toSavings > 0) {
+            Text(
+                "💎 A ahorro o inversión: ${euros(a.toSavings, hide = hide)} al mes", color = C.Text, fontSize = 13.sp, fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(top = if (a.topUps > 0) 8.dp else 0.dp),
+            )
+            Text("No es gasto: queda dentro de tu ahorro.", color = C.Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 2.dp))
+        }
+    }
+}
+
 @Composable
 private fun GroupRow(g: GroupAnalysis, a: Analysis, hide: Boolean, selected: Boolean, dimmed: Boolean, onClick: () -> Unit) {
     val col = Color(g.group.color)
@@ -501,8 +526,25 @@ private fun GroupRow(g: GroupAnalysis, a: Analysis, hide: Boolean, selected: Boo
             if (!isSavings && actX > idealX) drawLine(C.Expense, Offset(idealX, y), Offset(actX, y), 4f, StrokeCap.Round)
             drawLine(C.Muted, Offset(idealX, 0f), Offset(idealX, size.height), 2f)
         }
+        // Desglose siempre visible: así se ve qué es gasolina, qué peajes, qué parking…
+        if (g.parts.isNotEmpty() && !selected) {
+            Text(
+                g.parts.take(3).joinToString(" · ") { (c, v) -> "${Categories.byName(c).emoji} $c ${euros(v, hide = hide)}" } +
+                    if (g.parts.size > 3) " · +${g.parts.size - 3}" else "",
+                color = C.Muted, fontSize = 12.sp, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                modifier = Modifier.padding(top = 6.dp).graphicsAlpha(fade),
+            )
+        }
         AnimatedVisibility(selected, enter = expandVertically() + fadeIn(), exit = shrinkVertically() + fadeOut()) {
             Column(Modifier.padding(top = 8.dp)) {
+                g.parts.forEach { (c, v) ->
+                    Row(Modifier.padding(vertical = 3.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text("${Categories.byName(c).emoji}  $c", color = C.Text, fontSize = 13.sp, modifier = Modifier.weight(1f), maxLines = 1)
+                        Text(euros(v, hide = hide), color = C.Text, fontSize = 13.sp)
+                        Text(pct(a.pctOfIncome(v)), color = C.Muted, fontSize = 12.sp, modifier = Modifier.padding(start = 10.dp).width(48.dp), textAlign = androidx.compose.ui.text.style.TextAlign.End)
+                    }
+                }
+                if (g.parts.isNotEmpty()) Spacer(Modifier.height(6.dp))
                 Text(g.group.hint, color = C.Muted, fontSize = 12.sp)
                 val d = g.delta
                 Text(

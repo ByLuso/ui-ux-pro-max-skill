@@ -21,6 +21,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ColumnScope
@@ -80,8 +82,9 @@ fun ImportOverlay(
     state: ImportState,
     hide: Boolean,
     onPassword: (String) -> Unit,
-    onConfirm: () -> Unit,
+    onConfirm: (account: String?) -> Unit,
     onDismiss: () -> Unit,
+    accounts: List<String> = emptyList(),
 ) {
     val visible = state !is ImportState.Idle && state !is ImportState.Done
     AnimatedVisibility(visible, enter = fadeIn(tween(250)), exit = fadeOut(tween(250))) {
@@ -124,7 +127,7 @@ fun ImportOverlay(
                     when (s) {
                         ImportState.Reading -> Reading()
                         is ImportState.NeedsPassword -> PasswordStep(s.wrong, onPassword, onDismiss)
-                        is ImportState.Preview -> PreviewStep(s.plan, hide, onConfirm, onDismiss)
+                        is ImportState.Preview -> PreviewStep(s.plan, hide, accounts, onConfirm, onDismiss)
                         is ImportState.Error -> ErrorStep(s.message, onDismiss)
                         else -> Unit
                     }
@@ -176,8 +179,20 @@ private fun PasswordStep(wrong: Boolean, onPassword: (String) -> Unit, onDismiss
 // ---------------------------------------------------------------- Vista previa
 
 @Composable
-private fun ColumnScope.PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+private fun ColumnScope.PreviewStep(
+    plan: ImportPlan, hide: Boolean, accounts: List<String>,
+    onConfirm: (account: String?) -> Unit, onDismiss: () -> Unit,
+) {
     val st = plan.statement
+    // Cuenta del extracto: la principal o una tarjeta aparte (sus movimientos no cambian el saldo principal)
+    val suggested = remember(plan) {
+        accounts.firstOrNull { st.bank != null && it.equals(st.bank, ignoreCase = true) }
+            ?: com.byluso.saldo.data.BankApps.cardAccounts.values.firstOrNull { st.bank != null && it.equals(st.bank, ignoreCase = true) }
+    }
+    var account by remember(plan) { mutableStateOf(suggested) }
+    var typingNew by remember(plan) { mutableStateOf(suggested != null && suggested !in accounts) }
+    var newName by remember(plan) { mutableStateOf(if (suggested != null && suggested !in accounts) suggested else "") }
+    val chosen = if (typingNew) newName.trim().ifEmpty { null } else account
     val fresh = plan.fresh
     val inc = fresh.filter { it.isIncome }.sumOf { it.amount }
     val exp = fresh.filter { !it.isIncome }.sumOf { it.amount }
@@ -209,7 +224,7 @@ private fun ColumnScope.PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: 
             Text(euros(-exp, signed = true, hide = hide), color = C.Expense, fontFamily = Mono, fontSize = 12.sp, maxLines = 1)
         }
     }
-    st.finalBalance?.let { bal ->
+    st.finalBalance?.takeIf { chosen == null }?.let { bal ->
         Row(
             Modifier
                 .padding(top = 10.dp)
@@ -256,16 +271,44 @@ private fun ColumnScope.PreviewStep(plan: ImportPlan, hide: Boolean, onConfirm: 
         }
     }
 
+    // ---- Cuenta o tarjeta del extracto
+    Spacer(Modifier.height(10.dp))
+    Text("¿De qué cuenta o tarjeta es?", color = C.Muted, fontSize = 12.sp)
+    Row(
+        Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(top = 6.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Pill("Cuenta principal", !typingNew && account == null) { typingNew = false; account = null }
+        accounts.forEach { a -> Pill("💳 $a", !typingNew && account == a) { typingNew = false; account = a } }
+        Pill("+ Otra tarjeta", typingNew) { typingNew = true }
+    }
+    if (typingNew) {
+        OutlinedTextField(
+            newName, { newName = it }, Modifier.fillMaxWidth().padding(top = 8.dp), singleLine = true,
+            placeholder = { Text("Nombre: Revolut, tarjeta crédito…", fontSize = 14.sp) },
+            colors = holoFieldColors(), shape = RoundedCornerShape(12.dp),
+        )
+    }
+    if (chosen != null) {
+        Text(
+            "Se guardan como movimientos de $chosen: no cambian el saldo de tu cuenta principal y sustituyen a las recargas en tus gastos.",
+            color = C.Muted, fontSize = 11.sp, modifier = Modifier.padding(top = 6.dp),
+        )
+    }
+
     // ---- Botones fijos abajo, siempre visibles
     Spacer(Modifier.height(12.dp))
     val label = when {
+        typingNew && chosen == null -> null
         fresh.isNotEmpty() -> "Importar ${fresh.size} movimientos"
-        st.finalBalance != null -> "Actualizar saldo"
+        st.finalBalance != null && chosen == null -> "Actualizar saldo"
         else -> null
     }
     if (label != null) {
-        PrimaryButton(label, onConfirm)
+        PrimaryButton(label) { onConfirm(chosen) }
         Spacer(Modifier.height(8.dp))
+    } else if (typingNew && chosen == null) {
+        Text("Escribe el nombre de la tarjeta para importar.", color = C.Muted, fontSize = 12.sp, modifier = Modifier.padding(bottom = 8.dp))
     } else {
         Text(
             "Todos los movimientos de este extracto ya estaban en Saldo.",

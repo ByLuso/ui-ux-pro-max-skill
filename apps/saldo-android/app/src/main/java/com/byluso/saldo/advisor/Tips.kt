@@ -111,6 +111,30 @@ object Tips {
                 personal = true, monthlySaving = discretionary * 0.1, source = CASANOVAS,
             )
         }
+        if (a.topUps > 0) {
+            out += if (a.topUpsUndetailed) Tip(
+                "p-topups", "Planificación", "Recargas a tarjetas: ${e(a.topUps)} al mes sin desglosar",
+                "Mandas ese dinero a otra tarjeta, pero no sé en qué lo gastas. Importa el extracto de esa tarjeta " +
+                    "(Movimientos → Importar PDF y elige la tarjeta) y contaré sus compras en su categoría en vez de la recarga.",
+                personal = true,
+            ) else Tip(
+                "p-topups", "Planificación", "Recargas a tarjetas: ${e(a.topUps)} al mes",
+                "No cuentan como gasto: ya cuento las compras de esa tarjeta en su categoría con su extracto.",
+                personal = true,
+            )
+        }
+        val transport = a.groups.firstOrNull { it.group == BudgetGroup.TRANSPORT }?.parts.orEmpty().toMap()
+        val fuel = transport["Gasolina"] ?: 0.0
+        val tolls = transport["Peajes"] ?: 0.0
+        if (fuel + tolls > 0) {
+            out += Tip(
+                "p-car-costs", "Coche", "Coche: ${e(fuel)} en gasolina y ${e(tolls)} en peajes al mes",
+                (if (tolls > 0) "Los peajes suman ${e(tolls * 12)} al año: compara la ruta sin peaje o un dispositivo de telepeaje con descuento por uso frecuente. " else "") +
+                    (if (fuel > 0) "Para la gasolina, usa una app de precios (las gasolineras low cost suelen salir 10–15 céntimos más baratas por litro) y las tarjetas de descuento de carburante. " else "") +
+                    "Mantener la presión de las ruedas y una conducción suave ahorra hasta un 15 % de combustible.",
+                personal = true, monthlySaving = fuel * 0.1 + tolls * 0.2,
+            )
+        }
         val (n, sum) = a.smallPurchases
         if (n >= 8) {
             out += Tip(
@@ -156,7 +180,7 @@ object Tips {
         BudgetGroup.SUBSCRIPTIONS -> "Quédate solo con las que usas cada semana."
         BudgetGroup.HEALTH -> "Pregunta por genéricos en la farmacia y compara seguros médicos."
         BudgetGroup.SHOPPING -> "Aplica la regla de las 48 horas antes de comprar algo que no necesitas."
-        else -> "Revisa los movimientos sin categoría para saber a dónde va ese dinero."
+        else -> "Revisa seguros, comisiones y los movimientos sin categoría para saber a dónde va ese dinero."
     }
 
     val general: List<Tip> = listOf(

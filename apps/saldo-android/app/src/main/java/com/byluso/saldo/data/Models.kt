@@ -13,6 +13,8 @@ data class Movement(
     val rawText: String? = null,
     /** Saldo que informó el banco tras este movimiento. */
     val balance: Double? = null,
+    /** Tarjeta o cuenta secundaria de la que viene (p. ej. "Revolut"); null = cuenta principal. */
+    val account: String? = null,
 ) {
     val signed: Double get() = if (isIncome) amount else -amount
 }
@@ -33,7 +35,9 @@ object BalanceCalculator {
      * Saldo actual = último saldo conocido (manual o de una notificación)
      * + todos los movimientos posteriores a ese momento.
      */
-    fun current(movements: List<Movement>, manual: BalanceAnchor?): Double? {
+    fun current(all: List<Movement>, manual: BalanceAnchor?): Double? {
+        // Solo la cuenta principal: las demás tarjetas tienen su propio saldo
+        val movements = all.filter { it.account == null }
         val fromMovements = movements.filter { it.balance != null }
             .maxByOrNull { it.timestamp }
             ?.let { BalanceAnchor(it.balance!!, it.timestamp) }

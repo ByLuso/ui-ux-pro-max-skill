@@ -33,6 +33,14 @@ object BankApps {
         "com.google.android.apps.nbu.paisa.user" to "Google Pay",
     )
 
+    /** Tarjetas y cuentas secundarias: sus avisos se guardan aparte y no tocan el saldo principal. */
+    val cardAccounts = mapOf(
+        "com.revolut.revolut" to "Revolut",
+        "de.number26.android" to "N26",
+        "com.transferwise.android" to "Wise",
+        "com.bunq.android" to "bunq",
+    )
+
     /** Carteras de pago: su notificación es "Comercio" + "23,45 € · Visa ••1234",
      *  sin palabras como "compra" o "pago", así que se asume gasto por defecto. */
     val wallets = setOf(

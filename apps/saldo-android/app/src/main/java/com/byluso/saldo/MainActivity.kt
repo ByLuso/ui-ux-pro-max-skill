@@ -192,6 +192,7 @@ private fun SaldoApp(repo: Repository, importer: StatementImporter) {
     }
 
     val balance = BalanceCalculator.current(movements, anchor)
+    val accounts = remember(movements) { movements.mapNotNull { it.account }.distinct().sorted() }
     val openListenerSettings = {
         context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
@@ -267,6 +268,7 @@ private fun SaldoApp(repo: Repository, importer: StatementImporter) {
                     toast = ToastMsg("registro eliminado", it.merchant, C.Expense)
                     editing = null
                 },
+                accounts = accounts,
             )
         }
         if (settingBalance) {
@@ -282,7 +284,8 @@ private fun SaldoApp(repo: Repository, importer: StatementImporter) {
         }
         ImportOverlay(
             state = importState, hide = hide,
-            onPassword = importer::submitPassword, onConfirm = importer::confirm, onDismiss = importer::dismiss,
+            onPassword = importer::submitPassword, onConfirm = { importer.confirm(it) }, onDismiss = importer::dismiss,
+            accounts = accounts,
         )
     }
 }

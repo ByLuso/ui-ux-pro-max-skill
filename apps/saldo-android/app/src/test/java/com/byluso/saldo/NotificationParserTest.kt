@@ -48,7 +48,7 @@ class NotificationParserTest {
         val r = p("Revolut", "Pagaste €12.50 en Uber")
         assertEquals(12.50, r.amount, 0.001)
         assertFalse(r.isIncome)
-        assertEquals("Transporte", r.category)
+        assertEquals("Taxi y VTC", r.category)
     }
 
     @Test fun bizumReceived() {
@@ -138,7 +138,7 @@ class NotificationParserTest {
         assertEquals(45.0, r.amount, 0.001)
         assertFalse(r.isIncome)
         assertEquals("Iberdrola Clientes", r.merchant)
-        assertEquals("Hogar", r.category)
+        assertEquals("Suministros", r.category)
     }
 
     @Test fun unicajaTransferIn() {

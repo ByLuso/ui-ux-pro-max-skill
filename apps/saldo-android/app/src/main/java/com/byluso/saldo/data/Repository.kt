@@ -22,7 +22,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import kotlin.math.roundToLong
 
-private class Db(context: Context) : SQLiteOpenHelper(context, "saldo.db", null, 1) {
+private class Db(context: Context) : SQLiteOpenHelper(context, "saldo.db", null, 2) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """CREATE TABLE movements(
@@ -34,7 +34,8 @@ private class Db(context: Context) : SQLiteOpenHelper(context, "saldo.db", null,
                 timestamp INTEGER NOT NULL,
                 source_app TEXT,
                 raw_text TEXT,
-                balance REAL)"""
+                balance REAL,
+                account TEXT)"""
         )
         db.execSQL("CREATE INDEX idx_mov_ts ON movements(timestamp)")
         db.execSQL(
@@ -47,7 +48,9 @@ private class Db(context: Context) : SQLiteOpenHelper(context, "saldo.db", null,
         )
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) = Unit
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion < 2) db.execSQL("ALTER TABLE movements ADD COLUMN account TEXT")
+    }
 }
 
 /** Fuente única de datos de la app. Los listados se exponen como StateFlow para Compose. */
@@ -75,7 +78,32 @@ class Repository private constructor(context: Context) {
     }
 
     init {
-        scope.launch { reload() }
+        scope.launch {
+            refineCategories()
+            reload()
+        }
+    }
+
+    /** Reclasifica una vez los movimientos guardados con las categorías nuevas (gasolina, peajes, recargas…). */
+    private fun refineCategories() {
+        if (prefs.getInt("categories_version", 1) >= CATEGORIES_VERSION) return
+        val w = db.writableDatabase
+        val changes = w.rawQuery("SELECT id, merchant, category, raw_text, is_income FROM movements", null).use { c ->
+            buildList {
+                while (c.moveToNext()) {
+                    val next = Categories.refine(c.getString(2), c.getString(1), c.getString(3), c.getInt(4) == 1)
+                    if (next != null) add(c.getLong(0) to next)
+                }
+            }
+        }
+        w.beginTransaction()
+        try {
+            for ((id, cat) in changes) w.update("movements", ContentValues().apply { put("category", cat) }, "id = ?", arrayOf(id.toString()))
+            w.setTransactionSuccessful()
+        } finally {
+            w.endTransaction()
+        }
+        prefs.edit().putInt("categories_version", CATEGORIES_VERSION).apply()
     }
 
     // ---------- Movimientos ----------
@@ -90,6 +118,7 @@ class Repository private constructor(context: Context) {
             put("source_app", m.sourceApp)
             put("raw_text", m.rawText)
             if (m.balance != null) put("balance", m.balance) else putNull("balance")
+            if (m.account != null) put("account", m.account) else putNull("account")
         }
         if (m.id == 0L) db.writableDatabase.insert("movements", null, values)
         else db.writableDatabase.update("movements", values, "id = ?", arrayOf(m.id.toString()))
@@ -165,9 +194,11 @@ class Repository private constructor(context: Context) {
             return false
         }
 
+        val account = BankApps.cardAccounts[pkg]
         if (parsed.category == Categories.BALANCE_ONLY) {
-            writeAnchor(BalanceAnchor(parsed.balance!!, postTime))
-            return true
+            // El saldo de otra tarjeta no es el de la cuenta principal
+            if (account == null) writeAnchor(BalanceAnchor(parsed.balance!!, postTime))
+            return account == null
         }
 
         synchronized(this) {
@@ -181,18 +212,25 @@ class Repository private constructor(context: Context) {
             // Un pago con Google Wallet genera dos avisos: el de Wallet y el del banco.
             // Si otra app ya registró el mismo importe hace menos de 5 minutos, es el mismo
             // movimiento: solo aprovechamos el saldo si este aviso lo trae.
-            val twinId = db.readableDatabase.rawQuery(
-                """SELECT id FROM movements WHERE source_app IS NOT NULL AND source_app != ?
+            val twin = db.readableDatabase.rawQuery(
+                """SELECT id, account FROM movements WHERE source_app IS NOT NULL AND source_app != ?
                    AND is_income = ? AND ABS(amount - ?) < 0.005 AND ABS(timestamp - ?) < 300000
                    ORDER BY ABS(timestamp - ?) LIMIT 1""",
                 arrayOf(pkg, if (parsed.isIncome) "1" else "0", parsed.amount.toString(), postTime.toString(), postTime.toString()),
-            ).use { if (it.moveToFirst()) it.getLong(0) else null }
-            if (twinId != null) {
-                if (parsed.balance != null) {
-                    db.writableDatabase.update(
-                        "movements", ContentValues().apply { put("balance", parsed.balance) },
-                        "id = ?", arrayOf(twinId.toString()),
-                    )
+            ).use { if (it.moveToFirst()) it.getLong(0) to it.getString(1) else null }
+            if (twin != null) {
+                val (twinId, twinAccount) = twin
+                val values = ContentValues()
+                // Pago con Wallet y aviso de Revolut: el movimiento es de la tarjeta Revolut
+                if (account != null && twinAccount == null) {
+                    values.put("account", account)
+                    values.putNull("balance")
+                } else if (parsed.balance != null) {
+                    if (account == twinAccount) values.put("balance", parsed.balance)
+                    else if (account == null) writeAnchor(BalanceAnchor(parsed.balance, postTime))
+                }
+                if (values.size() > 0) {
+                    db.writableDatabase.update("movements", values, "id = ?", arrayOf(twinId.toString()))
                     scope.launch { reload() }
                 }
                 return false
@@ -207,6 +245,7 @@ class Repository private constructor(context: Context) {
                 put("source_app", pkg)
                 put("raw_text", full)
                 if (parsed.balance != null) put("balance", parsed.balance) else putNull("balance")
+                if (account != null) put("account", account)
             }
             db.writableDatabase.insert("movements", null, values)
         }
@@ -230,6 +269,7 @@ class Repository private constructor(context: Context) {
         val fresh = mutableListOf<StatementLine>()
         val dups = mutableListOf<StatementLine>()
         val balanceUpdates = mutableListOf<Pair<Long, Double>>()
+        val matched = mutableListOf<Long>()
         for (l in st.lines) {
             val match = listOf(l.date, l.date.minusDays(1), l.date.plusDays(1)).firstNotNullOfOrNull { d ->
                 pool[key(d, l.amount, l.isIncome)]?.removeFirstOrNull()
@@ -237,14 +277,18 @@ class Repository private constructor(context: Context) {
             if (match == null) fresh += l
             else {
                 dups += l
+                matched += match.id
                 if (l.balance != null) balanceUpdates += match.id to l.balance
             }
         }
-        return ImportPlan(st, fresh, dups, balanceUpdates)
+        return ImportPlan(st, fresh, dups, balanceUpdates, matched)
     }
 
-    /** Guarda los movimientos nuevos del extracto y aplica sus saldos. Devuelve cuántos se añadieron. */
-    suspend fun applyImport(plan: ImportPlan): Int = withContext(Dispatchers.IO) {
+    /**
+     * Guarda los movimientos nuevos del extracto y aplica sus saldos. Devuelve cuántos se añadieron.
+     * Con [account] (otra tarjeta o cuenta) los movimientos se guardan aparte y no cambian el saldo principal.
+     */
+    suspend fun applyImport(plan: ImportPlan, account: String? = null): Int = withContext(Dispatchers.IO) {
         val zone = ZoneId.systemDefault()
         val w = db.writableDatabase
         w.beginTransaction()
@@ -263,10 +307,21 @@ class Repository private constructor(context: Context) {
                     put("source_app", SOURCE_PDF)
                     put("raw_text", l.raw)
                     if (l.balance != null) put("balance", l.balance) else putNull("balance")
+                    if (account != null) put("account", account)
                 })
             }
-            for ((id, bal) in plan.balanceUpdates) {
-                w.update("movements", ContentValues().apply { put("balance", bal) }, "id = ?", arrayOf(id.toString()))
+            if (account == null) {
+                for ((id, bal) in plan.balanceUpdates) {
+                    w.update("movements", ContentValues().apply { put("balance", bal) }, "id = ?", arrayOf(id.toString()))
+                }
+            } else {
+                // Lo que ya estaba (p. ej. avisado por Google Wallet) resulta ser de esta tarjeta
+                for (id in plan.matchedIds) {
+                    w.update(
+                        "movements", ContentValues().apply { put("account", account); putNull("balance") },
+                        "id = ? AND account IS NULL", arrayOf(id.toString()),
+                    )
+                }
             }
             w.setTransactionSuccessful()
         } finally {
@@ -310,12 +365,15 @@ class Repository private constructor(context: Context) {
             sourceApp = getString(getColumnIndexOrThrow("source_app")),
             rawText = getString(getColumnIndexOrThrow("raw_text")),
             balance = if (isNull(balIdx)) null else getDouble(balIdx),
+            account = getColumnIndex("account").takeIf { it >= 0 && !isNull(it) }?.let { getString(it) },
         )
     }
 
     companion object {
         /** Marca de los movimientos importados desde un extracto PDF. */
         const val SOURCE_PDF = "pdf"
+        /** Sube al cambiar las categorías para reclasificar lo guardado. */
+        private const val CATEGORIES_VERSION = 2
 
         @Volatile private var instance: Repository? = null
         fun get(context: Context): Repository =

@@ -25,15 +25,15 @@ enum class BudgetGroup(
     val categories: Set<String>,
     val hint: String,
 ) {
-    HOUSING("Vivienda", "🏠", 0xFF7F8FB8, 30, setOf("Hogar"), "Alquiler o hipoteca, luz, agua, gas, comunidad e internet."),
+    HOUSING("Vivienda", "🏠", 0xFF7F8FB8, 30, setOf("Hogar", "Suministros"), "Alquiler o hipoteca, comunidad, luz, agua y gas."),
     FOOD("Comida", "🛒", 0xFFC9A46E, 12, setOf("Comida"), "Supermercado y alimentación en casa."),
-    TRANSPORT("Transporte y coche", "🚗", 0xFF6FA2AF, 10, setOf("Transporte"), "Gasolina, seguro, cuota del coche, transporte público, parking."),
+    TRANSPORT("Transporte y coche", "🚗", 0xFF6FA2AF, 10, setOf("Gasolina", "Peajes", "Parking", "Coche", "Taxi y VTC", "Transporte"), "Gasolina, peajes, parking, taller e ITV, taxi y transporte público."),
     DINING("Restaurantes", "🍔", 0xFFC98E8E, 5, setOf("Restaurantes"), "Comer fuera, cafés y comida a domicilio."),
-    LEISURE("Ocio", "🎮", 0xFFA08FBF, 5, setOf("Ocio"), "Cine, viajes, gimnasio, conciertos, hobbies."),
-    SUBSCRIPTIONS("Suscripciones", "📺", 0xFF7FAFC6, 2, setOf("Suscripciones"), "Streaming, música, móvil y servicios digitales."),
+    LEISURE("Ocio y viajes", "🎮", 0xFFA08FBF, 5, setOf("Ocio", "Viajes", "Deporte", "Estanco y apuestas"), "Cine, viajes, gimnasio, conciertos, hobbies."),
+    SUBSCRIPTIONS("Suscripciones y móvil", "📺", 0xFF7FAFC6, 2, setOf("Suscripciones", "Telefonía e internet"), "Streaming, música, móvil, fibra y servicios digitales."),
     HEALTH("Salud", "💊", 0xFF8DBFB0, 3, setOf("Salud"), "Farmacia, seguro médico, dentista, óptica."),
-    SHOPPING("Ropa y compras", "🛍️", 0xFFCDB57E, 5, setOf("Ropa", "Compras"), "Ropa, tecnología y compras online."),
-    OTHER("Otros", "📦", 0xFFA4AAA6, 8, setOf("Efectivo", "Bizum", "Otros"), "Efectivo, Bizum y gastos sin clasificar."),
+    SHOPPING("Ropa y compras", "🛍️", 0xFFCDB57E, 5, setOf("Ropa", "Compras", "Cuidado personal"), "Ropa, tecnología, compras online, peluquería y cosmética."),
+    OTHER("Varios", "📦", 0xFFA4AAA6, 8, setOf("Seguros", "Impuestos y tasas", "Comisiones", "Educación", "Mascotas", "Efectivo", "Bizum", "Transferencias", Categories.TOP_UP, "Otros"), "Seguros, impuestos, comisiones, educación, mascotas, efectivo, Bizum y recargas sin desglosar."),
     SAVINGS("Ahorro", "💎", 0xFF5E9C82, 20, emptySet(), "Fondo de emergencia, objetivos e inversión."),
     ;
 
@@ -73,6 +73,8 @@ data class GroupAnalysis(
     val recommended: Double,
     /** € al mes reales (en el ahorro: lo que sobra). */
     val actual: Double,
+    /** Desglose por categoría (€ al mes), de mayor a menor. */
+    val parts: List<Pair<String, Double>> = emptyList(),
 ) {
     val recommendedPct: Double get() = group.recommendedPct.toDouble()
     /** Diferencia en € (positivo = te pasas; en ahorro, positivo = ahorras de más). */
@@ -116,6 +118,12 @@ data class Analysis(
     val subscriptions: List<Pair<String, Double>>,
     val smallPurchases: Pair<Int, Double>,
     val movementsInPeriod: Int,
+    /** Recargas a otras tarjetas al mes (no son gasto si tienes su extracto). */
+    val topUps: Double = 0.0,
+    /** Meses del periodo con recargas pero sin el extracto de la tarjeta. */
+    val topUpsUndetailed: Boolean = false,
+    /** Enviado a ahorro o inversión al mes. */
+    val toSavings: Double = 0.0,
 ) {
     val savings: Double get() = income - expenses
     val savingsPct: Double get() = if (income > 0) savings / income * 100 else 0.0
@@ -144,7 +152,7 @@ object FinanceAdvisor {
      * si no, los ingresos de un mismo pagador que se repiten en meses distintos con importe parecido.
      */
     fun salaryMovements(movements: List<Movement>, zone: ZoneId = ZoneId.systemDefault()): List<Movement> {
-        val incomes = movements.filter { it.isIncome }
+        val incomes = movements.filter { it.isIncome && !Categories.isTransfer(it.category) }
         val explicit = incomes.filter {
             it.category == Categories.SALARY ||
                 Categories.salaryWords.containsMatchIn(it.merchant) || Categories.salaryWords.containsMatchIn(it.rawText ?: "")
@@ -208,16 +216,23 @@ object FinanceAdvisor {
         val inP = movements.filter { ym(it) in months }
         val from = months.first().atDay(1)
         val to = months.last().atEndOfMonth().let { if (it.isAfter(today)) today else it }
-        val otherIncome = inP.filter { it.isIncome && it !in salaryIds }.sumOf { it.amount } / n
-        val expenseMovs = inP.filter { !it.isIncome }
+        val byMonth = months.map { m -> inP.filter { ym(it) == m } }
+        val otherIncome = byMonth.sumOf { list -> Spending.incomes(list).filter { it !in salaryIds }.sumOf { it.amount } } / n
+        val expenseMovs = byMonth.flatMap { Spending.expenses(it) }
         val byGroup = expenseMovs.groupBy { BudgetGroup.of(it.category) }.mapValues { e -> e.value.sumOf { it.amount } / n }
+        val partsByGroup = expenseMovs.groupBy { BudgetGroup.of(it.category) }.mapValues { e ->
+            e.value.groupBy { it.category }.map { (c, l) -> c to l.sumOf { it.amount } / n }.sortedByDescending { it.second }
+        }
+        val topUps = byMonth.sumOf { Spending.topUps(it) } / n
+        val topUpsUndetailed = byMonth.any { Spending.topUps(it) > 0 && !Spending.hasCardDetail(it) }
+        val toSavings = byMonth.sumOf { Spending.toSavings(it) } / n
         val expenses = byGroup.values.sum()
         val months_ = n
 
         val groups = BudgetGroup.entries.map { g ->
             val rec = income * g.recommendedPct / 100
             val act = if (g == BudgetGroup.SAVINGS) max(0.0, income - expenses) else byGroup[g] ?: 0.0
-            GroupAnalysis(g, rec, act)
+            GroupAnalysis(g, rec, act, partsByGroup[g].orEmpty())
         }
 
         // Vivienda: alquiler o cuota de hipoteca ≤ 30 % de la nómina
@@ -248,7 +263,7 @@ object FinanceAdvisor {
             .sumOf { byGroup[it] ?: 0.0 }
         val emergencyTarget = 6 * max(essential, expenses * 0.7).let { if (it > 0) it else income * 0.6 }
 
-        val subs = expenseMovs.filter { it.category == "Suscripciones" }
+        val subs = expenseMovs.filter { it.category == "Suscripciones" || it.category == "Telefonía e internet" }
             .groupBy { it.merchant }.mapValues { e -> e.value.sumOf { it.amount } / months_ }
             .entries.sortedByDescending { it.value }.map { it.key to it.value }
         val small = expenseMovs.filter { it.amount < 6.0 }
@@ -256,6 +271,7 @@ object FinanceAdvisor {
         val analysis = Analysis(
             period, from, to, income, source, note, otherIncome, expenses, groups, balance, emergencyTarget,
             housing, car, null, subs, small.size to small.sumOf { it.amount }, inP.size,
+            topUps, topUpsUndetailed, toSavings,
         )
         return analysis.copy(score = score(analysis))
     }

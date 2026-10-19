@@ -280,7 +280,7 @@ fun MovementRow(m: Movement, hide: Boolean, onClick: () -> Unit) {
         Column(Modifier.weight(1f).padding(horizontal = 14.dp)) {
             Text(m.merchant, color = C.Text, fontSize = 16.sp, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(
-                relativeDay(m.timestamp) + " · " + m.category + when (m.sourceApp) {
+                relativeDay(m.timestamp) + " · " + m.category + (m.account?.let { " · 💳 $it" } ?: "") + when (m.sourceApp) {
                     null -> ""
                     Repository.SOURCE_PDF -> " · extracto"
                     else -> " · automático"
@@ -343,12 +343,14 @@ fun MovementDialog(
     onDismiss: () -> Unit,
     onSave: (Movement) -> Unit,
     onDelete: ((Movement) -> Unit)? = null,
+    accounts: List<String> = emptyList(),
 ) {
     var isIncome by remember { mutableStateOf(initial?.isIncome ?: false) }
     var amount by remember { mutableStateOf(initial?.amount?.let { euros(it).removeSuffix(" €") } ?: "") }
     var merchant by remember { mutableStateOf(initial?.merchant ?: "") }
     var category by remember { mutableStateOf(initial?.category ?: Categories.OTHER) }
     var confirmDelete by remember { mutableStateOf(false) }
+    var account by remember { mutableStateOf(initial?.account) }
 
     val parsedAmount = NotificationParser.parseNumber(amount.trim())
     AlertDialog(
@@ -363,9 +365,10 @@ fun MovementDialog(
                     Pill("Ingreso", isIncome) { isIncome = true; if (!Categories.isIncomeCategory(category)) category = Categories.INCOME }
                 }
                 if (isIncome) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Pill("💼 Nómina", category == Categories.SALARY) { category = Categories.SALARY }
                         Pill("Otro ingreso", category == Categories.INCOME) { category = Categories.INCOME }
+                        Pill("💳 Recarga o traspaso", category == Categories.TOP_UP) { category = Categories.TOP_UP }
                     }
                     Text(
                         "Los cálculos del Asesor se hacen sobre los ingresos marcados como nómina.",
@@ -398,6 +401,14 @@ fun MovementDialog(
                         }
                     }
                 }
+                val accountOptions = (accounts + listOfNotNull(initial?.account)).distinct()
+                if (accountOptions.isNotEmpty()) {
+                    Text("Cuenta o tarjeta", color = C.Muted, fontSize = 12.sp)
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Pill("Principal", account == null) { account = null }
+                        accountOptions.forEach { a -> Pill("💳 $a", account == a) { account = a } }
+                    }
+                }
                 initial?.rawText?.let {
                     Text("Texto original", color = C.Muted, fontSize = 12.sp)
                     Text(it, color = C.Muted, fontSize = 12.sp)
@@ -416,7 +427,8 @@ fun MovementDialog(
                         base.copy(
                             amount = parsedAmount!!, isIncome = isIncome,
                             merchant = merchant.ifBlank { if (isIncome) "Ingreso" else "Gasto" },
-                            category = if (isIncome) (if (category == Categories.SALARY) Categories.SALARY else Categories.INCOME) else category,
+                            category = if (isIncome) (if (category == Categories.SALARY || category == Categories.TOP_UP) category else Categories.INCOME) else category,
+                            account = account,
                         )
                     )
                 },

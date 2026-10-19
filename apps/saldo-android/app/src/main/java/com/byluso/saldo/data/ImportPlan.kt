@@ -12,4 +12,6 @@ data class ImportPlan(
     val duplicates: List<StatementLine>,
     /** Saldos del extracto que se aplicarán a movimientos ya existentes (id, saldo). */
     val balanceUpdates: List<Pair<Long, Double>>,
+    /** Ids de los movimientos ya registrados que coinciden con una línea del extracto. */
+    val matchedIds: List<Long> = emptyList(),
 )

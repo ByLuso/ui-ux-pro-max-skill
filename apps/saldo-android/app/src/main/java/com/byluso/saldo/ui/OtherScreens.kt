@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byluso.saldo.data.Movement
 import com.byluso.saldo.data.SourceApp
+import com.byluso.saldo.advisor.Spending
 import com.byluso.saldo.parser.Categories
 import com.byluso.saldo.parser.NotificationParser
 import java.time.YearMonth
@@ -121,7 +122,7 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
     val months = (5 downTo 0).map { now.minusMonths(it.toLong()) }
     val data = months.map { ym ->
         val list = movements.filter { ym.contains(it.timestamp) }
-        Triple(ym, list.filter { it.isIncome }.sumOf { it.amount }, list.filter { !it.isIncome }.sumOf { it.amount })
+        Triple(ym, Spending.incomes(list).sumOf { it.amount }, Spending.expenses(list).sumOf { it.amount })
     }
     val max = data.maxOf { maxOf(it.second, it.third) }.takeIf { it > 0 } ?: 1.0
     val preview = LocalInspectionMode.current
@@ -179,7 +180,7 @@ fun ChartsScreen(movements: List<Movement>, hide: Boolean) {
             }
         }
         item {
-            val thisMonth = movements.filter { now.contains(it.timestamp) && !it.isIncome }
+            val thisMonth = Spending.expenses(movements.filter { now.contains(it.timestamp) })
             val top = thisMonth.groupBy { it.merchant }.mapValues { e -> e.value.sumOf { it.amount } }
                 .entries.sortedByDescending { it.value }.take(5)
             if (top.isNotEmpty()) SectionCard(Modifier.padding(16.dp).enterStagger(8)) {

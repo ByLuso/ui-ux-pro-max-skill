@@ -42,6 +42,13 @@ anillos que se dibujan, contadores). Modo claro y oscuro según el sistema.
   vivienda (alquiler, hipoteca, precio y entrada) y coche (regla 20/4/10), y más de 70 consejos
   con buscador y filtros, los primeros personalizados con tus números. Parte de ellos se basan en
   el discurso de M. Casanovas sobre asesoramiento financiero (RACEF, 2017), citado en cada consejo.
+- **Categorías**: más de 30 (gasolina, peajes, parking, taller/ITV, taxi, transporte público,
+  viajes, luz y agua, telefonía, seguros, impuestos, comisiones, peluquería, mascotas…) para que
+  apenas quede nada en "Otros". Lo ya guardado se reclasifica solo una vez al actualizar.
+- **Varias tarjetas y cuentas**: al importar un extracto eliges si es de la cuenta principal o de
+  otra tarjeta (Revolut, crédito…). Las recargas a tarjetas y los traspasos al ahorro no cuentan
+  como gasto cuando hay extracto de la tarjeta ese mes; sin él, la recarga cuenta para no perder
+  ese dinero. Los avisos de Revolut, N26, Wise y bunq se guardan en su propia tarjeta.
 - **Inicio**: mes con ingresos, gastos y balance; donut de gastos por grupo (en % de tu nómina); últimos movimientos.
 - **Movimientos**: lista por días con filtros; toca uno para editarlo, cambiar la categoría o borrarlo.
 - **Gráficas**: ingresos vs gastos de los últimos 6 meses y dónde más gastas.
