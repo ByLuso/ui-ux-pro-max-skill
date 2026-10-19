@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.byluso.saldo.parser.Categories
 import com.byluso.saldo.parser.Statement
 import com.byluso.saldo.parser.StatementLine
+import com.byluso.saldo.parser.StatementParser
 import com.byluso.saldo.parser.NotificationParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -79,9 +80,44 @@ class Repository private constructor(context: Context) {
 
     init {
         scope.launch {
+            repairTimeMerchants()
             refineCategories()
             reload()
         }
+    }
+
+    /**
+     * Arregla los movimientos importados de extractos de tarjeta en los que el lector anterior
+     * tomó la hora ("14:14") como nombre del comercio: se vuelve a leer su línea original.
+     */
+    private fun repairTimeMerchants() {
+        if (prefs.getBoolean("time_merchants_fixed", false)) return
+        val w = db.writableDatabase
+        val fixes = w.rawQuery(
+            "SELECT id, raw_text FROM movements WHERE source_app = ? AND raw_text IS NOT NULL", arrayOf(SOURCE_PDF),
+        ).use { c ->
+            buildList {
+                while (c.moveToNext()) {
+                    val id = c.getLong(0)
+                    val raw = c.getString(1)
+                    val line = runCatching { StatementParser.parse(raw).lines.singleOrNull() }.getOrNull() ?: continue
+                    add(Triple(id, line.merchant, line.category))
+                }
+            }
+        }
+        val bad = w.rawQuery("SELECT id FROM movements WHERE source_app = ? AND merchant GLOB '[0-9]*:[0-9][0-9]*'", arrayOf(SOURCE_PDF))
+            .use { c -> buildSet { while (c.moveToNext()) add(c.getLong(0)) } }
+        w.beginTransaction()
+        try {
+            for ((id, merchant, category) in fixes) {
+                if (id !in bad) continue
+                w.update("movements", ContentValues().apply { put("merchant", merchant); put("category", category) }, "id = ?", arrayOf(id.toString()))
+            }
+            w.setTransactionSuccessful()
+        } finally {
+            w.endTransaction()
+        }
+        prefs.edit().putBoolean("time_merchants_fixed", true).apply()
     }
 
     /** Reclasifica una vez los movimientos guardados con las categorías nuevas (gasolina, peajes, recargas…). */

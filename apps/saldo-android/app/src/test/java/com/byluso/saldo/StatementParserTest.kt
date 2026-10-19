@@ -156,4 +156,31 @@ class StatementParserTest {
         assertEquals(1, st.lines.size)
         assertEquals(listOf("Movimiento raro sin fecha 15,00"), st.unrecognized)
     }
+
+    /** Extracto de tarjeta de Unicaja: el concepto va delante de la fecha y la hora detrás. */
+    @Test fun unicajaCardConceptBeforeDateWithTime() {
+        val text = """
+            Unicaja · Movimientos de tarjeta
+            NETFLIX.COM DOMI-DEVOLUCION 07/10/2026 - 00:00 21,99 EUR
+            NORAUTO 00302 TEF COMPRA 06/10/2026 - 14:14 -18,99 EUR
+            TABACOS EXP. N 18 S COMPRA 06/10/2026 - 11:02 -5,50 EUR
+            BP 5 LLAGOS TEF COMPRA 05/10/2026 - 09:30 -40,00 EUR
+            AUTOPISTA AP-7 MALAGA COMPRA 04/10/2026 - 18:45 -7,35 EUR
+            REPSOL 4521 COMPRA 03/10/2026 - 08:12 -35,10 EUR
+        """.trimIndent()
+        val st = StatementParser.parse(text, today)
+        assertTrue(st.unrecognized.toString(), st.unrecognized.isEmpty())
+        assertEquals(6, st.lines.size)
+        val byMerchant = st.lines.associateBy { it.merchant }
+        st.lines.forEach { assertFalse(it.merchant, it.merchant.contains(":")) }
+        val netflix = byMerchant.getValue("Netflix.com")
+        assertTrue(netflix.isIncome); assertEquals(21.99, netflix.amount, 0.001)
+        assertEquals(LocalDate.of(2026, 10, 7), netflix.date)
+        val norauto = byMerchant.getValue("Norauto")
+        assertFalse(norauto.isIncome); assertEquals(18.99, norauto.amount, 0.001); assertEquals("Coche", norauto.category)
+        assertEquals("Estanco y apuestas", st.lines.first { it.merchant.startsWith("Tabacos") }.category)
+        assertEquals("Gasolina", st.lines.first { it.merchant.startsWith("Bp") }.category)
+        assertEquals("Peajes", st.lines.first { it.merchant.startsWith("Autopista") }.category)
+        assertEquals("Gasolina", byMerchant.getValue("Repsol").category)
+    }
 }

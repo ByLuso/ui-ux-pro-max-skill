@@ -142,7 +142,7 @@ object StatementParser {
         }
 
         for (line in lines) {
-            val date = findDate(line, defaultYear, today, allowOffset = money.containsMatchIn(line))
+            val date = findDate(line, defaultYear, today, money.find(line)?.range?.first)
             if (date == null) {
                 val p = pending
                 if (p != null && money.containsMatchIn(line) && !looksLikeSummary(line)) {
@@ -171,14 +171,21 @@ object StatementParser {
             }
             pending = null
             continuation = 0
-            var rest = line.substring(date.second)
+            var rest = line.substring(date.end)
             // Fecha valor opcional justo detrás de la fecha de operación
             leadingDate(rest.trimStart(), defaultYear, today)?.let { rest = rest.trimStart().substring(it.second) }
+            // Hora de la operación ("06/10/2026 - 14:14"): no forma parte del concepto
+            rest = rest.replace(time, " ")
+            // Formato "CONCEPTO FECHA - HORA IMPORTE" (tarjetas de Unicaja): el concepto va delante de la fecha
+            if (date.concept.isNotEmpty()) {
+                if (looksLikeSummary(date.concept)) continue
+                rest = date.concept + " " + rest.trim().trimStart('-', '|', ':').trim()
+            }
             if (!money.containsMatchIn(rest)) {
-                pending = Triple(date.first, rest.trim(), line)
+                pending = Triple(date.date, rest.trim(), line)
                 continue
             }
-            if (!addRow(date.first, rest, line)) unrecognized += line
+            if (!addRow(date.date, rest, line)) unrecognized += line
         }
 
         inferSigns(rows)
@@ -249,21 +256,38 @@ object StatementParser {
         return null
     }
 
+    /** Fecha encontrada en una línea: dónde acaba y el concepto que la precede (si lo hay). */
+    private class DateHit(val date: LocalDate, val end: Int, val concept: String = "")
+
     /**
-     * Fecha al principio de la línea, o tras una primera columna corta (nº de operación, referencia):
-     * se prueba en el inicio de cada palabra de los primeros 24 caracteres.
+     * Fecha al principio de la línea, o más adelante (antes del primer importe) si la línea tiene importes:
+     * - tras una primera columna corta sin letras (nº de operación, referencia), que se descarta;
+     * - tras el concepto ("NORAUTO 00302 TEF COMPRA 06/10/2026 - 14:14 -18,99 EUR"), que se conserva.
      */
-    private fun findDate(line: String, defaultYear: Int, today: LocalDate, allowOffset: Boolean): Pair<LocalDate, Int>? {
-        leadingDate(line, defaultYear, today)?.let { return it }
-        if (!allowOffset) return null
+    private fun findDate(line: String, defaultYear: Int, today: LocalDate, firstAmount: Int?): DateHit? {
+        leadingDate(line, defaultYear, today)?.let { return DateHit(it.first, it.second) }
+        if (firstAmount == null) return null
         var i = line.indexOf(' ')
-        while (i in 0..23) {
+        while (i in 0 until firstAmount) {
             val start = i + 1
-            leadingDate(line.substring(start), defaultYear, today)?.let { (d, len) -> return d to start + len }
+            leadingDate(line.substring(start), defaultYear, today)?.let { (d, len) ->
+                val prefix = line.substring(0, start).trim()
+                val hasWords = prefix.count { it.isLetter() } >= 3
+                if (hasWords) return DateHit(d, start + len, prefix)
+                if (start <= 24) return DateHit(d, start + len)
+            }
             i = line.indexOf(' ', start)
         }
         return null
     }
+
+    private val time = Regex("""^\s*[-–|]?\s*\d{1,2}:\d{2}(?::\d{2})?(?=\s|$)""")
+
+    /** Tipo de operación que algunos bancos añaden al final del concepto ("TEF COMPRA", "DOMI-DEVOLUCION"). */
+    private val operationSuffix = Regex(
+        """(?:\s+(?:TEF|TPV|DOMI-DEVOLUCI[OÓ]N|DOMI|COMPRA|DEVOLUCI[OÓ]N|DOMICILIACI[OÓ]N|PAGO|CARGO|ABONO|ANULACI[OÓ]N))+$""",
+        RegexOption.IGNORE_CASE,
+    )
 
     private fun looksLikeSummary(line: String) =
         Regex("""saldo|total|suma|p[aá]gina|retenci|comisi[oó]n\s+de\s+mantenimiento\s*:""", RegexOption.IGNORE_CASE).containsMatchIn(line)
@@ -290,6 +314,9 @@ object StatementParser {
         noise.forEach { s = s.replace(it, " ") }
         s = s.replace(Regex("""\s+"""), " ").trim()
         repeat(2) { conceptPrefixes.forEach { p -> s = s.replace(p, "") } }
+        s.replace(operationSuffix, "").trim().takeIf { it.isNotEmpty() }?.let { s = it }
+        // Código de tienda o terminal pegado al comercio ("NORAUTO 00302")
+        s.replace(Regex("""\s+\d{3,5}$"""), "").trim().takeIf { it.isNotEmpty() }?.let { s = it }
         s = s.replace(Regex("""\s+(?:ES|ESP|SPAIN|ESPAÑA)$""", RegexOption.IGNORE_CASE), "")
             .trim().trim('-', ',', '.', ':', '/', '*').trim()
         if (s.isEmpty()) return ""
