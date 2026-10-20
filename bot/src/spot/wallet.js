@@ -25,10 +25,10 @@ export class SpotWallet {
     if (this.events.length > 200) this.events.pop();
   }
 
-  open(c, view, q, eurUsdt) {
+  open(c, view, q, eurUsdt, opts = {}) {
     if (this.positions.has(c.id)) return "ya hay una posición en esta moneda";
     if (this.positions.size >= cfg.paperMaxOpen) return `cartera llena (${cfg.paperMaxOpen} posiciones)`;
-    const eur = Math.min(cfg.paperTradeEur, this.cash);
+    const eur = Math.min(opts.eur || cfg.paperTradeEur, this.cash);
     if (eur < 1) return "sin saldo libre";
     const usd = eur * eurUsdt, slip = slipOf(c, usd), f = feeOf(c);
     const entry = (c.px || view.entry) * (1 + slip);
@@ -36,10 +36,10 @@ export class SpotWallet {
     this.cash -= eur;
     const p = {
       coin: c.id, sym: c.sym, kind: c.kind, t: Date.now(), tEnd: Date.now() + cfg.spot.horizonH * 3600e3, eur, usd, qty, entry, ref: view.entry,
-      stop: view.stop, target: view.target, atr: view.atr, be: false, ev: q.evRaw, evAdj: q.ev, pTP: view.p[0], last: c.px || view.entry,
+      stop: view.stop, target: view.target, atr: view.atr, be: false, ev: q.evRaw, evAdj: q.ev, pTP: view.p[0], last: c.px || view.entry, explore: !!opts.explore,
     };
     this.positions.set(c.id, p);
-    this.event("buy", c.sym, c.id, `compra ${eur.toFixed(2)} € a ${fmtPx(entry)} · objetivo ${fmtPx(p.target)} · stop ${fmtPx(p.stop)} · P(objetivo) ${p.pTP.toFixed(2)} · EV ${pc(q.ev)}`, -eur);
+    this.event("buy", c.sym, c.id, `${p.explore ? "exploración · " : ""}compra ${eur.toFixed(2)} € a ${fmtPx(entry)} · objetivo ${fmtPx(p.target)} · stop ${fmtPx(p.stop)} · P(objetivo) ${p.pTP.toFixed(2)} · EV ${pc(q.ev)}`, -eur);
     this.save();
     return null;
   }
@@ -65,7 +65,7 @@ export class SpotWallet {
     const eur = usd / (eurUsdt || 1.08), pnl = eur - p.eur;
     this.cash += eur;
     this.positions.delete(p.coin);
-    const rec = { t: Date.now(), sym: p.sym, coin: p.coin, kind: p.kind, eur: p.eur, pnl, ret: pnl / p.eur, ev: p.ev, why, hours: (Date.now() - p.t) / 3600e3 };
+    const rec = { t: Date.now(), sym: p.sym, coin: p.coin, kind: p.kind, eur: p.eur, pnl, ret: pnl / p.eur, ev: p.ev, explore: !!p.explore, why, hours: (Date.now() - p.t) / 3600e3 };
     this.closed.push(rec);
     if (this.closed.length > 1000) this.closed.shift();
     this.event("sell", p.sym, p.coin, `vende · ${why} a ${fmtPx(px)} · ${pnl >= 0 ? "+" : ""}${pnl.toFixed(2)} € (${pc(rec.ret)})`, pnl);
@@ -93,7 +93,7 @@ export class SpotWallet {
       closed: cl.length, wins, avg: cl.length ? cl.reduce((s, x) => s + x.ret, 0) / cl.length : null, maxOpen: cfg.paperMaxOpen, tradeEur: cfg.paperTradeEur,
       open: [...this.positions.values()].map((p) => {
         const c = coins.get(p.coin), v = this.value(c, p, eurUsdt);
-        return { coin: p.coin, sym: p.sym, kind: p.kind, t: p.t, eur: p.eur, value: v, pnl: v - p.eur, ret: v / p.eur - 1, px: c ? c.px : p.last, entry: p.entry, stop: p.stop, target: p.target, be: p.be, tEnd: p.tEnd };
+        return { coin: p.coin, sym: p.sym, kind: p.kind, explore: !!p.explore, t: p.t, eur: p.eur, value: v, pnl: v - p.eur, ret: v / p.eur - 1, px: c ? c.px : p.last, entry: p.entry, stop: p.stop, target: p.target, be: p.be, tEnd: p.tEnd };
       }),
       events: this.events.slice(0, 40), curve: this.curve.slice(-500), recent: cl.slice(-30).reverse(), bias: this.bias(),
     };

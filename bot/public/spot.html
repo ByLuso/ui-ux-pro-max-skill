@@ -248,11 +248,17 @@ function render() {
   else if (m.ws !== "conectado") B.push("Sin conexión en tiempo real con Binance: reintentando…");
   if (D.model.labels < D.cfg.minLabels) B.push(`El modelo aún aprende (${D.model.labels}/${D.cfg.minLabels} casos): de momento analiza pero no opera.`);
   if (D.paused) B.push("Las señales están en pausa: analiza y aprende, pero la cartera no compra.");
+  const live = D.list.filter((c) => c.ev != null && !c.guard);
+  if (!D.warm && D.model.labels >= D.cfg.minLabels && live.length && !live.some((c) => c.ev >= D.cfg.evMin)) {
+    const top = live.reduce((a, b) => (b.ev > a.ev ? b : a));
+    B.push(`Ahora ninguna moneda da ventaja para comprar (la mejor, ${top.sym}, ${pct(top.ev)} tras costes; hace falta ${pct(D.cfg.evMin, 0)}). Es lo normal cuando el mercado baja: el bot solo compra, así que espera.` +
+      (D.cfg.explore ? ` Mientras, hace compras de prueba de ${eur(D.cfg.exploreEur)} en las mejores candidatas («exploración») para medir en vivo si el modelo acierta.` : ""));
+  }
   $("banners").innerHTML = B.map((t) => `<div class="banner">${esc(t)}</div>`).join("");
   renderWallet(); renderAgents(); renderRank(); renderLearn();
   $("mood").textContent = `ánimo de las noticias ${m.newsMood.score > 0 ? "+" : ""}${m.newsMood.score} · ${m.newsMood.count} noticias`;
   $("news").innerHTML = D.news.map((n) => `<div><span class="dot" style="background:${n.tone > 0 ? C.green : n.tone < 0 ? C.red : C.faint}"></span><a href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a> <span class="c-dim">· ${esc(n.src)} · ${ago(n.t)}</span></div>`).join("") || `<div class="c-dim">Cargando noticias…</div>`;
-  const K = { entry: ["SEÑAL", "c-gold"], block: ["BLOQUEO", "c-red"], skip: ["SALTO", "c-dim"] };
+  const K = { entry: ["SEÑAL", "c-gold"], explore: ["PRUEBA", "c-blue"], block: ["BLOQUEO", "c-red"], skip: ["SALTO", "c-dim"] };
   $("decT").innerHTML = `<tr><th>hora</th><th>moneda</th><th>decisión</th><th>P(objetivo)</th><th>EV</th><th>motivo</th></tr>` + D.decisions.slice(0, 15).map((x) => `<tr><td class="c-dim">${new Date(x.t).toLocaleTimeString()}</td><td><b class="c-white">${esc(x.sym)}</b> <span class="chip ${KIND[x.kind][1]}">${KIND[x.kind][0]}</span></td><td class="${K[x.dec][1]}">${K[x.dec][0]}</td><td>${x.p[0].toFixed(2)}</td><td style="color:${col(x.ev)}">${pct(x.ev)}</td><td class="c-dim">${esc(x.reason)}</td></tr>`).join("");
   if (!sel && D.list.length) { sel = D.list[0].id; pollDetail(); }
 }
@@ -279,10 +285,10 @@ function renderWallet() {
   $("oCount").textContent = `${w.open.length} abiertas · ${w.closed} cerradas`;
   $("oOpen").innerHTML = w.open.length ? w.open.map((o) => {
     const span = o.target - o.stop, f = (v) => Math.max(0, Math.min(100, ((v - o.stop) / span) * 100));
-    return `<div class="op"><span><b class="c-white">${esc(o.sym)}</b> <span class="chip ${KIND[o.kind][1]}">${KIND[o.kind][0]}</span> <span class="c-dim">· hace ${ago(o.t)} · cierra como tarde en ${ago(2 * Date.now() - o.tEnd).replace("-", "")}</span></span><span class="big2" style="color:${col(o.pnl)}">${eur(o.pnl, true)}</span>
+    return `<div class="op"><span><b class="c-white">${esc(o.sym)}</b> <span class="chip ${KIND[o.kind][1]}">${KIND[o.kind][0]}</span>${o.explore ? ' <span class="chip c-blue" title="compra de prueba: no es una señal">exploración</span>' : ""} <span class="c-dim">· hace ${ago(o.t)} · cierra como tarde en ${ago(2 * Date.now() - o.tEnd).replace("-", "")}</span></span><span class="big2" style="color:${col(o.pnl)}">${eur(o.pnl, true)}</span>
       <span class="c-dim">entrada ${px(o.entry)} → ahora ${px(o.px)} · stop ${px(o.stop)}${o.be ? " (en entrada)" : ""} · objetivo ${px(o.target)}</span><span style="color:${col(o.ret)}">${pct(o.ret)}</span>
       <span class="bar" title="posición entre el stop (izquierda) y el objetivo (derecha)"><i style="left:${f(o.entry)}%;background:${C.dim}"></i><i style="left:${f(o.px)}%;background:${col(o.ret) || C.white}"></i></span></div>`;
-  }).join("") : `<div class="c-dim">Sin posiciones abiertas. Compra cuando una moneda pasa los filtros y su EV supera ${pct(D.cfg.evMin, 0)}.</div>`;
+  }).join("") : `<div class="c-dim">Sin posiciones abiertas. Compra cuando una moneda pasa los filtros y su EV supera ${pct(D.cfg.evMin, 0)}${D.cfg.explore ? `; además prueba con ${eur(D.cfg.exploreEur)} las mejores candidatas` : ""}.</div>`;
   const K = { buy: ["COMPRA", C.gold], sell: ["VENTA", C.blue], move: ["STOP ↑", C.green] };
   $("oEvents").innerHTML = w.events.length ? w.events.map((e) => `<div><span class="c-dim">${new Date(e.t).toLocaleString("es-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span> <span class="ev-k" style="color:${K[e.kind]?.[1] || C.dim}">${K[e.kind]?.[0] || ""}</span><b class="c-white">${esc(e.sym)}</b> <span class="c-dim">${esc(e.txt)}</span></div>`).join("") : `<div class="c-dim">Aún no ha operado.</div>`;
 }

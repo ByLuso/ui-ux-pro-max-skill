@@ -7,12 +7,14 @@ Radar de criptomonedas que corre en **tu computadora**, gratis y en tiempo real.
 ## Radar de Binance + Binance Wallet (modo por defecto)
 
 **Datos, todos gratis y sin claves:**
-- **Binance (exchange):** las 40 monedas con más volumen. Precio en tiempo real por WebSocket (se actualiza cada ~2 s) e historial de velas.
-- **Binance Wallet:** los 30 tokens Alpha de BNB Chain con más volumen y liquidez, según la lista oficial de Binance, con sus velas y precios cada minuto.
+- **Binance (exchange):** las 150 monedas con más volumen (sin stablecoins, oro, copias de BTC/ETH ni acciones tokenizadas). Precio en tiempo real por WebSocket (se actualiza cada ~2 s) e historial de velas.
+- **Binance Wallet:** hasta 100 tokens Alpha de BNB Chain con más volumen (≥ $200K/día) y liquidez (≥ $100K), según la lista oficial de Binance, con sus velas y precios cada minuto.
 - **Noticias:** Cointelegraph, CoinDesk, Decrypt y The Block.
 - **Seguridad de los tokens de BNB Chain:** GoPlus (token trampa, impuestos, creador con mucho supply, liquidez sin bloquear).
 
 **Cómo decide:** al cerrar cada vela de 1 hora, cada moneda recibe 17 señales (cambio en 1/4/24 h, RSI, distancia a las EMA 20 y 50, MACD, volatilidad, volumen, rupturas, Bollinger, cómo va BTC, tono de las noticias…). El modelo estima la probabilidad de llegar antes al **objetivo (+3 ATR)** que al **stop (−2 ATR)** en 72 h. QUANT resta comisiones y deslizamiento; si el beneficio esperado supera +1% y GUARD no ve riesgos, la cartera de prueba compra 5 €. Si el precio avanza 1,5 ATR, el stop sube a la entrada.
+
+**Exploración:** si ninguna moneda llega al EV mínimo (lo normal cuando el mercado baja, porque solo compra), la cartera hace como mucho 2 compras de prueba de 2 € en las mejores candidatas, marcadas como «exploración». No son señales: sirven para medir en vivo si el modelo acierta, y sus resultados corrigen el EV. Se desactiva con `SPOT_EXPLORE=0`.
 
 **Por qué es honesto:**
 - **Aprende del historial al arrancar:** recorre los últimos días hora a hora y, en cada momento, solo sabe lo que ya había pasado. Así empieza con miles de casos y una **prueba con historial** de lo que habría ganado o perdido.

@@ -11,6 +11,9 @@ const WS = "wss://data-stream.binance.vision/stream?streams=";
 const ALPHA = "https://www.binance.com/bapi/defi/v1/public";
 const ALPHA_LIST = `${ALPHA}/wallet-direct/buw/wallet/cex/alpha/all/token/list`;
 const STABLE = /^(USDT|USDC|FDUSD|TUSD|BUSD|DAI|USDP|USD1|EUR|EURI|AEUR|PAXG|XUSD|USDE|BFUSD|RLUSD|USDS|PYUSD)$/;
+// No son criptos con movimiento propio: atadas al dólar/oro, copias de BTC/ETH o acciones tokenizadas (GOOGLB, NVDAB…)
+const PEGGED = /^(U|RWUSD|XAUT|WBTC|WBETH|BETH|BFUSD|USD1)$/;
+const STOCK = /^(GOOGL|QQQ|NVDA|TSLA|TSM|CRCL|SPCX|BNC|MSTR|MU|AMD|DRAM|INTC|CBRS|TQQQ|SNDK|LITE|SKHY|NBIS|AAOI|SOXS|SOXL|SNXX|KORU|AAPL|MSFT|AMZN|META|COIN|HOOD|SPY|PLTR|NFLX)B$/;
 const M15 = 15 * 60000, H1 = 3600000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -49,7 +52,7 @@ export class Market extends EventEmitter {
     const keep = new Set();
     try {
       const all = await getJSON(`${SPOT}/ticker/24hr`);
-      const top = all.filter((t) => t.symbol.endsWith("USDT") && !STABLE.test(t.symbol.slice(0, -4)) && !/(UP|DOWN|BULL|BEAR)USDT$/.test(t.symbol) && +t.count > 0)
+      const top = all.filter((t) => t.symbol.endsWith("USDT") && !STABLE.test(t.symbol.slice(0, -4)) && !PEGGED.test(t.symbol.slice(0, -4)) && !STOCK.test(t.symbol.slice(0, -4)) && !/(UP|DOWN|BULL|BEAR)USDT$/.test(t.symbol) && +t.count > 0)
         .sort((a, b) => b.quoteVolume - a.quoteVolume).slice(0, cfg.spot.topN);
       const want = new Set([...top.map((t) => t.symbol), "BTCUSDT", ...this.watch.filter((w) => w.kind === "cex").map((w) => w.pair)]);
       for (const t of all) if (want.has(t.symbol)) {

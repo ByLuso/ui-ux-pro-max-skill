@@ -16,19 +16,22 @@ import { Calib } from "./calib.js";
 const H1 = 3600000, M15 = 15 * 60000, H = cfg.spot.horizonH * H1;
 const RR = cfg.spot.targetAtr / cfg.spot.stopAtr; // ganancia del objetivo medida en "riesgos" (R)
 const NF = SPOT_SIGNALS.length;
+const VER = 2; // al cambiar, se rehace el aprendizaje inicial con el historial (p. ej. al ampliar la lista de monedas)
+const MATURE = 2000; // casos a partir de los cuales la calibración ya es fiable
 
 // ---------- estado ----------
 const market = new Market();
 const news = new News();
 const wallet = new SpotWallet();
 const saved = loadJSON("spot-model.json", null);
+const fresh = !saved || saved.nf !== NF || loadJSON("spot-backtest.json", null)?.ver !== VER;
 let model = Model.from(saved, NF);
-if (!saved || saved.nf !== NF) { model = new Model(NF); model.tpRet = RR; model.slRet = -1; model.timeRet = 0; } // retornos en R
-const calib = new Calib(saved && saved.nf === NF ? loadJSON("spot-calib.json", null) : null);
+if (fresh) { model = new Model(NF); model.tpRet = RR; model.slRet = -1; model.timeRet = 0; } // retornos en R
+const calib = new Calib(fresh ? null : loadJSON("spot-calib.json", null));
 const views = new Map((loadJSON("spot-views.json", []) || []).map((v) => [v.id, v])); // casos esperando resultado
 const S = {
   started: Date.now(), paused: loadJSON("spot-state.json", {}).paused || false,
-  decisions: [], log: [], backtest: loadJSON("spot-backtest.json", null), sec: new Map(),
+  decisions: [], log: [], backtest: fresh ? null : loadJSON("spot-backtest.json", null), sec: new Map(),
   agents: Object.fromEntries(["SCT", "CHT", "NWS", "ORB", "GRD", "QNT", "EXE"].map((k) => [k, { txt: "esperando…", t: 0, n: 0 }])),
   signalsToday: 0, warm: null,
 };
@@ -94,7 +97,8 @@ function decide(c, hourEnd, live) {
   const ta = analyze(h);
   const bias = evBias().bias;
   const q = quant(c, v, bias);
-  c.last = { t: hourEnd, p: v.p, ev: q.ev, evRaw: q.evRaw, risk: v.risk, stop: v.stop, target: v.target, s, ta: ta ? { score: ta.score, top: ta.signals.slice(0, 3), rsi: ta.rsi } : null };
+  c.view = v;
+  c.last = { t: hourEnd, p: v.p, ev: q.ev, evR: q.evR, evRaw: q.evRaw, risk: v.risk, stop: v.stop, target: v.target, s, ta: ta ? { score: ta.score, top: ta.signals.slice(0, 3), rsi: ta.rsi } : null };
   agent("CHT", `${c.sym}: RSI ${s.rsi.toFixed(0)} · ${s.dEma50 >= 0 ? "sobre" : "bajo"} la EMA 50 · ATR ${(s.atrPct * 100).toFixed(2)}%/h${ta && ta.signals[0] ? " · " + ta.signals[0].txt : ""}`);
   agent("ORB", `${c.sym}: P(objetivo) ${v.p[0].toFixed(2)} · P(stop) ${v.p[1].toFixed(2)} · P(nada en ${cfg.spot.horizonH} h) ${v.p[2].toFixed(2)}`);
   const block = guard(c, s);
@@ -163,8 +167,31 @@ function afterSell(c) {
   if (!r) return;
   agent("EXE", `vende ${c.sym}: ${r.why} · ${r.pnl >= 0 ? "+" : ""}${r.pnl.toFixed(2)} €`);
   log("EXE", `vende ${c.sym} · ${r.why} · ${pc(r.ret)}`);
-  if (r.why === "stop") c.cooldown = Date.now() + 6 * H1;
+  if (r.why === "stop" || r.explore) c.cooldown = Date.now() + 6 * H1;
 }
+
+// ---------- exploración: pequeñas compras de prueba en las mejores candidatas ----------
+// Si ninguna moneda llega al EV mínimo, la cartera no compra nada y no hay forma de comprobar en vivo si el modelo acierta.
+// Con poco dinero ficticio y un máximo de posiciones, compra la mejor candidata del momento (la de más ventaja por
+// unidad de riesgo) aunque no sea una señal. Sus resultados corrigen el EV con datos reales. Nunca cuentan como señal.
+function explore() {
+  const ex = cfg.spot.explore;
+  if (!ex || S.paused || model.labels < cfg.spot.minLabels || market.status.ws !== "conectado") return;
+  if ([...wallet.positions.values()].filter((p) => p.explore).length >= ex) return;
+  const fresh = Date.now() - 75 * 60000;
+  const best = [...market.coins.values()]
+    .filter((c) => c.last && c.view && c.last.t > fresh && !c.last.guard && Number.isFinite(c.last.evR) && !wallet.positions.has(c.id) && !(c.cooldown > Date.now())
+      && Math.abs(c.px - c.view.entry) < 0.5 * c.view.atr) // el precio sigue cerca del calculado: stop y objetivo valen
+    .sort((a, b) => b.last.evR - a.last.evR)[0];
+  if (!best) return;
+  const q = { evR: best.last.evR, evRaw: best.last.evRaw, ev: best.last.ev };
+  const why = wallet.open(best, best.view, q, eur(), { eur: cfg.spot.exploreEur, explore: true });
+  if (why) return;
+  log("EXE", `exploración: compra ${best.sym} con ${cfg.spot.exploreEur} € (mejor candidata · EV ${pc(q.ev)})`);
+  agent("EXE", `exploración: prueba ${best.sym} con ${cfg.spot.exploreEur} € ficticios`);
+  S.decisions.unshift({ t: Date.now(), coin: best.id, sym: best.sym, kind: best.kind, dec: "explore", reason: `exploración con ${cfg.spot.exploreEur} €: la mejor candidata ahora, aunque no llega al EV mínimo`, p: best.last.p, ev: q.ev });
+}
+setInterval(explore, 5 * 60000);
 market.on("hour", (c, end) => {
   const live = Date.now() - end < 30 * 60000; // una hora que llega tarde (corte o suspensión) solo sirve para aprender
   decide(c, end, live);
@@ -205,12 +232,13 @@ function warmStart() {
     e.v.p = calib.apply(e.v.pRaw);
     if (!e.res) { views.set(e.v.id, e.v); continue; } // aún sin resultado: se sigue en vivo
     // Prueba con historial: ¿qué habría pasado operando las señales que el modelo daba en ese momento?
-    if (learned >= cfg.spot.minLabels) {
+    // Solo cuenta cuando la calibración ya está madura, como la que se usa en vivo (si no, la corrección sale exagerada)
+    if (learned >= Math.max(cfg.spot.minLabels, MATURE)) {
       const q = quant(e.c, e.v, 0);
       if (q.ev >= cfg.spot.evMin) { const net = e.res.ret - q.costs; bt.n++; bt.sum += net; bt.gap += net - q.ev; if (net > 0) bt.wins++; }
     }
   }
-  S.backtest = { n: bt.n, avg: bt.n ? bt.sum / bt.n : null, wins: bt.wins, bias: bt.n >= 15 ? bt.gap / bt.n : null, labels: learned, t: Date.now() };
+  S.backtest = { n: bt.n, avg: bt.n ? bt.sum / bt.n : null, wins: bt.wins, bias: bt.n >= 15 ? bt.gap / bt.n : null, labels: learned, t: Date.now(), ver: VER };
   saveJSON("spot-backtest.json", S.backtest);
   saveJSON("spot-model.json", model);
   saveJSON("spot-calib.json", calib);
@@ -218,7 +246,7 @@ function warmStart() {
 }
 
 market.on("ready", () => {
-  if (!model.labels) { S.warm = "aprendiendo del historial…"; warmStart(); S.warm = null; }
+  if (fresh || !model.labels) { S.warm = "aprendiendo del historial…"; warmStart(); S.warm = null; }
   // Casos guardados de antes de reiniciar: se resuelven con las velas reales del historial
   const m = byCoin();
   for (const [coin, vs] of m) {
@@ -261,7 +289,7 @@ function state() {
     model: { labels: model.labels, counts: model.counts, ...sc, calib: calib.table(), tpR: model.tpRet, slR: model.slRet, tmR: model.timeRet, pending: views.size },
     backtest: S.backtest, evBias: evBias(), wallet: wallet.state(coins, eur()), agents: S.agents, decisions: S.decisions.slice(0, 40), log: S.log.slice(0, 30),
     list, news: news.latest(15),
-    cfg: { horizonH: cfg.spot.horizonH, stopAtr: cfg.spot.stopAtr, targetAtr: cfg.spot.targetAtr, beAtr: cfg.spot.beAtr, evMin: cfg.spot.evMin, minLabels: cfg.spot.minLabels },
+    cfg: { explore: cfg.spot.explore, exploreEur: cfg.spot.exploreEur, horizonH: cfg.spot.horizonH, stopAtr: cfg.spot.stopAtr, targetAtr: cfg.spot.targetAtr, beAtr: cfg.spot.beAtr, evMin: cfg.spot.evMin, minLabels: cfg.spot.minLabels },
   };
 }
 function detail(id) {
