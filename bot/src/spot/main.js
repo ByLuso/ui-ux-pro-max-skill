@@ -13,6 +13,7 @@ import { SPOT_SIGNALS, spotFeatures, spotVector, btcContext } from "./features.j
 import { SpotWallet, slipOf, pc, fmtPx } from "./wallet.js";
 import { Calib } from "./calib.js";
 import { TREND, regimeOf, coinOk, btcTrend, backtest as trendBacktest } from "./strategy.js";
+import { AGGRO, RotationWallet, pick as aggroPick, backtest as aggroBacktest } from "./rotation.js";
 
 const H1 = 3600000, M15 = 15 * 60000, H = cfg.spot.horizonH * H1;
 const RR = cfg.spot.targetAtr / cfg.spot.stopAtr; // ganancia del objetivo medida en "riesgos" (R)
@@ -24,6 +25,7 @@ const MATURE = 2000; // casos a partir de los cuales la calibración ya es fiabl
 const market = new Market();
 const news = new News();
 const wallet = new SpotWallet();
+const rot = new RotationWallet();
 const saved = loadJSON("spot-model.json", null);
 const fresh = !saved || saved.nf !== NF || loadJSON("spot-backtest.json", null)?.ver !== VER;
 let model = Model.from(saved, NF);
@@ -227,9 +229,25 @@ function trendPass(H) {
     S.decisions.unshift({ t: Date.now(), coin: c.id, sym: c.sym, kind: c.kind, dec: "entry", reason: `${TREND.name}: el mercado sube y ${c.sym} está entre las más fuertes de la semana (${pc(s.r168)})`, p: c.last.p, ev: c.last.ev });
   }
 }
+// ---------- cartera agresiva: rotación de momentum ----------
+function aggroPass(H) {
+  const btc = market.coins.get("cex:BTCUSDT"), bt = btcTrend(btc?.h1).get(H - H1);
+  const list = [...market.coins.values()].filter((c) => c.kind === "cex" && c.last && c.last.t === H && c.last.s)
+    .map((c) => ({ id: c.id, sym: c.sym, vol: c.vol24 || 0, dEma50: c.last.s.dEma50, r168: c.last.s.r168 }));
+  if (list.length < 30 || !bt) return;
+  const picks = aggroPick(list), on = bt.up;
+  S.aggro = { t: H, on, picks: picks.map((x) => ({ sym: x.sym, r168: x.r168 })) };
+  if (!cfg.spot.aggro || S.paused || Date.now() - H > 60 * 60000 || market.status.ws !== "conectado") return;
+  const r = rot.rotate(H, market.coins, picks, on, eur());
+  if (r.bought.length || r.sold.length) log("EXE", `Agresiva · tramo ${r.j + 1}: ${r.bought.length ? "compra " + r.bought.join(", ") : ""}${r.sold.length ? " vende " + r.sold.join(", ") : ""}`);
+  agent("EXE", on ? `Agresiva: mantiene ${picks.slice(0, 4).map((x) => x.sym).join(", ")}… (las más fuertes de la semana)` : "Agresiva: BTC bajo su media de 30 días, pasa a liquidez poco a poco");
+}
+
 setInterval(() => {
   const H = Math.floor(Date.now() / H1) * H1;
-  if (S.trendDone !== H && Date.now() - H > 90000 && S.ready) { S.trendDone = H; trendPass(H); }
+  rot.fixFx(market.eurUsdt); // el cambio EUR/USDT real (no el provisional) fija el saldo inicial de la cartera agresiva
+  // Espera a tener WebSocket: si no, la primera hora tras arrancar se daba por hecha sin poder operar
+  if (S.trendDone !== H && Date.now() - H > 90000 && S.ready && market.status.ws === "conectado") { S.trendDone = H; trendPass(H); aggroPass(H); }
 }, 20000);
 market.on("hour", (c, end) => {
   if (c.h1) { const k = hourly(c.c15, end).at(-1); if (k && k.t + H1 === end && (!c.h1.length || k.t > c.h1.at(-1).t)) { c.h1.push(k); if (c.h1.length > 1200) c.h1.shift(); } }
@@ -300,6 +318,8 @@ market.on("ready", () => {
   const t0 = Date.now();
   S.trendBt = trendBacktest([...market.coins.values()].filter((c) => c.kind === "cex"));
   log("QNT", `${TREND.name}, prueba con ${S.trendBt.days.toFixed(0)} días: ${S.trendBt.n} operaciones, media ${S.trendBt.n ? pc(S.trendBt.avg, 2) : "—"} (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
+  S.aggroBt = aggroBacktest([...market.coins.values()].filter((c) => c.kind === "cex"));
+  if (S.aggroBt) log("QNT", `${AGGRO.name}, prueba con ${S.aggroBt.days.toFixed(0)} días: ${pc(S.aggroBt.ret)} (BTC ${pc(S.aggroBt.btc)}), caída máxima ${(S.aggroBt.maxDD * 100).toFixed(0)}%`);
   S.ready = true;
 });
 
@@ -316,8 +336,8 @@ async function securityLoop() {
   }
 }
 setInterval(() => { saveJSON("spot-model.json", model); saveJSON("spot-calib.json", calib); saveJSON("spot-views.json", [...views.values()]); }, 5 * 60000);
-setInterval(() => wallet.sample(market.coins, eur()), 60000);
-for (const sg of ["SIGINT", "SIGTERM"]) process.on(sg, () => { console.log("\nGuardando…"); saveJSON("spot-model.json", model); saveJSON("spot-calib.json", calib); saveJSON("spot-views.json", [...views.values()]); wallet.save(); process.exit(0); });
+setInterval(() => { wallet.sample(market.coins, eur()); rot.sample(market.coins, eur()); }, 60000);
+for (const sg of ["SIGINT", "SIGTERM"]) process.on(sg, () => { console.log("\nGuardando…"); saveJSON("spot-model.json", model); saveJSON("spot-calib.json", calib); saveJSON("spot-views.json", [...views.values()]); wallet.save(); rot.save(); process.exit(0); });
 
 // ---------- panel ----------
 function state() {
@@ -332,6 +352,7 @@ function state() {
     market: { ...market.status, perHour: market.perHour(), coins: coins.size, cex: list.filter((c) => c.kind === "cex").length, alpha: list.filter((c) => c.kind === "alpha").length, eurUsdt: market.eurUsdt, newsMood: news.market() },
     model: { labels: model.labels, counts: model.counts, ...sc, calib: calib.table(), tpR: model.tpRet, slR: model.slRet, tmR: model.timeRet, pending: views.size },
     backtest: S.backtest, evBias: evBias(), regime: S.regime || null, trendBt: S.trendBt || null,
+    aggro: { on: !!cfg.spot.aggro, name: AGGRO.name, top: AGGRO.top, every: AGGRO.every, design: AGGRO.design, bt: S.aggroBt || null, now: S.aggro || null, wallet: rot.state(market.coins, eur()) },
     trend: { on: !!cfg.spot.trend, name: TREND.name, breadth: TREND.breadth, week: TREND.week, maxDD: cfg.spot.maxDD, design: TREND.design,
       live: (() => { const r = wallet.closed.filter((x) => x.strat === TREND.name); return { n: r.length, wins: r.filter((x) => x.pnl > 0).length, avg: r.length ? r.reduce((a, b) => a + b.ret, 0) / r.length : null }; })() }, wallet: wallet.state(coins, eur()), agents: S.agents, decisions: S.decisions.slice(0, 40), log: S.log.slice(0, 30),
     list, news: news.latest(15),
@@ -360,6 +381,7 @@ http.createServer(async (req, res) => {
       if (u.pathname === "/api/watch") return json(res, 200, { ok: true, sym: await market.addWatch((await body(req)).q) });
       if (u.pathname === "/api/unwatch") { market.removeWatch((await body(req)).id); return json(res, 200, { ok: true }); }
       if (u.pathname === "/api/pause" || u.pathname === "/api/resume") { S.paused = u.pathname === "/api/pause"; saveJSON("spot-state.json", { paused: S.paused }); log("GRD", S.paused ? "señales en pausa" : "señales reanudadas"); return json(res, 200, { ok: true }); }
+      if (u.pathname === "/api/aggro-reset") { rot.reset(eur()); log("EXE", `cartera agresiva reiniciada con ${cfg.spot.aggroStartEur} €`); return json(res, 200, { ok: true }); }
       if (u.pathname === "/api/wallet-reset") { wallet.reset(); log("EXE", `cartera de prueba reiniciada con ${cfg.paperStartEur} €`); return json(res, 200, { ok: true }); }
     } catch (e) { return json(res, 400, { ok: false, error: e.message }); }
   }

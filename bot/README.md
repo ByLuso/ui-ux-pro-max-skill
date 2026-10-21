@@ -40,6 +40,20 @@ Conclusión honesta: en esos 480 días la estrategia quedó cerca de cero mientr
 
 **Freno de emergencia:** decidido de antemano, como recomiendan las guías de trading algorítmico. Si la cartera cae un 25% desde su máximo (casi el doble de la peor caída de la prueba), deja de comprar hasta que la reinicies (`SPOT_MAX_DRAWDOWN`). En los tokens de Binance Wallet, las comisiones y el deslizamiento se comen la ganancia de cualquier estrategia probada, así que se vigilan pero la cartera no los compra. El panel *Estrategia de la cartera* enseña el estado del mercado, la prueba con los últimos ~40 días y los resultados en vivo. Se desactiva con `SPOT_TREND=0`.
 
+**Segunda cartera: «Agresiva» (rotación de momentum, solo Binance).** Tiene sus propios 50 € ficticios para compararla con la prudente. Mientras BTC esté por encima de su media de 30 días, mantiene las **8 monedas más fuertes de la semana** (entre las 80 de Binance con más volumen y solo si están sobre su EMA 50). Cuando BTC cae por debajo, pasa a liquidez. El capital está repartido en 72 tramos y cada hora rota uno (cada tramo cambia de monedas cada 72 h), así que la cartera se renueva poco a poco y el resultado no depende de la hora a la que se rota.
+
+Cómo se eligió, con 480 días de velas de 1 h de 80 monedas de Binance (BTC −25% en ese tiempo):
+
+| Rotación (BTC sobre su media) | 480 días | Caída máx. | Mitad bajista | Mitad alcista |
+|---|---|---|---|---|
+| Un solo tramo, top 3 cada 24 h | +45% | 45% | −12% | +30% |
+| … el mismo cada 12 h / 48 h | −32% / −25% | 65% / 67% | | |
+| **Escalonada, top 8 cada 72 h (la que usa)** | **+43%** | **26%** | **−9%** | **+57%** |
+| Escalonada, top 8 cada 24 h / 168 h | +31% / +30% | 32% / 24% | −13% / −13% | +51% / +49% |
+| Escalonada, top 5 cada 24 / 72 / 168 h | +20% / +33% / +24% | 36% / 31% / 27% | | |
+
+Con un solo tramo, el resultado dependía de la hora exacta de la rotación (suerte). Escalonada, todas las variantes cercanas salen positivas, que es lo que se espera de una ventaja real. Aun así: la lista de monedas es la de hoy (las que sobrevivieron), lo que puede inflar algo el resultado; y una caída del 26% o más es posible. Se desactiva con `SPOT_AGGRO=0`.
+
 **El modelo (Orb)** sigue analizando y aprendiendo de cada moneda, y la cartera solo le haría caso si diera una señal con EV por encima de +1% tras corregir con resultados reales; en las pruebas sus mejores apuestas eran monedas cayendo en picado, que perdían. Las compras de «exploración» con el modelo están desactivadas por eso (`SPOT_EXPLORE=0`).
 
 **Por qué es honesto:**

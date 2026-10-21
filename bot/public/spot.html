@@ -45,7 +45,7 @@ input { font: inherit; background: var(--panel-2); color: var(--white); border: 
 .eq { font: 700 40px/1 var(--f-display); color: var(--white); }
 .wpnl { font: 600 15px var(--f-display); margin-top: 4px; }
 canvas { display: block; width: 100%; }
-#cvWallet { height: 90px; margin-top: 8px; }
+#cvWallet, #cvAggro { height: 90px; margin-top: 8px; }
 #cvChart { height: 280px; }
 .kv td { padding: 3px 0; border-top: 1px solid var(--line); }
 .kv td:last-child { text-align: right; }
@@ -131,9 +131,38 @@ canvas { display: block; width: 100%; }
     </div>
   </section>
 
+  <section class="row0" id="aggroP" hidden>
+    <div class="panel">
+      <div class="ph"><span class="t">Cartera agresiva</span><span class="rt" id="aState"></span></div>
+      <div class="sub">saldo total ahora · dinero ficticio</div>
+      <div class="eq" id="aEq">—</div>
+      <div id="aPnl"></div>
+      <canvas id="cvAggro" aria-label="Evolución del saldo de la cartera agresiva"></canvas>
+      <table class="kv" style="margin-top:6px">
+        <tr><td class="c-dim">Caída desde el máximo</td><td id="aDD">—</td></tr>
+        <tr><td class="c-dim">En liquidez</td><td id="aCash">—</td></tr>
+        <tr><td class="c-dim">Prueba al diseñarla</td><td id="aDesign">—</td></tr>
+        <tr><td class="c-dim">Prueba con los últimos días</td><td id="aRecent">—</td></tr>
+      </table>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+        <button type="button" id="aReset" style="margin-left:auto">Reiniciar cartera agresiva</button>
+      </div>
+      <div class="sub" id="aConfirm" style="text-transform:none;letter-spacing:0;margin-top:4px" hidden>¿Seguro? <button type="button" id="aResetYes">Sí, reiniciar</button> <button type="button" id="aResetNo">Cancelar</button></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">Qué tiene y por qué</span></div>
+      <div class="note" id="aWhat"></div>
+      <div class="sub" style="margin:8px 0 4px">elegidas esta hora (subida en 7 días)</div>
+      <div id="aPicks" class="c-white"></div>
+      <table class="tbl" id="aHold" style="margin-top:8px"></table>
+      <div class="sub" style="margin:8px 0 4px">rotaciones</div>
+      <div class="events" id="aEvents"></div>
+    </div>
+  </section>
+
   <section class="row0">
     <div class="panel">
-      <div class="ph"><span class="t">Cartera de prueba</span><span class="rt chip c-blue">dinero ficticio</span></div>
+      <div class="ph"><span class="t">Cartera prudente</span><span class="rt chip c-blue">dinero ficticio</span></div>
       <div class="sub">saldo total ahora</div>
       <div class="eq" id="wEq">—</div>
       <div class="wpnl" id="wPnl"></div>
@@ -270,7 +299,7 @@ function render() {
   if (D.paused) B.push("Las señales están en pausa: analiza y aprende, pero la cartera no compra.");
   renderTrend();
   $("banners").innerHTML = B.map((t) => `<div class="banner">${esc(t)}</div>`).join("");
-  renderWallet(); renderAgents(); renderRank(); renderLearn();
+  renderWallet(); renderAggro(); renderAgents(); renderRank(); renderLearn();
   $("mood").textContent = `ánimo de las noticias ${m.newsMood.score > 0 ? "+" : ""}${m.newsMood.score} · ${m.newsMood.count} noticias`;
   $("news").innerHTML = D.news.map((n) => `<div><span class="dot" style="background:${n.tone > 0 ? C.green : n.tone < 0 ? C.red : C.faint}"></span><a href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a> <span class="c-dim">· ${esc(n.src)} · ${ago(n.t)}</span></div>`).join("") || `<div class="c-dim">Cargando noticias…</div>`;
   const K = { entry: ["SEÑAL", "c-gold"], explore: ["PRUEBA", "c-blue"], block: ["BLOQUEO", "c-red"], skip: ["SALTO", "c-dim"] };
@@ -296,6 +325,35 @@ function renderTrend() {
   const l = $("tLive"); l.textContent = T.live.n ? `${T.live.n} operaciones, media ${pct(T.live.avg, 2)}, ${T.live.wins} ganadoras` : "aún sin operaciones"; l.style.color = col(T.live.avg);
 }
 
+function drawCurve(cv, pts, base) {
+  const { ctx, w: W, h: Hh } = fit(cv); ctx.clearRect(0, 0, W, Hh);
+  if (pts.length < 2) return;
+  const mn = Math.min(base, ...pts), mx = Math.max(base, ...pts), rg = mx - mn || 1, last = pts.at(-1);
+  const X = (i) => (i / (pts.length - 1)) * (W - 2), Y = (v) => Hh - 4 - ((v - mn) / rg) * (Hh - 10);
+  ctx.setLineDash([3, 3]); ctx.strokeStyle = C.dim; ctx.beginPath(); ctx.moveTo(0, Y(base)); ctx.lineTo(W, Y(base)); ctx.stroke(); ctx.setLineDash([]);
+  const k = last >= base ? C.green : C.red;
+  ctx.beginPath(); pts.forEach((v, i) => (i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v)))); ctx.strokeStyle = k; ctx.lineWidth = 1.8; ctx.stroke();
+  ctx.lineTo(X(pts.length - 1), Hh); ctx.lineTo(0, Hh); ctx.closePath(); ctx.globalAlpha = 0.12; ctx.fillStyle = k; ctx.fill(); ctx.globalAlpha = 1;
+}
+
+function renderAggro() {
+  const A = D.aggro, w = A.wallet, d = A.design, now = A.now, bt = A.bt;
+  $("aggroP").hidden = !A.on;
+  if (!A.on) return;
+  $("aState").innerHTML = !now ? `<span class="chip c-dim">calculando…</span>` : now.on ? `<span class="chip c-green">INVERTIDA · BTC sobre su media</span>` : `<span class="chip c-gold">PASANDO A LIQUIDEZ · BTC bajo su media</span>`;
+  $("aWhat").textContent = `${A.name}: mientras BTC esté por encima de su media de 30 días, mantiene las ${A.top} monedas más fuertes de la semana (entre las 80 de Binance con más volumen). El dinero está repartido en ${A.every} partes y cada hora cambia una, así que la cartera se renueva poco a poco. Busca rentabilidad alta a cambio de más riesgo: puede caer bastante antes de recuperarse.`;
+  $("aEq").textContent = eur(w.equity);
+  const p = $("aPnl"); p.textContent = `${eur(w.pnl, true)} (${pct(w.pnlPct)}) desde ${eur(w.startEur)} · hace ${ago(w.started)}`; p.style.color = col(w.pnl);
+  drawCurve($("cvAggro"), w.curve.map((x) => x.v).concat(w.equity), w.startEur);
+  $("aDD").textContent = `ahora ${Math.round(Math.max(0, w.ddNow) * 100)}% · peor ${Math.round(w.maxDD * 100)}%`;
+  $("aCash").textContent = `${eur(w.cashEur)} (${Math.round(w.cashShare * 100)}%)`;
+  $("aDesign").textContent = `${d.days} días: ${pct(d.ret, 0)} (BTC ${pct(d.btc, 0)}), caída máxima ${Math.round(d.maxDD * 100)}%. Mitad bajista ${pct(d.bear.ret, 0)} (BTC ${pct(d.bear.btc, 0)}); mitad alcista ${pct(d.bull.ret, 0)} (BTC ${pct(d.bull.btc, 0)})`;
+  const r = $("aRecent"); r.textContent = bt ? `${bt.days.toFixed(0)} días: ${pct(bt.ret)} (BTC ${pct(bt.btc)}), caída máxima ${Math.round(bt.maxDD * 100)}%` : "calculando…"; r.style.color = col(bt?.ret);
+  $("aPicks").textContent = now ? (now.picks.map((x) => `${x.sym} ${pct(x.r168, 0)}`).join(" · ") || "ninguna") : "—";
+  $("aHold").innerHTML = w.hold.length ? `<tr><th>moneda</th><th>valor</th><th>peso</th><th>24 h</th></tr>` + w.hold.map((h) => `<tr><td><b class="c-white">${esc(h.sym)}</b></td><td>${eur(h.eur)}</td><td>${(h.share * 100).toFixed(h.share < 0.1 ? 1 : 0)}%</td><td style="color:${col(h.ch24)}">${h.ch24 == null ? "—" : pct(h.ch24)}</td></tr>`).join("") : `<tr><td class="c-dim">Todavía en liquidez: va comprando un tramo cada hora.</td></tr>`;
+  $("aEvents").innerHTML = w.events.length ? w.events.map((e) => `<div><span class="c-dim">${new Date(e.t).toLocaleString("es-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span> <span class="c-dim">${esc(e.txt)}</span></div>`).join("") : `<div class="c-dim">Aún no ha rotado.</div>`;
+}
+
 function renderWallet() {
   const w = D.wallet;
   $("wEq").textContent = eur(w.equity);
@@ -305,16 +363,7 @@ function renderWallet() {
   const a = $("wAvg"); a.textContent = pct(w.avg); a.style.color = col(w.avg);
   const eb = D.evBias, b = $("wBias"); b.textContent = eb.src ? `${pct(eb.bias)} (${eb.src}, ${eb.n})` : `faltan datos (${eb.n}/15)`; b.style.color = eb.bias < 0 ? C.red : "";
   $("wRules").textContent = `${eur(w.tradeEur)} por operación · comisiones y deslizamiento reales`;
-  const { ctx, w: W, h: Hh } = fit($("cvWallet")); ctx.clearRect(0, 0, W, Hh);
-  const pts = w.curve.map((x) => x.v).concat(w.equity);
-  if (pts.length > 1) {
-    const mn = Math.min(w.startEur, ...pts), mx = Math.max(w.startEur, ...pts), rg = mx - mn || 1;
-    const X = (i) => (i / (pts.length - 1)) * (W - 2), Y = (v) => Hh - 4 - ((v - mn) / rg) * (Hh - 10);
-    ctx.setLineDash([3, 3]); ctx.strokeStyle = C.dim; ctx.beginPath(); ctx.moveTo(0, Y(w.startEur)); ctx.lineTo(W, Y(w.startEur)); ctx.stroke(); ctx.setLineDash([]);
-    const k = w.equity >= w.startEur ? C.green : C.red;
-    ctx.beginPath(); pts.forEach((v, i) => (i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v)))); ctx.strokeStyle = k; ctx.lineWidth = 1.8; ctx.stroke();
-    ctx.lineTo(X(pts.length - 1), Hh); ctx.lineTo(0, Hh); ctx.closePath(); ctx.globalAlpha = 0.12; ctx.fillStyle = k; ctx.fill(); ctx.globalAlpha = 1;
-  }
+  drawCurve($("cvWallet"), w.curve.map((x) => x.v).concat(w.equity), w.startEur);
   $("oCount").textContent = `${w.open.length} abiertas · ${w.closed} cerradas`;
   $("oOpen").innerHTML = w.open.length ? w.open.map((o) => {
     const top = o.target || Math.max(o.peak || 0, o.px || 0, o.entry) * 1.03, span = top - o.stop || 1, f = (v) => Math.max(0, Math.min(100, ((v - o.stop) / span) * 100));
@@ -417,6 +466,9 @@ $("rankT").addEventListener("keydown", (e) => { if (e.key === "Enter") e.target.
 document.querySelectorAll("[data-f]").forEach((b) => b.addEventListener("click", () => { filter = b.dataset.f; try { localStorage.setItem("spotFilter", filter); } catch {} renderRank(); }));
 $("bPause").addEventListener("click", () => post(D && D.paused ? "/api/resume" : "/api/pause"));
 $("bReset").addEventListener("click", () => { $("wConfirm").hidden = false; });
+$("aReset").addEventListener("click", () => { $("aConfirm").hidden = false; });
+$("aResetNo").addEventListener("click", () => { $("aConfirm").hidden = true; });
+$("aResetYes").addEventListener("click", () => { $("aConfirm").hidden = true; post("/api/aggro-reset"); });
 $("bResetNo").addEventListener("click", () => { $("wConfirm").hidden = true; });
 $("bResetYes").addEventListener("click", () => { $("wConfirm").hidden = true; post("/api/wallet-reset"); });
 $("addForm").addEventListener("submit", async (e) => {
