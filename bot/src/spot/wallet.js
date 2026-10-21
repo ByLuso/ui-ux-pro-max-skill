@@ -36,10 +36,12 @@ export class SpotWallet {
     this.cash -= eur;
     const p = {
       coin: c.id, sym: c.sym, kind: c.kind, t: Date.now(), tEnd: Date.now() + cfg.spot.horizonH * 3600e3, eur, usd, qty, entry, ref: view.entry,
-      stop: view.stop, target: view.target, atr: view.atr, be: false, ev: q.evRaw, evAdj: q.ev, pTP: view.p[0], last: c.px || view.entry, explore: !!opts.explore,
+      stop: view.stop, target: view.target || null, trail: opts.trail || 0, peak: c.px || view.entry, strat: opts.strat || null, atr: view.atr, be: false, ev: q.evRaw, evAdj: q.ev, pTP: view.p[0], last: c.px || view.entry, explore: !!opts.explore,
     };
     this.positions.set(c.id, p);
-    this.event("buy", c.sym, c.id, `${p.explore ? "exploración · " : ""}compra ${eur.toFixed(2)} € a ${fmtPx(entry)} · objetivo ${fmtPx(p.target)} · stop ${fmtPx(p.stop)} · P(objetivo) ${p.pTP.toFixed(2)} · EV ${pc(q.ev)}`, -eur);
+    this.event("buy", c.sym, c.id, p.strat
+      ? `${p.strat} · compra ${eur.toFixed(2)} € a ${fmtPx(entry)} · stop ${fmtPx(p.stop)}, que sube siguiendo al precio`
+      : `${p.explore ? "exploración · " : ""}compra ${eur.toFixed(2)} € a ${fmtPx(entry)} · objetivo ${fmtPx(p.target)} · stop ${fmtPx(p.stop)} · P(objetivo) ${p.pTP.toFixed(2)} · EV ${pc(q.ev)}`, -eur);
     this.save();
     return null;
   }
@@ -51,13 +53,18 @@ export class SpotWallet {
 
   check(c, p, lo, hi, last, eurUsdt, candle) {
     p.last = last;
-    if (!p.be && hi >= p.ref + cfg.spot.beAtr * p.atr) { // ya avanzó lo suficiente: el stop pasa a la entrada
+    if (!p.be && !p.trail && hi >= p.ref + cfg.spot.beAtr * p.atr) { // ya avanzó lo suficiente: el stop pasa a la entrada
       p.be = true; p.stop = Math.max(p.stop, p.entry * (1 + 2 * feeOf(c)));
       this.event("move", p.sym, p.coin, `stop subido a la entrada (${fmtPx(p.stop)}): esta operación ya no puede perder`, 0);
     }
-    if (lo <= p.stop) return this.sell(c, p, candle ? p.stop : Math.min(p.stop, last), p.be ? "stop en entrada" : "stop", eurUsdt);
-    if (hi >= p.target) return this.sell(c, p, p.target, "objetivo", eurUsdt);
+    if (lo <= p.stop) return this.sell(c, p, candle ? p.stop : Math.min(p.stop, last), p.trail ? (p.be ? "stop móvil en ganancia" : "stop") : p.be ? "stop en entrada" : "stop", eurUsdt);
+    if (p.target && hi >= p.target) return this.sell(c, p, p.target, "objetivo", eurUsdt);
     if (Date.now() >= p.tEnd) return this.sell(c, p, last, `${cfg.spot.horizonH} h`, eurUsdt);
+    if (p.trail) { // stop móvil: se queda a `trail` ATR del máximo alcanzado (después de mirar el stop, por prudencia)
+      p.peak = Math.max(p.peak || p.entry, hi);
+      p.stop = Math.max(p.stop, p.peak - p.trail * p.atr);
+      if (!p.be && p.stop >= p.entry * (1 + 2 * feeOf(c))) { p.be = true; this.event("move", p.sym, p.coin, `el stop móvil ya está por encima de la entrada (${fmtPx(p.stop)}): esta operación ya no puede perder`, 0); }
+    }
   }
 
   sell(c, p, px, why, eurUsdt) {
@@ -65,7 +72,7 @@ export class SpotWallet {
     const eur = usd / (eurUsdt || 1.08), pnl = eur - p.eur;
     this.cash += eur;
     this.positions.delete(p.coin);
-    const rec = { t: Date.now(), sym: p.sym, coin: p.coin, kind: p.kind, eur: p.eur, pnl, ret: pnl / p.eur, ev: p.ev, explore: !!p.explore, why, hours: (Date.now() - p.t) / 3600e3 };
+    const rec = { t: Date.now(), sym: p.sym, coin: p.coin, kind: p.kind, eur: p.eur, pnl, ret: pnl / p.eur, ev: p.ev, explore: !!p.explore, strat: p.strat || null, why, hours: (Date.now() - p.t) / 3600e3 };
     this.closed.push(rec);
     if (this.closed.length > 1000) this.closed.shift();
     this.event("sell", p.sym, p.coin, `vende · ${why} a ${fmtPx(px)} · ${pnl >= 0 ? "+" : ""}${pnl.toFixed(2)} € (${pc(rec.ret)})`, pnl);
@@ -93,7 +100,7 @@ export class SpotWallet {
       closed: cl.length, wins, avg: cl.length ? cl.reduce((s, x) => s + x.ret, 0) / cl.length : null, maxOpen: cfg.paperMaxOpen, tradeEur: cfg.paperTradeEur,
       open: [...this.positions.values()].map((p) => {
         const c = coins.get(p.coin), v = this.value(c, p, eurUsdt);
-        return { coin: p.coin, sym: p.sym, kind: p.kind, explore: !!p.explore, t: p.t, eur: p.eur, value: v, pnl: v - p.eur, ret: v / p.eur - 1, px: c ? c.px : p.last, entry: p.entry, stop: p.stop, target: p.target, be: p.be, tEnd: p.tEnd };
+        return { coin: p.coin, sym: p.sym, kind: p.kind, explore: !!p.explore, strat: p.strat || null, peak: p.peak, t: p.t, eur: p.eur, value: v, pnl: v - p.eur, ret: v / p.eur - 1, px: c ? c.px : p.last, entry: p.entry, stop: p.stop, target: p.target, be: p.be, tEnd: p.tEnd };
       }),
       events: this.events.slice(0, 40), curve: this.curve.slice(-500), recent: cl.slice(-30).reverse(), bias: this.bias(),
     };

@@ -123,7 +123,11 @@ export class Market extends EventEmitter {
   async bootstrap() {
     for (const c of this.coins.values()) {
       if (c.c15.length) continue;
-      try { this.merge(c, await this.klines(c, c.kind === "cex" ? 1000 : 500), false); } catch (e) { c.err = e.message; if (e.rate) await sleep(30000); }
+      try {
+        this.merge(c, await this.klines(c, c.kind === "cex" ? 1000 : 500), false);
+        // 41 días de velas de 1 h para la estrategia y su prueba con historial (solo Binance)
+        if (c.kind === "cex") c.h1 = (await getJSON(`${SPOT}/klines?symbol=${c.pair}&interval=1h&limit=1000`)).map(toCandle).slice(0, -1);
+      } catch (e) { c.err = e.message; if (e.rate) await sleep(30000); }
       await sleep(c.kind === "cex" ? 120 : 400);
     }
     this.emit("ready");

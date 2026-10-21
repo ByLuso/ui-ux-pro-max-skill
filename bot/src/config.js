@@ -34,7 +34,10 @@ export const cfg = {
     beAtr: num("SPOT_BE_ATR", 1.5),            // al avanzar 1,5 ATR el stop pasa a la entrada
     evMin: num("SPOT_EV_MIN", 0.01),           // beneficio esperado mínimo tras costes (+1%)
     minLabels: num("SPOT_MIN_LABELS", 300),    // casos medidos antes de dar señales
-    explore: num("SPOT_EXPLORE", 2),           // compras de prueba a la vez en las mejores candidatas (0 = nunca)
+    trend: num("SPOT_TREND", 1),               // 1 = la cartera opera la estrategia «Tendencia de mercado» (0 = no)
+    trendBreadth: num("SPOT_TREND_BREADTH", 0.75), // mínimo de monedas de Binance sobre su EMA 50 para comprar
+    trendWeek: num("SPOT_TREND_WEEK", 0.75),   // mínimo de monedas de Binance que suben en 7 días
+    explore: num("SPOT_EXPLORE", 0),           // compras de prueba con el modelo (desactivado: compraba lo que caía)
     exploreEur: num("SPOT_EXPLORE_EUR", 2),    // euros ficticios por compra de prueba
     cexFee: num("BINANCE_FEE", 0.001),         // comisión de Binance por lado (0,1%)
     alphaFee: num("ALPHA_FEE", 0.0025),        // comisión estimada de Binance Wallet por lado

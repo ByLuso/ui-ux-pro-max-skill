@@ -54,6 +54,11 @@ canvas { display: block; width: 100%; }
 .bar { height: 4px; background: var(--line); margin-top: 4px; grid-column: 1 / -1; position: relative; }
 .bar i { position: absolute; top: -3px; width: 2px; height: 10px; }
 .events { max-height: 250px; overflow-y: auto; }
+.tgrid { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 16px; margin-top: 10px; align-items: start; }
+@media (max-width: 800px) { .tgrid { grid-template-columns: 1fr; } }
+.gauge { position: relative; height: 8px; background: var(--line); margin: 6px 0 4px; }
+.gauge i { position: absolute; left: 0; top: 0; height: 100%; }
+.gauge b { position: absolute; top: -3px; width: 2px; height: 14px; background: var(--fg); }
 .events div { padding: 3px 0; border-top: 1px solid var(--line); }
 .ev-k { display: inline-block; min-width: 56px; font-weight: 600; font-size: 10px; letter-spacing: .06em; }
 .agents { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
@@ -111,6 +116,20 @@ canvas { display: block; width: 100%; }
   </header>
   <div id="banners" style="display:grid;gap:6px"></div>
 
+  <section class="panel" id="trendP">
+    <div class="ph"><span class="t">Estrategia de la cartera</span><span class="rt" id="tState"></span></div>
+    <div class="note" id="tWhat"></div>
+    <div class="tgrid">
+      <div><div class="sub">monedas de Binance por encima de su media de 50 h</div><div class="gauge"><i id="gB"></i><b id="gBm"></b></div><div id="gBv" class="c-white"></div></div>
+      <div><div class="sub">monedas de Binance que suben en 7 días</div><div class="gauge"><i id="gW"></i><b id="gWm"></b></div><div id="gWv" class="c-white"></div></div>
+      <table class="kv">
+        <tr><td class="c-dim">Prueba al diseñarla</td><td id="tDesign">—</td></tr>
+        <tr><td class="c-dim">Prueba con los últimos días</td><td id="tRecent">—</td></tr>
+        <tr><td class="c-dim">En vivo (cartera de prueba)</td><td id="tLive">—</td></tr>
+      </table>
+    </div>
+  </section>
+
   <section class="row0">
     <div class="panel">
       <div class="ph"><span class="t">Cartera de prueba</span><span class="rt chip c-blue">dinero ficticio</span></div>
@@ -145,7 +164,7 @@ canvas { display: block; width: 100%; }
 
   <section class="main">
     <div class="panel">
-      <div class="ph"><span class="t">Ranking</span><span class="sub">precio en vivo · se evalúa al cerrar cada hora</span>
+      <div class="ph"><span class="t">Ranking</span><span class="sub">primero las candidatas de la estrategia · luego las más fuertes en 7 días</span>
         <span class="rt" role="group" aria-label="Filtro" style="display:flex;gap:4px;flex-wrap:wrap">
           <button type="button" data-f="all" aria-pressed="true">Todas</button>
           <button type="button" data-f="cex" aria-pressed="false">Binance</button>
@@ -248,12 +267,7 @@ function render() {
   else if (m.ws !== "conectado") B.push("Sin conexión en tiempo real con Binance: reintentando…");
   if (D.model.labels < D.cfg.minLabels) B.push(`El modelo aún aprende (${D.model.labels}/${D.cfg.minLabels} casos): de momento analiza pero no opera.`);
   if (D.paused) B.push("Las señales están en pausa: analiza y aprende, pero la cartera no compra.");
-  const live = D.list.filter((c) => c.ev != null && !c.guard);
-  if (!D.warm && D.model.labels >= D.cfg.minLabels && live.length && !live.some((c) => c.ev >= D.cfg.evMin)) {
-    const top = live.reduce((a, b) => (b.ev > a.ev ? b : a));
-    B.push(`Ahora ninguna moneda da ventaja para comprar (la mejor, ${top.sym}, ${pct(top.ev)} tras costes; hace falta ${pct(D.cfg.evMin, 0)}). Es lo normal cuando el mercado baja: el bot solo compra, así que espera.` +
-      (D.cfg.explore ? ` Mientras, hace compras de prueba de ${eur(D.cfg.exploreEur)} en las mejores candidatas («exploración») para medir en vivo si el modelo acierta.` : ""));
-  }
+  renderTrend();
   $("banners").innerHTML = B.map((t) => `<div class="banner">${esc(t)}</div>`).join("");
   renderWallet(); renderAgents(); renderRank(); renderLearn();
   $("mood").textContent = `ánimo de las noticias ${m.newsMood.score > 0 ? "+" : ""}${m.newsMood.score} · ${m.newsMood.count} noticias`;
@@ -261,6 +275,22 @@ function render() {
   const K = { entry: ["SEÑAL", "c-gold"], explore: ["PRUEBA", "c-blue"], block: ["BLOQUEO", "c-red"], skip: ["SALTO", "c-dim"] };
   $("decT").innerHTML = `<tr><th>hora</th><th>moneda</th><th>decisión</th><th>P(objetivo)</th><th>EV</th><th>motivo</th></tr>` + D.decisions.slice(0, 15).map((x) => `<tr><td class="c-dim">${new Date(x.t).toLocaleTimeString()}</td><td><b class="c-white">${esc(x.sym)}</b> <span class="chip ${KIND[x.kind][1]}">${KIND[x.kind][0]}</span></td><td class="${K[x.dec][1]}">${K[x.dec][0]}</td><td>${x.p[0].toFixed(2)}</td><td style="color:${col(x.ev)}">${pct(x.ev)}</td><td class="c-dim">${esc(x.reason)}</td></tr>`).join("");
   if (!sel && D.list.length) { sel = D.list[0].id; pollDetail(); }
+}
+
+function renderTrend() {
+  const T = D.trend, R = D.regime, bt = D.trendBt, d = T.design;
+  const on = R && R.on;
+  $("tState").innerHTML = !T.on ? `<span class="chip c-dim">desactivada</span>` : !R ? `<span class="chip c-dim">calculando…</span>` : on ? `<span class="chip c-green">ACTIVA · puede comprar</span>` : `<span class="chip c-gold">EN ESPERA · el mercado no acompaña</span>`;
+  $("tWhat").textContent = `${T.name}: solo compra en Binance cuando sube casi todo el mercado a la vez (más del ${Math.round(T.breadth * 100)}% en las dos barras), y solo las monedas más fuertes de la semana. Sale con un stop que sube siguiendo al precio. Cuando el mercado cae, no compra: así evita la mayoría de las pérdidas.` +
+    (R ? (on ? ` Candidatas ahora: ${R.cands.join(", ") || "ninguna"}.` : "") : "");
+  for (const [k, v, th] of [["B", R?.breadth, T.breadth], ["W", R?.week, T.week]]) {
+    const i = $("g" + k); i.style.width = v == null ? "0" : (v * 100).toFixed(0) + "%"; i.style.background = v > th ? C.green : C.amber;
+    $("g" + k + "m").style.left = (th * 100).toFixed(0) + "%";
+    $("g" + k + "v").textContent = v == null ? "—" : `${(v * 100).toFixed(0)}% (hace falta más del ${(th * 100).toFixed(0)}%)`;
+  }
+  $("tDesign").textContent = `${d.days} días, ${d.coins} monedas: ${d.n} operaciones, media ${pct(d.avg, 2)}, ${Math.round(d.win * 100)}% ganadoras, ${d.monthsUp} de ${d.months} meses en positivo`;
+  const r = $("tRecent"); r.textContent = !bt ? "calculando…" : bt.n ? `${bt.days.toFixed(0)} días: ${bt.n} operaciones, media ${pct(bt.avg, 2)}, ${Math.round((bt.wins / bt.n) * 100)}% ganadoras` : `${bt.days.toFixed(0)} días: el mercado no dio ocasión (0 operaciones)`; r.style.color = col(bt?.avg);
+  const l = $("tLive"); l.textContent = T.live.n ? `${T.live.n} operaciones, media ${pct(T.live.avg, 2)}, ${T.live.wins} ganadoras` : "aún sin operaciones"; l.style.color = col(T.live.avg);
 }
 
 function renderWallet() {
@@ -284,11 +314,11 @@ function renderWallet() {
   }
   $("oCount").textContent = `${w.open.length} abiertas · ${w.closed} cerradas`;
   $("oOpen").innerHTML = w.open.length ? w.open.map((o) => {
-    const span = o.target - o.stop, f = (v) => Math.max(0, Math.min(100, ((v - o.stop) / span) * 100));
-    return `<div class="op"><span><b class="c-white">${esc(o.sym)}</b> <span class="chip ${KIND[o.kind][1]}">${KIND[o.kind][0]}</span>${o.explore ? ' <span class="chip c-blue" title="compra de prueba: no es una señal">exploración</span>' : ""} <span class="c-dim">· hace ${ago(o.t)} · cierra como tarde en ${ago(2 * Date.now() - o.tEnd).replace("-", "")}</span></span><span class="big2" style="color:${col(o.pnl)}">${eur(o.pnl, true)}</span>
-      <span class="c-dim">entrada ${px(o.entry)} → ahora ${px(o.px)} · stop ${px(o.stop)}${o.be ? " (en entrada)" : ""} · objetivo ${px(o.target)}</span><span style="color:${col(o.ret)}">${pct(o.ret)}</span>
+    const top = o.target || Math.max(o.peak || 0, o.px || 0, o.entry) * 1.03, span = top - o.stop || 1, f = (v) => Math.max(0, Math.min(100, ((v - o.stop) / span) * 100));
+    return `<div class="op"><span><b class="c-white">${esc(o.sym)}</b> <span class="chip ${KIND[o.kind][1]}">${KIND[o.kind][0]}</span>${o.strat ? ' <span class="chip c-green">tendencia</span>' : ""}${o.explore ? ' <span class="chip c-blue" title="compra de prueba: no es una señal">exploración</span>' : ""} <span class="c-dim">· hace ${ago(o.t)} · cierra como tarde en ${ago(2 * Date.now() - o.tEnd).replace("-", "")}</span></span><span class="big2" style="color:${col(o.pnl)}">${eur(o.pnl, true)}</span>
+      <span class="c-dim">entrada ${px(o.entry)} → ahora ${px(o.px)} · stop ${px(o.stop)}${o.target ? (o.be ? " (en entrada)" : "") + ` · objetivo ${px(o.target)}` : ` móvil${o.be ? " (en ganancia)" : ""} · máximo ${px(o.peak)}`}</span><span style="color:${col(o.ret)}">${pct(o.ret)}</span>
       <span class="bar" title="posición entre el stop (izquierda) y el objetivo (derecha)"><i style="left:${f(o.entry)}%;background:${C.dim}"></i><i style="left:${f(o.px)}%;background:${col(o.ret) || C.white}"></i></span></div>`;
-  }).join("") : `<div class="c-dim">Sin posiciones abiertas. Compra cuando una moneda pasa los filtros y su EV supera ${pct(D.cfg.evMin, 0)}${D.cfg.explore ? `; además prueba con ${eur(D.cfg.exploreEur)} las mejores candidatas` : ""}.</div>`;
+  }).join("") : `<div class="c-dim">Sin posiciones abiertas. Compra cuando la estrategia está ACTIVA (mercado fuerte) o si el modelo da una señal con EV por encima de ${pct(D.cfg.evMin, 0)}.</div>`;
   const K = { buy: ["COMPRA", C.gold], sell: ["VENTA", C.blue], move: ["STOP ↑", C.green] };
   $("oEvents").innerHTML = w.events.length ? w.events.map((e) => `<div><span class="c-dim">${new Date(e.t).toLocaleString("es-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span> <span class="ev-k" style="color:${K[e.kind]?.[1] || C.dim}">${K[e.kind]?.[0] || ""}</span><b class="c-white">${esc(e.sym)}</b> <span class="c-dim">${esc(e.txt)}</span></div>`).join("") : `<div class="c-dim">Aún no ha operado.</div>`;
 }
@@ -309,11 +339,11 @@ function renderAgents() {
 function renderRank() {
   document.querySelectorAll("[data-f]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.f === filter));
   const rows = D.list.filter((c) => filter === "all" || (filter === "mine" ? c.mine : c.kind === filter));
-  $("rankT").innerHTML = `<tr><th>moneda</th><th>precio</th><th>24 h</th><th>P(objetivo)</th><th>EV</th><th>estado</th><th>gráfico</th><th></th></tr>` + rows.map((c) => {
+  $("rankT").innerHTML = `<tr><th>moneda</th><th>precio</th><th>24 h</th><th>7 días</th><th>P(objetivo)</th><th>EV</th><th>estado</th><th>gráfico</th><th></th></tr>` + rows.map((c) => {
     const prev = lastPx[c.id], fl = prev && c.px !== prev ? (c.px > prev ? "flash-up" : "flash-dn") : ""; lastPx[c.id] = c.px;
-    const st = c.open ? `<span class="chip c-blue">en cartera</span>` : c.guard ? `<span class="c-red" title="${esc(c.guard)}">bloqueo</span>` : c.ev != null && c.ev >= D.cfg.evMin ? `<span class="chip c-gold">señal</span>` : `<span class="c-dim">—</span>`;
+    const st = c.open ? `<span class="chip c-blue">en cartera</span>` : c.trendOk ? `<span class="chip c-green">candidata</span>` : c.guard ? `<span class="c-red" title="${esc(c.guard)}">bloqueo</span>` : c.ev != null && c.ev >= D.cfg.evMin ? `<span class="chip c-gold">señal</span>` : `<span class="c-dim">—</span>`;
     return `<tr tabindex="0" data-id="${esc(c.id)}" class="${c.id === sel ? "sel" : ""}"><td><b class="c-white">${esc(c.sym)}</b> <span class="chip ${KIND[c.kind][1]}">${KIND[c.kind][0]}</span>${c.mine ? ' <span class="chip c-blue">mía</span>' : ""}</td>
-      <td class="${fl}">${px(c.px)}</td><td style="color:${col(c.ch24)}">${pct(c.ch24)}</td><td>${c.p ? c.p[0].toFixed(2) : "—"}</td><td style="color:${col(c.ev)}">${pct(c.ev)}</td><td>${st}</td>
+      <td class="${fl}">${px(c.px)}</td><td style="color:${col(c.ch24)}">${pct(c.ch24)}</td><td style="color:${col(c.r7)}">${c.r7 == null ? "—" : pct(c.r7)}</td><td>${c.p ? c.p[0].toFixed(2) : "—"}</td><td style="color:${col(c.ev)}">${pct(c.ev)}</td><td>${st}</td>
       <td style="color:${col(c.ta?.score)}">${c.ta ? (c.ta.score > 0 ? "+" : "") + c.ta.score : "—"}</td><td>${c.mine ? `<button type="button" data-rm="${esc(c.id)}">quitar</button>` : ""}</td></tr>`;
   }).join("");
 }
