@@ -54,7 +54,7 @@ canvas { display: block; width: 100%; }
 .bar { height: 4px; background: var(--line); margin-top: 4px; grid-column: 1 / -1; position: relative; }
 .bar i { position: absolute; top: -3px; width: 2px; height: 10px; }
 .events { max-height: 250px; overflow-y: auto; }
-.tgrid { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 16px; margin-top: 10px; align-items: start; }
+.tgrid { display: grid; grid-template-columns: 1fr 1fr 0.8fr 1.4fr; gap: 16px; margin-top: 10px; align-items: start; }
 @media (max-width: 800px) { .tgrid { grid-template-columns: 1fr; } }
 .gauge { position: relative; height: 8px; background: var(--line); margin: 6px 0 4px; }
 .gauge i { position: absolute; left: 0; top: 0; height: 100%; }
@@ -122,6 +122,7 @@ canvas { display: block; width: 100%; }
     <div class="tgrid">
       <div><div class="sub">monedas de Binance por encima de su media de 50 h</div><div class="gauge"><i id="gB"></i><b id="gBm"></b></div><div id="gBv" class="c-white"></div></div>
       <div><div class="sub">monedas de Binance que suben en 7 días</div><div class="gauge"><i id="gW"></i><b id="gWm"></b></div><div id="gWv" class="c-white"></div></div>
+      <div><div class="sub">BTC frente a su media de 30 días</div><div id="gBtc" class="c-white" style="margin-top:6px"></div><div class="sub" style="margin-top:12px">freno de emergencia</div><div id="gDD" class="c-white" style="margin-top:6px"></div></div>
       <table class="kv">
         <tr><td class="c-dim">Prueba al diseñarla</td><td id="tDesign">—</td></tr>
         <tr><td class="c-dim">Prueba con los últimos días</td><td id="tRecent">—</td></tr>
@@ -280,16 +281,18 @@ function render() {
 function renderTrend() {
   const T = D.trend, R = D.regime, bt = D.trendBt, d = T.design;
   const on = R && R.on;
-  $("tState").innerHTML = !T.on ? `<span class="chip c-dim">desactivada</span>` : !R ? `<span class="chip c-dim">calculando…</span>` : on ? `<span class="chip c-green">ACTIVA · puede comprar</span>` : `<span class="chip c-gold">EN ESPERA · el mercado no acompaña</span>`;
-  $("tWhat").textContent = `${T.name}: solo compra en Binance cuando sube casi todo el mercado a la vez (más del ${Math.round(T.breadth * 100)}% en las dos barras), y solo las monedas más fuertes de la semana. Sale con un stop que sube siguiendo al precio. Cuando el mercado cae, no compra: así evita la mayoría de las pérdidas.` +
+  $("tState").innerHTML = !T.on ? `<span class="chip c-dim">desactivada</span>` : !R ? `<span class="chip c-dim">calculando…</span>` : on ? `<span class="chip c-green">ACTIVA · puede comprar</span>` : R.halt ? `<span class="chip c-red">PARADA · freno de emergencia</span>` : `<span class="chip c-gold">EN ESPERA · el mercado no acompaña</span>`;
+  $("tWhat").textContent = `${T.name}: solo compra en Binance cuando sube casi todo el mercado a la vez (más del ${Math.round(T.breadth * 100)}% en las dos barras) y BTC está por encima de su media de 30 días, y solo las monedas más fuertes de la semana. Sale con un stop que sube siguiendo al precio. Cuando el mercado cae, no compra: así evita la mayoría de las pérdidas.` +
     (R ? (on ? ` Candidatas ahora: ${R.cands.join(", ") || "ninguna"}.` : "") : "");
   for (const [k, v, th] of [["B", R?.breadth, T.breadth], ["W", R?.week, T.week]]) {
     const i = $("g" + k); i.style.width = v == null ? "0" : (v * 100).toFixed(0) + "%"; i.style.background = v > th ? C.green : C.amber;
     $("g" + k + "m").style.left = (th * 100).toFixed(0) + "%";
     $("g" + k + "v").textContent = v == null ? "—" : `${(v * 100).toFixed(0)}% (hace falta más del ${(th * 100).toFixed(0)}%)`;
   }
-  $("tDesign").textContent = `${d.days} días, ${d.coins} monedas: ${d.n} operaciones, media ${pct(d.avg, 2)}, ${Math.round(d.win * 100)}% ganadoras, ${d.monthsUp} de ${d.months} meses en positivo`;
-  const r = $("tRecent"); r.textContent = !bt ? "calculando…" : bt.n ? `${bt.days.toFixed(0)} días: ${bt.n} operaciones, media ${pct(bt.avg, 2)}, ${Math.round((bt.wins / bt.n) * 100)}% ganadoras` : `${bt.days.toFixed(0)} días: el mercado no dio ocasión (0 operaciones)`; r.style.color = col(bt?.avg);
+  $("gBtc").innerHTML = !R || R.btcUp == null ? "—" : R.btcUp ? `<span class="c-green">por encima ✓</span>` : `<span class="c-amber">por debajo: no compra</span>`;
+  $("gDD").innerHTML = !R ? "—" : R.halt ? `<span class="c-red">activado: la cartera cayó un ${Math.round(R.dd * 100)}% desde su máximo. Reiníciala para volver a operar.</span>` : `caída actual ${Math.round(Math.max(0, R.dd) * 100)}% · se para al ${Math.round(T.maxDD * 100)}%`;
+  $("tDesign").textContent = `${d.days} días con 50 €: ${pct(d.ret, 0)} (BTC ${pct(d.btc, 0)}), caída máxima ${Math.round(d.maxDD * 100)}%. Mitad bajista ${pct(d.bear.ret, 0)} (BTC ${pct(d.bear.btc, 0)}); mitad alcista ${pct(d.bull.ret, 0)} (BTC ${pct(d.bull.btc, 0)})`;
+  const r = $("tRecent"); r.textContent = !bt ? "calculando…" : bt.n ? `${bt.days.toFixed(0)} días: ${bt.n} operaciones, media ${pct(bt.avg, 2)}, ${Math.round((bt.wins / bt.n) * 100)}% ganadoras${bt.pf ? `, factor de beneficio ${bt.pf.toFixed(2)}` : ""}` : `${bt.days.toFixed(0)} días: el mercado no dio ocasión (0 operaciones)`; r.style.color = col(bt?.avg);
   const l = $("tLive"); l.textContent = T.live.n ? `${T.live.n} operaciones, media ${pct(T.live.avg, 2)}, ${T.live.wins} ganadoras` : "aún sin operaciones"; l.style.color = col(T.live.avg);
 }
 

@@ -1,8 +1,9 @@
 // Estrategia «Tendencia de mercado» (solo Binance).
-// Una moneda solo se compra cuando sube casi todo el mercado a la vez, y solo si está entre las más fuertes de la semana.
+// Una moneda solo se compra cuando sube casi todo el mercado a la vez, BTC está por encima de su media de 30 días
+// y la moneda está entre las más fuertes de la semana.
 // Sale con un stop móvil que sigue al precio: corta pronto lo que va mal y deja correr lo que va bien.
-// Se eligió probando varias estrategias con 480 días de historial de 80 monedas de Binance, con comisiones:
-// todas las demás perdían de media; esta fue la única claramente por encima de cero (ver README).
+// Se eligió probando varias estrategias con 480 días de historial de 80 monedas de Binance, con comisiones, y se
+// comprobó por mitades (bajista y alcista). Las demás perdían; esta queda cerca de cero con poca caída (ver README).
 import { cfg } from "../config.js";
 import { spotFeatures } from "./features.js";
 
@@ -14,7 +15,8 @@ export const TREND = {
   top: 0.7,                       // la moneda debe estar en el 30% que más sube en 7 días
   stopAtr: 2, trailAtr: 3, horizonH: 72,
   cost: 2 * cfg.spot.cexFee + 2 * 0.0005,
-  design: { days: 480, coins: 80, n: 2120, avg: 0.0023, win: 0.35, monthsUp: 9, months: 16 },
+  // Cartera simulada (50 €, 5 € por compra, máx. 5 a la vez) con 480 días de 80 monedas de Binance, dividida en dos mitades
+  design: { days: 480, coins: 80, ret: 0.01, maxDD: 0.14, btc: -0.23, bear: { ret: -0.05, btc: -0.41 }, bull: { ret: 0.06, btc: 0.28 }, prevDD: 0.23, prevBear: -0.15 },
 };
 
 // Estado del mercado a partir de las señales de cada moneda en la misma hora: [{ id, s }]
@@ -26,6 +28,16 @@ export function regimeOf(list) {
   const pct = new Map();
   l.slice().sort((a, b) => a.s.r168 - b.s.r168).forEach((x, j) => pct.set(x.id, j / (l.length - 1)));
   return { n: l.length, breadth, week, on: breadth > TREND.breadth && week > TREND.week, pct };
+}
+
+// BTC por encima de su media exponencial de 30 días (720 h): filtro de tendencia de largo plazo
+export function btcTrend(h1) {
+  const m = new Map();
+  if (!h1 || h1.length < 300) return m;
+  let e = h1.slice(0, 200).reduce((a, k) => a + k.c, 0) / 200;
+  const k = 2 / 721;
+  for (const x of h1) { e = x.c * k + e * (1 - k); m.set(x.t, { up: x.c > e, ema: e }); }
+  return m;
 }
 
 export const coinOk = (s, pct) => s.dEma50 > 0 && pct >= TREND.top;
@@ -60,13 +72,14 @@ export function backtest(coins) {
       rows.get(t).push({ id: c.id, c, i, s });
     }
   }
+  const bt = btcTrend(coins.find((c) => c.pair === "BTCUSDT")?.h1);
   const busy = new Map(), trades = [];
   let hours = 0, active = 0;
   for (const t of [...rows.keys()].sort((a, b) => a - b)) {
     const R = regimeOf(rows.get(t));
     if (!R) continue;
     hours++;
-    if (!R.on) continue;
+    if (!R.on || !bt.get(t)?.up) continue;
     active++;
     for (const x of rows.get(t)) {
       if (!coinOk(x.s, R.pct.get(x.id) ?? 0) || (busy.get(x.id) || 0) > t) continue;
@@ -76,6 +89,6 @@ export function backtest(coins) {
       trades.push(r.ret);
     }
   }
-  const n = trades.length;
-  return { n, avg: n ? trades.reduce((a, b) => a + b, 0) / n : null, wins: trades.filter((r) => r > 0).length, hours, active, days: hours / 24, t: Date.now() };
+  const n = trades.length, g = trades.filter((r) => r > 0).reduce((a, b) => a + b, 0), l = -trades.filter((r) => r <= 0).reduce((a, b) => a + b, 0);
+  return { n, avg: n ? trades.reduce((a, b) => a + b, 0) / n : null, wins: trades.filter((r) => r > 0).length, pf: l ? g / l : null, hours, active, days: hours / 24, t: Date.now() };
 }

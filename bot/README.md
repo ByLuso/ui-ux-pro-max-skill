@@ -14,7 +14,7 @@ Radar de criptomonedas que corre en **tu computadora**, gratis y en tiempo real.
 
 **Cómo decide:** al cerrar cada vela de 1 hora, cada moneda recibe 17 señales (cambio en 1/4/24 h, RSI, distancia a las EMA 20 y 50, MACD, volatilidad, volumen, rupturas, Bollinger, cómo va BTC, tono de las noticias…). El modelo estima la probabilidad de llegar antes al **objetivo (+3 ATR)** que al **stop (−2 ATR)** en 72 h. QUANT resta comisiones y deslizamiento; si el beneficio esperado supera +1% y GUARD no ve riesgos, la cartera de prueba compra 5 €. Si el precio avanza 1,5 ATR, el stop sube a la entrada.
 
-**Qué opera la cartera: estrategia «Tendencia de mercado» (solo Binance).** Una vez por hora mira dos cosas en las monedas de Binance: cuántas están por encima de su media de 50 h y cuántas suben en 7 días. Solo si **las dos pasan del 75%** (sube casi todo el mercado), compra 5 € de las monedas por encima de su media que están en el 30% más fuerte de la semana. Sale con un **stop móvil**: empieza a 2 ATR por debajo y sube siguiendo al precio a 3 ATR del máximo (máximo 72 h). Si el mercado no acompaña, no compra.
+**Qué opera la cartera: estrategia «Tendencia de mercado» (solo Binance).** Una vez por hora mira dos cosas en las monedas de Binance: cuántas están por encima de su media de 50 h y cuántas suben en 7 días. Solo si **las dos pasan del 75%** (sube casi todo el mercado) **y BTC está por encima de su media de 30 días**, compra 5 € de las monedas por encima de su media que están en el 30% más fuerte de la semana. Sale con un **stop móvil**: empieza a 2 ATR por debajo y sube siguiendo al precio a 3 ATR del máximo (máximo 72 h). Si el mercado no acompaña, no compra.
 
 Por qué esta y no otra: se probaron 24 combinaciones de estrategias y salidas con **480 días de velas de 1 h de 80 monedas de Binance**, con comisiones (en ese periodo BTC bajó un 23%):
 
@@ -25,7 +25,20 @@ Por qué esta y no otra: se probaron 24 combinaciones de estrategias y salidas c
 | Rupturas de máximos con volumen | 3.891 | −0,13% | 6 de 16 |
 | **Tendencia de mercado (la elegida)** | **2.120** | **+0,23%** | **9 de 16** |
 
-Todas las que compran sin mirar el mercado pierden; esta es la única claramente por encima de cero, y aun así la ventaja es pequeña. En los tokens de Binance Wallet, las comisiones y el deslizamiento se comen la ganancia de cualquier estrategia probada, así que se vigilan pero la cartera no los compra. El panel *Estrategia de la cartera* enseña el estado del mercado, la prueba con los últimos ~40 días y los resultados en vivo. Se desactiva con `SPOT_TREND=0`.
+Todas las que compran sin mirar el mercado pierden; esta es la única por encima de cero, y la ventaja es pequeña.
+
+**Comprobación más seria (cartera simulada de 50 €, máximo 5 posiciones, historial partido en dos mitades):**
+
+| Versión | 480 días | Caída máxima | Mitad bajista (BTC −41%) | Mitad alcista (BTC +28%) |
+|---|---|---|---|---|
+| Sin filtro de BTC | +2% | 23% | −15% | +16% |
+| **Con BTC sobre su media de 30 días (la que usa)** | **+1%** | **14%** | **−5%** | **+6%** |
+| + pausa si las últimas 10 operaciones pierden | −7% | 18% | −7% | 0% |
+| Tamaño según riesgo (1% del capital al stop) | −7% | 32% | −15% | +11% |
+
+Conclusión honesta: en esos 480 días la estrategia quedó cerca de cero mientras BTC caía un 23%. Su valor está en **no perder en los mercados bajistas** y ganar algo en los alcistas, no en ganar siempre. El filtro de BTC reduce la caída máxima casi a la mitad. Las otras dos ideas (pausar por rachas y tamaño según riesgo) empeoraban, así que no se usan.
+
+**Freno de emergencia:** decidido de antemano, como recomiendan las guías de trading algorítmico. Si la cartera cae un 25% desde su máximo (casi el doble de la peor caída de la prueba), deja de comprar hasta que la reinicies (`SPOT_MAX_DRAWDOWN`). En los tokens de Binance Wallet, las comisiones y el deslizamiento se comen la ganancia de cualquier estrategia probada, así que se vigilan pero la cartera no los compra. El panel *Estrategia de la cartera* enseña el estado del mercado, la prueba con los últimos ~40 días y los resultados en vivo. Se desactiva con `SPOT_TREND=0`.
 
 **El modelo (Orb)** sigue analizando y aprendiendo de cada moneda, y la cartera solo le haría caso si diera una señal con EV por encima de +1% tras corregir con resultados reales; en las pruebas sus mejores apuestas eran monedas cayendo en picado, que perdían. Las compras de «exploración» con el modelo están desactivadas por eso (`SPOT_EXPLORE=0`).
 

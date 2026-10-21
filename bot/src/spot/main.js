@@ -12,7 +12,7 @@ import { Market, hourly } from "./market.js";
 import { SPOT_SIGNALS, spotFeatures, spotVector, btcContext } from "./features.js";
 import { SpotWallet, slipOf, pc, fmtPx } from "./wallet.js";
 import { Calib } from "./calib.js";
-import { TREND, regimeOf, coinOk, backtest as trendBacktest } from "./strategy.js";
+import { TREND, regimeOf, coinOk, btcTrend, backtest as trendBacktest } from "./strategy.js";
 
 const H1 = 3600000, M15 = 15 * 60000, H = cfg.spot.horizonH * H1;
 const RR = cfg.spot.targetAtr / cfg.spot.stopAtr; // ganancia del objetivo medida en "riesgos" (R)
@@ -203,10 +203,16 @@ function trendPass(H) {
   const R = regimeOf(list);
   if (!R) return;
   const cands = list.filter((x) => coinOk(x.s, R.pct.get(x.id) ?? 0) && !x.c.last.guard).sort((a, b) => b.s.r168 - a.s.r168);
-  S.regime = { t: H, n: R.n, breadth: R.breadth, week: R.week, on: R.on, cands: cands.map((x) => x.c.sym).slice(0, 12) };
-  for (const x of list) x.c.trendOk = R.on && cands.includes(x);
-  const pctTxt = `${Math.round(R.breadth * 100)}% de monedas sobre su media · ${Math.round(R.week * 100)}% suben en 7 días`;
-  if (!R.on) { agent("QNT", `mercado sin fuerza (${pctTxt}; hace falta más del ${Math.round(TREND.breadth * 100)}%): no compra`); return; }
+  const btc = market.coins.get("cex:BTCUSDT"), bt = btcTrend(btc?.h1).get(H - H1) || null;
+  // Freno de emergencia decidido de antemano: si la cartera cae un 25% desde su máximo, deja de comprar
+  const peak = Math.max(wallet.startEur, ...wallet.curve.map((x) => x.v)), dd = 1 - wallet.equity(market.coins, eur()) / peak;
+  const halt = dd > cfg.spot.maxDD;
+  const on = R.on && !!bt?.up && !halt;
+  S.regime = { t: H, n: R.n, breadth: R.breadth, week: R.week, btcUp: bt ? bt.up : null, btcEma: bt?.ema ?? null, dd, halt, on, cands: cands.map((x) => x.c.sym).slice(0, 12) };
+  for (const x of list) x.c.trendOk = on && cands.includes(x);
+  const pctTxt = `${Math.round(R.breadth * 100)}% de monedas sobre su media · ${Math.round(R.week * 100)}% suben en 7 días · BTC ${bt?.up ? "sobre" : "bajo"} su media de 30 días`;
+  if (halt) { agent("GRD", `freno de emergencia: la cartera ha caído un ${Math.round(dd * 100)}% desde su máximo; no compra hasta que la reinicies`); return; }
+  if (!on) { agent("QNT", `mercado sin fuerza (${pctTxt}): no compra`); return; }
   agent("QNT", `mercado fuerte (${pctTxt}) · ${cands.length} candidatas: ${cands.slice(0, 5).map((x) => x.c.sym).join(", ") || "ninguna"}`);
   if (!cfg.spot.trend || S.paused || Date.now() - H > 60 * 60000 || market.status.ws !== "conectado") return;
   for (const x of cands) {
@@ -326,7 +332,7 @@ function state() {
     market: { ...market.status, perHour: market.perHour(), coins: coins.size, cex: list.filter((c) => c.kind === "cex").length, alpha: list.filter((c) => c.kind === "alpha").length, eurUsdt: market.eurUsdt, newsMood: news.market() },
     model: { labels: model.labels, counts: model.counts, ...sc, calib: calib.table(), tpR: model.tpRet, slR: model.slRet, tmR: model.timeRet, pending: views.size },
     backtest: S.backtest, evBias: evBias(), regime: S.regime || null, trendBt: S.trendBt || null,
-    trend: { on: !!cfg.spot.trend, name: TREND.name, breadth: TREND.breadth, week: TREND.week, design: TREND.design,
+    trend: { on: !!cfg.spot.trend, name: TREND.name, breadth: TREND.breadth, week: TREND.week, maxDD: cfg.spot.maxDD, design: TREND.design,
       live: (() => { const r = wallet.closed.filter((x) => x.strat === TREND.name); return { n: r.length, wins: r.filter((x) => x.pnl > 0).length, avg: r.length ? r.reduce((a, b) => a + b.ret, 0) / r.length : null }; })() }, wallet: wallet.state(coins, eur()), agents: S.agents, decisions: S.decisions.slice(0, 40), log: S.log.slice(0, 30),
     list, news: news.latest(15),
     cfg: { explore: cfg.spot.explore, exploreEur: cfg.spot.exploreEur, horizonH: cfg.spot.horizonH, stopAtr: cfg.spot.stopAtr, targetAtr: cfg.spot.targetAtr, beAtr: cfg.spot.beAtr, evMin: cfg.spot.evMin, minLabels: cfg.spot.minLabels },

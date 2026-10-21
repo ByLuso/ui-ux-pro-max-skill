@@ -37,6 +37,7 @@ export const cfg = {
     trend: num("SPOT_TREND", 1),               // 1 = la cartera opera la estrategia «Tendencia de mercado» (0 = no)
     trendBreadth: num("SPOT_TREND_BREADTH", 0.75), // mínimo de monedas de Binance sobre su EMA 50 para comprar
     trendWeek: num("SPOT_TREND_WEEK", 0.75),   // mínimo de monedas de Binance que suben en 7 días
+    maxDD: num("SPOT_MAX_DRAWDOWN", 0.25),     // freno: si la cartera cae este % desde su máximo, deja de comprar
     explore: num("SPOT_EXPLORE", 0),           // compras de prueba con el modelo (desactivado: compraba lo que caía)
     exploreEur: num("SPOT_EXPLORE_EUR", 2),    // euros ficticios por compra de prueba
     cexFee: num("BINANCE_FEE", 0.001),         // comisión de Binance por lado (0,1%)
