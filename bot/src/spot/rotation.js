@@ -134,3 +134,22 @@ export function backtest(coins) {
   const btcRet = btc.h1.at(-1).c / btc.h1[200].c - 1;
   return { ret: v - 1, maxDD: dd, btc: btcRet, days: times.length / 24, t: Date.now() };
 }
+
+// Serie horaria del mercado con el historial (para los minigráficos al arrancar): amplitud, semana, BTC y fuerza de las líderes
+export function marketSeries(coins, hours = 72) {
+  const btc = coins.find((c) => c.pair === "BTCUSDT"), bt = btcTrend(btc?.h1);
+  if (!btc?.h1?.length) return [];
+  const series = coins.filter((c) => c.h1 && c.h1.length > 300).map((c) => {
+    const cl = c.h1.map((k) => k.c), e50 = ema(cl, 50);
+    return { id: c.id, cl, e50, at: new Map(c.h1.map((k, i) => [k.t, i])), vol: c.vol24 || 0 };
+  });
+  const out = [];
+  for (const k of btc.h1.slice(-hours)) {
+    const list = series.map((s) => { const i = s.at.get(k.t); return i == null || i < 168 ? null : { id: s.id, vol: s.vol, dEma50: s.cl[i] / s.e50[i] - 1, r168: s.cl[i] / s.cl[i - 168] - 1 }; }).filter(Boolean);
+    if (list.length < 30) continue;
+    const top = pick(list), b = bt.get(k.t);
+    out.push({ t: k.t + H1, breadth: list.filter((x) => x.dEma50 > 0).length / list.length, week: list.filter((x) => x.r168 > 0).length / list.length,
+      btc: k.c, btcVs: b ? k.c / b.ema - 1 : null, lead: top.length ? top.reduce((a, x) => a + x.r168, 0) / top.length : null, news: null, ups: null });
+  }
+  return out;
+}

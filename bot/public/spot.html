@@ -92,6 +92,61 @@ canvas { display: block; width: 100%; }
 .note { color: var(--dim); font-size: 11px; }
 @media (max-width: 1250px) { .agents { grid-template-columns: repeat(4, minmax(0, 1fr)); } .main, .row0 { grid-template-columns: minmax(0, 1fr); } .row3 { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 700px) { .agents { grid-template-columns: repeat(2, minmax(0, 1fr)); } .stats { margin-left: 0; } .levels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---- Orb ---- */
+.orbrow { display: grid; grid-template-columns: minmax(200px, 250px) minmax(0, 1fr) minmax(220px, 290px); gap: 14px; position: relative; }
+.obs { display: grid; gap: 12px; align-content: start; position: relative; z-index: 2; }
+.ob { border-left: 2px solid var(--c); padding-left: 8px; }
+.ob .h { display: flex; justify-content: space-between; gap: 6px; }
+.ob .n { font: 700 11px var(--f-display); letter-spacing: .1em; color: var(--white); text-transform: uppercase; }
+.ob .val { color: var(--c); font-weight: 600; }
+.ob .s { font-size: 10px; color: var(--dim); }
+.ob canvas { height: 28px; margin-top: 3px; }
+.orbwrap { position: relative; min-height: 500px; }
+.cv-orb { position: absolute; inset: 0; height: 100%; }
+.cv-links { position: absolute; inset: 0; pointer-events: none; z-index: 1; height: 100%; }
+.orbcap { position: absolute; left: 0; right: 0; bottom: 0; text-align: center; font-size: 10px; color: var(--dim); }
+.orbleg { position: absolute; left: 0; top: 0; font-size: 10px; color: var(--dim); display: grid; gap: 2px; }
+.orbleg i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; }
+.stack { display: grid; gap: 6px; align-content: start; position: relative; z-index: 2; }
+.dcard { border: 1px solid var(--line-2); background: var(--panel-2); padding: 5px 8px 6px; border-radius: 2px; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 0 6px; text-align: left; color: inherit; font: inherit; width: 100%; }
+.dcard .k { font-size: 10px; letter-spacing: .08em; font-weight: 600; }
+.dcard .s { color: var(--white); font-weight: 600; }
+.dcard .r { grid-column: 1 / -1; color: var(--dim); font-size: 10px; letter-spacing: .02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dcard .bar { grid-column: 1 / -1; height: 2px; margin-top: 4px; background: var(--line); }
+.dcard .bar i { display: block; height: 100%; }
+.dcard.skip { border-color: color-mix(in srgb, var(--amber) 35%, var(--line)); }
+.dcard.block { border-color: color-mix(in srgb, var(--red) 45%, var(--line)); background: color-mix(in srgb, var(--red) 7%, var(--panel-2)); }
+.dcard.entry, .dcard.explore { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 9%, var(--panel-2)); }
+.dcard.sel { outline: 1px solid var(--white); }
+/* ---- traza y constructor ---- */
+.row4 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 10px; }
+.trace { font-size: 11px; line-height: 1.7; overflow-x: auto; }
+.trace .st { display: grid; grid-template-columns: 46px 80px minmax(0, 1fr); overflow-wrap: anywhere; }
+.trace .tg { display: inline-block; min-width: 44px; font-weight: 600; }
+.trace .ms { color: var(--faint); display: inline-block; min-width: 70px; }
+.trace .rec { border-left: 2px solid var(--gold); padding-left: 8px; margin: 4px 0; background: color-mix(in srgb, var(--gold) 6%, transparent); white-space: normal; }
+.sbgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 14px; }
+.sig { width: 100%; }
+.sig td { padding: 2px 0; font-size: 11px; white-space: nowrap; }
+.sig td:last-child { text-align: right; padding-left: 8px; color: var(--white); }
+.sig .tag { font-size: 9px; margin-right: 6px; }
+.cv-int { height: 190px; }
+.sbrow { display: grid; grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr); gap: 14px; margin-top: 10px; }
+.cv-tri { height: 120px; }
+.pb { margin-bottom: 6px; } .pb .h { display: flex; justify-content: space-between; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+.pb .tr { height: 6px; background: var(--line); position: relative; margin-top: 2px; } .pb .tr i { position: absolute; left: 0; top: 0; height: 100%; } .pb .tr b { position: absolute; top: -2px; width: 2px; height: 10px; background: var(--white); }
+.verdict .chip { white-space: normal; max-width: 100%; }
+.verdict { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); }
+/* ---- agentes con icono ---- */
+.agc .ic { width: 52px; height: 52px; border: 1px solid var(--c); display: grid; place-items: center; background: color-mix(in srgb, var(--c) 8%, transparent); border-radius: 2px; color: var(--c); }
+.agc .ic svg { width: 64%; height: 64%; }
+.agc.on .ic { box-shadow: 0 0 0 1px var(--c), 0 0 14px color-mix(in srgb, var(--c) 60%, transparent); }
+.agc .top { display: flex; gap: 8px; align-items: center; }
+.agc .m { font: 600 16px var(--f-display); color: var(--c); }
+.agc .u { font-size: 9px; color: var(--faint); text-transform: uppercase; letter-spacing: .05em; }
+@media (max-width: 1250px) { .orbrow { grid-template-columns: minmax(180px, 220px) minmax(0, 1fr); } .stack { grid-column: 1 / -1; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } .row4, .sbgrid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) { .orbrow { grid-template-columns: minmax(0, 1fr); } .obs { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cv-links { display: none; } .orbwrap { min-height: 340px; order: -1; } .sbrow { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .agc.on .st { animation: none; } .flash-up, .flash-dn { animation: none; } }
 </style>
 </head>
@@ -128,6 +183,40 @@ canvas { display: block; width: 100%; }
         <tr><td class="c-dim">Prueba con los últimos días</td><td id="tRecent">—</td></tr>
         <tr><td class="c-dim">En vivo (cartera de prueba)</td><td id="tLive">—</td></tr>
       </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="ph"><span class="t">El Orb</span><span class="sub">lo que mira el bot → probabilidades de cada moneda → decisiones</span><span class="rt sub c-blue" id="orbSub"></span></div>
+    <div class="orbrow" id="orbRow">
+      <canvas class="cv-links" id="cvLinks"></canvas>
+      <div class="obs" id="obs"></div>
+      <div class="orbwrap" id="orbWrap">
+        <canvas class="cv-orb" id="cvOrb" aria-label="Orb: cada punto es una moneda vigilada; cuanto más lejos del centro, más probabilidad de llegar al objetivo"></canvas>
+        <div class="orbleg"><span><i style="background:var(--gold)"></i>candidata o en cartera</span><span><i style="background:var(--violet)"></i>Binance Wallet</span><span><i style="background:var(--red)"></i>bloqueada por GUARD</span><span><i style="background:var(--white)"></i>resto de Binance</span></div>
+        <div class="orbcap"><span class="c-gold" id="orbCap"></span> · cuanto más lejos del centro, más P(objetivo) · haz clic en una decisión para ver su traza</div>
+      </div>
+      <div class="stack" id="stack" aria-label="Pila de decisiones"><div><div class="ph" style="margin:0"><span class="t">Pila de decisiones</span></div><div class="sub">oro entrada · ámbar salto · rojo bloqueo</div></div></div>
+    </div>
+  </section>
+
+  <section class="row4">
+    <div class="panel">
+      <div class="ph"><span class="t">Vida de una decisión</span><span class="sub">traza real de los agentes</span><span class="rt chip c-blue" id="trTag">—</span></div>
+      <div class="trace" id="trace"><div class="c-dim">Elige una decisión de la pila o una moneda del ranking.</div></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><span class="t">Constructor de estado</span><span class="sub">qué señal empuja la probabilidad · pesos reales del modelo</span><span class="rt chip c-amber" id="sbTag">—</span></div>
+      <div class="sbgrid">
+        <table class="sig" id="sbSig"></table>
+        <div><div class="sub">cada señal empuja P(objetivo) · <span class="c-white" id="sbPrior"></span></div><canvas class="cv-int" id="cvInt" aria-label="Contribución de cada señal a la probabilidad de llegar al objetivo"></canvas></div>
+      </div>
+      <div class="sbrow">
+        <div><div class="sub" style="margin-bottom:6px">estado calibrado · suma 1</div><div id="sbState"></div></div>
+        <div><div class="sub">espacio de estados</div><canvas class="cv-tri" id="cvTri" aria-label="Triángulo de los tres resultados"></canvas></div>
+        <div><div class="sub" style="margin-bottom:6px">medido · últimos <span id="calN">0</span> casos (la raya: histórico)</div><div id="sbMeas"></div></div>
+      </div>
+      <div class="verdict" id="sbVerdict"></div>
     </div>
   </section>
 
@@ -299,12 +388,12 @@ function render() {
   if (D.paused) B.push("Las señales están en pausa: analiza y aprende, pero la cartera no compra.");
   renderTrend();
   $("banners").innerHTML = B.map((t) => `<div class="banner">${esc(t)}</div>`).join("");
-  renderWallet(); renderAggro(); renderAgents(); renderRank(); renderLearn();
+  renderWallet(); renderAggro(); renderAgents(); renderRank(); renderLearn(); renderObs(); renderStack();
+  if (!sel) { const first = D.decisions.find((x) => x.dec === "entry") || D.decisions[0]; if (first) selectCoin(first.coin); }
   $("mood").textContent = `ánimo de las noticias ${m.newsMood.score > 0 ? "+" : ""}${m.newsMood.score} · ${m.newsMood.count} noticias`;
   $("news").innerHTML = D.news.map((n) => `<div><span class="dot" style="background:${n.tone > 0 ? C.green : n.tone < 0 ? C.red : C.faint}"></span><a href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a> <span class="c-dim">· ${esc(n.src)} · ${ago(n.t)}</span></div>`).join("") || `<div class="c-dim">Cargando noticias…</div>`;
   const K = { entry: ["SEÑAL", "c-gold"], explore: ["PRUEBA", "c-blue"], block: ["BLOQUEO", "c-red"], skip: ["SALTO", "c-dim"] };
   $("decT").innerHTML = `<tr><th>hora</th><th>moneda</th><th>decisión</th><th>P(objetivo)</th><th>EV</th><th>motivo</th></tr>` + D.decisions.slice(0, 15).map((x) => `<tr><td class="c-dim">${new Date(x.t).toLocaleTimeString()}</td><td><b class="c-white">${esc(x.sym)}</b> <span class="chip ${KIND[x.kind][1]}">${KIND[x.kind][0]}</span></td><td class="${K[x.dec][1]}">${K[x.dec][0]}</td><td>${x.p[0].toFixed(2)}</td><td style="color:${col(x.ev)}">${pct(x.ev)}</td><td class="c-dim">${esc(x.reason)}</td></tr>`).join("");
-  if (!sel && D.list.length) { sel = D.list[0].id; pollDetail(); }
 }
 
 function renderTrend() {
@@ -375,14 +464,179 @@ function renderWallet() {
   $("oEvents").innerHTML = w.events.length ? w.events.map((e) => `<div><span class="c-dim">${new Date(e.t).toLocaleString("es-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span> <span class="ev-k" style="color:${K[e.kind]?.[1] || C.dim}">${K[e.kind]?.[0] || ""}</span><b class="c-white">${esc(e.sym)}</b> <span class="c-dim">${esc(e.txt)}</span></div>`).join("") : `<div class="c-dim">Aún no ha operado.</div>`;
 }
 
+const ICON = {
+  SCT: '<circle cx="24" cy="30" r="16" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/><circle cx="24" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".7"/><path d="M24 30 L38 12 A20 20 0 0 1 42 26 Z" fill="currentColor" opacity=".8"/>',
+  CHT: '<g stroke="currentColor" stroke-width="1.4"><path d="M10 12 V36 M19 8 V30 M28 16 V40 M37 10 V28"/></g><g fill="currentColor"><rect x="7" y="18" width="6" height="12"/><rect x="16" y="12" width="6" height="12"/><rect x="25" y="22" width="6" height="12" opacity=".6"/><rect x="34" y="14" width="6" height="9"/></g>',
+  NWS: '<rect x="8" y="10" width="32" height="28" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M13 17 H35 M13 23 H35 M13 29 H27" stroke="currentColor" stroke-width="1.6"/><rect x="29" y="27" width="6" height="6" fill="currentColor"/>',
+  ORB: '<circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/><ellipse cx="24" cy="24" rx="15" ry="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"/><circle cx="24" cy="24" r="3.5" fill="currentColor"/><circle cx="36" cy="15" r="2" fill="currentColor"/><circle cx="13" cy="31" r="1.6" fill="currentColor"/>',
+  GRD: '<path d="M24 5 L41 15 L41 33 L24 43 L7 33 L7 15 Z" fill="currentColor" opacity=".25" stroke="currentColor" stroke-width="1.5"/><path d="M17 17 L31 31 M31 17 L17 31" stroke="#fff" stroke-width="2.4"/>',
+  QNT: '<path d="M6 40 Q16 40 20 26 Q24 8 28 26 Q32 40 42 40" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M24 12 L24 40" stroke="currentColor" stroke-dasharray="2 2"/><text x="31" y="14" font-size="9" fill="currentColor" font-family="monospace">EV</text>',
+  EXE: '<g stroke="currentColor" stroke-width="1.4"><path d="M10 14 V34 M18 18 V30 M26 10 V28 M34 20 V36 M40 16 V26"/></g><g fill="currentColor"><rect x="8" y="20" width="4" height="8"/><rect x="16" y="21" width="4" height="6"/><rect x="24" y="14" width="4" height="9"/><rect x="32" y="24" width="4" height="7"/><rect x="38" y="18" width="4" height="5"/></g>',
+};
+const AGU = { SCT: "actualizaciones / h", CHT: "monedas analizadas", NWS: "noticias en 48 h", ORB: "casos aprendidos", GRD: "tasa de bloqueo", QNT: "candidatas ahora", EXE: "posiciones abiertas" };
+const agFmt = (k, v) => v == null ? "—" : k === "GRD" ? Math.round(v * 100) + "%" : Number(v).toLocaleString("es-ES");
 const AG = [["SCT", "SCOUT", "datos en vivo de Binance", C.blue], ["CHT", "CHARTIST", "análisis técnico por hora", C.violet], ["NWS", "NEWS", "noticias y su tono", C.amber], ["ORB", "ORB", "probabilidades y aprendizaje", C.white], ["GRD", "GUARD", "seguridad y riesgos", C.red], ["QNT", "QUANT", "beneficio esperado tras costes", C.gold], ["EXE", "EXECUTOR", "compra y vende en papel", C.green]];
+
+// ---------- El Orb (datos reales) ----------
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const hash = (s) => { let h = 2166136261; for (const ch of s) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); return (h >>> 0) / 4294967295; };
+const OBS = [
+  { k: "breadth", n: "Amplitud", s: "monedas sobre su media 50 h", ag: "QNT", c: C.blue, f: (v) => Math.round(v * 100) + "%" },
+  { k: "week", n: "Suben en 7 días", s: "monedas de Binance", ag: "QNT", c: C.amber, f: (v) => Math.round(v * 100) + "%" },
+  { k: "btc", n: "Precio de BTC", s: "dólares", ag: "SCT", c: C.gold, f: (v) => "$" + Math.round(v).toLocaleString("es-ES") },
+  { k: "btcVs", n: "BTC vs media 30 d", s: "filtro de las dos carteras", ag: "QNT", c: C.green, f: (v) => pct(v) },
+  { k: "lead", n: "Fuerza de las líderes", s: "subida media 7 d del top 8", ag: "EXE", c: C.violet, f: (v) => pct(v, 0) },
+  { k: "news", n: "Ánimo de noticias", s: "tono de los titulares", ag: "NWS", c: C.red, f: (v) => (v > 0 ? "+" : "") + v },
+  { k: "ups", n: "Datos en vivo", s: "actualizaciones / hora", ag: "SCT", c: C.white, f: (v) => v.toLocaleString("es-ES") },
+];
+let orbCenter = { cx: 0, cy: 0, R: 0 };
+function buildObs() {
+  $("obs").innerHTML = `<div><div class="ph" style="margin:0"><span class="t">Observables</span></div><div class="sub">lo que miran los agentes · cada hora</div></div>` +
+    OBS.map((o, i) => `<div class="ob" style="--c:${o.c}"><div class="h"><span class="n">${o.n}</span><span class="val" id="obv${i}">—</span></div><div class="s">${o.s} · <span style="color:${o.c}">${o.ag}</span></div><canvas id="obc${i}"></canvas></div>`).join("");
+}
+function renderObs() {
+  if (!$("obc0")) buildObs();
+  OBS.forEach((o, i) => {
+    const a = (D.obs || []).map((x) => x[o.k]).filter((v) => v != null && isFinite(v));
+    const live = o.k === "ups" ? D.market.perHour : o.k === "news" ? D.market.newsMood.score : null;
+    if (live != null) a.push(live);
+    $("obv" + i).textContent = a.length ? o.f(a[a.length - 1]) : "—";
+    const { ctx, w, h } = fit($("obc" + i)); ctx.clearRect(0, 0, w, h);
+    if (a.length < 2) { ctx.fillStyle = C.faint; ctx.font = "9px " + css("--f-mono"); ctx.fillText("acumulando datos…", 0, h - 8); return; }
+    const mn = Math.min(...a), mx = Math.max(...a), rg = mx - mn || 1;
+    const P = a.map((v, j) => [(j / (a.length - 1)) * (w - 6), h - 4 - ((v - mn) / rg) * (h - 8)]);
+    ctx.beginPath(); P.forEach(([x, y], j) => (j ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.strokeStyle = o.c; ctx.lineWidth = 1.6; ctx.stroke();
+    ctx.lineTo(P.at(-1)[0], h); ctx.lineTo(0, h); ctx.closePath(); ctx.globalAlpha = 0.18; ctx.fillStyle = o.c; ctx.fill(); ctx.globalAlpha = 1;
+    ctx.fillStyle = C.white; ctx.beginPath(); ctx.arc(P.at(-1)[0], P.at(-1)[1], 2.4, 0, 7); ctx.fill();
+  });
+}
+function renderOrb(now) {
+  if (!D) return;
+  const { ctx, w, h } = fit($("cvOrb")); ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h * 0.48, R = Math.min(w * 0.46, h * 0.42);
+  const rot = reduced ? 0.6 : now / 12000, tilt = 0.35, ct = Math.cos(tilt), st = Math.sin(tilt);
+  const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.1); g.addColorStop(0, "rgba(79,140,255,0.12)"); g.addColorStop(1, "rgba(79,140,255,0)");
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 1.1, 0, 7); ctx.fill();
+  let hot = 0;
+  for (const c of D.list) {
+    if (!c.p) continue;
+    const z0 = hash(c.id) * 2 - 1, th = hash(c.id + "θ") * Math.PI * 2 + rot, rr = Math.sqrt(1 - z0 * z0);
+    const x = rr * Math.cos(th); let y = z0, z = rr * Math.sin(th);
+    const y2 = y * ct - z * st, z2 = y * st + z * ct; y = y2; z = z2;
+    const amp = Math.min(1, 0.25 + c.p[0] * 1.6);
+    const ex = cx + x * R * amp, ey = cy + y * R * amp, depth = (z + 1) / 2, a = 0.2 + depth * 0.8;
+    const hotC = c.open || c.trendOk, colr = hotC ? C.gold : c.guard ? C.red : c.kind === "alpha" ? C.violet : C.white;
+    if (hotC) hot++;
+    ctx.globalAlpha = a * 0.45; ctx.strokeStyle = colr; ctx.lineWidth = 0.6;
+    ctx.beginPath(); ctx.moveTo(cx + x * R * 0.1, cy + y * R * 0.1); ctx.lineTo(ex, ey); ctx.stroke();
+    ctx.globalAlpha = a; ctx.fillStyle = colr;
+    const r = hotC ? 2 + depth * 1.8 : 1 + depth * 1.1;
+    ctx.beginPath(); ctx.arc(ex, ey, r, 0, 7); ctx.fill();
+    if (hotC && !reduced) { ctx.globalAlpha = 0.4 + 0.4 * Math.sin(now / 200 + hash(c.id) * 9); ctx.strokeStyle = C.gold; ctx.beginPath(); ctx.arc(ex, ey, r + 3, 0, 7); ctx.stroke(); }
+    if (c.id === sel) { ctx.globalAlpha = 1; ctx.strokeStyle = C.white; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(ex, ey, r + 6, 0, 7); ctx.stroke(); ctx.fillStyle = C.white; ctx.font = "10px " + css("--f-mono"); ctx.fillText(c.sym, ex + 9, ey - 6); }
+    else if ((hotC || c.open) && depth > 0.55) { ctx.globalAlpha = 0.9; ctx.fillStyle = C.gold; ctx.font = "10px " + css("--f-mono"); ctx.fillText(c.sym, ex + 6, ey - 5); }
+  }
+  ctx.globalAlpha = 1; ctx.fillStyle = C.white; ctx.beginPath(); ctx.arc(cx, cy, 3, 0, 7); ctx.fill();
+  ctx.strokeStyle = C.white; ctx.globalAlpha = 0.4; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, h - 20); ctx.stroke(); ctx.globalAlpha = 1;
+  orbCenter = { cx, cy, R };
+  $("orbSub").textContent = `${D.list.filter((c) => c.p).length} monedas · cada una un punto · ${hot} candidatas o en cartera`;
+  $("orbCap").textContent = `↺ ${D.model.labels.toLocaleString("es-ES")} casos medidos`;
+}
+function renderLinks(now) {
+  const cv = $("cvLinks"); if (getComputedStyle(cv).display === "none") return;
+  const { ctx, w, h } = fit(cv); ctx.clearRect(0, 0, w, h);
+  const base = $("orbRow").getBoundingClientRect(), ow = $("orbWrap").getBoundingClientRect();
+  const ocx = ow.left - base.left + orbCenter.cx, ocy = ow.top - base.top + orbCenter.cy;
+  OBS.forEach((o, i) => {
+    const c = $("obc" + i); if (!c) return;
+    const r = c.getBoundingClientRect(), x0 = r.right - base.left, y0 = r.top - base.top - 8;
+    const ang = (i / (OBS.length - 1) - 0.5) * 1.6 + Math.PI, x1 = ocx + Math.cos(ang) * orbCenter.R * 0.5, y1 = ocy + Math.sin(ang) * orbCenter.R * 0.5;
+    ctx.strokeStyle = o.c; ctx.globalAlpha = 0.7; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.bezierCurveTo(x0 + 80, y0, x1 - 120, y1, x1, y1); ctx.stroke();
+    const t = reduced ? 0.5 : (now / 2600 + i * 0.13) % 1, mt = 1 - t;
+    const bx = mt ** 3 * x0 + 3 * mt * mt * t * (x0 + 80) + 3 * mt * t * t * (x1 - 120) + t ** 3 * x1, by = mt ** 3 * y0 + 3 * mt * mt * t * y0 + 3 * mt * t * t * y1 + t ** 3 * y1;
+    ctx.globalAlpha = 1; ctx.fillStyle = o.c; ctx.beginPath(); ctx.arc(bx, by, 2.6, 0, 7); ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+}
+function renderStack() {
+  const el = $("stack"), head = el.firstElementChild;
+  const items = D.decisions.slice(0, 11).map((x) => {
+    const k = x.dec === "entry" || x.dec === "explore" ? ["ENTRADA", "EXE", "c-gold", C.gold] : x.dec === "block" ? ["BLOQUEO", "GRD", "c-red", C.red] : ["SALTO", "QNT", "c-amber", C.amber];
+    return `<button type="button" class="dcard ${x.dec}${x.coin === sel ? " sel" : ""}" data-coin="${esc(x.coin)}"><span class="k ${k[2]}">${k[0]} · ${k[1]} <span class="s">${esc(x.sym)}</span></span><span class="k ${k[2]}">${x.p ? x.p[0].toFixed(2) : "—"}</span><span class="r" title="${esc(x.reason)}">${esc(x.reason)}</span><span class="bar"><i style="width:${Math.max(4, Math.min(100, (x.p?.[0] || 0) * 220))}%;background:${k[3]}"></i></span></button>`;
+  });
+  el.innerHTML = ""; el.appendChild(head); el.insertAdjacentHTML("beforeend", items.join(""));
+}
+function selectCoin(id) { sel = id; detail = null; renderRank(); fetch("/api/coin?id=" + encodeURIComponent(id)).then((r) => r.json()).then((d) => { detail = d; renderDetail(); }); }
+$("stack").addEventListener("click", (e) => { const b = e.target.closest(".dcard"); if (b) selectCoin(b.dataset.coin); });
+function orbLoop(now) { if (D) { renderOrb(now); renderLinks(now); } requestAnimationFrame(orbLoop); }
+requestAnimationFrame(orbLoop);
+
+// ---------- Vida de una decisión y constructor de estado ----------
+const AGC = { SCT: C.blue, CHT: C.violet, NWS: C.amber, ORB: C.white, GRD: C.red, QNT: C.gold, EXE: C.green, MKT: C.dim };
+function renderTrace() {
+  const d = detail, T = d?.trace;
+  if (!T) { $("trace").innerHTML = `<div class="c-dim">${d ? `${esc(d.sym)} aún no tiene una decisión en esta sesión (se evalúa al cerrar cada hora).` : "Elige una decisión de la pila o una moneda del ranking."}</div>`; $("trTag").textContent = "—"; return; }
+  const k = T.dec === "entry" || T.dec === "explore" ? ["ENTRADA", "c-gold"] : T.dec === "block" ? ["BLOQUEO", "c-red"] : ["SALTO", "c-amber"];
+  $("trTag").textContent = `${T.sym} · ${k[0]}`; $("trTag").className = "rt chip " + k[1];
+  $("trace").innerHTML = `<div class="c-dim">↳ disparador: cierre de la vela de 1 h · ${new Date(T.t).toLocaleString("es-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })} · ${esc(T.src)}</div>` +
+    T.steps.map((s) => `<div class="st"><span class="tg" style="color:${AGC[s.ag] || C.dim}">[${s.ag}]</span><span class="ms">+${s.ms.toFixed(2)} ms</span><span>${esc(s.txt)}</span></div>`).join("") +
+    `<div class="rec"><span class="${k[1]}">REGISTRO DE DECISIÓN · ${k[0]}</span> · ${esc(T.sym)} · ${esc(T.reason)}</div><div class="c-dim">… el resultado se mide cuando toque el objetivo, el stop o pasen ${D.cfg.horizonH} h, y vuelve al entrenamiento del modelo</div>`;
+}
+const PK = new Set(["r1", "r4", "r24", "dEma20", "dEma50", "slope", "atrPct", "breakout", "bbWidth", "btc4", "btc24"]);
+const fmtSig = (k, v) => v == null || !isFinite(v) ? "—" : PK.has(k) ? pct(v, 2) : k === "rsi" ? v.toFixed(0) : k === "macd" ? (v * 1000).toFixed(2) : k === "volRatio" ? v.toFixed(2) + "×" : k === "alpha" ? (v ? "sí" : "no") : k === "liq" ? usd(10 ** v) : String(Math.round(v));
+function renderBuilder() {
+  const d = detail, E = d?.explain;
+  if (!E) { $("sbSig").innerHTML = ""; $("sbVerdict").innerHTML = ""; $("sbTag").textContent = d ? d.sym : "—"; return; }
+  $("sbTag").textContent = d.sym;
+  const top = E.sig.map((s, i) => ({ ...s, i })).sort((a, b) => Math.abs(b.d) - Math.abs(a.d));
+  const shown = top.slice(0, 8), rest = top.slice(8).reduce((a, s) => a + s.d, 0);
+  $("sbSig").innerHTML = shown.map((s) => `<tr><td><span class="tag" style="color:${AGC[s.ag]}">${s.ag}</span>${esc(s.name)}</td><td>${fmtSig(s.k, s.v)}</td></tr>`).join("") + `<tr><td class="c-dim">otras ${top.length - 8} señales</td><td class="c-dim">—</td></tr>`;
+  $("sbPrior").textContent = `base ${E.prior.toFixed(2)} → modelo ${E.pRaw[0].toFixed(2)} → calibrado ${E.p[0].toFixed(2)}`;
+  const steps = []; let prev = E.prior;
+  for (const s of shown) { steps.push([prev, prev + s.d]); prev += s.d; }
+  steps.push([prev, prev + rest]);
+  const { ctx, w, h } = fit($("cvInt")); ctx.clearRect(0, 0, w, h);
+  const all = steps.flat().concat(E.prior), lo = Math.max(0, Math.min(...all) - 0.03), hi = Math.min(1, Math.max(...all) + 0.03);
+  const X = (v) => 8 + ((v - lo) / (hi - lo || 1)) * (w - 50), rowH = (h - 18) / steps.length;
+  ctx.font = "9px " + css("--f-mono"); ctx.strokeStyle = C.line; ctx.fillStyle = C.dim;
+  for (let v = Math.ceil(lo * 20) / 20; v <= hi; v += 0.05) { ctx.beginPath(); ctx.moveTo(X(v), 0); ctx.lineTo(X(v), h - 14); ctx.stroke(); ctx.fillText(v.toFixed(2), X(v) - 9, h - 3); }
+  ctx.strokeStyle = C.white; ctx.setLineDash([2, 2]); ctx.beginPath(); ctx.moveTo(X(E.prior), 0); ctx.lineTo(X(E.prior), h - 14); ctx.stroke(); ctx.setLineDash([]);
+  steps.forEach(([a, b], i) => {
+    const y = 4 + i * rowH + rowH / 2, colr = i === steps.length - 1 ? C.dim : b >= a ? C.green : C.red;
+    ctx.strokeStyle = colr; ctx.fillStyle = colr; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(X(a), y); ctx.lineTo(X(b), y); ctx.stroke();
+    const dd = b >= a ? 1 : -1; ctx.beginPath(); ctx.moveTo(X(b), y); ctx.lineTo(X(b) - dd * 4, y - 3); ctx.lineTo(X(b) - dd * 4, y + 3); ctx.fill();
+    ctx.fillText((b - a >= 0 ? "+" : "−") + Math.abs(b - a).toFixed(3), Math.min(Math.max(X(a), X(b)) + 6, w - 40), y + 3);
+  });
+  ctx.lineWidth = 1;
+  const p = E.p, OC = [C.green, C.red, C.amber], lab = [`objetivo +${D.cfg.targetAtr} ATR primero`, `stop −${D.cfg.stopAtr} ATR primero`, `nada en ${D.cfg.horizonH} h`];
+  $("sbState").innerHTML = [0, 1, 2].map((i) => `<div class="pb"><div class="h"><span style="color:${OC[i]}">${lab[i]}</span><span class="c-white">${p[i].toFixed(2)}</span></div><div class="tr"><i style="width:${p[i] * 100}%;background:${OC[i]}"></i></div></div>`).join("");
+  { const { ctx, w, h } = fit($("cvTri")); ctx.clearRect(0, 0, w, h);
+    const s = Math.min(w - 24, (h - 24) * 1.15), A = [w / 2, 10], B = [w / 2 - s / 2, h - 16], Cc = [w / 2 + s / 2, h - 16];
+    ctx.strokeStyle = css("--line-2"); ctx.beginPath(); ctx.moveTo(...A); ctx.lineTo(...B); ctx.lineTo(...Cc); ctx.closePath(); ctx.stroke();
+    ctx.font = "9px " + css("--f-mono");
+    [[A, C.green, "OBJ"], [B, C.red, "STOP"], [Cc, C.amber, "72 H"]].forEach(([q, c, t]) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(q[0], q[1], 3, 0, 7); ctx.fill(); ctx.fillText(t, q[0] + (q === B ? -18 : q === Cc ? -16 : 6), q[1] + (q === A ? 6 : 12)); });
+    const qx = p[0] * A[0] + p[1] * B[0] + p[2] * Cc[0], qy = p[0] * A[1] + p[1] * B[1] + p[2] * Cc[1];
+    const gg = ctx.createRadialGradient(qx, qy, 0, qx, qy, 13); gg.addColorStop(0, "rgba(238,243,255,.95)"); gg.addColorStop(1, "rgba(79,140,255,0)"); ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(qx, qy, 13, 0, 7); ctx.fill(); }
+  const M = d.measured, n = M.n || 1, tot = M.all.reduce((a, b) => a + b, 0) || 1, OUT = ["objetivo", "stop", "nada"];
+  $("calN").textContent = M.n;
+  $("sbMeas").innerHTML = [0, 1, 2].map((i) => `<div class="pb"><div class="h"><span style="color:${OC[i]}">${OUT[i]}</span><span class="c-white">${M.counts[i]} · ${(M.counts[i] / n).toFixed(2)}</span></div><div class="tr"><i style="width:${(M.counts[i] / n) * 100}%;background:${OC[i]}"></i><b style="left:${(M.all[i] / tot) * 100}%" title="frecuencia histórica"></b></div></div>`).join("");
+  const L = d.last || {};
+  $("sbVerdict").innerHTML = (L.guard ? `<span class="chip c-red">GUARD BLOQUEA · ${esc(L.guard)}</span>` : `<span class="chip c-green">GUARD PASA</span>`) +
+    `<span class="c-dim">EV tras costes</span><span style="color:${col(L.ev)}">${pct(L.ev)}</span>` +
+    (d.pos ? `<span class="chip c-gold">EN CARTERA</span>` : L.ev >= D.cfg.evMin && !L.guard ? `<span class="chip c-gold">SEÑAL DEL MODELO</span>` : `<span class="chip c-amber">EL MODELO NO VE VENTAJA</span>`) +
+    (D.list.find((c) => c.id === d.id)?.trendOk ? `<span class="chip c-green">CANDIDATA · TENDENCIA DE MERCADO</span>` : "");
+}
+
 function renderAgents() {
   const el = $("agents");
-  if (!el.children.length) el.innerHTML = AG.map(([k, n, r, c]) => `<div class="agc" id="ag-${k}" style="--c:${c}"><div class="hd"><span class="cd">${k}</span><span class="nm">${n}</span><span class="st"></span></div><div class="role">${r}</div><div class="tx"></div><div class="ft"><span class="ago"></span><span class="cnt"></span></div></div>`).join("");
+  if (!el.children.length) el.innerHTML = AG.map(([k, n, r, c]) => `<div class="agc" id="ag-${k}" style="--c:${c}"><div class="top"><div class="ic"><svg viewBox="0 0 48 48" aria-hidden="true">${ICON[k]}</svg></div><div><div class="m"></div><div class="u">${AGU[k]}</div></div></div><div class="hd"><span class="cd">${k}</span><span class="nm">${n}</span><span class="st"></span></div><div class="role">${r}</div><div class="tx"></div><div class="ft"><span class="ago"></span><span class="cnt"></span></div></div>`).join("");
   for (const [k] of AG) {
     const a = D.agents[k], c = $("ag-" + k);
     c.classList.toggle("on", a.t && Date.now() - a.t < 4000);
     c.querySelector(".tx").textContent = a.txt;
+    c.querySelector(".m").textContent = agFmt(k, D.agentM?.[k]);
     c.querySelector(".ago").textContent = a.t ? "hace " + ago(a.t) : "";
     c.querySelector(".cnt").textContent = a.n ? a.n.toLocaleString("es-ES") + " acciones" : "";
   }
@@ -423,6 +677,7 @@ function renderLearn() {
 
 function renderDetail() {
   const d = detail; if (!d) return;
+  renderTrace(); renderBuilder();
   $("dTitle").textContent = d.sym + (d.name && d.name !== d.sym ? " · " + d.name : "");
   $("dLinks").innerHTML = `<a href="${esc(d.url)}" target="_blank" rel="noopener">${d.kind === "cex" ? "abrir en Binance" : "ver contrato"} ↗</a>`;
   const L = d.last;
@@ -460,7 +715,7 @@ function drawChart(d) {
 $("rankT").addEventListener("click", async (e) => {
   const rm = e.target.closest("[data-rm]");
   if (rm) { e.stopPropagation(); await post("/api/unwatch", { id: rm.dataset.rm }); return; }
-  const tr = e.target.closest("tr[data-id]"); if (tr) { sel = tr.dataset.id; detail = null; renderRank(); fetch("/api/coin?id=" + encodeURIComponent(sel)).then((r) => r.json()).then((d) => { detail = d; renderDetail(); }); }
+  const tr = e.target.closest("tr[data-id]"); if (tr) selectCoin(tr.dataset.id);
 });
 $("rankT").addEventListener("keydown", (e) => { if (e.key === "Enter") e.target.closest("tr[data-id]")?.click(); });
 document.querySelectorAll("[data-f]").forEach((b) => b.addEventListener("click", () => { filter = b.dataset.f; try { localStorage.setItem("spotFilter", filter); } catch {} renderRank(); }));

@@ -13,7 +13,7 @@ import { SPOT_SIGNALS, spotFeatures, spotVector, btcContext } from "./features.j
 import { SpotWallet, slipOf, pc, fmtPx } from "./wallet.js";
 import { Calib } from "./calib.js";
 import { TREND, regimeOf, coinOk, btcTrend, backtest as trendBacktest } from "./strategy.js";
-import { AGGRO, RotationWallet, pick as aggroPick, backtest as aggroBacktest } from "./rotation.js";
+import { AGGRO, RotationWallet, pick as aggroPick, backtest as aggroBacktest, marketSeries } from "./rotation.js";
 
 const H1 = 3600000, M15 = 15 * 60000, H = cfg.spot.horizonH * H1;
 const RR = cfg.spot.targetAtr / cfg.spot.stopAtr; // ganancia del objetivo medida en "riesgos" (R)
@@ -94,20 +94,28 @@ function guard(c, s) {
 }
 
 function decide(c, hourEnd, live) {
+  const t0 = performance.now(), T = [];
+  const step = (ag, txt) => T.push({ ag, ms: performance.now() - t0, txt });
   const r = evaluate(c, hourEnd);
   if (!r) return;
   const { v, s, h } = r;
+  step("SCT", `vela de 1 h cerrada · precio ${fmtPx(s.px)} · ${pc(s.r24)} en 24 h · ${Number.isFinite(s.r168) ? pc(s.r168) : "—"} en 7 días · volumen ${Math.round((c.vol24 || 0) / 1e6)} M$`);
   views.set(v.id, v);
   const ta = analyze(h);
   const bias = evBias().bias;
   const q = quant(c, v, bias);
   c.view = v;
   c.last = { t: hourEnd, p: v.p, ev: q.ev, evR: q.evR, evRaw: q.evRaw, risk: v.risk, stop: v.stop, target: v.target, s, ta: ta ? { score: ta.score, top: ta.signals.slice(0, 3), rsi: ta.rsi } : null };
+  step("CHT", `RSI ${s.rsi.toFixed(0)} · ${s.dEma50 >= 0 ? "sobre" : "bajo"} la EMA 50 (${pc(s.dEma50)}) · ATR ${(s.atrPct * 100).toFixed(2)}%/h${ta && ta.signals[0] ? " · " + ta.signals[0].txt : ""}`);
+  { const n = newsFor(c); step("NWS", n.count ? `${n.count} noticias en 48 h · tono ${n.score > 0 ? "+" : ""}${n.score}` : "sin noticias en 48 h"); }
+  step("ORB", `estado · objetivo ${v.p[0].toFixed(2)} · stop ${v.p[1].toFixed(2)} · nada en ${cfg.spot.horizonH} h ${v.p[2].toFixed(2)} (modelo ${v.pRaw[0].toFixed(2)} → calibrado)`);
   agent("CHT", `${c.sym}: RSI ${s.rsi.toFixed(0)} · ${s.dEma50 >= 0 ? "sobre" : "bajo"} la EMA 50 · ATR ${(s.atrPct * 100).toFixed(2)}%/h${ta && ta.signals[0] ? " · " + ta.signals[0].txt : ""}`);
   agent("ORB", `${c.sym}: P(objetivo) ${v.p[0].toFixed(2)} · P(stop) ${v.p[1].toFixed(2)} · P(nada en ${cfg.spot.horizonH} h) ${v.p[2].toFixed(2)}`);
   const block = guard(c, s);
   c.last.guard = block;
   let dec = "skip", reason = `EV ${pc(q.ev)} tras costes · mínimo ${pc(cfg.spot.evMin, 0)}`;
+  step("GRD", block ? `BLOQUEA · ${block}` : `pasa · ${c.kind === "alpha" ? (S.sec.get(c.id)?.ok ? "contrato revisado con GoPlus" : "contrato pendiente de revisar") : "listada en Binance"} · volatilidad ${(s.atrPct * 100).toFixed(2)}%/h`);
+  step("QNT", `${pc(q.evR * v.risk)} esperado − costes ${(q.costs * 100).toFixed(2)}%${bias ? ` ${pc(bias)} corrección` : ""} = EV ${pc(q.ev)} (mínimo ${pc(cfg.spot.evMin, 0)})`);
   if (block) { dec = "block"; reason = block; agent("GRD", `bloquea ${c.sym}: ${block}`); }
   else {
     agent("GRD", `${c.sym} pasa los filtros`);
@@ -124,6 +132,8 @@ function decide(c, hourEnd, live) {
       }
     }
   }
+  step("EXE", dec === "entry" ? `ENTRADA · ${reason}` : dec === "block" ? "no opera: bloqueada por GUARD" : `salta · ${reason}`);
+  c.trace = { t: hourEnd, sym: c.sym, dec, reason, steps: T, src: "modelo (Orb)" };
   S.decisions.unshift({ t: Date.now(), coin: c.id, sym: c.sym, kind: c.kind, dec, reason, p: v.p, ev: q.ev });
   if (S.decisions.length > 80) S.decisions.pop();
 }
@@ -200,6 +210,14 @@ setInterval(explore, 5 * 60000);
 // ---------- estrategia «Tendencia de mercado» (la que opera la cartera) ----------
 // Una vez por hora, cuando ya han llegado las velas de Binance: mira si sube casi todo el mercado y, si es así,
 // compra las monedas más fuertes de la semana que pasan los filtros, con stop móvil.
+// Serie horaria de lo que mira el bot (para los minigráficos del Orb)
+function pushObs(H, R, bt, lead) {
+  const btc = market.coins.get("cex:BTCUSDT");
+  const pt = { t: H, breadth: R?.breadth ?? null, week: R?.week ?? null, btc: btc?.px ?? null, btcVs: bt && btc?.px ? btc.px / bt.ema - 1 : null, lead, news: news.market().score, ups: market.perHour() };
+  S.obs = (S.obs || []).filter((x) => x.t !== H); S.obs.push(pt);
+  if (S.obs.length > 96) S.obs.splice(0, S.obs.length - 96);
+}
+
 function trendPass(H) {
   const list = [...market.coins.values()].filter((c) => c.kind === "cex" && c.last && c.last.t === H).map((c) => ({ id: c.id, c, s: c.last.s }));
   const R = regimeOf(list);
@@ -224,6 +242,13 @@ function trendPass(H) {
     const why = wallet.open(c, view, { evRaw: NaN, ev: NaN }, eur(), { trail: TREND.trailAtr, strat: TREND.name });
     if (why) { if (/llena|saldo/.test(why)) break; continue; }
     S.signalsToday++;
+    c.trace = { t: H, sym: c.sym, dec: "entry", src: TREND.name, reason: `${TREND.name}: compra`, steps: [
+      { ag: "SCT", ms: 0, txt: `vela de 1 h cerrada · precio ${fmtPx(s.px)} · ${pc(s.r168)} en 7 días` },
+      { ag: "QNT", ms: 0.1, txt: `mercado: ${Math.round(R.breadth * 100)}% sobre su media · ${Math.round(R.week * 100)}% suben en 7 días · BTC sobre su media de 30 días` },
+      { ag: "QNT", ms: 0.2, txt: `${c.sym} está en el ${Math.round((1 - (R.pct.get(c.id) ?? 0)) * 100) || 1}% más fuerte de la semana y sobre su EMA 50` },
+      { ag: "GRD", ms: 0.3, txt: "pasa los filtros" },
+      { ag: "EXE", ms: 0.4, txt: `ENTRADA · ${cfg.paperTradeEur} € · stop ${fmtPx(view.stop)} que sube a ${TREND.trailAtr} ATR del máximo` },
+    ] };
     log("EXE", `${TREND.name}: compra ${c.sym} (sube ${pc(s.r168)} en 7 días) · stop ${fmtPx(view.stop)} móvil`);
     agent("EXE", `compra ${c.sym} en la cartera de prueba (${TREND.name})`);
     S.decisions.unshift({ t: Date.now(), coin: c.id, sym: c.sym, kind: c.kind, dec: "entry", reason: `${TREND.name}: el mercado sube y ${c.sym} está entre las más fuertes de la semana (${pc(s.r168)})`, p: c.last.p, ev: c.last.ev });
@@ -237,6 +262,7 @@ function aggroPass(H) {
   if (list.length < 30 || !bt) return;
   const picks = aggroPick(list), on = bt.up;
   S.aggro = { t: H, on, picks: picks.map((x) => ({ sym: x.sym, r168: x.r168 })) };
+  { const ls = [...market.coins.values()].filter((c) => c.kind === "cex" && c.last && c.last.t === H).map((c) => ({ id: c.id, s: c.last.s })); pushObs(H, regimeOf(ls), bt, picks.length ? picks.reduce((a, x) => a + x.r168, 0) / picks.length : null); }
   if (!cfg.spot.aggro || S.paused || Date.now() - H > 60 * 60000 || market.status.ws !== "conectado") return;
   const r = rot.rotate(H, market.coins, picks, on, eur());
   if (r.bought.length || r.sold.length) log("EXE", `Agresiva · tramo ${r.j + 1}: ${r.bought.length ? "compra " + r.bought.join(", ") : ""}${r.sold.length ? " vende " + r.sold.join(", ") : ""}`);
@@ -318,6 +344,7 @@ market.on("ready", () => {
   const t0 = Date.now();
   S.trendBt = trendBacktest([...market.coins.values()].filter((c) => c.kind === "cex"));
   log("QNT", `${TREND.name}, prueba con ${S.trendBt.days.toFixed(0)} días: ${S.trendBt.n} operaciones, media ${S.trendBt.n ? pc(S.trendBt.avg, 2) : "—"} (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
+  S.obs = marketSeries([...market.coins.values()].filter((c) => c.kind === "cex"), 72);
   S.aggroBt = aggroBacktest([...market.coins.values()].filter((c) => c.kind === "cex"));
   if (S.aggroBt) log("QNT", `${AGGRO.name}, prueba con ${S.aggroBt.days.toFixed(0)} días: ${pc(S.aggroBt.ret)} (BTC ${pc(S.aggroBt.btc)}), caída máxima ${(S.aggroBt.maxDD * 100).toFixed(0)}%`);
   S.ready = true;
@@ -352,6 +379,8 @@ function state() {
     market: { ...market.status, perHour: market.perHour(), coins: coins.size, cex: list.filter((c) => c.kind === "cex").length, alpha: list.filter((c) => c.kind === "alpha").length, eurUsdt: market.eurUsdt, newsMood: news.market() },
     model: { labels: model.labels, counts: model.counts, ...sc, calib: calib.table(), tpR: model.tpRet, slR: model.slRet, tmR: model.timeRet, pending: views.size },
     backtest: S.backtest, evBias: evBias(), regime: S.regime || null, trendBt: S.trendBt || null,
+    obs: S.obs || [],
+    agentM: agentMetrics(),
     aggro: { on: !!cfg.spot.aggro, name: AGGRO.name, top: AGGRO.top, every: AGGRO.every, design: AGGRO.design, bt: S.aggroBt || null, now: S.aggro || null, wallet: rot.state(market.coins, eur()) },
     trend: { on: !!cfg.spot.trend, name: TREND.name, breadth: TREND.breadth, week: TREND.week, maxDD: cfg.spot.maxDD, design: TREND.design,
       live: (() => { const r = wallet.closed.filter((x) => x.strat === TREND.name); return { n: r.length, wins: r.filter((x) => x.pnl > 0).length, avg: r.length ? r.reduce((a, b) => a + b.ret, 0) / r.length : null }; })() }, wallet: wallet.state(coins, eur()), agents: S.agents, decisions: S.decisions.slice(0, 40), log: S.log.slice(0, 30),
@@ -359,11 +388,27 @@ function state() {
     cfg: { explore: cfg.spot.explore, exploreEur: cfg.spot.exploreEur, horizonH: cfg.spot.horizonH, stopAtr: cfg.spot.stopAtr, targetAtr: cfg.spot.targetAtr, beAtr: cfg.spot.beAtr, evMin: cfg.spot.evMin, minLabels: cfg.spot.minLabels },
   };
 }
+function agentMetrics() {
+  const d = S.decisions, rw = rot.state(market.coins, eur());
+  return {
+    SCT: market.perHour(), CHT: [...market.coins.values()].filter((c) => c.last && Date.now() - c.last.t < 2 * H1).length, NWS: news.items.size, ORB: model.labels,
+    GRD: d.length ? d.filter((x) => x.dec === "block").length / d.length : 0, QNT: S.regime?.on ? S.regime.cands.length : 0, EXE: wallet.positions.size + rw.hold.length,
+  };
+}
+
 function detail(id) {
   const c = market.coins.get(id);
   if (!c) return null;
   const n = newsFor(c);
-  return { id, sym: c.sym, name: c.name, kind: c.kind, url: c.url, px: c.px, liq: c.liq, holders: c.holders, last: c.last || null, candles: hourly(c.c15).slice(-120),
+  let explain = null;
+  if (c.view?.f) {
+    const e = model.explain(c.view.f), s = c.last?.s || {};
+    explain = { prior: e.prior, pRaw: c.view.pRaw, p: c.view.p,
+      sig: SPOT_SIGNALS.map((g, i) => ({ k: g.k, name: g.name, ag: g.ag, v: s[g.k] ?? null, d: e.steps[i] })) };
+  }
+  const last = model.hist.slice(-60), meas = [0, 0, 0]; for (const x of last) meas[x.y]++;
+  return { id, sym: c.sym, name: c.name, kind: c.kind, url: c.url, px: c.px, liq: c.liq, holders: c.holders, last: c.last || null, trace: c.trace || null, explain,
+    measured: { n: last.length, counts: meas, all: model.counts }, candles: hourly(c.c15).slice(-120),
     news: n.items, newsScore: n.score, sec: S.sec.get(id) || null, pos: wallet.positions.get(id) || null };
 }
 
