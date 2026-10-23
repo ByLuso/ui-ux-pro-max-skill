@@ -264,7 +264,8 @@ function aggroPass(H) {
   S.aggro = { t: H, on, picks: picks.map((x) => ({ sym: x.sym, r168: x.r168 })) };
   { const ls = [...market.coins.values()].filter((c) => c.kind === "cex" && c.last && c.last.t === H).map((c) => ({ id: c.id, s: c.last.s })); pushObs(H, regimeOf(ls), bt, picks.length ? picks.reduce((a, x) => a + x.r168, 0) / picks.length : null); }
   if (!cfg.spot.aggro || S.paused || Date.now() - H > 60 * 60000 || market.status.ws !== "conectado") return;
-  const r = rot.rotate(H, market.coins, picks, on, eur());
+  const r = rot.catchUp(H, market.coins, picks, on, eur());
+  if (r.caught) log("EXE", `Agresiva · ${r.caught} tramos pendientes rotados de una vez`);
   if (r.bought.length || r.sold.length) log("EXE", `Agresiva · tramo ${r.j + 1}: ${r.bought.length ? "compra " + r.bought.join(", ") : ""}${r.sold.length ? " vende " + r.sold.join(", ") : ""}`);
   agent("EXE", on ? `Agresiva: mantiene ${picks.slice(0, 4).map((x) => x.sym).join(", ")}… (las más fuertes de la semana)` : "Agresiva: BTC bajo su media de 30 días, pasa a liquidez poco a poco");
 }

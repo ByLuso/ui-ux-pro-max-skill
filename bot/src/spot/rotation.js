@@ -53,7 +53,7 @@ export class RotationWallet {
   usd(coins) { let v = 0; for (const t of this.tranches) { v += t.cash; for (const [id, q] of Object.entries(t.hold)) v += q * this.px(coins, id); } return v; }
 
   // Rota el tramo que toca a la hora H: vende lo que ya no está entre las elegidas y reparte entre las que entran
-  rotate(H, coins, picks, on, eurUsdt) {
+  rotate(H, coins, picks, on, eurUsdt, quiet = false) {
     const j = Math.floor(H / H1) % AGGRO.every, t = this.tranches[j];
     const want = on ? picks.map((x) => x.id) : [];
     const sold = [], bought = [];
@@ -70,12 +70,27 @@ export class RotationWallet {
       t.cash -= usd; t.hold[id] = (usd * (1 - AGGRO.fee)) / this.px(coins, id); bought.push(coins.get(id)?.sym || id);
     }
     this.rotations++;
+    if (quiet) return { j, sold, bought };
     if (sold.length || bought.length) {
       const share = 100 / AGGRO.every;
       this.event(`tramo ${j + 1}/${AGGRO.every} (${share.toFixed(1)}% del capital)${bought.length ? ` · compra ${bought.join(", ")}` : ""}${sold.length ? ` · vende ${sold.join(", ")}` : ""}${!on ? " · BTC bajo su media: pasa a liquidez" : ""}`);
     }
     this.sample(coins, eurUsdt);
     return { j, sold, bought };
+  }
+
+  // Rota todos los tramos que tocaban desde la última vez (si el bot estuvo apagado o el móvil lo durmió, o si la
+  // cartera es nueva) y después el de la hora H. Así nunca se queda dinero parado esperando 72 h a su turno.
+  catchUp(H, coins, picks, on, eurUsdt) {
+    const first = H - (AGGRO.every - 1) * H1;
+    const from = this.lastH ? Math.max(this.lastH + H1, first) : first;
+    let n = 0;
+    for (let h = from; h < H; h += H1) { const r = this.rotate(h, coins, picks, on, eurUsdt, true); if (r.sold.length || r.bought.length) n++; }
+    if (n) this.event(`${this.lastH ? "recupera" : "pone en marcha"} ${n} tramos ${this.lastH ? "que no rotaron mientras el bot estaba parado" : "de golpe"} (${on ? "compra " + picks.map((x) => x.sym).join(", ") : "BTC bajo su media: pasa a liquidez"})`);
+    const r = this.rotate(H, coins, picks, on, eurUsdt);
+    this.lastH = H;
+    this.save();
+    return { ...r, caught: n };
   }
 
   event(txt) { this.events.unshift({ t: Date.now(), txt }); if (this.events.length > 150) this.events.pop(); }
