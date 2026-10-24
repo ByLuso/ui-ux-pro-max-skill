@@ -263,7 +263,7 @@ function aggroPass(H) {
   const picks = aggroPick(list), on = bt.up;
   S.aggro = { t: H, on, picks: picks.map((x) => ({ sym: x.sym, r168: x.r168 })) };
   { const ls = [...market.coins.values()].filter((c) => c.kind === "cex" && c.last && c.last.t === H).map((c) => ({ id: c.id, s: c.last.s })); pushObs(H, regimeOf(ls), bt, picks.length ? picks.reduce((a, x) => a + x.r168, 0) / picks.length : null); }
-  if (!cfg.spot.aggro || S.paused || Date.now() - H > 60 * 60000 || market.status.ws !== "conectado") return;
+  if (!cfg.spot.aggro || S.paused || Date.now() - H > 60 * 60000 || market.status.ws !== "conectado" || !market.eurUsdt) return;
   const r = rot.catchUp(H, market.coins, picks, on, eur());
   if (r.caught) log("EXE", `Agresiva · ${r.caught} tramos pendientes rotados de una vez`);
   if (r.bought.length || r.sold.length) log("EXE", `Agresiva · tramo ${r.j + 1}: ${r.bought.length ? "compra " + r.bought.join(", ") : ""}${r.sold.length ? " vende " + r.sold.join(", ") : ""}`);
@@ -364,7 +364,8 @@ async function securityLoop() {
   }
 }
 setInterval(() => { saveJSON("spot-model.json", model); saveJSON("spot-calib.json", calib); saveJSON("spot-views.json", [...views.values()]); }, 5 * 60000);
-setInterval(() => { wallet.sample(market.coins, eur()); rot.sample(market.coins, eur()); }, 60000);
+// Sin el cambio EUR/USDT real no se registra el saldo: con el provisional salían picos falsos en el gráfico al arrancar
+setInterval(() => { if (market.eurUsdt) { wallet.sample(market.coins, eur()); rot.sample(market.coins, eur()); } }, 60000);
 for (const sg of ["SIGINT", "SIGTERM"]) process.on(sg, () => { console.log("\nGuardando…"); saveJSON("spot-model.json", model); saveJSON("spot-calib.json", calib); saveJSON("spot-views.json", [...views.values()]); wallet.save(); rot.save(); process.exit(0); });
 
 // ---------- panel ----------

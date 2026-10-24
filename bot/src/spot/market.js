@@ -38,6 +38,7 @@ export class Market extends EventEmitter {
   }
 
   async start() {
+    await this.refreshEur(); // antes que nada: las carteras valoran en euros desde el primer minuto
     await this.refreshUniverse();
     await this.bootstrap();
     this.connect();
