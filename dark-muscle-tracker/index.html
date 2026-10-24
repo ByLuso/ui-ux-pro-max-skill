@@ -43,13 +43,19 @@
    2. BASE
    ===================================================================== */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{background:var(--bg);color-scheme:dark}
+html{background:var(--bg);color-scheme:dark;touch-action:manipulation}
+/* Safari iOS: quitar estilos nativos (sombras, bordes redondeados, flechas) */
+button,input,select,textarea{-webkit-appearance:none;appearance:none;border-radius:0;margin:0}
+input[type=search]::-webkit-search-decoration,input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none}
+input[type=date]{-webkit-appearance:auto;appearance:auto}
+input::-webkit-date-and-time-value{text-align:left}
+button,a,.chip,.st-btn{touch-action:manipulation}
 body{
   margin:0;background:var(--bg);color:var(--text);
   font:16px/1.45 var(--font);
   -webkit-text-size-adjust:100%;
   padding-bottom:calc(var(--nav-h) + var(--safe-b) + 24px);
-  min-height:100vh;
+  min-height:100vh;min-height:100dvh;
 }
 body.timer-on{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 110px)}
 body.modal-open{overflow:hidden}
@@ -134,22 +140,17 @@ main{
 }
 .btn:active{transform:scale(.97)}
 .btn-red{background:var(--red);color:#fff}
-.btn-red:hover{background:var(--red-hi)}
 .btn-ghost{background:var(--panel-3);color:var(--text)}
-.btn-ghost:hover{background:#2e2e2e}
 .btn-outline{border:2px dashed #3a3a3a;color:var(--text);background:transparent}
-.btn-outline:hover{border-color:var(--red)}
 .btn-text{color:var(--muted);background:transparent;font-weight:700}
 .btn-lg{min-height:58px;font-size:17px;border-radius:14px}
 .btn-sm{min-height:40px;padding:0 14px;font-size:14px}
 .btn-block{width:100%}
 .icon-btn{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:var(--text);background:var(--panel-2);transition:background .2s,transform .12s}
-.icon-btn:hover{background:var(--panel-3)}
 .icon-btn:active{transform:scale(.94)}
-.icon-btn.danger:hover{color:var(--red-hi)}
 
 .chips{display:flex;gap:8px;flex-wrap:wrap}
-.chips.scroll{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 4px}
+.chips.scroll{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -16px;padding:2px 16px 4px}
 .chips.scroll::-webkit-scrollbar{display:none}
 .chip{
   flex:none;min-height:40px;padding:0 14px;border-radius:999px;
@@ -168,6 +169,7 @@ main{
 
 .banner{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:var(--red-lo);border:1px solid var(--red-mid);color:#ffd0cc;font-size:14px;margin-bottom:14px}
 
+select.field{padding-right:40px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a3a3a3' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px}
 input.field,select.field{
   width:100%;min-height:48px;padding:0 14px;border-radius:12px;
   background:var(--panel-2);border:1px solid var(--line);color:var(--text);font-size:16px;
@@ -204,7 +206,6 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 .tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media (min-width:640px){.tools{grid-template-columns:repeat(4,1fr)}}
 .tool{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:6px;min-height:104px;transition:border-color .2s,transform .12s}
-.tool:hover{border-color:var(--red)}
 .tool:active{transform:scale(.97)}
 .tool .ic{color:var(--red-hi);width:26px;height:26px}
 .tool b{font-family:var(--font-d);text-transform:uppercase;font-size:17px}
@@ -217,7 +218,7 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 .wk-head .wk-name{width:100%;background:transparent;border:0;border-bottom:2px solid var(--line);font-family:var(--font-d);font-weight:800;text-transform:uppercase;font-size:24px;padding:4px 0 6px;color:var(--text)}
 .wk-head .wk-name:focus{outline:none;border-color:var(--red)}
 .wk-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}
-.wk-meta input[type=date]{width:150px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;min-height:36px;padding:0 10px;color:var(--text);font-size:16px}
+.wk-meta input[type=date]{width:150px;height:36px;display:inline-flex;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;min-height:36px;padding:0 10px;color:var(--text);font-size:16px}
 .progress{height:6px;border-radius:6px;background:var(--panel-3);overflow:hidden}
 .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--red-hi));border-radius:6px;transition:width .4s ease}
 .rest-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
@@ -332,7 +333,6 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 .body .sil{fill:#262626}
 .body .mus{fill:#333;stroke:#000;stroke-width:1.5;transition:fill .2s}
 .body .mus[data-action]{cursor:pointer}
-.body .mus[data-action]:hover{fill:#5a1410}
 .body .mus.sec{fill:#7a1d17}
 .body .mus.pri{fill:var(--red)}
 .body .mus.selm{fill:var(--red-hi);animation:pulse 1.4s ease infinite}
@@ -342,7 +342,6 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 .ex-count{font-size:13px;color:var(--muted);margin:16px 2px 8px}
 .ex-list{display:flex;flex-direction:column;gap:8px}
 .ex-item{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:10px 12px 10px 14px;border-radius:14px;background:var(--panel);border:1px solid var(--line);text-align:left;transition:border-color .2s,transform .12s}
-.ex-item:hover{border-color:var(--red)}
 .ex-item:active{transform:scale(.985)}
 .ex-item .t{flex:1;min-width:0}
 .ex-item b{display:block;font-size:16px}
@@ -370,7 +369,6 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
    8. PESTAÑA APRENDER (lecciones, quiz, glosario)
    ===================================================================== */
 .lesson-card{display:flex;gap:14px;align-items:center;width:100%;text-align:left;padding:14px;border-radius:var(--radius);background:var(--panel);border:1px solid var(--line);margin-bottom:10px;min-height:76px;transition:border-color .2s,transform .12s}
-.lesson-card:hover{border-color:var(--red)}
 .lesson-card:active{transform:scale(.985)}
 .lesson-n{width:44px;height:44px;flex:none;border-radius:12px;background:var(--red-lo);color:var(--red-hi);display:grid;place-items:center;font-family:var(--font-d);font-weight:900;font-size:22px}
 .lesson-card .t{flex:1;min-width:0}
@@ -384,7 +382,6 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 .q-t{font-weight:800;margin-bottom:10px}
 .opts{display:grid;gap:8px}
 .opt{text-align:left;min-height:48px;padding:10px 14px;border-radius:12px;background:var(--panel-2);border:2px solid var(--line);font-size:15px;transition:border-color .2s,background .2s}
-.opt:not(:disabled):hover{border-color:#555}
 .opt.right{border-color:var(--red);background:var(--red-lo)}
 .opt.wrong{border-color:#555;background:#1c1c1c;color:var(--muted);text-decoration:line-through}
 .opt.right::after{content:" ✓";font-weight:900;color:var(--red-hi)}
@@ -436,8 +433,8 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 /* =====================================================================
    10. MODAL (hoja inferior) Y TOASTS
    ===================================================================== */
-.modal{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
-.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.72);animation:fade .2s ease}
+.modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.modal-backdrop{position:absolute;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.72);animation:fade .2s ease}
 .sheet{
   position:relative;width:100%;max-width:640px;max-height:calc(100% - var(--safe-t) - 24px);
   background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:22px 22px 0 0;
@@ -446,7 +443,7 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 @media (min-width:700px){.modal{align-items:center}.sheet{border-radius:22px;border-bottom:1px solid var(--line);max-height:88vh}}
 .sheet-head{display:flex;align-items:center;gap:10px;padding:14px 12px 10px 18px;border-bottom:1px solid var(--line)}
 .sheet-head h2{flex:1;font-family:var(--font-d);text-transform:uppercase;font-size:21px;letter-spacing:.02em}
-.sheet-body{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:16px 16px calc(16px + var(--safe-b))}
+.sheet-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:16px 16px calc(16px + var(--safe-b))}
 .seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;background:var(--panel-2);border-radius:12px;margin-bottom:16px}
 .seg button{min-height:40px;border-radius:9px;font-weight:800;font-size:13.5px;color:var(--muted)}
 .seg button.on{background:var(--red);color:#fff}
@@ -478,6 +475,20 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 .toast.out{animation:toastOut .3s ease forwards}
 .toast .ic{width:20px;height:20px}
 .pr-flash{animation:prFlash .9s ease}
+
+/* Efectos hover solo con ratón (en iOS se quedan fijos tras tocar) */
+@media (hover:hover) and (pointer:fine){
+.btn-red:hover{background:var(--red-hi)}
+.btn-ghost:hover{background:#2e2e2e}
+.btn-outline:hover{border-color:var(--red)}
+.icon-btn:hover{background:var(--panel-3)}
+.icon-btn.danger:hover{color:var(--red-hi)}
+.tool:hover{border-color:var(--red)}
+.body .mus[data-action]:hover{fill:#5a1410}
+.ex-item:hover{border-color:var(--red)}
+.lesson-card:hover{border-color:var(--red)}
+.opt:not(:disabled):hover{border-color:#555}
+}
 
 /* =====================================================================
    11. ANIMACIONES
@@ -511,8 +522,12 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 </header>
 
 <!-- ===================== CONTENIDO (se pinta por JS) ===================== -->
-<main id="main" tabindex="-1"></main>
-<noscript><p style="padding:20px">Activa JavaScript para usar Dark Muscle Tracker.</p></noscript>
+<main id="main" tabindex="-1">
+  <div class="card" style="margin-top:8px">
+    <p style="font-weight:800;margin-bottom:8px">Cargando Dark Muscle Tracker…</p>
+    <p class="muted small">Si esta pantalla no cambia, la estás viendo en una vista previa que no ejecuta JavaScript (app Archivos, vista previa de un adjunto, correo…). Ábrela en Safari desde su enlace de GitHub Pages.</p>
+  </div>
+</main>
 
 <!-- ===================== TEMPORIZADOR DE DESCANSO ===================== -->
 <div id="timerBar" class="timer-bar hidden" role="timer" aria-live="polite">
