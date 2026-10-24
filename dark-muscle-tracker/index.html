@@ -36,6 +36,7 @@
   --safe-l:env(safe-area-inset-left,0px);
   --safe-r:env(safe-area-inset-right,0px);
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
   --font-d:"SF Pro Display","Barlow Condensed","Roboto Condensed","Arial Narrow",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 }
 
@@ -467,6 +468,13 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 .mini-step span{min-width:56px;text-align:center;font-weight:800;font-size:14px;font-variant-numeric:tabular-nums}
 .draft-ctrl .icon-btn{width:38px;height:38px;background:var(--panel-3)}
 
+/* Diálogo de confirmación propio */
+.ask{position:fixed;top:0;right:0;bottom:0;left:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px}
+.ask-box{position:relative;width:100%;max-width:380px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.7);animation:slideUp .22s ease}
+#askMsg{font-size:16px;font-weight:700;line-height:1.45;white-space:pre-line;margin-bottom:18px}
+.ask-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+textarea.field{width:100%;min-height:180px;padding:12px;border-radius:12px;background:var(--panel-2);border:1px solid var(--line);color:var(--text);font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical}
+textarea.field:focus{border-color:var(--red);outline:none}
 .toasts{position:fixed;left:0;right:0;top:calc(var(--safe-t) + 64px);z-index:80;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;padding:0 16px}
 .toast{max-width:460px;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;background:#1d1d1d;border:1px solid #333;font-weight:700;font-size:14.5px;box-shadow:0 10px 30px rgba(0,0,0,.6);animation:toastIn .3s ease}
 .toast.ok{border-color:var(--red)}
@@ -555,6 +563,15 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
   </div>
 </div>
 
+<!-- ===================== DIÁLOGO DE CONFIRMACIÓN ===================== -->
+<div id="ask" class="ask hidden" role="alertdialog" aria-modal="true" aria-labelledby="askMsg">
+  <div class="modal-backdrop" id="askBack"></div>
+  <div class="ask-box">
+    <p id="askMsg"></p>
+    <div class="ask-actions"><button class="btn btn-ghost" id="askCancel">Cancelar</button><button class="btn btn-red" id="askOk">Aceptar</button></div>
+  </div>
+</div>
+
 <div class="toasts" id="toasts" aria-live="assertive"></div>
 <input type="file" id="importFile" accept="application/json,.json" hidden>
 
@@ -610,6 +627,20 @@ function toast(msg, type = '') {
   el.innerHTML = (type === 'pr' ? ic('trophy') : type === 'ok' ? ic('check') : type === 'error' ? ic('info') : '') + `<span>${esc(msg)}</span>`;
   $('#toasts').appendChild(el);
   setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 320); }, type === 'pr' ? 3600 : 2600);
+}
+
+/** Confirmación con diálogo propio (algunos visores bloquean el diálogo nativo). Devuelve una promesa booleana. */
+function ask(msg, okLabel = 'Aceptar') {
+  return new Promise(resolve => {
+    const box = $('#ask'), ok = $('#askOk'), cancel = $('#askCancel'), back = $('#askBack');
+    $('#askMsg').textContent = msg;
+    ok.textContent = okLabel;
+    box.classList.remove('hidden');
+    const done = v => { box.classList.add('hidden'); ok.onclick = cancel.onclick = back.onclick = null; resolve(v); };
+    ok.onclick = () => done(true);
+    cancel.onclick = back.onclick = () => done(false);
+    setTimeout(() => ok.focus(), 30);
+  });
 }
 
 /** Vibración segura (no todos los dispositivos la permiten, p. ej. iPhone) */
@@ -1837,8 +1868,8 @@ function makeWorkoutExercise(exId, nSets = 3, reps = null) {
   return { uid: uid(), exId, target: reps, sets, sel: 0 };
 }
 
-function startWorkout(routine) {
-  if (DB.current && !confirm('Ya hay un entrenamiento en curso. ¿Descartarlo y empezar otro?')) return false;
+async function startWorkout(routine) {
+  if (DB.current && !(await ask('Ya hay un entrenamiento en curso. ¿Descartarlo y empezar otro?', 'Descartar'))) return false;
   DB.current = {
     id: uid(), date: todayISO(), name: routine ? routine.name : 'Entrenamiento libre', startedAt: Date.now(), editingId: null,
     exercises: routine ? routine.items.filter(i => EX_MAP[i.ex]).map(i => makeWorkoutExercise(i.ex, i.sets, i.reps)) : [],
@@ -1900,14 +1931,14 @@ function compareWithLast(e) {
   else toast(`${exName(e.exId)} completado. Hoy algo menos de volumen: ¡no pasa nada!`, 'ok');
 }
 
-function finishWorkout() {
+async function finishWorkout() {
   const c = DB.current;
   const exercises = c.exercises
     .map(e => ({ exId: e.exId, sets: e.sets.filter(s => s.done).map(({ w, r, rpe }) => ({ w, r, rpe })) }))
     .filter(e => e.sets.length);
   if (!exercises.length) { toast('Completa al menos una serie antes de guardar', 'error'); return; }
   const pending = c.exercises.reduce((a, e) => a + e.sets.filter(s => !s.done).length, 0);
-  if (pending && !confirm(`Hay ${pending} serie(s) sin marcar como hechas que no se guardarán. ¿Continuar?`)) return;
+  if (pending && !(await ask(`Hay ${pending} serie(s) sin marcar como hechas que no se guardarán. ¿Guardar igualmente?`, 'Guardar'))) return;
   const prev = c.editingId ? DB.workouts.find(w => w.id === c.editingId) : null;
   const w = {
     id: c.editingId || c.id, date: c.date || todayISO(), name: (c.name || '').trim() || 'Entrenamiento', exercises,
@@ -1942,16 +1973,16 @@ const ACTIONS = {
   startEmpty: () => startWorkout(null),
   startRoutine: el => { const r = findRoutine(el.dataset.id); if (r) startWorkout(r); },
   editRoutine: el => { const r = findRoutine(el.dataset.id); if (r) openRoutineEditor(r); },
-  delRoutine: el => {
+  delRoutine: async el => {
     const r = DB.routines.find(x => x.id === el.dataset.id);
-    if (r && confirm(`¿Borrar la rutina «${r.name}»?`)) { DB.routines = DB.routines.filter(x => x !== r); persist(); render(); toast('Rutina borrada'); }
+    if (r && await ask(`¿Borrar la rutina «${r.name}»?`, 'Borrar')) { DB.routines = DB.routines.filter(x => x !== r); persist(); render(); toast('Rutina borrada'); }
   },
   setRest: el => { DB.settings.rest = +el.dataset.s; persist(); render(); if (Timer.iv) Timer.start(DB.settings.rest); },
   setStep: el => { DB.settings.step = +el.dataset.s; persist(); render(); },
   toggleSetting: el => { const k = el.dataset.k; DB.settings[k] = !DB.settings[k]; persist(); render(); },
-  wipeData: () => {
-    if (!confirm('¿Borrar TODOS tus entrenamientos, rutinas y ajustes? Esta acción no se puede deshacer.')) return;
-    if (!confirm('Última confirmación: ¿seguro? Te recomendamos exportar antes una copia.')) return;
+  wipeData: async () => {
+    if (!(await ask('¿Borrar TODOS tus entrenamientos, rutinas y ajustes? Esta acción no se puede deshacer.', 'Borrar todo'))) return;
+    if (!(await ask('Última confirmación: ¿seguro? Te recomendamos exportar antes una copia.', 'Sí, borrar'))) return;
     DB = defaultData(); persist(); Timer.stop(); render(); toast('Datos borrados');
   },
   timerStart: () => Timer.start(DB.settings.rest),
@@ -1959,9 +1990,9 @@ const ACTIONS = {
   timerStop: () => Timer.stop(),
 
   addExercise: () => openPicker(id => { DB.current.exercises.push(makeWorkoutExercise(id, 3)); persist(); closeModal(); render(); scrollToEx(DB.current.exercises.length - 1); }),
-  removeEx: el => {
+  removeEx: async el => {
     const i = +el.dataset.ei, e = DB.current.exercises[i];
-    if (e.sets.some(s => s.done) && !confirm(`¿Quitar ${exName(e.exId)} y sus series?`)) return;
+    if (e.sets.some(s => s.done) && !(await ask(`¿Quitar ${exName(e.exId)} y sus series?`, 'Quitar'))) return;
     DB.current.exercises.splice(i, 1); persist(); render();
   },
   moveEx: el => {
@@ -1991,9 +2022,9 @@ const ACTIONS = {
     e.sets.splice(i, 1); e.sel = Math.max(0, i - 1); persist(); render();
   },
   finishWorkout: () => finishWorkout(),
-  discardWorkout: () => {
+  discardWorkout: async () => {
     const c = DB.current;
-    if (!confirm(c.editingId ? '¿Cancelar la edición? Los cambios no se guardarán.' : '¿Descartar este entrenamiento? Se perderán las series registradas.')) return;
+    if (!(await ask(c.editingId ? '¿Cancelar la edición? Los cambios no se guardarán.' : '¿Descartar este entrenamiento? Se perderán las series registradas.', c.editingId ? 'Cancelar edición' : 'Descartar'))) return;
     const back = c.editingId;
     DB.current = null; Timer.stop(); persist();
     if (back) go('history'); else render();
@@ -2001,22 +2032,26 @@ const ACTIONS = {
 
   /* --- Historial --- */
   toggleHist: el => { UI.histOpen = UI.histOpen === el.dataset.id ? null : el.dataset.id; render(); },
-  editWorkout: el => {
+  editWorkout: async el => {
     const w = DB.workouts.find(x => x.id === el.dataset.id); if (!w) return;
-    if (DB.current && !confirm('Hay un entrenamiento en curso. ¿Descartarlo para editar este?')) return;
+    if (DB.current && !(await ask('Hay un entrenamiento en curso. ¿Descartarlo para editar este?', 'Descartar'))) return;
     DB.current = workoutToCurrent(w, true); persist(); go('train');
   },
-  repeatWorkout: el => {
+  repeatWorkout: async el => {
     const w = DB.workouts.find(x => x.id === el.dataset.id); if (!w) return;
-    if (DB.current && !confirm('Hay un entrenamiento en curso. ¿Descartarlo?')) return;
+    if (DB.current && !(await ask('Hay un entrenamiento en curso. ¿Descartarlo?', 'Descartar'))) return;
     DB.current = workoutToCurrent(w, false); persist(); go('train'); toast('Entrenamiento listo: supera tus números');
   },
-  delWorkout: el => {
+  delWorkout: async el => {
     const w = DB.workouts.find(x => x.id === el.dataset.id);
-    if (w && confirm(`¿Borrar «${w.name}» del ${fmtDate(w.date)}?`)) { DB.workouts = DB.workouts.filter(x => x !== w); persist(); render(); toast('Entrenamiento borrado'); }
+    if (w && await ask(`¿Borrar «${w.name}» del ${fmtDate(w.date)}?`, 'Borrar')) { DB.workouts = DB.workouts.filter(x => x !== w); persist(); render(); toast('Entrenamiento borrado'); }
   },
   exportData: () => exportData(),
-  importData: () => $('#importFile').click(),
+  importData: () => openImport(),
+  pickImportFile: () => $('#importFile').click(),
+  importPasted: () => { const t = $('#importText').value.trim(); if (!t) { toast('Pega primero el texto de la copia', 'error'); return; } importJSON(t); },
+  copyBackup: () => copyBackup(),
+  downloadBackup: () => downloadBackup(),
   loadSample: () => loadSample(),
 
   /* --- Ejercicios --- */
@@ -2024,10 +2059,10 @@ const ACTIONS = {
   bodyMuscle: el => { UI.exMuscle = UI.exMuscle === el.dataset.m ? '' : el.dataset.m; buzz(10); render(); },
   filterMuscle: el => { UI.exMuscle = el.dataset.m; render(); },
   filterEquip: el => { UI.exEquip = el.dataset.e; render(); },
-  addExToWorkout: el => {
+  addExToWorkout: async el => {
     const id = el.dataset.id;
     closeAllModals();
-    if (!DB.current) { if (!startWorkout({ name: exName(id), items: [] })) return; }
+    if (!DB.current) { if (!(await startWorkout({ name: exName(id), items: [] }))) return; }
     DB.current.exercises.push(makeWorkoutExercise(id, 3));
     persist(); go('train'); scrollToEx(DB.current.exercises.length - 1);
     toast(`${exName(id)} añadido`, 'ok');
@@ -2092,6 +2127,7 @@ document.addEventListener('click', e => {
 
 /* Teclado: Enter/Espacio en elementos SVG interactivos, Escape cierra modales */
 document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !$('#ask').classList.contains('hidden')) { $('#askCancel').click(); return; }
   if (e.key === 'Escape' && modalStack.length) { closeModal(); return; }
   const el = e.target;
   if ((e.key === 'Enter' || e.key === ' ') && el.getAttribute && el.getAttribute('role') === 'button' && el.dataset.action && el.tagName !== 'BUTTON') {
@@ -2142,46 +2178,78 @@ function sanitizeWorkout(w) {
   return { id: String(w.id || uid()), date: w.date, name: String(w.name || 'Entrenamiento').slice(0, 60), exercises, ts: +w.ts || fromISO(w.date).getTime(), duration: +w.duration || 0 };
 }
 
+function backupJSON() {
+  return JSON.stringify({ app: 'dark-muscle-tracker', version: 1, exportedAt: new Date().toISOString(), workouts: DB.workouts, routines: DB.routines, settings: DB.settings, quiz: DB.quiz }, null, 2);
+}
+
+/** Exportar: muestra el JSON para copiarlo y ofrece descargarlo (algunos visores bloquean descargas) */
 function exportData() {
+  openModal('Copia de seguridad', () => `
+    <p class="muted" style="margin-bottom:12px">${DB.workouts.length} entrenamientos y ${DB.routines.length} rutinas. Copia este texto y guárdalo (por ejemplo en Notas), o descárgalo como archivo. Para recuperarlo usa <b>Importar</b>.</p>
+    <div class="grid" style="grid-template-columns:1fr 1fr;margin-bottom:12px">
+      <button class="btn btn-red" data-action="copyBackup">${ic('check')} Copiar</button>
+      <button class="btn btn-ghost" data-action="downloadBackup">${ic('download')} Descargar</button>
+    </div>
+    <textarea id="backupText" class="field" readonly aria-label="Copia de seguridad en JSON">${esc(backupJSON())}</textarea>
+    <p class="muted small" style="margin-top:8px">Si la descarga no se inicia en tu navegador, usa Copiar.</p>`);
+}
+
+function copyBackup() {
+  const ta = $('#backupText');
+  const fallback = () => { ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length); toast('Texto seleccionado: mantén pulsado y elige Copiar'); };
   try {
-    const data = { app: 'dark-muscle-tracker', version: 1, exportedAt: new Date().toISOString(), workouts: DB.workouts, routines: DB.routines, settings: DB.settings, quiz: DB.quiz };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    navigator.clipboard.writeText(ta.value).then(() => toast('Copia copiada al portapapeles', 'ok'), fallback);
+  } catch (e) { fallback(); }
+}
+
+function downloadBackup() {
+  try {
+    const blob = new Blob([backupJSON()], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; a.download = `dark-muscle-backup-${todayISO()}.json`;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 2000);
-    toast(`Copia exportada (${DB.workouts.length} entrenamientos)`, 'ok');
-  } catch (e) { toast('No se pudo exportar: ' + e.message, 'error'); }
+  } catch (e) { toast('No se pudo descargar: usa Copiar', 'error'); }
+}
+
+/** Importar: desde archivo .json o pegando el texto de una copia */
+function openImport() {
+  openModal('Importar copia', () => `
+    <button class="btn btn-red btn-block" data-action="pickImportFile">${ic('upload')} Elegir archivo .json</button>
+    <p class="muted small" style="margin:16px 0 8px">O pega aquí el texto de tu copia de seguridad:</p>
+    <textarea id="importText" class="field" placeholder='{"app":"dark-muscle-tracker", ...}' aria-label="Texto de la copia"></textarea>
+    <button class="btn btn-ghost btn-block" style="margin-top:10px" data-action="importPasted">Importar texto pegado</button>`);
 }
 
 function importFile(file) {
   const rd = new FileReader();
   rd.onerror = () => toast('No se pudo leer el archivo', 'error');
-  rd.onload = () => {
-    try {
-      const d = JSON.parse(rd.result);
-      if (!d || !Array.isArray(d.workouts)) throw new Error('el archivo no es una copia de Dark Muscle Tracker');
-      const ws = d.workouts.map(sanitizeWorkout).filter(Boolean);
-      const rs = Array.isArray(d.routines) ? d.routines.filter(r => r && r.id && Array.isArray(r.items)) : [];
-      if (!confirm(`El archivo contiene ${ws.length} entrenamientos y ${rs.length} rutinas.\n\nSe combinarán con tus datos actuales (los repetidos se actualizan). ¿Importar?`)) return;
-      const map = new Map(DB.workouts.map(w => [w.id, w]));
-      ws.forEach(w => map.set(w.id, w));
-      DB.workouts = [...map.values()];
-      const rmap = new Map(DB.routines.map(r => [r.id, r]));
-      rs.forEach(r => rmap.set(r.id, { ...r, group: 'Mis rutinas' }));
-      DB.routines = [...rmap.values()];
-      if (d.settings) DB.settings = { ...DB.settings, ...d.settings };
-      if (d.quiz) DB.quiz = { ...DB.quiz, ...d.quiz };
-      persist(); render(); toast('Datos importados correctamente', 'ok');
-    } catch (e) { toast('Importación fallida: ' + e.message, 'error'); }
-  };
+  rd.onload = () => importJSON(rd.result);
   rd.readAsText(file);
 }
 
+async function importJSON(text) {
+  let d;
+  try { d = JSON.parse(text); } catch (e) { toast('El texto no es una copia válida (JSON incorrecto)', 'error'); return; }
+  if (!d || !Array.isArray(d.workouts)) { toast('Importación fallida: no es una copia de Dark Muscle Tracker', 'error'); return; }
+  const ws = d.workouts.map(sanitizeWorkout).filter(Boolean);
+  const rs = Array.isArray(d.routines) ? d.routines.filter(r => r && r.id && Array.isArray(r.items)) : [];
+  if (!(await ask(`La copia contiene ${ws.length} entrenamientos y ${rs.length} rutinas.\n\nSe combinarán con tus datos actuales (los repetidos se actualizan).`, 'Importar'))) return;
+  const map = new Map(DB.workouts.map(w => [w.id, w]));
+  ws.forEach(w => map.set(w.id, w));
+  DB.workouts = [...map.values()];
+  const rmap = new Map(DB.routines.map(r => [r.id, r]));
+  rs.forEach(r => rmap.set(r.id, { ...r, group: 'Mis rutinas' }));
+  DB.routines = [...rmap.values()];
+  if (d.settings) DB.settings = { ...DB.settings, ...d.settings };
+  if (d.quiz) DB.quiz = { ...DB.quiz, ...d.quiz };
+  persist(); closeAllModals(); render(); toast('Datos importados correctamente', 'ok');
+}
+
 /** Genera 6 semanas de entrenamientos PPL con progresión, para explorar la app */
-function loadSample() {
-  if (DB.workouts.length && !confirm('Se añadirán entrenamientos de ejemplo a tus datos. ¿Continuar?')) return;
+async function loadSample() {
+  if (DB.workouts.length && !(await ask('Se añadirán entrenamientos de ejemplo a tus datos. ¿Continuar?', 'Añadir'))) return;
   const base = { 'press-banca': 60, 'press-inclinado-mancuernas': 20, 'press-militar': 37.5, 'elevaciones-laterales': 8, 'extension-triceps-polea': 25, 'fondos': 0,
     'dominadas': 0, 'remo-barra': 50, 'remo-polea-baja': 45, 'face-pull': 15, 'curl-barra': 25, 'curl-martillo': 12,
     'sentadilla': 80, 'peso-muerto-rumano': 70, 'zancadas': 14, 'extension-cuadriceps': 40, 'curl-femoral': 35, 'elevacion-gemelos': 60 };
