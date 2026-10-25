@@ -137,7 +137,7 @@ main{
   min-height:48px;padding:0 18px;border-radius:12px;
   font-weight:800;font-size:15px;letter-spacing:.02em;
   transition:transform .12s ease,background .2s,border-color .2s,opacity .2s;
-  user-select:none;-webkit-user-select:none;
+  user-select:none;-webkit-user-select:none;white-space:nowrap;
 }
 .btn:active{transform:scale(.97)}
 .btn-red{background:var(--red);color:#fff}
@@ -404,6 +404,30 @@ input.field:focus,select.field:focus{border-color:var(--red);outline:none}
 .kpi b{display:block;font-family:var(--font-d);font-size:30px;font-weight:900;font-variant-numeric:tabular-nums;margin-top:4px}
 .kpi small{color:var(--dim);font-size:12px}
 .kpi.hot b{color:var(--red-hi)}
+/* Mapa de fatiga muscular */
+.body .mus.heat{transition:fill .35s ease}
+.body .mus.hsel{stroke:#fff;stroke-width:3}
+.fat-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;font-size:12.5px;color:var(--muted);margin:8px 0 14px}
+.fat-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.fat-detail{background:var(--panel-2);border-radius:14px;padding:14px;margin-bottom:14px;animation:fadeUp .25s ease}
+.fat-detail .fd-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.fat-detail h3{font-family:var(--font-d);text-transform:uppercase;font-size:20px}
+.fat-detail .fd-pct{font-family:var(--font-d);font-size:34px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.fat-detail .fd-meta{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.fat-detail p{font-size:14.5px;color:#ddd}
+.lvl{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--panel-3);white-space:nowrap}
+.lvl i{width:9px;height:9px;border-radius:50%}
+.fat-row{display:grid;grid-template-columns:100px 1fr 46px;gap:10px;align-items:center;width:100%;min-height:36px;font-size:13px;text-align:left;border-radius:8px}
+.fat-row.on{background:var(--panel-2)}
+.fat-row .track{height:12px;border-radius:6px;background:var(--panel-2);overflow:hidden}
+.fat-row .fill{height:100%;border-radius:6px;transition:width .6s ease}
+.fat-row b{text-align:right;font-variant-numeric:tabular-nums}
+.fm-row{display:grid;grid-template-columns:132px 1fr;gap:14px;align-items:center}
+.fm-bodies{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.fm-text{min-width:0;display:grid;gap:8px;font-size:13.5px}
+.fm-text .lvl{margin-right:6px}
+.fm-rec{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.fm-rec p{font-size:14px;flex:1;min-width:180px}
 .chart-card h2{font-family:var(--font-d);text-transform:uppercase;font-size:17px;margin-bottom:4px}
 .chart-card .sub{font-size:13px;color:var(--muted);margin-bottom:10px}
 .chart{width:100%;height:auto;overflow:visible}
@@ -1052,7 +1076,7 @@ function loadDB() {
 /* Estado de interfaz (no se guarda) */
 const UI = {
   tab: 'train', exSearch: '', exMuscle: '', exEquip: '',
-  progEx: '', progMetric: 'e1rm', histOpen: null,
+  progEx: '', progMetric: 'e1rm', histOpen: null, fatSel: '',
   calcTab: '1rm', calc: { w: 100, r: 5, orm: 100, target: 100, bar: 20 },
   pop: null, pick: null, draft: null, quiz: null,
 };
@@ -1163,6 +1187,74 @@ function muscleSetsLast7() {
     }
   }
   return out;
+}
+
+/* ---------- Fatiga muscular estimada ----------
+   Cada serie suma carga al músculo: 1 si es principal, 0,5 si es secundario, ajustada por el esfuerzo (RPE).
+   La carga se disipa de forma exponencial con una constante de recuperación propia de cada músculo
+   (los grandes tardan más). 100 % = unas 8 series duras recién hechas. */
+const RECOVERY_TAU = { pecho: 45, espalda: 45, trapecio: 35, hombros: 35, biceps: 30, triceps: 30, antebrazos: 28, abdomen: 28,
+  lumbar: 50, gluteos: 45, cuadriceps: 50, isquios: 50, gemelos: 30 }; // horas
+const FATIGUE_REF = 8;          // series duras que equivalen al 100 %
+const FATIGUE_READY = 20;       // por debajo de este % se considera recuperado
+const FATIGUE_LEVELS = [
+  { max: 20, label: 'Recuperado', color: '#22c55e', tip: 'Listo para entrenarlo duro.' },
+  { max: 50, label: 'Carga ligera', color: '#eab308', tip: 'Casi recuperado: puedes entrenarlo con normalidad.' },
+  { max: 80, label: 'Carga moderada', color: '#f97316', tip: 'Aún se está recuperando: entrénalo suave o espera a que baje para ir a tope.' },
+  { max: Infinity, label: 'Muy fatigado', color: '#ff2d20', tip: 'Necesita descanso: evita entrenarlo hoy o haz solo trabajo muy ligero.' },
+];
+const FATIGUE_NONE = { label: 'Sin trabajo reciente', color: '#3d3d3d', tip: 'No lo has entrenado en los últimos 10 días: buen candidato para hoy.' };
+
+/** Momento aproximado del entrenamiento (si no hay hora fiable, las 18:00 de ese día) */
+function workoutTime(w) {
+  if (w.ts && toISO(new Date(w.ts)) === w.date) return w.ts;
+  return fromISO(w.date).getTime() + 18 * 3600e3;
+}
+/** Factor de esfuerzo: RPE 8 = 1; sin RPE se asume ~RPE 7,5 */
+const effortFactor = rpe => rpe ? clamp((rpe - 4) / 4, 0.4, 1.25) : 0.85;
+
+function muscleFatigue(now = Date.now()) {
+  const res = Object.fromEntries(Object.keys(MUSCLES).map(m => [m, { load: 0, sets7: 0, last: 0 }]));
+  const add = (exId, sets, t) => {
+    const x = EX_MAP[exId]; if (!x) return;
+    const h = Math.max(0, (now - t) / 3600e3);
+    if (h > 240) return; // más de 10 días: ya no cuenta
+    for (const s of sets) {
+      const e = effortFactor(s.rpe);
+      for (const [list, role] of [[x.pri, 1], [x.sec, 0.5]]) for (const m of list) {
+        const r = res[m];
+        r.load += role * e * Math.exp(-h / RECOVERY_TAU[m]);
+        if (h <= 168) r.sets7 += role;
+        r.last = Math.max(r.last, t);
+      }
+    }
+  };
+  DB.workouts.forEach(w => { if (DB.current?.editingId !== w.id) { const t = workoutTime(w); w.exercises.forEach(e => add(e.exId, e.sets, t)); } });
+  if (DB.current) DB.current.exercises.forEach(e => add(e.exId, e.sets.filter(s => s.done), now));
+  for (const [m, r] of Object.entries(res)) {
+    r.pct = Math.round(r.load / FATIGUE_REF * 100);
+    r.level = r.last ? FATIGUE_LEVELS.find(l => r.pct < l.max) : FATIGUE_NONE;
+    const thr = FATIGUE_READY / 100 * FATIGUE_REF;
+    r.readyIn = r.load > thr ? Math.ceil(RECOVERY_TAU[m] * Math.log(r.load / thr)) : 0; // horas hasta "recuperado"
+  }
+  return res;
+}
+const heatColors = fat => Object.fromEntries(Object.entries(fat).map(([m, r]) => [m, r.level.color]));
+const fmtHours = h => h <= 36 ? `${h} h` : `${fmt(Math.round(h / 12) / 2, 1)} días`;
+function fmtAgo(t) {
+  const d = Math.round((fromISO(todayISO()) - fromISO(toISO(new Date(t)))) / 864e5);
+  return d <= 0 ? 'hoy' : d === 1 ? 'ayer' : `hace ${d} días`;
+}
+
+/** Rutina cuyos músculos principales están más recuperados */
+function bestRoutineToday(fat) {
+  let best = null;
+  for (const r of allRoutines()) {
+    let sum = 0, n = 0;
+    r.items.forEach(i => (EX_MAP[i.ex]?.pri || []).forEach(m => { sum += fat[m].pct * i.sets; n += i.sets; }));
+    if (n && (!best || sum / n < best.avg)) best = { r, avg: sum / n };
+  }
+  return best;
 }
 
 /** Calculadora de discos: reparto por lado (algoritmo voraz) */
@@ -1280,12 +1372,15 @@ const SILHOUETTE = '<circle class="sil" cx="100" cy="32" r="20"/><rect class="si
   + '<circle class="sil" cx="86" cy="282" r="10"/><circle class="sil" cx="114" cy="282" r="10"/>';
 
 function bodySVG(view, opt = {}) {
-  const { primary = [], secondary = [], selected = '', interactive = false } = opt;
+  // heat: { músculo: color } pinta cada músculo con su color (mapa de fatiga)
+  const { primary = [], secondary = [], selected = '', interactive = false, heat = null, action = 'bodyMuscle', titles = {} } = opt;
   const shape = (m, tag, a, transform) => {
-    const cls = ['mus', primary.includes(m) ? 'pri' : '', secondary.includes(m) ? 'sec' : '', selected === m ? 'selm' : ''].join(' ');
+    const sel = selected === m ? (heat ? 'hsel' : 'selm') : '';
+    const cls = ['mus', primary.includes(m) ? 'pri' : '', secondary.includes(m) ? 'sec' : '', heat ? 'heat' : '', sel].join(' ');
     const attrs = Object.entries(a).map(([k, v]) => `${k}="${v}"`).join(' ');
-    const act = interactive ? ` data-action="bodyMuscle" data-m="${m}" tabindex="0" role="button" aria-label="${MUSCLES[m]}"` : '';
-    return `<${tag} class="${cls}" ${attrs}${transform ? ` transform="${transform}"` : ''}${act}><title>${MUSCLES[m]}</title></${tag}>`;
+    const fill = heat ? ` style="fill:${heat[m]}"` : '';
+    const act = interactive ? ` data-action="${action}" data-m="${m}" tabindex="0" role="button" aria-label="${titles[m] || MUSCLES[m]}"` : '';
+    return `<${tag} class="${cls}" ${attrs}${fill}${transform ? ` transform="${transform}"` : ''}${act}><title>${titles[m] || MUSCLES[m]}</title></${tag}>`;
   };
   let out = SILHOUETTE;
   for (const [m, tag, a, mirror] of BODY[view]) {
@@ -1380,6 +1475,7 @@ function viewTrainStart() {
     <p class="muted">Elige una rutina o empieza en blanco. Todo se guarda en este dispositivo.</p>
     <button class="btn btn-red btn-lg btn-block" data-action="startEmpty">${ic('play')} Entrenamiento libre</button>
   </section>`;
+  if (DB.workouts.length) html += fatigueCard();
   if (DB.routines.length) html += routineGroup('Mis rutinas', DB.routines, true);
   ROUTINE_GROUPS.forEach(g => html += routineGroup(g, PRESET_ROUTINES.filter(r => r.group === g), false));
   html += `<h2 class="sec-title">Herramientas</h2>
@@ -1399,6 +1495,29 @@ function viewTrainStart() {
     <div class="set-line"><span>Borrar todos los datos</span><button class="btn btn-ghost btn-sm" data-action="wipeData">${ic('trash')} Borrar</button></div>
   </div>`;
   return html;
+}
+
+/** Resumen del estado muscular con la rutina recomendada para hoy */
+function fatigueCard() {
+  const fat = muscleFatigue(), heat = heatColors(fat);
+  const by = lvl => Object.keys(MUSCLES).filter(m => fat[m].level === lvl).map(m => MUSCLES[m]);
+  const tired = [...by(FATIGUE_LEVELS[3]), ...by(FATIGUE_LEVELS[2])];
+  const ready = [...by(FATIGUE_LEVELS[0]), ...by(FATIGUE_NONE)];
+  const best = bestRoutineToday(fat);
+  const dot = l => `<span class="lvl"><i style="background:${l.color}"></i>${l === FATIGUE_LEVELS[0] ? 'Listos' : 'Fatigados'}</span>`;
+  return `<section class="card">
+    <div class="r-head"><h3 class="display" style="font-size:20px">Estado muscular</h3>
+      <button class="btn btn-ghost btn-sm" data-action="openFatigue">${ic('chart')} Ver mapa</button></div>
+    <div class="fm-row">
+      <div class="fm-bodies">${bodySVG('front', { heat })}${bodySVG('back', { heat })}</div>
+      <div class="fm-text">
+        <div>${dot(FATIGUE_LEVELS[3])}${tired.length ? esc(tired.join(', ')) : '<span class="muted">Ninguno</span>'}</div>
+        <div>${dot(FATIGUE_LEVELS[0])}${ready.length ? esc(ready.join(', ')) : '<span class="muted">Ninguno todavía</span>'}</div>
+      </div>
+    </div>
+    ${best ? `<div class="fm-rec"><p>Mejor opción hoy: <b>${esc(best.r.name)}</b>. Sus músculos principales están al ${fmt(best.avg, 0)} % de fatiga media.</p>
+      <button class="btn btn-red btn-sm" data-action="startRoutine" data-id="${esc(best.r.id)}">${ic('play')} Empezar</button></div>` : ''}
+  </section>`;
 }
 
 function routineGroup(title, list, custom) {
@@ -1628,6 +1747,7 @@ function viewProgress() {
   const maxMs = Math.max(22, ...Object.values(ms));
 
   return `<div class="page-head"><h1 class="display">Progreso</h1></div>
+  ${fatigueSection()}
   <div class="kpis">
     <div class="kpi"><span>Entrenamientos</span><b>${ws.length}</b><small>en total</small></div>
     <div class="kpi hot"><span>Esta semana</span><b>${weeks[weeks.length - 1].count}</b><small>sesiones</small></div>
@@ -1674,6 +1794,39 @@ function viewProgress() {
     <h2 class="display" style="font-size:17px;margin-bottom:6px">${ic('trophy', '')} Récords personales</h2>
     ${exIds.map(id => { const p = prsFor(id); return `<div class="pr-row"><div class="t"><b>${esc(exName(id))}</b><span>${p.sessions} sesiones · ${p.maxW ? `máx. ${fmt(p.maxW)} kg × ${p.maxWr}` : 'peso corporal'}${p.maxWdate ? ` (${shortDate(p.maxWdate)})` : ''}</span></div>
       <div class="v">${p.best1 ? `<b>${fmt(p.best1, 1)}</b><span>1RM est. kg</span>` : `<b>${p.maxReps}</b><span>reps máx.</span>`}</div></div>`; }).join('')}
+  </section>`;
+}
+
+/** Mapa corporal de fatiga con detalle por músculo */
+function fatigueSection() {
+  const fat = muscleFatigue(), heat = heatColors(fat);
+  const titles = Object.fromEntries(Object.entries(fat).map(([m, r]) => [m, `${MUSCLES[m]}: ${r.last ? r.pct + ' %, ' : ''}${r.level.label}`]));
+  const order = Object.keys(MUSCLES).sort((a, b) => fat[b].pct - fat[a].pct);
+  if (!fat[UI.fatSel]) UI.fatSel = order[0];
+  const m = UI.fatSel, r = fat[m];
+  const opt = { heat, titles, interactive: true, action: 'fatMuscle', selected: m };
+  return `<section class="card chart-card" id="fatigue">
+    <h2>Mapa de fatiga muscular</h2>
+    <p class="sub">Carga estimada de cada músculo según tus series recientes, su esfuerzo (RPE) y el tiempo que tarda en recuperarse. Toca un músculo.</p>
+    <div class="bodies">
+      <figure>${bodySVG('front', opt)}<figcaption>Frente</figcaption></figure>
+      <figure>${bodySVG('back', opt)}<figcaption>Espalda</figcaption></figure>
+    </div>
+    <div class="fat-legend">${[...FATIGUE_LEVELS, FATIGUE_NONE].map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('')}</div>
+    <div class="fat-detail" aria-live="polite">
+      <div class="fd-head"><div><h3>${MUSCLES[m]}</h3><span class="lvl"><i style="background:${r.level.color}"></i>${r.level.label}</span></div>
+        ${r.last ? `<div class="fd-pct" style="color:${r.level.color}">${r.pct} %</div>` : ''}</div>
+      <div class="fd-meta">
+        <span class="chip static num">${fmt(r.sets7, 1)} series en 7 días</span>
+        ${r.last ? `<span class="chip static">Último: ${fmtAgo(r.last)}</span>` : ''}
+        ${r.last ? `<span class="chip static">${r.readyIn ? `Recuperado en ~${fmtHours(r.readyIn)}` : 'Listo para entrenar'}</span>` : ''}
+      </div>
+      <p>${r.level.tip}</p>
+    </div>
+    ${order.map(k => { const f = fat[k]; return `<button class="fat-row ${k === m ? 'on' : ''}" data-action="fatMuscle" data-m="${k}">
+      <span>${MUSCLES[k]}</span><span class="track"><span class="fill" style="display:block;width:${Math.min(100, f.pct)}%;background:${f.level.color}"></span></span><b>${f.last ? f.pct + '%' : '—'}</b></button>`; }).join('')}
+    <p class="muted small" style="margin-top:12px">Es una estimación orientativa: el sueño, la alimentación y el estrés también influyen. Si notas dolor o cansancio, hazle caso a tu cuerpo.
+      <button class="chip static" data-action="openLesson" data-id="recuperacion" style="cursor:pointer;margin-top:6px">Lección: recuperación</button></p>
   </section>`;
 }
 
@@ -2107,6 +2260,8 @@ const ACTIONS = {
 
   /* --- Progreso --- */
   progMetric: el => { UI.progMetric = el.dataset.m; render(); },
+  fatMuscle: el => { UI.fatSel = el.dataset.m; buzz(10); render(); },
+  openFatigue: () => { go('progress'); setTimeout(() => $('#fatigue')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60); },
 
   /* --- Calculadoras --- */
   openCalc: el => openCalc(el.dataset.t),
