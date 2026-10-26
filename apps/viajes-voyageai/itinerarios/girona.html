@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Girona — Las escaleras de Braavos y el río de los mil colores | Routlo</title>
+  <meta name="description" content="100 km desde Barcelona, poco más de una hora: el Barrio Judío mejor conservado de Europa, las escaleras de la Catedral que Juego de Tronos convirtió en Braavos y las coloridas Cases de l'Onyar. Un día gratuito por unos 30€ para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #d98c6b; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #d98c6b; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(217,140,107,0.15); border: 1px solid rgba(217,140,107,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #d98c6b; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(217,140,107,0.12); border: 1px solid rgba(217,140,107,0.3); font-size: 0.75rem; font-weight: 600; color: #d98c6b; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(217,140,107,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(217,140,107,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #d98c6b, #a85d3f); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #d98c6b; border-left-color: #d98c6b; background: rgba(217,140,107,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(217,140,107,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(217,140,107,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #d98c6b; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(217,140,107,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #d98c6b; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #d98c6b; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(217,140,107,0.3); }
+    .hotel-link:hover { border-color: #d98c6b; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #d98c6b; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#d98c6b'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#d98c6b'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1555993539-1732b0258235?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">🎨 Escapada de un día</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;font-size:0.75rem;font-weight:600;">🆓 Entrada gratuita</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">100 km · ~75 min en coche desde Barcelona</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~30€ / 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Girona<br><span style="color:#d98c6b;">El río de los mil colores y las escaleras de Braavos</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A poco más de una hora de Barcelona, Girona esconde el Barrio Judío mejor conservado de Europa, las fachadas multicolor de las Cases de l'Onyar reflejadas en el río, y unas escaleras de catedral que Juego de Tronos convirtió en la entrada a la Casa de Blanco y Negro de Braavos. Historia milenaria, fotos de leyenda y presupuesto modesto: unos 30€ para dos.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">De Gerunda a Braavos</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Girona</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🎨 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">100 km</div><div class="route-info-unit">desde Barcelona</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~75 min</div><div class="route-info-unit">por la AP-7</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~30€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Escaleras Catedral</div><div class="route-info-value">90</div><div class="route-info-unit">escalones · Braavos</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Todo el año</div><div class="route-info-unit">evita mediodía en verano</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">🏛️ De Gerunda a Braavos: el viaje de Girona por la historia y la pantalla</h2>
+      <div class="highlight-box">
+        <h4>🗺️ Gerunda, la ciudad romana que nunca dejó de crecer</h4>
+        <p>Girona nació como Gerunda, una ciudad fortificada romana fundada en torno al siglo I a.C. sobre la confluencia de los ríos Onyar, Ter, Güell y Galligants. Su trazado original —el de la Força Vella— sigue siendo el esqueleto del Barri Vell actual: calles estrechas y empedradas que han absorbido dos mil años de capas históricas, desde las murallas romanas hasta las medievales, pasando por la etapa árabe y la próspera comunidad judía que convirtió la ciudad en uno de los centros de estudio cabalístico más importantes de Europa durante los siglos XII y XIII.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🐉 De catedral medieval a Casa de Blanco y Negro</h4>
+        <p>En 2016, durante el rodaje de la sexta temporada de Juego de Tronos, las imponentes escaleras barrocas de la Catedral de Santa María de Girona —90 escalones que conectan la plaza con el templo— se transformaron en la entrada a la Casa de Blanco y Negro de Braavos, el refugio de los Hombres sin Rostro donde Arya Stark entrena para convertirse en una de ellos. Si has visto la serie, reconocerás al instante la perspectiva: la escalinata ascendiendo hacia la fachada neoclásica de la catedral es prácticamente idéntica al plano que recorre Arya en sus escenas más icónicas.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Barcelona → Girona · ~75 min</div><div class="day-subtitle">Por la autopista AP-7 en dirección norte</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 La ruta recomendada</div>
+            <div class="stop-desc">La forma más rápida y cómoda es tomar la AP-7 desde Barcelona en dirección a Girona/Francia. Son unos 100 km que se cubren en aproximadamente 1h 15min con tráfico normal, con peaje incluido. Si prefieres evitar el peaje, la alternativa por la N-II añade entre 20 y 30 minutos al trayecto.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento</div>
+            <div class="stop-desc">El centro histórico es peatonal, así que lo mejor es dejar el coche en uno de los aparcamientos públicos cercanos al Barri Vell (zona de la Devesa o aparcamientos de pago junto al río Onyar) y cruzar a pie hacia el casco antiguo en pocos minutos.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Barri Vell i Call Jueu</div><div class="day-subtitle">Paseo a pie · 1h - 1h 30min · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🕍 El Call Jueu, el Barrio Judío mejor conservado de Europa</div>
+            <div class="stop-desc">El Call de Girona es uno de los conjuntos urbanos judíos medievales mejor conservados de todo el continente. Pasear por sus calles —Carrer de la Força, Carrer de Sant Llorenç, callejones en cuesta y escalinatas estrechas entre muros de piedra— es retroceder directamente al siglo XIII, cuando esta zona albergaba una de las comunidades judías más influyentes de la corona de Aragón.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">📚 Museu d'Història dels Jueus (opcional, de pago)</div>
+            <div class="stop-desc">Si quieres profundizar en la historia de la comunidad judía de Girona, el Museu d'Història dels Jueus ocupa varios edificios del antiguo Call y explica con rigor la vida cotidiana, religiosa e intelectual de la aljama medieval, incluyendo su papel como centro de estudios cabalísticos.</div>
+            <div class="stop-price">Entrada: ~4€/persona · Visita opcional, no imprescindible para disfrutar del paseo gratuito por el Call</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚶 Carrer de la Força</div>
+            <div class="stop-desc">La calle principal del antiguo Call sigue el trazado de la vía romana original y está considerada una de las calles medievales mejor conservadas de Cataluña. Sus arcos, escalinatas y rincones son perfectos para fotos sin necesidad de pagar ninguna entrada.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Escaleras de la Catedral + Passeig de la Muralla</div><div class="day-subtitle">Paseo a pie · 1h - 1h 30min · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛪ Las escaleras de Braavos</div>
+            <div class="stop-desc">La escalinata barroca de 90 escalones que asciende hasta la fachada de la Catedral de Santa María es totalmente gratuita de visitar —solo se paga si quieres entrar al templo o al claustro. Es el lugar exacto donde se rodaron las escenas de Arya Stark frente a la Casa de Blanco y Negro en la sexta temporada de Juego de Tronos. Subir hasta arriba y disfrutar de las vistas sobre los tejados del Barri Vell ya merece la parada.</div>
+            <a href="https://www.getyourguide.com/s/?q=Girona+Game+of+Thrones+tour&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener" aria-label="Reservar tour de Juego de Tronos en Girona en GetYourGuide">🎬 Reservar tour de Juego de Tronos en GetYourGuide</a>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🧱 Passeig de la Muralla</div>
+            <div class="stop-desc">El paseo por las murallas medievales que rodean el casco antiguo es completamente gratuito y ofrece algunas de las mejores vistas panorámicas de Girona: tejados rojizos, la propia catedral, las torres de la Força Vella y, en días claros, los Pirineos al fondo. Hay varios accesos desde el Barri Vell, y el recorrido completo puede hacerse en menos de una hora.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Cases de l'Onyar, Pont de les Peixateries Velles y vuelta</div><div class="day-subtitle">Paseo + tapas · 1h - 1h 30min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🎨 Cases de l'Onyar</div>
+            <div class="stop-desc">Las casas de colores que se asoman al río Onyar son la postal más conocida de Girona —fachadas en ocres, rojos, amarillos y azules que se reflejan en el agua creando una de las estampas más fotografiadas de Cataluña. El mirador desde cualquiera de los puentes que cruzan el río es gratuito y el resultado, espectacular a cualquier hora del día.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌉 Pont de les Peixateries Velles (el "puente Eiffel")</div>
+            <div class="stop-desc">Este puente peatonal de hierro rojo, inaugurado en 1877, fue diseñado por el taller de Gustave Eiffel —el mismo que años después construiría la torre parisina. Cruzar a pie de un lado a otro del Onyar sobre esta estructura, con las Cases de l'Onyar de fondo, es otra parada obligatoria y, por supuesto, gratuita.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍻 Tapas antes de volver</div>
+            <div class="stop-desc">En las calles que rodean la Rambla de la Llibertat y el entorno del Mercadal hay numerosos bares de tapas con precios razonables para una parada antes de emprender el regreso. Una ronda de tapas y bebida por persona suele rondar los 8-10€.</div>
+            <div class="stop-price">Tapas + bebida: ~8-10€/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Barcelona — ~75 min</div>
+            <div class="stop-desc">Vuelta directa por la AP-7. Si sales a media tarde evitarás la salida de la ciudad con más tráfico y llegarás a Barcelona con tiempo de sobra para cenar.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, ~200 km)</span><span>16€</span></div>
+        <div class="budget-row"><span>🎫 Museu d'Història dels Jueus (2 personas, opcional)</span><span>8€</span></div>
+        <div class="budget-row"><span>☕ Café y tapas</span><span>6€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~30€</span></div>
+      </div>
+      <div class="budget-note">El Barri Vell, el Call Jueu, las escaleras de la catedral, el Passeig de la Muralla y las Cases de l'Onyar son completamente gratuitos. La única partida realmente opcional es la entrada al museo judío —si la omites, el día puede salir por menos de 25€ para dos personas, sin contar el peaje de la AP-7 si decides usarlo.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Mejor hora para las Cases de l'Onyar:</strong> a primera hora de la mañana o al atardecer la luz incide de lleno en las fachadas de colores y el río está más tranquilo, ideal para fotos sin gente cruzando los puentes.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Evita el Call Jueu a mediodía en temporada alta:</strong> las calles son estrechas y se llenan rápido de grupos turísticos entre las 11h y las 14h. Ir a primera hora de la mañana permite disfrutar de los callejones casi en solitario.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Parking recomendado:</strong> los aparcamientos junto a la Devesa o en la zona del río Güell suelen tener tarifas más económicas que los del centro y están a 10-15 minutos a pie del Barri Vell.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Las escaleras de la catedral con poca gente:</strong> combina la visita a primera hora de la mañana, antes de las 10h, cuando los grupos organizados todavía no han llegado y puedes recrear con calma las fotos al estilo Braavos.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Barcelona y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Barcelona" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Barcelona en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados"><strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (GetYourGuide, DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.</div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Barcelona?</h3>
+      <p>Rutas de un día con entradas gratuitas o casi gratuitas, mapas detallados y presupuesto desglosado para dos personas.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([41.68,2.50],9);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[41.3851,2.1734],label:'Barcelona',color:'#5ecb8a',r:10},{coords:[41.9794,2.8214],label:'Girona',color:'#d98c6b',r:9},{coords:[41.9865,2.8248],label:'Catedral de Girona (escaleras de Braavos)',color:'#e0b44a',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[41.3851,2.1734],[41.9794,2.8214]],{color:'#d98c6b',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

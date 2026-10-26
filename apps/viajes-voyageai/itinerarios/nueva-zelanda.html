@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nueva Zelanda — Isla Norte + Isla Sur — 10 días | Routlo</title>
+  <meta name="description" content="Itinerario de 10 días en Nueva Zelanda: Auckland, Hobbiton, Rotorua, Tongariro, Queenstown, Milford Sound, Wanaka y glaciares. Presupuesto detallado y consejos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0a2a3a 0%, transparent 70%); top: -200px; left: -150px; opacity: 0.5; animation: blob 14s ease-in-out infinite; }
+    .aurora::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0a2535 0%, transparent 70%); bottom: -150px; right: -100px; opacity: 0.45; animation: blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #062030 0%, transparent 70%); top: 40%; left: 50%; transform: translate(-50%,-50%); opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-60px) scale(1.08); } 66% { transform: translate(-30px,40px) scale(0.94); } }
+    .dest-hero { position: relative; z-index: 1; min-height: 65vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 140px 24px 60px; overflow: hidden; }
+    .dest-hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #050f1a 0%, #0a1e2e 40%, #0d2d42 70%, rgba(201,169,110,0.15) 100%), url('https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=1400&q=80') center/cover no-repeat; }
+    .dest-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%); }
+    .dest-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); margin-bottom: 20px; position: relative; z-index: 1; }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2; }
+    .dest-country { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; font-style: italic; color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1; }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(4,8,16,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar { display: flex; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 600px; position: relative; z-index: 1; }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .hotel-grid { grid-template-columns: repeat(2,1fr); } .gastro-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .hotel-grid { grid-template-columns: 1fr; } .emerg-grid { grid-template-columns: 1fr; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Oceanía</span>
+    <span aria-hidden="true">›</span><span>Nueva Zelanda</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Nueva Zelanda</h1>
+  <p class="dest-country">Isla Norte · Isla Sur</p>
+  <div class="dest-meta">
+    <span class="dest-badge">✈️ ~26h desde Madrid</span>
+    <span class="dest-badge gold">10 días</span>
+    <span class="dest-badge">💰 ~€3,200/persona</span>
+    <span class="dest-badge">🌿 El país más verde</span>
+  </div>
+  <div class="dest-summary-bar" role="region" aria-label="Resumen del viaje">
+    <div class="dest-sum-item"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">10 días</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€3,200</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Mejor época</div><div class="dest-sum-val">Nov–Mar</div></div>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#alojamiento">Alojamiento</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#dia1">Día 1 — Llegada Auckland</a></li>
+      <li><a href="#dia2">Día 2 — Hobbiton + Rotorua</a></li>
+      <li><a href="#dia3">Día 3 — Rotorua Geotérmica</a></li>
+      <li><a href="#dia4">Día 4 — Tongariro Crossing</a></li>
+      <li><a href="#dia5">Día 5 — Vuelo a Queenstown</a></li>
+      <li><a href="#dia6">Día 6 — Milford Sound</a></li>
+      <li><a href="#dia7">Día 7 — Central Otago Wines</a></li>
+      <li><a href="#dia8">Día 8 — Lago Wanaka</a></li>
+      <li><a href="#dia9">Día 9 — Glaciares Franz Josef</a></li>
+      <li><a href="#dia10">Día 10 — Christchurch + vuelo</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Alojamiento</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">Económico</div>
+          <div class="hotel-name">Nomads Queenstown</div>
+          <div class="hotel-zone">Centro, Queenstown</div>
+          <div class="hotel-price">€30–40/noche</div>
+          <ul class="hotel-features"><li>Hostal de referencia en Queenstown</li><li>Ambiente viajero internacional</li><li>Cocina compartida equipada</li></ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Intermedio</div>
+          <div class="hotel-name">Novotel Rotorua Lakeside</div>
+          <div class="hotel-zone">Orilla del lago, Rotorua</div>
+          <div class="hotel-price">€85–110/noche</div>
+          <ul class="hotel-features"><li>Vistas directas al lago Rotorua</li><li>Acceso a piscinas geotérmicas</li><li>Desayuno bufet disponible</li></ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Lujo</div>
+          <div class="hotel-name">Millbrook Resort</div>
+          <div class="hotel-zone">Arrowtown, cerca de Queenstown</div>
+          <div class="hotel-price">€260–300/noche</div>
+          <ul class="hotel-features"><li>Resort de golf de 18 hoyos</li><li>Spa y piscina exterior climatizada</li><li>Vistas a las montañas Remarkables</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead><tr><th>Concepto</th><th>Coste</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Vuelo ida y vuelta</td><td>€1,400–2,000</td><td>Madrid–AKL con escala en Singapur, Dubái o Doha</td></tr>
+            <tr><td>Alojamiento (10 noches)</td><td>€350–2,000</td><td>Desde hostal €35/n hasta lujo €280/n; mix recomendado ~€100/n</td></tr>
+            <tr><td>Vuelo doméstico Auckland–Queenstown</td><td>€80–140</td><td>Air New Zealand; reservar con 2–3 meses de antelación</td></tr>
+            <tr><td>Alquiler de coche</td><td>€200–300</td><td>Esencial para Tongariro, Wanaka y glaciares; conducción por la izquierda</td></tr>
+            <tr><td>Actividades</td><td>€300–500</td><td>Hobbiton €40, Tongariro free, bungee €180, helicóptero glaciar €250</td></tr>
+            <tr><td>Comidas</td><td>€250–400</td><td>Supermercados + pies de cordero + 2–3 cenas especiales</td></tr>
+            <tr><td><strong>TOTAL</strong></td><td><strong>€2,580–5,340</strong></td><td>Por persona (media ~€3,200)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Nueva Zelanda es uno de los destinos más caros de Oceanía. El mayor coste es el vuelo internacional (~€1,600 media). Una vez allí, el alquiler de coche es imprescindible — el transporte público no cubre las atracciones principales fuera de ciudades.</p>
+    </section>
+
+    <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+      <h2 class="section-heading" id="h-dia1">Día 1</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div><div class="day-title">Llegada a Auckland</div><div class="day-subtitle">Sky Tower, Viaduct Harbour y Ponsonby</div></div>
+          <div class="day-meta"><span>🛬 Aeropuerto Auckland</span><span>🏙️ Isla Norte</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">Tarde</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada y Sky Tower</div>
+              <div class="act-desc">El aeropuerto de Auckland está a 21 km del centro (SkyBus €16 o taxi €50). Auckland es la ciudad más grande de Nueva Zelanda con 1,7 millones de habitantes. La Sky Tower de 328 m domina el horizonte — desde la plataforma de observación se ven los dos puertos de la ciudad y el golfo de Hauraki con sus volcanes. Los más atrevidos pueden hacer el SkyWalk o el SkyJump (€215).</div>
+              <div class="act-tags"><span class="act-tag">Sky Tower €32</span><span class="act-tag info">Jet lag: primera noche dura</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Viaduct Harbour y Ponsonby</div>
+              <div class="act-desc">El Viaduct Harbour fue sede de la Copa América de vela — un paseo marítimo animado con restaurantes de mariscos y bares con terrazas sobre el agua. A 10 minutos, el barrio de Ponsonby es el más hipster de Auckland: cafeterías de specialty coffee, brunch neozelandés y tiendas de diseño local. El flat white nació en Auckland y Ponsonby es donde se hace mejor.</div>
+              <div class="act-tags"><span class="act-tag green">Flat white €4–5</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+      <h2 class="section-heading" id="h-dia2">Día 2</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div><div class="day-title">Hobbiton + Rotorua</div><div class="day-subtitle">El Señor de los Anillos en Matamata</div></div>
+          <div class="day-meta"><span>🧙 Hobbiton Matamata</span><span>♨️ Rotorua</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Hobbiton Movie Set — Matamata</div>
+              <div class="act-desc">A 2h de Auckland en coche, en la granja Alexander de Matamata, Peter Jackson construyó los 44 agujeros de hobbit permanentes para la trilogía de El Señor de los Anillos y El Hobbit. El set es la única atracción de cine construida para durar — los jardines florecen igual que en la película. El tour incluye el Pub El Dragón Verde, donde se sirve cerveza artesanal exclusiva. Imprescindible para fans y no fans por igual.</div>
+              <div class="act-tags"><span class="act-tag">Tour €40 por persona</span><span class="act-tag info">Reservar online con antelación</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada a Rotorua — la ciudad geotérmica</div>
+              <div class="act-desc">Rotorua (90 min desde Matamata) es la capital geotérmica de Nueva Zelanda: huele a azufre desde que llegas, el suelo humea, y los parques tienen géiseres y lagunas de barro hirviendo. La ciudad es también el corazón de la cultura maorí en Nueva Zelanda. Paseo por el lago Rotorua al atardecer y cena en el barrio central.</div>
+              <div class="act-tags"><span class="act-tag green">Duchas geotérmicas gratis en el parque</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+      <h2 class="section-heading" id="h-dia3">Día 3</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div><div class="day-title">Rotorua Geotérmica + Cultura Maorí</div><div class="day-subtitle">Te Puia, Pohutu y hāngī</div></div>
+          <div class="day-meta"><span>♨️ Géiser Pohutu</span><span>🪶 Cultura maorí</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Te Puia — géiseres y tallado maorí</div>
+              <div class="act-desc">Te Puia es el parque geotérmico más importante de Nueva Zelanda. El géiser Pohutu es el más activo del hemisferio sur: erupciona hasta 30 metros de altura hasta 20 veces al día. El complejo alberga también el Instituto Nacional de Tallado y Tejido Maorí, donde artesanos trabajan las técnicas tradicionales whakairo (tallado en madera) y raranga (tejido de flax). Las lagunas de barro hirviendo y los cráteres de azufre crean un paisaje casi marciano.</div>
+              <div class="act-tags"><span class="act-tag">€35 entrada</span><span class="act-tag info">Géiser Pohutu erupciona cada ~1–2h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Whakarewarewa — aldea maorí viva</div>
+              <div class="act-desc">A diferencia de los parques temáticos, Whakarewarewa es una aldea maorí habitada donde 1,500 personas viven hoy sobre campo geotérmico activo. Los residentes cocinan con el vapor geotérmico, se bañan en pozas naturales y muestran su cultura con danzas tradicionales incluyendo el haka de guerra. Una experiencia auténtica y conmovedora que va mucho más allá del turismo convencional.</div>
+              <div class="act-tags"><span class="act-tag">€25 con danza incluida</span><span class="act-tag green">Aldea habitada, no parque temático</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena hāngī maorí</div>
+              <div class="act-desc">El hāngī es la técnica de cocción maorí tradicional: carnes (cordero, cerdo, pollo) y vegetales envueltos en hojas se cocinan enterrados bajo tierra con piedras volcánicas calientes durante 3–4 horas. El resultado es una carne increíblemente tierna con sabor ahumado. Varios restaurantes y marae (aldeas) de Rotorua ofrecen cenas hāngī con espectáculo cultural maorí nocturno.</div>
+              <div class="act-tags"><span class="act-tag">Cena + espectáculo €55–75</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+      <h2 class="section-heading" id="h-dia4">Día 4</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div><div class="day-title">Tongariro Alpine Crossing</div><div class="day-subtitle">El mejor day hike del mundo — 19km, volcanes activos</div></div>
+          <div class="day-meta"><span>🌋 Volcán Tongariro</span><span>🥾 19km / 7–8h</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">06:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida desde Rotorua — 2,5h en coche</div>
+              <div class="act-desc">El Parque Nacional Tongariro es Patrimonio Mundial UNESCO — tanto por su valor natural (tres volcanes activos: Tongariro, Ngauruhoe y Ruapehu) como cultural (territorio sagrado maorí). El monte Ngauruhoe fue el Monte del Destino en El Señor de los Anillos. El shuttle desde el parking de Mangatepopo hasta el final del cruce sale a las 7:30h. Reservar el shuttle con antelación en temporada alta.</div>
+              <div class="act-tags"><span class="act-tag">Shuttle €30 ida</span><span class="act-tag info">Parque nacional: entrada gratuita</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tongariro Alpine Crossing — 19,4 km</div>
+              <div class="act-desc">Considerado unánimemente el mejor day hike del mundo. La ruta atraviesa paisaje volcánico de otro planeta: lava negra solidificada, cráteres activos que exhalan vapor sulfuroso, y las Esmerald Lakes — tres lagunas de cráteres de color verde azulado intenso por los minerales volcánicos. La cima del Red Crater a 1.886m ofrece vistas de 360° sobre la Isla Norte. Nivel medio-alto de dificultad. Llevar ropa de abrigo, impermeables y comida para el día.</div>
+              <div class="act-tags"><span class="act-tag green">Esmerald Lakes — foto icónica</span><span class="act-tag">7–9h ida a pie</span><span class="act-tag info">Clima cambia rápido, preparación esencial</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Conducción nocturna hacia Auckland</div>
+              <div class="act-desc">Tras el crossing, cena en Turangi o Taupo (a 40–50 km) y conducción de regreso a Auckland (~3,5h) para el vuelo del día siguiente. Alternativamente, alojarse en Taupo (lago volcánico, el mayor de Nueva Zelanda) y madrugar el día 5 para el aeropuerto.</div>
+              <div class="act-tags"><span class="act-tag">Alojamiento Taupo €70–120</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+      <h2 class="section-heading" id="h-dia5">Día 5</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div><div class="day-title">Vuelo Auckland → Queenstown</div><div class="day-subtitle">Bungee jumping AJ Hackett + jet boat</div></div>
+          <div class="day-meta"><span>✈️ Vuelo doméstico</span><span>🏔️ Isla Sur</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo Auckland–Queenstown</div>
+              <div class="act-desc">Air New Zealand opera vuelos directos en ~1h45. La aproximación a Queenstown es una de las más espectaculares del mundo: el avión desciende entre las montañas Remarkables, cubiertos de nieve en invierno, reflejadas en el lago Wakatipu. A la salida del aeropuerto ya se ve el lago y las montañas — la primera impresión de Queenstown es de película.</div>
+              <div class="act-tags"><span class="act-tag">Vuelo €80–140</span><span class="act-tag info">Ventanilla derecha = mejores vistas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bungee jumping AJ Hackett — Kawarau Bridge</div>
+              <div class="act-desc">AJ Hackett es el inventor del bungee jumping comercial moderno — el primer salto fue aquí, en el puente Kawarau (43m), en 1988. Queenstown es la capital mundial del turismo de aventura. Saltar desde el puente histórico con vistas al río Kawarau turquesa es una experiencia que se recuerda toda la vida. También disponible: The Ledge (400m sobre Queenstown, 47m), Nevis (134m, el tercer salto más alto del mundo).</div>
+              <div class="act-tags"><span class="act-tag">Kawarau €145</span><span class="act-tag">Nevis €265</span><span class="act-tag info">Reservar online con descuento</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Shotover Jet — jet boat por cañones</div>
+              <div class="act-desc">Los jet boats navegan a 85 km/h a centímetros de las paredes de roca del Cañón Shotover, con giros de 360° completos en el agua. El Shotover Jet es el más famoso de Nueva Zelanda — 25 minutos de adrenalina pura en uno de los paisajes más dramáticos de la Isla Sur.</div>
+              <div class="act-tags"><span class="act-tag">€90 por persona</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia6" class="itin-section" aria-labelledby="h-dia6">
+      <h2 class="section-heading" id="h-dia6">Día 6</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">06</div>
+          <div><div class="day-title">Fiordland — Milford Sound</div><div class="day-subtitle">El fiordo con 1.200m de paredes verticales</div></div>
+          <div class="day-meta"><span>🏔️ Milford Sound</span><span>🚢 Crucero fiordo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">06:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Conducción Queenstown–Milford Sound (4h)</div>
+              <div class="act-desc">La carretera desde Te Anau hasta Milford Sound está considerada una de las más bellas del mundo: atraviesa el Parque Nacional Fiordland, cruza el Túnel Homer tallado en roca viva (1,2 km), y desciende abruptamente hacia el fiordo. El paisaje cambia cada kilómetro: bosques de hayas rojas, cascadas de centenas de metros, glaciares colgantes y praderas alpinas sin un humano a la vista. Salir antes del amanecer desde Queenstown es imprescindible.</div>
+              <div class="act-tags"><span class="act-tag info">Carretera SH94 — sin gasolina entre Te Anau y Milford</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Crucero por Milford Sound</div>
+              <div class="act-desc">Milford Sound (técnicamente un fiordo tallado por glaciares) tiene paredes verticales de hasta 1.200m, incluyendo el Mitre Peak (1.692m) que emerge directamente del mar. Las cascadas Stirling Falls y Bowen Falls caen desde 150m. En días de lluvia el fiordo se transforma — docenas de cascadas temporales aparecen en cada pared rocosa. Los delfines, focas y pingüinos de ojos azules son avistamientos frecuentes. El crucero de 2h es la mejor manera de experimentar la escala épica del lugar.</div>
+              <div class="act-tags"><span class="act-tag">Crucero 2h €60–80</span><span class="act-tag green">La lluvia crea más cascadas — no es mala suerte</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Queenstown</div>
+              <div class="act-desc">4h de regreso por la misma carretera — igual de impresionante en sentido contrario, con mejor luz de tarde. Cena en Queenstown en el barrio de Steamer Wharf, frente al lago Wakatipu y los Remarkables.</div>
+              <div class="act-tags"><span class="act-tag">Total día ~380 km en coche</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia7" class="itin-section" aria-labelledby="h-dia7">
+      <h2 class="section-heading" id="h-dia7">Día 7</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">07</div>
+          <div><div class="day-title">Viñedos de Central Otago</div><div class="day-subtitle">El Pinot Noir más austral del mundo</div></div>
+          <div class="day-meta"><span>🍷 Central Otago</span><span>🏘️ Arrowtown</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Arrowtown — el pueblo del oro</div>
+              <div class="act-desc">A 20 minutos de Queenstown, Arrowtown es un pueblo de la fiebre del oro del siglo XIX extraordinariamente bien conservado: calles de adoquines, edificios victorianos de madera y el lago Arrow rodeado de álamos que en otoño (marzo–abril) se tiñen de oro y rojo. El Lakes District Museum documenta la historia de los mineros chinos e irlandeses que llegaron en 1860. El pueblo más fotogénico de la Isla Sur en cualquier estación.</div>
+              <div class="act-tags"><span class="act-tag">Entrada museo €5</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ruta de viñedos — Pinot Noir austral</div>
+              <div class="act-desc">Central Otago es la región vinícola más austral del mundo (45°S) y produce el mejor Pinot Noir de Nueva Zelanda. El clima continental extremo — veranos secos e intensos, inviernos fríos — crea vinos de intensidad y complejidad únicas. Bodegas recomendadas: Amisfield (vistas 360° impresionantes), Peregrine (arquitectura contemporánea premiada), Rippon (frente al lago Wanaka). La mayoría ofrecen degustaciones por €15–25.</div>
+              <div class="act-tags"><span class="act-tag">Degustación €15–25</span><span class="act-tag green">Pinot Noir — varietal estrella</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Atardecer en Queenstown y cena especial</div>
+              <div class="act-desc">El lago Wakatipu toma tonos dorados y rosados al atardecer con los picos nevados como fondo. Cena en el restaurante Rata (cocina neozelandesa contemporánea con ingredientes locales) o Botswana Butchery (carnes de cordero Merino y ciervo de la región).</div>
+              <div class="act-tags"><span class="act-tag">Cena especial €60–80 pp</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia8" class="itin-section" aria-labelledby="h-dia8">
+      <h2 class="section-heading" id="h-dia8">Día 8</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">08</div>
+          <div><div class="day-title">Lago Wanaka + Roys Peak</div><div class="day-subtitle">La foto más icónica de Nueva Zelanda</div></div>
+          <div class="day-meta"><span>🏔️ Roys Peak 1,578m</span><span>💧 Lago Wanaka</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">06:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida a Wanaka (1h desde Queenstown)</div>
+              <div class="act-desc">La carretera Crown Range, la más alta de Nueva Zelanda, conecta Queenstown con Wanaka con vistas panorámicas a ambos lados. Wanaka es el lago gemelo tranquilo de Queenstown — mismas montañas, sin la multitud. El árbol solitario de Wanaka, un sauce que crece en el lago a 2m de la orilla, es probablemente la foto más reproducida del país.</div>
+              <div class="act-tags"><span class="act-tag info">El árbol Wanaka — a 2m de la orilla, acceso a pie</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">07:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Roys Peak Tramping — vista icónica</div>
+              <div class="act-desc">El track Roys Peak (16km ida/vuelta, +1.228m desnivel, 5–6h) es uno de los más fotografiados de Nueva Zelanda. En el punto de cresta a 1.578m se abre la vista que sale en todas las guías del país: el lago Wanaka en forma de L con el monte aspirante (aspiring) nevado al fondo. La subida es continua y exigente pero el sendero está perfectamente señalizado. Madrugar para llegar a la cresta antes de las nubes.</div>
+              <div class="act-tags"><span class="act-tag green">Vista de cresta — la más icónica de NZ</span><span class="act-tag">Tramping gratuito</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tarde libre en Wanaka</div>
+              <div class="act-desc">Tras el tramping, chapuzón en el lago (fría pero vivificante), pizza en Gusto at the Lake o cena de pescado en Ritual Coffee. Alojarse en Wanaka para el día siguiente hacia los glaciares (a 2h30 por carretera). Wanaka tiene el ambiente más tranquilo y auténtico de la región de Queenstown-Lakes.</div>
+              <div class="act-tags"><span class="act-tag">Alojamiento Wanaka €80–150</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia9" class="itin-section" aria-labelledby="h-dia9">
+      <h2 class="section-heading" id="h-dia9">Día 9</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">09</div>
+          <div><div class="day-title">Glaciares Franz Josef y Fox</div><div class="day-subtitle">Helicóptero sobre hielo milenario</div></div>
+          <div class="day-meta"><span>🚁 Vuelo en helicóptero</span><span>🧊 Glaciar Fox</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Conducción Wanaka → Glaciares (2h30)</div>
+              <div class="act-desc">La carretera costera de la Costa Oeste es espectacular: el Haast Pass cruza los Alpes del Sur por el único paso entre las regiones de Otago y West Coast. Cascadas, ríos de piedra azul turquesa y bosque primario de podocarpus. La Costa Oeste es la región más lluviosa de Nueva Zelanda — más de 5.000mm/año — lo que permite a los glaciares descender hasta nivel de bosque templado, algo único en el mundo.</div>
+              <div class="act-tags"><span class="act-tag info">Haast Pass — scenic highway única</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Helicóptero sobre Glaciar Fox o Franz Josef</div>
+              <div class="act-desc">Los glaciares Franz Josef y Fox descienden desde el Monte Cook (3.724m, el pico más alto de Nueva Zelanda) hasta 300m de altitud, atravesando la selva templada — un fenómeno glaciológico único en el mundo. El vuelo en helicóptero de 30 min aterriza en la zona de acumulación del glaciar a 2.500m: campo de hielo azul puro, grietas de 40m de profundidad y el silencio absoluto del hielo. La experiencia más sobrecogedora del viaje. Condicionada al tiempo — cancelaciones frecuentes en días nublados, reembolso garantizado.</div>
+              <div class="act-tags"><span class="act-tag">Heli-hike €250–320</span><span class="act-tag info">Solo posible con buen tiempo</span><span class="act-tag green">Aterrizaje en el glaciar incluido</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Walk al pie del glaciar</div>
+              <div class="act-desc">Si el helicóptero se cancela por mal tiempo, el track al terminal face del glaciar Fox (45 min ida/vuelta) permite ver el hielo de cerca. El glaciar retrocede ~20 metros al año — los mojones históricos en el sendero muestran dónde llegaba en 1990, 2000 y 2020. Una lección visual impactante sobre el cambio climático.</div>
+              <div class="act-tags"><span class="act-tag">Gratuito</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dia10" class="itin-section" aria-labelledby="h-dia10">
+      <h2 class="section-heading" id="h-dia10">Día 10</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">10</div>
+          <div><div class="day-title">Christchurch + vuelo internacional</div><div class="day-subtitle">La ciudad jardín de Nueva Zelanda</div></div>
+          <div class="day-meta"><span>✈️ Vuelo internacional</span><span>🌸 Christchurch</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Conducción hacia Christchurch (4–5h)</div>
+              <div class="act-desc">Desde los glaciares hasta Christchurch hay 4–5 horas por la carretera costera de la Costa Oeste y luego el paso Arthurs Pass o la llanura de Canterbury. Arthurs Pass (920m) atraviesa los Alpes del Sur con túneles y viaductos construidos en los años 1860 para el tren de vapor — el paisaje de montaña es completamente diferente al fiordland.</div>
+              <div class="act-tags"><span class="act-tag info">Arthurs Pass — ruta panorámica recomendada</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Christchurch — jardines y resurrección urbana</div>
+              <div class="act-desc">Christchurch fue devastada por los terremotos de 2010–2011 (185 muertos). La ciudad lleva 15 años reconstruyéndose con arquitectura contemporánea premiada y espacios verdes que la convierten en la ciudad más jardineada de Oceanía. El Botanic Gardens tiene 75 hectáreas de rosales, árboles centenarios y el río Avon serpenteando entre flores. La Transitional Cathedral — construida completamente con tubos de cartón por el arquitecto Shigeru Ban — es un símbolo de resiliencia y creatividad posdisastre.</div>
+              <div class="act-tags"><span class="act-tag green">Botanic Gardens — gratuito</span><span class="act-tag">Cardboard Cathedral — €5</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo internacional desde Christchurch</div>
+              <div class="act-desc">Christchurch tiene vuelos directos a Singapur (Air New Zealand/Singapore Airlines) y Dubái (Emirates) con conexión a Madrid. Última cena en el mercado callejero de South City o en el restaurante Twenty Seven Steps del centro histórico reconstruido. Nueva Zelanda es el tipo de destino que se lleva para siempre: la escala, el verde, la amabilidad de la gente y la pureza del paisaje no tienen equivalente.</div>
+              <div class="act-tags"><span class="act-tag info">Check-in 3h antes en vuelos internacionales</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía neozelandesa</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Tradición maorí</div>
+          <div class="gastro-title">Hāngī</div>
+          <div class="gastro-desc">La técnica de cocción maorí más antigua: carnes (cordero, cerdo, pollo) y kumara (batata maorí) se envuelven en hojas y se cocinan en un hoyo bajo tierra con piedras volcánicas calientes durante 3–4 horas. El resultado es una textura increíblemente tierna y un sabor ahumado y terroso imposible de replicar con otras técnicas. En Rotorua, varios marae ofrecen hāngī con espectáculo cultural nocturno.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Clásico neozelandés</div>
+          <div class="gastro-title">Pies de cordero</div>
+          <div class="gastro-desc">Nueva Zelanda tiene 6 millones de personas y más de 27 millones de ovejas. El cordero neozelandés es el mejor del mundo — en particular el Merino de alta montaña de los Alpes del Sur. Los meat pies (empanadas de cordero, con salsa marrón y mashed potato) son el snack de furgoneta más omnipresente del país. €4–6 en cualquier gasolinera o bakery del país.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Postre nacional</div>
+          <div class="gastro-title">Pavlova</div>
+          <div class="gastro-desc">El gran debate del Pacífico Sur: Australia y Nueva Zelanda se disputan la invención del merengue gigante con nata y fruta fresca. Los neozelandeses lo tienen muy claro: es suyo. La pavlova neozelandesa lleva kiwifruit, fresas y maracuyá sobre una base de merengue crujiente por fuera y cremoso por dentro. Omnipresente en cualquier mesa de festividad y en cafeterías de calidad.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Café de culto</div>
+          <div class="gastro-title">Flat White</div>
+          <div class="gastro-desc">El flat white (café con leche vaporizada sin espuma) fue inventado en Auckland o Sydney según cada país. Lo que no se discute es que Nueva Zelanda tiene la cultura de café de especialidad más sofisticada de Oceanía. Cada pueblo, por pequeño que sea, tiene al menos una cafetería con espresso de origen único, granos tostados localmente y latte art de nivel barista. €4–5 por una taza que avergonzaría a cualquier cadena europea.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Favorito local</div>
+          <div class="gastro-title">Fish &amp; Chips</div>
+          <div class="gastro-desc">La herencia británica más deliciosa de Nueva Zelanda: filete de tarakihi, blue cod o snapper rebozado y frito, con chips gruesas, servido en papel de periódico en cualquier frente de mar. En Queenstown, Dunedin o la Costa Oeste, comprar fish &amp; chips para llevar y comer frente al océano o el lago es una de las experiencias más auténticas y económicas del viaje.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Alta cocina</div>
+          <div class="gastro-title">Cordero Merino de alta montaña</div>
+          <div class="gastro-desc">El cordero Merino criado a más de 1.000m en los Alpes del Sur come pastos silvestres toda su vida y desarrolla una carne de sabor profundo, muy diferente al cordero europeo. Los restaurantes de Queenstown, Wanaka y Christchurch lo sirven en racks asados con salsa de menta, slow-roasted shoulder o en tartare. El mejor cordero del mundo está en Nueva Zelanda.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Conducción por la izquierda:</strong> Nueva Zelanda conduce por la izquierda (herencia británica). El primer día es el más difícil — especialmente en rotondas y al girar a la derecha. Tómate 30 minutos extra de concentración al principio. Las carreteras son sinuosas y los límites de velocidad más bajos de lo esperado (100 km/h en autopista, 80 en curvas).</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Clima impredecible:</strong> En Nueva Zelanda hay "cuatro estaciones en un día". Siempre llevar ropa impermeable, capas y protector solar alto (el agujero en la capa de ozono sobre el Pacífico Sur hace que la radiación UV sea extrema — 40% más alta que en Europa en verano). El clima puede cambiar en minutos en los Alpes del Sur.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Reservas con antelación:</strong> Hobbiton, bungee jumping AJ Hackett, helicópteros glaciar y el shuttle de Tongariro requieren reserva anticipada (especialmente en temporada alta nov–feb). El alquiler de coche también — hay escasez en temporada alta y los precios suben mucho si se reserva tarde. Reservar todo antes de salir de España.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Seguro de viaje con aventura:</strong> Las actividades de aventura (bungee, helicóptero, tramping) requieren seguro de viaje específico que cubra actividades de alto riesgo. Los seguros estándar de tarjeta bancaria suelen excluirlas. Verificar la cobertura antes de salir — un rescate en helicóptero cuesta €5,000–15,000 sin seguro.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Temporada ideal:</strong> Noviembre–marzo es el verano austral — días largos (hasta 15h de luz), temperaturas 18–25°C en costa, actividades al máximo. Diciembre–enero es Navidad local y hay más turistas. Marzo–abril tiene menos gente, los viñedos en vendimia y los árboles de Arrowtown con colores otoñales preciosos.</div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Policía / Ambulancia / Bomberos</div><div class="emerg-value">111</div><div class="emerg-note">Número único de emergencias NZ</div></div>
+        <div class="emerg-card"><div class="emerg-label">Rescate en montaña</div><div class="emerg-value">111</div><div class="emerg-note">Solicitar Policía → Mountain Rescue</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España (Wellington)</div><div class="emerg-value">+64 4 802-5665</div><div class="emerg-note">Lun–Vie 9:00–14:00 hora NZ</div></div>
+        <div class="emerg-card"><div class="emerg-label">Urgencias no vitales</div><div class="emerg-value">*555</div><div class="emerg-note">Policía no urgente desde móvil NZ</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede adaptar el itinerario a tus fechas, presupuesto y preferencias en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos para 2026. Las actividades de aventura (bungee, helicóptero, tramping en alta montaña) requieren condición física básica y seguro de viaje que cubra actividades de riesgo. El vuelo en helicóptero sobre glaciar puede cancelarse por condiciones meteorológicas — reembolso garantizado. Consulta el Ministerio de Asuntos Exteriores antes de viajar.
+    </div>
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Oceanía</div>
+      <nav aria-label="Destinos Oceanía"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="nueva-zelanda.html" style="font-size:0.84rem;color:#c9a96e;text-decoration:none;">Nueva Zelanda</a></li>
+        <li><a href="australia.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Australia</a></li>
+      </ul></nav>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Asia</div>
+      <nav aria-label="Destinos Asia"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="tokio.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Tokio</a></li>
+        <li><a href="nepal.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Nepal</a></li>
+        <li><a href="vietnam.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Vietnam</a></li>
+      </ul></nav>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+})();
+</script>
+</body>
+</html>

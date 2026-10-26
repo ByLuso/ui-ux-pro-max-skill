@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ciudad del Cabo, Sudáfrica — 6 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 6 días en Ciudad del Cabo: Montaña de la Mesa, Cabo de Buena Esperanza, ruta de vinos Stellenbosch, Robben Island y Garden Route. Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040d1a !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,13,26,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(4,13,26,0.95); }
+
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #0d2a3d 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #1a5a6e 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.35;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #0a3a52 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #040d1a 0%, #0d2a3d 40%, #1a5a6e 70%, rgba(30,180,200,0.2) 100%);
+    }
+    .dest-hero-photo {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1600&q=80');
+      background-size: cover; background-position: center;
+      opacity: 0.25;
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #040d1a 0%, rgba(4,13,26,0.5) 50%, rgba(4,13,26,0.2) 100%);
+    }
+    .dest-hero-deco {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+      background: linear-gradient(to top, #040d1a 0%, transparent 100%);
+      z-index: 0;
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #1eb8d0; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #1eb8d0; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(4,13,26,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(30,184,208,0.4); color: #1eb8d0; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #071525; padding: 16px; text-align: center; }
+    .dest-sum-label {
+      font-size: 0.7rem; color: rgba(237,238,242,0.55);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .dest-sum-val {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.2rem; font-weight: 700; color: #1eb8d0;
+    }
+
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title {
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(237,238,242,0.55); margin-bottom: 12px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #1eb8d0; border-left-color: #1eb8d0; background: rgba(30,184,208,0.1); }
+
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+
+    .day-card {
+      background: #071525;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; overflow: hidden; margin-bottom: 28px;
+    }
+    .day-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .day-num {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 2.2rem; font-weight: 700; color: #1eb8d0;
+      line-height: 1; min-width: 60px;
+    }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #1eb8d0; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #1eb8d0; border: 2px solid #071525; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(30,184,208,0.1); border: 1px solid rgba(30,184,208,0.3); border-radius: 100px; font-size: 0.67rem; color: #1eb8d0; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .hotel-card:hover { border-color: rgba(30,184,208,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #1eb8d0; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 5px; color: #1eb8d0; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(30,184,208,0.3); padding-bottom: 1px; }
+    .hotel-link:hover { border-color: #1eb8d0; }
+
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #071525; color: #1eb8d0; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(30,184,208,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #1eb8d0; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #071525; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #1eb8d0; }
+
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(30,184,208,0.1); border: 1px solid rgba(30,184,208,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #1eb8d0; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    .phrases-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .phrase-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .phrase-es { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 4px; }
+    .phrase-local { font-size: 0.88rem; font-weight: 600; color: #edeef2; margin-bottom: 2px; }
+    .phrase-pron { font-size: 0.74rem; color: #1eb8d0; font-style: italic; }
+
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #1eb8d0; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    .cta-banner { background: linear-gradient(135deg, rgba(30,184,208,0.1) 0%, rgba(26,90,110,0.08) 100%); border: 1px solid rgba(30,184,208,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #1eb8d0, #0d7a8a); color: #ffffff; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+
+    @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .hotel-grid { grid-template-columns: repeat(2,1fr); }
+      .transport-grid { grid-template-columns: 1fr; }
+      .gastro-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px; }
+      nav[role="navigation"] ul { display: none; }
+      .dest-hero { padding: 100px 16px 40px; }
+      .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
+      .dest-country { font-size: 1.1rem; }
+      .dest-summary-bar { flex-direction: column; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+      .day-num { font-size: 1.8rem; min-width: 44px; }
+      .day-body { padding: 14px 16px; }
+      .hotel-grid { grid-template-columns: 1fr; }
+      .phrases-grid { grid-template-columns: 1fr; }
+      .emerg-grid { grid-template-columns: 1fr; }
+      .section-heading { font-size: 1.3rem; }
+      .budget-wrap { overflow-x: auto; }
+      .budget-table { min-width: 480px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-photo" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(30,184,208,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(30,184,208,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#1eb8d0">Ciudad del Cabo</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Ciudad del Cabo</h1>
+  <p class="dest-country">Sudáfrica — Table Mountain &amp; Winelands</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      6 días / 5 noches
+    </span>
+    <span class="dest-badge gold" role="listitem">~€1,800/persona</span>
+    <span class="dest-badge" role="listitem">África · Sudáfrica</span>
+    <span class="dest-badge" role="listitem">Naturaleza + Vinos + Historia</span>
+    <a href="https://www.skyscanner.net/transport/flights/MAD/CPT/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(30,184,208,0.3);color:#1eb8d0;text-decoration:none">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      Buscar vuelos
+    </a>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">6 días</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Precio/persona</div>
+      <div class="dest-sum-val">~€1,800</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Mejor época</div>
+      <div class="dest-sum-val" style="font-size:0.9rem">Oct–Abr</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Visado</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Sin visado</div>
+    </div>
+  </div>
+</section>
+
+<main id="main-content">
+  <div class="itin-layout">
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#alojamiento">Alojamiento</a></li>
+          <li><a href="#dia1">Día 1</a></li>
+          <li><a href="#dia2">Día 2</a></li>
+          <li><a href="#dia3">Día 3</a></li>
+          <li><a href="#dia4">Día 4</a></li>
+          <li><a href="#dia5">Día 5</a></li>
+          <li><a href="#dia6">Día 6</a></li>
+          <li><a href="#gastronomia">Gastronomía</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+          <li><a href="#emergencias">Emergencias</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <article>
+
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          Ciudad del Cabo es posiblemente la ciudad más bella del mundo: una metrópolis moderna encajonada entre la imponente Montaña de la Mesa y dos océanos — el Atlántico y el Índico. En 6 días se puede explorar la ciudad más cosmopolita de África, el rincón donde Mandela fue preso durante 18 años, las mejores playas del continente, las bodegas con mejores vinos al sur del ecuador, y el extremo sur de África donde los dos océanos se encuentran.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Empezar gratis
+          </a>
+        </div>
+      </section>
+
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para Ciudad del Cabo">
+            <thead>
+              <tr><th>Concepto</th><th>Económico</th><th>Medio</th><th>Premium</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>✈️ Vuelos Madrid–Cape Town i/v</td><td>€550–750</td><td>€750–1,000</td><td>€1,500–2,500</td></tr>
+              <tr><td>🏨 Alojamiento (5 noches)</td><td>€150–250</td><td>€400–700</td><td>€1,000–2,000</td></tr>
+              <tr><td>🍽️ Alimentación (6 días)</td><td>€120–200</td><td>€200–350</td><td>€450–700</td></tr>
+              <tr><td>🚗 Alquiler de coche (5 días)</td><td>€100–150</td><td>€150–250</td><td>€300–500</td></tr>
+              <tr><td>🎫 Entradas y actividades</td><td>€60–100</td><td>€120–200</td><td>€250–400</td></tr>
+              <tr><td>🍷 Catas de vinos Stellenbosch</td><td>€30–50</td><td>€60–100</td><td>€150–300</td></tr>
+              <tr><td>🛡️ Seguro de viaje</td><td>€40–60</td><td>€60–80</td><td>€100–150</td></tr>
+              <tr><td><strong>TOTAL estimado</strong></td><td><strong>~€1,000</strong></td><td><strong>~€1,800</strong></td><td><strong>~€4,000</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Sin visado para ciudadanos españoles (90 días). Mejor época: octubre–abril (verano austral). Cuidado con la seguridad vial — conducir por la izquierda.</p>
+      </section>
+
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1eb8d0" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+              Desde el aeropuerto
+            </div>
+            <div class="transport-content">
+              <strong>Uber</strong> desde Cape Town International al centro — 20 min, €5–8. El servicio más seguro y cómodo.<br><br>
+              <strong>Recoger coche de alquiler</strong> en el aeropuerto es lo más recomendado — necesario para el Cabo y Stellenbosch. <strong>Recuerda: se conduce por la izquierda.</strong>
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1eb8d0" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/></svg>
+              MyCiTi Bus
+            </div>
+            <div class="transport-content">
+              El autobús público de Ciudad del Cabo — <strong>limpio, seguro y barato</strong>. Cubre el Waterfront, Sea Point, Camps Bay. Tarjeta myconnect recargable: €5 depósito.<br><br>
+              Para el centro y los barrios turísticos, el MyCiTi es perfecto. Para zonas alejadas (Cabo, Stellenbosch), necesitas coche.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1eb8d0" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+              Apps esenciales
+            </div>
+            <div class="transport-content">
+              <strong>Uber</strong> — funciona perfectamente, más seguro que taxis de calle.<br><br>
+              <strong>Google Maps</strong> — señal perfecta en toda la Península del Cabo.<br><br>
+              <strong>Waze</strong> — imprescindible para conducir, incluye alertas de seguridad vial.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1eb8d0" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Excursiones día completo
+            </div>
+            <div class="transport-content">
+              <strong>Cabo de Buena Esperanza:</strong> 1h en coche desde el centro. Ruta escénica por Chapman's Peak imprescindible.<br><br>
+              <strong>Stellenbosch:</strong> 45 min en coche. Designar conductor o contratar tour con transporte incluido.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+        <h2 class="section-heading" id="h-alojamiento">Dónde dormir</h2>
+        <div class="hotel-grid">
+          <div class="hotel-card">
+            <div class="hotel-tier">💎 Premium</div>
+            <div class="hotel-name">One&amp;Only Cape Town</div>
+            <div class="hotel-zone">V&amp;A Waterfront — Marina</div>
+            <div class="hotel-price">Desde €350/noche</div>
+            <ul class="hotel-features">
+              <li>Vistas a la Montaña de la Mesa</li>
+              <li>Piscina infinity con vistas</li>
+              <li>Spa y restaurantes de autor</li>
+              <li>El mejor hotel de Sudáfrica</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=One+Only+Cape+Town" class="hotel-link" target="_blank" rel="noopener">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver en Booking.com
+            </a>
+          </div>
+          <div class="hotel-card">
+            <div class="hotel-tier">⭐ Recomendado</div>
+            <div class="hotel-name">The Westin Cape Town</div>
+            <div class="hotel-zone">Convention Square — Centro</div>
+            <div class="hotel-price">Desde €120/noche</div>
+            <ul class="hotel-features">
+              <li>Vistas a la montaña y bahía</li>
+              <li>A pie del Waterfront</li>
+              <li>Piscina en azotea</li>
+              <li>Desayuno buffet incluido</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Westin+Cape+Town" class="hotel-link" target="_blank" rel="noopener">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver en Booking.com
+            </a>
+          </div>
+          <div class="hotel-card">
+            <div class="hotel-tier">💵 Económico</div>
+            <div class="hotel-name">Once in Cape Town</div>
+            <div class="hotel-zone">De Waterkant — Gardens</div>
+            <div class="hotel-price">Desde €30/noche</div>
+            <ul class="hotel-features">
+              <li>Hostel boutique de diseño</li>
+              <li>Zona segura y animada</li>
+              <li>Cocina compartida</li>
+              <li>Cerca de Long Street</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=budget+hostel+Cape+Town+gardens" class="hotel-link" target="_blank" rel="noopener">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver en Booking.com
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 1 -->
+      <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+        <h2 class="section-heading" id="h-dia1">Día 1</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Llegada — Waterfront y la Montaña</div>
+              <div class="day-subtitle">V&amp;A Waterfront, Montaña de la Mesa y Signal Hill al atardecer</div>
+            </div>
+            <div class="day-meta">
+              <span>⛵ V&amp;A Waterfront</span>
+              <span>🏔️ Table Mountain</span>
+              <span>🌅 Signal Hill</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada y check-in</div>
+                <div class="act-desc">Vuelo directo desde Madrid (Iberia, ~11h) o con escala en Johannesburgo. Recoger coche de alquiler en el aeropuerto. Conducir por la N2 hasta el centro — primera vista de la Montaña de la Mesa desde la autopista: impresión garantizada. Check-in en el hotel y almuerzo en el Waterfront.</div>
+                <div class="act-tags"><span class="act-tag info">Conduce por la izquierda</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">V&amp;A Waterfront</div>
+                <div class="act-desc">El puerto histórico reconvertido en el mejor espacio público de Ciudad del Cabo: restaurantes, mercados, galerías, el Museo del Acuario de Two Oceans. El Waterfront tiene la Montaña de la Mesa como telón de fondo permanente — ninguna ciudad del mundo tiene un contexto natural comparable. Paseo por los diques, tiendas de artesanía y mercado de comida.</div>
+                <div class="act-tags"><span class="act-tag green">Entrada gratuita al paseo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Montaña de la Mesa — Teleférico</div>
+                <div class="act-desc">El teleférico rotatorio sube 1.086 metros en 5 minutos — vistas 360° de la ciudad, la bahía, Robben Island y el océano Atlántico. Arriba: 3 km² de meseta plana con flora única del mundo (fynbos). Comprobar el viento antes de ir — se cierra con rachas fuertes. Reservar online para evitar colas.</div>
+                <div class="act-tags"><span class="act-tag">€18 teleférico ida/vuelta</span><span class="act-tag info">Comprobar clima</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">18:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Signal Hill y Lion's Head al atardecer</div>
+                <div class="act-desc">Signal Hill es el mirador de puesta de sol más espectacular de Ciudad del Cabo: la ciudad entera, el Atlántico, la Montaña de la Mesa iluminada por el sol poniente. Los capetonians traen sillas de camping, vino y picnic los fines de semana. Uno de los mejores atardeceres de África.</div>
+                <div class="act-tags"><span class="act-tag green">Acceso gratuito en coche</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 2 -->
+      <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+        <h2 class="section-heading" id="h-dia2">Día 2</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">02</div>
+            <div>
+              <div class="day-title">Cabo de Buena Esperanza</div>
+              <div class="day-subtitle">Pingüinos en Boulders Beach, el Cabo y Simon's Town</div>
+            </div>
+            <div class="day-meta">
+              <span>🐧 Boulders Beach</span>
+              <span>🌊 Cabo</span>
+              <span>⛵ Simon's Town</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Chapman's Peak Drive</div>
+                <div class="act-desc">La carretera más espectacular de Sudáfrica: 9 km excavados en la roca con 114 curvas entre el océano y los acantilados. Construida entre 1915 y 1922, es una obra de ingeniería que también es arte. Peaje €2 — absolutamente vale. Las paradas de fotografía son obligatorias en cada mirador.</div>
+                <div class="act-tags"><span class="act-tag">€2 peaje</span><span class="act-tag green">Ruta escénica incomparable</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Reserva Natural del Cabo de Buena Esperanza</div>
+                <div class="act-desc">El extremo sudoccidental de África — donde el Atlántico se vuelve violento y el viento nunca para. El antiguo "Cabo de las Tormentas" que los marineros portugueses temían. El faro del Cabo de Buena Esperanza a 238 metros sobre el mar. Babuinos, avestruces y pingüinos africanos viven libres en la reserva. Entrada al parque incluye todo el día.</div>
+                <div class="act-tags"><span class="act-tag">€14 entrada reserva</span><span class="act-tag info">Cuidado con los babuinos</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Boulders Beach — Colonia de Pingüinos</div>
+                <div class="act-desc">La única colonia de pingüinos africanos accesible al público en una playa: 3.000 pingüinos conviven con bañistas en esta bahía protegida de Simon's Town. El pingüino africano (también llamado "de anteojos") está en peligro de extinción — esta experiencia es única en el mundo. Nadar con ellos (guardando distancia) es posible.</div>
+                <div class="act-tags"><span class="act-tag">€10 entrada</span><span class="act-tag green">Única colonia de pingüinos accesible</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Simon's Town y regreso</div>
+                <div class="act-desc">Simon's Town es el pueblo marinero más charmant del Cabo: casas victorianas de colores, restaurantes de pescado fresco, el museo naval más antiguo de Sudáfrica. Cena de mariscos antes del regreso: la langosta sudafricana (West Coast Rock Lobster) con mantequilla. Diferente a cualquier otra del mundo.</div>
+                <div class="act-tags"><span class="act-tag">€15–25 cena mariscos</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 3 -->
+      <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+        <h2 class="section-heading" id="h-dia3">Día 3</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">03</div>
+            <div>
+              <div class="day-title">Ruta de los Vinos</div>
+              <div class="day-subtitle">Stellenbosch, Franschhoek y cata de Pinotage</div>
+            </div>
+            <div class="day-meta">
+              <span>🍷 Stellenbosch</span>
+              <span>🏡 Franschhoek</span>
+              <span>🌿 Pinotage</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Stellenbosch — La Capital del Vino</div>
+                <div class="act-desc">45 minutos desde Ciudad del Cabo, Stellenbosch es la segunda ciudad más antigua de Sudáfrica y la capital de la industria vinícola del país. Las bodegas más premiadas del hemisferio sur se concentran en este valle: Kanonkop, Rust en Vrede, Meerlust, Warwick. El vino sudafricano es el mejor secreto gastronómico del mundo anglófono.</div>
+                <div class="act-tags"><span class="act-tag">Cata desde €8/bodega</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cata de Pinotage en Kanonkop</div>
+                <div class="act-desc">El Pinotage es la única uva originaria de Sudáfrica — cruce entre Pinot Noir y Cinsault creado en 1925 en Stellenbosch. Kanonkop produce el Pinotage más famoso del mundo, ganador de múltiples premios internacionales. La cata guiada incluye 5 vinos con maridaje de quesos y charcutería local. Una educación vinícola completa.</div>
+                <div class="act-tags"><span class="act-tag">€15 cata guiada</span><span class="act-tag green">Premio mundial consecutivo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en Franschhoek</div>
+                <div class="act-desc">Franschhoek ("rincón francés") fue fundada por hugonotes franceses en 1688 — el pueblo más europeo de Sudáfrica. La única Main Street del mundo con un restaurante de lujo internacional en cada bloque. Almuerzo en La Petite Ferme (vistas al valle de viñedos) o The French Connection Bistro. Maridaje local obligatorio.</div>
+                <div class="act-tags"><span class="act-tag">€25–50 almuerzo con maridaje</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Franschhoek Wine Tram y regreso</div>
+                <div class="act-desc">El Wine Tram de Franschhoek (tranvía histórico + bus) recorre el valle pasando por 20 bodegas — puedes bajarte y subir en cualquier parada. La mejor forma de ver el paisaje sin conducir. Las viñas del valle de Franschhoek son de las más fotogénicas de cualquier región vinícola del mundo.</div>
+                <div class="act-tags"><span class="act-tag">€25 Wine Tram día completo</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 4 -->
+      <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+        <h2 class="section-heading" id="h-dia4">Día 4</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">04</div>
+            <div>
+              <div class="day-title">Robben Island y Bo-Kaap</div>
+              <div class="day-subtitle">La celda de Mandela, el barrio de colores y Long Street</div>
+            </div>
+            <div class="day-meta">
+              <span>🏝️ Robben Island</span>
+              <span>🎨 Bo-Kaap</span>
+              <span>🍸 Long Street</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Ferry a Robben Island</div>
+                <div class="act-desc">El ferry sale del Waterfront — 30 minutos cruzando la bahía con vistas a la ciudad y la montaña. Robben Island es Patrimonio de la Humanidad UNESCO: aquí estuvo Nelson Mandela preso durante 18 de sus 27 años de cárcel. Los guías son ex-presos políticos — su relato en primera persona de la resistencia al apartheid es emocionante e irrepetible.</div>
+                <div class="act-tags"><span class="act-tag">€22 ferry + tour incluido</span><span class="act-tag info">Reservar con semanas de antelación</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Bo-Kaap — El Barrio de Colores</div>
+                <div class="act-desc">El barrio más fotogénico de Ciudad del Cabo: casas del siglo XVIII pintadas en colores pastel intensos — naranja, amarillo, rosa, verde — con la Montaña de la Mesa al fondo. El barrio de la comunidad malaya y de esclavos liberados del Cabo Oriental, con mezquitas, especias y una cultura única. El Museo de Bo-Kaap narra 300 años de historia.</div>
+                <div class="act-tags"><span class="act-tag green">Barrio de libre acceso</span><span class="act-tag">Museo €3</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Long Street y el centro histórico</div>
+                <div class="act-desc">Long Street es el corazón de la vida nocturna y cultural de Ciudad del Cabo: librerías de segunda mano, bares con música en vivo, restaurantes de todo el mundo, tiendas vintage. Los edificios victorianos con balcones de hierro son un recordatorio de la historia colonial. La calle más animada de Sudáfrica.</div>
+                <div class="act-tags"><span class="act-tag green">Exploración libre</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">20:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena en el Waterfront</div>
+                <div class="act-desc">Cena en el Waterfront: The Harbour House para mariscos frescos o Nobu para fusión japonesa-sudafricana. El Waterfront de noche con las luces reflejadas en el puerto y la Montaña iluminada es el panorama gastronómico más elegante de África.</div>
+                <div class="act-tags"><span class="act-tag">€30–60 cena restaurante</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 5 -->
+      <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+        <h2 class="section-heading" id="h-dia5">Día 5</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">05</div>
+            <div>
+              <div class="day-title">Garden Route — Hermanus y Knysna</div>
+              <div class="day-subtitle">Ballenas, laguna y el mejor paisaje costero de África</div>
+            </div>
+            <div class="day-meta">
+              <span>🐋 Hermanus</span>
+              <span>🌊 Knysna</span>
+              <span>🏞️ Garden Route</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Salida hacia Hermanus por la ruta costera</div>
+                <div class="act-desc">Conducir por la R44 — la carretera costera más espectacular de Sudáfrica, con el Atlántico a un lado y montañas al otro. Hermanus está a 2 horas de Ciudad del Cabo. De septiembre a noviembre, las ballenas jorobadas y francas australes llegan a la bahía de Walker para aparearse — la mejor observación de ballenas desde tierra del mundo.</div>
+                <div class="act-tags"><span class="act-tag">2h desde Ciudad del Cabo</span><span class="act-tag info">Sep-Nov: temporada ballenas</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cliff Path — Ballenas desde los acantilados</div>
+                <div class="act-desc">El Cliff Path de Hermanus: 12 km de sendero costero en el borde de los acantilados desde donde se ven las ballenas breaching (saltando) a metros de distancia en temporada. El "whale crier" (heraldo de ballenas) es el único en el mundo — pasea por Hermanus con un cuerno de kelp anunciando donde hay ballenas.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito (sin temporada)</span><span class="act-tag">Barco ballenas €60</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Knysna Lagoon</div>
+                <div class="act-desc">Continuando por la N2 Garden Route hasta Knysna: una laguna esmeralda rodeada de bosque nativo, con dos "Heads" (acantilados de cuarcita) que protegen la entrada al océano. El barco que recorre la laguna es la forma más serena de ver este paraíso verde. Los ostras de Knysna son famosas en todo Sudáfrica.</div>
+                <div class="act-tags"><span class="act-tag">Crucero laguna €15</span><span class="act-tag">Ostras €8–15</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso a Ciudad del Cabo</div>
+                <div class="act-desc">Regreso por la N2 — 3h aproximadamente. El amanecer del día siguiente promete. Cena ligera en el hotel o takeaway de uno de los food trucks del Waterfront.</div>
+                <div class="act-tags"><span class="act-tag info">3h de regreso</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 6 -->
+      <section id="dia6" class="itin-section" aria-labelledby="h-dia6">
+        <h2 class="section-heading" id="h-dia6">Día 6</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">06</div>
+            <div>
+              <div class="day-title">Camps Bay y Despedida</div>
+              <div class="day-subtitle">La playa más glamurosa de África, Greenmarket Square y braai final</div>
+            </div>
+            <div class="day-meta">
+              <span>🏖️ Camps Bay</span>
+              <span>🛍️ Greenmarket</span>
+              <span>🔥 Braai</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Camps Bay — La Riviera Africana</div>
+                <div class="act-desc">La playa más glamurosa de Sudáfrica: arena blanca, agua cristalina del Atlántico, los Doce Apóstoles (doce picos de montaña) al fondo, y la avenida de palmeras con los restaurantes más cool de Ciudad del Cabo. El agua del Atlántico está fría (15–18°C) pero las piscinas naturales entre rocas son perfectas.</div>
+                <div class="act-tags"><span class="act-tag green">Playa gratuita</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Greenmarket Square — Compras finales</div>
+                <div class="act-desc">El mercado de artesanía más grande de Ciudad del Cabo: máscaras africanas, telas africanas, joyas de plata, esculturas de madera. Todo de Africa occidental y del sur. El regateo es bienvenido y esperado. Las mascaras Malí, los tejidos Kente de Ghana y los cuentas de Ndebele son los mejores souvenirs.</div>
+                <div class="act-tags"><span class="act-tag">Regateo bien recibido</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Braai de despedida</div>
+                <div class="act-desc">El braai es la barbacoa sudafricana — no solo técnica de cocina sino institución social que trasciende razas, idiomas y clases. Las salchichas boerewors en el fuego, las chuletas de cordero, los pinchos de pollo con peri-peri. Muchos guesthouses organizan braai de despedida para los huéspedes que lo piden. La última cena sudafricana.</div>
+                <div class="act-tags"><span class="act-tag">€10–20 braai completo</span><span class="act-tag green">Experiencia cultural</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">19:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Traslado al aeropuerto</div>
+                <div class="act-desc">Uber al aeropuerto o devolver el coche de alquiler. Salida nocturna a Madrid. Última vista de la Montaña de la Mesa iluminada desde la autopista — imposible no volver.</div>
+                <div class="act-tags"><span class="act-tag info">2h antes del vuelo mínimo</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gastronomía -->
+      <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+        <h2 class="section-heading" id="h-gastro">Gastronomía sudafricana</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:20px">Ciudad del Cabo tiene una de las escenas gastronómicas más emocionantes de África: influencias malayas, holandesas, inglesas y zulúes, mariscos frescos del Atlántico e Índico, y los mejores vinos del hemisferio sur.</p>
+        <div class="gastro-grid">
+          <div class="gastro-card">
+            <div class="gastro-cat">Barbacoa</div>
+            <div class="gastro-title">Braai</div>
+            <div class="gastro-desc">La institución social sudafricana por excelencia: barbacoa de madera (nunca carbón — los puristas lo consideran herejía). Boerewors (salchicha de especias), chuletas de cordero, peri-peri chicken. El braai no es solo comida — es el momento de comunidad más importante de la cultura sudafricana.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Plato Nacional</div>
+            <div class="gastro-title">Bobotie</div>
+            <div class="gastro-desc">Carne picada de cordero con especias malayo-holandesas (curry, canela, clavo), cubierta con natillas de huevo y horneada. El plato nacional oficial de Sudáfrica, de origen malayo del siglo XVII. Dulce, especiado y reconfortante. €8–15 en restaurante tradicional.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Snack</div>
+            <div class="gastro-title">Biltong</div>
+            <div class="gastro-desc">Carne seca curada sudafricana — el snack más omnipresente del país. Hecho de res, avestruz o venado con especias secas. Mucho más sabroso y tierno que el jerky americano. Los biltong shops están en cada esquina. El snack de película oficial de Sudáfrica.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Curry</div>
+            <div class="gastro-title">Bunny Chow</div>
+            <div class="gastro-desc">Mitad de pan de molde vaciado relleno de curry (pollo, cordero o vegetariano). Inventado en Durban por la comunidad india, hoy es popular en toda Sudáfrica. Se come con las manos. El curry del Cabo es más especiado que el de Durban — usar la tapa del pan para mojar.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Postre</div>
+            <div class="gastro-title">Malva Pudding</div>
+            <div class="gastro-desc">El postre más famoso de Sudáfrica: bizcocho de albaricoque con salsa de mantequilla caliente, servido con crema o helado de vainilla. Dulce, húmedo y reconfortante. Omnipresente en todos los menús sudafricanos. Imprescindible al menos una vez.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Vinos</div>
+            <div class="gastro-title">Pinotage y Chenin Blanc</div>
+            <div class="gastro-desc">Sudáfrica tiene la mayor superficie de Chenin Blanc del mundo — frescos, minerales, ideales para mariscos. El Pinotage (uva exclusivamente sudafricana) produce tintos potentes con notas de baobab y chocolate. Los vinos de Stellenbosch y Franschhoek compiten de igual a igual con Borgoña a un tercio del precio.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Consejos -->
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">1</div>
+          <div class="tip-text"><strong>Sin visado para españoles</strong> — los ciudadanos españoles pueden entrar a Sudáfrica sin visado para estancias de hasta 90 días. Solo necesitas pasaporte vigente y billete de vuelta.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">2</div>
+          <div class="tip-text"><strong>Conducir por la izquierda</strong> — como en el Reino Unido. Los primeros kilómetros requieren concentración. El volante está a la derecha. Recuerda los giros especialmente en rotondas.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">3</div>
+          <div class="tip-text"><strong>Seguridad en el coche:</strong> no dejar objetos de valor visibles. En semáforos en rojo en zonas periféricas, mantener ventanillas subidas. En el centro turístico (Waterfront, Bo-Kaap, Camps Bay) la seguridad es alta.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">4</div>
+          <div class="tip-text"><strong>Reservar Robben Island con antelación</strong> — las plazas se agotan semanas antes, especialmente en temporada alta (dic–ene). La web oficial: robben-island.org.za.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">5</div>
+          <div class="tip-text"><strong>El teleférico de Table Mountain se cierra con viento</strong> — el "tablecloth" (nube que cubre la cima) es frecuente. Tener un plan B y esperar al día siguiente si está cerrado. Verificar en tablemountain.net antes de salir.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">6</div>
+          <div class="tip-text"><strong>Rand (ZAR)</strong> — la moneda local. €1 = ~20 ZAR (2026). Los cajeros dan buen tipo de cambio. La mayoría de restaurantes y tiendas aceptan tarjeta. El destino es muy asequible para europeos gracias al tipo de cambio.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">7</div>
+          <div class="tip-text"><strong>Propinas del 10–15%</strong> en restaurantes y tours — el servicio no suele estar incluido. Los guías de Robben Island (ex-presos políticos) merecen propina generosa por su testimonio único.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">8</div>
+          <div class="tip-text"><strong>Protección solar alta factor</strong> — la radiación UV en el hemisferio sur es especialmente intensa por el agujero en la capa de ozono. SPF 50+ siempre, incluso en días nublados.</div>
+        </div>
+      </section>
+
+      <!-- Emergencias -->
+      <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+        <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+        <div class="emerg-grid">
+          <div class="emerg-card">
+            <div class="emerg-label">Emergencias (todos)</div>
+            <div class="emerg-value">112</div>
+            <div class="emerg-note">Policía, ambulancia, bomberos</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Policía</div>
+            <div class="emerg-value">10111</div>
+            <div class="emerg-note">Solo emergencias policiales</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Ambulancia</div>
+            <div class="emerg-value">10177</div>
+            <div class="emerg-note">Emergencias médicas</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Groote Schuur Hospital</div>
+            <div class="emerg-value" style="font-size:0.85rem">+27-21-404-9111</div>
+            <div class="emerg-note">Hospital público de referencia, en inglés</div>
+          </div>
+          <div class="emerg-card" style="grid-column:1/-1">
+            <div class="emerg-label">Embajada de España en Pretoria</div>
+            <div class="emerg-value" style="font-size:0.85rem">+27-12-460-0123</div>
+            <div class="emerg-note">Consulado Honorario en Ciudad del Cabo: +27-21-425-1553</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="disclosure" role="note" aria-label="Aviso legal sobre enlaces de afiliados">
+        <strong style="color:#edeef2">Aviso sobre enlaces de afiliados:</strong> Algunos enlaces en esta página son de afiliados (Booking.com, GetYourGuide, Skyscanner). Si realizas una compra a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Precios orientativos en euros (€) para 2026. Siempre verifica disponibilidad en los sitios oficiales.
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#071525">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html" aria-label="Routlo — Inicio"><img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);"></a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav[role="navigation"]');
+    nav.classList.toggle('menu-open');
+  }
+(function() {
+  'use strict';
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#', '');
+    const el = document.getElementById(id);
+    if (el) sections.push({ el: el, link: link });
+  });
+  function updateTOC() {
+    const scrollY = window.scrollY + 120;
+    let current = null;
+    sections.forEach(function(s) { if (s.el.offsetTop <= scrollY) current = s; });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+  window.addEventListener('scroll', updateTOC, { passive: true });
+  updateTOC();
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const el = document.getElementById(this.getAttribute('href').replace('#', ''));
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 96, behavior: 'smooth' });
+    });
+  });
+
+  function initNav() {
+    const authEl = document.getElementById('navAuth');
+    if (!authEl) return;
+    authEl.innerHTML = '<a href="../login.html" style="color:rgba(237,238,242,0.7);text-decoration:none;margin-right:12px">Entrar</a><a href="../registro.html" style="background:linear-gradient(135deg,#1eb8d0,#0d7a8a);color:#fff;padding:7px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem">Registrarse</a>';
+  }
+  initNav();
+})();
+</script>
+</body>
+</html>

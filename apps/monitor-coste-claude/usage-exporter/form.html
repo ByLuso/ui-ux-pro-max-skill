@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111217">
+<title>claude.ai · registro de uso</title>
+<style>
+  :root { color-scheme: dark; --bg:#111217; --panel:#181b1f; --line:#2c3235; --text:#ccccdc; --muted:#8e8e9e; --blue:#3d71d9; --green:#73bf69; --red:#f2495c; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); font:14px/1.4 Inter, system-ui, -apple-system, sans-serif; display:flex; justify-content:center; padding:16px; }
+  form { width:100%; max-width:420px; background:var(--panel); border-radius:2px; padding:20px; }
+  h1 { font-size:16px; margin:0 0 4px; font-weight:500; }
+  p.sub { color:var(--muted); font-size:12px; margin:0 0 20px; }
+  fieldset { border:0; padding:0; margin:0 0 16px; display:flex; gap:8px; }
+  legend, label { display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .seg input { position:absolute; opacity:0; }
+  .seg span { display:block; padding:10px 0; width:100%; text-align:center; border:1px solid var(--line); border-radius:2px; cursor:pointer; }
+  .seg { flex:1; position:relative; }
+  .seg input:checked + span { border-color:var(--blue); background:rgba(61,113,217,.15); color:#fff; }
+  .seg input:focus-visible + span { outline:2px solid var(--blue); }
+  .row { margin-bottom:16px; }
+  input[type=number] { width:100%; padding:10px 12px; font-size:16px; background:var(--bg); color:#fff; border:1px solid var(--line); border-radius:2px; }
+  input[type=number]:focus { outline:none; border-color:var(--blue); }
+  button { width:100%; padding:12px; font-size:15px; font-weight:500; color:#fff; background:var(--blue); border:0; border-radius:2px; cursor:pointer; min-height:44px; }
+  #msg { margin-top:12px; font-size:13px; min-height:18px; }
+  .ok { color:var(--green); } .err { color:var(--red); }
+</style>
+</head>
+<body>
+<form id="f">
+  <h1>Uso de claude.ai (manual)</h1>
+  <p class="sub">Copia los porcentajes de Ajustes → Uso en claude.ai.</p>
+  <legend>Superficie</legend>
+  <fieldset>
+    <label class="seg"><input type="radio" name="surface" value="web" checked><span>Web</span></label>
+    <label class="seg"><input type="radio" name="surface" value="movil"><span>Móvil</span></label>
+  </fieldset>
+  <div class="row">
+    <label for="weekly">% del límite semanal</label>
+    <input id="weekly" name="weekly" type="number" inputmode="decimal" min="0" max="100" step="0.1" required>
+  </div>
+  <div class="row">
+    <label for="session">% de la sesión actual (opcional)</label>
+    <input id="session" name="session" type="number" inputmode="decimal" min="0" max="100" step="0.1">
+  </div>
+  <button type="submit">Registrar</button>
+  <div id="msg" role="status" aria-live="polite"></div>
+</form>
+<script>
+  const f = document.getElementById('f'), msg = document.getElementById('msg');
+  f.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msg.className = ''; msg.textContent = 'Enviando…';
+    try {
+      const r = await fetch('manual', { method: 'POST', body: new URLSearchParams(new FormData(f)) });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error);
+      msg.className = 'ok'; msg.textContent = 'Registrado ✓';
+    } catch (err) { msg.className = 'err'; msg.textContent = 'Error: ' + err.message; }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Praga, República Checa — 4 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 4 días en Praga: Ciudad Vieja, Castillo de Praga, Barrio Judío Josefov, Žižkov y la mejor cerveza del mundo. Presupuesto, hoteles y consejos insider de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Base (fallback si shared.css no carga en file:// / content://) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0d00 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#2a1500 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0a00 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg,#080500 0%,#1e1000 40%,#5a3200 70%,rgba(201,169,110,0.22) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .phrases-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .phrase-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px; }
+    .phrase-es { font-size:0.78rem;color:rgba(237,238,242,0.5);margin-bottom:4px; }
+    .phrase-local { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:3px; }
+    .phrase-pron { font-size:0.75rem;color:#c9a96e;font-style:italic; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* ── Tablet ── */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+    }
+    /* ── Mobile ── */
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    /* ── Small mobile ── */
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .alert-box { font-size: 0.8rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .act-desc { font-size: 0.82rem !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .phrase-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+      .disclosure { padding: 12px 14px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(201,169,110,0.1);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Praga</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Praga</h1>
+  <p class="dest-country">Ciudad Vieja · Castillo · Barrio Judío · Žižkov</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 4 días / 3 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Amigos / Solo</span>
+    <span class="dest-badge gold" role="listitem">💶 €600–950/persona</span>
+    <span class="dest-badge" role="listitem">🌍 Europa · República Checa</span>
+    <span class="dest-badge" role="listitem">🏰 Historia + Cerveza + Arte</span>
+    <a href="https://www.skyscanner.es/transport/flights/MAD/PRG/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">4 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">1 destino</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€600–950</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Mar–Jun, Sep–Nov</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Ciudad Vieja</a></li>
+        <li><a href="#dia2">Día 2 · Castillo</a></li>
+        <li><a href="#dia3">Día 3 · Žižkov</a></li>
+        <li><a href="#dia4">Día 4 · Salida</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#frases">Frases útiles</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Praga es la capital más bien conservada de Europa: una ciudad de cuento que sobrevivió a dos guerras mundiales casi intacta, donde el gótico, el barroco y el art nouveau conviven en una armonía imposible a orillas del Moldava. En cuatro días descubrirás el castillo medieval más extenso del mundo con vistas sobre tejados de pizarra, el barrio judío más completo del continente, el puente barroco de las 30 estatuas y el barrio alternativo con más bares por habitante del planeta. Todo ello a precios que hacen de Praga uno de los mejores destinos calidad-precio de Europa, donde la mejor cerveza del mundo —el Pilsner Urquell— cuesta €1.50 la pinta. En 2026, Praga sigue siendo magia pura: irresistible, asequible y completamente única.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏰</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Ciudad Vieja y Josefov</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 1</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">⚔️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Castillo y Hradčany</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 2</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🍺</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Žižkov alternativo</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 3</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Económico</th><th>Confort</th><th>Premium</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo A/R (desde Madrid)</td><td>€50–100</td><td>€130–200</td><td>€300+</td><td>Ryanair desde Madrid. 2h35min de vuelo</td></tr>
+            <tr><td>🏨 Alojamiento (3 noches)</td><td>€66</td><td>€390</td><td>€1,140</td><td></td></tr>
+            <tr><td>🍽️ Comidas (4 días)</td><td>€80</td><td>€180</td><td>€380</td><td>La comida es muy económica — svíčková €10, pivo €1.50</td></tr>
+            <tr><td>🚇 Transporte local</td><td>€10</td><td>€25</td><td>€50</td><td>Metro + tranvía vs taxi</td></tr>
+            <tr><td>🎟️ Entradas (castillo, sinagogas)</td><td>€50</td><td>€75</td><td>€100</td><td>Castillo €14, Josefov €28</td></tr>
+            <tr><td>🍺 Cervezas (imprescindible)</td><td>€20</td><td>€35</td><td>€60</td><td>Pilsner Urquell €1.50–2.50/pinta</td></tr>
+            <tr><td>🔄 Imprevistos (10%)</td><td>€28</td><td>€80</td><td>€200</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€304</strong></td><td><strong>~€985</strong></td><td><strong>~€2,230</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo:</strong> Praga usa la corona checa (CZK), no el euro. 1 EUR ≈ 25 CZK. Los euros no son aceptados como moneda local — usa tarjeta sin comisiones (Revolut, N26) o retira CZK en cajeros de bancos locales. Evita las casas de cambio del centro histórico con tasas abusivas. La cerveza más buena del mundo cuesta menos de €2 en cualquier hospoda (taberna) local.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚇 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Vuelos</div>
+          <div class="transport-content">
+            Aeropuerto <strong>Václav Havel (PRG)</strong>, a 17 km del centro. Ryanair y Wizz Air operan desde Madrid con precios desde €25 de ida. El aeropuerto tiene dos terminales (T1 internacional, T2 Schengen). Reserva con 6–8 semanas de antelación para los mejores precios. Evita los taxis no regulados del aeropuerto.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Metro al centro</div>
+          <div class="transport-content">
+            <strong>Bus 119</strong> desde el aeropuerto hasta Dejvická (metro línea A), luego metro hasta el centro. Total <strong>€1.50</strong> y 35–40 minutos. Pase <strong>Lítačka 24h €6</strong>, pase 72h <strong>€16</strong>. Compra el billete en máquinas del aeropuerto (aceptan tarjeta). El taxi al centro cuesta ~€15–20 con Bolt app.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚃 Transporte urbano</div>
+          <div class="transport-content">
+            Red DPP con <strong>3 líneas de metro + tranvías + autobuses</strong>. El billete sencillo de 30 min €1.20 (validar al entrar). Los <strong>tranvías 17 y 18</strong> recorren el Moldava con vistas al castillo. El <strong>tranvía 22</strong> sube hasta Malá Strana desde el centro. Funciona 24h con servicio nocturno reducido. Compra billetes en máquinas o con la app PID Lítačka.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚶 La ciudad a pie</div>
+          <div class="transport-content">
+            El centro histórico de Praga es <strong>extraordinariamente compacto y peatonal</strong>. La Ciudad Vieja, el Barrio Judío, Malá Strana y el Puente de Carlos están en un radio de 2 km. Llevar calzado cómodo — los adoquines medievales son irregulares y resbaladizos con lluvia. Para el castillo, el tranvía 22 evita la empinada subida a pie.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Budget</div>
+          <div class="hotel-name">Czech Inn Hostel</div>
+          <div class="hotel-zone">Vinohrady</div>
+          <div class="hotel-price">~€22/noche</div>
+          <ul class="hotel-features">
+            <li>Diseño industrial reconvertido</li>
+            <li>Cafetería y bar en el local</li>
+            <li>Barrio elegante fuera del turismo</li>
+            <li>Metro Náměstí Míru a 5 min</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/cz/czech-inn.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐⭐ Confort</div>
+          <div class="hotel-name">Hotel Josef</div>
+          <div class="hotel-zone">Ciudad Vieja</div>
+          <div class="hotel-price">~€130/noche</div>
+          <ul class="hotel-features">
+            <li>Diseño contemporáneo premiado</li>
+            <li>Ubicación perfecta en el centro histórico</li>
+            <li>Desayuno excepcional incluido</li>
+            <li>A 3 min del Reloj Astronómico</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/cz/josef.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Four Seasons Prague</div>
+          <div class="hotel-zone">Junto al río Moldava</div>
+          <div class="hotel-price">~€380/noche</div>
+          <ul class="hotel-features">
+            <li>Vistas directas al Castillo de Praga</li>
+            <li>Tres edificios históricos fusionados</li>
+            <li>Restaurante CottoCrudo estrella</li>
+            <li>El hotel más icónico de Praga</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/cz/four-seasons-prague.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS DEL ITINERARIO ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Ciudad Vieja y Josefov</div>
+            <div class="day-subtitle">Reloj Astronómico · Barrio Judío · Puente de Carlos · Malá Strana</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Ciudad Vieja</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Plaza de la Ciudad Vieja — Reloj Astronómico gótico del siglo XV</div>
+              <div class="act-desc">La Plaza de la Ciudad Vieja (Staroměstské náměstí) es el corazón medieval de Praga. El Reloj Astronómico (Orloj), instalado en 1410, es el tercero más antiguo del mundo en funcionamiento: cada hora en punto, los 12 apóstoles desfilan por las ventanillas mientras la Muerte hace sonar su campana. Sube a la Torre del Reloj (€12) para vistas panorámicas del centro histórico. El espectáculo del Orloj se ve perfectamente desde la plaza — completamente gratis.</div>
+              <div class="act-tags"><span class="act-tag">Torre €12</span><span class="act-tag green">Ver Orloj gratis</span><span class="act-tag info">Cada hora apóstoles</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio Judío Josefov — 6 sinagogas y cementerio medieval</div>
+              <div class="act-desc">Josefov es el barrio judío mejor preservado de Europa Central: seis sinagogas históricas del siglo XVI al XIX y el cementerio judío medieval con 12.000 tumbas apiladas en 12 capas. El pase combinado (€28) incluye todas las sinagogas y el cementerio. Reserva siempre online — las entradas se agotan en temporada alta. Dedica al menos 2 horas a este recorrido de enorme peso histórico y belleza arquitectónica.</div>
+              <div class="act-tags"><span class="act-tag">Pase combinado €28</span><span class="act-tag warn">Reservar online</span><span class="act-tag info">2h mínimo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en V Kolkovně — svíčková con knedlíky</div>
+              <div class="act-desc">V Kolkovně es uno de los mejores restaurantes checos tradicionales del centro: interior con arcos de ladrillo, cervezas Pilsner Urquell de barril perfectas y una svíčková na smetaně (solomillo de ternera con salsa de crema, knedlíky de pan y arándanos) que define la cocina checa. Servicio amable, precios razonables para la zona turística y sin trampa.</div>
+              <div class="act-tags"><span class="act-tag">Svíčková ~€12</span><span class="act-tag info">Pilsner Urquell de barril</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Puente de Carlos — las 30 estatuas barrocas del siglo XVII</div>
+              <div class="act-desc">El Puente de Carlos (Karlův most), construido en 1357 por orden de Carlos IV, es el más bello y más fotografiado de la ciudad. Sus 30 estatuas barrocas del siglo XVII representan santos y mártires de la historia checa y bohemia. El truco local: ir a las 7 de la mañana para tenerlo casi solo, o a las 10 de la noche para el ambiente más romántico. A media tarde tiene muchos turistas pero las vistas al castillo y al río son insuperables. Completamente gratuito.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag">30 estatuas barrocas</span><span class="act-tag info">7am o 10pm para evitar multitudes</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Malá Strana — el barrio barroco bajo el castillo</div>
+              <div class="act-desc">Malá Strana (el Barrio Pequeño) es la zona más encantadora de Praga: callejuelas empedradas, palacios barrocos del siglo XVII, cafés escondidos y los Jardines Wallenstein — el primer jardín barroco de Bohemia, gratuito y frecuentado por familias locales. Es el barrio donde vivieron embajadores, artistas y nobles durante siglos. Recórrelo sin prisa siguiendo la calle Nerudova hacia arriba.</div>
+              <div class="act-tags"><span class="act-tag green">Jardines Wallenstein gratis</span><span class="act-tag info">Barrio barroco</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Sunset desde Letná — panorámica con cervezas locales</div>
+              <div class="act-desc">El parque de Letná, sobre los tejados de Josefov y la Ciudad Vieja, es el lugar favorito de los praguenses jóvenes para tomar cervezas al atardecer con vistas sobre el Moldava y los puentes. El kiosco de cerveza junto al metronomo (que sustituyó a la estatua de Stalin más grande del mundo, demolida en 1962) sirve Kozel y Pilsner a €2. Uno de los planes más auténticos y gratuitos de Praga.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag">Cerveza €2</span><span class="act-tag info">Ambiente local joven</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Lokál — la mejor svíčková de Praga</div>
+              <div class="act-desc">Lokál (hay varias sucursales en Praga) es la cadena de restaurantes checos más querida por los locales: sin trampa turística, Pilsner Urquell perfectamente tirada con el cuidado ceremonial que merece, y una svíčková que compite con cualquier restaurante de la ciudad. Ambiente animado, mesas comunales y una cuenta que no duele. Reserva recomendable en fin de semana.</div>
+              <div class="act-tags"><span class="act-tag">Cena ~€15</span><span class="act-tag green">Favorito de locales</span><span class="act-tag info">Reservar fines de semana</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Nase Maso</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Ciudad Vieja</span></td><td>Carnicería-bar con bocadillos de carne asada. El almuerzo más honesto y barato del centro.</td><td>~€10</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Cafe Savoy</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Malá Strana</span></td><td>Desayuno vienés o svíčková en un café art nouveau de 1893. Interior magnífico.</td><td>~€25</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Field</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Josefov · Estrella Michelin</span></td><td>Menú degustación de cocina checa de vanguardia. El mejor restaurante fino de Praga.</td><td>~€75</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Castillo de Praga</div>
+            <div class="day-subtitle">San Vito · Callejuela de Oro · Hradčany · U Fleků</div>
+          </div>
+          <div class="day-meta"><span>🏰 Castillo</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Consejo:</strong> Llega al Castillo de Praga a las 9h en punto cuando abre para evitar las colas de grupos organizados que llegan a partir de las 10h. El pase completo (€14) incluye la Catedral de San Vito, la Basílica de San Jorge, la Callejuela de Oro y las Torres. Reserva online con antelación en temporada alta.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Castillo de Praga — el complejo medieval más grande del mundo</div>
+              <div class="act-desc">El Castillo de Praga (Pražský hrad) es el castillo en activo más extenso del mundo: ocupa 70.000 m² en la cima de la colina de Hradčany. No es un único edificio sino un barrio amurallado con catedrales, palacios, jardines, callejuelas medievales y museos. Fue residencia de los reyes bohemios, los emperadores habsburgos y hoy es la sede oficial del Presidente de la República. El pase completo (€14) da acceso a todos los monumentos principales.</div>
+              <div class="act-tags"><span class="act-tag">Pase completo €14</span><span class="act-tag warn">Llegar al abrir 9h</span><span class="act-tag info">El castillo más grande del mundo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Catedral de San Vito — gótico impresionante del siglo XIV</div>
+              <div class="act-desc">La Catedral de San Vito (Katedrála sv. Víta) tardó 600 años en construirse: iniciada en 1344 por Carlos IV, no se terminó hasta 1929. Su interior es de un gótico impresionante con vidrieras art nouveau de Alfons Mucha (la capilla de San Wenceslao), la tumba de los reyes bohemios y las joyas de la corona checa en una cámara con siete llaves. La vista desde el exterior, con las torres de 96 metros, es uno de los iconos más reconocibles de Europa.</div>
+              <div class="act-tags"><span class="act-tag">Incluido en pase</span><span class="act-tag info">600 años en construir</span><span class="act-tag">Vidrieras de Mucha</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Callejuela de Oro — casitas medievales donde vivió Kafka</div>
+              <div class="act-desc">La Zlatá ulička (Callejuela de Oro) es la calle más famosa y fotogénica del castillo: una hilera de casitas de colores construidas en el siglo XVI para los arqueros y artesanos del castillo. Franz Kafka vivió en el número 22 durante el invierno de 1916–1917, donde escribió parte de sus cuentos. Hoy las casitas albergan pequeñas exposiciones sobre la vida medieval en el castillo. Incluido en el pase.</div>
+              <div class="act-tags"><span class="act-tag">Incluido en pase</span><span class="act-tag info">Kafka vivió en nº22</span><span class="act-tag">Casitas s.XVI</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Lobkovický Palác — el único palacio privado del castillo</div>
+              <div class="act-desc">El Palacio Lobkowicz es el único palacio privado dentro del recinto del castillo, propiedad de la familia Lobkowicz desde el siglo XVI. Su café-restaurante es el más exclusivo y mejor ubicado del castillo: terraza con vistas sobre los tejados de Praga, cocina checa contemporánea de calidad y la posibilidad de ver la colección de arte de la familia (Brueghel, Cranach, originales de Beethoven y Mozart). Una experiencia única para un almuerzo.</div>
+              <div class="act-tags"><span class="act-tag">Almuerzo ~€15</span><span class="act-tag info">Único palacio privado del castillo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Hradčany — palacios y jardines reales alrededor del castillo</div>
+              <div class="act-desc">El barrio de Hradčany, que rodea el castillo, está lleno de palacios aristocráticos del siglo XVIII, conventos y jardines reales que los turistas suelen ignorar. El Jardín Real (Královská zahrada) con tulipanes y el Jardín del Paraíso (Rajská zahrada) tienen vistas directas al castillo y a los tejados de Malá Strana. El Palacio Sternberg (galería de arte europeo medieval) y el convento de Loreto completan el barrio.</div>
+              <div class="act-tags"><span class="act-tag green">Jardines gratis</span><span class="act-tag info">Zona tranquila de turistas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Descenso por Nerudova — la calle más pintoresca de Praga</div>
+              <div class="act-desc">La calle Nerudova, que baja desde el castillo hasta Malá Strana, es la más pintoresca de Praga: sus casas del siglo XVIII llevan los signos de los gremios medievales (el Violín Rojo, los Tres Violines, la Mina de Oro) que servían de dirección antes de que existieran los números. Jan Neruda, el poeta checo que inspiró el nombre del escritor chileno Pablo Neruda, vivió aquí. La bajada a pie entre galerías y cafés boutique es uno de los paseos más agradables de la ciudad.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Signos de gremios medievales</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">U Fleků — cervecería desde 1499, la más antigua de Praga</div>
+              <div class="act-desc">U Fleků es la cervecería más antigua de Praga y una de las más antiguas del mundo en funcionamiento continuo: abierta desde 1499. Produce su propia cerveza oscura (tmavé pivo, 13°) que solo se sirve aquí, en enormes salas con mesas de madera, trajes medievales y música de acordeón. Un lugar kitsch, turístico y completamente irresistible. La pinta de cerveza oscura cuesta apenas €3. No te pierdas la visita aunque sea para un pivo.</div>
+              <div class="act-tags"><span class="act-tag">Cerveza oscura €3/pinta</span><span class="act-tag info">Desde 1499</span><span class="act-tag">Cerveza propia exclusiva</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Eska</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Žižkov · bakería</span></td><td>Cocina de mercado checa moderna. Pan artesanal propio. Favorito de chefs locales.</td><td>~€14</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Mash Bistro</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Vinohrady</span></td><td>Cocina de temporada bohemia con productos locales. Vinos naturales excelentes.</td><td>~€30</td></tr>
+                <tr><td>👑 Premium</td><td><strong>La Degustation</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Ciudad Vieja · Estrella Michelin</span></td><td>Menú degustación de 7 platos de cocina checa histórica. Reserva indispensable.</td><td>~€90</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Vinohrady, Žižkov y Praga Alternativa</div>
+            <div class="day-subtitle">Torre TV · Mucha · Jiřák · Vyšehrad · Cervezas Žižkov</div>
+          </div>
+          <div class="day-meta"><span>🍺 Žižkov</span><span>Día alternativo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Torre TV de Žižkov — la más rara de Europa con bebés de David Černý</div>
+              <div class="act-desc">La Torre de Televisión de Žižkov (Žižkovská věž), construida en 1992, es el edificio más polémico y singular de Praga: 216 metros de acero futurista que los praguenses odian y adoran a partes iguales. En 2000, el artista David Černý instaló diez bebés gigantes de fibra de vidrio reptando por la torre —sin ojos ni facciones— que se convirtieron en uno de los iconos más extraños del arte urbano europeo. La vista desde el mirador (€12) es la más alta y panorámica de Praga.</div>
+              <div class="act-tags"><span class="act-tag">Mirador €12</span><span class="act-tag info">Bebés de David Černý</span><span class="act-tag">La más alta de Praga</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Museo Mucha — el padre del Art Nouveau</div>
+              <div class="act-desc">Alfons Mucha (1860–1939) es el artista checo más famoso del mundo: inventor visual del art nouveau, diseñador de carteles de Sarah Bernhardt y autor de La Epopeya Eslava. El Museo Mucha en el centro de Praga concentra su obra gráfica, bocetos, fotografías y objetos personales en un edificio del siglo XVIII. Una visita íntima y fascinante al universo de un genio incomprendido en vida y adorado tras su muerte.</div>
+              <div class="act-tags"><span class="act-tag">€12</span><span class="act-tag info">Padre del Art Nouveau</span><span class="act-tag">1h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado de Jiřák — productores locales de Vinohrady</div>
+              <div class="act-desc">El Mercado de Jiřák (náměstí Jiřího z Poděbrad) es el mejor mercado de productores de Praga, celebrado los sábados y domingos por la mañana. Quesos artesanales, pan de masa madre, embutidos de la granja, verduras de temporada y parámetros de cervezas artesanales locales. El almuerzo entre los puestos —knedlíky con gulaš o trdelník recién hecho— cuesta entre €5 y €10. El ambiente es completamente local y sin turistas.</div>
+              <div class="act-tags"><span class="act-tag">Sábados y domingos</span><span class="act-tag">Almuerzo €8</span><span class="act-tag info">Solo productores locales</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vinohrady — el barrio más elegante de Praga</div>
+              <div class="act-desc">Vinohrady es el barrio más hermoso de Praga fuera del centro histórico: anchas avenidas con edificios art nouveau de principios del siglo XX, cafés de especialidad, librerías independientes y tiendas de diseño checo. Los sábados, la plaza de Náměstí Míru con su iglesia neogótica y las terrazas alrededor es el punto de encuentro de los jóvenes profesionales praguenses. Un barrio para pasear sin prisa.</div>
+              <div class="act-tags"><span class="act-tag green">Paseo gratis</span><span class="act-tag info">Art nouveau s.XX</span><span class="act-tag">Barrio local</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vyšehrad — fortaleza y cementerio con Dvořák y Smetana</div>
+              <div class="act-desc">Vyšehrad es la fortaleza más antigua de Praga, anterior al castillo, encaramada sobre el Moldava con vistas al río y los tejados. Su cementerio (Slavín) es el Panteón checo: aquí reposan Antonín Dvořák, Bedřich Smetana, Alfons Mucha y los grandes escritores y artistas del país. Los jardines y murallas medievales son gratuitos y tranquilos —muy lejos del turismo masivo. La vista desde las murallas al atardecer sobre el Moldava es espectacular.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Dvořák y Smetana</span><span class="act-tag">Vistas del río</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tour cervezas en Žižkov — el barrio con más bares por habitante del mundo</div>
+              <div class="act-desc">Žižkov tiene el récord mundial de bares por habitante: más de 200 pubs en un barrio de apenas 30.000 personas. El circuito clásico empieza en Pivnice u Sadu (cervezas artesanales), sigue por Houdek y termina en U Vystřeleného oka (El Ojo Disparado), un bar cult con terraza sobre los tejados. Cada cerveza cuesta entre €1.50 y €3. Una noche de €15–20 cubre más de lo que el cuerpo aguanta.</div>
+              <div class="act-tags"><span class="act-tag">€15–20 noche completa</span><span class="act-tag info">Récord mundial de bares</span><span class="act-tag">Cerveza €1.50–3</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Café Louvre</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Nueva Ciudad</span></td><td>Café vienés clásico de 1902 donde jugaba al billar Kafka. Menú del día excelente precio.</td><td>~€12</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Bistro 8</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Vinohrady</span></td><td>Cocina de mercado bohemia moderna. El secreto mejor guardado de Vinohrady.</td><td>~€28</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Sansho</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Ciudad Vieja</span></td><td>Fusión checo-asiática con productos de granja locales. Menú degustación sin maridaje.</td><td>~€65</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Nový Svět y salida</div>
+            <div class="day-subtitle">Barrio secreto · Loreta · Compras · Traslado aeropuerto</div>
+          </div>
+          <div class="day-meta"><span>✈️ Salida</span><span>Mañana + vuelo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Nový Svět — el barrio más secreto de Praga</div>
+              <div class="act-desc">Nový Svět (Mundo Nuevo) es el barrio más desconocido y encantador de Praga: un callejón de casitas de colores del siglo XVII escondido junto al castillo, tan olvidado que conserva su aspecto de aldea medieval. Lo habitaron artesanos pobres del castillo — carpinteros, herreros y porteros — y hoy es un barrio de artistas y galeristas que despiertan muy tarde. Llegar a las 8:30h para tenerlo absolutamente solo, en la luz dorada de la mañana.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Casitas s.XVII</span><span class="act-tag">Completamente solo a las 8h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Loreta — santuario barroco con carillón de 27 campanas</div>
+              <div class="act-desc">La Loreta es el santuario barroco más bello de Bohemia: construida en 1626 como réplica de la Santa Casa de Loreto (Italia), su fachada churrigueresca del siglo XVIII esconde un patio interior con capillas, frescos y la iglesia de la Natividad. Cada hora, las 27 campanas de su carillón tocan el himno mariano "We Greet Thee a Thousand Times". El tesoro (incluido en la entrada) tiene el sol de diamantes del siglo XVIII con 6.222 piedras preciosas.</div>
+              <div class="act-tags"><span class="act-tag">€6</span><span class="act-tag info">Carillón 27 campanas</span><span class="act-tag">Sol de diamantes 6.222 piedras</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Compras — granates bohemios, cristal Bohemia y marionetas</div>
+              <div class="act-desc">Los souvenirs más auténticos de Praga: los granates bohemios (granát) son el mineral de joyería autóctono de Bohemia, de un rojo intenso especial. El cristal Bohemia (Moser, Rückl) es el más fino de Europa desde el siglo XIII. Las marionetas tradicionales checas son arte popular reconocido por la UNESCO. Cómpralos siempre en tiendas con certificado de origen — los granates de los puestos callejeros suelen ser imitaciones de vidrio rojo.</div>
+              <div class="act-tags"><span class="act-tag warn">Granates: exige certificado origen</span><span class="act-tag info">Cristal Bohemia auténtico</span><span class="act-tag">Marionetas UNESCO</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último almuerzo — trdelník + svíčková de despedida</div>
+              <div class="act-desc">La despedida gastronómica ideal: un trdelník (masa al carbón enrollada en el palo, cubierta de azúcar y canela) de postre callejero — fotogénico, delicioso y €3 — y una última svíčková na smetaně antes de marchar. El trdelník no es medievalmente checo como dicen los vendedores, pero es un dulce genuinamente bohemio del siglo XIX que merece el ritual de la última mañana en Praga.</div>
+              <div class="act-tags"><span class="act-tag">Trdelník €3</span><span class="act-tag info">Despedida ritual</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado aeropuerto Václav Havel</div>
+              <div class="act-desc">La opción más económica: Metro línea A hasta Dejvická, luego autobús 119 hasta el aeropuerto. Total €1.50 y 40 minutos. Compra el billete de 90 minutos (€1.50) que cubre todo el trayecto. Alternativa: taxi Bolt desde el centro (~€12–15, 25 min sin tráfico). Añade 2 horas de margen para vuelos internacionales. El aeropuerto es moderno y los controles rápidos, pero los accesos por carretera tienen tráfico en horas punta.</div>
+              <div class="act-tags"><span class="act-tag">Metro + bus €1.50</span><span class="act-tag">Bolt ~€12–15</span><span class="act-tag info">40 min en transporte público</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Stará Tiskárna</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Žižkov</span></td><td>Antigua imprenta reconvertida en bar-restaurante. El almuerzo checo más barato y honesto.</td><td>~€9</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Aromi</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Vinohrady</span></td><td>Cocina italiana de mercado. El mejor restaurante italiano de Praga, sorprendentemente.</td><td>~€32</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Alcron</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Nueva Ciudad · Estrella Michelin</span></td><td>Cocina francesa clásica en un art déco de 1932. Menú de mediodía con precio de escándalo.</td><td>~€85</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Plaza de la Ciudad Vieja con el Reloj Astronómico</h4><p>El reloj más famoso del mundo, las torres góticas y los tejados de pizarra que no han cambiado en 600 años. La postal perfecta de Europa Central. Verlo de noche iluminado es igualmente impresionante.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Castillo de Praga al amanecer</h4><p>El complejo medieval más extenso del mundo desde el que toda Praga se despliega a tus pies. Llegar antes de las 9h para tener la Catedral de San Vito casi en soledad — la experiencia más solemne de la ciudad.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Puente de Carlos a las 7 de la mañana</h4><p>El puente medieval más bello de Europa, con sus 30 estatuas barrocas y la niebla del Moldava todavía en el agua, sin un turista a la vista. Una experiencia que no olvidarás en décadas.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Josefov — el barrio judío más completo de Europa</h4><p>Seis sinagogas y el cementerio medieval con 12 capas de tumbas: la historia más densa y emocionante de Praga en apenas cuatro manzanas. Reservar siempre online para garantizar la entrada.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>U Fleků — la cervecería más antigua del mundo en activo</h4><p>Desde 1499, la misma cerveza oscura en la misma sala de madera con músicos de acordeón. Turístico, kitsch y absolutamente imprescindible. Una pinta y ya entiendes por qué Praga tiene fama de cervecera.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Atardecer en Letná con cerveza local</h4><p>El parque con la mejor vista de los tejados de la Ciudad Vieja y el Moldava, repleto de jóvenes praguenses con cervezas a €2. La versión más auténtica y asequible de disfrutar Praga como un local.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Žižkov de noche — el barrio con más bares del mundo</h4><p>El barrio más obrero y auténtico de Praga, con su torre TV futurista y sus 200 bares repartidos en cuatro manzanas. Una noche de €15–20 y ves más de lo que el cuerpo aguanta. Solo para valientes.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Vyšehrad — el Panteón checo sobre el río</h4><p>La fortaleza más antigua de Praga, con Dvořák y Smetana en su cementerio y vistas al Moldava que los turistas ignoran por completo. La alternativa tranquila y profunda al castillo masificado.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Nový Svět — el callejón más secreto de Praga</h4><p>Casitas de colores del siglo XVII junto al castillo que parecen sacadas de un cuento de Andersen. A las 8 de la mañana, completamente solo. Una de las experiencias más mágicas y gratuitas de Europa.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Cristal y granates de Bohemia</h4><p>El cristal Bohemia (Moser, Rückl) y los granates bohemios de color rojo intenso son los mejores souvenirs que puedes traer de Praga. Arte y artesanía con siglos de tradición que ninguna otra ciudad del mundo puede igualar.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍺 Gastronomía checa</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Plato nacional · Estofado</div><div class="gastro-title">Svíčková na smetaně</div><div class="gastro-desc">El plato más checo de todos: solomillo de ternera marinado en verduras y especias durante 24 horas, estofado lentamente y servido con salsa de crema agria, knedlíky (dumplings de pan), arándanos rojos y nata montada. Una combinación que suena imposible y sabe a gloria. Precio: €10–16 en cualquier restaurante tradicional.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">La trinidad checa · Asado</div><div class="gastro-title">Vepřo-knedlo-zelo</div><div class="gastro-desc">El plato más popular de las hospody (tabernas): cerdo asado con corteza crujiente (vepřo), dumplings de pan esponjosos (knedlo) y col encurtida o agria (zelo). La trinidad de la cocina bohemia en un plato. Abundante, reconfortante y absolutamente delicioso. Por €8–12 en cualquier taberna. El alma de la cocina checa.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Street food · Dulce</div><div class="gastro-title">Trdelník</div><div class="gastro-desc">Masa de levadura enrollada en un palo de madera, asada al carbón y recubierta de azúcar y canela. Muy fotogénico, muy fragante y muy delicioso, aunque los vendedores lo llaman "medieval" sin mucho rigor histórico. Lo que sí es cierto: es genuinamente bohemio del siglo XIX y cuesta €3. Cómelo recién sacado del fuego.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Bebida · Imprescindible</div><div class="gastro-title">Pivo — la mejor cerveza del mundo</div><div class="gastro-desc">Pilsner Urquell (Plzeňský Prazdroj), Kozel y Budvar (el Budweiser original checo) son tres de las mejores cervezas del mundo producidas en la República Checa. En Praga, una pinta de barril cuesta €1.50–2.50. Los checos consumen más cerveza per cápita que ningún otro país del mundo. El ritual de servirla con el vaso inclinado y la espuma perfecta es una ceremonia que toman muy en serio.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Fast food · Frito</div><div class="gastro-title">Smažený sýr</div><div class="gastro-desc">El fast food más checo del mundo: queso edam o gouda empanado y frito, servido con salsa tartar y pan. Simple, contundente y adictivo. Lo encontrarás en todos los bufetes de autoservicio y restaurantes de barrio. Una ración de queso frito con tartar cuesta €3–5. El favorito de los estudiantes checos a todas horas del día y de la noche.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Postre · Crepe</div><div class="gastro-title">Palačinky</div><div class="gastro-desc">Las crepes checas son más gruesas y tiernas que las francesas. Los rellenos tradicionales: mermelada de albaricoque (meruňková marmeláda) con nata montada, mermelada de fresa con helado de vainilla, o la versión salada con espinacas y queso de cabra. En cualquier kavárna (café) de Praga desde €4. El postre más reconfortante de la cocina bohemia.</div></div>
+      </div>
+    </section>
+
+    <!-- ── FRASES ── -->
+    <section id="frases" class="itin-section">
+      <h2 class="section-heading">🗣️ Frases útiles en checo</h2>
+      <div class="phrases-grid">
+        <div class="phrase-card"><div class="phrase-es">Hola (informal)</div><div class="phrase-local">Ahoj</div><div class="phrase-pron">"AH-hoy"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Gracias</div><div class="phrase-local">Děkuji</div><div class="phrase-pron">"DYEH-koo-yee"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Cuánto cuesta?</div><div class="phrase-local">Kolik to stojí?</div><div class="phrase-pron">"KOH-lik toh STOH-yee"</div></div>
+        <div class="phrase-card"><div class="phrase-es">La cuenta, por favor</div><div class="phrase-local">Účet prosím</div><div class="phrase-pron">"OO-chet PRO-seem"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Una cerveza</div><div class="phrase-local">Jedno pivo</div><div class="phrase-pron">"YED-noh PEE-voh"</div></div>
+        <div class="phrase-card"><div class="phrase-es">No entiendo</div><div class="phrase-local">Nerozumím</div><div class="phrase-pron">"neh-ROH-zoo-meem"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¡Salud! (al brindar)</div><div class="phrase-local">Na zdraví</div><div class="phrase-pron">"nah ZDRAH-vee"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Ayuda</div><div class="phrase-local">Pomoc</div><div class="phrase-pron">"POH-mots"</div></div>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Nota lingüística:</strong> El checo es una lengua eslava con consonantes en racimo que parecen impossibles para un hispanohablante (el apellido "Dvořák" se pronuncia "DVOR-zhak"). No te preocupes — el inglés funciona perfectamente en Praga con jóvenes, hoteles y restaurantes. Los checos aprecian enormemente cualquier intento de pronunciar su lengua, por imperfecto que sea.
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales (UE)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos, ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Nacional</div><div class="emerg-value">158</div><div class="emerg-note">Policie ČR — robos y denuncias</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">155</div><div class="emerg-note">Záchranná zdravotní služba</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Motol</div><div class="emerg-value">+420 224 431 111</div><div class="emerg-note">Urgencias 24h · Hospital principal de Praga</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada española</div><div class="emerg-value">+420 233 097 211</div><div class="emerg-note">Pevnostní 9 · Praga 6 · Dejvice</div></div>
+        <div class="emerg-card"><div class="emerg-label">Bomberos</div><div class="emerg-value">150</div><div class="emerg-note">Hasičský záchranný sbor</div></div>
+      </div>
+      <div class="alert-box warn" style="margin-top:14px">
+        <strong>⚠️ Estafas y consejos de seguridad:</strong> Los euros NO valen como moneda de pago — usa siempre coronas checas (CZK) o tarjeta. Evita cambiar dinero en las casas de cambio del centro histórico con tasas de "0% comisión" — el tipo de cambio es abusivo. No compres granates bohemios en puestos callejeros sin certificado (suelen ser vidrio rojo). Las noches en Praga son frescas incluso en verano — lleva siempre una capa extra.
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje con cobertura médica</div>
+            <div class="check-item"><div class="check-box"></div>Descarga app Bolt (taxi) antes de llegar</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">✈️ Reservas confirmadas</div>
+            <div class="check-item"><div class="check-box"></div>Vuelos (Praga PRG)</div>
+            <div class="check-item"><div class="check-box"></div><strong>Sinagogas Josefov — reservar online con antelación</strong></div>
+            <div class="check-item"><div class="check-box"></div>Alojamiento (3 noches)</div>
+            <div class="check-item"><div class="check-box"></div>Castillo de Praga — pase completo online</div>
+            <div class="check-item"><div class="check-box"></div>Restaurante fine dining (si aplica)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">🎒 Equipaje</div>
+            <div class="check-item"><div class="check-box"></div>Calzado muy cómodo (adoquines irregulares)</div>
+            <div class="check-item"><div class="check-box"></div>Chaqueta o capa — noches frescas todo el año</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta sin comisiones (Revolut, N26)</div>
+            <div class="check-item"><div class="check-box"></div>Euros NO sirven — retira CZK o paga con tarjeta</div>
+            <div class="check-item"><div class="check-box"></div>Cargador portátil para el día largo</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">📱 Apps esenciales</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps — descarga offline Praga</div>
+            <div class="check-item"><div class="check-box"></div>PID Lítačka — transporte público de Praga</div>
+            <div class="check-item"><div class="check-box"></div>Bolt — taxi a precio justo</div>
+            <div class="check-item"><div class="check-box"></div>Revolut o N26 — pago sin comisión en CZK</div>
+            <div class="check-item"><div class="check-box"></div>Google Translate — checo es difícil, tenlo listo</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para Praga?</h3>
+      <p>Dinos tus fechas, presupuesto y estilo de viaje. Routlo IA te crea un plan a medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a Praga
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com, Skyscanner y operadores de actividades pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos en euros (1 EUR ≈ 25 CZK) y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.5);text-decoration:none;font-size:0.85rem;margin-bottom:16px">← Ver todos los itinerarios</a>
+    <div style="font-size:0.78rem;color:rgba(237,238,242,0.3)">© 2026 Routlo · Hecho con IA para viajeros del mundo</div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+    const sections = document.querySelectorAll('.itin-section[id], .day-card[id]');
+    const links = document.querySelectorAll('.toc-list a');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }, { passive: true });
+</script>
+</body>
+</html>

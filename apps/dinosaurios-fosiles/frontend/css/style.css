@@ -1,0 +1,264 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+#app-header {
+  padding: 0.75rem 1.25rem;
+  background: #1f2937;
+  color: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+#region-select {
+  background: #374151;
+  color: #f9fafb;
+  border: 1px solid #4b5563;
+  border-radius: 4px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+#app-header h1 {
+  margin: 0 0 0.15rem;
+  font-size: 1.1rem;
+}
+
+#app-header p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+#loading-status:empty {
+  display: none;
+}
+
+#loading-status {
+  color: #fbbf24;
+}
+
+main {
+  height: calc(100vh - 62px);
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+.legend-control {
+  background: #ffffff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  max-height: 45vh;
+  max-width: 220px;
+  overflow-y: auto;
+  font-size: 0.8rem;
+  color: #111827;
+}
+
+.legend-control strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.legend-control img {
+  display: block;
+  max-width: 100%;
+}
+
+.legend-section + .legend-section {
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #1f2937;
+  flex-shrink: 0;
+}
+
+.legend-pin {
+  display: inline-block;
+  width: 0.85rem;
+  height: 1.4rem;
+  background: url("../vendor/leaflet/images/marker-icon.png") no-repeat center / contain;
+  flex-shrink: 0;
+}
+
+.gradient-bar {
+  height: 0.9rem;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.gradient-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #4b5563;
+  margin-top: 0.15rem;
+}
+
+.weights-control {
+  background: #ffffff;
+  padding: 0.6rem 0.75rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  font-size: 0.8rem;
+  color: #111827;
+  width: 190px;
+}
+
+.weights-control strong {
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.weight-row {
+  margin-bottom: 0.5rem;
+}
+
+.weight-row label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.15rem;
+}
+
+.weight-value {
+  color: #6b7280;
+}
+
+.weight-row input[type="range"] {
+  width: 100%;
+}
+
+.lidar-opacity-control {
+  background: #ffffff;
+  padding: 0.5rem 0.6rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  font-size: 0.8rem;
+  color: #111827;
+  width: 190px;
+}
+
+.lidar-opacity-control label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.15rem;
+}
+
+.lidar-opacity-value {
+  color: #6b7280;
+}
+
+.lidar-opacity-control input[type="range"] {
+  width: 100%;
+}
+
+.breakdown-popup {
+  font-size: 0.85rem;
+  min-width: 200px;
+}
+
+.breakdown-popup strong {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-top: 0.3rem;
+}
+
+.breakdown-detail {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.hillshade-control {
+  background: #ffffff;
+  padding: 0.5rem 0.6rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  width: 190px;
+}
+
+.hillshade-toggle {
+  width: 100%;
+  padding: 0.5rem 0.4rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #f9fafb;
+  color: #111827;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.hillshade-toggle.active {
+  background: #1f2937;
+  border-color: #1f2937;
+  color: #f9fafb;
+}
+
+.hillshade-hint {
+  margin: 0.4rem 0 0;
+  font-size: 0.72rem;
+  color: #6b7280;
+}
+
+/* Botón "✕" flotante anclado a la esquina de la imagen LiDAR (no es un control fijo
+   de Leaflet: su posición se recalcula en cada pan/zoom para seguir pegado a la
+   esquina superior derecha del recuadro revelado). */
+.hillshade-close-btn {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #1f2937;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}

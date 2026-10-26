@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Asturias en 5 días — Ruta completa desde Oviedo | Routlo</title>
+  <meta name="description" content="Ruta completa de 5 días por Asturias desde Oviedo: Gijón, Covadonga, Cudillero, Luarca y Llanes. Mapas, presupuesto desglosado y consejos prácticos. ~€460 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    :root { --accent: #2a9d8f; --accent-dim: rgba(42,157,143,0.15); --accent-border: rgba(42,157,143,0.3); }
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: var(--accent); line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: var(--accent); margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: var(--accent-dim); border: 1px solid var(--accent-border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-roman { display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;background:var(--accent-dim);border:1px solid var(--accent-border);font-size:0.75rem;font-weight:600;color:var(--accent);margin-bottom:12px; }
+    .cta-banner { background: linear-gradient(135deg, var(--accent-dim) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid var(--accent-border); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, var(--accent), #1f7a6e); color: #040810; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-dim); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, var(--accent-dim) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid var(--accent-border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: var(--accent); margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid var(--accent-border); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: var(--accent); font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: var(--accent); text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid var(--accent-border); }
+    .hotel-link:hover { border-color: var(--accent); }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#2a9d8f'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#2a9d8f'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,20,16,0.30) 0%,rgba(4,24,20,0.60) 50%,rgba(4,8,16,0.95) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-roman" style="margin-bottom:0;">🏔️ Ruta completa · 5 días</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">0 km (partimos de aquí)</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">5 días con coche propio</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~€460 · 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Asturias en 5 días<br><span style="color:#2a9d8f;">La ruta completa desde Oviedo</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">Desde la capital asturiana, cinco jornadas para descubrir todo: el Gijón marinero, el santuario de Covadonga y sus lagos glaciares, los pueblos de colores de la Costa Verde, la gastronomía de sidra y fabada, y las playas vírgenes del Cantábrico. Una ruta circular que empieza y termina en Oviedo.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">Asturias</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Asturias en 5 días</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🏔️ Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Días</div><div class="route-info-value">5</div><div class="route-info-unit">desde Oviedo</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Km totales</div><div class="route-info-value">~450</div><div class="route-info-unit">circular</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~€460</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Noches</div><div class="route-info-value">4</div><div class="route-info-unit">fuera de Oviedo</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tipo</div><div class="route-info-value" style="font-size:0.9rem;">Con coche</div><div class="route-info-unit">propio</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">🌿 Asturias: verde, humana y diferente</h2>
+      <div class="highlight-box">
+        <h4>🏞️ Paraíso Natural — el pulmón verde del norte</h4>
+        <p>Asturias concentra el 80% del territorio bajo alguna figura de protección medioambiental: el Parque Nacional de los Picos de Europa, la Reserva de la Biosfera de Muniellos y decenas de parques naturales costeros. La lluvia que cae sobre estos valles produce la paleta más intensa de verde que existe en la península ibérica. La Costa Verde se extiende 345 km de acantilados, rías y playas de arena fina sin apenas urbanización.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🍺 Sidra y fabada — la identidad líquida y culinaria</h4>
+        <p>La sidra natural asturiana (Denominación de Origen Sidra de Asturias) se produce en más de 80 llagares y se consume escanciada desde altura para oxigenarla. La fabada asturiana —fabes con chorizo, morcilla, lacón y tocino— es el plato de cuchara más replicado del norte de España. En los güeños (sidrerías tradicionales) del barrio de Gascona en Oviedo, el vaso de sidra cuesta €1.20 y la ración de fabada ronda los €10.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa de la ruta</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">Día 1</div>
+          <div><div class="day-title">Oviedo — Capital asturiana y prerrománico</div><div class="day-subtitle">La ciudad donde nace el Camino del Norte</div></div>
+        </div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛪ Catedral de Oviedo (€7/pers)</div>
+            <div class="stop-desc">La Cámara Santa guarda el Sudario de Cristo y la Cruz de los Ángeles (808 d.C.), considerados reliquias medievales de primer orden. El claustro gótico y la torre del s. XVI son los hitos arquitectónicos de la catedral. Declarada Patrimonio de la Humanidad por la UNESCO como parte de los monumentos prerrománicos asturianos.</div>
+            <div class="stop-price">Entrada: €7/persona · Incluye audioguía</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏛️ San Julián de los Prados (prerrománico)</div>
+            <div class="stop-desc">La iglesia prerrománica más grande de España y la mejor conservada del arte asturiano del s. IX. Sus pinturas murales interiores —únicas en el arte prerrománico europeo— representan arquitectura romana ficticia con una técnica de trompe l'oeil extraordinaria. Patrimonio de la Humanidad UNESCO.</div>
+            <div class="stop-price">Entrada: €3/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏪 Mercado El Fontán</div>
+            <div class="stop-desc">El mercado cubierto histórico del centro de Oviedo, con puestos de sidra, quesos asturianos (Cabrales, Gamonéu, Afuega'l Pitu), embutidos y fabas del Caudal. El edificio neoclásico de 1886 es un monumento en sí mismo. Abre de lunes a sábado hasta las 14:00.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍺 Fabada y sidra en la calle Gascona</div>
+            <div class="stop-desc">La "Bulevar de la Sidra" ofrece decenas de sidrerías tradicionales con escanciado en mesa. Menú del día con fabada completa, postre y sidra por ~€14 por persona. Casa Conrado y El Rincón de los Compadres son referencias históricas del barrio.</div>
+            <div class="stop-price">Menú completo: ~€14/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚶 Paseo por el casco histórico</div>
+            <div class="stop-desc">El casco histórico de Oviedo es peatonal y compacto. La calle Uría, la Plaza del Paraguas, la estatua de La Regenta de Clarín y el Paseo del Bombé se recorren en un paseo vespertino de dos horas sin esfuerzo. El ambiente nocturno de la zona de El Fontán concentra las mejores tapas de la ciudad.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">Día 2</div>
+          <div><div class="day-title">Gijón — Cimadevilla y Playa de San Lorenzo</div><div class="day-subtitle">30 km desde Oviedo · ~30 min en coche o bus</div></div>
+        </div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛵ Cimadevilla — barrio histórico pesquero</div>
+            <div class="stop-desc">El barrio original de Gijón, construido sobre el promontorio romano, concentra calles medievales, una atalaya con vista de 360° sobre la bahía y la arquitectura indiana de quienes emigraron a América y volvieron ricos. La Plaza Mayor y la bajada por las escaleras del puerto son el recorrido clásico.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏖️ Playa de San Lorenzo (3 km de playa urbana)</div>
+            <div class="stop-desc">La playa urbana más larga de Asturias, con bandera azul permanente en verano. El Paseo del Muro bordea toda la playa con cafeterías, puestos de helado y una vista del Cantábrico abierto. Ideal para el baño de tarde: el oleaje del norte es refrescante incluso en julio.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Casa Natal de Jovellanos (€3/pers)</div>
+            <div class="stop-desc">Gaspar Melchor de Jovellanos (1744-1811), ilustrado español, reformador agrario y humanista, nació en este palacio barroco del centro de Gijón. El museo documenta su vida, su biblioteca original y su influencia en la modernización de España. Una visita de 45 minutos bien invertidos.</div>
+            <div class="stop-price">Entrada: €3/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍺 Sidra natural con escanciado en Calle Begoña</div>
+            <div class="stop-desc">El templo de la sidra gijonesa. Decenas de sidrerías concentradas en dos manzanas, escanciando desde las 13:00. Pitu de la Vega, El Pote y El Verano son los locales más auténticos. El ritual es compartir la botella entre amigos y pedir queso Cabrales y chorizo a la sidra para acompañar.</div>
+            <div class="stop-price">Sidra: €1.50/vaso · Tabla mixta: ~€10</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">Día 3</div>
+          <div><div class="day-title">Covadonga y Lagos — Picos de Europa</div><div class="day-subtitle">85 km desde Oviedo · ~1 h en coche</div></div>
+        </div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Santuario de Covadonga (gratuito)</div>
+            <div class="stop-desc">En el año 722 d.C., el rey Pelayo derrotó a los árabes en este anfiteatro natural de montaña, iniciando la Reconquista. La Basílica Neorrománica de 1901 en piedra rosa se construyó sobre el lugar de la batalla. La Cueva Santa —con la imagen de la Virgen y la tumba de Pelayo— es el corazón espiritual de Asturias.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚌 Bus a los Lagos Enol y Ercina (€3/trayecto)</div>
+            <div class="stop-desc">En julio y agosto el acceso en coche a los Lagos está restringido de 8:30 a 20:00. El autobús lanzadera sale desde el Santuario cada 15 minutos y sube hasta 1.070 m de altitud. Los Lagos Enol y Ercina son lagunas glaciares del Cuaternario con vistas directas a los Picos de Europa.</div>
+            <div class="stop-price">Bus: €3/trayecto por persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🥾 Senderismo Lagos — ruta circular (4 km, fácil)</div>
+            <div class="stop-desc">Ruta circular Enol-Ercina de 4 km sin desnivel significativo y 1h30 de duración. Los dos lagos están conectados por un sendero bien señalizado con vistas constantes de las cumbres nevadas (incluso en verano). Rebaños de vacas asturianas de montaña pastan libremente en las majadas.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌉 Cangas de Onís — Puente Romano</div>
+            <div class="stop-desc">De regreso, Cangas de Onís tiene el Puente Medieval del s. XI (llamado romano por tradición) sobre el río Sella, con la Cruz de la Victoria colgando del arco central. La villa tiene arquitectura indiana y un mercadillo de artesanía asturiana. La sidrería de la villa sirve el mejor menú del día de la comarca a €12.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">Día 4</div>
+          <div><div class="day-title">Costa Occidental — Cudillero y Luarca</div><div class="day-subtitle">La perla negra y el anfiteatro de colores</div></div>
+        </div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🎨 Cudillero — pueblo pesquero en anfiteatro</div>
+            <div class="stop-desc">El pueblo más fotografiado de Asturias organiza sus casas de colores en forma de anfiteatro sobre el puerto pesquero. El callejeo por las escaleras empedradas, el olor a salitre y la vista del Cantábrico desde el mirador de Los Jardines son experiencias que no cuestan nada. La flota sale antes del amanecer y regresa a media mañana.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⚓ Luarca — La Perla del Negro</div>
+            <div class="stop-desc">Villa marinera llamada "La Perla del Negro" por la ría de color oscuro que la parte en dos. El cementerio marino de Luarca —suspendido sobre los acantilados con vistas al Cantábrico— es uno de los paisajes más dramáticos de Asturias. El barrio de los pescadores conserva hórreos centenarios junto al mar.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🦐 Tapeo de marisco en el puerto</div>
+            <div class="stop-desc">Los bares del puerto de Luarca sirven percebe, nécora y mejillón de la ría a precios de lonja. La caldeirada de pescado (~€14) y el bocadillo de calamares caseros (~€7) son las opciones más económicas. El pulpo a la plancha con cachelos (€12) es obligatorio si el presupuesto lo permite.</div>
+            <div class="stop-price">Tapeo completo: ~€20/persona</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">Día 5</div>
+          <div><div class="day-title">Llanes y regreso a Oviedo</div><div class="day-subtitle">Bufones, cala virgen y casco medieval</div></div>
+        </div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">💦 Bufones de Pría — géiseres naturales del mar</div>
+            <div class="stop-desc">En la costa oriental de Asturias, el oleaje del Cantábrico entra por fracturas kársticas en los acantilados y emerge disparado como géiseres de agua marina de hasta 20 metros de altura. El espectáculo es más intenso con mar de fondo (coeficiente de marea alto). Acceso gratuito desde el aparcamiento de Pría.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏖️ Playa de Torimbia — cala virgen</div>
+            <div class="stop-desc">La playa naturista más conocida de Asturias es también una de las más bellas: cala en herradura de arena fina con acantilados verdes. Sin chiringuito, sin hamacas, sin concesiones. El acceso es a pie desde el aparcamiento (15 min de bajada). En agosto llega a su aforo máximo antes de las 10:00.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏰 Casco medieval de Llanes</div>
+            <div class="stop-desc">La villa medieval de Llanes conserva intacta su muralla del s. XIII, el torreón de los condes y un casco histórico de casas con blasones indianos. El puerto de Llanes y los cubos de la Memoria (esculturas en los cubos de defensa del puerto) son el broche final antes del regreso a Oviedo (85 km, ~1 h).</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>🏨 4 noches hostal/pensión (€45/noche media)</span><span>€180</span></div>
+        <div class="budget-row"><span>⛽ Gasolina (~450 km totales)</span><span>€45</span></div>
+        <div class="budget-row"><span>🍽️ Comidas (media €22/día x 5 días x 2)</span><span>€220</span></div>
+        <div class="budget-row"><span>🎫 Entradas museos y actividades</span><span>€20</span></div>
+        <div class="budget-row"><span>🚌 Bus Lagos Covadonga x2 personas (ida+vuelta)</span><span>€12</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span style="color:#2a9d8f;">~€477</span></div>
+      </div>
+      <div class="budget-note">Asturias es una de las regiones más asequibles del norte de España: la mayoría de sus mejores experiencias (playas, senderismo, santuarios, pueblos) son completamente gratuitas. El gasto principal son el alojamiento y la gasolina.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Sidra escanciada:</strong> La sidra natural asturiana se sirve escanciada desde altura para oxigenarla — €1.20/vaso en los güeños del Fontán de Oviedo. Nunca pidas que la viertan despacio: el escanciado es parte de la experiencia.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Bus Lagos Covadonga:</strong> En julio y agosto el acceso en coche a los Lagos está restringido de 8:30 a 20:00. El autobús lanzadera sale desde el Santuario cada 15 min (€3/trayecto). Llega al Santuario antes de las 8:30 para subir con tu coche si prefieres.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Fabada auténtica:</strong> La auténtica fabada asturiana en Oviedo: Casa Conrado (€14 el cocido completo) o cualquier sidrería de la calle Gascona. Fuera de Asturias, la fabada enlatada de El Gaitero es la única versión aceptable.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Sin coche propio:</strong> ALSA conecta Oviedo con Gijón (€3.80, cada 15 min), Cudillero, Luarca y Llanes. Para Covadonga hay bus desde Arriondas. La ruta es perfectamente realizable en transporte público con un día más de margen.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Playas libres:</strong> Casi todas las playas del Cantábrico son de acceso libre y gratuito, sin hamacas de pago ni chiringuitos obligatorios. Evita el mes de agosto para aparcar: las calas más bonitas (Torimbia, Gulpiyuri) se llenan antes de las 9:00. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Oviedo" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Oviedo en DiscoverCars" style="display:inline;margin-top:0;">Comparar coches en DiscoverCars</a></div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas de un día desde Oviedo?</h3>
+      <p>Rutas desde la capital asturiana con mapas y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.36,-5.86],9);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[43.362,-5.849],label:'Oviedo',color:'#2a9d8f',r:12},{coords:[43.533,-5.661],label:'Gijón',color:'#2a9d8f',r:10},{coords:[43.344,-4.998],label:'Covadonga',color:'#2a9d8f',r:10},{coords:[43.561,-6.145],label:'Cudillero',color:'#2a9d8f',r:10},{coords:[43.542,-6.537],label:'Luarca',color:'#2a9d8f',r:10},{coords:[43.421,-4.756],label:'Llanes',color:'#2a9d8f',r:10}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[43.362,-5.849],[43.533,-5.661],[43.344,-4.998],[43.421,-4.756],[43.561,-6.145],[43.542,-6.537],[43.362,-5.849]],{color:'#2a9d8f',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

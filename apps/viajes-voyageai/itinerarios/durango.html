@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Durango — 1 día desde Bilbao | Routlo</title>
+  <meta name="description" content="Itinerario de 1 día en Durango desde Bilbao: Basílica de Uribarri, Portal de Kurutziaga, Parque Natural de Urkiola y pintxos auténticos. 33 km, 40 min en tren."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,8,16,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #0a1e0c 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #1e3020 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #121e12 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #08100a 0%, #121e12 40%, #1e3020 70%, rgba(201,169,110,0.2) 100%);
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%);
+    }
+    .dest-hero-deco {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+      background: linear-gradient(to top, #040810 0%, transparent 100%);
+      z-index: 0;
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(4,8,16,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label {
+      font-size: 0.7rem; color: rgba(237,238,242,0.55);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .dest-sum-val {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.2rem; font-weight: 700; color: #c9a96e;
+    }
+
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title {
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(237,238,242,0.55); margin-bottom: 12px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    .day-card {
+      background: #0d1628;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; overflow: hidden; margin-bottom: 28px;
+    }
+    .day-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .day-num {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 2.2rem; font-weight: 700; color: #c9a96e;
+      line-height: 1; min-width: 60px;
+    }
+    .day-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px;
+    }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time {
+      min-width: 55px; font-size: 0.78rem; color: #c9a96e;
+      font-weight: 600; padding-top: 3px; flex-shrink: 0;
+    }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #c9a96e; border: 2px solid #0d1628;
+      flex-shrink: 0; margin-top: 3px;
+    }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag {
+      display: inline-block; padding: 2px 8px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 100px; font-size: 0.67rem; color: #c9a96e;
+    }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    .meal-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 16px 0 22px; }
+    .meal-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px; transition: border-color 0.2s;
+    }
+    .meal-card:hover { border-color: rgba(201,169,110,0.3); }
+    .meal-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .meal-name { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 4px; }
+    .meal-info { font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.5; margin-bottom: 8px; }
+    .meal-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; }
+
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th {
+      text-align: left; padding: 10px 14px; background: #0d1628;
+      color: #c9a96e; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(201,169,110,0.3);
+    }
+    .budget-table td {
+      padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: rgba(237,238,242,0.55); vertical-align: top;
+    }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 18px;
+    }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    .tip-item {
+      display: flex; gap: 12px; padding: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .tip-num {
+      min-width: 28px; height: 28px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700;
+      color: #c9a96e; flex-shrink: 0;
+    }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    .top10-item {
+      display: flex; gap: 16px; padding: 16px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .top10-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.8rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 36px; }
+    .top10-content h4 { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .top10-content p { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.55; }
+
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 16px;
+    }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    .disclosure {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 16px 18px;
+      font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65;
+      margin-top: 40px;
+    }
+
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%);
+      border: 1px solid rgba(201,169,110,0.3); border-radius: 20px;
+      padding: 32px; text-align: center; margin-bottom: 28px;
+    }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px;
+      background: linear-gradient(135deg, #c9a96e, #a07840);
+      color: #0a0a0a; font-weight: 600; font-size: 0.9rem;
+      border-radius: 10px; text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .meal-options { grid-template-columns: 1fr; }
+      .transport-grid { grid-template-columns: 1fr; }
+      .gastro-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px; }
+      nav[role="navigation"] ul { display: none; }
+      .dest-hero { padding: 100px 16px 40px; }
+      .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
+      .dest-country { font-size: 1.1rem; }
+      .dest-summary-bar { border-radius: 12px; }
+      .dest-sum-item { padding: 12px 8px; }
+      .dest-sum-label { font-size: 0.6rem; }
+      .dest-sum-val { font-size: 1rem; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+      .day-num { font-size: 1.8rem; min-width: 44px; }
+      .day-body { padding: 14px 16px; }
+      .act-time { min-width: 44px; font-size: 0.72rem; }
+      .section-heading { font-size: 1.3rem; }
+      .budget-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none; }
+    }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios-espana.html">España</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Durango</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Durango</h1>
+  <p class="dest-country">Villa Foral · Bizkaia</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      1 día
+    </span>
+    <span class="dest-badge" role="listitem">33 km desde Bilbao</span>
+    <span class="dest-badge gold" role="listitem">~€57 para 2</span>
+    <span class="dest-badge" role="listitem">País Vasco · España</span>
+    <span class="dest-badge" role="listitem">Historia + Naturaleza</span>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">1 día</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Origen</div>
+      <div class="dest-sum-val">Bilbao</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Km</div>
+      <div class="dest-sum-val">33 km</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Transporte</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Renfe/Coche</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Estilo</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Historia</div>
+    </div>
+  </div>
+</section>
+
+<main id="main-content">
+  <div class="itin-layout">
+
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#dia1">El día</a></li>
+          <li><a href="#restaurantes">Restaurantes</a></li>
+          <li><a href="#top7">Top 7</a></li>
+          <li><a href="#gastronomia">Gastronomía</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <article>
+
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del día</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          Durango es la villa foral más auténtica de Bizkaia: una ciudad de tamaño humano, sin turismo masivo, con uno de los cascos históricos más bien conservados del País Vasco. A 33 km de Bilbao (40 minutos en tren Renfe), concentra monumentos góticos del siglo XV, un arco ojival que es el más fotografiado de la villa, un mercado semanal con productos del valle y la puerta de entrada al Parque Natural de Urkiola. Un día en Durango es la alternativa perfecta para quien busca el País Vasco real, sin aglomeraciones y con precios muy inferiores a los grandes focos turísticos.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este día con IA</h3>
+          <p>Routlo adapta cada parada al ritmo y los intereses de tu grupo en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Empezar gratis
+          </a>
+        </div>
+      </section>
+
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para 1 día en Durango (2 personas)">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Estimado (2 personas)</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>🚂 Tren Bilbao-Abando / Durango ida y vuelta (x2)</td>
+                <td>€16.80</td>
+                <td>€4.20 por trayecto y persona</td>
+              </tr>
+              <tr>
+                <td>🍽️ Pintxos + comida</td>
+                <td>€30</td>
+                <td>Parte Vieja, tabernas locales</td>
+              </tr>
+              <tr>
+                <td>🏛️ Entradas monumentos</td>
+                <td>€0</td>
+                <td>Basílica, Portal, exterior torre: gratuitos</td>
+              </tr>
+              <tr>
+                <td>🌿 Parque Urkiola (acceso)</td>
+                <td>€0</td>
+                <td>Acceso gratuito al parque</td>
+              </tr>
+              <tr>
+                <td>☕ Cafés y bebidas</td>
+                <td>€10</td>
+                <td>Café mañana + bebidas con pintxos</td>
+              </tr>
+              <tr>
+                <td>🎁 Extras / mercado / imprevistos</td>
+                <td>€10</td>
+                <td>Productos del mercado, recuerdos</td>
+              </tr>
+              <tr>
+                <td><strong>TOTAL DÍA</strong></td>
+                <td><strong>~€57</strong></td>
+                <td>Para 2 personas (tren incluido)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* En coche (A-8) el gasto total se reduce a ~€20 en gasolina. El tren es más cómodo y elimina el problema de aparcar.</p>
+      </section>
+
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo llegar</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+              Renfe — Opción recomendada
+            </div>
+            <div class="transport-content">
+              <strong>Bilbao-Abando → Durango</strong> en 40 minutos directos.<br><br>
+              Precio: <strong>€4.20 por trayecto</strong>. Varios trenes por hora. Estación de Durango a 5 min andando del centro histórico.<br><br>
+              <span style="color:rgba(237,238,242,0.4)">Descarga la app Renfe antes de salir — permite compra de billetes y muestra horarios en tiempo real.</span>
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 6V4M16 6V4M2 10h20"/></svg>
+              Coche — A-8
+            </div>
+            <div class="transport-content">
+              <strong>Autopista A-8 dirección San Sebastián,</strong> salida Durango. 33 km, 35 minutos sin tráfico.<br><br>
+              Parking en el centro: zona azul junto a la Plaza del Porrua (~€1.50/h). Aconsejable llegar antes de las 10h para encontrar plaza.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Dentro de Durango
+            </div>
+            <div class="transport-content">
+              Durango es completamente <strong>caminable</strong>: todos los puntos de interés histórico están en un radio de 500m.<br><br>
+              Para la Ermita de San Fausto (2 km) y el Parque de Urkiola (8 km): coche o taxi local.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+              Apps útiles
+            </div>
+            <div class="transport-content">
+              <strong>App Renfe</strong> — compra de billetes, horarios y validación digital. Descarga antes de salir.<br><br>
+              <strong>Google Maps offline</strong> — útil en las rutas de montaña hacia Urkiola donde la cobertura puede fallar.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+        <h2 class="section-heading" id="h-dia1">El día completo</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Durango — Villa gótica y montaña vasca</div>
+              <div class="day-subtitle">Kurutziaga, Uribarri, mercado y Urkiola</div>
+            </div>
+            <div class="day-meta">
+              <span>⛪ Gótico s. XV</span>
+              <span>🌿 Urkiola</span>
+              <span>🏘️ Parte Vieja</span>
+            </div>
+          </div>
+          <div class="day-body">
+
+            <div class="activity">
+              <div class="act-time">09:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada + Plaza del Porrua</div>
+                <div class="act-desc">La Plaza del Porrua es el corazón del centro histórico de Durango: soportales tradicionales, bares con pintxos a primera hora y el ambiente tranquilo de una ciudad que todavía no ha sido invadida por el turismo masivo. Tomad el primer café del día aquí y comenzad la mañana a ritmo vasco: sin prisas.</div>
+                <div class="act-tags"><span class="act-tag green">Llegada tren / coche</span><span class="act-tag info">5 min de la estación</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">10:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Basílica de Santa María de Uribarri</div>
+                <div class="act-desc">Construida en el siglo XV, es uno de los mejores ejemplos de gótico tardío de Bizkaia. Su portada gótica flamígera — con decoración en forma de llama — fue declarada Bien de Interés Cultural. El interior conserva retablos barrocos y una pila bautismal románica anterior a la propia basílica. La torre campanario domina el skyline de la villa con presencia medieval. Uno de los edificios religiosos más completos del interior de Bizkaia.</div>
+                <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag info">BIC — Bien de Interés Cultural</span><span class="act-tag">s. XV</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Portal de Kurutziaga</div>
+                <div class="act-desc">El arco gótico del siglo XV que fue durante siglos la entrada principal a la villa amurallada. Su nombre significa "Cruz de caminos" en euskera. Es el monumento más fotografiado de Durango y uno de los arcos de acceso medievales mejor conservados del País Vasco. El detalle de la decoración gótica sobre la piedra arenisca, con una cruz central y molduras de tradición flamígera, justifica un alto prolongado para contemplarlo. Mejor fotografiado a la mañana, con la luz lateral desde el este.</div>
+                <div class="act-tags"><span class="act-tag green">Exterior gratuito</span><span class="act-tag info">Gótico s. XV</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">11:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Ermita de San Fausto de Zaldibar</div>
+                <div class="act-desc">A 2 km del centro (15-20 min andando o taxi corto), esta ermita del siglo XVI está enclavada en la ladera del monte, entre robles y castaños. El camino hasta ella ya es en sí una experiencia agradable: sendero rural con vistas al valle de Durango y a la cordillera del Duranguesado. La ermita, de planta rectangular y porticada, sigue siendo lugar de romería en mayo. Tranquilidad absoluta y perspectiva panorámica sobre la villa.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag">2 km / 20 min andando</span><span class="act-tag info">s. XVI</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">12:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Mercado Semanal — Plaza Mayor</div>
+                <div class="act-desc">Los lunes y jueves, la Plaza Mayor de Durango se transforma con el mercado semanal: puestos de verduras del valle, queso de oveja latxa, miel de otoño, conservas artesanales y productores locales. Sin la pompa turística del mercado de la Ribera de Bilbao, pero con la autenticidad que ese tiene perdida. Si vuestro día cae en lunes o jueves, no os lo perdáis — es una ventana directa a la vida rural de Bizkaia.</div>
+                <div class="act-tags"><span class="act-tag info">Solo lunes y jueves</span><span class="act-tag green">Entrada gratuita</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">13:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Pintxos en la Parte Vieja</div>
+                <div class="act-desc">Las tabernas de la Parte Vieja de Durango sirven pintxos a precios muy inferiores a Bilbao o San Sebastián, con una clientela 100% local. Especialidades: morcilla de Beasain con pimiento, bacalao en salsa verde, tortilla con anchoa. El ambiente del mediodía de lunes a viernes, con trabajadores del comercio y la industria local, es el País Vasco de verdad. Pedid con confianza sin mirar la carta — lo que esté en la barra es siempre lo mejor.</div>
+                <div class="act-tags"><span class="act-tag">~€12-15 por persona</span><span class="act-tag green">Sin turismo</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Torre de San Agustín Etxebarria</div>
+                <div class="act-desc">La torre medieval de San Agustín es uno de los pocos restos de la arquitectura defensiva civil de Durango. Aunque el acceso al interior está limitado, su exterior ofrece un testimonio directo de la Durango medieval: piedra sillar, aspilleras estrechas y la solidez de una estructura diseñada tanto para habitar como para resistir. Las restauraciones recientes han recuperado parte de su imagen original. Un punto perfecto para reflexionar sobre la densidad histórica de una villa que el turismo todavía no ha convertido en escenario.</div>
+                <div class="act-tags"><span class="act-tag green">Exterior gratuito</span><span class="act-tag info">Torre medieval</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Parque Natural de Urkiola</div>
+                <div class="act-desc">A 8 km de Durango (15 min en coche o taxi), el Parque Natural de Urkiola es uno de los espacios naturales más espectaculares del País Vasco: picos calcáreos con formas dramáticas, bosques de haya y roble, y el Santuario de Urkiola (donde cada año el primer domingo de mayo se celebra la romería más importante de la comarca). El camino hasta el Altzusta (1.040m) ofrece vistas al Duranguesado y, con buen tiempo, a la costa cantábrica. Llevar ropa de abrigo — la temperatura baja en altitud.</div>
+                <div class="act-tags"><span class="act-tag green">Acceso gratuito</span><span class="act-tag info">8 km desde Durango</span><span class="act-tag">Llevar abrigo</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">18:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso a Bilbao</div>
+                <div class="act-desc">Tren Renfe desde Durango hasta Bilbao-Abando en 40 minutos. Frecuencia alta hasta las 22:00h. En coche: A-8 dirección Bilbao, 35 minutos. El regreso al atardecer por la autopista, con el Duranguesado a la derecha, es de una belleza subestimada.</div>
+                <div class="act-tags"><span class="act-tag">€4.20 tren</span><span class="act-tag info">Último tren ~22:00h</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section id="restaurantes" class="itin-section" aria-labelledby="h-restaurantes">
+        <h2 class="section-heading" id="h-restaurantes">Dónde comer</h2>
+        <div class="meal-options">
+          <div class="meal-card">
+            <div class="meal-tier">Pintxos clásicos</div>
+            <div class="meal-name">Bar Juanito</div>
+            <div class="meal-info">Referencia local de la Parte Vieja. Pintxos de morcilla con pimiento del piquillo, tortilla y bocadillos de bonito. Clientela local, sin carta turística. El bar más auténtico de Durango.</div>
+            <div class="meal-price">~€10-14 por persona</div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-tier">Cocina vasca</div>
+            <div class="meal-name">Restaurante Murtuts</div>
+            <div class="meal-info">Cocina vasca de mercado con menú del día (~€14). Bacalao a la vizcaína, marmitako de temporada y postres caseros. Ambiente familiar y precios honestos. Reserva recomendada en fines de semana.</div>
+            <div class="meal-price">~€14-20 por persona</div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-tier">Sidrería (temporada)</div>
+            <div class="meal-name">Sidrería Patxi Etxebarri</div>
+            <div class="meal-info">En temporada de sidra (enero-abril), las sidrerías del entorno de Durango son una experiencia ineludible: txotx (escanciado directo del tonel), tortilla de bacalao, chuletón y queso con membrillo. Plato único, cantidad ilimitada de sidra.</div>
+            <div class="meal-price">~€35 por persona (todo incluido)</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="top7" class="itin-section" aria-labelledby="h-top7">
+        <h2 class="section-heading" id="h-top7">Top 7 — Durango en 1 día</h2>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">1</div>
+          <div class="top10-content">
+            <h4>Portal de Kurutziaga</h4>
+            <p>El arco gótico del siglo XV más fotografiado de la villa. La piedra arenisca con decoración flamígera es un testimonio perfecto del gótico vizcaíno.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">2</div>
+          <div class="top10-content">
+            <h4>Basílica de Santa María de Uribarri</h4>
+            <p>Portada gótica flamígera declarada BIC. El interior con retablos barrocos y la pila románica hacen de esta basílica uno de los edificios religiosos más completos de Bizkaia.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">3</div>
+          <div class="top10-content">
+            <h4>Parque Natural de Urkiola</h4>
+            <p>Picos calcáreos y bosques de haya a 8 km. La ruta al Altzusta ofrece panorámicas del Duranguesado. Entrada gratuita y sin masificación.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">4</div>
+          <div class="top10-content">
+            <h4>Mercado semanal (lunes y jueves)</h4>
+            <p>Productores locales del valle: queso latxa, miel, verduras de temporada. El País Vasco rural sin filtros turísticos.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">5</div>
+          <div class="top10-content">
+            <h4>Pintxos en la Parte Vieja</h4>
+            <p>Los mismos productos que en Bilbao o San Sebastián, a la mitad de precio y con clientela 100% local. La experiencia gastronómica más honesta del País Vasco.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">6</div>
+          <div class="top10-content">
+            <h4>Ermita de San Fausto de Zaldibar</h4>
+            <p>El camino hasta la ermita del siglo XVI, entre castaños y robles, con vistas panorámicas al valle, vale el desvío.</p>
+          </div>
+        </div>
+        <div class="top10-item">
+          <div class="top10-num" aria-hidden="true">7</div>
+          <div class="top10-content">
+            <h4>Plaza del Porrua con soportales</h4>
+            <p>El corazón de Durango: sin restaurantes de diseño ni tiendas de souvenirs. El espacio público vasco en su forma más auténtica.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+        <h2 class="section-heading" id="h-gastro">Gastronomía del Duranguesado</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:20px">La comarca del Duranguesado tiene una tradición gastronómica propia ligada a la montaña y a la huerta del interior: productos más contundentes que los de la costa, con protagonismo de la morcilla, el bacalao seco y las legumbres.</p>
+        <div class="gastro-grid">
+          <div class="gastro-card">
+            <div class="gastro-cat">Pintxos interiores</div>
+            <div class="gastro-title">Morcilla y pimientos</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">Pintxo de morcilla de Beasain</strong> con pimiento del piquillo — la morcilla de arroz vasca, más suave que la andaluza. <strong style="color:#edeef2">Montadito de bacalao</strong> con ajo confitado. En los bares locales, el pintxo promedio cuesta €1.20-1.80 — un 30% menos que en Bilbao.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Sidra</div>
+            <div class="gastro-title">El txotx (enero-abril)</div>
+            <div class="gastro-desc">Las sidrerías del Duranguesado abren en temporada de sidra nueva (enero-abril). El ritual: cuando el sidreru grita "txotx", todos corren al tonel con el vaso en alto para escanciarse sidra directamente. Precio cerrado que incluye tortilla de bacalao, chuleta de buey y sidra ilimitada. ~€35 pp.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Queso</div>
+            <div class="gastro-title">Idiazabal de oveja latxa</div>
+            <div class="gastro-desc"><strong style="color:#edeef2">Queso Idiazabal</strong> — queso curado de leche de oveja latxa, con ahumado suave o natural. Los productores del valle de Mañaria, a 5 km de Durango, son algunos de los mejores del País Vasco. En el mercado lo encontráis directo del productor a ~€12/kg.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Menú del día</div>
+            <div class="gastro-title">La comida más honesta</div>
+            <div class="gastro-desc">Los restaurantes de Durango ofrecen menús del día de semana (~€12-14) con primero, segundo, postre y bebida incluida. <strong style="color:#edeef2">Alubias de Gernika</strong> con sacramentos, o <strong style="color:#edeef2">merluza en salsa verde</strong> como segundos habituales. Sin carta turística, sin traducción al inglés — auténtico.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">Consejos para el día</h2>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">1</div>
+          <div class="tip-text"><strong>Si vuestro día cae en lunes o jueves, ajustad el horario para el mercado.</strong> Es la única actividad con restricción de días y merece la pena reorganizar el itinerario para incluirla.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">2</div>
+          <div class="tip-text"><strong>Urkiola es accesible directamente desde Durango</strong> en coche o taxi (8 km). Si no lleváis coche, preguntad en la estación por el bus de montaña o solicitad taxi local — la oferta existe aunque no esté muy anunciada.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">3</div>
+          <div class="tip-text"><strong>Poco turismo masivo</strong> = autenticidad garantizada. Los precios en bares y restaurantes son sensiblemente inferiores a Bilbao y San Sebastián. La experiencia gastronómica es más honesta precisamente porque los locales trabajan para su comunidad, no para visitantes.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">4</div>
+          <div class="tip-text"><strong>Descarga la app Renfe antes de salir.</strong> Permite compra de billetes, selección de horario y validación digital. En Bilbao-Abando las máquinas también tienen opción en inglés. El billete es económico y el tren es puntual.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">5</div>
+          <div class="tip-text"><strong>Durango como punto de partida para Urkiola.</strong> Si queréis combinar historia y naturaleza en el mismo día, llegad temprano al casco histórico (antes de las 10h), haced los monumentos por la mañana y dedicad la tarde a Urkiola. Regreso a Bilbao en el último tren de tarde (18:00-19:00h).</div>
+        </div>
+      </section>
+
+      <div class="disclosure" role="note" aria-label="Aviso legal sobre precios">
+        <strong style="color:#edeef2">Aviso sobre precios:</strong> Los precios indicados son orientativos para 2026. Los horarios del tren Renfe pueden cambiar — consultad siempre la app o la web oficial antes de planificar la salida. Los establecimientos locales no siempre tienen presencia online: llamad antes si queréis aseguraros de horarios.
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html" aria-label="Routlo — Inicio"><img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);"></a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../itinerarios-espana.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">España</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+(function() {
+  'use strict';
+
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#', '');
+    const el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+
+  function updateTOC() {
+    const scrollY = window.scrollY;
+    const offset = 120;
+    let current = null;
+    sections.forEach(function(s) {
+      if (s.el.offsetTop - offset <= scrollY) {
+        current = s;
+      }
+    });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateTOC, { passive: true });
+  updateTOC();
+
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const id = this.getAttribute('href').replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 96;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.day-card, .top10-item, .tip-item').forEach(function(el) {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }
+})();
+</script>
+</body>
+</html>

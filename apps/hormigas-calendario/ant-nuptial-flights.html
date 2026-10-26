@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Vuelos Nupciales de Hormigas — Península Ibérica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Exo:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{
+  --c-p:#15803D;--c-pd:#14532D;--c-s:#059669;--c-a:#D97706;--c-ad:#92400E;
+  --c-bg:#F0FDF4;--c-sur:#FFF;--c-mut:#F0F7F3;--c-bor:#BBF7D0;
+  --c-txt:#0F172A;--c-txm:#64748B;--r:20px;--rb:14px;
+  --sh:4px 4px 0 #BBF7D0;--shh:6px 6px 0 #86EFAC;--tr:150ms ease-out;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Exo',sans-serif;background:var(--c-bg);color:var(--c-txt);line-height:1.5}
+.card{background:var(--c-sur);border-radius:var(--r);border:3px solid var(--c-bor);box-shadow:var(--sh);transition:transform var(--tr),box-shadow var(--tr)}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shh)}
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:'Exo',sans-serif;font-weight:600;font-size:13px;padding:8px 16px;border-radius:var(--rb);background:var(--c-p);color:#fff;border:2.5px solid var(--c-pd);box-shadow:3px 3px 0 var(--c-pd);cursor:pointer;transition:transform var(--tr),box-shadow var(--tr)}
+.btn:hover{transform:translateY(-1px);box-shadow:4px 4px 0 var(--c-pd)}
+.btn:active{transform:translateY(1px);box-shadow:1px 1px 0 var(--c-pd)}
+.btn:focus-visible{outline:3px solid var(--c-p);outline-offset:2px}
+.btn-g{background:#fff;color:var(--c-p);border-color:var(--c-p);box-shadow:3px 3px 0 var(--c-bor)}
+.btn-g:hover{box-shadow:4px 4px 0 var(--c-bor)}
+.btn.act{background:var(--c-p);color:#fff;border-color:var(--c-pd)}
+/* ─── NAV ─── */
+nav{background:var(--c-pd);padding:0 24px;display:flex;align-items:center;gap:0;position:sticky;top:0;z-index:900;height:56px}
+.nav-brand{color:#fff;font-weight:700;font-size:16px;margin-right:auto;display:flex;align-items:center;gap:8px}
+.nav-link{color:#BBF7D0;font-size:13px;font-weight:600;padding:0 14px;height:56px;display:flex;align-items:center;cursor:pointer;border-bottom:3px solid transparent;transition:border-color .15s,color .15s}
+.nav-link:hover{color:#fff}
+.nav-link.active{color:#fff;border-bottom-color:#4ADE80}
+/* ─── HERO ─── */
+.hero{background:linear-gradient(135deg,#14532D 0%,#166534 50%,#15803D 100%);padding:48px 24px 40px;text-align:center;color:#fff}
+.hero h1{font-size:clamp(1.6rem,4vw,2.8rem);font-weight:700;line-height:1.2}
+.hero p{color:#86EFAC;margin-top:10px;font-size:15px}
+.hero-stats{display:flex;justify-content:center;gap:32px;margin-top:28px;flex-wrap:wrap}
+.stat-box{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);border-radius:14px;padding:14px 24px;text-align:center}
+.stat-num{font-size:2rem;font-weight:700;color:#4ADE80}
+.stat-lbl{font-size:11px;color:#86EFAC;text-transform:uppercase;letter-spacing:.06em}
+/* ─── VIEWS ─── */
+#view-map,#view-grid,#view-detail{display:none}
+#view-map.show,#view-grid.show,#view-detail.show{display:block}
+/* ─── MAP ─── */
+#mapEl{height:520px;border-radius:0 0 24px 24px;border:3px solid var(--c-bor)}
+.map-wrap{padding:0 0 32px}
+.zone-row{display:flex;flex-wrap:wrap;gap:10px;padding:16px 24px}
+.zpill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:2.5px solid var(--c-bor);font-family:'Exo',sans-serif;font-weight:600;font-size:12px;background:#fff;color:var(--c-txm);cursor:pointer;transition:transform var(--tr),box-shadow var(--tr),background var(--tr)}
+.zpill:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.zpill.active{background:var(--c-p);color:#fff;border-color:var(--c-pd)}
+/* ─── SPECIES PANEL ─── */
+.sp-panel{padding:0 24px 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.sp-panel{grid-template-columns:1fr}}
+.sp-card{cursor:pointer}
+.sp-card-inner{padding:16px}
+.sp-card .sci{font-style:italic;font-weight:600;font-size:13px;color:var(--c-p)}
+.sp-card .com{font-size:11.5px;color:var(--c-txm);margin-top:2px}
+.sp-card .badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;letter-spacing:.04em}
+.badge-endemic{background:#FEF9C3;color:#92400E;border:1.5px solid #FDE68A}
+.badge-invasive{background:#FEE2E2;color:#991B1B;border:1.5px solid #FECACA}
+.badge-now{background:#DCFCE7;color:#14532D;border:1.5px solid #86EFAC}
+.badge-sub{background:#EEF2FF;color:#312E81;border:1.5px solid #C7D2FE}
+.months-bar{display:flex;gap:2px;margin-top:10px}
+.mb{flex:1;height:8px;border-radius:3px;background:#E2E8F0}
+.mb.active{background:var(--c-p)}
+.mb.peak{background:var(--c-a)}
+.mb.now{background:#4ADE80}
+/* ─── GRID VIEW ─── */
+.grid-toolbar{padding:20px 24px 12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.search-box{flex:1;min-width:220px;padding:10px 16px;border:2.5px solid var(--c-bor);border-radius:var(--rb);font-family:'Exo',sans-serif;font-size:13px;background:#fff;outline:none}
+.search-box:focus{border-color:var(--c-p)}
+.filter-row{padding:0 24px 16px;display:flex;gap:8px;flex-wrap:wrap}
+.fchip{font-size:11.5px;font-weight:600;padding:4px 12px;border-radius:999px;border:2px solid var(--c-bor);background:#fff;color:var(--c-txm);cursor:pointer;transition:all .15s}
+.fchip:hover{border-color:var(--c-p);color:var(--c-p)}
+.fchip.active{background:var(--c-p);color:#fff;border-color:var(--c-pd)}
+.grid-count{padding:0 24px 8px;font-size:12px;color:var(--c-txm)}
+.species-grid{padding:0 24px 40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.sg-card{cursor:pointer;padding:14px;transition:transform .15s,box-shadow .15s}
+.sg-card:hover{transform:translateY(-3px);box-shadow:var(--shh)}
+.sg-card .num{font-size:10px;color:var(--c-txm);font-family:'Roboto Mono',monospace}
+.sg-card .sci{font-style:italic;font-weight:600;font-size:12.5px;color:var(--c-p);margin-top:2px}
+.sg-card .com{font-size:11px;color:var(--c-txm);margin-top:2px;line-height:1.3}
+.sg-months{display:flex;gap:2px;margin-top:8px}
+.sm{width:8px;height:8px;border-radius:2px;background:#E2E8F0}
+.sm.active{background:var(--c-p)}
+.sm.peak{background:var(--c-a)}
+/* ─── DETAIL VIEW ─── */
+.detail-wrap{max-width:760px;margin:0 auto;padding:24px}
+.detail-back{margin-bottom:20px}
+.detail-header{padding:28px;margin-bottom:20px}
+.detail-num{font-size:11px;color:var(--c-txm);font-family:'Roboto Mono',monospace}
+.detail-sci{font-style:italic;font-size:1.9rem;font-weight:700;color:var(--c-p);line-height:1.2;margin-top:4px}
+.detail-com{font-size:1rem;color:var(--c-txm);margin-top:6px}
+.detail-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:560px){.detail-grid{grid-template-columns:1fr}}
+.detail-stat{padding:16px}
+.ds-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--c-txm)}
+.ds-value{font-size:15px;font-weight:600;color:var(--c-txt);margin-top:4px}
+.ds-value.mono{font-family:'Roboto Mono',monospace}
+.cal-wrap{padding:20px;margin-bottom:20px}
+.cal-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--c-txm);margin-bottom:12px}
+.cal-months{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.cm{padding:8px 4px;text-align:center;border-radius:8px;background:#E2E8F0;transition:transform .1s}
+.cm.active{background:var(--c-p);color:#fff}
+.cm.peak{background:var(--c-a);color:#fff}
+.cm-lbl{font-size:9px;font-weight:700;text-transform:uppercase}
+.cm-dot{width:6px;height:6px;border-radius:50%;background:currentColor;margin:4px auto 0;opacity:.6}
+.desc-card{padding:20px;margin-bottom:20px}
+.desc-card h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--c-txm);margin-bottom:8px}
+.desc-card p{font-size:14px;color:var(--c-txt);line-height:1.65}
+.detail-nav{display:flex;gap:12px;justify-content:space-between;padding:0 24px 40px;max-width:760px;margin:0 auto}
+/* ─── CALENDAR VIEW ─── */
+.cal-view{padding:24px}
+.cal-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:12px}
+.cal-table th{padding:8px;background:var(--c-pd);color:#fff;font-weight:600}
+.cal-table td{padding:6px 10px;border-bottom:1px solid #E2E8F0}
+.cal-table tr:nth-child(even){background:#F8FAF8}
+.now-pill{display:inline-block;background:#DCFCE7;color:#14532D;border:1.5px solid #86EFAC;font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;letter-spacing:.04em}
+/* ─── FLYING NOW ─── */
+.fly-banner{background:linear-gradient(90deg,#166534,#15803D);padding:12px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.fly-banner span{color:#fff;font-size:13px}
+.fly-list{display:flex;gap:8px;flex-wrap:wrap}
+.fly-tag{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;font-style:italic}
+/* ─── FOOTER ─── */
+footer{background:var(--c-pd);color:#86EFAC;padding:24px;text-align:center;font-size:12px}
+/* ─── REDUCED MOTION ─── */
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">🐜 Vuelos Nupciales</div>
+  <div class="nav-link active" id="nl-mapa" onclick="goView('map')">🗺️ Mapa</div>
+  <div class="nav-link" id="nl-especies" onclick="goView('grid')">📋 Las 297 Especies</div>
+  <div class="nav-link" id="nl-cal" onclick="goView('cal')">📅 Calendario</div>
+</nav>
+
+<div class="hero">
+  <h1>🐜 Vuelos Nupciales · Península Ibérica</h1>
+  <p>Calendario interactivo de vuelos nupciales para las <strong id="heroCount">297</strong> especies ibéricas</p>
+  <div class="hero-stats">
+    <div class="stat-box"><div class="stat-num">297</div><div class="stat-lbl">Especies</div></div>
+    <div class="stat-box"><div class="stat-num" id="hEndemics">0</div><div class="stat-lbl">Endémicas</div></div>
+    <div class="stat-box"><div class="stat-num" id="hNow">0</div><div class="stat-lbl">Vuelan en Junio</div></div>
+    <div class="stat-box"><div class="stat-num">46</div><div class="stat-lbl">Géneros</div></div>
+  </div>
+</div>
+
+<!-- FLYING NOW BANNER -->
+<div class="fly-banner" id="flyBanner"></div>
+
+<!-- MAP VIEW -->
+<div id="view-map" class="show">
+  <div class="map-wrap">
+    <div class="zone-row" id="zoneRow" role="group" aria-label="Zonas geográficas"></div>
+    <div id="mapEl" role="application" aria-label="Mapa interactivo"></div>
+  </div>
+  <div id="spPanel" class="sp-panel"></div>
+</div>
+
+<!-- SPECIES GRID VIEW -->
+<div id="view-grid">
+  <div class="grid-toolbar">
+    <input class="search-box" id="searchBox" placeholder="🔍  Buscar especie (nombre científico o común)..." oninput="filterGrid()"/>
+    <button class="btn btn-g" onclick="clearFilters()">Limpiar filtros</button>
+  </div>
+  <div class="filter-row" id="filterRow"></div>
+  <div class="grid-count" id="gridCount"></div>
+  <div class="species-grid" id="speciesGrid"></div>
+</div>
+
+<!-- DETAIL VIEW -->
+<div id="view-detail">
+  <div class="detail-wrap" id="detailContent"></div>
+  <div class="detail-nav" id="detailNav"></div>
+</div>
+
+<!-- CALENDAR TABLE VIEW -->
+<div id="view-cal" style="display:none">
+  <div class="cal-view">
+    <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:4px">📅 Calendario Anual de Vuelos</h2>
+    <p style="color:var(--c-txm);font-size:13px;margin-bottom:16px">Península Ibérica · <span id="calNowLabel"></span></p>
+    <div style="overflow-x:auto"><table class="cal-table" id="calTable"></table></div>
+  </div>
+</div>
+
+<footer>
+  <p>Datos basados en la <em>Lista de especies de hormigas de la Península Ibérica e Islas Baleares</em> · Diseño Antigravity Kit</p>
+  <p style="margin-top:6px;opacity:.7">Los datos de vuelos nupciales son estimaciones basadas en bibliografía científica y observaciones de campo</p>
+</footer>
+
+<script>
+// ─── CONSTANTS ──────────────────────────────────────────────
+const NOW = new Date().getMonth()+1; // June = 6
+const MONTHS_ES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const MONTHS_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+// ─── GENUS DEFAULTS ─────────────────────────────────────────
+const GD = {
+  Camponotus:     {months:[5,6],       peak:[5,6],    temp:'16–24 °C', time:'Noche (20–23 h)',        sub:'Formicinae',    subC:'#065F46', trigger:'Noches cálidas de verano, a menudo tras lluvia'},
+  Colobopsis:     {months:[5,6],       peak:[5,6],    temp:'18–26 °C', time:'Noche (20–23 h)',        sub:'Formicinae',    subC:'#065F46', trigger:'Noches cálidas de verano'},
+  Cataglyphis:    {months:[4,5,6],     peak:[5],      temp:'28–45 °C', time:'Mediodía (11–14 h)',     sub:'Formicinae',    subC:'#065F46', trigger:'Calor extremo > 28 °C, suelo muy caliente'},
+  Formica:        {months:[5,6,7],     peak:[6],      temp:'18–26 °C', time:'Mediodía (10–15 h)',     sub:'Formicinae',    subC:'#065F46', trigger:'Días soleados y cálidos sin viento'},
+  Iberoformica:   {months:[6,7],       peak:[6],      temp:'20–28 °C', time:'Tarde (15–19 h)',        sub:'Formicinae',    subC:'#065F46', trigger:'Tardes cálidas de verano', endemic:1},
+  Lasius:         {months:[7,8],       peak:[8],      temp:'20–28 °C', time:'Mediodía (11–15 h)',     sub:'Formicinae',    subC:'#065F46', trigger:'Día caluroso y húmedo, preferentemente tras lluvia'},
+  Plagiolepis:    {months:[5,6,7,8],   peak:[6,7],    temp:'20–30 °C', time:'Tarde (14–18 h)',        sub:'Formicinae',    subC:'#065F46', trigger:'Tardes cálidas de verano'},
+  Nylanderia:     {months:[6,7,8],     peak:[7],      temp:'20–30 °C', time:'Tarde-noche (18–22 h)',  sub:'Formicinae',    subC:'#065F46', trigger:'Noches cálidas de verano'},
+  Lepisiota:      {months:[5,6,7],     peak:[6],      temp:'22–32 °C', time:'Tarde (14–18 h)',        sub:'Formicinae',    subC:'#065F46', trigger:'Tardes cálidas mediterráneas'},
+  Paratrechina:   {months:[5,6,7,8,9], peak:[7,8],    temp:'24–34 °C', time:'Tarde-noche (17–22 h)', sub:'Formicinae',    subC:'#065F46', trigger:'Calor prolongado', invasive:1},
+  Brachymyrmex:   {months:[5,6,7,8],   peak:[6,7],    temp:'20–28 °C', time:'Noche (20–24 h)',        sub:'Formicinae',    subC:'#065F46', trigger:'Noches cálidas de verano', invasive:1},
+  Polyergus:      {months:[7,8],       peak:[8],      temp:'22–30 °C', time:'Tarde (15–18 h)',        sub:'Formicinae',    subC:'#065F46', trigger:'Tardes calurosas de verano'},
+  Proformica:     {months:[5,6,7],     peak:[6],      temp:'20–30 °C', time:'Mediodía-tarde (10–16 h)',sub:'Formicinae',   subC:'#065F46', trigger:'Días soleados cálidos, zonas esteparias'},
+  Rossomyrmex:    {months:[6,7],       peak:[6],      temp:'22–30 °C', time:'Tarde (14–18 h)',        sub:'Formicinae',    subC:'#065F46', trigger:'Tardes cálidas en zonas áridas', endemic:1},
+  Bothriomyrmex:  {months:[6,7,8],     peak:[7],      temp:'22–32 °C', time:'Tarde (14–18 h)',        sub:'Dolichoderinae',subC:'#1E3A5F', trigger:'Días cálidos de verano'},
+  Dolichoderus:   {months:[6,7],       peak:[7],      temp:'18–26 °C', time:'Tarde (14–18 h)',        sub:'Dolichoderinae',subC:'#1E3A5F', trigger:'Tardes cálidas'},
+  Linepithema:    {months:[5,6,7,8,9], peak:[7,8],    temp:'20–30 °C', time:'Tarde-noche (17–22 h)', sub:'Dolichoderinae',subC:'#1E3A5F', trigger:'Días cálidos con humedad moderada', invasive:1},
+  Tapinoma:       {months:[5,6,7,8],   peak:[6,7],    temp:'20–30 °C', time:'Mediodía-tarde (11–17 h)',sub:'Dolichoderinae',subC:'#1E3A5F', trigger:'Días cálidos de verano'},
+  Technomyrmex:   {months:[6,7,8],     peak:[7],      temp:'22–30 °C', time:'Tarde-noche (16–22 h)', sub:'Dolichoderinae',subC:'#1E3A5F', trigger:'Calor estival'},
+  Anochetus:      {months:[6,7,8],     peak:[7],      temp:'20–28 °C', time:'Noche (20–24 h)',        sub:'Ponerinae',     subC:'#7C2D12', trigger:'Noches cálidas de verano'},
+  Cryptopone:     {months:[6,7,8],     peak:[7],      temp:'18–26 °C', time:'Tarde (14–19 h)',        sub:'Ponerinae',     subC:'#7C2D12', trigger:'Tardes cálidas'},
+  Hypoponera:     {months:[5,6,7,8,9], peak:[7],      temp:'18–26 °C', time:'Noche (20–24 h)',        sub:'Ponerinae',     subC:'#7C2D12', trigger:'Noches húmedas y cálidas'},
+  Ponera:         {months:[6,7,8],     peak:[7],      temp:'18–24 °C', time:'Tarde-noche (16–22 h)', sub:'Ponerinae',     subC:'#7C2D12', trigger:'Tardes cálidas de verano'},
+  Proceratium:    {months:[5,6,7],     peak:[6],      temp:'16–24 °C', time:'Noche',                  sub:'Ponerinae',     subC:'#7C2D12', trigger:'Noches cálidas de primavera-verano'},
+  Stigmatomma:    {months:[4,5,6],     peak:[5],      temp:'14–22 °C', time:'Tarde (14–18 h)',        sub:'Ponerinae',     subC:'#7C2D12', trigger:'Primavera cálida'},
+  Leptanilla:     {months:[4,5,6,7],   peak:[5,6],    temp:'16–24 °C', time:'Noche',                  sub:'Leptanillinae', subC:'#4C1D95', trigger:'Noches cálidas de primavera-verano'},
+  Anergates:      {months:[7,8,9],     peak:[8],      temp:'18–26 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Sin vuelo propio — parásito social de Tetramorium'},
+  Aphaenogaster:  {months:[4,5,6,7,8], peak:[5,6],    temp:'16–26 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Primavera cálida o inicio de verano'},
+  Cardiocondyla:  {months:[5,6,7,8,9,10,11],peak:[7,8],temp:'22–32 °C',time:'Todo el día',           sub:'Myrmicinae',    subC:'#78350F', trigger:'Especie polivoltina, vuelos en varias épocas del año'},
+  Chalepoxenus:   {months:[7,8,9],     peak:[8],      temp:'18–26 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Tardes calurosas (especie parásita)'},
+  Crematogaster:  {months:[7,8,9],     peak:[8],      temp:'20–28 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Tardes calurosas de verano-otoño'},
+  Formicoxenus:   {months:[7,8],       peak:[8],      temp:'16–24 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Tardes cálidas en bosques con Formica'},
+  Goniomma:       {months:[9,10,11],   peak:[10],     temp:'16–24 °C', time:'Mañana (8–12 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Primeras lluvias de otoño'},
+  Harpagoxenus:   {months:[7,8],       peak:[7,8],    temp:'16–22 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Tardes cálidas de verano'},
+  Leptothorax:    {months:[7,8],       peak:[8],      temp:'16–24 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Tardes de verano en zonas montañosas'},
+  Messor:         {months:[9,10,11],   peak:[10],     temp:'16–24 °C', time:'Mañana (8–12 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Primeras lluvias de otoño — trigger muy preciso'},
+  Monomorium:     {months:[5,6,7,8,9], peak:[7,8],    temp:'22–32 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Verano caluroso'},
+  Myrmecina:      {months:[6,7,8],     peak:[7],      temp:'16–24 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Días cálidos de verano'},
+  Myrmoxenus:     {months:[7,8,9],     peak:[8],      temp:'16–24 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Tardes calurosas (especie parásita)'},
+  Myrmica:        {months:[7,8],       peak:[7,8],    temp:'16–24 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Tardes cálidas y húmedas de verano'},
+  Oxyopomyrmex:   {months:[8,9,10],    peak:[9],      temp:'22–32 °C', time:'Mañana (8–12 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Lluvias de otoño en zonas áridas'},
+  Pheidole:       {months:[6,7,8],     peak:[7],      temp:'22–32 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Días calurosos de verano'},
+  Solenopsis:     {months:[6,7,8],     peak:[7],      temp:'20–30 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Días calurosos de verano'},
+  Stenamma:       {months:[4,5,6,7],   peak:[5,6],    temp:'14–22 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Primavera y principios de verano'},
+  Strongylognathus:{months:[7,8,9],    peak:[8],      temp:'18–26 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Tardes calurosas de verano'},
+  Strumigenys:    {months:[6,7,8,9],   peak:[7,8],    temp:'18–26 °C', time:'Tarde-noche (16–22 h)', sub:'Myrmicinae',    subC:'#78350F', trigger:'Tardes cálidas y húmedas'},
+  Teleutomyrmex:  {months:[7,8],       peak:[8],      temp:'16–22 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Parásito obligado de Tetramorium; raro'},
+  Tetramorium:    {months:[6,7,8],     peak:[7],      temp:'20–30 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Días cálidos de verano'},
+  Trichomyrmex:   {months:[6,7,8],     peak:[7],      temp:'22–32 °C', time:'Tarde (14–18 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Verano caluroso'},
+  Temnothorax:    {months:[6,7,8],     peak:[7],      temp:'18–28 °C', time:'Tarde (14–19 h)',        sub:'Myrmicinae',    subC:'#78350F', trigger:'Tardes cálidas de verano'},
+  Wasmannia:      {months:[5,6,7,8,9,10],peak:[7,8],  temp:'22–32 °C', time:'Tarde-noche',           sub:'Myrmicinae',    subC:'#78350F', trigger:'Invasora; vuelos en clima cálido prolongado', invasive:1}
+};
+
+// ─── DESCRIPTIONS FOR NOTABLE SPECIES ───────────────────────
+const DESCS = {
+  'lasius_niger':'La hormiga más común de la Península Ibérica. Sus vuelos nupciales en agosto son un espectáculo masivo: millones de reproductores vuelan simultáneamente formando nubes visibles a kilómetros. Forma colonias de hasta 15.000 individuos. Las reinas, tras el vuelo, pierden las alas y excavan solas una cámara fundacional sin alimentarse durante meses.',
+  'messor_barbarus':'Icónica hormiga cosechadora del Mediterráneo. Sus colonias de hasta 100.000 obreras recogen y almacenan semillas en graneros subterráneos. Los vuelos de otoño coinciden exactamente con las primeras lluvias. Las reinas son enormes (hasta 18 mm) y pueden vivir más de 20 años. Sus nidos crean montículos de tierra visibles a campo traviesa.',
+  'cataglyphis_iberica':'Una de las hormigas más veloces del mundo: alcanza 1 m/s. Navega por el desierto usando integración de rutas (dead reckoning) y la polarización de la luz solar como brújula. Resiste temperaturas letales para otros insectos. Sus vuelos nupciales al mediodía bajo el sol abrasador son únicos en el mundo animal.',
+  'cataglyphis_floricola':'Endémica exclusiva del Parque Nacional de Doñana (Huelva). Posiblemente la hormiga más amenazada de España. Sólo conocida de unas pocas localidades en el pinar del Coto. Sus vuelos nupciales se producen en primavera, antes del calor extremo del verano doñanés. Su taxonomía y ecología siguen siendo estudiadas activamente.',
+  'iberoformica_subrufa':'Único representante de un género endémico de la Península Ibérica. Grande y robusta, con típica coloración rojo-naranja. Nidifica en suelos sueltos de zonas semiáridas y estepas. Está ligada a ecosistemas ibéricos únicos. Sus relaciones con otras especies de Formica han generado hipótesis sobre evolución del comportamiento social.',
+  'rossomyrmex_minuchae':'Una de las hormigas más raras del mundo. Endémica de zonas áridas de Almería. Se conoce de menos de 20 localidades. Es parásita obligada de Proformica longiseta, cuyas colonias "esclaviza". Su descubrimiento en 1978 fue un acontecimiento científico. El cambio climático y la pérdida de hábitat la amenazan gravemente.',
+  'linepithema_humile':'La hormiga argentina, una de las peores especies invasoras del planeta. Originaria de Sudamérica, está presente en toda la costa mediterránea formando supercolonias de miles de km² de extensión. Elimina la fauna de hormigas nativas donde llega. Sus vuelos nupciales son escasos — se extiende principalmente por fisión de colonias.',
+  'formica_rufa':'La hormiga roja de los bosques, ingeniera del ecosistema. Sus montículos de acículas pueden superar 1 m de altura y albergar hasta 500.000 individuos. Protegen los bosques del pecho de plagas de insectos. En España está protegida en varias comunidades autónomas. Sus colonias pueden reproducirse por fisión además de vuelos nupciales.',
+  'formica_sanguinea':'La hormiga amazona de Europa. Realiza "razias esclavistas" contra colonias de Formica fusca y Formica cunicularia, robando pupas que eclosan como obreras que trabajan para los capturadores. Es uno de los comportamientos más estudiados en entomología.',
+  'polyergus_rufescens':'La hormiga amazona europea, esclavista extrema. Sus obreras han perdido la capacidad de alimentarse solas y dependen totalmente de esclavas de Formica. Los vuelos nupciales de agosto son espectaculares: miles de reproductores emergen en horas. La reina parasita activamente nidos de Formica.',
+  'temnothorax_albipennis':'Famosa por los experimentos de Thomas Seeley y Phoebe Seger sobre "toma de decisiones colectiva". Las colonias de apenas 50-200 individuos eligen su nuevo nido mediante una sofisticada danza de reclutamiento. Se ha convertido en modelo de estudio del comportamiento de enjambre y computación distribuida. Habita grietas rocosas y cortezas en bosques.',
+  'solenopsis_fugax':'La "hormiga ladrona". Sus diminutas obreras (1.5 mm) penetran en nidos de otras hormigas para robar larvas y huevos. Construyen sus propias galerías junto a las colonias huésped. Tiene el aguijón más doloroso en proporción a su tamaño de todas las hormigas europeas. Sus reinas son las más pequeñas de Europa.',
+  'paratrechina_longicornis':'La "hormiga loca" de patas largas. Movimientos erráticos e impredecibles la hacen difícil de capturar. Introductora global presente en todos los continentes habitados. En el Mediterráneo es una plaga de viviendas. Omnívora generalista, puede desestabilizar ecosistemas locales.',
+  'wasmannia_auropunctata':'La "hormiga eléctrica" o "small fire ant". Su picadura quema como un cigarrillo. Invasora devastadora en islas y zonas tropicales. En España presente principalmente en Canarias y zonas costeras. Capaz de cegar animales grandes (vacas, humanos) con sus picaduras en los ojos. Forma supercolonias sin conflictos entre reinas.',
+  'pheidole_megacephala':'La "big-headed ant" africana. Una de las 100 peores invasoras del mundo. Sus superobreras de cabeza enorme son capaces de partir semillas y defender la colonia. Extermina la fauna de hormigas nativa donde se establece. En España su presencia es aún limitada y objeto de control.',
+  'crematogaster_scutellaris':'La icónica hormiga acróbata mediterránea. Su abdomen en forma de corazón, erguido cuando se defiende, la hace inconfundible. Construye nidos de cartón en árboles (especialmente pinos y encinas). Segrega ácido fórmico y veneno de la boca. Sus vuelos nupciales de agosto-septiembre son visibles en zonas arboladas mediterráneas.',
+  'lasius_fuliginosus':'La hormiga más llamativa de Europa: negra lacada, brillante como barniz. Nidifica en madera muerta y construye complejas estructuras de cartón fungoso que pueden durar décadas. Usa hongos simbiotes para cimentar su nido. Emite olor a limón cuando se la aplasta (ácido cítrico). Sus colonias pueden alcanzar 15.000 obreras.',
+  'tapinoma_nigerrimum':'Especie con supercolonias que pueden alcanzar los 35 km² en la costa mediterránea española. Una de las colonias más grandes documentadas en el mundo es la "supercolonia del Maresme" (Cataluña). Plaga importante en zonas urbanas y agrícolas. Desplaza a hormigas nativas por competencia. Tiene olor fétido cuando se aplasta.',
+  'camponotus_cruentatus':'Una de las hormigas más grandes y espectaculares de la Península Ibérica: hasta 14 mm de longitud. Coloración roja y negra inconfundible. Nocturna y arborícola, nidifica en madera de encinas y alcornoques. Sus vuelos nupciales nocturnos de mayo-junio son llamativos por el gran tamaño de reproductores.',
+  'camponotus_sylvaticus':'La hormiga carpintera forestal ibérica. Forma colonias de hasta 10.000 obreras bajo piedras y en suelos de bosques mediterráneos. Activa nocturnamente, patrulla territorios de hasta 30 m de radio desde el nido. Importante depredadora de insectos. Vuela en mayo-junio en noches cálidas.',
+  'messor_capitatus':'La cosechadora de cabeza grande. Sus superobreras tienen la cabeza enormemente hipertrofiada para triturar semillas duras. Colonias de hasta 30.000 obreras. Sus caminos de aprovisionamiento pueden alcanzar 50 m. Vuela en otoño, sincronizada con las lluvias como todas las Messor ibéricas.',
+  'lasius_flavus':'La hormiga amarilla subterránea, conocida como "hormiga ganadera". Cultiva pulgones en sus galerías como fuente de melaza. Apenas sale a la superficie. Sus reinas, recién fecundadas, deben parasitar nidos de otras hormigas (principalmente Lasius niger) para fundar una colonia. Sus vuelos de verano son masivos.',
+  'formica_polyctena':'La hormiga del bosque europea. Colonias poliginas con múltiples reinas, que permiten poblaciones de millones de individuos. Un solo complejo de nidos puede contener varios montículos interconectados. Depredadora clave de orugas y otros insectos forestales. Su picadura con ácido fórmico es efectiva a 30 cm de distancia.',
+  'myrmica_rubra':'La hormiga roja europea, una de las pocas hormigas europeas con aguijón funcional. Sus picaduras son intensamente dolorosas y pueden causar reacciones alérgicas. Muy abundante en zonas húmedas y prados. Tiene un complejo sistema de comunicación con feromonas. Sus vuelos nupciales de julio-agosto son muy localizados.',
+  'tetramorium_caespitum':'La hormiga del pavimento. Responsable de las "guerras de hormigas" que se observan en bordillos y aceras en primavera. Colonias de 3.000-5.000 obreras que libran batallas épicas por territorio. Una de las hormigas más tolerantes a la perturbación humana. Presente en toda Iberia, desde el nivel del mar hasta 2.000 m.',
+  'lasius_neglectus':'La hormiga invasora europea de origen balcánico. Forma supercolonias que desplazan a las hormigas nativas. Establecida en varias ciudades españolas (Madrid, Barcelona, Huelva). Su nombre "neglectus" (descuidada) hace referencia a que fue confundida durante décadas con Lasius alienus antes de ser descrita como especie nueva en 1990.',
+  'aphaenogaster_senilis':'Una de las hormigas dispersoras de semillas más importantes del Mediterráneo. Recoge diásporas (semillas con eleosoma) de más de 100 especies vegetales. Elemento clave en la regeneración de matorrales ibéricos. Sus colonias son pequeñas (100-500 obreras) pero su impacto ecológico es enorme. Endémica efectiva del Mediterráneo occidental.',
+  'pheidole_pallidula':'La hormiga granívora más común del Mediterráneo. Sus superobreras de cabeza gigante (castas dimórficas) trituran semillas duras para alimentar a la colonia. Competidora directa de las Messor. Forma colonias densas con múltiples entradas y complejos graneros subterráneos. Sus vuelos de verano son abundantes.',
+  'formica_cunicularia':'Una de las Formica más comunes de la Península. Nidifica en suelos arcillosos con poca vegetación, donde crea redes de galerías extensas. Importante depredadora y carroñera. Especie huésped de varias especies de Strongylognathus que parasitan sus nidos. Vuela en mayo-julio en días soleados.'
+};
+
+// ─── SPECIES HELPER ─────────────────────────────────────────
+function S(n,sci,com,x={}){
+  const g=sci.split(' ')[0];
+  const d=GD[g]||{};
+  const id=sci.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+  return {n,sci,com,id,...d,...x};
+}
+
+// ─── ALL 297 IBERIAN SPECIES ────────────────────────────────
+const SP = [
+  // Formicinae — Camponotus (1-18)
+  S(1,'Camponotus aethiops','Hormiga carpintera negra mediterránea'),
+  S(2,'Camponotus amaurus','Hormiga carpintera montañesa',{endemic:1}),
+  S(3,'Camponotus barbaricus','Hormiga carpintera bárbara',{endemic:1}),
+  S(4,'Camponotus cruentatus','Hormiga carpintera bicolor'),
+  S(5,'Camponotus fallax','Hormiga carpintera de corteza',{months:[5,6,7],peak:[6]}),
+  S(6,'Camponotus foreli','Hormiga carpintera de Forel',{endemic:1}),
+  S(7,'Camponotus gestroi','Hormiga carpintera de Gestro'),
+  S(8,'Camponotus haroi','Hormiga carpintera del sureste',{endemic:1}),
+  S(9,'Camponotus herculeanus','Hormiga carpintera hércules',{months:[6,7],peak:[6,7],temp:'14–20 °C'}),
+  S(10,'Camponotus lateralis','Hormiga carpintera lateral'),
+  S(11,'Camponotus ligniperda','Hormiga carpintera de la madera',{months:[6,7],peak:[6,7]}),
+  S(12,'Camponotus micans','Hormiga carpintera brillante'),
+  S(13,'Camponotus piceus','Hormiga carpintera oscura'),
+  S(14,'Camponotus pilicornis','Hormiga carpintera pelicuernos'),
+  S(15,'Camponotus ruber','Hormiga carpintera roja'),
+  S(16,'Camponotus sylvaticus','Hormiga carpintera forestal'),
+  S(17,'Camponotus universitatis','Hormiga carpintera universitaria',{endemic:1}),
+  S(18,'Camponotus vagus','Hormiga carpintera vagabunda'),
+  // Colobopsis (19-20)
+  S(19,'Colobopsis imitans','Hormiga tapón imitadora'),
+  S(20,'Colobopsis truncata','Hormiga tapón de cabeza bloqueante'),
+  // Cataglyphis (21-30)
+  S(21,'Cataglyphis douwesi','Hormiga del desierto de Douwes',{endemic:1}),
+  S(22,'Cataglyphis floricola','Hormiga de las flores de Doñana',{endemic:1,months:[3,4,5],peak:[4],temp:'22–32 °C'}),
+  S(23,'Cataglyphis gadeai','Hormiga del desierto de Gadea',{endemic:1}),
+  S(24,'Cataglyphis hispanica','Hormiga del desierto hispánica',{endemic:1}),
+  S(25,'Cataglyphis humeya','Hormiga del desierto alpujarreña',{endemic:1}),
+  S(26,'Cataglyphis iberica','Hormiga del desierto ibérica'),
+  S(27,'Cataglyphis piliscapa','Hormiga del desierto peluda'),
+  S(28,'Cataglyphis rosenhaueri','Hormiga del desierto de Rosenauer',{endemic:1}),
+  S(29,'Cataglyphis tartessica','Hormiga del desierto tartésica',{endemic:1}),
+  S(30,'Cataglyphis velox','Hormiga del desierto veloz'),
+  // Formica (31-53)
+  S(31,'Formica bruni','Hormiga de los prados húmedos',{months:[5,6],peak:[6]}),
+  S(32,'Formica cinerea','Hormiga gris de las arenas'),
+  S(33,'Formica clara','Hormiga clarita de arenales'),
+  S(34,'Formica cunicularia','Hormiga excavadora'),
+  S(35,'Formica decipiens','Hormiga engañosa'),
+  S(36,'Formica dusmeti','Hormiga de Dusmet',{endemic:1}),
+  S(37,'Formica exsecta','Hormiga de nuca escotada',{months:[6,7],peak:[7]}),
+  S(38,'Formica foreli','Hormiga de Forel'),
+  S(39,'Formica frontalis','Hormiga frontal meridional'),
+  S(40,'Formica fusca','Hormiga fusca gris oscura'),
+  S(41,'Formica gagates','Hormiga azabache'),
+  S(42,'Formica gerardi','Hormiga de Gérard',{endemic:1}),
+  S(43,'Formica lemani','Hormiga de Leman',{months:[6,7],peak:[7]}),
+  S(44,'Formica lugubris','Hormiga lugubre de los abetos',{months:[6,7],peak:[6,7],temp:'14–22 °C'}),
+  S(45,'Formica paralugubris','Hormiga paralúgubre',{months:[6,7],peak:[6,7]}),
+  S(46,'Formica picea','Hormiga picea de turberas',{months:[6,7],peak:[7]}),
+  S(47,'Formica polyctena','Hormiga del bosque europea'),
+  S(48,'Formica pratensis','Hormiga de los prados'),
+  S(49,'Formica pressilabris','Hormiga labio presionado'),
+  S(50,'Formica rufa','Hormiga roja de los bosques'),
+  S(51,'Formica rufibarbis','Hormiga barbirrubia'),
+  S(52,'Formica sanguinea','Hormiga amazona esclavista'),
+  S(53,'Formica selysi','Hormiga de Selys',{months:[5,6],peak:[5,6]}),
+  // Iberoformica (54)
+  S(54,'Iberoformica subrufa','Iberoformica rojiza',{endemic:1}),
+  // Lasius (55-80)
+  S(55,'Lasius alienus','Hormiga alienada de jardines'),
+  S(56,'Lasius balearicus','Hormiga de las Baleares',{endemic:1}),
+  S(57,'Lasius bicornis','Hormiga bicorne amarilla',{months:[7,8,9],peak:[8]}),
+  S(58,'Lasius brunneus','Hormiga parda de madera'),
+  S(59,'Lasius carniolicus','Hormiga de Carniola',{months:[7,8,9],peak:[8]}),
+  S(60,'Lasius cinereus','Hormiga cenicienta'),
+  S(61,'Lasius citrinus','Hormiga amarilla citrina',{months:[8,9],peak:[8,9]}),
+  S(62,'Lasius distinguendus','Hormiga distinguible',{months:[7,8,9],peak:[8]}),
+  S(63,'Lasius emarginatus','Hormiga emarginada bicolor'),
+  S(64,'Lasius flavus','Hormiga amarilla subterránea'),
+  S(65,'Lasius fuliginosus','Hormiga negra lacada'),
+  S(66,'Lasius grandis','Hormiga negra grande atlántica'),
+  S(67,'Lasius jensi','Hormiga de Jens',{months:[7,8,9],peak:[8]}),
+  S(68,'Lasius lasioides','Hormiga lasioides meridional',{months:[8,9],peak:[8]}),
+  S(69,'Lasius meridionalis','Hormiga meridional'),
+  S(70,'Lasius mixtus','Hormiga mixta subterránea',{months:[7,8,9],peak:[8]}),
+  S(71,'Lasius myops','Hormiga miope',{months:[7,8,9],peak:[8]}),
+  S(72,'Lasius neglectus','Hormiga invasora europea',{invasive:1}),
+  S(73,'Lasius niger','Hormiga negra común'),
+  S(74,'Lasius paralienus','Hormiga paraliena'),
+  S(75,'Lasius piliferus','Hormiga pilífera',{months:[7,8,9],peak:[8]}),
+  S(76,'Lasius platythorax','Hormiga de tórax ancho de bosques'),
+  S(77,'Lasius psammophilus','Hormiga de las dunas arenosas'),
+  S(78,'Lasius reginae','Hormiga reina de las dunas',{months:[7,8],peak:[8]}),
+  S(79,'Lasius sabularum','Hormiga de arenales',{months:[8,9],peak:[8]}),
+  S(80,'Lasius umbratus','Hormiga umbrosa subterránea',{months:[8,9],peak:[9]}),
+  // Plagiolepis (81-85)
+  S(81,'Plagiolepis grassei','Plagiolepis de Grassé',{endemic:1,months:[5,6,7]}),
+  S(82,'Plagiolepis pygmaea','Hormiga pigmea mediterránea'),
+  S(83,'Plagiolepis pyrenaica','Plagiolepis del Pirineo',{endemic:1}),
+  S(84,'Plagiolepis schmitzii','Plagiolepis de Schmitz'),
+  S(85,'Plagiolepis taurica','Plagiolepis táurica'),
+  // Nylanderia (86-87)
+  S(86,'Nylanderia jaegerskioeldi','Nylanderia de Jägerskiöld'),
+  S(87,'Nylanderia vividula','Hormiga viva de jardines'),
+  // Lepisiota (88-90)
+  S(88,'Lepisiota frauenfeldi','Lepisiota mediterránea'),
+  S(89,'Lepisiota melas','Lepisiota negra'),
+  S(90,'Lepisiota nigra','Lepisiota oscura norte-africana'),
+  // Paratrechina (91)
+  S(91,'Paratrechina longicornis','Hormiga loca de patas largas',{invasive:1}),
+  // Brachymyrmex (92)
+  S(92,'Brachymyrmex patagonicus','Hormiga patagónica',{invasive:1}),
+  // Polyergus (93)
+  S(93,'Polyergus rufescens','Hormiga amazona escarlata',{months:[7,8],peak:[8]}),
+  // Proformica (94-97)
+  S(94,'Proformica cerdanyensis','Proformica de la Cerdanya',{endemic:1}),
+  S(95,'Proformica ferreri','Proformica de Ferrer',{endemic:1}),
+  S(96,'Proformica longiseta','Proformica de bigotes largos'),
+  S(97,'Proformica nasuta','Proformica picuda'),
+  // Rossomyrmex (98)
+  S(98,'Rossomyrmex minuchae','Hormiga parásita almeriense',{endemic:1,rare:1,months:[6],peak:[6]}),
+  // Dolichoderinae — Bothriomyrmex (99-102)
+  S(99,'Bothriomyrmex atlantis','Bothriomyrmex atlántico'),
+  S(100,'Bothriomyrmex communista','Bothriomyrmex comunista'),
+  S(101,'Bothriomyrmex corsicus','Bothriomyrmex corso'),
+  S(102,'Bothriomyrmex meridionalis','Bothriomyrmex meridional'),
+  // Dolichoderus (103)
+  S(103,'Dolichoderus quadripunctatus','Hormiga de los cuatro puntos arborícola'),
+  // Linepithema (104)
+  S(104,'Linepithema humile','Hormiga argentina',{invasive:1,months:[5,6,7,8,9],peak:[7,8]}),
+  // Tapinoma (105-113)
+  S(105,'Tapinoma darioi','Tapinoma de Dario',{endemic:1}),
+  S(106,'Tapinoma erraticum','Tapinoma errático'),
+  S(107,'Tapinoma ibericum','Tapinoma ibérico',{endemic:1}),
+  S(108,'Tapinoma madeirense','Tapinoma de Madeira',{months:[5,6,7,8,9],peak:[7]}),
+  S(109,'Tapinoma magnum','Tapinoma gigante invasor',{invasive:1,months:[5,6,7,8,9],peak:[7]}),
+  S(110,'Tapinoma melanocephalum','Tapinoma fantasma',{invasive:1,months:[4,5,6,7,8,9,10],peak:[7,8]}),
+  S(111,'Tapinoma nigerrimum','Tapinoma negrísimo de supercolonia'),
+  S(112,'Tapinoma pygmaeum','Tapinoma pigmeo'),
+  S(113,'Tapinoma simrothi','Tapinoma de Simroth'),
+  // Technomyrmex (114)
+  S(114,'Technomyrmex vexatus','Technomyrmex molesto'),
+  // Ponerinae (115-127)
+  S(115,'Anochetus ghilianii','Hormiga de mandíbulas trampa'),
+  S(116,'Cryptopone ochracea','Hormiga ponera ocrácea'),
+  S(117,'Hypoponera abeillei','Hypoponera de Abeille'),
+  S(118,'Hypoponera eduardi','Hypoponera de Eduardo'),
+  S(119,'Hypoponera ergatandria','Hypoponera ergatándrica'),
+  S(120,'Hypoponera punctatissima','Hypoponera puntuada cosmopolita',{invasive:1,months:[4,5,6,7,8,9,10]}),
+  S(121,'Hypoponera ragusai','Hypoponera de Ragusa'),
+  S(122,'Ponera coarctata','Hormiga ponera constricta'),
+  S(123,'Ponera testacea','Hormiga ponera testácea'),
+  S(124,'Proceratium melinum','Proceratium de la miel'),
+  S(125,'Stigmatomma emeryi','Stigmatomma de Emery'),
+  S(126,'Stigmatomma gaetulicum','Stigmatomma gaetúlico'),
+  S(127,'Stigmatomma impressifrons','Stigmatomma de frente impresa'),
+  // Leptanillinae (128-132)
+  S(128,'Leptanilla charoneae','Leptanilla de Caronte',{endemic:1}),
+  S(129,'Leptanilla plutonia','Leptanilla plutónica',{endemic:1}),
+  S(130,'Leptanilla revelieri','Leptanilla de Reveliére'),
+  S(131,'Leptanilla theryi','Leptanilla de Théry',{endemic:1}),
+  S(132,'Leptanilla zaballosi','Leptanilla de Zaballos',{endemic:1}),
+  // Myrmicinae (133-252)
+  S(133,'Anergates atratulus','Hormiga parásita sin obreras',{months:[7,8,9],peak:[8]}),
+  S(134,'Aphaenogaster cardenai','Aphaenogaster de Cardeña',{endemic:1}),
+  S(135,'Aphaenogaster dulcineae','Aphaenogaster de Dulcinea',{endemic:1}),
+  S(136,'Aphaenogaster gemella','Aphaenogaster gemela'),
+  S(137,'Aphaenogaster gibbosa','Aphaenogaster jorobada mediterránea'),
+  S(138,'Aphaenogaster iberica','Aphaenogaster ibérica',{endemic:1}),
+  S(139,'Aphaenogaster ichnusa','Aphaenogaster de Ichnusa'),
+  S(140,'Aphaenogaster senilis','Aphaenogaster dispersora de semillas'),
+  S(141,'Aphaenogaster splendida','Aphaenogaster espléndida mediterránea'),
+  S(142,'Aphaenogaster striativentris','Aphaenogaster estriadiventral'),
+  S(143,'Aphaenogaster subterranea','Aphaenogaster subterránea'),
+  S(144,'Aphaenogaster ulibeli','Aphaenogaster de Ulibel',{endemic:1}),
+  S(145,'Cardiocondyla batesii','Cardiocondyla de Bates'),
+  S(146,'Cardiocondyla elegans','Cardiocondyla elegante'),
+  S(147,'Cardiocondyla emeryi','Cardiocondyla de Emery'),
+  S(148,'Cardiocondyla mauritanica','Cardiocondyla mauritana'),
+  S(149,'Cardiocondyla nigra','Cardiocondyla negra'),
+  S(150,'Cardiocondyla obscurior','Cardiocondyla oscurecida'),
+  S(151,'Chalepoxenus kutteri','Chalepoxenus de Kutter'),
+  S(152,'Chalepoxenus muellerianus','Chalepoxenus de Müller'),
+  S(153,'Crematogaster auberti','Crematogaster de Aubert'),
+  S(154,'Crematogaster inermis','Crematogaster inerme ibérica'),
+  S(155,'Crematogaster laestrygon','Crematogaster lestrigona'),
+  S(156,'Crematogaster scutellaris','Hormiga acróbata mediterránea'),
+  S(157,'Crematogaster sordidula','Crematogaster sórdida'),
+  S(158,'Formicoxenus nitidulus','Formicoxenus inquilino brillante'),
+  S(159,'Goniomma baeticum','Goniomma bético',{endemic:1}),
+  S(160,'Goniomma blanci','Goniomma de Blanc'),
+  S(161,'Goniomma collingwoodi','Goniomma de Collingwood'),
+  S(162,'Goniomma compressisquama','Goniomma de escama comprimida'),
+  S(163,'Goniomma decipiens','Goniomma engañoso'),
+  S(164,'Goniomma hispanicum','Goniomma hispánico',{endemic:1}),
+  S(165,'Goniomma kugleri','Goniomma de Kugler'),
+  S(166,'Harpagoxenus sublaevis','Harpagoxenus semilaevigado'),
+  S(167,'Leptothorax acervorum','Leptotórax montaraz'),
+  S(168,'Leptothorax gredleri','Leptotórax de Gredler'),
+  S(169,'Leptothorax muscorum','Leptotórax del musgo'),
+  S(170,'Messor barbarus','Hormiga cosechadora bárbara'),
+  S(171,'Messor bouvieri','Hormiga cosechadora de Bouvier'),
+  S(172,'Messor capitatus','Hormiga cosechadora de cabezota'),
+  S(173,'Messor celiae','Hormiga cosechadora de Celia',{endemic:1}),
+  S(174,'Messor erwini','Hormiga cosechadora de Erwin',{endemic:1}),
+  S(175,'Messor hispanicus','Hormiga cosechadora hispánica',{endemic:1}),
+  S(176,'Messor ibericus','Hormiga cosechadora ibérica',{endemic:1}),
+  S(177,'Messor lobicornis','Hormiga cosechadora de cuernolóbulo'),
+  S(178,'Messor lusitanicus','Hormiga cosechadora lusitana',{endemic:1}),
+  S(179,'Messor marocanus','Hormiga cosechadora marroquí'),
+  S(180,'Messor timidus','Hormiga cosechadora tímida'),
+  S(181,'Monomorium algiricum','Monomorium argelino'),
+  S(182,'Monomorium andrei','Monomorium de André'),
+  S(183,'Monomorium carbonarium','Monomorium carbonero'),
+  S(184,'Monomorium exiguum','Monomorium ínfimo'),
+  S(185,'Monomorium hesperium','Monomorium hespéreo'),
+  S(186,'Monomorium monomorium','Monomorium típico'),
+  S(187,'Monomorium pharaonis','Hormiga faraón',{invasive:1,months:[4,5,6,7,8,9,10,11],peak:[7,8]}),
+  S(188,'Monomorium salomonis','Monomorium de Salomón'),
+  S(189,'Monomorium subopacum','Monomorium subopaco'),
+  S(190,'Myrmecina graminicola','Myrmecina de los prados'),
+  S(191,'Myrmoxenus bernardi','Myrmoxenus de Bernard'),
+  S(192,'Myrmoxenus kraussei','Myrmoxenus de Krausse'),
+  S(193,'Myrmoxenus ravouxi','Myrmoxenus de Ravoux'),
+  S(194,'Myrmoxenus stumperi','Myrmoxenus de Stumper'),
+  S(195,'Myrmica aloba','Myrmica aloba pirenaica',{months:[7,8,9],peak:[8]}),
+  S(196,'Myrmica bibikoffi','Myrmica de Bibikoff',{endemic:1,months:[7,8,9],peak:[8]}),
+  S(197,'Myrmica karavajevi','Myrmica de Karawajev',{months:[7,8,9],peak:[8]}),
+  S(198,'Myrmica lemasnei','Myrmica de Le Masne',{endemic:1}),
+  S(199,'Myrmica lobulicornis','Myrmica antenolobulada'),
+  S(200,'Myrmica martini','Myrmica de Martin',{endemic:1}),
+  S(201,'Myrmica rubra','Hormiga roja europea con aguijón'),
+  S(202,'Myrmica ruginodis','Myrmica de nudo rugoso'),
+  S(203,'Myrmica sabuleti','Myrmica de los arenales'),
+  S(204,'Myrmica scabrinodis','Myrmica de nudo áspero'),
+  S(205,'Myrmica schencki','Myrmica de Schenck'),
+  S(206,'Myrmica specioides','Myrmica parecida a speci'),
+  S(207,'Myrmica spinosior','Myrmica más espinosa'),
+  S(208,'Myrmica sulcinodis','Myrmica de nudo surcado',{months:[7,8,9],peak:[8]}),
+  S(209,'Myrmica vandeli','Myrmica de Vandel',{endemic:1}),
+  S(210,'Myrmica wesmaeli','Myrmica de Wesmael'),
+  S(211,'Myrmica xavieri','Myrmica de Xavier',{endemic:1}),
+  S(212,'Oxyopomyrmex magnus','Oxyopomyrmex grande'),
+  S(213,'Oxyopomyrmex saulcyi','Oxyopomyrmex de Saulcy'),
+  S(214,'Pheidole cf. navigans','Pheidole de cabeza invasora',{invasive:1}),
+  S(215,'Pheidole indica','Pheidole india',{invasive:1}),
+  S(216,'Pheidole megacephala','Hormiga cabezuda africana',{invasive:1}),
+  S(217,'Pheidole pallidula','Hormiga granívora mediterránea'),
+  S(218,'Solenopsis fairchildi','Solenopsis de Fairchild'),
+  S(219,'Solenopsis fugax','Hormiga ladrona europea'),
+  S(220,'Solenopsis latro','Solenopsis ladrona grande'),
+  S(221,'Solenopsis lusitanica','Solenopsis lusitana',{endemic:1}),
+  S(222,'Solenopsis oraniensis','Solenopsis oranesa'),
+  S(223,'Solenopsis orbula','Solenopsis orbicular'),
+  S(224,'Stenamma debile','Stenamma débil'),
+  S(225,'Stenamma punctiventre','Stenamma de vientre puntuado'),
+  S(226,'Stenamma striatulum','Stenamma estriado',{endemic:1}),
+  S(227,'Stenamma westwoodi','Stenamma de Westwood'),
+  S(228,'Strongylognathus caeciliae','Strongylognathus de Cecilia',{endemic:1}),
+  S(229,'Strongylognathus huberi','Strongylognathus de Huber'),
+  S(230,'Strongylognathus testaceus','Strongylognathus testáceo'),
+  S(231,'Strumigenys argiola','Strumigenys argiolada'),
+  S(232,'Strumigenys baudueri','Strumigenys de Bauduer'),
+  S(233,'Strumigenys membranifera','Strumigenys membranosa'),
+  S(234,'Strumigenys silvestrii','Strumigenys de Silvestri'),
+  S(235,'Strumigenys tenuipilis','Strumigenys filopilosa'),
+  S(236,'Teleutomyrmex kutteri','Teleutomyrmex de Kutter'),
+  S(237,'Teleutomyrmex schneideri','Teleutomyrmex de Schneider',{rare:1}),
+  S(238,'Tetramorium alpestre','Tetramorium alpestre montano'),
+  S(239,'Tetramorium bicarinatum','Tetramorium bicarinado',{invasive:1}),
+  S(240,'Tetramorium biskrense','Tetramorium biscreño'),
+  S(241,'Tetramorium caespitum','Hormiga del pavimento'),
+  S(242,'Tetramorium caldarium','Tetramorium caldario'),
+  S(243,'Tetramorium exasperatum','Tetramorium exasperado'),
+  S(244,'Tetramorium forte','Tetramorium fuerte'),
+  S(245,'Tetramorium immigrans','Tetramorium inmigrante'),
+  S(246,'Tetramorium impurum','Tetramorium impuro'),
+  S(247,'Tetramorium indocile','Tetramorium indócil'),
+  S(248,'Tetramorium lanuginosum','Tetramorium lanudo',{invasive:1}),
+  S(249,'Tetramorium meridionale','Tetramorium meridional'),
+  S(250,'Tetramorium semilaeve','Tetramorium semiliso'),
+  S(251,'Trichomyrmex destructor','Hormiga destructora',{invasive:1}),
+  S(252,'Trichomyrmex mayri','Trichomyrmex de Mayr'),
+  // Temnothorax (253-296)
+  S(253,'Temnothorax affinis','Temnothorax afín'),
+  S(254,'Temnothorax albipennis','Temnothorax alabanca — modelo científico'),
+  S(255,'Temnothorax alfacarensis','Temnothorax de Alfacar',{endemic:1}),
+  S(256,'Temnothorax algiricus','Temnothorax argelino'),
+  S(257,'Temnothorax angustulus','Temnothorax angosto'),
+  S(258,'Temnothorax ansei','Temnothorax de Ansé',{endemic:1}),
+  S(259,'Temnothorax aveli','Temnothorax de Avell',{endemic:1}),
+  S(260,'Temnothorax baeticus','Temnothorax bético',{endemic:1}),
+  S(261,'Temnothorax bejaraniensis','Temnothorax de Béjar',{endemic:1}),
+  S(262,'Temnothorax binodis','Temnothorax de dos nudos'),
+  S(263,'Temnothorax caesari','Temnothorax de César',{endemic:1}),
+  S(264,'Temnothorax cagnianti','Temnothorax de Cagniant'),
+  S(265,'Temnothorax conatensis','Temnothorax de Conata',{endemic:1}),
+  S(266,'Temnothorax continentalis','Temnothorax continental'),
+  S(267,'Temnothorax convexus','Temnothorax convexo'),
+  S(268,'Temnothorax crassispinosus','Temnothorax de espina gruesa'),
+  S(269,'Temnothorax cristinae','Temnothorax de Cristina',{endemic:1}),
+  S(270,'Temnothorax curtulus','Temnothorax curtito'),
+  S(271,'Temnothorax esteli','Temnothorax de Estel',{endemic:1}),
+  S(272,'Temnothorax exilis','Temnothorax exiguo'),
+  S(273,'Temnothorax flavispinus','Temnothorax espina amarilla'),
+  S(274,'Temnothorax formosus','Temnothorax bonito'),
+  S(275,'Temnothorax gredosi','Temnothorax de Gredos',{endemic:1}),
+  S(276,'Temnothorax grouvellei','Temnothorax de Grouvelle'),
+  S(277,'Temnothorax ibericus','Temnothorax ibérico',{endemic:1}),
+  S(278,'Temnothorax interruptus','Temnothorax interrumpido'),
+  S(279,'Temnothorax lichtensteini','Temnothorax de Lichtenstein'),
+  S(280,'Temnothorax longispinosus','Temnothorax de espina larga'),
+  S(281,'Temnothorax montivagus','Temnothorax montaraz'),
+  S(282,'Temnothorax nadigi','Temnothorax de Nadig'),
+  S(283,'Temnothorax naeviventris','Temnothorax vientrimancha'),
+  S(284,'Temnothorax niger','Temnothorax negro'),
+  S(285,'Temnothorax nigriceps','Temnothorax cabanegra'),
+  S(286,'Temnothorax nylanderi','Temnothorax de Nylander'),
+  S(287,'Temnothorax pardoi','Temnothorax de Pardo',{endemic:1}),
+  S(288,'Temnothorax parvulus','Temnothorax pequeñísimo'),
+  S(289,'Temnothorax platycephalus','Temnothorax de cabeza plana'),
+  S(290,'Temnothorax racovitzai','Temnothorax de Racovitza'),
+  S(291,'Temnothorax recedens','Temnothorax retrocedente'),
+  S(292,'Temnothorax schaufussi','Temnothorax de Schaufuss'),
+  S(293,'Temnothorax tuberum','Temnothorax de los tubérculos'),
+  S(294,'Temnothorax tyndalei','Temnothorax de Tyndal',{endemic:1}),
+  S(295,'Temnothorax unifasciatus','Temnothorax unifajeado'),
+  S(296,'Temnothorax universitatis','Temnothorax universitario',{endemic:1}),
+  // Wasmannia (297)
+  S(297,'Wasmannia auropunctata','Hormiga eléctrica',{invasive:1})
+];
+
+// index by id
+const SP_MAP = {};
+SP.forEach(s=>{ SP_MAP[s.id]=s; });
+
+// ─── ESPECIES DE LOGROÑO / LA RIOJA (nºs del checklist) ─────
+// Selección basada en distribución conocida: clima mediterráneo-continental,
+// altitud 384 m, entorno de cultivos, pinares, ribera del Ebro y sierras.
+const LOGRONO_NS = new Set([
+  1,4,13,16,18,    // Camponotus: aethiops, cruentatus, piceus, sylvaticus, vagus
+  34,40,41,42,47,48,50,51,52,53, // Formica: cunicularia,fusca,gagates,gerardi,polyctena,pratensis,rufa,rufibarbis,sanguinea,selysi
+  55,58,63,64,65,73,74,76,   // Lasius: alienus,brunneus,emarginatus,flavus,fuliginosus,niger,paralienus,platythorax
+  82,            // Plagiolepis pygmaea
+  86,93,         // Nylanderia jaegerskioeldi, Polyergus rufescens
+  99,103,106,    // Bothriomyrmex atlantis, Dolichoderus quadripunctatus, Tapinoma erraticum
+  117,122,       // Hypoponera abeillei, Ponera coarctata
+  136,137,140,143, // Aphaenogaster: gemella,gibbosa,senilis,subterranea
+  146,           // Cardiocondyla elegans
+  153,156,157,   // Crematogaster: auberti,scutellaris,sordidula
+  158,           // Formicoxenus nitidulus (con Formica)
+  167,169,       // Leptothorax: acervorum,muscorum
+  170,171,177,   // Messor: barbarus,bouvieri,lobicornis
+  183,189,       // Monomorium: carbonarium,subopacum
+  190,           // Myrmecina graminicola
+  201,202,203,204,205, // Myrmica: rubra,ruginodis,sabuleti,scabrinodis,schencki
+  217,219,       // Pheidole pallidula, Solenopsis fugax
+  230,           // Strongylognathus testaceus
+  241,244,245,246,249,250, // Tetramorium: caespitum,forte,immigrans,impurum,meridionale,semilaeve
+  253,262,266,278,283,286,291,293,295  // Temnothorax: affinis,binodis,continentalis,interruptus,naeviventris,nylanderi,recedens,tuberum,unifasciatus
+]);
+SP.forEach(s=>{ if(LOGRONO_NS.has(s.n)) s.logrono=true; });
+
+// Coordenadas dentro de Logroño y alrededores (radio ~40 km)
+const LOGRONO_COORDS = [
+  [42.466,-2.445],[42.461,-2.451],[42.471,-2.438],[42.455,-2.465],[42.478,-2.430],
+  [42.440,-2.500],[42.490,-2.490],[42.408,-2.521],[42.510,-2.420],[42.435,-2.395],
+  [42.565,-2.675],[42.543,-2.300],[42.590,-2.555],[42.502,-2.610],[42.450,-2.745],
+  [42.350,-2.555],[42.380,-2.380],[42.660,-2.795],[42.720,-2.305],[42.800,-2.550],
+  [42.600,-2.390],[42.520,-2.710],[42.680,-2.450],[42.310,-2.540],[42.700,-2.230],
+  [42.420,-2.340],[42.580,-2.200],[42.640,-3.000],[42.450,-2.860],[42.550,-2.800],
+  [42.480,-2.350],[42.510,-2.580],[42.390,-2.610],[42.600,-2.700],[42.720,-2.600]
+];
+
+// ─── ZONAS IBÉRICAS ──────────────────────────────────────────
+const IBERIAN_ZONES = {
+  logrono:{name:'Logroño · La Rioja',short:'Logroño',icon:'📍',color:'#7C3AED',border:'#5B21B6',
+    center:[42.47,-2.45],zoom:10,bounds:[[41.9,-3.6],[43.0,-1.4]],
+    coords:LOGRONO_COORDS,
+    spFilter:s=>s.logrono===true},
+  todas:{name:'Toda la Península',short:'Todas',icon:'🗺️',color:'#15803D',border:'#14532D',
+    center:[40.1,-3.5],zoom:6,bounds:[[36,-9.5],[44,4]],
+    spFilter:()=>true},
+  norte:{name:'Norte Atlántico',short:'Norte',icon:'🌧️',color:'#1D4ED8',border:'#1E3A8A',
+    center:[43.2,-5.5],zoom:7,bounds:[[42.3,-9],[44,2]],
+    spFilter:s=>['Formica','Lasius','Myrmica','Leptothorax','Harpagoxenus','Formicoxenus','Polyergus','Proformica'].includes(s.sci.split(' ')[0])},
+  rioja:{name:'La Rioja & Aragón',short:'La Rioja',icon:'🍇',color:'#9333EA',border:'#6B21A8',
+    center:[42.0,-1.5],zoom:7,bounds:[[41,-3.5],[43.5,2]],
+    spFilter:s=>s.logrono||['Camponotus','Goniomma','Messor','Cataglyphis','Aphaenogaster'].includes(s.sci.split(' ')[0])},
+  meseta:{name:'Meseta Central',short:'Meseta',icon:'🌾',color:'#D97706',border:'#92400E',
+    center:[40.4,-3.7],zoom:7,bounds:[[38.5,-6.5],[41.5,-1]],
+    spFilter:s=>['Messor','Aphaenogaster','Pheidole','Crematogaster','Solenopsis','Iberoformica','Tapinoma','Cataglyphis'].includes(s.sci.split(' ')[0])},
+  mediterraneo:{name:'Mediterráneo',short:'Mediterráneo',icon:'🌊',color:'#0891B2',border:'#0E7490',
+    center:[39.5,0.5],zoom:7,bounds:[[37.5,-0.5],[42,3.5]],
+    spFilter:s=>['Crematogaster','Tapinoma','Pheidole','Plagiolepis','Linepithema','Cardiocondyla','Tetramorium'].includes(s.sci.split(' ')[0])},
+  andalucia:{name:'Andalucía & Sur',short:'Andalucía',icon:'☀️',color:'#B91C1C',border:'#7F1D1D',
+    center:[37.5,-4.5],zoom:7,bounds:[[36,-7.5],[38.7,-1]],
+    spFilter:s=>['Cataglyphis','Rossomyrmex','Goniomma','Messor','Iberoformica','Proformica','Aphaenogaster'].includes(s.sci.split(' ')[0])}
+};
+
+// Coordenadas distribuidas por la Península Ibérica (para marcadores)
+const IBERIA_COORDS = [
+  [42.47,-2.45],[42.3,-2.1],[42.6,-1.9],[41.9,-2.7],[42.1,-1.6],// La Rioja / Logroño
+  [42.0,-4.5],[41.5,-5.2],[41.8,-3.8],[40.8,-5.0],[41.2,-4.0],[41.0,-4.8],// Castilla León
+  [41.6,-0.5],[42.1,0.2],[41.0,-0.8],[40.5,-0.2],[41.3,0.5],// Aragón
+  [40.4,-3.7],[40.0,-3.2],[39.8,-3.5],[40.5,-3.0],[40.2,-4.2],// Madrid / Guadalajara
+  [39.5,-3.8],[39.0,-2.5],[38.5,-3.0],[38.8,-2.0],[39.2,-3.2],// Castilla La Mancha
+  [39.5,-6.5],[39.0,-6.0],[38.5,-6.5],[38.7,-6.0],[39.8,-7.0],// Extremadura
+  [38.0,-5.0],[37.5,-4.5],[37.8,-3.5],[38.0,-4.0],[37.9,-5.5],// Andalucía norte
+  [37.0,-5.5],[36.8,-4.5],[36.5,-5.5],[36.7,-3.5],[37.2,-5.0],// Andalucía sur
+  [37.6,-1.8],[37.0,-2.0],[36.8,-2.5],[37.3,-1.5],[36.9,-1.9],// Murcia / Almería
+  [39.5,-0.5],[38.8,-0.2],[38.5,-1.0],[39.0,-0.8],[39.8,-0.3],// Valencia
+  [41.5,1.5],[41.8,2.5],[42.2,1.8],[41.2,2.0],[42.0,2.8],// Cataluña
+  [42.5,-8.0],[43.0,-7.5],[42.8,-7.0],[43.3,-8.5],[42.3,-8.5],// Galicia
+  [43.3,-5.5],[43.4,-6.5],[43.5,-5.0],[43.3,-4.0],[43.2,-6.0],// Asturias
+  [43.3,-2.5],[43.1,-1.8],[42.8,-2.8],[43.2,-3.5],[43.4,-3.0],// País Vasco / Cantabria
+  [39.5,-8.0],[40.5,-7.5],[41.5,-7.5],[38.0,-8.0],[37.5,-7.5],// Portugal interior
+  [40.0,-7.0],[41.0,-8.0],[37.0,-7.5],[38.5,-7.2],[39.0,-8.5] // Portugal más
+];
+
+// ─── MAP ─────────────────────────────────────────────────────
+let map, markers=[], logronoMarker=null, activeZone='todas';
+
+function initMap(){
+  map = L.map('mapEl',{zoomControl:true,attributionControl:false,
+    maxBounds:[[27,-15],[50,10]],minZoom:5
+  }).setView([42.47,-2.45],10);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+    maxZoom:18,attribution:'© CartoDB'}).addTo(map);
+  L.control.attribution({position:'bottomright'}).addTo(map);
+  addLogronoMarker();
+  map.on('zoomend moveend',()=>refreshMarkers());
+  selectZone('logrono');
+}
+
+function addLogronoMarker(){
+  const html=`<div onclick="selectZone('logrono')" style="background:#7C3AED;border:3px solid #5B21B6;color:#fff;
+    padding:8px 14px;border-radius:14px;font-family:'Exo',sans-serif;font-weight:700;
+    font-size:12px;box-shadow:4px 4px 0 #5B21B6;white-space:nowrap;cursor:pointer;
+    display:flex;align-items:center;gap:6px">
+    📍 <span>Logroño · La Rioja</span>
+    <span style="background:rgba(255,255,255,.25);border-radius:8px;padding:2px 6px;font-size:10px">${LOGRONO_NS.size} esp.</span>
+  </div>`;
+  logronoMarker = L.marker([42.47,-2.45],{
+    icon:L.divIcon({html,className:'',iconSize:[210,40],iconAnchor:[105,40]}),
+    zIndexOffset:1000
+  }).addTo(map);
+}
+
+function antMarkerHTML(s){
+  const col=s.subC||'#15803D';
+  const isNow=(s.months||[]).includes(NOW);
+  const bg=isNow?'#166534':col;
+  const border=isNow?'#14532D':'rgba(0,0,0,.2)';
+  return `<div style="background:${bg};color:#fff;padding:4px 9px;border-radius:999px;
+    font-family:'Exo',sans-serif;font-weight:600;font-size:10px;font-style:italic;
+    box-shadow:2px 2px 0 ${border};cursor:pointer;white-space:nowrap;
+    border:1.5px solid rgba(255,255,255,.35);line-height:1.2">${s.sci}</div>`;
+}
+
+function refreshMarkers(){
+  markers.forEach(m=>m.remove());
+  markers=[];
+  const zoom=map.getZoom();
+  if(zoom<6) return;
+  const z=IBERIAN_ZONES[activeZone];
+  if(!z) return;
+  const visible=SP.filter(z.spFilter);
+  const coords=z.coords||IBERIA_COORDS;
+  const maxShow=activeZone==='logrono'?visible.length:Math.min(visible.length,zoom>=7?50:30);
+  visible.slice(0,maxShow).forEach((s,i)=>{
+    const base=coords[i%coords.length];
+    // small deterministic jitter
+    const jLat=base[0]+(((i*7+3)%11-5)*0.003);
+    const jLng=base[1]+(((i*13+1)%9-4)*0.005);
+    const m=L.marker([jLat,jLng],{
+      icon:L.divIcon({html:antMarkerHTML(s),className:'',
+        iconSize:[170,22],iconAnchor:[85,11]})
+    });
+    m.on('click',()=>openSpeciesDetail(s.id));
+    m.addTo(map);
+    markers.push(m);
+  });
+}
+
+function selectZone(key){
+  activeZone=key;
+  const z=IBERIAN_ZONES[key];
+  if(!z) return;
+  map.flyToBounds(z.bounds,{duration:0.8,maxZoom:z.zoom||7,padding:[20,20]});
+  document.querySelectorAll('.zpill').forEach(p=>p.classList.toggle('active',p.dataset.key===key));
+  renderSpPanel(key);
+  setTimeout(()=>refreshMarkers(),900);
+}
+
+function renderSpPanel(key){
+  const z=IBERIAN_ZONES[key];
+  const all=SP.filter(z.spFilter);
+  const nowFlying=all.filter(s=>(s.months||[]).includes(NOW));
+  const panel=document.getElementById('spPanel');
+  const header=`<div style="grid-column:1/-1;padding:4px 0 12px">
+    <div style="font-size:13px;font-weight:700;color:var(--c-p)">${z.icon} ${z.name}</div>
+    <div style="font-size:12px;color:var(--c-txm);margin-top:3px">
+      <strong style="color:var(--c-txt)">${all.length}</strong> especies registradas ·
+      <strong style="color:#15803D">${nowFlying.length} vuelan en ${MONTHS_FULL[NOW-1]}</strong>
+      ${key==='logrono'?' · <em style="color:#7C3AED">Área metropolitana y alrededores</em>':''}
+    </div>
+  </div>`;
+  const cards=all.slice(0,8).map(s=>{
+    const months=s.months||[];
+    const peak=s.peak||[];
+    const bars=Array.from({length:12},(_,i)=>{
+      const m=i+1;
+      const cls=peak.includes(m)?'mb peak':(months.includes(m)?(m===NOW?'mb now':'mb active'):'mb');
+      return `<div class="${cls}" title="${MONTHS_ES[i]}"></div>`;
+    }).join('');
+    const isNow=(months||[]).includes(NOW);
+    return `<div class="card sp-card" onclick="openSpeciesDetail('${s.id}')">
+      <div class="sp-card-inner">
+        <div class="sci">${s.sci}</div>
+        <div class="com">${s.com}</div>
+        <div class="badges">
+          ${isNow?'<span class="badge badge-now">🌟 Vuela ahora</span>':''}
+          ${s.endemic?'<span class="badge badge-endemic">Endémica</span>':''}
+          ${s.invasive?'<span class="badge badge-invasive">Invasora</span>':''}
+          ${s.rare?'<span class="badge badge-endemic" style="background:#FEE2E2">⚠ Rarísima</span>':''}
+        </div>
+        <div class="months-bar">${bars}</div>
+      </div>
+    </div>`;
+  }).join('');
+  panel.innerHTML=header+cards;
+}
+
+// ─── SPECIES GRID VIEW ─────────────────────────────────────
+let activeFilters={sub:null,status:null,month:null};
+const SUBS=['Formicinae','Dolichoderinae','Ponerinae','Leptanillinae','Myrmicinae'];
+
+function buildFilterRow(){
+  const row=document.getElementById('filterRow');
+  let html='<span style="font-size:11px;color:var(--c-txm);margin-right:4px;align-self:center">Subfamilia:</span>';
+  SUBS.forEach(s=>{
+    html+=`<button class="fchip" data-ftype="sub" data-val="${s}" onclick="toggleFilter('sub','${s}')">${s}</button>`;
+  });
+  html+='<span style="font-size:11px;color:var(--c-txm);margin:0 4px;align-self:center">Estado:</span>';
+  html+=`<button class="fchip" data-ftype="status" data-val="endemic" onclick="toggleFilter('status','endemic')">🌿 Endémica</button>`;
+  html+=`<button class="fchip" data-ftype="status" data-val="invasive" onclick="toggleFilter('status','invasive')">⚠️ Invasora</button>`;
+  html+=`<button class="fchip" data-ftype="status" data-val="now" onclick="toggleFilter('status','now')">🌟 Vuela en ${MONTHS_FULL[NOW-1]}</button>`;
+  row.innerHTML=html;
+}
+
+function toggleFilter(type,val){
+  activeFilters[type]=activeFilters[type]===val?null:val;
+  document.querySelectorAll('.fchip').forEach(c=>{
+    if(c.dataset.ftype===type){
+      c.classList.toggle('active',c.dataset.val===activeFilters[type]);
+    }
+  });
+  filterGrid();
+}
+
+function clearFilters(){
+  activeFilters={sub:null,status:null,month:null};
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
+  document.getElementById('searchBox').value='';
+  filterGrid();
+}
+
+function filterGrid(){
+  const q=(document.getElementById('searchBox').value||'').toLowerCase();
+  const {sub,status}=activeFilters;
+  const filtered=SP.filter(s=>{
+    if(q&&!s.sci.toLowerCase().includes(q)&&!s.com.toLowerCase().includes(q)) return false;
+    if(sub&&s.sub!==sub) return false;
+    if(status==='endemic'&&!s.endemic) return false;
+    if(status==='invasive'&&!s.invasive) return false;
+    if(status==='now'&&!(s.months||[]).includes(NOW)) return false;
+    return true;
+  });
+  document.getElementById('gridCount').textContent=`Mostrando ${filtered.length} de 297 especies`;
+  document.getElementById('speciesGrid').innerHTML=filtered.map(s=>{
+    const months=s.months||[];
+    const peak=s.peak||[];
+    const dots=Array.from({length:12},(_,i)=>{
+      const m=i+1;
+      const cls=peak.includes(m)?'sm peak':(months.includes(m)?'sm active':'sm');
+      return `<div class="${cls}" title="${MONTHS_ES[i]}"></div>`;
+    }).join('');
+    return `<div class="card sg-card" onclick="openSpeciesDetail('${s.id}')">
+      <div class="num">#${s.n}</div>
+      <div class="sci">${s.sci}</div>
+      <div class="com">${s.com}</div>
+      <div class="badges" style="display:flex;gap:3px;flex-wrap:wrap;margin-top:5px">
+        ${s.endemic?'<span class="badge badge-endemic">Endémica</span>':''}
+        ${s.invasive?'<span class="badge badge-invasive">Invasora</span>':''}
+        ${(months).includes(NOW)?'<span class="badge badge-now">Vuela ahora</span>':''}
+      </div>
+      <div class="sg-months">${dots}</div>
+    </div>`;
+  }).join('');
+}
+
+// ─── SPECIES DETAIL ─────────────────────────────────────────
+function openSpeciesDetail(id){
+  const s=SP_MAP[id]||SP.find(x=>x.id===id);
+  if(!s) return;
+  location.hash='#/especie/'+id;
+  showDetailView(s);
+}
+
+function showDetailView(s){
+  setView('detail');
+  const months=s.months||[];
+  const peak=s.peak||[];
+  const desc=DESCS[s.id]||`<em>${s.sci}</em> es una hormiga de la subfamilia ${s.sub} presente en la Península Ibérica${s.endemic?' (especie endémica)':''}. Realiza sus vuelos nupciales principalmente en ${(months.map(m=>MONTHS_FULL[m-1])).join(', ')||'temporada estival'}, con condición óptima: ${s.temp||'temperatura moderada'}, ${s.time||'tarde'}. Datos basados en bibliografía científica y observaciones de campo.`;
+  const calCells=Array.from({length:12},(_,i)=>{
+    const m=i+1;
+    const isPeak=peak.includes(m), isActive=months.includes(m), isNow=m===NOW;
+    const bg=isPeak?'peak':(isActive?(isNow?'peak':'active'):'');
+    return `<div class="cm ${bg}"><div class="cm-lbl">${MONTHS_ES[i]}</div><div class="cm-dot"></div></div>`;
+  }).join('');
+  document.getElementById('detailContent').innerHTML=`
+    <div class="detail-back"><button class="btn btn-g" onclick="history.back()">← Volver</button></div>
+    <div class="card detail-header">
+      <div class="detail-num">Especie #${s.n} · ${s.sub||''}</div>
+      <div class="detail-sci">${s.sci}</div>
+      <div class="detail-com">${s.com}</div>
+      <div class="detail-badges">
+        ${s.endemic?'<span class="badge badge-endemic">🌿 Endémica de Iberia</span>':''}
+        ${s.invasive?'<span class="badge badge-invasive">⚠️ Especie Invasora</span>':''}
+        ${s.rare?'<span class="badge badge-endemic" style="background:#FEE2E2;color:#991B1B">🔴 Rarísima / Amenazada</span>':''}
+        ${(months).includes(NOW)?'<span class="badge badge-now">🌟 Vuela en '+MONTHS_FULL[NOW-1]+'</span>':''}
+        ${s.sub?`<span class="badge badge-sub">${s.sub}</span>`:''}
+      </div>
+    </div>
+    <div class="card cal-wrap">
+      <div class="cal-label">📅 Calendario de Vuelo Nupcial</div>
+      <div class="cal-months">${calCells}</div>
+      <div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--c-txm)">
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--c-p);border-radius:2px;display:inline-block"></span>Período activo</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--c-a);border-radius:2px;display:inline-block"></span>Pico de actividad</span>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="card detail-stat"><div class="ds-label">🌡️ Temperatura óptima</div><div class="ds-value mono">${s.temp||'—'}</div></div>
+      <div class="card detail-stat"><div class="ds-label">🕐 Hora del vuelo</div><div class="ds-value">${s.time||'—'}</div></div>
+      <div class="card detail-stat"><div class="ds-label">⚡ Desencadenante</div><div class="ds-value" style="font-size:13px">${s.trigger||'—'}</div></div>
+      <div class="card detail-stat"><div class="ds-label">📊 Subfamilia</div><div class="ds-value" style="color:${s.subC||'#333'}">${s.sub||'—'}</div></div>
+    </div>
+    <div class="card desc-card">
+      <h3>Sobre esta especie</h3>
+      <p>${desc}</p>
+    </div>`;
+
+  // prev/next navigation
+  const idx=SP.findIndex(x=>x.id===s.id);
+  const prev=SP[idx-1],next=SP[idx+1];
+  document.getElementById('detailNav').innerHTML=`
+    ${prev?`<button class="btn btn-g" onclick="openSpeciesDetail('${prev.id}')">← #${prev.n} ${prev.sci}</button>`:'<span></span>'}
+    ${next?`<button class="btn" onclick="openSpeciesDetail('${next.id}')">#${next.n} ${next.sci} →</button>`:'<span></span>'}`;
+}
+
+// ─── CALENDAR VIEW ─────────────────────────────────────────
+function buildCalendar(){
+  document.getElementById('calNowLabel').textContent='Mes actual: '+MONTHS_FULL[NOW-1];
+  const thead=`<tr><th>Especie</th>${MONTHS_ES.map((m,i)=>`<th style="${i+1===NOW?'background:#15803D':''}">${m}</th>`).join('')}<th>Pico</th></tr>`;
+  // show first 100 species for performance
+  const rows=SP.slice(0,100).map((s,i)=>{
+    const months=s.months||[];
+    const peak=s.peak||[];
+    const cells=Array.from({length:12},(_,j)=>{
+      const m=j+1;
+      if(peak.includes(m)) return `<td style="background:#D97706;color:#fff;text-align:center">●</td>`;
+      if(months.includes(m)) return `<td style="background:#86EFAC;text-align:center">○</td>`;
+      return `<td></td>`;
+    }).join('');
+    const peakStr=(peak.map(p=>MONTHS_ES[p-1])).join(', ');
+    return `<tr style="background:${i%2===0?'white':'#F8FAF8'}">
+      <td style="padding:5px 10px;font-style:italic;font-size:11.5px;white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis" title="${s.sci} — ${s.com}">
+        ${s.sci}${months.includes(NOW)?` <span class="now-pill">Ahora</span>`:''}
+      </td>${cells}<td style="padding:5px 8px;font-size:11px;color:var(--c-txm)">${peakStr}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('calTable').innerHTML=`<thead>${thead}</thead><tbody>${rows}</tbody>`;
+}
+
+// ─── ROUTING & VIEWS ────────────────────────────────────────
+function setView(v){
+  ['map','grid','detail','cal'].forEach(x=>{
+    const el=document.getElementById('view-'+x);
+    if(el) el.style.display=x===v?'block':'none';
+  });
+  ['mapa','especies','cal'].forEach(x=>{
+    const lnk=document.getElementById('nl-'+x);
+    if(lnk) lnk.classList.toggle('active',
+      (x==='mapa'&&v==='map')||(x==='especies'&&(v==='grid'||v==='detail'))||(x==='cal'&&v==='cal'));
+  });
+}
+
+function goView(v){
+  if(v==='map'){ location.hash='#/mapa'; setView('map'); refreshMarkers(); }
+  else if(v==='grid'){ location.hash='#/especies'; buildGridView(); }
+  else if(v==='cal'){ location.hash='#/calendario'; buildCalendar(); setView('cal'); }
+}
+
+function buildGridView(){
+  setView('grid');
+  buildFilterRow();
+  filterGrid();
+}
+
+function route(){
+  const h=location.hash.replace(/^#/,'');
+  if(h.startsWith('/especie/')){
+    const id=h.slice(9);
+    const s=SP_MAP[id]||SP.find(x=>x.id===id);
+    if(s){ showDetailView(s); return; }
+  }
+  if(h==='/especies'){ buildGridView(); return; }
+  if(h==='/calendario'){ buildCalendar(); setView('cal'); return; }
+  setView('map');
+}
+
+// ─── FLYING NOW BANNER ──────────────────────────────────────
+function buildFlyingNow(){
+  const flying=SP.filter(s=>(s.months||[]).includes(NOW));
+  const banner=document.getElementById('flyBanner');
+  const peakNow=flying.filter(s=>(s.peak||[]).includes(NOW));
+  banner.innerHTML=`<span>🌟 <strong>${MONTHS_FULL[NOW-1]}:</strong> ${flying.length} especies en vuelo nupcial · ${peakNow.length} en pico</span>
+    <div class="fly-list">${peakNow.slice(0,5).map(s=>`<span class="fly-tag" onclick="openSpeciesDetail('${s.id}')" style="cursor:pointer">${s.sci}</span>`).join('')}
+    ${peakNow.length>5?`<span class="fly-tag">+${peakNow.length-5} más</span>`:''}</div>`;
+}
+
+// ─── STATS ──────────────────────────────────────────────────
+function buildStats(){
+  const endemics=SP.filter(s=>s.endemic).length;
+  const flyingNow=SP.filter(s=>(s.months||[]).includes(NOW)).length;
+  document.getElementById('hEndemics').textContent=endemics;
+  document.getElementById('hNow').textContent=flyingNow;
+}
+
+// ─── ZONE PILLS ─────────────────────────────────────────────
+function buildZonePills(){
+  const row=document.getElementById('zoneRow');
+  row.innerHTML=Object.entries(IBERIAN_ZONES).map(([k,z])=>
+    `<button class="zpill${k==='todas'?' active':''}" data-key="${k}" onclick="selectZone('${k}')"
+    >${z.icon} ${z.name}</button>`
+  ).join('');
+}
+
+// ─── INIT ───────────────────────────────────────────────────
+window.addEventListener('hashchange', route);
+window.addEventListener('DOMContentLoaded', ()=>{
+  initMap();
+  buildZonePills();
+  buildFlyingNow();
+  buildStats();
+  route();
+});
+</script>
+</body>
+</html>

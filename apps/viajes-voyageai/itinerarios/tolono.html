@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sierra de Toloño — Escapada desde Logroño: viñedos de la Rioja Alavesa desde el cielo | Routlo</title>
+  <meta name="description" content="45 km desde Logroño: la Sierra de Toloño con vistas aéreas sobre los viñedos de la Rioja Alavesa, la ermita de San Formerio y el Ebro serpenteando entre bodegueros. Ruta media con recompensa máxima."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .trail-medium { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.35); font-size: 0.75rem; font-weight: 600; color: #c9a96e; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(201,169,110,0.08) 0%, rgba(20,10,0,0.6) 100%); border: 1px solid rgba(201,169,110,0.2); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #c9a96e; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.55; }
+    .checklist li::before { content: '□'; color: #5ecb8a; font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c9a96e; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1504279807002-09854ccc9b6c?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(15,8,0,0.25) 0%, rgba(20,10,0,0.55) 50%, rgba(10,5,0,0.92) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="trail-medium" style="margin-bottom:0;">▲ Dificultad media</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">45 km de Logroño</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🍇 Rioja Alavesa</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Sierra de Toloño<br><span style="color:#c9a96e;">Viñedos desde el cielo</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">Las vistas más espectaculares sobre los viñedos de la Rioja Alavesa y el Ebro. Una cresta caliza a 1.271 m con precipicios verticales y un horizonte que abarca Logroño, el Moncayo y los Picos de Europa.</p>
+  </div>
+</section>
+
+<!-- MAIN LAYOUT -->
+<div class="itin-layout">
+
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">La excursión</a></li>
+      <li><a href="#picnic">Picnic & bodega</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Lista de mochila</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a>
+      <span>›</span>
+      <a href="../itinerarios-espana.html">España</a>
+      <span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Sierra de Toloño</span>
+    </div>
+
+    <!-- DATOS -->
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🍇 Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell">
+          <div class="route-info-label">Distancia al destino</div>
+          <div class="route-info-value">45 km</div>
+          <div class="route-info-unit">desde Logroño</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Distancia a pie</div>
+          <div class="route-info-value">9 km</div>
+          <div class="route-info-unit">ida y vuelta</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Desnivel</div>
+          <div class="route-info-value">+560 m</div>
+          <div class="route-info-unit">acumulado</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Cota máxima</div>
+          <div class="route-info-value">1.271 m</div>
+          <div class="route-info-unit">cresta Toloño</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Mejor época</div>
+          <div class="route-info-value">Mar–Nov</div>
+          <div class="route-info-unit">vendimia en Sep</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <h4>🍷 La cresta del vino</h4>
+        <p>Toloño es la montaña que protege los viñedos de la Rioja Alavesa de los vientos del norte. Desde su cresta caliza, el cuadro de abajo es una pintura: 15.000 hectáreas de vid ordenadas entre pueblos medievales como Laguardia, Labastida y Samaniego. En septiembre coincide con la vendimia —el olor a mosto llega hasta la cumbre.</p>
+      </div>
+    </section>
+
+    <!-- MAPA -->
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa de la ruta</h2>
+      <div id="route-map" style="height:380px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <!-- RUTA -->
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🥾 La excursión</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">①</div>
+          <div>
+            <div class="day-title">Logroño → Labastida · 45 min en coche</div>
+            <div class="day-subtitle">A-68 hasta Haro, luego A-124 a Labastida · Rioja Alavesa (País Vasco)</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">🏘️ Labastida — el pueblo bodeguero</div>
+              <div class="stop-desc">Aparca en el parking gratuito junto a la Plaza Mayor. Labastida es un pueblo medieval de 1.100 habitantes con más de 20 bodegas en su término. Merece 15 minutos paseando la calle porticada antes de arrancar la subida. El castillo árabe del s. IX asoma sobre los tejados.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🥖 Avituallamiento en la panadería local</div>
+              <div class="stop-desc">En la calle principal hay una panadería que abre desde las 8:00 con pan de pueblo recién hecho. Compra el pan para el picnic aquí —pan de masa madre, sin aditivos, con la corteza crujiente que ya no existe en los supermercados.</div>
+              <div class="stop-price">Pan de hogaza: ~3€</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">②</div>
+          <div>
+            <div class="day-title">Labastida → Cresta de Toloño</div>
+            <div class="day-subtitle">4,5 km · +560 m · aprox. 2h 15min · Señalizado GR-38</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <span class="trail-medium">▲ Dificultad media</span>
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">🍇 Entre viñedos — los primeros 2 km</div>
+              <div class="stop-desc">El sendero arranca desde el pueblo entre hileras de vid. En septiembre puedes ver cuadrillas de vendimiadores trabajando. El contraste entre la viña de abajo y la roca caliza de arriba es el alma de este paisaje. Ojo con los tractores en el camino de acceso.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🌲 Bosque de quejigos y encinas</div>
+              <div class="stop-desc">A media subida el sendero entra en un robledal de quejigo y carrasca. El suelo es más pedregoso y el desnivel se hace notar. Buen sitio para hacer una primera pausa con agua y frutos secos. En otoño el follaje rojizo es espectacular.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🏔️ Cresta caliza de Toloño (1.271 m)</div>
+              <div class="stop-desc">La cresta emerge de golpe: paredes verticales al sur y un balcón inmenso sobre la Rioja Alavesa. El vértigo es real —cuidado cerca de los bordes. La ermita románica de San Formerio se ve desde aquí, a unos 3 km por la cresta hacia el este.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">⛪ Ermita de San Formerio (opcional)</div>
+              <div class="stop-desc">Un paseo adicional de 45 minutos por la cresta lleva a esta pequeña ermita rupestre enclavada en la roca caliza. Interior austero con pinturas medievales. La mejor recompensa visual del recorrido —y el lugar más aislado para el picnic.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">③</div>
+          <div>
+            <div class="day-title">Descenso y visita a bodega</div>
+            <div class="day-subtitle">Regreso a Labastida + cata de vino riojano</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">🔄 Mismo camino de bajada</div>
+              <div class="stop-desc">El descenso es más rápido pero requiere cuidado en el tramo pedregoso —bastones muy recomendables. Llega a Labastida hacia la 1:30–2:00 del mediodía.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🍷 Cata en bodega de Labastida o Laguardia</div>
+              <div class="stop-desc">Varias bodegas ofrecen visitas + cata sin reserva previa los fines de semana (Bodegas Solabal, Señorío de Arana). Una copa de Rioja Alavesa en la misma tierra donde nació sabe diferente a cualquier otra. Marida perfectamente con el cansancio de las piernas.</div>
+              <div class="stop-price">Cata con copa: ~8–12€ · Cata completa 3 vinos: ~18–22€</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🚗 Regreso a Logroño — 45 min</div>
+              <div class="stop-desc">Estás de vuelta en Logroño a media tarde. Puedes combinar con una última parada en el Puente de Piedra y una cañita en el Laurel antes de cenar.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PICNIC -->
+    <section class="itin-section" id="picnic">
+      <h2 class="section-heading">🧺 Picnic en la cresta</h2>
+
+      <div class="highlight-box">
+        <h4>🍷 El picnic más vinícola de La Rioja</h4>
+        <p>Estás sobre los viñedos más famosos de España. El picnic perfecto aquí es <strong>pan de pueblo de Labastida</strong>, <strong>jamón ibérico de bellota</strong>, <strong>queso idiazábal</strong> (cruzas al País Vasco a 200 metros), <strong>una botella de vino joven de Rioja Alavesa</strong> (lleva un descorchador), y <strong>pimientos del piquillo en conserva</strong>. Abre el vino 10 minutos antes —a 1.200 m el frío lo mantiene a la temperatura perfecta.</p>
+      </div>
+
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Lugar #1: Cresta de Toloño</strong> — las losas de piedra caliza son planas y cómodas. Vistas de 180° sobre los viñedos. Desabrigado y expuesto al viento —manta imprescindible.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Lugar #2: Ermita de San Formerio</strong> — las rocas junto a la ermita protegen del viento del norte. El lugar más íntimo y tranquilo. A 45 min de la cresta principal.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Lugar #3: Claro del bosque de quejigos</strong> — a mitad de subida, un prado con sombra. Ideal si no quieres llegar a la cresta pero buscas un lugar bonito y resguardado.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>El vino en la mochila:</strong> una botella de 75cl pesa 1,2 kg pero vale cada gramo. Envuélvela en ropa para amortiguar golpes. Opción alternativa: lata de cerveza artesana de la Rioja (más ligera).</div>
+      </div>
+    </section>
+
+    <!-- CONSEJOS -->
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Cuidado con el viento en la cresta</strong> — Toloño es famosa por sus rachas fuertes en días de borrasca. En invierno puede ser peligroso acercarse al borde. Mira el pronóstico antes de salir.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Ir en septiembre (vendimia)</strong> — la mejor época del año. El paisaje huele a mosto, los viñedos están en su punto máximo de color, y hay ambiente festivo en los pueblos.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Labastida vs Laguardia:</strong> Labastida (Álava) es el mejor punto de inicio para Toloño. Laguardia está a 15 minutos en coche y vale mucho la pena —murallas medievales intactas y bodegas subterráneas excavadas en la roca.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Garrapatas:</strong> en primavera-verano, la sierra tiene garrapatas. Lleva spray repelente y revísate al llegar al coche. Pantalón largo en el bosque de quejigos.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Calzado:</strong> zapatillas de trail sirven para este recorrido. Botas de trekking para mayor seguridad en la cresta caliza mojada. Nunca chanclas o zapatillas de ciudad.</div>
+      </div>
+    </section>
+
+    <!-- CHECKLIST -->
+    <section class="itin-section" id="checklist">
+      <h2 class="section-heading">🎒 Lista de mochila</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.4);margin-bottom:10px;">Equipamiento</div>
+          <ul class="checklist">
+            <li>Calzado trail o botas trekking</li>
+            <li>Bastones (muy recomendado)</li>
+            <li>Mochila 20–25 litros</li>
+            <li>Cortavientos</li>
+            <li>Protector solar + gorra</li>
+            <li>Spray repelente garrapatas</li>
+            <li>Mapa descargado offline</li>
+            <li>Descorchador de vino</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.4);margin-bottom:10px;">Picnic & avituallamiento</div>
+          <ul class="checklist">
+            <li>1,5 litros de agua por persona</li>
+            <li>Pan de pueblo de Labastida</li>
+            <li>Jamón ibérico o chorizo</li>
+            <li>Queso idiazábal</li>
+            <li>Vino joven Rioja Alavesa</li>
+            <li>Frutos secos para la subida</li>
+            <li>Manta impermeable</li>
+            <li>Bolsa para la basura</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres explorar más escapadas desde Logroño?</h3>
+      <p>7 rutas de montaña y naturaleza a menos de 2 horas de la capital riojana.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false }).setView([42.49, -2.73], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 17 }).addTo(map);
+
+  setTimeout(() => {
+    const tp = document.querySelector('#route-map .leaflet-tile-pane');
+    if(tp) tp.style.filter = 'grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';
+  }, 500);
+
+  const wps = [
+    { coords: [42.466, -2.445], label: 'Logroño', color: '#5ecb8a', r: 10 },
+    { coords: [42.557, -2.798], label: 'Haro', color: '#c9a96e', r: 7 },
+    { coords: [42.540, -2.804], label: 'Labastida', color: '#c9a96e', r: 10 },
+    { coords: [42.534, -2.800], label: 'Inicio sendero GR-38', color: '#c9a96e', r: 7 },
+    { coords: [42.552, -2.821], label: 'Cresta Toloño 1.271m', color: '#e0b44a', r: 12 },
+    { coords: [42.558, -2.810], label: 'Ermita San Formerio', color: '#c9a96e', r: 8 },
+  ];
+
+  wps.forEach(wp => {
+    L.circleMarker(wp.coords, { radius: wp.r, color: wp.color, fillColor: wp.color, fillOpacity: 0.9, weight: 2 }).addTo(map).bindTooltip(wp.label, { permanent: false, direction: 'top' });
+  });
+
+  L.polyline([
+    [42.466, -2.445], [42.557, -2.798], [42.540, -2.804],
+    [42.534, -2.800], [42.552, -2.821], [42.558, -2.810],
+  ], { color: '#c9a96e', weight: 3, opacity: 0.85, dashArray: '8,6' }).addTo(map);
+})();
+</script>
+
+<script>
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('main-nav');
+  if(window.scrollY > 60){ nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
+});
+</script>
+
+<script>
+const tocLinks = document.querySelectorAll('.toc-list a');
+const sections = document.querySelectorAll('.itin-section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+      if(active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

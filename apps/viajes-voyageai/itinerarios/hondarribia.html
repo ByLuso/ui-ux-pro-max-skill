@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hondarribia — 1 día desde Bilbao | Routlo</title>
+  <meta name="description" content="Itinerario de 1 día en Hondarribia desde Bilbao: la villa medieval mejor conservada del País Vasco, murallas del s. X, el Parador de Carlos V y paseo a Francia."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,8,16,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #1a3a6e 0%, transparent 70%); top: -200px; left: -150px; opacity: 0.5; animation: blob 14s ease-in-out infinite; }
+    .aurora::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #2a1a5e 0%, transparent 70%); bottom: -150px; right: -100px; opacity: 0.45; animation: blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0a2d4a 0%, transparent 70%); top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-60px) scale(1.08); } 66% { transform: translate(-30px,40px) scale(0.94); } }
+
+    .dest-hero { position: relative; z-index: 1; min-height: 65vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 140px 24px 60px; overflow: hidden; }
+    .dest-hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #120a00 0%, #2a1600 40%, #4a2a08 70%, rgba(201,169,110,0.2) 100%); }
+    .dest-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%); }
+    .dest-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); margin-bottom: 20px; position: relative; z-index: 1; }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2; }
+    .dest-country { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; font-style: italic; color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1; }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(4,8,16,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar { display: flex; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 600px; position: relative; z-index: 1; }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    .meal-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 16px 0 22px; }
+    .meal-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .meal-card:hover { border-color: rgba(201,169,110,0.3); }
+    .meal-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .meal-name { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 4px; }
+    .meal-info { font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.5; margin-bottom: 8px; }
+    .meal-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; }
+
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .meal-options { grid-template-columns: 1fr; } .transport-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .dest-title { font-size: clamp(2rem,10vw,3.2rem); } .day-body { padding: 14px 16px; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } .reveal { opacity: 1; transform: none; transition: none; } }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- Aurora background -->
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<!-- Navigation -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios-espana.html">España</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Hondarribia</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Hondarribia</h1>
+  <p class="dest-country">Villa Medieval · Gipuzkoa</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      1 día
+    </span>
+    <span class="dest-badge" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Desde Bilbao
+    </span>
+    <span class="dest-badge gold" role="listitem">~€81–116 (2 personas)</span>
+    <span class="dest-badge" role="listitem">110 km · 1h 15min</span>
+    <span class="dest-badge" role="listitem">Medieval · Gastronomía · Mar</span>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">1 día</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Origen</div>
+      <div class="dest-sum-val">Bilbao</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Km</div>
+      <div class="dest-sum-val">110 km</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Transporte</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Coche/Bus</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Estilo</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Medieval</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main content -->
+<main id="main-content">
+  <div class="itin-layout">
+
+    <!-- TOC Sidebar -->
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#transporte">Cómo llegar</a></li>
+          <li><a href="#jornada">La jornada</a></li>
+          <li><a href="#gastronomia">Dónde comer</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <article>
+
+      <!-- Resumen -->
+      <section id="resumen" class="itin-section reveal" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          Hondarribia es la joya escondida de Gipuzkoa: una villa medieval amurallada con 10 siglos de historia en primera línea del mar, mirando a Francia desde la ría Bidasoa. A 110 km de Bilbao, es la excursión más larga de esta lista pero también la más recompensante: el Casco Antiguo es de los mejor conservados del País Vasco, el puerto de La Marina es de postal y la comida es extraordinaria.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Empezar gratis
+          </a>
+        </div>
+      </section>
+
+      <!-- Transporte -->
+      <section id="transporte" class="itin-section reveal" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo llegar desde Bilbao</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M7 8V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/><path d="M12 12v4"/><path d="M8 12h8"/></svg>
+              En Coche
+            </div>
+            <div class="transport-content">
+              Desde Bilbao por <strong>A-8 dirección San Sebastián</strong> hasta Irún, luego N-1 o GI-3440 hasta Hondarribia. <strong>110 km, ~1h 15min</strong> (sin tráfico).<br><br>
+              Parking en el <strong>Puerto de Hondarribia (~€1.5/h)</strong> o en la zona alta del Casco Antiguo. La villa es peatonal.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="1" y="6" width="22" height="13" rx="2"/><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M5 19v2M19 19v2"/></svg>
+              Transporte Público
+            </div>
+            <div class="transport-content">
+              <strong>Bus Pesa/Lurraldebus</strong> desde Bilbao-Termibus hasta Irún (~1h 30min, ~€8). Desde Irún, bus urbano <strong>E21 o taxi</strong> (~10 min, ~€8) hasta Hondarribia.<br><br>
+              También desde Donostia: <strong>topo E21</strong> hasta Hondarribia (~35 min, muy frecuente).
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- La Jornada -->
+      <section id="jornada" class="itin-section reveal" aria-labelledby="h-jornada">
+        <h2 class="section-heading" id="h-jornada">La jornada</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Hondarribia completo</div>
+              <div class="day-subtitle">Puerto, murallas, casco antiguo, Francia y vuelta</div>
+            </div>
+            <div class="day-meta">
+              <span>&#9832; Puerto de La Marina</span>
+              <span>&#127963; Murallas s. X</span>
+              <span>&#9973; Barco a Francia</span>
+            </div>
+          </div>
+          <div class="day-body">
+
+            <div class="activity">
+              <div class="act-time">09:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada — Puerto de La Marina</div>
+                <div class="act-desc">Primera impresión del Puerto de La Marina: barcos de pesca, casas coloridas con balcones floridos, la ría Bidasoa con Francia al fondo. Uno de los puertos más bonitos del Cantábrico.</div>
+                <div class="act-tags"><span class="act-tag green">Entrada libre</span><span class="act-tag info">Aparcar en el puerto</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">10:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Barrio de La Marina</div>
+                <div class="act-desc">El barrio marinero entre el puerto y las murallas. Casas medievales de madera pintadas en rojo y verde, balcones desbordantes de flores. La calle San Pedro es la postal más copiada de Hondarribia.</div>
+                <div class="act-tags"><span class="act-tag green">Paseo libre</span><span class="act-tag">Calle San Pedro</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">10:45</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Muralla Medieval (s. X)</div>
+                <div class="act-desc">La muralla más completa del norte de España. Conserva casi 2 km de lienzo medieval con cubos y baluartes. Subir por la Puerta de Santa María y caminar sobre la muralla con vistas a Francia y al Cantábrico.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag">~2 km de muralla</span><span class="act-tag info">Puerta de Santa María</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">11:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Casco Antiguo (Parte Vieja)</div>
+                <div class="act-desc">Calles laberínticas de adoquín con arquitectura medieval vasca. La Plaza de Armas con el Castillo de Carlos V (ahora Parador Nacional) presidiendo. La iglesia de Santa María de la Asunción, gótica vasca del s. XIV.</div>
+                <div class="act-tags"><span class="act-tag green">Entrada libre</span><span class="act-tag">Iglesia s. XIV</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">12:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Castillo de Carlos V — Parador de Hondarribia</div>
+                <div class="act-desc">El parador más impresionante del País Vasco, en un castillo medieval del s. X. Aunque no te alojes, puedes entrar al bar/restaurante para un aperitivo o tomar pintxos en el patio medieval.</div>
+                <div class="act-tags"><span class="act-tag">Acceso al bar: libre</span><span class="act-tag info">Castillo s. X</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">13:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Pintxos y txakoli en La Marina</div>
+                <div class="act-desc">Los bares de la calle San Pedro y el puerto son famosos por sus pintxos de txangurro (centollo) y pescado fresco. El txakoli de Getaria con vistas al mar es el mejor aperitivo del mundo.</div>
+                <div class="act-tags"><span class="act-tag">~€15-20 pp</span><span class="act-tag">Txangurro</span><span class="act-tag green">Txakoli</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Paseo en barco a Hendaya (Francia)</div>
+                <div class="act-desc">Pequeñas lanchas cruzan la ría Bidasoa de Hondarribia a Hendaya (Francia) en 5 minutos. Pasear por el pueblo francés, comprar queso o simplemente decir que has estado en Francia.</div>
+                <div class="act-tags"><span class="act-tag">~€1.50 ida</span><span class="act-tag info">Cada 15-20 min</span><span class="act-tag green">5 min de travesía</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">16:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Ermita de Guadalupe — Vistas panorámicas</div>
+                <div class="act-desc">Subir en coche o a pie (2 km) hasta la ermita sobre el monte Jaizquibel con vistas panorámicas a Hondarribia, la ría y Francia. Una de las mejores vistas del litoral vasco.</div>
+                <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag">2 km a pie</span><span class="act-tag info">Monte Jaizquibel</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">18:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Último paseo y compras</div>
+                <div class="act-desc">Último paseo por el Casco Antiguo. Tiempo para compras de conservas y txakoli local en las tiendas de la Parte Vieja antes de emprender el regreso.</div>
+                <div class="act-tags"><span class="act-tag">Conservas locales</span><span class="act-tag">Txakoli de Hondarribia</span></div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">19:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso a Bilbao</div>
+                <div class="act-desc">Por A-8 dirección Bilbao. Trayecto de ~1h 15min. Llegar a Bilbao sobre las 20:45-21:00h con el recuerdo de una de las villas medievales más hermosas del Cantábrico.</div>
+                <div class="act-tags"><span class="act-tag info">~1h 15min A-8</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Gastronomía -->
+      <section id="gastronomia" class="itin-section reveal" aria-labelledby="h-gastronomia">
+        <h2 class="section-heading" id="h-gastronomia">Dónde comer</h2>
+        <div class="meal-options">
+          <div class="meal-card">
+            <div class="meal-tier">Tradicional · Puerto</div>
+            <div class="meal-name">Hermandad de Pescadores</div>
+            <div class="meal-info">Zuloaga, 12. El comedor de la cofradía de pescadores. Menú del día con pescado fresquísimo de lonja, sopas de pescado y marmitako. Precio fijo y calidad garantizada. Reserva recomendada.</div>
+            <div class="meal-price">~€20-25 pp menú</div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-tier">Pintxos · La Marina</div>
+            <div class="meal-name">Gran Sol</div>
+            <div class="meal-info">San Pedro, 65. El bar más popular de La Marina. Pintxos de txangurro, gamba roja y anchoa. Terraza con vistas al puerto. Ambiente local y animado.</div>
+            <div class="meal-price">~€15-20 pp con txakoli</div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-tier">Alta Cocina · Gipuzkoa</div>
+            <div class="meal-name">Restaurante Alameda</div>
+            <div class="meal-info">Miracle, 1. 2 Estrellas Michelin. Los hermanos Txapartegi proponen la alta cocina vasca más refinada. Para una ocasión especial. Reserva con mucha antelación.</div>
+            <div class="meal-price">~€120-180 pp (menú degustación)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Presupuesto -->
+      <section id="presupuesto" class="itin-section reveal" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para Hondarribia (2 personas)">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Estimado (2 pers.)</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Transporte (Bilbao-Hondarribia ida/vuelta)</td>
+                <td>€25-35 (coche) o €32 (bus+taxi)</td>
+                <td>Gasolina + peajes ~€25 en coche</td>
+              </tr>
+              <tr>
+                <td>Gastronomía (pintxos + almuerzo)</td>
+                <td>€40-60</td>
+                <td>Pintxos ~€10pp + almuerzo ~€20pp</td>
+              </tr>
+              <tr>
+                <td>Barco a Hendaya (ida/vuelta, 2 pers.)</td>
+                <td>€6</td>
+                <td>Muy recomendado</td>
+              </tr>
+              <tr>
+                <td>Extras / café / txakoli</td>
+                <td>€10-15</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><strong>TOTAL</strong></td>
+                <td><strong>~€81-116 (2 personas)</strong></td>
+                <td>Sin transporte: ~€55-70</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos para 2026. El transporte varía según gasolina y peajes actuales.</p>
+      </section>
+
+      <!-- Consejos -->
+      <section id="consejos" class="itin-section reveal" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">Consejos prácticos</h2>
+
+        <div class="tip-item">
+          <div class="tip-num">1</div>
+          <div class="tip-text">El <strong>barco a Hendaya (Francia)</strong> cuesta ~€1.50 y sale cada 15-20 min desde el Paseo Butrón. En verano puede haber cola, pero el viaje son solo 5 minutos. Los euros valen en ambos lados.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num">2</div>
+          <div class="tip-text">El <strong>Parador de Hondarribia</strong> es uno de los más especiales de España. Si quieres hacer de la excursión algo memorable, considera alojarte una noche y convertirla en una escapada de 2 días (cena en el Parador + mañana tranquila antes de volver).</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num">3</div>
+          <div class="tip-text">Las <strong>murallas de Hondarribia</strong> se pueden recorrer gratis desde el exterior y en parte desde el interior. El mejor acceso es por la Puerta de Santa María (entrada al Casco Antiguo).</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num">4</div>
+          <div class="tip-text">Hondarribia está a solo <strong>15 min de Donostia-San Sebastián</strong>. Si buscas una excursión más larga, combina ambas ciudades en el mismo día o usa Donostia como base intermedia.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num">5</div>
+          <div class="tip-text">El <strong>txakoli de Hondarribia</strong> es diferente al de Getaria o Bizkaia: más aromático y con un punto de acidez distinto. Aprovecha para comparar en los bares locales.</div>
+        </div>
+
+        <div class="cta-banner" style="margin-top:32px">
+          <h3>¿Quieres más excursiones desde Bilbao?</h3>
+          <p>Routlo tiene itinerarios de 1 día a Gaztelugatxe, Getxo, Lekeitio, Getaria y muchos más destinos del País Vasco.</p>
+          <a href="../itinerarios-espana.html" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Ver más destinos
+          </a>
+        </div>
+
+        <div class="disclosure">
+          <strong>Aviso:</strong> Los precios indicados son orientativos y pueden variar según la temporada y disponibilidad. Routlo no recibe comisión de los restaurantes ni establecimientos mencionados. El barco a Hendaya puede estar suspendido en condiciones meteorológicas adversas.
+        </div>
+      </section>
+
+    </article>
+  </div>
+</main>
+
+<script>
+  // Nav scroll
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // TOC active highlighting
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = document.querySelectorAll('.itin-section');
+
+  function updateTOC() {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 120;
+      if (window.scrollY >= sectionTop) {
+        current = section.getAttribute('id');
+      }
+    });
+    tocLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateTOC, { passive: true });
+
+  // Smooth scroll for TOC links
+  tocLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  reveals.forEach(el => revealObserver.observe(el));
+
+  // Mobile menu toggle
+  function toggleMenu() {
+    const ul = document.querySelector('nav[role="navigation"] ul');
+    if (ul) ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex';
+  }
+</script>
+
+</body>
+</html>

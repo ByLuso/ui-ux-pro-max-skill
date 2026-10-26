@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fuerteventura Sur — Jandía, Cofete y Sotavento | Routlo</title>
+  <meta name="description" content="Ruta de 1 día por el sur de Fuerteventura: Playa de Sotavento, Playa de Cofete, Faro de Jandía y kitesurf en La Barca. La ruta más salvaje de Canarias."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #1a3a6e 0%, transparent 70%); top: -200px; left: -150px; opacity: 0.5; animation: blob 14s ease-in-out infinite; }
+    .aurora::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #2a1a5e 0%, transparent 70%); bottom: -150px; right: -100px; opacity: 0.45; animation: blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0a2d4a 0%, transparent 70%); top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-60px) scale(1.08); } 66% { transform: translate(-30px,40px) scale(0.94); } }
+    .dest-hero { position: relative; z-index: 1; min-height: 65vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 140px 24px 60px; overflow: hidden; }
+    .dest-hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #100800 0%, #281400 40%, #401e00 70%, rgba(201,169,110,0.2) 100%); }
+    .dest-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%); }
+    .dest-hero-deco { position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, #040810 0%, transparent 100%); z-index: 0; }
+    .dest-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); margin-bottom: 20px; position: relative; z-index: 1; }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2; }
+    .dest-country { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; font-style: italic; color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1; }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(4,8,16,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar { display: flex; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 680px; position: relative; z-index: 1; }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.15rem; font-weight: 700; color: #c9a96e; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .meal-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 16px 0 22px; }
+    .meal-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .meal-card:hover { border-color: rgba(201,169,110,0.3); }
+    .meal-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .meal-name { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 4px; }
+    .meal-info { font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.5; margin-bottom: 8px; }
+    .meal-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .meal-options { grid-template-columns: 1fr; } .transport-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .dest-title { font-size: clamp(2rem,10vw,3.2rem); } .dest-country { font-size: 1.1rem; } .dest-sum-item { padding: 12px 8px; } .dest-sum-label { font-size: 0.6rem; } .dest-sum-val { font-size: 1rem; } .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; } .day-num { font-size: 1.8rem; min-width: 44px; } .day-meta { margin-left: 0; flex-direction: row; gap: 8px; width: 100%; } .day-body { padding: 14px 16px; } .section-heading { font-size: 1.3rem; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } .reveal { opacity: 1; transform: none; transition: none; } }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- Aurora background -->
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<!-- Navigation -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div class="dest-hero-deco" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Fuerteventura Sur</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Fuerteventura Sur</h1>
+  <p class="dest-country">Fuerteventura · Islas Canarias</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      1 día
+    </span>
+    <span class="dest-badge" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Coche
+    </span>
+    <span class="dest-badge gold" role="listitem">~€52/pp</span>
+    <span class="dest-badge" role="listitem">Islas Canarias · España</span>
+    <span class="dest-badge" role="listitem">Playa + Salvaje</span>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">1 día</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Isla</div>
+      <div class="dest-sum-val">Fuerteventura</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Km</div>
+      <div class="dest-sum-val">~120 km</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Transporte</div>
+      <div class="dest-sum-val" style="font-size:0.9rem">Coche</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Estilo</div>
+      <div class="dest-sum-val" style="font-size:0.9rem">Aventura</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main content -->
+<main id="main-content">
+  <div class="itin-layout">
+
+    <!-- TOC Sidebar -->
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#actividades">Actividades</a></li>
+          <li><a href="#restaurantes">Restaurantes</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <article>
+
+      <!-- Resumen -->
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen de la ruta</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          El sur de Fuerteventura es el extremo más salvaje del Atlántico europeo: 20 kilómetros de playa virgen en Sotavento donde el viento del alisio dibuja lagunas turquesas efímeras, la remota Playa de Cofete escondida tras el macizo de Jandía con sus 14 km de arena negra-dorada sin turistas, y la Villa Winter como fantasma de la posguerra entre los acantilados. Una ruta que exige coche pero recompensa con los paisajes más extremos de Canarias.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Empezar gratis
+          </a>
+        </div>
+      </section>
+
+      <!-- Presupuesto -->
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para Fuerteventura Sur">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Estimado</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>🚕 Taxi 4x4 a Cofete (ida/vuelta)</td>
+                <td>€30</td>
+                <td>~€15 pp, alternativa a pista con coche normal</td>
+              </tr>
+              <tr>
+                <td>⛽ Combustible</td>
+                <td>€20</td>
+                <td>~120 km desde Costa Calma/Morro Jable</td>
+              </tr>
+              <tr>
+                <td>🍽️ Almuerzo + bebidas</td>
+                <td>€45</td>
+                <td>Restaurante en Morro Jable o Cofete</td>
+              </tr>
+              <tr>
+                <td>💧 Extras (aparcamientos, agua)</td>
+                <td>€10</td>
+                <td>Agua imprescindible en Cofete</td>
+              </tr>
+              <tr>
+                <td>TOTAL</td>
+                <td>~€105 (2 personas)</td>
+                <td>~€52 por persona</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Transporte -->
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Transporte</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Alquiler de coche
+            </div>
+            <div class="transport-content">
+              <strong>Imprescindible.</strong> La FV-2 conecta toda la costa sur. Para Cofete hay 2 opciones: pista de tierra (10 km, coche normal pasa lentamente, 30-40 min) o taxi 4x4 desde Morro Jable (~€15 pp). App <strong>Maps.me</strong> descargada offline para zonas sin cobertura.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l2-8h14l2 8"/><path d="M5 17h14"/><circle cx="7.5" cy="19.5" r="1.5"/><circle cx="16.5" cy="19.5" r="1.5"/></svg>
+              Pista de Cofete
+            </div>
+            <div class="transport-content">
+              La pista atraviesa el macizo de Jandía: espectacular pero exigente. Con coche normal ir despacio y comprobar los bajos. <strong>Con lluvias recientes NO recomendada.</strong> El taxi 4x4 desde Morro Jable es la opción más segura y cómoda (<strong>€15 pp</strong>, frecuentes en temporada).
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Actividades -->
+      <section id="actividades" class="itin-section" aria-labelledby="h-actividades">
+        <h2 class="section-heading" id="h-actividades">Ruta día a día</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Jandía, Cofete y Sotavento</div>
+              <div class="day-subtitle">Del kitesurf al fin del mundo</div>
+            </div>
+            <div class="day-meta">
+              <span>📍 Inicio Costa Calma</span>
+              <span>🚗 ~120 km</span>
+              <span>⏱ 12 horas</span>
+            </div>
+          </div>
+          <div class="day-body">
+
+            <!-- Actividad 1 -->
+            <div class="activity">
+              <div class="act-time">08:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Punto de partida sur</div>
+                <div class="act-desc">Costa Calma y Morro Jable son los dos centros turísticos del sur. Llenar el depósito de gasolina antes de salir (las gasolineras son escasas en el extremo sur) y comprar comida y agua para llevar a Cofete donde no hay tiendas.</div>
+                <div class="act-tags">
+                  <span class="act-tag">Llevar agua y comida</span>
+                  <span class="act-tag">Gasolina primero</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actividad 2 -->
+            <div class="activity">
+              <div class="act-time">08:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">20 km de playa virgen y laguna turquesa</div>
+                <div class="act-desc">La playa más larga y salvaje de Fuerteventura: 20 kilómetros de arena blanca continua donde el alisio reinante convierte la costa en el mejor spot de windsurf y kitesurf del mundo. En bajamar, el agua retrocede y forma una laguna de aguas turquesas perfecta para caminar. Aquí se celebra cada año el PWA World Windsurfing Championship. La playa es libre y gratuita en su totalidad; los aparcamientos junto a la FV-2 son gratuitos.</div>
+                <div class="act-tags">
+                  <span class="act-tag green">Gratis</span>
+                  <span class="act-tag">PWA World Championship</span>
+                  <span class="act-tag info">Mejor en bajamar</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actividad 3 -->
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Morro Jable — El extremo sur, pueblo y puerto</div>
+                <div class="act-desc">El pueblo más meridional de Fuerteventura conserva un núcleo histórico auténtico junto al nuevo puerto de ferrys. Paseo hasta el puerto pesquero donde los barcos locales descargan el atún del día. Desayuno tardío con vistas al Atlántico: café canario con leche de cabra y churros en alguno de los bares del paseo marítimo.</div>
+                <div class="act-tags">
+                  <span class="act-tag">Puerto pesquero</span>
+                  <span class="act-tag">Desayuno tardío</span>
+                  <span class="act-tag">~€5</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actividad 4 -->
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Atravesar el macizo de Jandía</div>
+                <div class="act-desc">La carretera asfaltada termina en Morro Jable y empieza la aventura: 10 km de pista de tierra que sube y baja el macizo de Jandía por un paisaje lunar sin vegetación. El taxi 4x4 (€15 pp, negociar en el puerto) es la opción cómoda. Con coche propio, ir despacio y aparcar en el mirador antes del descenso final a la playa.</div>
+                <div class="act-tags">
+                  <span class="act-tag">Taxi 4x4 €15/pp</span>
+                  <span class="act-tag">O pista propia</span>
+                  <span class="act-tag info">30-40 min</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actividad 5 -->
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Playa de Cofete — La playa más espectacular de Canarias</div>
+                <div class="act-desc">Cofete es el paisaje definitivo de Fuerteventura: 14 kilómetros de arena negra-dorada volcánica ante el Atlántico abierto, sin servicios, sin acceso fácil, sin los turistas de resort. El oleaje del Atlántico abierto hace imposible el baño (corrientes peligrosas) pero el entorno es absolutamente sobrenatural. En la colina: la Villa Winter, mansión construida en los años 40 por el ingeniero alemán Gustav Winter, rodeada de misterio histórico sobre su papel en la posguerra nazi. Visitable por fuera, sin entrada.</div>
+                <div class="act-tags">
+                  <span class="act-tag">Baño no recomendado (corriente)</span>
+                  <span class="act-tag">Villa Winter visible</span>
+                  <span class="act-tag info">Sin servicios — llevar comida</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actividad 6 -->
+            <div class="activity">
+              <div class="act-time">15:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Faro de Jandía — El extremo suroeste de la isla (1954)</div>
+                <div class="act-desc">El Faro de Jandía marca el punto más suroccidental de Fuerteventura: acantilados verticales de roca volcánica negra cayendo al Atlántico, el silbido constante del viento alisio y una vista hacia el horizonte sin tierra hasta las costas de Brasil. Construido en 1954, uno de los más aislados y fotogénicos de Canarias.</div>
+                <div class="act-tags">
+                  <span class="act-tag green">Gratis</span>
+                  <span class="act-tag">Acantilados</span>
+                  <span class="act-tag">Fotografía</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actividad 7 -->
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso a Morro Jable — Vuelta por pista o FV-2</div>
+                <div class="act-desc">Regreso a Morro Jable por la misma pista o, si se quiere variar, bordeando la costa sur a pie hasta encontrar alguna de las calas escondidas entre Cofete y el faro. La carretera FV-2 de regreso al norte ofrece las últimas vistas de Sotavento con la luz de la tarde.</div>
+                <div class="act-tags">
+                  <span class="act-tag">Regreso</span>
+                  <span class="act-tag info">30-40 min pista</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actividad 8 -->
+            <div class="activity">
+              <div class="act-time">18:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Atardecer en Playa de la Barca — El mejor atardecer kitesurf del mundo</div>
+                <div class="act-desc">La Playa de la Barca, en la zona norte de Sotavento, es mundialmente famosa entre los kitesurfistas: el alisio constante y las lagunas de bajamar crean condiciones perfectas. Ver el atardecer con decenas de cometas de colores sobrevolando la laguna turquesa es uno de los espectáculos más fotogénicos de Canarias.</div>
+                <div class="act-tags">
+                  <span class="act-tag green">Gratis</span>
+                  <span class="act-tag">Kitesurf</span>
+                  <span class="act-tag">Atardecer perfecto</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Restaurantes -->
+      <section id="restaurantes" class="itin-section" aria-labelledby="h-restaurantes">
+        <h2 class="section-heading" id="h-restaurantes">Dónde comer</h2>
+        <div class="meal-options">
+          <div class="meal-card">
+            <div class="meal-tier">Cofete (único)</div>
+            <div class="meal-name">El Solitario</div>
+            <div class="meal-info">El restaurante más remoto de Fuerteventura: un chiringuito básico junto a Cofete con menú del día (papas arrugadas, carne o pescado, postre) a precios razonables. Solo sirven a mediodía y los fines de semana pueden estar llenos. Sin carta de vinos.</div>
+            <div class="meal-price">~€15 pp</div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-tier">Morro Jable</div>
+            <div class="meal-name">Restaurante Muelle</div>
+            <div class="meal-info">Frente al puerto pesquero, especialidad en atún rojo local y mariscos. El mismo atún que sale del mar esa mañana llega a tu plato al mediodía. Terraza con vistas al puerto.</div>
+            <div class="meal-price">~€22–28 pp</div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-tier">Kitesurf spot</div>
+            <div class="meal-name">Chiringuito La Barca</div>
+            <div class="meal-info">El chiringuito del spot de kitesurf internacional: gente de todo el mundo, ambiente relajado, bocatas y bebidas frías mientras ves volar las cometas. El sitio menos gastronómico pero más cinematográfico de la ruta.</div>
+            <div class="meal-price">~€10 pp</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Consejos -->
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+
+        <div class="tip-item">
+          <div class="tip-num">1</div>
+          <div class="tip-text"><strong>Cofete: oleaje impredecible.</strong> El Atlántico en la cara oeste de Jandía genera corrientes subterráneas peligrosas. La playa de Cofete es para contemplar, no para bañarse. Los únicos que entran al agua son surfistas con tabla y traje de neopreno.</div>
+        </div>
+
+        <div class="tip-item">
+          <div class="tip-num">2</div>
+          <div class="tip-text"><strong>Llevar nevera con comida y agua.</strong> Cofete no tiene tienda ni fuente. Llevar una nevera portátil con comida, agua mínimo 2L por persona y protección solar. El sol de Jandía a mediodía es implacable.</div>
+        </div>
+
+        <div class="tip-item">
+          <div class="tip-num">3</div>
+          <div class="tip-text"><strong>Villa Winter: historia y misterio.</strong> La Villa Winter fue construida en 1937 por Gustav Winter, ingeniero alemán con vínculos con el régimen nazi. Las teorías sobre su función real (refugio de submarinos U-Boot, base de comunicaciones secreta) nunca han sido confirmadas ni desmentidas del todo. Visitable por fuera, gratis.</div>
+        </div>
+
+        <div class="tip-item">
+          <div class="tip-num">4</div>
+          <div class="tip-text"><strong>Mejor mes: mayo/junio/octubre.</strong> Julio y agosto el alisio es más intenso y las playas del sur están más concurridas. Mayo, junio y octubre tienen clima perfecto, menos viento y menos turistas.</div>
+        </div>
+
+        <div class="tip-item">
+          <div class="tip-num">5</div>
+          <div class="tip-text"><strong>Sotavento mejor en bajamar.</strong> La laguna turquesa que hace famosa a Sotavento solo existe en bajamar. Consultar las tablas de mareas antes de visitar: la bajamar de mañana es perfecta para la foto y el paseo.</div>
+        </div>
+
+      </section>
+
+      <!-- Disclosure -->
+      <div class="disclosure" role="note" aria-label="Aviso legal sobre enlaces de afiliados">
+        <strong style="color:#edeef2">Aviso sobre enlaces de afiliados:</strong> Algunos enlaces en esta página son de afiliados (Booking.com, GetYourGuide, Skyscanner, IATI Seguros). Si realizas una compra a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Esto nos permite mantener el servicio gratuito. Los precios y disponibilidad son indicativos y pueden variar. Siempre verifica en los sitios oficiales antes de reservar. Los precios están expresados en euros (€) y son estimaciones para 2026.
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html" style="font-family:'Bodoni Moda',serif;font-size:1.2rem;font-weight:700;color:#edeef2;text-decoration:none" aria-label="Routlo — Inicio">
+      <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+    </a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+(function() {
+  'use strict';
+
+  // ── Nav scroll effect ──
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // ── TOC active highlighting ──
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#', '');
+    const el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+
+  function updateTOC() {
+    const scrollY = window.scrollY;
+    const offset = 120;
+    let current = null;
+    sections.forEach(function(s) {
+      if (s.el.offsetTop - offset <= scrollY) {
+        current = s;
+      }
+    });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateTOC, { passive: true });
+  updateTOC();
+
+  // ── Smooth scroll for TOC links ──
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const id = this.getAttribute('href').replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 96;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ── Scroll reveal ──
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.day-card, .tip-item').forEach(function(el) {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }
+})();
+</script>
+</body>
+</html>

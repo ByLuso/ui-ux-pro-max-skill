@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ghandruk (Nepal) — 3 días en la aldea Gurung: Annapurna, piedra milenaria y el código de honor Gurkha | Routlo</title>
+  <meta name="description" content="3 días en Ghandruk: la aldea Gurung de piedra a 1.940m con Annapurna South (7.219m) de fondo. Cultura Gurkha, templos Ganesh, rutas de pizarra y los mejores atardeceres del Circuito de Annapurna."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#162a50 70%,rgba(201,169,110,0.12) 100%),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Aldeas · Nepal</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Ghandruk</h1>
+  <p class="dest-country">Aldea Gurung · Annapurna · Nepal</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Zona de Conservación Annapurna · Nepal</span>
+    <span class="dest-badge gold">3 días · Aldea Gurung</span>
+    <span class="dest-badge gold">💶 320 € dos personas</span>
+    <span class="dest-badge">🏔️ Annapurna South 7.219m</span>
+    <span class="dest-badge">🌸 Oct · Nov · Mar · Abr</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">3 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~320 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo a Pokhara</div></div>
+        <div class="route-info-item"><div class="route-info-label">Destaque</div><div class="route-info-val">Aldea Gurung</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Oct · Abr</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Ghandruk (aldea principal)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Puntos del circuito</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:24px;height:3px;background:#c9a96e;border-radius:2px;border-top:1px dashed #c9a96e;"></span>Ruta</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Pokhara → Nayapul en jeep → trek 4h a Ghandruk</div>
+            <div class="day-subtitle">Jeep compartido por el valle del Seti Gandaki · 870m de desnivel por escalones de pizarra</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Pokhara → Nayapul — la última carretera</div>
+              <div class="stop-desc">El jeep compartido desde Pokhara a Nayapul (1,5h, 350 rupias nepalesas/€2,50) recorre el valle del Seti Gandaki. Nayapul (1.070 m) es el punto de inicio del Circuito de Annapurna y del Santuario de Annapurna — la misma pista de tierra por la que partieron los primeros expedicionarios de Annapurna en 1950. El mercado de Nayapul tiene los mejores dal bhat del valle a 200 rupias (~€1,50). Comprad suficiente agua y snacks aquí — en Ghandruk cuestan el doble.</div>
+              <div class="stop-price">Jeep Pokhara → Nayapul: €2,50/persona compartido · Dal bhat: €1,50</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Trek Nayapul → Ghandruk — 4 horas de pizarra y aldeas Magar</div>
+              <div class="stop-desc">El sendero sube 870m desde Nayapul por la orilla del río Modi Khola hasta Ghandruk: 4 horas de escalones de pizarra negra (los Gurung tallan la roca local para los caminos desde hace 800 años), cruzando las aldeas de Tikhedhunga y Ulleri. La aldea de Ulleri (1.960m) tiene el tramo más duro: 3.900 escalones consecutivos sin descanso — la mayor concentración de escalones del Circuito de Annapurna. Al llegar a Ghandruk (1.940m), la Annapurna South (7.219m) aparece directamente sobre el pueblo. El efecto es inmediato: el pico más próximo de 7.000m del mundo en relación a una aldea habitada permanente.</div>
+              <div class="stop-price">ACAP (Annapurna Conservation Area Permit): €25/persona — compradlo en Pokhara</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>El ACAP y el TIMS:</strong> Para trekkear en la zona de Annapurna necesitáis dos permisos: el ACAP (Annapurna Conservation Area Permit, €25) y el TIMS card (Trekkers' Information Management System, €10). Se tramitan en la Nepal Tourism Board de Pokhara o en el aeropuerto. Sin ellos, os pararán en los checkpoints.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Ghandruk — la aldea que nunca se rinde</div>
+            <div class="day-subtitle">Museo Gurung · arquitectura de pizarra sin mortero · mirador de Tadapani a 10 km de la Annapurna</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Gurung Museum — el código de honor de los Gurkhas</div>
+              <div class="stop-desc">El museo comunitario Gurung de Ghandruk (€1) documenta la cultura de los Gurung, el pueblo del que proviene la mayoría de los legendarios soldados Gurkha del ejército británico e indio. Las kukris (cuchillos curvos ceremoniales), las fotografías de los soldados Gurung en la campaña de las Malvinas (1982) y las cartas en nepalí al General británico desde 1815 cuentan 200 años de historia militar. El Gurung de Ghandruk que cobra la entrada también fue sargento del Ejército Británico — lo preguntaréis y os contará su historia con orgullo. Sin dramatismo: es la identidad del pueblo.</div>
+              <div class="stop-price">Entrada museo: €1</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Rodhi y los caminos de pizarra — la arquitectura que dura siglos</div>
+              <div class="stop-desc">El Rodhi es la casa comunal del pueblo Gurung donde los jóvenes aprenden las canciones tradicionales (Ghatu) y las chicas practican el tejido ritual de la noche del festival. En Ghandruk el Rodhi del barrio de Chhumrong sigue funcionando — la arquitectura de piedra de pizarra sin mortero (solo encaje de piedra sobre piedra) tiene 400 años. Las casas de Ghandruk tienen muros de 70 cm de grosor para aguantar el frío del invierno y la humedad del monzón sin grietas. Los vecinos no tienen seguro de hogar — tienen muros de pizarra.</div>
+              <div class="stop-price">Gratis</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Mirador de Tadapani — Annapurna a 10 km</div>
+              <div class="stop-desc">El sendero de 2h desde Ghandruk hacia Tadapani (2.590m) sube por bosque de rododendros (en flor en marzo-abril: todo el bosque es rojo y rosa) hasta el mirador más cercano a la Annapurna South de todo el circuito. La distancia horizontal al pico es de 10 km — a escala en montaña de 7.219m, la sensación es de tener el Himalaya encima. El atardecer desde Tadapani pinta los glaciares de naranja y rosa: 20 minutos de espectáculo que ninguna fotografía puede reproducir.</div>
+              <div class="stop-price">Gratis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Descenso alternativo a Kimche → regreso a Pokhara</div>
+            <div class="day-subtitle">Aguas termales de Jhinu · aldeas sin guesthouses · Phewa Tal al atardecer</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Descenso a Kimche — la ruta que nadie coge</div>
+              <div class="stop-desc">En lugar de volver por el mismo camino (Nayapul), el descenso alternativo a través de Chomrong y Kimche es más largo (5h) pero pasa por aldeas Gurung que el trek estándar no visita: Jhinu Danda (aguas termales gratuitas en el río Modi, 30 min desde el sendero) y el pueblo de Landruk (tejado de pizarra, sin ningún guesthouse, solo familias Gurung). La llegada a Kimche coincide con la salida del jeep de vuelta a Pokhara a las 15h.</div>
+              <div class="stop-price">Aguas termales Jhinu: gratis · Jeep Kimche → Pokhara: €3/persona</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Pokhara — el merecido lakeside</div>
+              <div class="stop-desc">Phewa Tal, el lago de Pokhara, refleja el Machhapuchhre (6.993m, el pico con forma de cola de pez que nunca ha sido escalado legalmente) en el agua al atardecer. Después de 3 días de piedra y montaña, la orilla del lago con cerveza de jengibre y thakali set (cena nepalí completa) es el cierre perfecto. Los restaurantes de Lakeside Road tienen las mejores vistas al pico y al lago simultáneamente. Precio cena: €6-10.</div>
+              <div class="stop-price">Cena Lakeside Pokhara: €6-10/persona</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto desglosado</h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Mínimo (2 pax)</th><th>Cómodo (2 pax)</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida+vuelta a Pokhara (vía Katmandú, ×2)</td><td>€600</td><td>€900</td></tr>
+          <tr><td>Jeep Pokhara → Nayapul → Kimche → Pokhara (×2)</td><td>€11</td><td>€11</td></tr>
+          <tr><td>ACAP + TIMS permisos (×2 personas)</td><td>€70</td><td>€70</td></tr>
+          <tr><td>Alojamiento guesthouses 2 noches Ghandruk (×2)</td><td>€20</td><td>€40</td></tr>
+          <tr><td>Hotel Pokhara 1 noche</td><td>€20</td><td>€50</td></tr>
+          <tr><td>Comidas dal bhat en ruta (Nepal muy barato)</td><td>€30</td><td>€55</td></tr>
+          <tr><td>Entradas + museo</td><td>€10</td><td>€15</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado para 2 personas · 3 días (sin vuelos)</span>
+        <span class="budget-total-value">€161 – €241</span>
+      </div>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-aloj">
+      <h2 class="section-heading" id="h-aloj">Dónde dormir</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">Guesthouses de piedra en Ghandruk (€5-10/noche doble)</div>
+            <div class="stop-desc">Los teahouses de Ghandruk son guesthouses de piedra construidos por las familias Gurung. La tarifa incluye el derecho a usar la cocina compartida. El sistema funciona así: el alojamiento es barato (€5-8/noche doble) y las familias ganan con las comidas. Comed en el guesthouse donde dormís — es el código del trek. Los más recomendados: Himalayan Lodge, Annapurna Guest House, Gurung Cottage.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">Hotel en Pokhara (€10-25/noche doble)</div>
+            <div class="stop-desc">Lakeside tiene hostales con wifi, ducha caliente y piscina desde €10. Después de 3 días sin ducha caliente, el primer baño en Pokhara merece el upgrade a los €25 con vista al lago.</div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía Gurung · Nepal</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato nacional</div>
+          <div class="gastro-title">Dal Bhat</div>
+          <div class="gastro-price">€1,50-2,50</div>
+          <div class="gastro-desc">El plato más completo del mundo: arroz, dal (sopa de lentejas), sabji (verduras del día), achar (encurtido de mostaza o tomate), papadam y a veces pollo o huevo. Se rellena gratis tantas veces como queráis ("dal bhat power, 24 hour" dicen los trekkeros). En los teahouses de Ghandruk cuesta 350 rupias (~€2,50) y es la misma cantidad que come un porteador local.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Fermentado</div>
+          <div class="gastro-title">Gundruk</div>
+          <div class="gastro-price">€0,50-1</div>
+          <div class="gastro-desc">Hojas de mostaza fermentadas en seco durante 1-2 semanas en botes de barro. El sabor es ácido, casi vegetal. Los Gurung lo preparan en octubre para el invierno. Como acompañamiento del dal bhat es imprescindible. Fuera de Nepal es prácticamente imposible encontrarlo — la fermentación en seco es demasiado específica del clima del Himalaya.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Sopa</div>
+          <div class="gastro-title">Thukpa</div>
+          <div class="gastro-price">€2-3</div>
+          <div class="gastro-desc">Sopa de fideos tibetana adaptada por los Gurung: caldo de pollo o yak con fideos de trigo, verduras de raíz (nabo, zanahoria), jengibre y chile seco. Se sirve en cuenco de cerámica. En las alturas del Himalaya, el thukpa reconstituyente a 1.940m después de la subida desde Nayapul es el mejor plato del mundo en ese momento preciso.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Aguardiente</div>
+          <div class="gastro-title">Rakshi</div>
+          <div class="gastro-price">€0,50</div>
+          <div class="gastro-desc">El destilado de mijo fermentado de los Gurung. Completamente transparente, 25-40% vol., sabor más suave que el raksi tibetano. Se sirve en taza de bambú lacado. En las celebraciones Gurung (Dasain, Tihar) se ofrece a los invitados como primer gesto de hospitalidad. Rechazarlo es un insulto leve — aceptadlo aunque no bebáis alcohol.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bollería</div>
+          <div class="gastro-title">Sel Roti</div>
+          <div class="gastro-price">€0,30</div>
+          <div class="gastro-desc">Rosquillas de arroz fritas en aceite: masa de arroz molido con azúcar y cardamomo, formada en anillo y frita hasta que el exterior está crujiente y el interior blando. Las mujeres Gurung las hacen durante el festival Tihar (octubre-noviembre) en cantidades industriales. En los teahouses las venden en el desayuno a 20 rupias cada una — el snack perfecto para el trek.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida caliente</div>
+          <div class="gastro-title">Tongba</div>
+          <div class="gastro-price">€1</div>
+          <div class="gastro-desc">Bebida fermentada de mijo caliente exclusiva del norte de Nepal y Sikkim: el mijo fermentado se mete en un cántaro de bambú, se añade agua hirviendo y se bebe con una caña de bambú filtrante mientras el agua se recarga. La graduación aumenta cuanto más rato se deja fermentar el agua. Calentaros las manos en el cántaro después de la subida al mirador de Tadapani: la temperatura baja a 2.590m incluso en octubre.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>El trek no requiere guía para ir a Ghandruk:</strong> el camino Nayapul → Ghandruk está perfectamente señalizado con carteles del ACAP en inglés y nepalí. Para el desvío a Tadapani o el descenso alternativo por Landruk, un guía local (€15-20/día) añade contexto cultural que ninguna guía impresa puede dar.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Bajad de Ghandruk a Nayapul con cuidado los días de lluvia:</strong> los 3.900 escalones de pizarra de Ulleri se vuelven extremadamente resbaladizos con humedad. Bastones de trekking son imprescindibles. La pizarra mojada no tiene fricción — es como mármol pulido en pendiente.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Los permisos ACAP y TIMS no se pueden comprar en el sendero:</strong> si llegáis a Ghandruk sin los permisos, los checkpoints del ACAP os detendrán y tendréis que volver a Pokhara para tramitarlos. No merece la pena arriesgar. Tramitadlos en la Nepal Tourism Board de Lakeside Pokhara (9h-17h, lunes a viernes).</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Parad en Jhinu Danda:</strong> las aguas termales naturales del río Modi Khola en Jhinu Danda (30 min fuera del camino principal, señalizado) son gratuitas. El agua a 40°C en el río a 1.780m después del trekking es una experiencia que ningún balneario europeo puede igualar.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Los meses de monzón (junio-agosto) transforman el trek:</strong> Ghandruk puede visitarse en monzón (los rododendros están en pleno apogeo en julio) pero las vistas al Annapurna están bloqueadas por nubes el 90% del tiempo y los senderos son resbaladizos. Octubre-noviembre y marzo-abril son las ventanas perfectas.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>El código del teahouse:</strong> en los guesthouses de trekking del Himalaya hay una norma no escrita: si dormís en un teahouse, coméis ahí. Es el sustento de las familias de montaña. Si compráis comida de fuera y la coméis en el comedor, el propietario puede pediros que os vayáis. No es descortesía — es economía de subsistencia.</div></div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-check">
+      <h2 class="section-heading" id="h-check">Qué llevar</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="check-item"><div class="check-box"></div>Botas de trekking con tobillera y suela de goma (escalones de pizarra mojada)</div>
+        <div class="check-item"><div class="check-box"></div>Bastones de trekking (imprescindibles en el bajada de Ulleri)</div>
+        <div class="check-item"><div class="check-box"></div>ACAP + TIMS tramitados en Pokhara antes de salir</div>
+        <div class="check-item"><div class="check-box"></div>Efectivo en rupias nepalesas (los guesthouses no aceptan tarjeta)</div>
+        <div class="check-item"><div class="check-box"></div>Ropa por capas (1.940m: 5°C de noche en octubre, 22°C a mediodía)</div>
+        <div class="check-item"><div class="check-box"></div>Mochila de 30-40L + bolsa de lluvia impermeable</div>
+        <div class="check-item"><div class="check-box"></div>Pastillas de purificación de agua (el agua del grifo en los teahouses no siempre es potable)</div>
+        <div class="check-item"><div class="check-box"></div>Crema solar SPF 50+ (UV alto en altitud)</div>
+        <div class="check-item"><div class="check-box"></div>Botiquín básico (antihistamínico, vendas, betadine)</div>
+        <div class="check-item"><div class="check-box"></div>SIM nepalí con datos (NCell o NTC — señal en Ghandruk variable)</div>
+      </div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias Nepal</div><div class="emerg-value">100</div><div class="emerg-note">Policía — operativo solo en ciudades</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">102</div><div class="emerg-note">Sin cobertura en zonas de trekking</div></div>
+        <div class="emerg-card"><div class="emerg-label">ACAP Rescue · Pokhara</div><div class="emerg-value">+977 61 466 447</div><div class="emerg-note">Centro de información Annapurna</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Pokhara Western</div><div class="emerg-value">+977 61 523 183</div><div class="emerg-note">Western Regional Hospital — urgencias 24h</div></div>
+        <div class="emerg-card"><div class="emerg-label">Helicóptero de rescate</div><div class="emerg-value">+977 61 525 091</div><div class="emerg-note">HACE (Himalayan Rescue Association) — con seguro</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España Katmandú</div><div class="emerg-value">+977 1 4411 292</div><div class="emerg-note">emb.katmandu@maec.es</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar esta ruta?</h3>
+      <p>Nuestro chatbot IA puede ayudarte a extender el trek al Circuito de Annapurna completo (14 días), el Santuario de Annapurna Base Camp (ABC) o el Poon Hill sunrise desde Ghorepani.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los permisos ACAP (€25) y TIMS (€10) son obligatorios por persona y no se venden en el sendero. Tramitadlos en la Nepal Tourism Board de Pokhara. Los precios en rupias nepalesas son orientativos (1 € ≈ 133 NPR). El servicio de helicóptero de rescate requiere seguro de viaje con cobertura de evacuación de altura. Routlo no se responsabiliza de condiciones meteorológicas.
+    </div>
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Aldeas de Asia</div>
+      <nav aria-label="Aldeas de Asia"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="shirakawa.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Shirakawa-go</a></li>
+        <li><a href="mawlynnong.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Mawlynnong</a></li>
+        <li><a href="muang-ngoi.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Muang Ngoi</a></li>
+      </ul></nav>
+    </div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Itinerarios España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  const routeCoords = [
+    [28.210, 83.986], [28.318, 83.736], [28.378, 83.809],
+    [28.398, 83.777], [28.334, 83.798]
+  ];
+  const waypoints = [
+    { latlng: [28.210, 83.986], label: 'Pokhara — punto de salida' },
+    { latlng: [28.318, 83.736], label: 'Nayapul — inicio del trek' },
+    { latlng: [28.378, 83.809], label: 'Ghandruk — aldea principal' },
+    { latlng: [28.398, 83.777], label: 'Tadapani — mirador' },
+    { latlng: [28.334, 83.798], label: 'Kimche — descenso final' }
+  ];
+
+  const map = L.map('route-map', { zoomControl: true, attributionControl: false })
+    .setView([28.35, 83.85], 11);
+
+  const _lang = (navigator.language || 'en').toLowerCase();
+  if (_lang.startsWith('es')) {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, className: 'tile-osm-es'
+    }).addTo(map);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+  }
+
+  const bounds = L.latLngBounds(routeCoords).pad(0.15);
+  map.fitBounds(bounds);
+  L.polyline(routeCoords, { color: '#c9a96e', weight: 4, opacity: 0.85, lineJoin: 'round', dashArray: '8,6' }).addTo(map);
+
+  L.circleMarker(routeCoords[2], { radius: 9, fillColor: '#5ecb8a', color: '#fff', weight: 2.5, fillOpacity: 1 })
+    .bindTooltip('Ghandruk', { permanent: false }).addTo(map);
+  [waypoints[0], waypoints[1], waypoints[3], waypoints[4]].forEach(wp => {
+    L.circleMarker(wp.latlng, { radius: 7, fillColor: '#c9a96e', color: '#fff', weight: 2, fillOpacity: 1 })
+      .bindTooltip(wp.label, { permanent: false, direction: 'top' }).addTo(map);
+  });
+
+  L.control.attribution({ prefix: false }).addAttribution('© <a href="https://openstreetmap.org">OpenStreetMap</a>').addTo(map);
+  setTimeout(() => map.invalidateSize(), 100);
+})();
+</script>
+<style>.tile-osm-es{filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)}</style>
+</body>
+</html>

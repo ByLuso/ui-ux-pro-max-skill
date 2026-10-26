@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tailandia — 8 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 8 días en Tailandia: Bangkok, Chiang Mai, las islas del sur y templos sagrados. Presupuesto detallado, hoteles y consejos exclusivos de Routlo."/>
+  <meta property="og:title" content="Tailandia — 8 días | Routlo"/>
+  <meta property="og:description" content="La guía definitiva para 8 días en Tailandia: Grand Palace, Doi Suthep, Railay Beach, mercados flotantes y gastronomía callejera."/>
+  <meta property="og:type" content="article"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #040810; color: #edeef2; font-family: 'Jost', system-ui, sans-serif; line-height: 1.6; }
+
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.96); }
+
+    /* Aurora — green jungle tones for Thailand */
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #0d2e1a 0%, transparent 70%); top: -200px; left: -150px; opacity: 0.55; animation: blob 14s ease-in-out infinite; }
+    .aurora::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #1a3a0d 0%, transparent 70%); bottom: -150px; right: -100px; opacity: 0.45; animation: blob 14s ease-in-out infinite -7s; }
+    .aurora-mid { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, #2a6e2a22 0%, transparent 70%); top: 40%; left: 50%; opacity: 0.35; animation: blob-mid 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+    @keyframes blob-mid { 0%,100%{transform:translate(-50%,-50%) scale(1)} 33%{transform:translate(calc(-50% + 40px),calc(-50% - 60px)) scale(1.08)} 66%{transform:translate(calc(-50% - 30px),calc(-50% + 40px)) scale(0.94)} }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-mid { animation: none; } }
+
+    /* Hero */
+    .dest-hero { position: relative; z-index: 1; min-height: 65vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 140px 24px 60px; overflow: hidden; }
+    .dest-hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #0d1a0d 0%, #0d3a1a 40%, #2a6e2a 70%, rgba(80,200,80,0.15) 100%); }
+    .dest-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%); }
+    .dest-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); margin-bottom: 20px; position: relative; z-index: 1; }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(2.5rem,6vw,5rem); font-weight: 700; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2; }
+    .dest-country { font-family: 'Bodoni Moda', Georgia, serif; font-size: clamp(1.2rem,3vw,2rem); font-weight: 400; font-style: italic; color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1; }
+    .dest-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; margin-bottom: 32px; }
+    .dest-badge { padding: 6px 14px; background: rgba(4,8,16,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .sum-bar { display: flex; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 600px; position: relative; z-index: 1; }
+    .sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+
+    /* Layout */
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; font-size: 0.82rem; }
+    .toc-list a:hover { color: #c9a96e; border-left-color: rgba(201,169,110,0.4); background: rgba(201,169,110,0.05); }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.1); }
+
+    /* Sections */
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+
+    /* Day card */
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 56px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-sub { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-metas { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta { font-size: 0.74rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    /* Activity */
+    .activity { display: flex; gap: 14px; margin-bottom: 20px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; flex-shrink: 0; padding-top: 3px; }
+    .act-conn { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .act-tag.blue { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.warn { background: rgba(220,80,80,0.1); border-color: rgba(220,80,80,0.25); color: #e07070; }
+
+    /* Meals */
+    .meal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 14px; }
+    .meal-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .meal-type { font-size: 0.67rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 5px; }
+    .meal-name { font-weight: 700; font-size: 0.88rem; color: #edeef2; margin-bottom: 3px; }
+    .meal-desc { font-size: 0.78rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; line-height: 1.5; }
+    .meal-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; }
+
+    /* Hotels */
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 14px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 5px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 5px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; }
+    .hotel-feats { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-feats li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-feats li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .hotel-link:hover { border-color: #c9a96e; }
+
+    /* Budget */
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { color: #c9a96e; font-weight: 700; font-size: 1rem; border-bottom: none; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+    /* Transport */
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    /* Tips */
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    /* Phrases */
+    .phrases-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .phrase-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .phrase-es { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 4px; }
+    .phrase-local { font-size: 0.88rem; font-weight: 600; color: #edeef2; margin-bottom: 2px; }
+    .phrase-pron { font-size: 0.74rem; color: #c9a96e; font-style: italic; }
+
+    /* Emergency */
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+
+    /* Checklist */
+    .check-section { margin-bottom: 20px; }
+    .check-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 10px; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); cursor: pointer; user-select: none; }
+    .check-item:last-child { border-bottom: none; }
+    .check-item.done { color: rgba(237,238,242,0.3); text-decoration: line-through; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .check-item.done .check-box { background: #5ecb8a; border-color: #5ecb8a; }
+    .check-item.done .check-box::after { content: '✓'; font-size: 10px; color: #040810; font-weight: 700; }
+
+    /* Top 10 */
+    .top10-item { display: flex; gap: 16px; padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .top10-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.8rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 36px; }
+    .top10-content h4 { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .top10-content p { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.55; }
+
+    /* Gastronomy */
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; transition: border-color 0.2s; }
+    .gastro-card:hover { border-color: rgba(201,169,110,0.3); }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    /* Stay22 iframe */
+    .stay22-wrap { border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+
+    /* Disclosure */
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+
+    /* CTA Banner */
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg,#c9a96e,#a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* Responsive */
+        @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .hotel-grid { grid-template-columns: repeat(2,1fr); }
+      .transport-grid { grid-template-columns: 1fr; }
+      .gastro-grid { grid-template-columns: 1fr; }
+      .meal-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px; }
+      nav[role="navigation"] ul { display: none; }
+      /* Hero */
+      .dest-hero { padding: 100px 16px 40px; }
+      .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
+      .dest-country { font-size: 1.1rem; }
+      /* Sum bar: 3-col grid instead of long vertical stack */
+      .sum-bar { display: grid; grid-template-columns: repeat(3,1fr); border-radius: 12px; }
+      .sum-item { padding: 12px 8px; }
+      .sum-label { font-size: 0.6rem; }
+      .sum-val { font-size: 1rem; }
+      /* Day cards */
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+      .day-num { font-size: 1.8rem; min-width: 44px; }
+      .day-title { font-size: 1rem; }
+      .day-metas { margin-left: 0; flex-direction: row; gap: 8px; width: 100%; }
+      .day-body { padding: 14px 16px; }
+      /* Activities */
+      .act-time { min-width: 44px; font-size: 0.72rem; }
+      .act-title { font-size: 0.88rem; }
+      /* Grids */
+      .hotel-grid { grid-template-columns: 1fr; }
+      .phrases-grid { grid-template-columns: 1fr; }
+      .emerg-grid { grid-template-columns: 1fr; }
+      /* Section heading */
+      .section-heading { font-size: 1.3rem; }
+      /* Must box */
+      .must-box { flex-direction: column; gap: 8px; }
+      /* Budget table horizontal scroll */
+      .budget-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px; }
+      /* Checklist */
+      .check-section { margin-bottom: 16px; }
+    } nav[role="navigation"] ul { display: none; } }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><div class="aurora-mid"></div></div>
+
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">/</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">Tailandia</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Tailandia</h1>
+  <p class="dest-country">El País de las Sonrisas</p>
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">🏯 Asia</span>
+    <span class="dest-badge" role="listitem">8 días · 7 noches</span>
+    <span class="dest-badge" role="listitem">✈️ Bangkok · Chiang Mai · Krabi</span>
+    <span class="dest-badge" role="listitem">🌡️ 28–36 °C</span>
+    <span class="dest-badge" role="listitem">💱 Baht (THB)</span>
+  </div>
+  <div class="sum-bar" role="list">
+    <div class="sum-item" role="listitem"><div class="sum-label">Duración</div><div class="sum-val">8 días</div></div>
+    <div class="sum-item" role="listitem"><div class="sum-label">Ciudades</div><div class="sum-val">3</div></div>
+    <div class="sum-item" role="listitem"><div class="sum-label">Budget medio</div><div class="sum-val">~1.400€</div></div>
+    <div class="sum-item" role="listitem"><div class="sum-label">Dificultad</div><div class="sum-val">Fácil</div></div>
+    <div class="sum-item" role="listitem"><div class="sum-label">Ideal para</div><div class="sum-val">Cultura+Playa</div></div>
+  </div>
+</section>
+
+<!-- Main layout -->
+<div class="itin-layout">
+  <!-- TOC -->
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <p class="toc-title">Contenidos</p>
+    <ul class="toc-list" role="list">
+      <li><a href="#dias" class="toc-link">Itinerario día a día</a></li>
+      <li><a href="#dia1" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 1 — Bangkok llegada</a></li>
+      <li><a href="#dia2" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 2 — Templos</a></li>
+      <li><a href="#dia3" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 3 — Floating Market</a></li>
+      <li><a href="#dia4" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 4 — Chiang Mai</a></li>
+      <li><a href="#dia5" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 5 — Doi Suthep</a></li>
+      <li><a href="#dia6" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 6 — Krabi</a></li>
+      <li><a href="#dia7" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 7 — Railay Beach</a></li>
+      <li><a href="#dia8" class="toc-link" style="padding-left:18px;font-size:0.77rem">Día 8 — Regreso</a></li>
+      <li><a href="#presupuesto" class="toc-link">Presupuesto</a></li>
+      <li><a href="#transporte" class="toc-link">Transporte</a></li>
+      <li><a href="#top10" class="toc-link">Top 10 imprescindibles</a></li>
+      <li><a href="#gastronomia" class="toc-link">Gastronomía</a></li>
+      <li><a href="#consejos" class="toc-link">Consejos locales</a></li>
+      <li><a href="#frases" class="toc-link">Frases en tailandés</a></li>
+      <li><a href="#emergencias" class="toc-link">Emergencias</a></li>
+      <li><a href="#checklist" class="toc-link">Checklist pre-viaje</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main content -->
+  <main id="main-content">
+
+    <!-- ── ITINERARY ── -->
+    <section class="itin-section" id="dias" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">🗓️ Itinerario día a día</h2>
+
+      <!-- Día 1 -->
+      <article class="day-card" id="dia1" aria-labelledby="h-dia1">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title" id="h-dia1">Bangkok — Llegada y primer paseo nocturno</div>
+            <div class="day-sub">Aeropuerto · Sukhumvit · Mercado nocturno Asiatique</div>
+          </div>
+          <div class="day-metas" aria-label="Información del día">
+            <div class="day-meta">✈️ Llegada BKK</div>
+            <div class="day-meta">🌙 Cena callejera</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada al Aeropuerto Suvarnabhumi (BKK)</div>
+              <div class="act-desc">Recoge tu SIM turística en los mostradores de DTAC o AIS antes de salir de la terminal. La tarifa de 30 días con 30 GB cuesta unos 8€. Toma el Airport Rail Link hasta la estación Phaya Thai (45 THB, ~30 min).</div>
+              <div class="act-tags"><span class="act-tag">🚆 Rail Link</span><span class="act-tag green">SIM incluida</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Check-in y descanso en Sukhumvit</div>
+              <div class="act-desc">Uno de los barrios más vibrantes de Bangkok, con excelente conexión de BTS Skytrain. Dedica una hora a refrescarte y orientarte antes de la tarde-noche.</div>
+              <div class="act-tags"><span class="act-tag blue">BTS Skytrain</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Asiatique The Riverfront</div>
+              <div class="act-desc">Gran complejo de mercado nocturno a orillas del río Chao Phraya. Más de 1.500 puestos de artesanía, moda y comida. Llega en el ferry gratuito desde Saphan Taksin pier. La rueda panorámica iluminada ofrece vistas memorables.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag">⛵ Ferry</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Asiatique o Chinatown (Yaowarat)</div>
+              <div class="act-desc">Prueba el pad thai auténtico y los oysters a la plancha. Si tienes energía, Chinatown (Yaowarat) a las 21h es uno de los espectáculos gastronómicos más vibrantes de Asia.</div>
+              <div class="act-tags"><span class="act-tag">🍜 Street food</span></div>
+            </div>
+          </div>
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;margin:20px 0 10px;color:#edeef2">🍽️ Opciones de cena</h3>
+          <div class="meal-grid">
+            <div class="meal-card"><div class="meal-type">Económico</div><div class="meal-name">Jay Fai (Chinatown)</div><div class="meal-desc">Pad see ew y crab omelette de la chef con estrella Michelin más famosa del street food.</div><div class="meal-price">~15€/persona</div></div>
+            <div class="meal-card"><div class="meal-type">Intermedio</div><div class="meal-name">Asiatique Food Court</div><div class="meal-desc">Variedad inigualable: satay, mango sticky rice, tom yum y platos regionales.</div><div class="meal-price">~8€/persona</div></div>
+            <div class="meal-card"><div class="meal-type">Premium</div><div class="meal-name">Supanniga Eating Room</div><div class="meal-desc">Cocina thai refinada con recetas centenarias de la abuela de los propietarios. Ambiente interior chic.</div><div class="meal-price">~30€/persona</div></div>
+          </div>
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;margin:20px 0 10px;color:#edeef2">🏨 Alojamiento — Bangkok</h3>
+          <div class="hotel-grid">
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐ Económico</div>
+              <div class="hotel-name">Lub d Bangkok Silom</div>
+              <div class="hotel-zone">Silom · BTS Sala Daeng</div>
+              <div class="hotel-price">~25€/noche</div>
+              <ul class="hotel-feats"><li>Hostal boutique premiado</li><li>Piscina en rooftop</li><li>Bar social incluido</li></ul>
+              <a href="https://www.booking.com/hotel/th/lub-d-bangkok-silom.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐⭐⭐ Confort</div>
+              <div class="hotel-name">The Sukosol Bangkok</div>
+              <div class="hotel-zone">Phetchaburi · BTS Nana</div>
+              <div class="hotel-price">~80€/noche</div>
+              <ul class="hotel-feats"><li>Arte y diseño tailandés</li><li>Dos piscinas exteriores</li><li>Desayuno incluido</li></ul>
+              <a href="https://www.booking.com/hotel/th/the-sukosol.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐⭐⭐⭐⭐ Lujo</div>
+              <div class="hotel-name">Mandarin Oriental Bangkok</div>
+              <div class="hotel-zone">Orilla del Chao Phraya</div>
+              <div class="hotel-price">~450€/noche</div>
+              <ul class="hotel-feats"><li>Hotel histórico desde 1876</li><li>Vistas al río desde 60%+ habitaciones</li><li>Butler service</li></ul>
+              <a href="https://www.booking.com/hotel/th/mandarin-oriental-bangkok.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Día 2 -->
+      <article class="day-card" id="dia2" aria-labelledby="h-dia2">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title" id="h-dia2">Bangkok — Gran Palacio y templos sagrados</div>
+            <div class="day-sub">Wat Phra Kaew · Wat Pho · Wat Arun · Khao San Road</div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">🚶 12 km aprox.</div>
+            <div class="day-meta">🏛️ Cultura intensa</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Desayuno y salida temprana</div>
+              <div class="act-desc">Los templos más importantes de Bangkok se llenan de turistas a partir de las 9h. Salir temprano es esencial. Desayuna en el hotel o en un mercado local (kuay teow o jok, el arroz congee tailandés).</div>
+              <div class="act-tags"><span class="act-tag">🌅 Madrugada recomendada</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Gran Palacio y Wat Phra Kaew (Templo del Buda Esmeralda)</div>
+              <div class="act-desc">El complejo más importante de Tailandia. El Buda Esmeralda es en realidad jade verde y sólo el rey puede cambiarle el traje tres veces al año. <strong>Dress code obligatorio</strong>: hombros y rodillas cubiertos — si no llevas ropa adecuada, alquilan prendas en la entrada.</div>
+              <div class="act-tags"><span class="act-tag warn">Dress code</span><span class="act-tag">500 THB entrada</span><span class="act-tag green">Audioguía incluida</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Wat Pho — El Buda Reclinado</div>
+              <div class="act-desc">A 10 minutos a pie del Gran Palacio. El Buda de 46 metros de largo y 15 de alto es impresionante. Wat Pho también es considerado la primera universidad de Tailandia y el origen del masaje thai. Aprovecha para un masaje de pies de 30 minutos en las escuelas del templo (200 THB).</div>
+              <div class="act-tags"><span class="act-tag">100 THB entrada</span><span class="act-tag green">Masaje 200 THB</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ferry al Wat Arun — Templo del Amanecer</div>
+              <div class="act-desc">Cruza el río Chao Phraya en el ferry (4 THB) para ver de cerca las torres de cerámica de colores del Wat Arun. Sube a la terraza central para vistas panorámicas de Bangkok y el río. Al atardecer el reflejo en el agua es espectacular.</div>
+              <div class="act-tags"><span class="act-tag">⛵ 4 THB ferry</span><span class="act-tag">100 THB entrada</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Khao San Road — Epicentro mochilero</div>
+              <div class="act-desc">Famosa calle mochilera con vendedores de escorpiones fritos, camisetas personalizadas, bares con cocteles de colores y música en vivo. Aunque turística, la energía es única. Buen sitio para cenar barato y conocer viajeros.</div>
+              <div class="act-tags"><span class="act-tag">🍺 Vida nocturna</span><span class="act-tag">🦂 Escorpiones fritos</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Día 3 -->
+      <article class="day-card" id="dia3" aria-labelledby="h-dia3">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title" id="h-dia3">Bangkok — Mercados flotantes y rooftop bars</div>
+            <div class="day-sub">Damnoen Saduak · Chatuchak · Rooftop Bangkok</div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">🛶 Excursión</div>
+            <div class="day-meta">🏙️ Skyline nocturno</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">06:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida hacia el Mercado Flotante de Damnoen Saduak</div>
+              <div class="act-desc">A 100 km de Bangkok. La excursión organizada (reserva en GetYourGuide) include transporte A/R y guía. El mercado está más animado entre 7h y 10h, de ahí la salida temprana. En barca entre canales comprarás frutas tropicales, sopas y souvenirs directamente a los vendedores.</div>
+              <div class="act-tags"><span class="act-tag">🛶 Barca en canales</span><span class="act-tag green">Tour ~25€</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso y almuerzo en Chatuchak Weekend Market</div>
+              <div class="act-desc">Si es fin de semana, Chatuchak es el mayor mercado al aire libre de Asia (15.000 puestos, 200.000 visitantes/día). Ropa vintage, arte, antigüedades, plantas y comida callejera espectacular. Entre semana, ve al Terminal 21 — un centro comercial temático con plantas dedicadas a ciudades del mundo.</div>
+              <div class="act-tags"><span class="act-tag">🛍️ Shopping</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Rooftop Bar con vistas al skyline de Bangkok</div>
+              <div class="act-desc">Bangkok tiene algunos de los mejores rooftops del mundo. El Vertigo & Moon Bar (Banyan Tree, planta 61) ofrece vistas de 360°. Alternativas más accesibles: Sky Bar del Lebua (escenario de "Resacón en Bangkok") o el Octave en el Marriott. Reserva con antelación.</div>
+              <div class="act-tags"><span class="act-tag blue">Dress code smart casual</span><span class="act-tag">Cóctel ~15€</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Día 4 -->
+      <article class="day-card" id="dia4" aria-labelledby="h-dia4">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title" id="h-dia4">Vuelo a Chiang Mai — La rosa del norte</div>
+            <div class="day-sub">Old City · Mercado nocturno · Templos del casco antiguo</div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">✈️ Vuelo BKK→CNX</div>
+            <div class="day-meta">🌙 Walking Street</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo Bangkok → Chiang Mai</div>
+              <div class="act-desc">AirAsia y Thai Lion Air operan la ruta por ~25–50€ (1h 10min). Aeropuerto de Chiang Mai Internacional está a solo 3 km del centro — tuk-tuk fijo: 150 THB, songthaew (furgoneta roja compartida): 50 THB.</div>
+              <div class="act-tags"><span class="act-tag">✈️ ~1h 10min</span><span class="act-tag green">~25€ vuelo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Check-in y exploración de la Old City</div>
+              <div class="act-desc">Chiang Mai tiene una antigua ciudad amurallada perfectamente cuadrada con fosos de agua. Alquila una bicicleta (50 THB/día) o un scooter (200 THB/día) para moverte cómodamente. En el interior del recinto hay más de 30 templos.</div>
+              <div class="act-tags"><span class="act-tag">🚲 Bicicleta 50 THB</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Wat Chedi Luang y Wat Phra Singh</div>
+              <div class="act-desc">Dos de los templos más impresionantes del norte. El Wat Chedi Luang tiene una pagoda del siglo XIV parcialmente destruida por un terremoto que sigue siendo monumental. El Wat Phra Singh guarda el más venerado Buda de Chiang Mai.</div>
+              <div class="act-tags"><span class="act-tag">40 THB entrada c/u</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Walking Street del sábado (Wualai Road)</div>
+              <div class="act-desc">Si es sábado, la Wualai Walking Street es el mercado nocturno más auténtico de Chiang Mai, con artesanía local de plata y cerámica. Si es domingo, la Nimmanhaemin Road Walking Street ofrece ambiente más moderno y bohemio.</div>
+              <div class="act-tags"><span class="act-tag">🎨 Artesanía local</span><span class="act-tag green">Gratis</span></div>
+            </div>
+          </div>
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;margin:20px 0 10px;color:#edeef2">🏨 Alojamiento — Chiang Mai</h3>
+          <div class="hotel-grid">
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐ Económico</div>
+              <div class="hotel-name">Gap's House</div>
+              <div class="hotel-zone">Old City · amurallado</div>
+              <div class="hotel-price">~20€/noche</div>
+              <ul class="hotel-feats"><li>Jardín tropical tranquilo</li><li>Desayuno tailandés incluido</li><li>Alquiler de bicicletas</li></ul>
+              <a href="https://www.booking.com/hotel/th/gap-s-house.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐⭐⭐ Confort</div>
+              <div class="hotel-name">Tamarind Village</div>
+              <div class="hotel-zone">Old City · centro histórico</div>
+              <div class="hotel-price">~120€/noche</div>
+              <ul class="hotel-feats"><li>Boutique en jardín de tamarindos centenarios</li><li>Piscina infinity con templos de fondo</li><li>Experiencias culturales incluidas</li></ul>
+              <a href="https://www.booking.com/hotel/th/tamarind-village.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐⭐⭐⭐⭐ Lujo</div>
+              <div class="hotel-name">137 Pillars House</div>
+              <div class="hotel-zone">Nimmanhaemin · diseño colonial</div>
+              <div class="hotel-price">~350€/noche</div>
+              <ul class="hotel-feats"><li>30 suites con antigüedades originales</li><li>Spa y jardín privado</li><li>Butler y tours exclusivos</li></ul>
+              <a href="https://www.booking.com/hotel/th/137-pillars-house-chiang-mai.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Día 5 -->
+      <article class="day-card" id="dia5" aria-labelledby="h-dia5">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div>
+            <div class="day-title" id="h-dia5">Chiang Mai — Doi Suthep y santuario de elefantes</div>
+            <div class="day-sub">Templo montaña · Santuario ético de elefantes · Nimmanhaemin</div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">🐘 Elefantes éticos</div>
+            <div class="day-meta">🏔️ 1.073 m altitud</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">06:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Doi Suthep — El templo de la montaña sagrada</div>
+              <div class="act-desc">Sube en songthaew (rojo) desde Thanon Huay Kaew (50 THB). En la cima, 309 escalones con dragones nagas te llevan al templo dorado. Las vistas de Chiang Mai desde aquí al amanecer son absolutamente mágicas. El templo guarda una reliquia del hombro de Buda.</div>
+              <div class="act-tags"><span class="act-tag">🏔️ 1.073 m</span><span class="act-tag">30 THB entrada</span><span class="act-tag green">Amanecer épico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Santuario ético de elefantes — Elephant Nature Park</div>
+              <div class="act-desc">El más reconocido santuario ético de Asia, fundado por la activista Lek Chailert. Aquí se rescatan elefantes maltratados del turismo de equitación. Puedes alimentarlos, bañarlos en el río y caminar junto a ellos sin molestarlos ni montarlos. Experiencia transformadora. <strong>Reserva con meses de antelación.</strong></div>
+              <div class="act-tags"><span class="act-tag warn">Reservar con antelación</span><span class="act-tag">~75€ día completo</span><span class="act-tag green">Rescate ético</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Nimmanhaemin Road — Tarde bohemia</div>
+              <div class="act-desc">El barrio más trendy de Chiang Mai con galerías de arte, cafeterías de especialidad, restaurantes de fusión y boutiques de diseño local. Paseo perfecto para la tarde. Busca el callejón MAYA Mall para descubrir talleres de artesanos locales.</div>
+              <div class="act-tags"><span class="act-tag">☕ Specialty coffee</span><span class="act-tag">🎨 Arte local</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Día 6 -->
+      <article class="day-card" id="dia6" aria-labelledby="h-dia6">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">06</div>
+          <div>
+            <div class="day-title" id="h-dia6">Vuelo a Krabi — Paraíso del sur</div>
+            <div class="day-sub">Chiang Mai → Krabi · Ao Nang Beach · Atardecer</div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">✈️ CNX → KBV</div>
+            <div class="day-meta">🏖️ Playa</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo Chiang Mai → Krabi</div>
+              <div class="act-desc">Bangkok Airways opera la ruta con escala en Bangkok (~3h total) por unos 60–90€. Alternativa: AirAsia con escala en Don Mueang. El aeropuerto de Krabi está a 15 km de Ao Nang — minibus turístico 150 THB.</div>
+              <div class="act-tags"><span class="act-tag">✈️ ~3h con escala</span><span class="act-tag">~60€</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada a Ao Nang y check-in</div>
+              <div class="act-desc">Ao Nang es la base perfecta para explorar la región de Krabi. Playa accesible con acantilados kársticos de fondo — uno de los paisajes más reconocibles de Asia. Alquila una moto de agua o simplemente descansa en la arena.</div>
+              <div class="act-tags"><span class="act-tag">🏖️ Descanso</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Atardecer en Ao Nang Beach</div>
+              <div class="act-desc">El sol se pone detrás de las islas de Ko Daeng y Ko Mor con los acantilados de piedra caliza de fondo. Pide un cóctel en cualquier bar de playa y disfruta del espectáculo. Las luces de las linternas flotantes al caer la noche son mágicas.</div>
+              <div class="act-tags"><span class="act-tag green">Atardecer épico</span><span class="act-tag">🍹 Cócteles playa</span></div>
+            </div>
+          </div>
+          <h3 style="font-family:'Bodoni Moda',serif;font-size:1rem;margin:20px 0 10px;color:#edeef2">🏨 Alojamiento — Ao Nang, Krabi</h3>
+          <div class="hotel-grid">
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐ Económico</div>
+              <div class="hotel-name">Ao Nang Cliff Beach Resort</div>
+              <div class="hotel-zone">Ao Nang · frente al mar</div>
+              <div class="hotel-price">~35€/noche</div>
+              <ul class="hotel-feats"><li>Piscina con vistas al mar</li><li>Desayuno incluido</li><li>Kayaks gratuitos</li></ul>
+              <a href="https://www.booking.com/hotel/th/ao-nang-cliff-beach-resort.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐⭐⭐ Confort</div>
+              <div class="hotel-name">Centara Grand Beach Resort</div>
+              <div class="hotel-zone">Ao Nang Beach · primera línea</div>
+              <div class="hotel-price">~140€/noche</div>
+              <ul class="hotel-feats"><li>Acceso privado a la playa</li><li>4 piscinas en terrazas</li><li>Spa y actividades acuáticas</li></ul>
+              <a href="https://www.booking.com/hotel/th/centara-grand-beach-resort-villas-krabi.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+            <div class="hotel-card">
+              <div class="hotel-tier">⭐⭐⭐⭐⭐ Lujo</div>
+              <div class="hotel-name">Rayavadee Resort</div>
+              <div class="hotel-zone">Railay Beach · aislado</div>
+              <div class="hotel-price">~600€/noche</div>
+              <ul class="hotel-feats"><li>Únicamente accesible en barco</li><li>Pavellones rodeados de selva y acantilados</li><li>3 playas privadas exclusivas</li></ul>
+              <a href="https://www.booking.com/hotel/th/rayavadee.html?aid=123456" target="_blank" rel="noopener" class="hotel-link">Ver en Booking ↗</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Día 7 -->
+      <article class="day-card" id="dia7" aria-labelledby="h-dia7">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">07</div>
+          <div>
+            <div class="day-title" id="h-dia7">Krabi — Railay Beach y 4 Islas</div>
+            <div class="act-tags"><span>Excursión en long-tail boat · Snorkel · Playa secreta</span></div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">⛵ Long-tail boat</div>
+            <div class="day-meta">🐠 Snorkel</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:30</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Railay Beach en long-tail boat</div>
+              <div class="act-desc">Railay es la única playa de Tailandia accesible solo por mar, rodeada de acantilados de 200m. El long-tail boat desde Ao Nang cuesta 100 THB/persona (10 min). Hay cuatro playas distintas — Railay West (la mejor), Railay East, Phra Nang (con cueva sagrada) y Tonsai.</div>
+              <div class="act-tags"><span class="act-tag">⛵ 100 THB</span><span class="act-tag green">Playa secreta</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Excursión 4 Islas en kayak</div>
+              <div class="act-desc">Tour organizado que visita Chicken Island (Ko Kai), Ko Tub, Ko Mor y Ko Poda. Las aguas tienen una visibilidad de 10–15m perfecta para el snorkel. El tour incluye almuerzo en la playa, equipo de snorkel y guía (reserva en GetYourGuide: ~20€).</div>
+              <div class="act-tags"><span class="act-tag">🤿 Snorkel</span><span class="act-tag green">Almuerzo incluido</span><span class="act-tag">~20€ tour</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cueva de Phra Nang — Santuario de la fertilidad</div>
+              <div class="act-desc">En la punta de Railay, esta cueva sagrada es uno de los rincones más surrealistas de Tailandia: ofrendas de falos de madera de todas las formas y tamaños rodean una pequeña gruta donde los pescadores piden buena pesca y fertilidad. El contexto cultural es fascinante.</div>
+              <div class="act-tags"><span class="act-tag">🕌 Sagrado</span><span class="act-tag green">Gratis</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Día 8 -->
+      <article class="day-card" id="dia8" aria-labelledby="h-dia8">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">08</div>
+          <div>
+            <div class="day-title" id="h-dia8">Regreso — Última mañana y vuelo a casa</div>
+            <div class="day-sub">Mercado matutino · Último masaje thai · Vuelo de regreso</div>
+          </div>
+          <div class="day-metas">
+            <div class="day-meta">✈️ KBV → Casa</div>
+            <div class="day-meta">🛍️ Souvenirs</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado matutino de Krabi Town</div>
+              <div class="act-desc">Si tienes vuelo tarde, acércate a Krabi Town (20 min en minibus). El mercado matutino de Maharaj es auténtico, sin turistas, con frutas tropicales (rambután, mangostán, durian si te atreves), curry packets para llevar y ropa tradicional.</div>
+              <div class="act-tags"><span class="act-tag green">Muy local</span><span class="act-tag">🥭 Frutas tropicales</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-conn"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último masaje thai y souvenirs</div>
+              <div class="act-desc">Un masaje thai de 2 horas en un centro local cuesta 300–400 THB (~8–11€). Para souvenirs auténticos: nuea mun (aceites de masaje), cerámicas celadón de Chiang Mai, seda thai y especias. Evita las tiendas "Official Thai Handicraft" — suelen ser trampas para turistas.</div>
+              <div class="act-tags"><span class="act-tag">💆 Masaje 300 THB</span><span class="act-tag warn">Evita tiendas trampa</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-conn"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Transfer al aeropuerto de Krabi y vuelo de regreso</div>
+              <div class="act-desc">Llega al aeropuerto 2h antes para vuelos internacionales. En el control recuerda que los líquidos de más de 100ml deben ir en facturado. Los productos de curry y salsa de pescado en conserva pasan sin problema en equipaje de mano. ¡Sawasdee kha / krap!</div>
+              <div class="act-tags"><span class="act-tag">🛫 ¡Buen viaje!</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section class="itin-section" id="presupuesto" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">💰 Presupuesto estimado (8 días · 1 persona)</h2>
+      <div class="budget-wrap">
+        <table class="budget-table" aria-label="Tabla de presupuesto">
+          <thead><tr><th>Categoría</th><th>Económico</th><th>Confort</th><th>Premium</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Vuelos internacionales</td><td>450€</td><td>650€</td><td>1.200€</td><td>España–Bangkok A/R. Noviembre–febrero es temporada alta.</td></tr>
+            <tr><td>Vuelos internos</td><td>80€</td><td>120€</td><td>180€</td><td>BKK→CNX + CNX→KBV. Reserva con antelación.</td></tr>
+            <tr><td>Alojamiento (7 noches)</td><td>140€</td><td>560€</td><td>2.100€</td><td>Bangkok 2n + Chiang Mai 2n + Krabi 3n.</td></tr>
+            <tr><td>Comidas (8 días)</td><td>80€</td><td>200€</td><td>480€</td><td>Street food 3€/plato · restaurante 15–30€.</td></tr>
+            <tr><td>Transporte local</td><td>40€</td><td>80€</td><td>150€</td><td>BTS, tuk-tuks, songthaews, ferries, long-tail boats.</td></tr>
+            <tr><td>Entradas templos</td><td>30€</td><td>30€</td><td>30€</td><td>Gran Palacio, Wat Pho, Wat Arun, Doi Suthep.</td></tr>
+            <tr><td>Tours y experiencias</td><td>100€</td><td>150€</td><td>250€</td><td>Mercado flotante, elefantes, 4 islas, masajes.</td></tr>
+            <tr><td>Seguro médico IATI</td><td>45€</td><td>70€</td><td>120€</td><td><a href="https://www.iatiseguros.com/?r=voyageai" target="_blank" rel="noopener" class="hotel-link">Contratar IATI ↗</a></td></tr>
+            <tr><td><strong>Total estimado</strong></td><td><strong>965€</strong></td><td><strong>1.860€</strong></td><td><strong>4.510€</strong></td><td>Sin compras ni imprevistos.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.8rem;color:rgba(237,238,242,0.55);margin-top:12px">💡 Tip: 1€ ≈ 38 THB (mayo 2026). Siempre lleva algo de efectivo — muchos mercados y tuk-tuks no aceptan tarjeta.</p>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section class="itin-section" id="transporte" aria-labelledby="h-transporte">
+      <h2 class="section-heading" id="h-transporte">🚌 Transporte en Tailandia</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">🚆 BTS Skytrain · MRT (Bangkok)</div>
+          <div class="transport-content">La forma más rápida de moverse en Bangkok. El BTS cubre Sukhumvit, Silom y el centro moderno. El MRT (metro) conecta puntos clave como Chatuchak y la estación central Hua Lamphong. <strong>Tarifa: 17–59 THB</strong> según distancia. Compra la tarjeta Rabbit Card para BTS (200 THB depósito + saldo).</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🛺 Tuk-Tuk</div>
+          <div class="transport-content">Icónico pero solo para trayectos cortos y si negocias bien el precio <strong>antes</strong> de subir. Nunca pagues más de 100 THB por menos de 3 km en Bangkok. Desconfía de los tuk-tuk que te ofrecen tours "muy baratos" — suelen llevarte a tiendas de comisión. Grab (el Uber tailandés) es más fiable y barato.</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">⛵ Long-tail Boat y Ferry</div>
+          <div class="transport-content">En Bangkok, el Chao Phraya Express Boat es fantástico: <strong>15–40 THB</strong> y evita el tráfico. En Krabi, los long-tail boats conectan Ao Nang con Railay (100 THB, 10 min) y Ko Lanta (ferries de temporada). Son la forma más auténtica de moverse por la costa.</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🛵 Scooter y Bicicleta (Chiang Mai)</div>
+          <div class="transport-content">En Chiang Mai el scooter es el rey: <strong>200–300 THB/día</strong>. Necesitas carnet de moto válido (el español vale, pero comprueba el seguro). La bicicleta funciona perfectamente dentro del foso de la Old City (50 THB/día). Para el Doi Suthep, usa el songthaew rojo (50 THB).</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">📱 Grab — El Uber de Asia</div>
+          <div class="transport-content">Descarga Grab antes de llegar. Funciona en Bangkok, Chiang Mai y Phuket/Krabi. Precio fijo, sin regateo, pago con tarjeta. <strong>Perfecto para aeropuertos</strong> — evita taxistas sin taxímetro. Funciona también como entrega de comida (GrabFood) y compras (GrabMart).</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">✈️ Vuelos domésticos</div>
+          <div class="transport-content">La red de vuelos domésticos es densa y barata. <strong>AirAsia</strong> domina con rutas desde 20€. Bangkok Airways es más premium pero tiene más destinos exclusivos (Ko Samui). Busca en <a href="https://www.skyscanner.net/?utm_source=voyageai" target="_blank" rel="noopener" class="hotel-link">Skyscanner ↗</a> con 2–3 meses de antelación para mejores precios.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section class="itin-section" id="top10" aria-labelledby="h-top10">
+      <h2 class="section-heading" id="h-top10">⭐ Top 10 experiencias imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Gran Palacio y Wat Phra Kaew — Bangkok</h4><p>El complejo más impresionante de Tailandia. El Buda Esmeralda es el símbolo nacional. Llega a las 8h para evitar masas.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Santuario ético de elefantes — Chiang Mai</h4><p>Una de las experiencias más transformadoras de Asia. Ver elefantes libres y felices en un entorno natural es algo que no se olvida.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Railay Beach — Krabi</h4><p>La playa más espectacular de Tailandia, accesible solo en barco. Acantilados de 200m, agua turquesa y ambiente muy relajado.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Doi Suthep al amanecer — Chiang Mai</h4><p>Subir los 309 escalones con los nagas y llegar al templo dorado con el valle de Chiang Mai entre nubes al fondo. Pura magia.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Street food de Bangkok</h4><p>La mejor gastronomía callejera del mundo según muchos chefs. Jay Fai, Yaowarat de noche, mercado de Or Tor Kor. Indispensable.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Mercado flotante de Damnoen Saduak</h4><p>Comprar en barca entre canales tropicales es una experiencia visual y gastronómica única. Turístico pero genuinamente mágico.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Rooftop bar con vista a Bangkok</h4><p>El skyline de Bangkok de noche desde la planta 60 de un edificio es uno de los espectáculos urbanos más impresionantes del mundo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Masaje thai en un templo</h4><p>Un masaje de 2h en el Wat Pho o en una escuela certificada de Chiang Mai por menos de 10€. Terapéutico y culturalmente fascinante.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Snorkel en las 4 Islas de Krabi</h4><p>Aguas con 15m de visibilidad, peces de colores y corales sanos. Una de las mejores zonas de snorkel del Golfo de Tailandia.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Cueva de Phra Nang — Railay</h4><p>El rincón más surrealista de Tailandia: una cueva sagrada rodeada de ofrendas en uno de los acantilados más impresionantes del país.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section class="itin-section" id="gastronomia" aria-labelledby="h-gastronomia">
+      <h2 class="section-heading" id="h-gastronomia">🍜 Gastronomía tailandesa esencial</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Plato estrella</div><div class="gastro-title">Pad Thai</div><div class="gastro-desc">Fideos de arroz salteados con huevo, brotes, cacahuetes y gambas o pollo. El plato nacional por excelencia. Pide el "wet" (más jugoso) si puedes. Precio: 60–120 THB en street food.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Sopas</div><div class="gastro-title">Tom Yum Goong</div><div class="gastro-desc">Sopa agripicante con gambas, lemongrass, galangal y hojas de lima kafir. Aromática y explosiva. Uno de los sabores más representativos de Asia.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Curry</div><div class="gastro-title">Massaman Curry</div><div class="gastro-desc">Curry suave de origen persa con patatas, cacahuetes y carne de vacuno. Elegido el mejor plato del mundo por CNN varias veces. Más popular en el sur.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Norte de Tailandia</div><div class="gastro-title">Khao Soi</div><div class="gastro-desc">El plato emblema de Chiang Mai: fideos al curry crujientes y blandos al mismo tiempo, con leche de coco, pollo y encurtidos. Absolutamente adictivo.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Postre</div><div class="gastro-title">Mango Sticky Rice</div><div class="gastro-desc">Arroz glutinoso con leche de coco caliente y mango fresco cortado. Sencillo, barato (40–60 THB) y absolutamente delicioso. Mejor en temporada de mango (marzo–junio).</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Bebida</div><div class="gastro-title">Thai Iced Tea (Cha Yen)</div><div class="gastro-desc">Té negro fuerte con leche condensada y hielo. Naranja intenso y sabor a cardamomo. Inevitable en cualquier mercado callejero. 30–50 THB.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Ensalada</div><div class="gastro-title">Som Tum (Papaya verde)</div><div class="gastro-desc">Ensalada de papaya verde rallada con chile, lima, salsa de pescado y cacahuetes. Refrescante y muy picante. Pide "pet nit noi" para picante moderado.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Aventura culinaria</div><div class="gastro-title">Durian — el rey de las frutas</div><div class="gastro-desc">Prohibido en hoteles y transporte público por su olor, pero con un sabor cremoso de mango, natillas y ajo. Experiencia que divide a los viajeros. Precio: 50–150 THB/porción.</div></div>
+      </div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section class="itin-section" id="consejos" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">💡 Consejos locales de Routlo</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Dress code en templos:</strong> Hombros y rodillas siempre cubiertos. Lleva una bandana o pareo de tela ligera en la mochila — solución instantánea para 200g de peso. Los porteros del Gran Palacio son estrictos.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>La cabeza es sagrada:</strong> Nunca toques la cabeza de nadie, ni siquiera de niños de manera juguetona. Es el insulto más grave que puedes hacer en la cultura tailandesa.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Sonrisa tiene 13 significados:</strong> Los tailandeses sonríen para decir hola, gracias, lo siento, estoy incómodo, no sé y más. No interpretes una sonrisa como confirmación de que algo es correcto — confirma siempre de otra forma.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Regateo sí, agresividad no:</strong> Regatear es esperado en mercados (excepto en centros comerciales con precio fijo). Hazlo con humor y buen rollo. Si el precio no te conviene, di "mai ao kha/krap" (no quiero) y empieza a irte — casi siempre bajan el precio.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Ley de lesa majestad:</strong> Tailandia tiene una de las leyes de protección a la monarquía más estrictas del mundo. Nunca hagas comentarios negativos sobre el rey o la familia real en público. Penas de hasta 15 años de cárcel.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Agua y hielo:</strong> Nunca bebas agua del grifo. Todas las botellas de agua cuestan 10–15 THB. En restaurantes decentes, el hielo está hecho con agua purificada — es el hielo cilíndrico con agujero. El hielo granizado es potencialmente peligroso.</div></div>
+      <div class="tip-item"><div class="tip-num">7</div><div class="tip-text"><strong>Protección solar extrema:</strong> El sol tailandés quema en 20 minutos. SPF 50+ y ropa ligera de manga larga (UPF 50) son esenciales. Los tailandeses evitan el sol activamente — es señal de clase social, no de vanidad.</div></div>
+      <div class="tip-item"><div class="tip-num">8</div><div class="tip-text"><strong>Zapatos fáciles de quitar:</strong> Entrarás y saldrás de templos constantemente. Los chanclas o zapatos sin cordones son la opción inteligente para el día de templos. Busca los que huela menos posible para los interiores.</div></div>
+    </section>
+
+    <!-- ── FRASES ── -->
+    <section class="itin-section" id="frases" aria-labelledby="h-frases">
+      <h2 class="section-heading" id="h-frases">🗣️ Frases esenciales en tailandés</h2>
+      <p style="font-size:0.85rem;color:rgba(237,238,242,0.55);margin-bottom:16px">Nota: Los hombres añaden <em>krap</em> al final de las frases para ser educados; las mujeres añaden <em>kha</em>. En las frases se muestra la forma con ambos.</p>
+      <div class="phrases-grid">
+        <div class="phrase-card"><div class="phrase-es">Hola / Buenos días</div><div class="phrase-local">Sawasdee krap/kha</div><div class="phrase-pron">sa-wàt-dee kráp/kâ</div></div>
+        <div class="phrase-card"><div class="phrase-es">Gracias</div><div class="phrase-local">Khob khun krap/kha</div><div class="phrase-pron">khòp-khun kráp/kâ</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Cuánto cuesta?</div><div class="phrase-local">Tao rai krap/kha?</div><div class="phrase-pron">tâo-rài kráp/kâ</div></div>
+        <div class="phrase-card"><div class="phrase-es">Muy caro</div><div class="phrase-local">Phaeng maak</div><div class="phrase-pron">phɛɛng mâak</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Dónde está...?</div><div class="phrase-local">...yuu thi nai?</div><div class="phrase-pron">yùu thîi nǎi</div></div>
+        <div class="phrase-card"><div class="phrase-es">No quiero / No gracias</div><div class="phrase-local">Mai ao krap/kha</div><div class="phrase-pron">mâi ao kráp/kâ</div></div>
+        <div class="phrase-card"><div class="phrase-es">Está muy rico</div><div class="phrase-local">Aroi maak!</div><div class="phrase-pron">à-ròi mâak</div></div>
+        <div class="phrase-card"><div class="phrase-es">Picante moderado</div><div class="phrase-local">Pet nit noi</div><div class="phrase-pron">phèt nìt nòi</div></div>
+        <div class="phrase-card"><div class="phrase-es">Sin picante</div><div class="phrase-local">Mai pet</div><div class="phrase-pron">mâi phèt</div></div>
+        <div class="phrase-card"><div class="phrase-es">La cuenta, por favor</div><div class="phrase-local">Kep tang duay</div><div class="phrase-pron">kèp tang dûay</div></div>
+        <div class="phrase-card"><div class="phrase-es">Llame a un médico</div><div class="phrase-local">Riak mor duay</div><div class="phrase-pron">rîak mǒr dûay</div></div>
+        <div class="phrase-card"><div class="phrase-es">Lo siento / Perdón</div><div class="phrase-local">Kho thod krap/kha</div><div class="phrase-pron">khǒ thôot kráp/kâ</div></div>
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section class="itin-section" id="emergencias" aria-labelledby="h-emergencias">
+      <h2 class="section-heading" id="h-emergencias">🆘 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">191</div><div class="emerg-note">Policía tailandesa (24h)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía turística</div><div class="emerg-value">1155</div><div class="emerg-note">Inglés disponible (24h)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">1669</div><div class="emerg-note">Servicio médico de urgencias</div></div>
+        <div class="emerg-card"><div class="emerg-label">Bomberos</div><div class="emerg-value">199</div><div class="emerg-note">Incendios y rescates</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada española en Bangkok</div><div class="emerg-value">+66 2 661 8284</div><div class="emerg-note">L–V 9h–13h · Sukhumvit Soi 23</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital BNH Bangkok</div><div class="emerg-value">+66 2 686 2700</div><div class="emerg-note">El mejor para turistas. Inglés total.</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Bumrungrad</div><div class="emerg-value">+66 2 667 1000</div><div class="emerg-note">Referencia internacional. Sukhumvit Soi 3.</div></div>
+        <div class="emerg-card"><div class="emerg-label">Número de emergencias EU</div><div class="emerg-value">112</div><div class="emerg-note">Funciona también desde Tailandia con SIM española</div></div>
+      </div>
+      <div style="margin-top:16px;padding:14px 16px;background:rgba(201,169,110,0.08);border:1px solid rgba(201,169,110,0.2);border-radius:12px;font-size:0.83rem;color:rgba(237,238,242,0.7)">
+        ⚠️ <strong>Seguro médico obligatorio:</strong> Los hospitales tailandeses son excelentes pero caros sin seguro. Una hospitalización puede superar 10.000€. Contrata tu seguro con <a href="https://www.iatiseguros.com/?r=voyageai" target="_blank" rel="noopener" style="color:#c9a96e;text-decoration:none;border-bottom:1px solid rgba(201,169,110,0.3)">IATI Seguros ↗</a> antes de salir.
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section class="itin-section" id="checklist" aria-labelledby="h-checklist">
+      <h2 class="section-heading" id="h-checklist">✅ Checklist pre-viaje</h2>
+      <div class="check-section">
+        <div class="check-title">Documentación</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Pasaporte válido mínimo 6 meses más allá de la fecha de regreso</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Exención de visado para turistas españoles (hasta 60 días desde 2024)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Tarjeta de embarque y reserva de hotel impresas o descargadas offline</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Seguro de viaje con cobertura médica mínima 100.000€</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Carnet de conducir internacional (para alquilar moto en Chiang Mai)</div>
+      </div>
+      <div class="check-section">
+        <div class="check-title">Salud y vacunas</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Consulta con médico de viajes (hepatitis A+B, fiebre tifoidea recomendadas)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Repelente de mosquitos DEET 30%+ (dengue activo en Tailandia)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Antidiarreicos y suero oral (cambio de alimentación habitual)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Protector solar SPF 50+ y labial con protección</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Medicamentos personales en cantidad suficiente + receta en inglés</div>
+      </div>
+      <div class="check-section">
+        <div class="check-title">Tecnología y dinero</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>SIM turística tailandesa (comprar en aeropuerto BKK: DTAC o AIS)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Grab App instalada (taxi, comida, compras)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Tarjeta de débito sin comisiones en extranjero (Revolut, Bnext, N26)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Efectivo THB para llegar (300–500€ equivalente)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Cargador universal y adaptador de enchufe tipo A/B/C</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Powerbank de al menos 10.000 mAh</div>
+      </div>
+      <div class="check-section">
+        <div class="check-title">Reservas anticipadas</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Vuelos internacionales e internos reservados y pagados</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Elephant Nature Park en Chiang Mai (agota con meses de antelación)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Hotel en Krabi para temporada alta (noviembre–febrero)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Tour 4 Islas reservado (GetYourGuide o agencia local)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Rooftop bar en Bangkok (Vertigo, Sky Bar) — reserva con 1 semana</div>
+      </div>
+      <div class="check-section">
+        <div class="check-title">Ropa y equipaje</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Ropa ligera de lino/algodón (calor extremo 28–38°C)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Ropa respetuosa para templos (hombros y rodillas cubiertos)</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Sandalia o zapatilla cómoda de quitar rápido</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Bañador (al menos 2) y toalla de microfibra</div>
+        <div class="check-item" role="checkbox" aria-checked="false" tabindex="0"><div class="check-box"></div>Chubasquero ligero o poncho (lluvias tropicales repentinas)</div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este itinerario?</h3>
+      <p>Routlo genera itinerarios a medida con tus fechas, presupuesto y estilo de viaje en menos de 60 segundos.</p>
+      <a href="../index.html#generar" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Generar mi itinerario
+      </a>
+    </div>
+
+    <!-- Disclosure -->
+    <div class="disclosure" role="note">
+      <strong>Divulgación de afiliados:</strong> Este itinerario contiene enlaces de afiliado a Booking.com, GetYourGuide, Skyscanner e IATI Seguros. Si realizas una reserva a través de estos enlaces, Routlo puede recibir una pequeña comisión sin coste adicional para ti. Esto nos permite mantener el servicio gratuito y seguir generando contenido de calidad. Todos los precios son orientativos y pueden variar según temporada y disponibilidad.
+    </div>
+  </main>
+</div>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:64px 24px 40px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px">
+    <div>
+      <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px">
+        <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+      </a>
+      <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.7;max-width:280px">Itinerarios de viaje generados por inteligencia artificial. Más de 10.000 viajeros confían en Routlo cada mes.</p>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Destinos</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="tokio.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Tokio</a></li>
+        <li><a href="bali.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Bali</a></li>
+        <li><a href="paris.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">París</a></li>
+        <li><a href="roma.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Roma</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Más destinos</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="marrakech.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Marrakech</a></li>
+        <li><a href="peru.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Perú</a></li>
+        <li><a href="tailandia.html" style="font-size:0.875rem;color:#c9a96e;text-decoration:none">Tailandia</a></li>
+        <li><a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Ver todos →</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Routlo</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="../index.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Inicio</a></li>
+        <li><a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Mapa interactivo</a></li>
+        <li><a href="../index.html#generar" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Generar itinerario</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.8rem;color:rgba(237,238,242,0.55)">
+    <span>© 2026 Routlo · Todos los derechos reservados</span>
+    <span>Generado con ❤️ e IA</span>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // TOC active link on scroll
+  const sections = document.querySelectorAll('[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // Checklist toggle
+  document.querySelectorAll('.check-item').forEach(item => {
+    const toggle = () => {
+      const done = item.classList.toggle('done');
+      item.setAttribute('aria-checked', done);
+    };
+    item.addEventListener('click', toggle);
+    item.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); } });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'Exo', system-ui, sans-serif;
+  --font-mono: 'Roboto Mono', ui-monospace, monospace;
+}
+
+:root {
+  --color-bg: #0f172a;
+  --color-surface: #161f36;
+  --color-surface-2: #1c2742;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-fg: #f8fafc;
+  --color-fg-muted: #94a3b8;
+  --color-primary: #2563eb;
+  --color-primary-fg: #ffffff;
+  --color-accent: #f5b942;
+  --color-accent-fg: #1a1200;
+  --color-danger: #dc2626;
+  --color-success: #22c55e;
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --color-bg: #f4f6fb;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef1f8;
+  --color-border: rgba(15, 23, 42, 0.1);
+  --color-fg: #0f172a;
+  --color-fg-muted: #475569;
+  --color-primary: #2563eb;
+  --color-primary-fg: #ffffff;
+  --color-accent: #b7791f;
+  --color-accent-fg: #ffffff;
+  --color-danger: #dc2626;
+  --color-success: #16a34a;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --color-bg: #f4f6fb;
+    --color-surface: #ffffff;
+    --color-surface-2: #eef1f8;
+    --color-border: rgba(15, 23, 42, 0.1);
+    --color-fg: #0f172a;
+    --color-fg-muted: #475569;
+    --color-primary: #2563eb;
+    --color-primary-fg: #ffffff;
+    --color-accent: #b7791f;
+    --color-accent-fg: #ffffff;
+    --color-danger: #dc2626;
+    --color-success: #16a34a;
+    color-scheme: light;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-display);
+  background: var(--color-bg);
+  color: var(--color-fg);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+.leaflet-container {
+  background: var(--color-bg);
+  font-family: var(--font-display);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cascada del Huéznar — Cascadas y bosque en la Sierra Norte de Sevilla | Routlo</title>
+  <meta name="description" content="Escapada gratis de un día desde Sevilla a la Ruta de las Cascadas del Huéznar: senderismo fácil junto a cascadas y pozas naturales en plena Reserva de la Biosfera Sierra Norte. Guía con mapa, presupuesto y consejos."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #5ecbb8; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #5ecbb8; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(94,203,184,0.15); border: 1px solid rgba(94,203,184,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #5ecbb8; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(94,203,184,0.12); border: 1px solid rgba(94,203,184,0.3); font-size: 0.75rem; font-weight: 600; color: #5ecbb8; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(94,203,184,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(94,203,184,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #5ecbb8, #3a9e8d); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #5ecbb8; border-left-color: #5ecbb8; background: rgba(94,203,184,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(94,203,184,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(94,203,184,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #5ecbb8; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(94,203,184,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #5ecbb8; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #5ecbb8; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(94,203,184,0.3); }
+    .hotel-link:hover { border-color: #5ecbb8; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #5ecbb8; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#5ecbb8'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#5ecbb8'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,16,14,0.3) 0%,rgba(4,20,18,0.58) 50%,rgba(4,8,16,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">💧 Escapada de un día</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;font-size:0.75rem;font-weight:600;">🆓 Entrada gratuita</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">85 km · ~80 min en coche desde Sevilla</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~35€ / 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Cascada del Huéznar<br><span style="color:#5ecbb8;">El bosque y el agua que Andalucía esconde</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A poco más de una hora de Sevilla, la Sierra Norte cambia por completo el paisaje: bosques de alcornoques y castaños, un río que no se seca en verano y una sucesión de cascadas escalonadas con pozas de agua transparente. Toda la ruta —senderismo, cascadas y casco histórico de Cazalla— es gratis. El presupuesto del día: poco más de 35€ para dos.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#agua">El agua que olvidó que esto es Andalucía</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Cascada del Huéznar</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">💧 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">85 km</div><div class="route-info-unit">desde Sevilla</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~80 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~35€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Ruta a pie</div><div class="route-info-value">~8 km</div><div class="route-info-unit">fácil, sin desnivel fuerte</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Oct - Jun</div><div class="route-info-unit">más caudal en las cascadas</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="agua">
+      <h2 class="section-heading">💧 El agua que olvidó que esto es Andalucía</h2>
+      <div class="highlight-box">
+        <h4>🌳 Cuando el sur deja de ser sequía</h4>
+        <p>Piensa en Andalucía y seguramente imaginas olivares dorados, sol de justicia y tierra agrietada por la sequía. A menos de 100 km de Sevilla, ese paisaje desaparece de golpe. La Sierra Norte es la zona más septentrional y montañosa de la provincia, frontera natural con Extremadura y Córdoba: aquí llueve más, los bosques de alcornoques, encinas y castaños cubren las laderas, y el río Huéznar corre con agua limpia y fresca durante todo el año, incluso en pleno agosto. Es, literalmente, otra Andalucía —verde, fresca y casi desconocida para quien solo pasa por la capital.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🏞️ Reserva de la Biosfera Sierra Norte de Sevilla (UNESCO)</h4>
+        <p>Toda la zona que vas a recorrer —el valle del Huéznar, Cazalla de la Sierra y los pueblos vecinos— forma parte de la Reserva de la Biosfera Sierra Norte de Sevilla, declarada por la UNESCO. Es el espacio protegido más extenso de Andalucía y uno de los bosques mejor conservados de dehesa y monte mediterráneo de toda la región, refugio de buitres negros, ciervos, jabalíes y nutrias que viven precisamente gracias a este río que nunca se seca.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Sevilla → San Nolasco / Cascadas del Huéznar · ~80 min</div><div class="day-subtitle">Por la A-8200 hacia Cazalla de la Sierra y Constantina, atravesando la Sierra Norte</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 Salida temprano desde Sevilla</div>
+            <div class="stop-desc">Desde Sevilla, toma la A-66/A-8200 en dirección a Cazalla de la Sierra. El paisaje cambia rápido: a partir de El Pedroso empiezan los bosques de alcornoques y las primeras curvas de montaña. Sale a primera hora —cuanto antes llegues, más fácil será aparcar y más fresco estará el bosque.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento junto al sendero</div>
+            <div class="stop-desc">El acceso habitual a la Ruta de las Cascadas del Huéznar se hace desde el área recreativa de "Los Castillejos" o desde San Nolasco / la antigua estación de Cazalla-Constantina. Hay zonas de aparcamiento gratuitas junto al inicio del sendero; en fines de semana de primavera y verano llega pronto porque se llenan.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Ruta de las Cascadas del Huéznar</div><div class="day-subtitle">Senderismo fácil · ~8 km (ida y vuelta o tramo elegido) · 2h - 2h 30min · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🥾 Antigua Vía Verde de la Sierra Norte</div>
+            <div class="stop-desc">El sendero discurre sobre el antiguo trazado del ferrocarril Cazalla-Constantina-Almadén de la Plata, hoy convertido en Vía Verde: un camino llano, ancho y muy bien señalizado que sigue de cerca el curso del río Huéznar. Es apto para todos los niveles, incluido con niños o en bici de paseo, y no tiene ningún coste de acceso.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">💦 Las cascadas escalonadas</div>
+            <div class="stop-desc">A lo largo del recorrido se sucede una serie de saltos de agua de formación natural —travertínica, por la disolución de la caliza— que crean pequeñas cascadas escalonadas entre la vegetación de ribera: chopos, álamos, fresnos y zarzales. Las más conocidas son la Cascada de la Cimbarra del Huéznar y los saltos cerca de la antigua fábrica de la luz. Cada una tiene su mirador o pasarela de madera para fotografiar sin acercarse demasiado al borde.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">👟 Calzado y agua</div>
+            <div class="stop-desc">Aunque el terreno es fácil, hay tramos con piedras sueltas, raíces y zonas húmedas por las salpicaduras de las cascadas —unas zapatillas con buen agarre marcan la diferencia. Lleva al menos 1-1,5 litros de agua por persona: en verano, pese a la sombra del bosque, el calor de la Sierra Norte aprieta.</div>
+            <div class="stop-price">Acceso y senderismo: gratis</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Pozas naturales para el baño</div><div class="day-subtitle">Mediodía · Solo en temporada cálida · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏊 Un chapuzón a mitad de ruta</div>
+            <div class="stop-desc">En los meses cálidos (de junio a septiembre, según el caudal del año), algunas de las pozas que forma el río Huéznar bajo las cascadas son perfectamente aptas para el baño: agua fría, cristalina y muy poco profunda en la mayoría de los tramos. Es el descanso perfecto a mitad de la ruta, y no cuesta nada —solo necesitas bañador y toalla.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌳 Sombra y picnic junto al río</div>
+            <div class="stop-desc">El propio entorno de la Vía Verde tiene zonas con bancos y mesas de madera bajo los árboles, ideales para parar a comer algo entre cascada y cascada. Si prefieres llevarte el picnic montado desde casa, este es un buen tramo para hacerlo —fresco, con sombra y con el sonido del agua de fondo.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Cazalla de la Sierra</div><div class="day-subtitle">Paseo por el pueblo · 1h - 1h 30min · Casco histórico gratuito</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⚪ Un pueblo blanco de montaña</div>
+            <div class="stop-desc">Cazalla de la Sierra es la localidad de referencia de la Sierra Norte: calles empedradas, casas encaladas con balcones de hierro forjado, y una arquitectura serrana tradicional muy distinta a la de la campiña sevillana. Pasear por su casco histórico —declarado conjunto histórico-artístico— es gratis y se hace en poco más de una hora con calma.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Antigua Cartuja de Cazalla</div>
+            <div class="stop-desc">A las afueras del pueblo se encuentra la antigua Cartuja de Nuestra Señora de la Asunción (s. XV), un monasterio cartujo que hoy combina hospedería, bodega y centro cultural. Aunque parte del edificio es de uso privado/hotelero, sus jardines y entorno exterior son visitables y permiten admirar la arquitectura del conjunto y las vistas sobre el valle sin coste de entrada —consulta en el momento si hay alguna visita guiada puntual con tarifa aparte.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesias y miradores del pueblo</div>
+            <div class="stop-desc">La iglesia de Nuestra Señora de la Consolación, con su torre mudéjar, y varios miradores naturales del propio núcleo urbano ofrecen vistas sobre los tejados del pueblo y las sierras circundantes. Todo el recorrido se hace caminando y sin ningún coste.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">⑤</div><div><div class="day-title">Gastronomía local y regreso</div><div class="day-subtitle">Tarde · Productos de la Sierra Norte · Vuelta ~80 min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🍄 Setas, castañas y productos de temporada</div>
+            <div class="stop-desc">La Sierra Norte es tierra de setas y castañas: en otoño es habitual encontrar puestos y tiendas locales con champiñones, níscalos y otras setas de temporada, además de castañas asadas. También es zona productora de embutidos ibéricos y quesos de cabra artesanos —perfectos para completar el picnic o llevarte algo a casa.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🥃 Anís de Cazalla</div>
+            <div class="stop-desc">Cazalla de la Sierra es históricamente conocida por la producción de anís y aguardientes artesanales —el famoso "anís de Cazalla". Hay bares y tiendas locales en el pueblo donde se puede probar o comprar una botella como recuerdo; no es una visita obligatoria ni de pago, simplemente una parada opcional para los que quieran llevarse un sabor típico de la sierra.</div>
+            <div class="stop-price">Anís o productos locales (opcional): ~5-8€</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Sevilla — ~80 min</div>
+            <div class="stop-desc">Vuelta por la misma carretera de montaña hasta Sevilla. Si el día da para más, Constantina —con su castillo y su propio entorno natural— está a solo 15 minutos de Cazalla y puede ser la base de otra escapada de Routlo.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, ~170 km)</span><span>17€</span></div>
+        <div class="budget-row"><span>🅿️ Parking en área de inicio del sendero</span><span>0€</span></div>
+        <div class="budget-row"><span>🥾 Senderismo, cascadas y pozas</span><span>0€</span></div>
+        <div class="budget-row"><span>🍽️ Picnic o comida en Cazalla de la Sierra</span><span>14€</span></div>
+        <div class="budget-row"><span>🥃 Anís o productos locales (setas, castañas)</span><span>4€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~35€</span></div>
+      </div>
+      <div class="budget-note">El acceso a la Ruta de las Cascadas del Huéznar, las pozas de baño y el casco histórico de Cazalla son completamente gratuitos. El presupuesto se va casi entero en gasolina y en la comida del mediodía —si llevas picnic desde Sevilla, el día puede salir todavía más barato.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Mejor época para las cascadas:</strong> de octubre a junio el río Huéznar lleva más caudal y las cascadas se ven mucho más espectaculares. En pleno verano el agua disminuye, aunque las pozas siguen siendo aptas para el baño.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Calzado adecuado:</strong> aunque el sendero sigue la antigua vía del tren y es mayormente llano, hay tramos con piedras, raíces y zonas húmedas junto a las cascadas. Unas zapatillas de trekking o sneakers con buena suela son suficientes —evita el calzado abierto.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Evita los fines de semana de pleno verano</strong> si puedes: las pozas más conocidas tienen capacidad limitada y se llenan rápido en julio y agosto. Entre semana o fuera de temporada alta disfrutarás de la ruta casi en solitario.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Bañador y toalla en la mochila:</strong> si vas entre junio y septiembre, lleva bañador, toalla y una bolsa para la ropa mojada —las pozas aparecen sin avisar y apetece meterse en cuanto las ves.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Sevilla y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Sevilla" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Sevilla en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados"><strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.</div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Sevilla?</h3>
+      <p>Rutas de naturaleza, senderismo y pueblos con encanto cerca de Sevilla, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([37.9900,-5.7650],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[37.9900,-5.7650],label:'Cascadas del Huéznar (San Nolasco)',color:'#5ecbb8',r:12},{coords:[37.9333,-5.7500],label:'Cazalla de la Sierra',color:'#5ecb8a',r:9}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[37.9900,-5.7650],[37.9333,-5.7500]],{color:'#5ecbb8',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

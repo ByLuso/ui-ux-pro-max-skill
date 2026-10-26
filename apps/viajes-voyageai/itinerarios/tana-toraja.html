@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tana Toraja (Indonesia) — 4 días entre funerales épicos, casas barco y tumbas en acantilados de Sulawesi | Routlo</title>
+  <meta name="description" content="4 días en Tana Toraja, Sulawesi: los funerales más elaborados del mundo, casas tongkonan con techo de barco, efigies tau-tau y tumbas talladas en acantilados de piedra caliza."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#162a50 70%,rgba(201,169,110,0.12) 100%),url('https://images.unsplash.com/photo-1604999333679-b86d54738315?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Aldeas · Indonesia</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Tana Toraja</h1>
+  <p class="dest-country">Sulawesi · Los funerales más elaborados del mundo · Tumbas en acantilados</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Sulawesi del Sur · Indonesia</span>
+    <span class="dest-badge gold">4 días · Cultura funeraria única</span>
+    <span class="dest-badge gold">💶 ~1.650 € dos personas (vuelos incluidos)</span>
+    <span class="dest-badge">🏠 Casas tongkonan · Tau-tau</span>
+    <span class="dest-badge">☀️ May · Jun · Jul · Ago</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">4 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~1.650 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo a Makassar</div></div>
+        <div class="route-info-item"><div class="route-info-label">Altitud</div><div class="route-info-val">~900 m</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Jun · Ago</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Rantepao (base)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Makassar → Rantepao — llegada al corazón de Sulawesi</div>
+            <div class="day-subtitle">Ciudad portuaria balinesa · Bus nocturno · Primera vista de los tongkonan</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Makassar (Ujung Pandang) — el portal a Sulawesi</div>
+              <div class="stop-desc">Los vuelos a Makassar desde Europa requieren al menos una escala (Singapur, Kuala Lumpur, Yakarta o Bali son los hubs habituales). Desde Madrid, el viaje total dura 18-24 horas dependiendo de las escalas. Makassar es la capital de Sulawesi del Sur, ciudad portuaria con 1,5 millones de habitantes, conocida históricamente como la principal potencia marítima de las Indias Orientales. La Fortaleza de Rotterdam (s. XVII, construida por los holandeses sobre una fortaleza de los Gowa) vale una visita rápida si llegas por el día. El bus nocturno a Rantepao sale normalmente entre las 20:00 y las 22:00 desde la Terminal Daya.</div>
+              <div class="stop-price">Vuelo España → Makassar (ida y vuelta, con escala): €700–1.000/persona · Bus Makassar → Rantepao: €8–12</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Bus nocturno a Rantepao — las 8 horas más cinematográficas de Indonesia</div>
+              <div class="stop-desc">El trayecto de 330 km desde Makassar a Rantepao dura 7-9 horas por la carretera que sube desde el nivel del mar hasta los 900 metros de la meseta Toraja. Los buses modernos tienen asientos reclinables y AC. Al amanecer —si estás despierto— el cambio de paisaje es radical: los arrozales planos de la costa dan paso a montañas cubiertas de selva y las primeras casas tongkonan aparecen entre los árboles como barcos varados en tierra.</div>
+              <div class="stop-price">Bus nocturno Makassar-Rantepao: IDR 150.000-250.000 ≈ €8–14</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Llegada a Rantepao — instala base</div>
+              <div class="stop-desc">Rantepao es la capital turística de Tana Toraja y el punto de partida para todas las excursiones. Pequeña ciudad de 30.000 habitantes rodeada de arrozales en terrazas. Consulta en el hotel o guesthouse qué funerales (Rambu Solo) están programados para los próximos días: los funerales torajeños son eventos públicos a los que los viajeros son bienvenidos. El mercado de Rantepao (pasar) tiene lugar cada 6 días y es uno de los mejores del país.</div>
+              <div class="stop-price">Guesthouse Rantepao: €15–30/habitación doble</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Kete Kesu y Londa — casas barco y tumbas en acantilado</div>
+            <div class="day-subtitle">El pueblo tongkonan más fotogénico · Cueva de los antepasados · Efigies tau-tau</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Kete Kesu — el pueblo tongkonan más fotografiado del mundo</div>
+              <div class="stop-desc">A 4 km al sur de Rantepao, Kete Kesu es el pueblo tradicional torajeño mejor conservado. Las casas tongkonan —con su techo en forma de casco de barco invertido que se eleva hasta 10 metros en los extremos— tienen entre 300 y 700 años de antigüedad. Los techos están cubiertos de capas de bambú apiladas como escamas de pez y decorados con grabados rojinegros de búfalos de agua, gallos y espirales. Frente a cada tongkonan principal hay un granero (alang) con el mismo techo de barco, donde se guarda el arroz. Entre los dos edificios cuelgan cráneos de búfalo: cada uno registra un funeral celebrado. Más cráneos = más riqueza de la familia.</div>
+              <div class="stop-price">Entrada a Kete Kesu: IDR 25.000 ≈ €1,40</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Tumbas en acantilado de Kete Kesu</div>
+              <div class="stop-desc">Detrás del pueblo, una senda sube 200 metros hasta las tumbas talladas directamente en la roca caliza del acantilado. Los ataúdes —algunos con más de 500 años— cuelgan de las paredes o están apoyados en plataformas de madera. Muchos están ya desintegrados por la humedad y los huesos caen al suelo. No es un espectáculo de miedo: es un lugar de profunda serenidad. Los torajeños no temen a la muerte, la celebran. Un muerto "bien enterrado" (con un funeral Rambu Solo apropiado) puede descansar en paz. Un muerto "mal enterrado" se convierte en problemático para los vivos.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Londa — la cueva de los tau-tau</div>
+              <div class="stop-desc">A 6 km de Rantepao, el complejo funerario de Londa es una cueva caliza con ataúdes apilados y, en la entrada, una fila de tau-tau: efigies de madera talladas a imagen y semejanza del difunto, con ojos de vidrio y ropa real, colocadas en nichos del acantilado para vigilar sus propias tumbas. Los más antiguos son del siglo XVIII; los más recientes, del XXI. El interior de la cueva se puede explorar con guía y linterna de aceite (incluida en el precio). Los ataúdes de madera más recientes tienen forma de animal: el barco para los de mayor rango, el búfalo para los ganaderos, el cerdo para los de clase media. El animal lo decide la familia según el rango del difunto.</div>
+              <div class="stop-price">Entrada Londa (con guía y linterna): IDR 30.000 ≈ €1,65</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>El Rambu Solo — el funeral más caro del mundo por habitante:</strong> Un funeral torajeño de primera clase puede durar entre 3 y 7 días e involucrar el sacrificio de decenas de búfalos de agua (precio de mercado: €2.000-5.000 por animal). La familia puede pasar años —o décadas— ahorrando antes de poder enterrar dignamente a su familiar. Mientras tanto, el cuerpo del difunto convive con la familia en casa, embalsamado con formalina, tratado como si estuviera enfermo. No como si estuviera muerto. Los vecinos vienen a visitarle. Le ofrecen cigarrillos.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Batutumonga y Bori Kalimbuang — las alturas sagradas</div>
+            <div class="day-subtitle">Panorámica de arrozales a 1.300 m · Campo de megalitos · Sendero entre aldeas</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Batutumonga — el mirador más alto de Tana Toraja</div>
+              <div class="stop-desc">A 1.300 metros sobre el nivel del mar, el pueblo de Batutumonga ofrece la vista más completa sobre el corazón de Tana Toraja: terrazas de arroz en escalones hasta el horizonte, casas tongkonan dispersas en el valle como barcos encallados, y el Puncak Noling al fondo. El acceso desde Rantepao (18 km) se hace en ojek (mototaxi local) por una carretera que sube en espiral. El trayecto dura 40 minutos y es parte del espectáculo. Desde Batutumonga parten senderos de 2-4 horas entre aldeas tradicionales: no hay señalización pero los niños locales hacen de guía espontáneo.</div>
+              <div class="stop-price">Ojek Rantepao-Batutumonga: IDR 50.000-80.000 ≈ €2,70–4,40 por persona</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Bori Kalimbuang — el campo de menhires de los funerales nobles</div>
+              <div class="stop-desc">A 12 km de Rantepao, el campo de Bori Kalimbuang reúne 102 menhires de piedra de hasta 4 metros de altura, cada uno erigido en memoria de un noble torajeño fallecido. La costumbre es milenaria: cuando un aristócrata moría, la familia cortaba un bloque de piedra y lo transportaba al campo comunal. Los más antiguos tienen más de 700 años. Es el equivalente torajeño de Stonehenge, pero se sigue usando. Delante de los menhires hay una plataforma de piedra (rante) donde se ejecutaban los búfalos durante el funeral. Las manchas oscuras del suelo llevan siglos.</div>
+              <div class="stop-price">Entrada Bori Kalimbuang: IDR 20.000 ≈ €1,10</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Si hay funeral — el privilegio inesperado</div>
+              <div class="stop-desc">Los funerales Rambu Solo son eventos públicos: si coincides con uno durante tu estancia, es completamente apropiado asistir (con ropa oscura y un paquete de cigarrillos o azúcar como ofrenda mínima). Los torajeños aprecian que los forasteros honren sus tradiciones. El sacrificio de búfalos es la parte más impactante —y puede ser perturbadora para algunos— pero es un acto ritual de profundo significado espiritual, no de crueldad. La carne es distribuida entre toda la comunidad. La escala de estos eventos (cientos o miles de personas, música, danza, decenas de búfalos) no tiene parangón en ningún otro lugar del planeta.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title">Pallawa, Singki y regreso a Makassar</div>
+            <div class="day-subtitle">El pueblo tongkonan más aristocrático · Último amanecer · Bus de vuelta</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Pallawa — el tongkonan más grande de Tana Toraja</div>
+              <div class="stop-desc">A 12 km al norte de Rantepao, Pallawa tiene el complejo de casas tongkonan más grande y mejor conservado de la región. El tongkonan principal tiene más de 500 años y está flanqueado por una hilera de 11 alang (graneros). Los cráneos de búfalo acumulados en la fachada forman una pared completa: se cuentan más de 70, un registro material de la riqueza y el poder de la familia durante siglos. El pueblo sigue habitado —no es un museo—: las mujeres tejen ikat en los porches de los graneros y los ancianos fuman en las escaleras.</div>
+              <div class="stop-price">Entrada Pallawa: IDR 25.000 ≈ €1,40</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Mirador de Singki — despedida aérea de Tana Toraja</div>
+              <div class="stop-desc">El mirador de Singki está a 3 km de Rantepao, sobre una colina de 50 metros de ascenso (15 minutos a pie). Desde arriba se ve todo el valle de Rantepao: el río Sa'dan, los campos de arroz, los tejados de barco de los tongkonan distribuidos por el paisaje. Es el mejor punto para entender la escala del paisaje cultural torajeño. Inmortaliza la vista y baja a tiempo para comer antes del bus de vuelta.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Bus a Makassar — vuelo de vuelta</div>
+              <div class="stop-desc">Los buses a Makassar salen desde Rantepao durante todo el día (también hay servicio nocturno). Si tu vuelo de regreso sale por la noche desde Makassar, el bus de la tarde (salida ~14:00, llegada ~22:00) da margen suficiente. Algunos viajeros añaden 1-2 días en Bali a la vuelta para romper el largo viaje de regreso a Europa.</div>
+              <div class="stop-price">Bus Rantepao-Makassar: IDR 150.000-250.000 ≈ €8–14</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto detallado</h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Detalle</th><th>2 personas</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida y vuelta</td><td>España → Makassar (con 1-2 escalas)</td><td>€1.100–1.600</td></tr>
+          <tr><td>Alojamiento (4 noches)</td><td>Guesthouses en Rantepao</td><td>€80–180</td></tr>
+          <tr><td>Transporte tierra</td><td>Bus Makassar↔Rantepao x2 + ojeks locales</td><td>€40–70</td></tr>
+          <tr><td>Comidas (4 días)</td><td>Restaurantes locales + mercado</td><td>€40–80</td></tr>
+          <tr><td>Entradas y guías</td><td>Kete Kesu, Londa, Bori, Pallawa + guías</td><td>€20–45</td></tr>
+          <tr><td>Imprevistos</td><td>Taxis, souvenirs, agua, sim card</td><td>€30–60</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <div class="budget-total-label">Total estimado (2 personas, 4 días)</div>
+        <div class="budget-total-value">€1.310–2.035</div>
+      </div>
+      <div class="highlight-box" style="margin-top:16px;">
+        <strong>En tierra, es barato:</strong> Sin los vuelos, Tana Toraja cuesta unos €100–200 por persona para todo el viaje. El problema es la distancia: Sulawesi está a 13.000 km de España. Los vuelos son el único gasto grande. Combinar con Bali (ya de paso) puede amortizar el vuelo largo.
+      </div>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Dónde dormir</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Rantepao — zona hotelera principal:</strong> La mayoría de guesthouses y hoteles de Tana Toraja están concentrados en Rantepao. Precio medio: €15-30 habitación doble. Busca opciones cerca del mercado para moverte a pie. Algunas guesthouses tienen vistas directas a tongkonan desde la terraza.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Homestay en aldea (opción avanzada):</strong> Algunas familias de Kete Kesu o Pallawa aceptan viajeros. La experiencia es única: cenar en una casa tongkonan centenaria, dormir con el zumbido de la selva y despertar con gallos. Se organiza sobre la marcha o a través del guesthouse de Rantepao. Precio: €10-20/persona con desayuno.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Makassar (noche de tránsito):</strong> Cerca del aeropuerto Hasanuddin hay hoteles de cadena (Pop! Hotel, Aston) por €25-50 la noche doble. Útil si el vuelo de llegada/salida es en horario complicado.</div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Toraja</div>
+          <div class="gastro-title">Pa'piong — cerdo o pollo en bambú</div>
+          <div class="gastro-price">IDR 35.000–60.000 ≈ €1,90–3,30</div>
+          <div class="gastro-desc">La especialidad torajeña: carne de cerdo o pollo mezclada con sangre, hierbas aromáticas locales y hojas de mandioca, sellada dentro de un tubo de bambú y cocinada directamente sobre el fuego durante 2 horas. La carne queda tierna, con sabor ahumado y una textura que no tiene equivalente en ninguna otra cocina.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Carne de Búfalo</div>
+          <div class="gastro-title">Daging tedong — el lujo post-funeral</div>
+          <div class="gastro-price">IDR 25.000–40.000 ≈ €1,40–2,20</div>
+          <div class="gastro-desc">La carne de búfalo de agua se vende en el mercado de Rantepao los días después de un funeral grande. Es de color más oscuro que la ternera y de sabor más intenso. Se cocina frita con especias (rica-rica) o en curry local. Comerla en el mercado mientras la vendes es la versión más auténtica.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida</div>
+          <div class="gastro-title">Badik — vino de palma torajeño</div>
+          <div class="gastro-price">IDR 10.000–20.000 ≈ €0,55–1,10</div>
+          <div class="gastro-desc">El vino de palma (tuak) fermentado localmente es la bebida social de Tana Toraja. Ligeramente alcohólico (4-6%), con sabor agridulce y texture turbia. Se bebe en bambú durante las celebraciones. Las familias que no son estrictamente musulmanas lo ofrecen a los visitantes como gesto de hospitalidad.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Mercado</div>
+          <div class="gastro-title">Pasar Bolu — el mayor mercado de búfalos de Sulawesi</div>
+          <div class="gastro-price">Sin entrada</div>
+          <div class="gastro-desc">Cada 6 días (coincidiendo con el calendario toraja de 6 días) el mercado de animales de Rantepao concentra búfalos, cerdos y gallinas que serán usados en funerales próximos. Un búfalo albino (tedong bonga) puede valer más de €10.000. El pasar de verduras y artesanía adyacente es mucho más tranquilo y excelente para el café Toraja (uno de los mejores de Indonesia).</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos prácticos</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Mejor temporada:</strong> La temporada alta de funerales es <strong>julio y agosto</strong>, cuando los torajeños de la diáspora (Yakarta, Makassar, Países Bajos, Arabia Saudí) vuelven al pueblo para enterrar a sus familiares. Es cuando más Rambu Solo coinciden. La temporada seca (mayo-octubre) garantiza mejor clima.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Respeto en los funerales:</strong> Si asistes a un Rambu Solo, <strong>llevar una ofrenda</strong> (bebidas, azúcar, cigarrillos, una botella de aceite de cocina) es imprescindible. Entrega el paquete al responsable de la entrada. Ropa oscura (negro, azul marino, marrón oscuro): nunca rojo ni blanco. No fotografíes sin preguntar con la mirada, especialmente durante el sacrificio.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Guías locales:</strong> Para los sitios arqueológicos y funerarios, un guía local (€15–25/día) añade una comprensión del simbolismo que no puede captarse solo. Los mejores guías son torajeños que hablan inglés y pueden explicar desde dentro la cosmología aluk to dolo (la religión animista tradicional, que coexiste con el cristianismo en la mayoría de familias).</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Visado Indonesia:</strong> Los ciudadanos de la UE pueden obtener el <strong>Visa on Arrival (VoA)</strong> en el aeropuerto de Makassar o Yakarta por $35. Válido 30 días. También existe el e-VOA online previo al viaje (mismo precio, sin cola en inmigración).</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Salud:</strong> Tana Toraja está a 900m de altitud: el dengue y la malaria son mucho menos prevalentes que en zonas costeras de Indonesia. Aun así, lleva repelente de insectos. El agua del grifo no es potable: compra botellas o usa pastillas purificadoras. La comida de mercado es generalmente segura.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">6</div>
+        <div class="tip-text"><strong>Efectivo:</strong> Los cajeros ATM en Rantepao aceptan Visa y Mastercard, pero la conexión puede ser intermitente. Lleva suficiente rupias desde Makassar (aeropuerto tiene cajeros fiables). Muchos guesthouses y restaurantes locales solo aceptan efectivo.</div>
+      </div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-checklist">
+      <h2 class="section-heading" id="h-checklist">Qué llevar</h2>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Ropa oscura (negro, azul marino) para asistir a posibles funerales con respeto</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Repelente de insectos con DEET (necesario al amanecer y atardecer)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Linterna frontal (las cuevas funerarias como Londa requieren luz adicional)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Efectivo en rupias indonesias (IDR) — los cajeros del aeropuerto de Makassar son fiables</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Botella de agua reutilizable (el agua filtrada está disponible en guesthouses)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Chaqueta ligera (las noches en Rantepao a 900m pueden bajar a 18°C)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Pasaporte + e-VOA impreso o en el móvil</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Pastillas de rehidratación oral (precaución básica para cualquier viaje a Indonesia)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>SIM local indonesa (Telkomsel es la más fiable en Sulawesi) — en el aeropuerto de Makassar</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Ofrenda de bienvenida si planeas visitar un funeral (bebidas, azúcar, cigarrillos)</span></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias Indonesia</div><div class="emerg-value">112</div><div class="emerg-note">Emergencias generales · Policía 110</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Rantepao</div><div class="emerg-value">+62 423 21222</div><div class="emerg-note">RSUD Lakipadada · Rantepao</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España en Indonesia</div><div class="emerg-value">+62 21 3190 7200</div><div class="emerg-note">Embajada de España · Yakarta</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Makassar</div><div class="emerg-value">+62 411 829 191</div><div class="emerg-note">RS Wahidin Sudirohusodo · Makassar</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres combinar Sulawesi con Bali o Java?</h3>
+      <p>Usa el chatbot de Routlo para diseñar tu ruta por Indonesia, incluyendo funerales toraja y arrozales de Ubud.</p>
+      <a href="../chatbot.html" class="cta-btn">Planificar mi ruta →</a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios indicados son estimaciones basadas en datos de viajeros independientes (2024–2025) y pueden variar según temporada, tipo de cambio y disponibilidad. Los funerales Rambu Solo son eventos privados de las familias; su celebración no es garantizable ni programable por ningún servicio turístico. Routlo no recibe comisiones por alojamientos ni transportes mencionados en esta guía.
+    </div>
+
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;background:#040810;border-top:1px solid rgba(255,255,255,0.06);padding:48px 24px 32px;text-align:center;">
+  <a href="../index.html" style="display:inline-block;margin-bottom:20px;">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:36px;border-radius:8px;background:#fff;padding:3px 10px;opacity:0.7;">
+  </a>
+  <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;font-size:0.85rem;">
+    <a href="../itinerarios.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Itinerarios</a>
+    <a href="../mapa.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Mapa</a>
+    <a href="../chatbot.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Chatbot IA</a>
+    <a href="../itinerarios-espana.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">España</a>
+  </div>
+  <p style="font-size:0.78rem;color:rgba(237,238,242,0.25);margin:0;">© 2025 Routlo · Guías de viaje independientes · Todos los derechos reservados</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../assets/shared.js"></script>
+<script>
+(function(){
+  const isEs = navigator.language.startsWith('es');
+  const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false }).setView([-3.1, 119.9], 9);
+  if (isEs) {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      className: 'tile-osm-es'
+    }).addTo(map);
+    const style = document.createElement('style');
+    style.textContent = '.tile-osm-es { filter: grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg); }';
+    document.head.appendChild(style);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB'
+    }).addTo(map);
+  }
+
+  const gold = { radius: 7, fillColor: '#c9a96e', color: '#a07840', weight: 2, opacity: 1, fillOpacity: 0.9 };
+  const green = { radius: 9, fillColor: '#5ecb8a', color: '#3aaa66', weight: 2, opacity: 1, fillOpacity: 0.95 };
+
+  const waypoints = [
+    [-5.147, 119.432],
+    [-2.971, 119.899],
+    [-3.025, 119.899],
+    [-2.970, 119.859],
+    [-3.050, 119.810],
+    [-2.890, 119.910]
+  ];
+
+  L.polyline(waypoints, { color: '#c9a96e', weight: 3, opacity: 0.7, dashArray: '6,5' }).addTo(map);
+
+  const stops = [
+    { coords: [-5.147, 119.432], label: 'Makassar', opts: gold },
+    { coords: [-2.971, 119.899], label: 'Rantepao (base)', opts: green },
+    { coords: [-3.025, 119.899], label: 'Kete Kesu', opts: gold },
+    { coords: [-2.970, 119.859], label: 'Londa', opts: gold },
+    { coords: [-3.050, 119.810], label: 'Batutumonga', opts: gold },
+    { coords: [-2.890, 119.910], label: 'Pallawa', opts: gold }
+  ];
+
+  stops.forEach(s => {
+    L.circleMarker(s.coords, s.opts).addTo(map)
+      .bindPopup(`<strong style="color:#c9a96e">${s.label}</strong>`);
+  });
+})();
+</script>
+</body>
+</html>

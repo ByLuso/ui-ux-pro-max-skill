@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laguna Negra de Urbión — Escapada desde Logroño: el circo glaciar de Antonio Machado | Routlo</title>
+  <meta name="description" content="130 km desde Logroño: la Laguna Negra de Urbión, el circo glaciar que inspiró a Antonio Machado. Aguas oscuras y transparentes, paredes de granito verticales y un silencio único en el corazón del Pico Urbión. Ruta fácil."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .trail-easy { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(94,203,138,0.12); border: 1px solid rgba(94,203,138,0.3); font-size: 0.75rem; font-weight: 600; color: #5ecb8a; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(70,100,180,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(70,100,180,0.2); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #7a9fd4; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .verse-box { background: rgba(255,255,255,0.03); border-left: 3px solid rgba(201,169,110,0.4); padding: 18px 20px; border-radius: 0 12px 12px 0; margin: 16px 0; }
+    .verse-box p { font-family: 'Bodoni Moda', Georgia, serif; font-style: italic; font-size: 0.95rem; color: rgba(237,238,242,0.7); line-height: 1.8; margin: 0; }
+    .verse-box cite { display: block; font-size: 0.75rem; color: rgba(237,238,242,0.35); margin-top: 10px; font-style: normal; }
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.55; }
+    .checklist li::before { content: '□'; color: #5ecb8a; font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c9a96e; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,5,20,0.3) 0%, rgba(0,8,25,0.6) 50%, rgba(0,5,18,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="trail-easy" style="margin-bottom:0;">● Dificultad fácil</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">130 km de Logroño</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💧 Circo glaciar · Soria</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Laguna Negra de Urbión<br><span style="color:#7a9fd4;">El lago que inspiró a Machado</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">Aguas oscuras y quietas, paredes de granito de 200 m que caen en vertical, una niebla perpetua entre los pinos y el poema de Antonio Machado grabado en piedra. La laguna glaciar más sobrecogedora de Castilla.</p>
+  </div>
+</section>
+
+<!-- MAIN LAYOUT -->
+<div class="itin-layout">
+
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#machado">Machado y la laguna</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">La excursión</a></li>
+      <li><a href="#picnic">Picnic & paradas</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Lista de mochila</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a>
+      <span>›</span>
+      <a href="../itinerarios-espana.html">España</a>
+      <span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Laguna Negra de Urbión</span>
+    </div>
+
+    <!-- DATOS -->
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">💧 Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell">
+          <div class="route-info-label">Distancia al destino</div>
+          <div class="route-info-value">130 km</div>
+          <div class="route-info-unit">desde Logroño</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Distancia a pie</div>
+          <div class="route-info-value">5 km</div>
+          <div class="route-info-unit">ida y vuelta</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Desnivel</div>
+          <div class="route-info-value">+250 m</div>
+          <div class="route-info-unit">muy suave</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Altitud laguna</div>
+          <div class="route-info-value">1.753 m</div>
+          <div class="route-info-unit">circo glaciar</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Mejor época</div>
+          <div class="route-info-value">Jun–Oct</div>
+          <div class="route-info-unit">Jun: nieve residual</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <h4>💧 Una laguna de origen glaciar</h4>
+        <p>La Laguna Negra se formó durante la última glaciación, hace 18.000 años, cuando un glaciar excavó la roca granítica del macizo de Urbión creando un anfiteatro natural. Las aguas son negras por la sombra de las paredes de granito, no por contaminación —son de una transparencia y pureza excepcionales. El lago alimenta al río Duero unos kilómetros más abajo.</p>
+      </div>
+    </section>
+
+    <!-- MACHADO -->
+    <section class="itin-section" id="machado">
+      <h2 class="section-heading">📖 Antonio Machado y la Laguna Negra</h2>
+
+      <div class="verse-box">
+        <p>«Laguna Negra. En este rincón del mundo / donde el viento del norte sacude los pinos / y el agua tiembla bajo los granitos / —aquí dormirás, alma, tu sueño profundo.»</p>
+        <cite>— Antonio Machado, Campos de Castilla (inspirado en la Laguna Negra), 1912</cite>
+      </div>
+
+      <div class="tip-item">
+        <div class="tip-num">📚</div>
+        <div class="tip-text">Machado vivió en <strong>Soria entre 1907 y 1912</strong>, y la Laguna Negra le marcó profundamente. La visitó varias veces y la convirtió en escenario de su obra maestra "La tierra de Alvargonzález". El lugar le transmitía al mismo tiempo paz y melancolía —algo que se siente con fuerza cuando llegas.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">📖</div>
+        <div class="tip-text">En el aparcamiento hay una placa con versos de Machado grabados en granito. Lee el poema antes de arrancar el sendero —llegará a la laguna con otro significado.</div>
+      </div>
+    </section>
+
+    <!-- MAPA -->
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa de la ruta</h2>
+      <div id="route-map" style="height:380px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <!-- RUTA -->
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🥾 La excursión</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">①</div>
+          <div>
+            <div class="day-title">Logroño → Vinuesa (Soria) → Laguna Negra</div>
+            <div class="day-subtitle">1h 45min en coche · A-15 → SO-830 por el pinar de Vinuesa</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">🏘️ Vinuesa — el pueblo de la madera</div>
+              <div class="stop-desc">A 120 km de Logroño, Vinuesa es el pueblo de referencia para visitar la Laguna Negra. Sus casas de madera y piedra, el embalse de La Cuerda del Pozo reflejando los pinos, y sus restaurantes de cocina serrana son el mejor anticipo. Avituállate aquí: gasolinera, panadería y carnicería con embutidos de la zona.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">⚠️ Shuttle obligatorio en verano</div>
+              <div class="stop-desc">De julio a mediados de septiembre, el acceso al aparcamiento de la Laguna Negra está restringido. Un autobús lanzadera sale desde el aparcamiento de Covaleda (8 km antes) cada 20 minutos —incluido en los 4€ de entrada al Parque Natural. Fuera de temporada puedes llegar en coche hasta el aparcamiento junto al lago.</div>
+              <div class="stop-price">Entrada Parque Natural: ~4€/persona · Gratuito oct-junio</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">②</div>
+          <div>
+            <div class="day-title">Sendero a la Laguna Negra</div>
+            <div class="day-subtitle">2,5 km · +250 m · 1h · Fácil · Señalizado</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <span class="trail-easy">● Dificultad fácil</span>
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">🌲 Pinar de Vinuesa — el camino al lago</div>
+              <div class="stop-desc">El sendero transcurre por un denso pinar de pino silvestre con el suelo alfombrado de acículas. Es un camino ancho y bien señalizado, apto para cualquier persona sin experiencia en montaña. La fresca sombra del pinar hace que el verano sea soportable incluso a mediodía.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🪨 Primera vista a la pared de granito</div>
+              <div class="stop-desc">A 1,5 km, el pinar se abre y aparece por primera vez la pared de granito vertical que rodea el circo glaciar. Una masa gris de 200 metros que parece imposible en una sierra tan discreta. El silencio en este punto es total.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">💧 La Laguna Negra (1.753 m)</div>
+              <div class="stop-desc">El lago aparece de repente, quieto y oscuro, rodeado de la pared granítica. Las aguas reflejan el cielo y las rocas con una nitidez absoluta. En junio puede quedar nieve en las cornisas de la pared —una imagen sobrecogedora. El agua está fría todo el año. La primera vez que la ves te quedas sin palabras.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">③</div>
+          <div>
+            <div class="day-title">Laguna de los Peces (opcional) y regreso</div>
+            <div class="day-subtitle">+2 km desde la Laguna Negra · +200 m adicionales · Sendero empinado</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">🐟 Laguna de los Peces (1.940 m)</div>
+              <div class="stop-desc">Siguiendo el sendero que trepa por la pared del circo se llega a una segunda laguna glaciar a 1.940 m —más pequeña, más alta y rodeada de roca viva sin vegetación. El esfuerzo es notable (30 min de subida empinada) pero las vistas de vuelta sobre la Laguna Negra desde arriba justifican el extra.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🚗 Regreso y parada en Vinuesa</div>
+              <div class="stop-desc">Baja al aparcamiento, toma el shuttle de vuelta y detente en Vinuesa para comer o cenar. Los restaurantes del pueblo sirven caldereta de cordero churro soriano y judías pintas con chorizo —la gastronomía de alta meseta en estado puro.</div>
+              <div class="stop-price">Menú del día en Vinuesa: ~12–16€</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🚗 Regreso a Logroño — 1h 45min</div>
+              <div class="stop-desc">La vuelta se hace larga pero el paisaje de pinares de Castilla y los Campos de Soria acompañan. Es el viaje más largo de las 7 escapadas, pero la Laguna Negra es uno de esos lugares que te cambian. Merece cada kilómetro.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PICNIC -->
+    <section class="itin-section" id="picnic">
+      <h2 class="section-heading">🧺 Picnic junto al lago</h2>
+
+      <div class="highlight-box">
+        <h4>🪨 Picnic en el circo glaciar</h4>
+        <p>Las orillas de la Laguna Negra tienen <strong>grandes bloques de granito planos</strong> que hacen de mesa natural perfecta. La propuesta de picnic soriana: <strong>morcilla de Soria</strong> (la más buena de España, con arroz), <strong>pan candeal</strong>, <strong>jamón serrano de la sierra</strong>, <strong>queso zamorano</strong>, <strong>nueces y miel de brezo</strong>. El frío del lago mantiene la comida a temperatura perfecta. Olvida el termo —lleva una botella de vino tinto de la Ribera del Duero y déjala enfriarse en el agua 10 minutos.</p>
+      </div>
+
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Orilla norte de la laguna</strong> — los bloques de granito junto al agua son el sitio más dramático. La pared de 200 m detrás de ti, el agua oscura delante. Llevarás la imagen grabada para siempre.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Claro del pinar (1,5 km antes de la laguna)</strong> — más abrigado, sin viento, con olor a resina de pino. Si vas con niños o mayores, este es el sitio más cómodo.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Respetar la zona protegida:</strong> no hacer fuego en ningún punto del parque. No dejar residuos. El vidrio está prohibido cerca del lago —lleva la bebida en botella de acero inoxidable o reutilizable.</div>
+      </div>
+    </section>
+
+    <!-- CONSEJOS -->
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Madrugar:</strong> la Laguna Negra es uno de los lugares más visitados de Castilla en verano. Llegar antes de las 9:00 es la diferencia entre tener el lago para ti solo o encontrarte con cientos de personas. La niebla matutina a primera hora es mágica.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Mejor época para la nieve en la pared:</strong> junio (primera semana) y mayo si el invierno fue nevado. La imagen del lago con cornisas nevadas encima es de las más impresionantes de España.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>El shuttle de verano:</strong> en julio-agosto, el parking de la laguna está cerrado. Sale el autobús lanzadera desde Covaleda. Comprueba el horario en la web del Parque Natural de Urbión antes de salir.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Frío inesperado:</strong> aunque el trayecto a pie es fácil, la altitud y la sombra del circo hacen que junto a la laguna haga frío incluso en agosto. Lleva siempre una capa de abrigo, especialmente en la mañana.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Combina con Soria ciudad:</strong> si quieres hacer el viaje completo, añade una parada en Soria (30 min desde Vinuesa). El paseo junto al Duero, el románico de San Juan de Duero y la ermita de San Saturio son excepcionales. Una Soria diferente a Logroño —más austera, más solitaria, más profunda.</div>
+      </div>
+    </section>
+
+    <!-- CHECKLIST -->
+    <section class="itin-section" id="checklist">
+      <h2 class="section-heading">🎒 Lista de mochila</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.4);margin-bottom:10px;">Equipamiento</div>
+          <ul class="checklist">
+            <li>Zapatillas de trekking o trail</li>
+            <li>Mochila 15–20 litros</li>
+            <li>Capa de abrigo ligera</li>
+            <li>Pantalón largo (pinar)</li>
+            <li>Protector solar</li>
+            <li>Cámara de fotos (merece la pena)</li>
+            <li>Libro de Machado (opcional)</li>
+            <li>Botella reutilizable</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.4);margin-bottom:10px;">Picnic & avituallamiento</div>
+          <ul class="checklist">
+            <li>1,5 litros de agua por persona</li>
+            <li>Morcilla de Soria o jamón serrano</li>
+            <li>Queso zamorano</li>
+            <li>Pan candeal de Vinuesa</li>
+            <li>Nueces y miel de brezo</li>
+            <li>Vino tinto Ribera del Duero</li>
+            <li>Manta impermeable</li>
+            <li>Bolsa para la basura</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres explorar más escapadas desde Logroño?</h3>
+      <p>7 rutas de montaña y naturaleza a menos de 2 horas de la capital riojana.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false }).setView([41.97, -2.85], 9);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 17 }).addTo(map);
+
+  setTimeout(() => {
+    const tp = document.querySelector('#route-map .leaflet-tile-pane');
+    if(tp) tp.style.filter = 'grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';
+  }, 500);
+
+  const wps = [
+    { coords: [42.466, -2.445], label: 'Logroño', color: '#5ecb8a', r: 10 },
+    { coords: [41.925, -2.757], label: 'Vinuesa', color: '#c9a96e', r: 9 },
+    { coords: [41.878, -2.826], label: 'Covaleda (shuttle verano)', color: '#c9a96e', r: 7 },
+    { coords: [41.858, -2.852], label: 'Laguna Negra 1.753m', color: '#7a9fd4', r: 13 },
+    { coords: [41.845, -2.860], label: 'Laguna de los Peces 1.940m', color: '#5ecb8a', r: 9 },
+  ];
+
+  wps.forEach(wp => {
+    L.circleMarker(wp.coords, { radius: wp.r, color: wp.color, fillColor: wp.color, fillOpacity: 0.9, weight: 2 }).addTo(map).bindTooltip(wp.label, { permanent: false, direction: 'top' });
+  });
+
+  L.polyline([
+    [42.466, -2.445], [41.925, -2.757], [41.878, -2.826],
+    [41.858, -2.852], [41.845, -2.860],
+  ], { color: '#7a9fd4', weight: 3, opacity: 0.85, dashArray: '8,6' }).addTo(map);
+})();
+</script>
+
+<script>
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('main-nav');
+  if(window.scrollY > 60){ nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
+});
+</script>
+
+<script>
+const tocLinks = document.querySelectorAll('.toc-list a');
+const sections = document.querySelectorAll('.itin-section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+      if(active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

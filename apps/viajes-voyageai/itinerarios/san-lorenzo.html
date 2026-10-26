@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monte San Lorenzo & Ezcaray — Escapada desde Logroño: el hayedo de Pedroso y el techo de la Demanda | Routlo</title>
+  <meta name="description" content="85 km desde Logroño: el Monte San Lorenzo a 2.271m —el pico más alto de la Sierra de la Demanda—, el espectacular hayedo de Valle de Pedroso y el pueblo serrano de Ezcaray. Ruta media-alta con paisaje alpino."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .trail-hard { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(224,92,92,0.12); border: 1px solid rgba(224,92,92,0.3); font-size: 0.75rem; font-weight: 600; color: #e05c5c; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(224,92,92,0.06) 0%, rgba(20,5,5,0.6) 100%); border: 1px solid rgba(224,92,92,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #e08a5c; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.55; }
+    .checklist li::before { content: '□'; color: #5ecb8a; font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c9a96e; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(10,5,0,0.25) 0%, rgba(15,5,0,0.55) 50%, rgba(8,3,0,0.92) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="trail-hard" style="margin-bottom:0;">▲▲ Dificultad alta</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">85 km de Logroño</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🌳 Hayedo · Sierra de la Demanda</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">San Lorenzo & Ezcaray<br><span style="color:#e08a5c;">El techo de la Demanda</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">El Monte San Lorenzo a 2.271 m —el pico más alto de la Sierra de la Demanda—, el hayedo de Pedroso con siglos de historia y el encantador pueblo de Ezcaray con sus casonas de piedra y fama de buen comer.</p>
+  </div>
+</section>
+
+<!-- MAIN LAYOUT -->
+<div class="itin-layout">
+
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">La excursión</a></li>
+      <li><a href="#picnic">Picnic & hayedo</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Lista de mochila</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a>
+      <span>›</span>
+      <a href="../itinerarios-espana.html">España</a>
+      <span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">San Lorenzo · Ezcaray</span>
+    </div>
+
+    <!-- DATOS -->
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🏔️ Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell">
+          <div class="route-info-label">Distancia al destino</div>
+          <div class="route-info-value">85 km</div>
+          <div class="route-info-unit">desde Logroño</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Distancia a pie</div>
+          <div class="route-info-value">14 km</div>
+          <div class="route-info-unit">circular</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Desnivel</div>
+          <div class="route-info-value">+1.100 m</div>
+          <div class="route-info-unit">acumulado</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Cota máxima</div>
+          <div class="route-info-value">2.271 m</div>
+          <div class="route-info-unit">San Lorenzo</div>
+        </div>
+        <div class="route-info-cell">
+          <div class="route-info-label">Mejor época</div>
+          <div class="route-info-value">Jun–Oct</div>
+          <div class="route-info-unit">hayedo en otoño</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <h4>🌳 El hayedo más espectacular de La Rioja</h4>
+        <p>El Hayedo de Pedroso, protegido en el término de Ezcaray, es un bosque de hayas milenarias con troncos de más de 1 metro de diámetro. En octubre se convierte en una explosión de dorados, cobrizos y rojos que no tiene rival en la región. La ruta sube desde el hayedo hasta los pastos alpinos y la cima de San Lorenzo —un contraste brutal y hermoso.</p>
+      </div>
+    </section>
+
+    <!-- MAPA -->
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa de la ruta</h2>
+      <div id="route-map" style="height:380px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <!-- RUTA -->
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🥾 La excursión</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">①</div>
+          <div>
+            <div class="day-title">Logroño → Ezcaray · 1h en coche</div>
+            <div class="day-subtitle">A-12 → LR-111 por el valle del Oja · Pueblo de montaña de La Rioja</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">🏘️ Ezcaray — el pueblo de montaña más bonito de La Rioja</div>
+              <div class="stop-desc">Casas de piedra con solanas de madera, la iglesia de Santa María la Mayor del s. XV y el río Oja cruzando el pueblo bajo pequeños puentes de sillería. Ezcaray tiene una tradición textil —la Real Fábrica de Paños— y actualmente es conocido por su buena gastronomía. Aparca en el parking junto al río.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">☕ Desayuno y avituallamiento</div>
+              <div class="stop-desc">Toma el desayuno en uno de los bares del pueblo —huevos rotos con patatas o un sencillo café con tostadas con aceite y tomate. Después compra el picnic: en la carnicería local hay chorizo de la zona, morcilla de Ezcaray y embutidos artesanos que no encuentras en la ciudad.</div>
+              <div class="stop-price">Desayuno: ~4–6€ · Embutidos: ~8–12€/kg</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">②</div>
+          <div>
+            <div class="day-title">Hayedo de Pedroso → San Lorenzo</div>
+            <div class="day-subtitle">Parking Pedroso (1.170m) → Cima (2.271m) · 7 km · +1.100m · 4h ida</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <span class="trail-hard">▲▲ Dificultad alta</span>
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">🚗 Parking del Hayedo de Pedroso (1.170 m)</div>
+              <div class="stop-desc">Desde Ezcaray sigue la pista forestal señalizada hacia el Hayedo de Pedroso (4 km, parcialmente asfaltada). El parking queda a 1.170 m de altitud, en el límite del bosque. Aquí arranca el sendero hacia San Lorenzo, bien marcado con marcas blancas y amarillas.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🌳 Hayedo de Pedroso — los primeros 2,5 km</div>
+              <div class="stop-desc">El sendero discurre por el interior del hayedo: hayas centenarias con raíces que rompen las piedras, sombra densa, musgo en las rocas y un silencio monacal. En octubre, la luz que filtra entre las hojas amarillas es de postal. Es el tramo más mágico de toda la ruta.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🌿 Zona de pastos y cresta alpina</div>
+              <div class="stop-desc">Tras el hayedo el bosque se abre y aparecen praderas de altiplano con vacas pastando libremente. El terreno se hace más pedregoso. El contraste entre la verde pradera y los roquedos grises de la cima es uno de los paisajes más auténticos de la sierra riojana.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🏔️ Cima de San Lorenzo (2.271 m)</div>
+              <div class="stop-desc">La cima tiene una cruz de hierro y, en días despejados, vistas que abarcan desde los Picos de Europa hasta el Sistema Ibérico. El buzón de cumbres guarda un cuaderno con firmas que se remonta a décadas. Un lugar de viento y silencio donde el mundo queda muy lejos.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">③</div>
+          <div>
+            <div class="day-title">Descenso y cena en Ezcaray</div>
+            <div class="day-subtitle">Regreso al hayedo · cena en el pueblo · vuelta a Logroño</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">🔄 Descenso por el mismo sendero — 3h</div>
+              <div class="stop-desc">El descenso lleva unas 3 horas con paradas. Las piernas se acusan en el tramo de piedra suelta. Bastones muy recomendables para proteger las rodillas. Llegarás al parking con las últimas luces de la tarde.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🍽️ Cena en Ezcaray (opcional)</div>
+              <div class="stop-desc">Si el cuerpo aguanta, Ezcaray tiene una oferta gastronómica destacada para ser un pueblo tan pequeño. El restaurante Echaurren (1 estrella Michelin, familiar desde 1898) tiene menú de mediodía los fines de semana. Para presupuesto normal, los bares del pueblo sirven chuletillas al sarmiento —el clásico riojano.</div>
+              <div class="stop-price">Chuletillas + vino: ~20–28€ · Menú Echaurren: ~45–60€</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">🚗 Regreso a Logroño — 1h</div>
+              <div class="stop-desc">Vuelta por la LR-111 a Logroño. Aproximadamente 1 hora tranquila por el valle del río Oja. El cuerpo cansado y la cabeza despejada —la combinación perfecta.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PICNIC -->
+    <section class="itin-section" id="picnic">
+      <h2 class="section-heading">🧺 Picnic en el hayedo</h2>
+
+      <div class="highlight-box">
+        <h4>🍂 El picnic entre hayas milenarias</h4>
+        <p>El <strong>Hayedo de Pedroso</strong> tiene claros naturales con piedras planas a la orilla de pequeños riachuelos —los sitios perfectos para extender la manta. La propuesta gastronómica: <strong>chorizo de Ezcaray</strong> a la navaja, <strong>queso de Cameros curado</strong>, pan de pueblo, <strong>pisto riojano en tarro de cristal</strong>, y fruta. En octubre añade unas nueces recién caídas del camino —las hayas también producen hayucos, fruto silvestre comestible.</p>
+      </div>
+
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Lugar #1: Claro del hayedo (1.300 m)</strong> — a 1,5 km del parking, un claro con banco natural de piedra junto al arroyo. El sonido del agua y la cúpula de hayas lo convierten en el picnic más memorable de La Rioja.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Lugar #2: Zona de pastos (1.800 m)</strong> — más arriba, una pradera con vistas sobre el bosque y la primera nieve en los picos. Más expuesto al viento pero con panorámica amplia.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Lugar #3: Cima de San Lorenzo (2.271 m)</strong> — para los que quieren decir que han hecho el picnic más alto posible en La Rioja. El viento puede ser fuerte —manta y ropa de abrigo imprescindibles.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Época del hayedo:</strong> octubre 1–20 es la ventana de oro. Antes de octubre las hayas están verdes. Después se caen las hojas. Esas tres semanas son de fotografía de revista.</div>
+      </div>
+    </section>
+
+    <!-- CONSEJOS -->
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Ruta exigente:</strong> 1.100 m de desnivel en un día es mucho para quien no está acostumbrado. Si no tienes experiencia en montaña, sube solo hasta el hayedo (2,5 km) y disfruta del bosque. El picnic es igual de bueno sin subir a la cima.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Salida muy temprana:</strong> para llegar a la cima y bajar con luz, sal de Logroño antes de las 7:00. La niebla matutina en el hayedo es un espectáculo extra que no querrás perderte.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Ropa de montaña:</strong> base técnica, capa intermedia (forro polar), chubasquero. A 2.000 m la temperatura puede bajar 10–15°C respecto a Ezcaray. En octubre puede nevar.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>La pista al hayedo:</strong> 4 km de pista forestal parcialmente asfaltada. Llega con un turismo normal pero con cuidado. En verano hay mucho tráfico en fines de semana —llega antes de las 9:00 para encontrar parking.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Estación de esquí de La Rioja:</strong> la estación de Ezcaray (Valdezcaray) queda a 15 minutos del pueblo. En verano el telesilla sube en bici. Una alternativa interesante si no quieres subir a pie.</div>
+      </div>
+    </section>
+
+    <!-- CHECKLIST -->
+    <section class="itin-section" id="checklist">
+      <h2 class="section-heading">🎒 Lista de mochila</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.4);margin-bottom:10px;">Equipamiento</div>
+          <ul class="checklist">
+            <li>Botas de trekking (obligatorio)</li>
+            <li>Bastones de trekking</li>
+            <li>Mochila 30 litros</li>
+            <li>Base técnica + forro polar</li>
+            <li>Chubasquero impermeable</li>
+            <li>Gorro y guantes ligeros</li>
+            <li>Protector solar factor 50</li>
+            <li>Mapa offline (Wikiloc)</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.4);margin-bottom:10px;">Picnic & provisiones</div>
+          <ul class="checklist">
+            <li>2,5 litros de agua por persona</li>
+            <li>Chorizo y embutido de Ezcaray</li>
+            <li>Queso de Cameros curado</li>
+            <li>Pan de hogaza</li>
+            <li>Frutos secos y dátiles</li>
+            <li>Chocolate negro 70% (energía)</li>
+            <li>Manta impermeable</li>
+            <li>Bolsa para la basura</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres explorar más escapadas desde Logroño?</h3>
+      <p>7 rutas de montaña y naturaleza a menos de 2 horas de la capital riojana.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false }).setView([42.21, -3.00], 10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 17 }).addTo(map);
+
+  setTimeout(() => {
+    const tp = document.querySelector('#route-map .leaflet-tile-pane');
+    if(tp) tp.style.filter = 'grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';
+  }, 500);
+
+  const wps = [
+    { coords: [42.466, -2.445], label: 'Logroño', color: '#5ecb8a', r: 10 },
+    { coords: [42.319, -2.982], label: 'Ezcaray', color: '#c9a96e', r: 10 },
+    { coords: [42.250, -3.020], label: 'Hayedo de Pedroso 1.170m', color: '#c9a96e', r: 8 },
+    { coords: [42.210, -3.040], label: 'Zona de pastos 1.800m', color: '#c9a96e', r: 7 },
+    { coords: [42.188, -3.058], label: 'Monte San Lorenzo 2.271m', color: '#e05c5c', r: 12 },
+  ];
+
+  wps.forEach(wp => {
+    L.circleMarker(wp.coords, { radius: wp.r, color: wp.color, fillColor: wp.color, fillOpacity: 0.9, weight: 2 }).addTo(map).bindTooltip(wp.label, { permanent: false, direction: 'top' });
+  });
+
+  L.polyline([
+    [42.466, -2.445], [42.319, -2.982], [42.250, -3.020],
+    [42.210, -3.040], [42.188, -3.058],
+  ], { color: '#e08a5c', weight: 3, opacity: 0.85, dashArray: '8,6' }).addTo(map);
+})();
+</script>
+
+<script>
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('main-nav');
+  if(window.scrollY > 60){ nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
+});
+</script>
+
+<script>
+const tocLinks = document.querySelectorAll('.toc-list a');
+const sections = document.querySelectorAll('.itin-section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+      if(active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

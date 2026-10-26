@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Etiopía — Addis Abeba + Lalibela — 6 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 6 días en Etiopía: Addis Abeba, las iglesias rupestres de Lalibela (Patrimonio UNESCO), Lucy en el Museo Nacional y ceremonias del café. Presupuesto detallado y consejos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,8,16,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #3a1010 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #5a2010 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #2a0a0a 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #1a0505 0%, #3a1010 40%, #5a2010 70%, rgba(180,80,40,0.2) 100%),
+        url('https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?w=1400&q=80') center/cover no-repeat;
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%);
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(4,8,16,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .dest-sum-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #c9a96e; }
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time { min-width: 55px; font-size: 0.78rem; color: #c9a96e; font-weight: 600; padding-top: 3px; flex-shrink: 0; }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; background: #c9a96e; border: 2px solid #0d1628; flex-shrink: 0; margin-top: 3px; }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag { display: inline-block; padding: 2px 8px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 100px; font-size: 0.67rem; color: #c9a96e; }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; transition: border-color 0.2s; }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th { text-align: left; padding: 10px 14px; background: #0d1628; color: #c9a96e; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(237,238,242,0.55); vertical-align: top; }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    @media (max-width: 1024px) { .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .hotel-grid { grid-template-columns: repeat(2,1fr); } .transport-grid { grid-template-columns: 1fr; } .gastro-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { nav[role="navigation"] { padding: 0 14px; } nav[role="navigation"] ul { display: none; } .dest-hero { padding: 100px 16px 40px; } .hotel-grid { grid-template-columns: 1fr; } .emerg-grid { grid-template-columns: 1fr; } .budget-wrap { overflow-x: auto; } .budget-table { min-width: 480px; } }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none; } }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span>África</span>
+    <span aria-hidden="true">›</span>
+    <span>Etiopía</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Etiopía</h1>
+  <p class="dest-country">Addis Abeba + Lalibela</p>
+  <div class="dest-meta">
+    <span class="dest-badge">✈️ ~9h desde Madrid</span>
+    <span class="dest-badge gold">6 días</span>
+    <span class="dest-badge">💰 ~€1,400/persona</span>
+    <span class="dest-badge">⛪ Patrimonio UNESCO</span>
+  </div>
+  <div class="dest-summary-bar" role="region" aria-label="Resumen del viaje">
+    <div class="dest-sum-item"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">6 días</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€1,400</div></div>
+    <div class="dest-sum-item"><div class="dest-sum-label">Mejor época</div><div class="dest-sum-val">Oct–Mar</div></div>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#alojamiento">Alojamiento</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#transporte">Transporte</a></li>
+      <li><a href="#dia1">Día 1 — Addis Abeba</a></li>
+      <li><a href="#dia2">Día 2 — Vuelo a Lalibela</a></li>
+      <li><a href="#dia3">Día 3 — 11 Iglesias UNESCO</a></li>
+      <li><a href="#dia4">Día 4 — Asheton Maryam</a></li>
+      <li><a href="#dia5">Día 5 — Regreso Addis</a></li>
+      <li><a href="#dia6">Día 6 — Mercado + vuelo</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <!-- Alojamiento -->
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Alojamiento</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">Económico</div>
+          <div class="hotel-name">Guesthouse Lalibela</div>
+          <div class="hotel-zone">Lalibela, centro</div>
+          <div class="hotel-price">€20–35/noche</div>
+          <ul class="hotel-features">
+            <li>Vistas a las colinas rocosas</li>
+            <li>Ambiente local auténtico</li>
+            <li>Desayuno de injera incluido</li>
+          </ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Intermedio</div>
+          <div class="hotel-name">Maribela Hotel</div>
+          <div class="hotel-zone">Addis Abeba, Bole</div>
+          <div class="hotel-price">€70/noche</div>
+          <ul class="hotel-features">
+            <li>Zona Bole, bien comunicado</li>
+            <li>Restaurante etíope e internacional</li>
+            <li>WiFi y aire acondicionado</li>
+          </ul>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">Superior</div>
+          <div class="hotel-name">Mountain View Hotel Lalibela</div>
+          <div class="hotel-zone">Lalibela, altura</div>
+          <div class="hotel-price">€120/noche</div>
+          <ul class="hotel-features">
+            <li>Vistas panorámicas a las iglesias</li>
+            <li>Piscina exterior y terraza</li>
+            <li>Guías locales en el hotel</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Presupuesto -->
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead><tr><th>Concepto</th><th>Coste</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Vuelo ida y vuelta</td><td>€600–900</td><td>Madrid–ADD, con escala</td></tr>
+            <tr><td>Visado e-Visa</td><td>€52</td><td>Visado electrónico obligatorio</td></tr>
+            <tr><td>Vuelos internos (ADD–LLI–ADD)</td><td>€120–180</td><td>Ethiopian Airlines, reservar con antelación</td></tr>
+            <tr><td>Alojamiento (6 noches)</td><td>€120–480</td><td>Según categoría elegida</td></tr>
+            <tr><td>Comidas</td><td>€80–130</td><td>Injera + wat, restaurantes locales</td></tr>
+            <tr><td>Actividades y entradas</td><td>€60–100</td><td>Iglesias Lalibela, museos, ceremonias</td></tr>
+            <tr><td><strong>TOTAL</strong></td><td><strong>€1,032–1,842</strong></td><td>Por persona (vuelos incluidos)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos 2026. La entrada a las iglesias de Lalibela (€50 aprox.) cubre todas las 11 iglesias del complejo. Reservar vuelos internos con mínimo 6 semanas de antelación.</p>
+    </section>
+
+    <!-- Transporte -->
+    <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+      <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+            Desde el aeropuerto
+          </div>
+          <div class="transport-content">
+            <strong>Aeropuerto de Bole (ADD)</strong> — a 5 km del centro de Addis.<br><br>
+            <strong>Taxi oficial</strong> — ~300–500 birr (~€5–8). Negociar precio antes de subir. Hay taxis amarillos oficiales en la salida de llegadas.<br><br>
+            <strong>Ride-hailing (Ride/Feres)</strong> — apps locales equivalentes a Uber, más seguras y con precio fijo.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 6V4M16 6V4M2 10h20"/></svg>
+            Vuelo interno ADD–Lalibela
+          </div>
+          <div class="transport-content">
+            <strong>Ethiopian Airlines</strong> — única opción confiable. Duración ~1h 15min. Precio ida: €60–90.<br><br>
+            El aeropuerto de Lalibela (LLI) está a 25 km del pueblo. <strong>Minibús compartido</strong> o taxi (negociar ~200 birr) para llegar al centro.<br><br>
+            Reservar ida y vuelta al confirmar el viaje — los asientos se agotan rápido.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+            En Lalibela
+          </div>
+          <div class="transport-content">
+            <strong>A pie</strong> — el conjunto de iglesias es compacto. Las iglesias del norte y del sur están a 10–15 min andando entre grupos.<br><br>
+            <strong>Mulas de alquiler</strong> — para el trekking a Asheton Maryam (~€10/día). Se contratan en el pueblo.<br><br>
+            <strong>Guía local</strong> — muy recomendable (€15–25/día). Conocen las leyendas, horarios de misas y accesos.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Altitud y salud
+          </div>
+          <div class="transport-content">
+            Addis Abeba está a <strong>2.355 m de altitud</strong>. Lalibela a <strong>2.500 m</strong>. El primer día puede haber cansancio ligero.<br><br>
+            Beber mucha agua y evitar esfuerzo intenso las primeras horas. Consultar al médico si hay condiciones cardíacas o respiratorias previas al viaje.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 1 -->
+    <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+      <h2 class="section-heading" id="h-dia1">Día 1</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Llegada Addis Abeba — Lucy + Merkato</div>
+            <div class="day-subtitle">La cuna de la humanidad te recibe</div>
+          </div>
+          <div class="day-meta">
+            <span>🦴 Lucy, 3.2 millones de años</span>
+            <span>🏪 Mayor mercado de África</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada y check-in</div>
+              <div class="act-desc">Aterriza en el aeropuerto de Bole. Controla el visado e-Visa en la frontera. Toma un taxi oficial al hotel en el distrito Bole. Addis Abeba es una capital vibrante de 5 millones de personas, caótica y fascinante, a más de 2.300 metros de altitud.</div>
+              <div class="act-tags"><span class="act-tag info">e-Visa tramitar antes del viaje</span><span class="act-tag">Taxi oficial recomendado</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Museo Nacional de Etiopía — Lucy</div>
+              <div class="act-desc">El Museo Nacional alberga a "Lucy" (Australopithecus afarensis), el esqueleto humanoide más famoso del mundo, con 3,2 millones de años. Descubierta en 1974 en el valle del Afar por Donald Johanson. Los etíopes la llaman "Dinknesh" — significa "eres maravillosa". Los restos originales están en el museo (la mayoría de lo que se ve en otros museos son réplicas).</div>
+              <div class="act-tags"><span class="act-tag">Entrada ~€3</span><span class="act-tag green">Imprescindible</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercato — el mayor mercado de África</div>
+              <div class="act-desc">El Merkato de Addis Abeba es el mercado al aire libre más grande de todo el continente africano. Miles de puestos organizados por sectores: especias, telas, cerámica, electrónica, animales vivos. El olor del berbere y el cardamomo impregna todo el ambiente. Ir con guía o acompañante local y dejar el pasaporte en el hotel.</div>
+              <div class="act-tags"><span class="act-tag green">Gratuito</span><span class="act-tag info">Ir con guía local</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 2 -->
+    <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+      <h2 class="section-heading" id="h-dia2">Día 2</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Vuelo a Lalibela — primeras iglesias rupestres</div>
+            <div class="day-subtitle">El octavo milagro del mundo te espera</div>
+          </div>
+          <div class="day-meta">
+            <span>✈️ Vuelo ADD–LLI</span>
+            <span>⛪ Bet Medhane Alem</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo Addis Abeba → Lalibela</div>
+              <div class="act-desc">Ethiopian Airlines opera vuelos matutinos. El descenso hacia Lalibela es espectacular: montañas escarpadas de más de 2.500 m, valles profundos y la ciudad encaramada en las crestas. Desde el aeropuerto, minibús o taxi al pueblo (45 min).</div>
+              <div class="act-tags"><span class="act-tag">~€60–90 ida</span><span class="act-tag info">Check-in 2h antes</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Check-in y almuerzo local</div>
+              <div class="act-desc">Instálate en el alojamiento. Come en uno de los restaurantes del pueblo: un plato de injera con shiro wat (puré de garbanzo picante) y una cerveza Meta Abo o St. George, las dos cervezas nacionales etíopes. Lalibela es un pueblo pequeño y tranquilo — muy distinto al caos de Addis.</div>
+              <div class="act-tags"><span class="act-tag">Almuerzo ~€4–6 pp</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:30</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bet Medhane Alem — primera iglesia rupestre</div>
+              <div class="act-desc">La iglesia más grande del mundo tallada en roca monolítica. Bet Medhane Alem (Casa del Salvador del Mundo) mide 33 metros de largo y fue excavada directamente en la roca rojiza volcánica hace 900 años. En su interior, monjes vestidos con túnicas blancas recitan salmos en ge'ez (el antiguo latín etíope). La luz dorada de la tarde penetra por las ventanas talladas creando un ambiente irreal.</div>
+              <div class="act-tags"><span class="act-tag">Entrada conjunta ~€50 (válida 5 días)</span><span class="act-tag green">UNESCO</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 3 -->
+    <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+      <h2 class="section-heading" id="h-dia3">Día 3</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Las 11 iglesias monolíticas — Patrimonio UNESCO</div>
+            <div class="day-subtitle">Jornada completa en el complejo más sagrado de África</div>
+          </div>
+          <div class="day-meta">
+            <span>⛪ 11 iglesias en roca viva</span>
+            <span>🌅 Bet Giyorgis al atardecer</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">06:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Grupo Norte — Bet Maryam y Bet Golgotha</div>
+              <div class="act-desc">Madrugar para coincidir con la misa matutina de los sacerdotes. Bet Maryam (Casa de María) tiene frescos medievales únicos en su interior. Bet Golgotha alberga la tumba simbólica del rey Lalibela y estatuas de santos talladas en la roca. Acompañar de guía para entender el simbolismo de cada representación.</div>
+              <div class="act-tags"><span class="act-tag">Incluido en entrada conjunta</span><span class="act-tag info">Misa a las 6:30h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Grupo Sur — Bet Gabriel, Bet Mercurios, Bet Amanuel</div>
+              <div class="act-desc">Las iglesias del sur están conectadas por túneles y pasadizos excavados en la roca. Bet Amanuel es la más elaborada arquitectónicamente, con columnas y arcos perfectamente tallados imitando la arquitectura aksumita. Los pasadizos entre iglesias simbolizan el camino entre la vida y la muerte.</div>
+              <div class="act-tags"><span class="act-tag">Incluido en entrada conjunta</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bet Giyorgis al atardecer</div>
+              <div class="act-desc">La iglesia más fotogénica del mundo: una cruz griega perfecta tallada 12 metros hacia abajo en la roca. La luz del atardecer la pinta de naranja y rojo. Bet Giyorgis (Casa de San Jorge) fue la última iglesia construida por el rey Lalibela en el siglo XII, dedicada al patrón de Etiopía tras su victoria contra los musulmanes. Ver cómo los monjes descienden por las escaleras talladas en la roca al caer el sol es una de las imágenes más impactantes de África.</div>
+              <div class="act-tags"><span class="act-tag">Incluido en entrada conjunta</span><span class="act-tag green">Imprescindible al atardecer</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 4 -->
+    <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+      <h2 class="section-heading" id="h-dia4">Día 4</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title">Monasterio Asheton Maryam + Valle Tukul</div>
+            <div class="day-subtitle">Trekking a 3.000 m sobre el mar</div>
+          </div>
+          <div class="day-meta">
+            <span>🥾 Trekking 2h</span>
+            <span>🏔️ Vistas del Rift Valley</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Inicio del trekking al monasterio</div>
+              <div class="act-desc">El Monasterio de Asheton Maryam está a 3.000 m de altitud, 2 horas de trekking a pie o en mula desde Lalibela. El camino sube por senderos de tierra roja entre aldeas de tukules (cabañas cónicas tradicionales) con vistas progresivas del valle. Contratar una mula es opcional pero recomendable para el ascenso.</div>
+              <div class="act-tags"><span class="act-tag">Mula ~€10</span><span class="act-tag">Guía ~€15–25/día</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Monasterio de Asheton Maryam</div>
+              <div class="act-desc">Un monasterio activo excavado en un acantilado a 3.000 m. Los monjes viven aquí en una comunidad cerrada. El interior alberga manuscritos iluminados del siglo XV y cruces de oro aksumitas. Las vistas desde la terraza abarcan el Valle del Rift y las montañas de los Semien a más de 100 km de distancia.</div>
+              <div class="act-tags"><span class="act-tag">Entrada ~€3</span><span class="act-tag green">Patrimonio vivo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Valle Tukul — descenso y aldeas</div>
+              <div class="act-desc">El descenso pasa por el Valle Tukul, salpicado de aldeas tradicionales donde los niños saludan con "You, you!" y ofrecen collares de semillas. Las mujeres llevan cruces tatuadas en la frente — marca de identidad ortodoxa etíope. Una tarde de contacto real con la vida rural a 2.500 m de altitud.</div>
+              <div class="act-tags"><span class="act-tag green">Experiencia cultural auténtica</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 5 -->
+    <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+      <h2 class="section-heading" id="h-dia5">Día 5</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div>
+            <div class="day-title">Regreso Addis Abeba — ceremonia del café</div>
+            <div class="day-subtitle">El origen del café tiene nombre etíope</div>
+          </div>
+          <div class="day-meta">
+            <span>✈️ Vuelo LLI–ADD</span>
+            <span>☕ Ceremonia del café</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Vuelo Lalibela → Addis Abeba</div>
+              <div class="act-desc">Vuelo de regreso a la capital. El paisaje desde el aire cambia de las montañas al altiplano: campos de teff (el cereal ancestral etíope), rebaños de cebras y buitres planeando sobre los valles. Check-in en el hotel de Addis para la última noche.</div>
+              <div class="act-tags"><span class="act-tag">~€60–90 ida</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ceremonia tradicional del café etíope</div>
+              <div class="act-desc">Etiopía es la cuna del café: la leyenda de Kaldi y sus cabras data del siglo IX en la región de Kaffa. La ceremonia del "buna" dura 45 minutos: la anfitriona tuesta los granos verdes en una sartén de hierro, los muele con mortero, los cuela tres veces (abol, tona, baraka) y sirve en jícaras con incienso encendido. Cada ronda tiene su significado espiritual.</div>
+              <div class="act-tags"><span class="act-tag">~€5 por ceremonia completa</span><span class="act-tag green">Experiencia cultural esencial</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bole District — gastronomía y noche</div>
+              <div class="act-desc">El distrito Bole es el corazón cosmopolita de Addis: restaurantes internacionales, tiendas de artesanía etíope y cafeterías modernas. Cena en el restaurante Yod Abyssinia con danza y música tradicional en vivo: eskista (la danza de hombros etíope), krar (lira de 5 cuerdas) y masenqo (violín de una cuerda). Precio medio con show: €15–20.</div>
+              <div class="act-tags"><span class="act-tag">Cena con show ~€15–20</span><span class="act-tag">Música en vivo</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Día 6 -->
+    <section id="dia6" class="itin-section" aria-labelledby="h-dia6">
+      <h2 class="section-heading" id="h-dia6">Día 6</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">06</div>
+          <div>
+            <div class="day-title">Addis Mercato artesanía + vuelo de regreso</div>
+            <div class="day-subtitle">Los últimos regalos antes de despedirse</div>
+          </div>
+          <div class="day-meta">
+            <span>🛍️ Artesanía etíope</span>
+            <span>✈️ Vuelo de vuelta</span>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Addis Mercato — artesanía y recuerdos</div>
+              <div class="act-desc">La sección de artesanía del Merkato tiene los mejores precios de Etiopía: cruces de plata aksumitas (desde €5), cestas de mimbre coloridas tejidas por mujeres oromo, telas de algodón con bordados tradicionales, incienso de olíbano (frankincense) del norte y especias de berbere auténtico. Regatear educadamente — el primer precio suele duplicar el precio real.</div>
+              <div class="act-tags"><span class="act-tag green">Mercado libre</span><span class="act-tag info">Regateo esperado</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último café antes del aeropuerto</div>
+              <div class="act-desc">Una última taza de café etíope en Tomoca Coffee — la cafetería más antigua de Addis Abeba, fundada en 1953 por inmigrantes italianos y actualmente ícono nacional. El café de origen de Yirgacheffe o Sidama es de los mejores del mundo. Llévate 250g de granos a casa — pasan perfectamente por el control de seguridad.</div>
+              <div class="act-tags"><span class="act-tag">Café ~€1.50</span><span class="act-tag">Bolsa granos ~€3–5</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida al Aeropuerto de Bole</div>
+              <div class="act-desc">El aeropuerto internacional de Addis Abeba es el hub de Ethiopian Airlines, una de las mejores aerolíneas de África. Los vuelos a Madrid suelen salir entre las 20:00 y las 23:00, con una escala. Llegar con 3h de antelación — las colas de control pueden ser largas.</div>
+              <div class="act-tags"><span class="act-tag info">3h antes del vuelo</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gastronomía -->
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía etíope</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato nacional</div>
+          <div class="gastro-title">Injera con Wat</div>
+          <div class="gastro-desc">La injera es un pan esponjoso y ligeramente ácido hecho de teff, un cereal ancestral endémico de Etiopía con alto contenido en hierro. Se sirve como base y cubierto con guisos especiados (wat): doro wat (pollo con huevo duro en salsa de berbere), misir wat (lentejas rojas picantes) o tikil gomen (col con cúrcuma). Se come con la mano derecha, sin cubiertos.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Carne especiada</div>
+          <div class="gastro-title">Tibs</div>
+          <div class="gastro-desc">Carne de ternera o cordero salteada con berbere (mezcla de chiles, pimienta negra, cardamomo, jengibre, clavo y más de 10 especias), mantequilla clarificada (nit'ir qibe) y cebollas en sartén de hierro. El berbere es el sabor más representativo de la cocina etíope — picante, ahumado y profundo. Se sirve directamente en la sartén chisporroteando.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida ancestral</div>
+          <div class="gastro-title">Tej — hidromiel etíope</div>
+          <div class="gastro-desc">El tej es el vino de miel tradicional de Etiopía, aromatizado con gesho (una planta lúpulo local) que le da un amargor característico. Se sirve en vasos de cristal en forma de jarrón (birille). Ha sido la bebida de reyes y sacerdotes durante más de 2.000 años. Contenido alcohólico variable: desde 4% hasta 12% según la fermentación.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida ritual</div>
+          <div class="gastro-title">Café de origen etíope</div>
+          <div class="gastro-desc">El café nació en Etiopía (región de Kaffa) hace más de 1.000 años. Las variedades de Yirgacheffe, Sidama y Harrar son de las más apreciadas del mundo. La ceremonia tradicional del "buna" se realiza tres veces al día y es un acto social de hospitalidad. Siempre se sirve con incienso y, opcionalmente, palomitas de maíz (popcorn) o cacahuetes.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consejos -->
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Visado e-Visa obligatorio:</strong> tramítalo en evisa.gov.et al menos 1 semana antes del viaje. Cuesta €52 y se aprueba en 3–5 días hábiles. No existe visado a la llegada para españoles sin e-Visa previo.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Vacunas y salud:</strong> se recomienda vacunación contra fiebre amarilla (necesaria si llegas de zona endémica), hepatitis A y B, y tifoidea. Llevar antimalárico si vas a zonas bajas. El agua del grifo no es potable — solo agua embotellada o hervida.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Moneda y pagos:</strong> el birr etíope (ETB). Solo se pueden obtener en bancos y cajeros oficiales — es ilegal el cambio informal. Los cajeros de los grandes hoteles de Addis aceptan tarjetas internacionales. En Lalibela, llevar suficiente efectivo pues los cajeros son escasos y fallan con frecuencia.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Respeto religioso en las iglesias:</strong> quítate los zapatos antes de entrar a cualquier iglesia (te darán una bolsa). Las mujeres deben cubrirse los hombros y las rodillas. En las misas matutinas, guardar silencio absoluto y no fotografiar sin permiso del sacerdote.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Altitud en Addis y Lalibela:</strong> ambas ciudades superan los 2.300–2.500 m. El primer día puede haber dolor de cabeza leve, cansancio o falta de apetito. Beber abundante agua, evitar alcohol las primeras 24h y no hacer esfuerzo físico intenso al llegar.</div></div>
+    </section>
+
+    <!-- Emergencias -->
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Policía</div><div class="emerg-value">991</div><div class="emerg-note">Emergencias policiales</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">907</div><div class="emerg-note">Servicio de urgencias médicas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Bomberos</div><div class="emerg-value">939</div><div class="emerg-note">Emergencias incendio/rescate</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España (Addis Abeba)</div><div class="emerg-value">+251 11 371-0222</div><div class="emerg-note">Asistencia consular a ciudadanos españoles</div></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede adaptar el itinerario a tus fechas, presupuesto y preferencias en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos para 2026 y pueden variar según temporada y disponibilidad. Comprobar siempre la situación política y de seguridad en Etiopía antes de viajar en el portal del Ministerio de Asuntos Exteriores de España. El e-Visa debe tramitarse antes de salir de España. Routlo no se responsabiliza de cambios en precios de terceros o modificaciones en la normativa de visados.
+    </div>
+  </main>
+</div>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div>
+      <div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div>
+      <p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Destinos</div>
+      <nav aria-label="Destinos populares">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li><a href="tokio.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Tokio</a></li>
+          <li><a href="buenos-aires.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Buenos Aires</a></li>
+          <li><a href="cairo.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">El Cairo</a></li>
+          <li><a href="rio-de-janeiro.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Río de Janeiro</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Destinos España">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li>
+          <li><a href="barcelona.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Barcelona</a></li>
+          <li><a href="sevilla.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Sevilla</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, {passive:true});
+
+  function toggleMenu() {
+    const ul = nav.querySelector('ul');
+    ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex';
+  }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>El Rocío — El pueblo sin asfalto a las puertas de Doñana | Routlo</title>
+  <meta name="description" content="70 km desde Sevilla, 65 minutos en coche: El Rocío es el único pueblo de España con todas sus calles de arena, hogar de la Virgen del Rocío y puerta de entrada al Parque Nacional de Doñana. Entrada gratuita y unos 35€ para dos personas en un día."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #e8d4a0; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #e8d4a0; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(232,212,160,0.15); border: 1px solid rgba(232,212,160,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #e8d4a0; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(232,212,160,0.12); border: 1px solid rgba(232,212,160,0.3); font-size: 0.75rem; font-weight: 600; color: #e8d4a0; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(232,212,160,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(232,212,160,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #e8d4a0, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #e8d4a0; border-left-color: #e8d4a0; background: rgba(232,212,160,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(232,212,160,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(232,212,160,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #e8d4a0; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(232,212,160,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #e8d4a0; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #e8d4a0; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(232,212,160,0.3); }
+    .hotel-link:hover { border-color: #e8d4a0; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #e8d4a0; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#e8d4a0'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#e8d4a0'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">🐎 Pueblo sin asfaltar</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🚗 70 km · 65 min desde Sevilla</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~35€ / 2 personas</span>
+      <span style="font-size:0.78rem;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;padding:4px 12px;border-radius:100px;">🆓 Entrada gratuita</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🌅 Atardecer en la marisma</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">El Rocío<br><span style="color:#e8d4a0;">El pueblo sin asfalto a las puertas de Doñana</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A poco más de una hora de Sevilla, El Rocío es un pueblo único en España: ni una sola de sus calles está asfaltada, todas son de arena, porque está pensado para llegar a caballo o en carreta. Aquí vive la Virgen del Rocío, escenario de la romería más multitudinaria del país, y aquí empiezan los senderos gratuitos hacia las marismas del Parque Nacional de Doñana. Un día completo, gratis de entrada, por unos 35€ para dos.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#pueblo">El pueblo sin asfalto</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">El Rocío</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🐎 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">70 km</div><div class="route-info-unit">desde Sevilla</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">65 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~35€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Ermita</div><div class="route-info-value">Gratis</div><div class="route-info-unit">entrada libre</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Oct - Abr</div><div class="route-info-unit">aves y temperaturas suaves</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="pueblo">
+      <h2 class="section-heading">🐎 El pueblo sin asfalto</h2>
+      <div class="highlight-box">
+        <h4>🏇 Un pueblo construido para llegar a caballo</h4>
+        <p>El Rocío es, junto a un puñado de núcleos en toda España, uno de los pocos pueblos cuyas calles nunca se han asfaltado: todas son de arena suelta, la misma arena de la marisma y del coto de Doñana sobre la que se asienta. No es casualidad ni abandono, es diseño deliberado. Casi todas las casas —muchas de ellas "casas hermandad" de las distintas hermandades rocieras de toda Andalucía— tienen en su fachada una argolla de hierro o un poste para atar caballos, porque el pueblo está pensado para vivirse a caballo, en carreta o a pie sobre la arena, tal y como llegan las hermandades en la Romería. Pasear por El Rocío es como entrar en un decorado permanente de la romería, incluso en un martes cualquiera de noviembre.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>⛪ La Romería del Rocío: la mayor concentración religiosa de Europa</h4>
+        <p>Cada año, en torno a Pentecostés (mayo-junio), más de cien hermandades de toda Andalucía y de otras partes de España recorren a pie, a caballo y en carretas tiradas por bueyes los caminos de arena que llevan hasta El Rocío, en peregrinaciones que pueden durar varios días. Se calcula que durante esos días la población del pueblo —apenas unos cientos de habitantes el resto del año— se multiplica hasta alcanzar más de un millón de personas, lo que convierte a la Romería del Rocío en una de las mayores concentraciones religiosas de toda Europa. El resto del año, El Rocío recupera su ritmo tranquilo de pueblo de frontera entre la civilización y el Parque Nacional de Doñana.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Sevilla → El Rocío · 65 min</div><div class="day-subtitle">Por la A-49 y la A-483, cruzando el Aljarafe y el Condado de Huelva</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 La carretera hacia el suroeste</div>
+            <div class="stop-desc">Sales de Sevilla por la A-49 en dirección a Huelva y, pasado Bollullos Par del Condado (tierra de vinos blancos y fresas), tomas la A-483 hacia Matalascañas. Los últimos kilómetros antes de llegar a El Rocío atraviesan pinares y monte bajo típico del entorno de Doñana —empieza a notarse el cambio de paisaje.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento en el pueblo</div>
+            <div class="stop-desc">Al llegar, lo primero que sorprende es que el propio aparcamiento ya es de arena. Hay espacio de sobra para aparcar gratis en las calles cercanas a la ermita y al Real, especialmente entre semana. En fin de semana de buen tiempo, llega antes de las 11h.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Ermita de Nuestra Señora del Rocío</div><div class="day-subtitle">Entrada gratuita · Visita 30-45 min · Abierta todo el día</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛪ El santuario de la Blanca Paloma</div>
+            <div class="stop-desc">La ermita actual, de fachada blanca y sobria, alberga en su camarín a la Virgen del Rocío, conocida popularmente como "la Blanca Paloma". La entrada es totalmente gratuita y suele estar abierta de la mañana a la tarde. Dentro encontrarás los estandartes y exvotos de muchas de las hermandades filiales que peregrinan aquí cada año.</div>
+            <div class="stop-price">Entrada gratuita · Horario aproximado: 8:00-21:00h (puede variar según oficios religiosos)</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌳 La leyenda del hallazgo en el árbol</div>
+            <div class="stop-desc">La tradición cuenta que, siglos atrás, un cazador (o pastor, según las versiones) que andaba por estos montes y marismas encontró en el hueco de un árbol —un acebuche o sabina, según la leyenda— una pequeña imagen de la Virgen. Al intentar llevársela a su pueblo, la imagen regresó milagrosamente sola al árbol, señal interpretada como su deseo de quedarse en ese lugar junto a la marisma. Allí se construyó la primera ermita, germen del actual santuario y origen de toda la devoción rociera.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏘️ El Real del Rocío</div>
+            <div class="stop-desc">Alrededor de la ermita se extiende "el Real", el conjunto de calles de arena bordeadas por las casas-hermandad de las distintas cofradías de Andalucía y otras regiones. La mayor parte del año estas casas permanecen cerradas, pero su arquitectura —porches, balconadas de madera, argollas para caballos— ya merece el paseo por sí misma.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Marismas, paseo y observación de aves</div><div class="day-subtitle">A pie · 1h - 1h 30min · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🦩 El paseo junto a la marisma</div>
+            <div class="stop-desc">Justo detrás de la ermita, un paseo con barandilla de madera se asoma directamente a las marismas del Preparque de Doñana. En otoño, invierno y primavera es habitual ver flamencos, garzas, cigüeñas, ánades y otras aves acuáticas a poca distancia, sin necesidad de prismáticos —aunque llevarlos mejora mucho la experiencia. En verano la marisma suele secarse casi por completo y el paisaje cambia radicalmente.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌿 Centro de Visitantes "La Rocina"</div>
+            <div class="stop-desc">A pocos minutos en coche (o un paseo algo más largo) se encuentra el Centro de Visitantes La Rocina, dentro del Parque Natural de Doñana, con acceso gratuito a varios senderos cortos y pasarelas de madera elevadas sobre el arroyo de la Rocina. Hay observatorios de aves y paneles informativos sobre la fauna y flora del entorno —ideal si viajas con niños o simplemente quieres alargar la caminata entre vegetación de ribera.</div>
+            <div class="stop-price">Acceso gratuito · Horario aproximado: 9:00-15:00h (verano) / 8:00-19:00h (resto del año), puede variar</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌉 Puente del Ajolí y Puente del Rey</div>
+            <div class="stop-desc">Estos dos puentes, situados a poca distancia del pueblo, son los accesos tradicionales a pie y en vehículos autorizados hacia el interior de Doñana. No es necesario cruzarlos para disfrutar del día, pero son un buen punto de referencia si quieres ampliar el paseo y ver la marisma desde otro ángulo, especialmente al atardecer.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Atardecer y regreso</div><div class="day-subtitle">El mejor momento del día · Vuelta directa 65 min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌅 Atardecer sobre la marisma y la ermita</div>
+            <div class="stop-desc">Si puedes elegir un solo momento para estar en El Rocío, que sea el atardecer. La luz dorada se refleja en el agua de la marisma (cuando la hay) y la fachada blanca de la ermita se ilumina con tonos cálidos, mientras las aves regresan a sus zonas de descanso. Es un espectáculo gratuito y uno de los recuerdos que más se repiten entre quienes visitan el pueblo por primera vez.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍽️ Antes de irte: una cerveza o tapa con vistas</div>
+            <div class="stop-desc">Varios bares y terrazas junto al Real tienen vistas directas a la marisma —perfectos para una cerveza, unas gambas de Sanlúcar o una tapa de jamón antes de volver. Los precios son razonables para tratarse de una zona turística, sobre todo entre semana.</div>
+            <div class="stop-price">Tapa + bebida: ~8-10€/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Sevilla — 65 min</div>
+            <div class="stop-desc">Vuelta por la misma ruta, A-483 y A-49. Si te ha gustado el entorno y quieres profundizar más en Doñana, este es también el punto de partida habitual para las excursiones organizadas en 4x4 por el interior del parque (ver sección de presupuesto).</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, 140 km)</span><span>14€</span></div>
+        <div class="budget-row"><span>⛪ Ermita y paseo de la marisma</span><span>Gratis</span></div>
+        <div class="budget-row"><span>🌿 Centro de Visitantes La Rocina</span><span>Gratis</span></div>
+        <div class="budget-row"><span>🍽️ Tapa y bebida antes de volver (2 personas)</span><span>18€</span></div>
+        <div class="budget-row"><span>☕ Extras (agua, café, helado)</span><span>3€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~35€</span></div>
+      </div>
+      <div class="budget-note">Una de las escapadas más económicas desde Sevilla: la ermita y los senderos de Doñana son gratuitos, y el grueso del presupuesto es la gasolina. Te queda margen de sobra para una comida algo más completa o para un detalle extra en el pueblo.</div>
+      <div class="budget-note">Si quieres adentrarte de verdad en el corazón del Parque Nacional de Doñana —playas vírgenes, dunas móviles, poblados de marismeños y fauna que no se ve desde los senderos públicos— la mejor opción es una excursión guiada en 4x4, que sale habitualmente desde El Rocío o Matalascañas. 👉 <a href="https://www.getyourguide.com/s/?q=Donana+4x4+safari+tour&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener" aria-label="Reservar safari 4x4 por Doñana en GetYourGuide" style="display:inline;margin-top:0;">Reservar safari 4x4 por Doñana en GetYourGuide</a></div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Mejor época:</strong> otoño, invierno y primavera son ideales —las marismas suelen tener agua, hay muchas más aves y las temperaturas son agradables. En pleno verano la marisma se seca casi por completo y el calor en la zona puede ser extremo.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Calzado adecuado:</strong> recuerda que todas las calles son de arena suelta. Lleva calzado cómodo y cerrado —las sandalias finas se llenan de arena en dos minutos— y no te preocupes si el coche se queda algo "polvoriento".</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Lleva prismáticos:</strong> aunque no seas un experto en aves, unos prismáticos básicos multiplican la experiencia en el paseo de la marisma y en el Centro de Visitantes La Rocina. Las primeras y últimas horas del día son las mejores para ver fauna.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>La Romería (Pentecostés):</strong> si buscas tranquilidad, evita las fechas de la Romería del Rocío, cuando el pueblo se llena hasta desbordar. Si por el contrario quieres vivir ese ambiente único —aunque sea de lejos—, planifica la visita justo en esas fechas, pero reserva alojamiento con muchísima antelación.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Sevilla y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Sevilla" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Sevilla en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (GetYourGuide, DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Sevilla?</h3>
+      <p>Rutas de un día con entrada gratuita, mapas detallados y presupuesto desglosado para dos personas.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([37.26,-6.23],9);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[37.3891,-5.9845],label:'Sevilla',color:'#5ecb8a',r:10},{coords:[37.1314,-6.4778],label:'El Rocío',color:'#e8d4a0',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[37.3891,-5.9845],[37.1314,-6.4778]],{color:'#e8d4a0',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mis Apps · Hub</title>
+<style>
+  :root{
+    --bg:#0b0d12; --surface:#141822; --surface-2:#1b212e; --border:#273041;
+    --text:#e8ecf4; --muted:#94a0b5; --accent:#6ea8fe; --accent-2:#9d7bff;
+    --ok:#4ade80; --warn:#fbbf24;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:radial-gradient(1200px 600px at 80% -10%, #1a2133 0%, var(--bg) 55%);
+    color:var(--text); font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    min-height:100vh; padding:0 16px 64px;
+  }
+  header{max-width:1100px; margin:0 auto; padding:48px 0 24px}
+  h1{font-size:34px; margin:0 0 6px; letter-spacing:-.02em}
+  h1 span{background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted); margin:0}
+  .controls{max-width:1100px; margin:20px auto 0; display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  input[type=search]{
+    flex:1; min-width:220px; background:var(--surface); border:1px solid var(--border);
+    color:var(--text); padding:11px 14px; border-radius:12px; font-size:15px; outline:none;
+  }
+  input[type=search]:focus{border-color:var(--accent)}
+  .filters{display:flex; gap:8px; flex-wrap:wrap}
+  .chip{
+    background:var(--surface); border:1px solid var(--border); color:var(--muted);
+    padding:8px 14px; border-radius:999px; cursor:pointer; font-size:13px; user-select:none;
+  }
+  .chip.active{background:var(--accent); border-color:var(--accent); color:#06101f; font-weight:600}
+  .grid{
+    max-width:1100px; margin:28px auto 0; display:grid; gap:16px;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  }
+  .card{
+    background:linear-gradient(180deg,var(--surface),var(--surface-2));
+    border:1px solid var(--border); border-radius:18px; padding:20px;
+    display:flex; flex-direction:column; gap:12px; transition:transform .15s, border-color .15s;
+  }
+  .card:hover{transform:translateY(-3px); border-color:var(--accent)}
+  .top{display:flex; align-items:center; gap:12px}
+  .emoji{font-size:30px; line-height:1}
+  .name{font-weight:650; font-size:17px; letter-spacing:-.01em}
+  .desc{color:var(--muted); font-size:14px; margin:0; flex:1}
+  .tags{display:flex; gap:6px; flex-wrap:wrap}
+  .tag{font-size:11px; color:var(--muted); background:#0e1420; border:1px solid var(--border); padding:3px 8px; border-radius:6px}
+  .actions{display:flex; align-items:center; gap:10px; margin-top:4px}
+  a.open{
+    text-decoration:none; background:var(--accent); color:#06101f; font-weight:600;
+    padding:9px 16px; border-radius:10px; font-size:14px;
+  }
+  a.open:hover{filter:brightness(1.08)}
+  .badge{font-size:12px; padding:6px 10px; border-radius:8px; border:1px solid var(--border); color:var(--warn); background:#1a1708}
+  .cmd{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; color:var(--text);
+    background:#0e1420; border:1px solid var(--border); padding:8px 10px; border-radius:8px;
+    overflow:auto; white-space:pre;
+  }
+  footer{max-width:1100px; margin:40px auto 0; color:var(--muted); font-size:13px; text-align:center}
+  .count{color:var(--muted); font-size:13px; margin-left:auto}
+</style>
+</head>
+<body>
+<header>
+  <h1>Mis <span>Apps</span></h1>
+  <p class="sub">Todas las apps creadas, reunidas en un solo sitio. Pulsa <b>Abrir</b> en las web; las nativas/backend muestran su comando de arranque.</p>
+</header>
+
+<div class="controls">
+  <input id="q" type="search" placeholder="Buscar app…" autocomplete="off" />
+  <div class="filters" id="filters"></div>
+  <span class="count" id="count"></span>
+</div>
+
+<main class="grid" id="grid"></main>
+
+<footer>
+  Hub generado automáticamente · sirve esta carpeta con <code>python3 launch.py</code> para que los enlaces funcionen.
+</footer>
+
+<script>
+// Datos embebidos (funciona también sin servidor). Sincronizado con apps.json.
+const APPS = [
+  {slug:"dashboard-3d",name:"Dashboard Impresión 3D",emoji:"🖨️",desc:"Panel para monitorizar impresoras 3D con proxy de IA.",type:"static",entry:"dashboard-impresion-3d.html",tags:["HTML","React","Cloudflare"]},
+  {slug:"dinosaurios-fosiles",name:"Mapa de Zonas Fósiles",emoji:"🦖",desc:"Mapa interactivo (Leaflet + relieve LIDAR) de zonas con potencial fósil.",type:"static",entry:"frontend/index.html",tags:["HTML","Leaflet","Python"]},
+  {slug:"enfermeria",name:"Servicios de Enfermería",emoji:"💉",desc:"Web de servicios de enfermería a domicilio.",type:"static",entry:"index.html",tags:["HTML"]},
+  {slug:"hormigas-calendario",name:"Vuelos Nupciales — Calendario",emoji:"🐜",desc:"Calendario de vuelos nupciales de hormigas.",type:"static",entry:"ant-nuptial-flights.html",tags:["HTML"]},
+  {slug:"hormigas-logrono",name:"Vuelos Nupciales — Logroño",emoji:"🐜",desc:"Predicción de vuelos nupciales de hormigas en Logroño.",type:"static",entry:"vuelos-nupciales-logrono.html",tags:["HTML"]},
+  {slug:"muscle-tracker",name:"Muscle Tracker",emoji:"💪",desc:"Registro de entrenamiento y grupos musculares (tema oscuro).",type:"static",entry:"index.html",tags:["HTML"]},
+  {slug:"observatorio-solar",name:"Observatorio Solar",emoji:"☀️",desc:"Visor de actividad y datos solares.",type:"static",entry:"solar-observatory.html",tags:["HTML"]},
+  {slug:"pesca-rioja",name:"Pesca en La Rioja",emoji:"🎣",desc:"Guía de especies y normativa de pesca en La Rioja.",type:"static",entry:"pesca-rioja/index.html",tags:["HTML"]},
+  {slug:"trading-bot-ia",name:"Trading Bot IA",emoji:"📈",desc:"Dashboard y bot de análisis de trading con IA. El dashboard es estático; el bot requiere Python.",type:"static",entry:"dashboard_static/index.html",tags:["Python","HTML"]},
+  {slug:"viajes-voyageai",name:"VoyageAI — Itinerarios",emoji:"🧭",desc:"Colección y generador de itinerarios de viaje y senderismo.",type:"static",entry:"index.html",tags:["HTML","Python"]},
+  {slug:"umbrafinder-eclipses",name:"UmbraFinder (Eclipses)",emoji:"🌑",desc:"App para encontrar y planificar eclipses. SPA con Vite — requiere build.",type:"spa",run:"npm install && npm run dev",tags:["Vite","React","TS"]},
+  {slug:"plantas-espana",name:"Identificador de Plantas (España)",emoji:"🌱",desc:"App móvil para identificar plantas de España (PlantNet).",type:"native",run:"npm install && npx expo start",tags:["Expo","React Native"]},
+  {slug:"conversor-ebooks",name:"Conversor PDF · EPUB · Kindle",emoji:"📚",desc:"Conversor de ebooks: API en Python + app móvil + app de escritorio.",type:"backend",run:"cd converter-api && ./run.sh",tags:["Python","Expo"]},
+  {slug:"monitor-coste-claude",name:"Monitor de Coste Claude",emoji:"🪙",desc:"Stack de observabilidad (Grafana/Loki/Prometheus) para el gasto de tokens.",type:"infra",run:"docker compose up",tags:["Docker","Grafana"]},
+];
+
+const TYPE_LABEL = {static:"Web", spa:"SPA", native:"Móvil", backend:"Backend", infra:"Infra"};
+const FILTERS = [["all","Todas"],["static","Web"],["spa","SPA"],["native","Móvil"],["backend","Backend"],["infra","Infra"]];
+
+let active = "all", query = "";
+const grid = document.getElementById("grid");
+const count = document.getElementById("count");
+
+const filtersEl = document.getElementById("filters");
+FILTERS.forEach(([val,label],i)=>{
+  const b=document.createElement("span");
+  b.className="chip"+(i===0?" active":""); b.textContent=label; b.dataset.val=val;
+  b.onclick=()=>{active=val; [...filtersEl.children].forEach(c=>c.classList.toggle("active",c.dataset.val===val)); render();};
+  filtersEl.appendChild(b);
+});
+
+document.getElementById("q").addEventListener("input", e=>{query=e.target.value.toLowerCase().trim(); render();});
+
+function card(a){
+  const el=document.createElement("article"); el.className="card";
+  const tags=a.tags.map(t=>`<span class="tag">${t}</span>`).join("");
+  let action;
+  if(a.type==="static"){
+    action=`<a class="open" href="./${a.slug}/${a.entry}">Abrir ↗</a><span class="tag">${TYPE_LABEL[a.type]}</span>`;
+  }else{
+    action=`<span class="badge">${TYPE_LABEL[a.type]} · requiere arranque</span>`;
+  }
+  const cmd = a.run ? `<div class="cmd">cd apps/${a.slug} && ${a.run}</div>` : "";
+  el.innerHTML=`
+    <div class="top"><span class="emoji">${a.emoji}</span><span class="name">${a.name}</span></div>
+    <p class="desc">${a.desc}</p>
+    <div class="tags">${tags}</div>
+    <div class="actions">${action}</div>
+    ${cmd}`;
+  return el;
+}
+
+function render(){
+  grid.innerHTML="";
+  const list=APPS.filter(a=>{
+    const okType = active==="all" || a.type===active;
+    const okQ = !query || (a.name+" "+a.desc+" "+a.tags.join(" ")).toLowerCase().includes(query);
+    return okType && okQ;
+  });
+  list.forEach(a=>grid.appendChild(card(a)));
+  count.textContent = `${list.length} de ${APPS.length} apps`;
+  if(!list.length) grid.innerHTML='<p class="desc">Sin resultados.</p>';
+}
+render();
+</script>
+</body>
+</html>

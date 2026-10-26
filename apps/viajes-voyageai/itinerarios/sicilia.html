@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sicilia — 6 días: Palermo, el Etna, Valle dei Templi y Taormina bajo €700 para dos | Routlo</title>
+  <meta name="description" content="6 días en Sicilia: los mercados de Palermo, el Valle dei Templi de Agrigento (UNESCO), subir al volcán Etna y la perla del Mediterráneo en Taormina. Bajo €700 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#180500 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#200800 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#2a0c00 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#200800 0%,#4a1500 40%,#6a2000 70%,rgba(201,169,110,0.2) 100%),url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Europa · Sicilia</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Sicilia</h1>
+  <p class="dest-country">Palermo · Etna · Valle dei Templi · Taormina · Bajo €700 para dos</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Italia · Mediterráneo</span>
+    <span class="dest-badge gold">6 días · La isla más grande del Mediterráneo</span>
+    <span class="dest-badge gold">💶 ~660 € dos personas (vuelos incluidos)</span>
+    <span class="dest-badge">🌊 Abr · May · Jun · Sep · Oct</span>
+    <span class="dest-badge">✈️ Vuelo directo desde Madrid/Barcelona</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">6 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~660 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo directo</div></div>
+        <div class="route-info-item"><div class="route-info-label">Vuelo</div><div class="route-info-val">~2h 30min</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Abr · May · Sep</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Palermo (inicio)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#f87171;"></span>Catania (fin)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Palermo — El crisol del Mediterráneo</div>
+            <div class="day-subtitle">Mercato Ballarò · Catedral · Cappella Palatina · Quattro Canti</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Mercato Ballarò — El mercado más antiguo de Palermo</div>
+              <div class="stop-desc">En activo desde el siglo X árabe, Ballarò es el corazón de la Palermo más auténtica: montañas de berenjenas violetas, sfilato siciliano, queso caciocavallo colgado del techo, arancini recién fritos, pani ca' meusa (sándwich de bazo) y el aroma de los puestos de pescado. El barrio árabe-normanno mezcla mezquitas, iglesias barrocas y palacios medievales en la misma manzana.</div>
+              <div class="stop-price">Arancino: €1.50 · Entrada libre al mercado</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Cappella Palatina — El arte normando-árabe-bizantino</div>
+              <div class="stop-desc">La capilla real de los reyes normandos (siglo XII) es el mayor conjunto de mosaicos bizantinos de oro del mundo después de Estambul: 6.200 m² de teselas doradas representando escenas bíblicas, con inscripciones en árabe, latín y griego conviviendo en el mismo techo. Testimonio único de la tolerancia multicultural de la Sicilia normanda.</div>
+              <div class="stop-price">Entrada: ~€12/pax · Reservar online</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Quattro Canti y centro histórico barroco</div>
+              <div class="stop-desc">El cruce de las cuatro esquinas más fotogénicas de Sicilia: cuatro fachadas barrocas del siglo XVII en el punto exacto donde se cruzan las dos calles principales de Palermo. Cerca: la Fontana Pretoria (fuente del XVI con 16 estatuas paganas que escandalizó a los religiosos). Cena en la Vucciria o en Trattoria Il Maestro del Brodo.</div>
+              <div class="stop-price">Cena: ~€12-18/pax</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Monreale y Cefalù</div>
+            <div class="day-subtitle">Catedral de Monreale (UNESCO) · Costa norte · Casco medieval de Cefalù</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Catedral de Monreale (UNESCO)</div>
+              <div class="stop-desc">A 8 km de Palermo, la catedral del siglo XII construida por el rey Guillermo II es el mayor conjunto de mosaicos medievales del mundo: 6.500 m² de oro sobre fondo dorado, con el Pantocrátor más grande de la iconografía cristiana (7 metros de altura). El claustro normando-árabe con 228 columnas de mármol talladas de forma única es uno de los espacios más hermosos de Italia.</div>
+              <div class="stop-price">Entrada: ~€6/pax · Claustro: €6 extra</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Costa norte hacia Cefalù</div>
+              <div class="stop-desc">La autopista A19 desde Palermo hacia Cefalù sigue la costa del Tirreno con vistas espectaculares. Parada en la playa de Pollina y en las Madonie (parque natural de montaña). Cefalù se avista desde lejos: el promontorio rocoso de 270 metros sobre el pueblo árabe-normando.</div>
+              <div class="stop-price">Coche de alquiler ~€25-35/día</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Cefalù — La roca, la catedral y la playa</div>
+              <div class="stop-desc">El pueblo más fotogénico de Sicilia: callejuelas medievales bajo la enorme Rocca (la fortaleza sobre el promontorio con ruinas fenicio-árabes), la catedral normanda del siglo XII también inscrita en la UNESCO, y la playa de arena fina en el corazón del pueblo. La imagen de la iglesia reflejada en el mar al atardecer es la postal clásica de la isla.</div>
+              <div class="stop-price">Catedral: €5 · Subida a La Rocca: €5</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Valle dei Templi — La Grecia de Agrigento</div>
+            <div class="day-subtitle">Templo de la Concordia · Templo de Zeus · Museo Arqueológico · Costa sur</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Valle dei Templi de Agrigento (UNESCO)</div>
+              <div class="stop-desc">El mayor conjunto de templos griegos fuera de Grecia y uno de los yacimientos arqueológicos más importantes del mundo: 7 templos dóricos del siglo V a.C. alineados en la cresta de una colina con vistas al Mediterráneo. El Templo de la Concordia es el mejor conservado del mundo antiguo (comparable al Partenón): 34 columnas originales de 6 metros en pie, 2.500 años después.</div>
+              <div class="stop-price">Entrada valle: ~€12/pax · Mejor al amanecer</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Templo de Zeus Olímpico</div>
+              <div class="stop-desc">El templo más grande jamás construido en la Antigüedad: 113 x 56 metros, tan descomunal que se usaban telamon (figuras de atlantes de 8 metros) como columnas. Nunca fue terminado. Una réplica de un telamon yace en el suelo para dar escala. El Museo Arqueológico nacional guarda los originales.</div>
+              <div class="stop-price">Incluido en entrada valle</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Scala dei Turchi — La escalera blanca de roca</div>
+              <div class="stop-desc">A 20 km de Agrigento, el acantilado de marga blanca más sorprendente del Mediterráneo: capas de roca calcárea pulidas por el viento en terrazas naturales que caen al mar azul cobalto. El nombre viene de las incursiones de corsarios turcos que desembarcaban aquí. Atardecer absolutamente extraordinario desde la cima.</div>
+              <div class="stop-price">Acceso libre (área pública)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Piazza Armerina — Los mosaicos romanos de Villa Romana</div>
+            <div class="day-subtitle">Villa Romana del Casale (UNESCO) · Ragusa Ibla barroca · Costa sur</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Villa Romana del Casale (UNESCO)</div>
+              <div class="stop-desc">La villa del siglo IV d.C. del gobernador romano de Sicilia tiene los mosaicos romanos más grandes y mejor conservados del mundo: 3.500 m² de mosaico policromado sobre suelo, con escenas de caza, juegos olímpicos, mitología y las famosas "chicas en bikini" (la primera representación de atletas femeninas en la historia). La pasarela elevada permite ver todo sin pisar.</div>
+              <div class="stop-price">Entrada: ~€10/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Ragusa Ibla — El barroco siciliano en su esplendor</div>
+              <div class="stop-desc">Ragusa Ibla es el barrio histórico de Ragusa, reconstruido totalmente en estilo barroco siciliano tras el terremoto de 1693 e inscrito en la UNESCO. Las calles empedradas, las iglesias con escalinatas de piedra caliza dorada, los balcones de hierro con cabezas de animales grotescos y la vista desde el Jardín Ibleo al amanecer son de una belleza aplastante.</div>
+              <div class="stop-price">Acceso libre · Cena en Ragusa: €12-18/pax</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Etna — El volcán activo más alto de Europa</div>
+            <div class="day-subtitle">Cráter Norte 3.326m · Flujos de lava · Catania nocturna</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Subida al Etna por el lado norte (Linguaglossa)</div>
+              <div class="stop-desc">El Etna (3.326m) es el volcán activo más alto de Europa y el más activo del mundo en relación con su tamaño. La ruta norte desde Linguaglossa sube por campo de lava solidificada del s. XVI hasta 2.800m en teleférico, y los últimos 500m a pie por la ladera de ceniza. El cráter norte fuma activamente. En invierno y primavera hay nieve sobre la lava.</div>
+              <div class="stop-price">Guía obligatorio zona cráter: ~€30/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Grotta del Gelo — El hielo eterno dentro del volcán</div>
+              <div class="stop-desc">Una de las curiosidades más sorprendentes del Etna: una cueva de tubo de lava en cuyo interior se acumula hielo perenne, incluso en pleno verano. Los lados de la gruta están tapizados de cristales de hielo sobre roca volcánica negra. Acceso solo con guía desde el refugio Citelli.</div>
+              <div class="stop-price">Tour guiado: ~€25/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Catania — La ciudad de la lava</div>
+              <div class="stop-desc">Catania está literalmente construida de lava basáltica negra del Etna: el Duomo de Sant'Agata, la Fontana dell'Elefante (símbolo de la ciudad: elefante negro de lava volcánica con obelisco), el mercado del pescado (Pescheria) donde langostas, ricci di mare (erizos) y pesce spada se venden a gritos al amanecer. La más africana de las ciudades italianas.</div>
+              <div class="stop-price">Pescheria: 5h-9h · Mercado gratuito</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">06</div>
+          <div>
+            <div class="day-title">Taormina — La perla del Mediterráneo</div>
+            <div class="day-subtitle">Teatro Greco · Corso Umberto · Playa de Isola Bella · Vuelo de regreso desde Catania</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Teatro Greco-Romano con el Etna de fondo</div>
+              <div class="stop-desc">Construido por los griegos en el siglo III a.C. y modificado por los romanos, el Teatro Greco de Taormina es el segundo más grande de Sicilia y el más espectacular del mundo por su contexto: las gradas de piedra volcánica con el telón de fondo del Etna humeante y el mar azul de la bahía de Naxos. Hoy sede del Festival Internacional de Cine de Taormina.</div>
+              <div class="stop-price">Entrada: ~€10/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Corso Umberto I y miradores</div>
+              <div class="stop-desc">La calle principal de Taormina atraviesa el pueblo entre tiendas de cerámica siciliana (piezas de lava volcánica pintada), heladerías de granita de almendra y limón, y terrazas suspendidas sobre el Mediterráneo. Los miradores de Piazza IX Aprile y Villa Comunale tienen las vistas más espectaculares de la isla.</div>
+              <div class="stop-price">Calle libre · Granita: €2.50</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Playa de Isola Bella y funicular</div>
+              <div class="stop-desc">La pequeña isla pegada a la costa conectada por un istmo de arena que el mar cubre y descubre con la marea: la más fotografiada de Sicilia. El funicular desde Taormina baja hasta la playa de arena oscura en 3 minutos. Última zambullida en el Mediterráneo antes del vuelo desde Catania (40 min en coche).</div>
+              <div class="stop-price">Funicular: €3 · Playa libre</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto detallado</h2>
+      <div class="highlight-box">
+        <strong>Truco: llegar a Palermo y volver desde Catania</strong><br>
+        Cogiendo el vuelo de ida a Palermo y el de vuelta desde Catania (o viceversa) se ahorra tiempo y se evita repetir ruta. Ryanair y Vueling tienen vuelos directos desde Madrid/Barcelona a ambos aeropuertos por €40-80pp. Alquiler de coche en Sicilia es esencial y económico.
+      </div>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Detalle</th><th>2 personas</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida y vuelta</td><td>MAD/BCN ↔ Palermo + Catania ↔ MAD/BCN</td><td>€120–200</td></tr>
+          <tr><td>Alojamiento</td><td>5 noches B&B/Airbnb siciliano · €25–40/noche</td><td>€125–200</td></tr>
+          <tr><td>Coche de alquiler</td><td>5 días · Imprescindible · Seguro incluido</td><td>€100–160</td></tr>
+          <tr><td>Comidas (10 comidas)</td><td>Trattorias locales, mercados, granita y arancini</td><td>€70–110</td></tr>
+          <tr><td>Entradas</td><td>Cappella Palatina, Monreale, Valle dei Templi, Etna guía</td><td>€90–120</td></tr>
+          <tr><td>Gasolina</td><td>~900 km total por la isla</td><td>€50–70</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado (2 pax, 6 días)</span>
+        <span class="budget-total-value">€555 – €860</span>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.45);margin-top:10px;">Julio-agosto: precios suben un 30-40% y las carreteras colapsan. La mejor relación calidad-precio es mayo-junio o septiembre.</p>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Dónde dormir</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Palermo centro (1-2 noches)</strong> — B&B en el barrio de l'Albergheria o Kalsa: €25-40/noche por habitación doble. Recomendado: B&B Ai Quattro Canti, Palazzo Riso. Posición perfecta para los mercados y la Cappella Palatina.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Agrigento o Scala dei Turchi (1 noche)</strong> — Posición estratégica para el Valle dei Templi al amanecer (cuando no hay turistas). B&B Atenea Vacanze o Casa Barbadoro (~€30/noche). Vale la pena pagar la noche para estar en los templos a las 8h.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Taormina o Giardini Naxos (1 noche)</strong> — Taormina es cara (€80+ hoteles). Giardini Naxos, a 10 min en taxi, tiene B&Bs desde €35/noche con las mismas vistas. O alojarse en el centro de Catania (~€25/noche) y subir a Taormina de día.</div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía siciliana</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Street food</div>
+          <div class="gastro-title">Arancino</div>
+          <div class="gastro-price">€1.50–2.50 unidad</div>
+          <div class="gastro-desc">Bola de arroz rellena de ragù, mozzarella y guisantes, empanada y frita. El debate entre arancino (Palermo, masculino) y arancina (Catania, femenino) es la guerra cultural más apasionada de Sicilia.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Postre</div>
+          <div class="gastro-title">Granita</div>
+          <div class="gastro-price">€2.50–3.50</div>
+          <div class="gastro-desc">Hielo granizado de almendra, limón, pistacho, café o fresa, con brioche siciliana tibia. El desayuno canónico de Sicilia. No tiene nada que ver con los granizados industriales: la granita siciliana es una obra de arte helada.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Pasta</div>
+          <div class="gastro-title">Pasta alla Norma</div>
+          <div class="gastro-price">€8–12/pax</div>
+          <div class="gastro-desc">El plato icónico de Catania: rigatoni con tomate, berenjenas fritas, albahaca y ricotta salata rallada. Inventada en Catania en honor a la ópera Norma de Bellini (también catanés). Símbolo de la cocina árabo-mediterránea siciliana.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Dulce</div>
+          <div class="gastro-title">Cannolo siciliano</div>
+          <div class="gastro-price">€2–3 unidad</div>
+          <div class="gastro-desc">Tubo de masa frita crujiente relleno de ricotta de oveja dulce con pistachos y candied orange. El postre siciliano por excelencia. La regla de oro: nunca comer un cannolo con el tubo relleno de antemano (se reblandece). Buscar las pastelerías que rellenan al momento.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos imprescindibles</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>El coche es indispensable.</strong> Sicilia tiene 25.000 km² y el transporte público es muy lento o inexistente entre sitios. Con coche, todo el itinerario es fluido. Las carreteras son buenas (menos los caminos de tierra a playas). Reservar con antelación en verano (precios se multiplican x3).</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Valle dei Templi: ir al amanecer o al atardecer.</strong> La entrada abre a las 9h. En verano a las 10h hay grupos de 50 personas. Llegar con el sol bajo hace los mosaicos dorados brillar de forma irreal y la luz es perfecta para fotografía. En julio-agosto el calor de mediodía es insoportable para caminar.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Cappella Palatina: reservar SIEMPRE online.</strong> Sin reserva previa la cola puede ser de 2-3 horas. La entrada online incluye una franja horaria específica. También recomendable reservar Monreale a primera hora de la mañana para evitar grupos.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Etna: la actividad puede cambiar los accesos.</strong> El Etna entra en erupción varias veces al año. Los senderos al cráter superior se cierran cuando hay actividad. Controlar el estado en etna.osservatorio.ingv.it antes de ir. Las erupciones nocturnas son visibles desde Catania y Taormina sin subir al volcán.</div>
+      </div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-checklist">
+      <h2 class="section-heading" id="h-checklist">Qué llevar</h2>
+      <div class="check-item"><div class="check-box"></div><span>Permiso de conducir internacional (o europeo válido en Italia)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Ropa de capas para el Etna (en la cima hace frío incluso en verano)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Mascarilla antipolvo/ceniza para la zona del cráter Etna</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Bañador y protector solar (playas desde mayo)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Zapatos resistentes (Valle dei Templi y Etna tienen terreno irregular)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Euros en efectivo (muchos B&B y trattorias rurales no aceptan tarjeta)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>App Google Maps offline descargada para la zona de Sicilia</span></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias y datos útiles</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias</div><div class="emerg-value">112</div><div class="emerg-note">Policía · Bomberos · Ambulancia (UE)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital</div><div class="emerg-value">+39 091 606 1111</div><div class="emerg-note">Ospedale Civico, Palermo · Urgencias</div></div>
+        <div class="emerg-card"><div class="emerg-label">Moneda</div><div class="emerg-value">Euro (€)</div><div class="emerg-note">Italia · Zona euro · Sin cambio</div></div>
+        <div class="emerg-card"><div class="emerg-label">Idioma</div><div class="emerg-value">Italiano</div><div class="emerg-note">Siciliano dialectal · Inglés básico en turismo</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Listo para descubrir la isla más rica del Mediterráneo?</h3>
+      <p>Planifica tu ruta siciliana con inteligencia artificial y optimiza cada día entre volcanes, templos griegos y mercados árabes.</p>
+      <a href="../chatbot.html" class="cta-btn">Planificar con Routlo IA →</a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios indicados son estimaciones orientativas en temporada media (mayo-junio / septiembre 2025-2026). Vuelos con Ryanair/Vueling desde Madrid/Barcelona. Coche de alquiler con tarifa básica sin extras. Este contenido es informativo y no constituye una oferta comercial.
+    </div>
+
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;background:rgba(4,8,16,0.95);border-top:1px solid rgba(255,255,255,0.08);padding:40px 24px;text-align:center;">
+  <a href="../index.html" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:20px;">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:32px;border-radius:6px;background:#fff;padding:2px 8px;">
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;color:#edeef2;font-weight:700;">Routlo</span>
+  </a>
+  <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-bottom:16px;">Itinerarios de viaje con inteligencia artificial · Sicilia y más de 100 destinos</p>
+  <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;font-size:0.8rem;">
+    <a href="../itinerarios.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Itinerarios</a>
+    <a href="../mapa.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Mapa</a>
+    <a href="../chatbot.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Chatbot IA</a>
+  </div>
+  <p style="font-size:0.72rem;color:rgba(237,238,242,0.25);margin-top:20px;">© 2025 Routlo · Todos los derechos reservados</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../assets/shared.js"></script>
+<script>
+(function(){
+  const isEs = navigator.language.startsWith('es');
+  const tileUrl = isEs
+    ? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+  const tileAttr = isEs
+    ? '© OpenStreetMap contributors'
+    : '© OpenStreetMap © CARTO';
+
+  const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false }).setView([37.6, 14.2], 8);
+  const tileLayer = L.tileLayer(tileUrl, { attribution: tileAttr, maxZoom: 18 }).addTo(map);
+
+  if (isEs) {
+    tileLayer.getContainer && tileLayer.once('load', function() {
+      const c = tileLayer.getContainer();
+      if (c) c.style.cssText += 'filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';
+    });
+  }
+
+  const waypoints = [
+    { latlng: [38.115, 13.361], label: 'Palermo', color: '#5ecb8a', start: true },
+    { latlng: [37.998, 13.873], label: 'Monreale', color: '#c9a96e' },
+    { latlng: [37.904, 14.023], label: 'Cefalù', color: '#c9a96e' },
+    { latlng: [37.291, 13.584], label: 'Valle dei Templi', color: '#c9a96e' },
+    { latlng: [37.363, 13.423], label: 'Scala dei Turchi', color: '#c9a96e' },
+    { latlng: [37.659, 14.249], label: 'Etna', color: '#c9a96e' },
+    { latlng: [37.851, 15.287], label: 'Taormina', color: '#c9a96e' },
+    { latlng: [37.503, 15.087], label: 'Catania', color: '#f87171' }
+  ];
+
+  const line = L.polyline(waypoints.map(w => w.latlng), { color: '#c9a96e', weight: 3, opacity: 0.75 }).addTo(map);
+
+  waypoints.forEach(function(wp) {
+    const icon = L.divIcon({
+      className: '',
+      html: '<div style="width:12px;height:12px;border-radius:50%;background:' + wp.color + ';border:2px solid #fff;box-shadow:0 0 6px rgba(0,0,0,0.5);"></div>',
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
+    });
+    L.marker(wp.latlng, { icon: icon }).addTo(map).bindPopup('<strong>' + wp.label + '</strong>');
+  });
+})();
+
+window.addEventListener('scroll', function() {
+  const nav = document.querySelector('nav[role="navigation"]');
+  if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+(function() {
+  const links = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('active'); });
+        const id = e.target.getAttribute('id');
+        const a = document.querySelector('.toc-list a[href="#' + id + '"]');
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  document.querySelectorAll('.itin-section[id]').forEach(function(s) { observer.observe(s); });
+})();
+</script>
+</body>
+</html>

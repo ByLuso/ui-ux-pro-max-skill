@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cambados desde Santiago — Albariño, hórreos y Rías Baixas | Routlo</title>
+  <meta name="description" content="55 km desde Santiago de Compostela: Cambados, capital mundial del Albariño y la DO Rías Baixas. Combarro y sus hórreos sobre el mar. Bodega Martín Códax y mariscos en O Grove. ~€46 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #6aa84f; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #6aa84f; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(106,168,79,0.15); border: 1px solid rgba(106,168,79,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #6aa84f; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-roman { display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;background:rgba(106,168,79,0.12);border:1px solid rgba(106,168,79,0.3);font-size:0.75rem;font-weight:600;color:#6aa84f;margin-bottom:12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(106,168,79,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(106,168,79,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #6aa84f, #4a8030); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #6aa84f; border-left-color: #6aa84f; background: rgba(106,168,79,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(106,168,79,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(106,168,79,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #6aa84f; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(106,168,79,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #6aa84f; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #6aa84f; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(106,168,79,0.3); }
+    .hotel-link:hover { border-color: #6aa84f; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #6aa84f; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#6aa84f,#4a8030);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#6aa84f'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#6aa84f'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.30) 0%,rgba(28,18,4,0.60) 50%,rgba(10,6,0,0.95) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-roman" style="margin-bottom:0;">🍾 Rías Baixas</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">55 km de Santiago</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">~45 min en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~€46 · 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Cambados<br><span style="color:#6aa84f;">La capital del Albariño y los hórreos de Combarro sobre el mar</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">Cambados es la capital mundial del Albariño, el vino blanco más famoso de Galicia, con una DO Rías Baixas que produce 30 millones de botellas al año. A 10 km, Combarro conserva los hórreos más fotogénicos de España: graneros de piedra del s. XVIII sobre el mar de la ría de Pontevedra.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">Historia de Cambados</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Cambados</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🍾 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">55 km</div><div class="route-info-unit">desde Santiago</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~45 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~€46</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Vino</div><div class="route-info-value">DO Rías Baixas</div><div class="route-info-unit">Albariño</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Hórreos</div><div class="route-info-value">Combarro</div><div class="route-info-unit">Conjunto Histórico</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">🍇 Historia de Cambados</h2>
+      <div class="highlight-box">
+        <h4>🍷 El Albariño — el vino blanco del Atlántico</h4>
+        <p>La uva Albariño, única en el mundo, crece en la costa atlántica de Galicia y norte de Portugal (Vinho Verde). Las vides se cultivan en pérgolas de granito (parras) a 1,5 m del suelo para evitar la humedad. Martín Códax, Zárate y Terras Gauda son las bodegas más reconocidas de la DO Rías Baixas (60.000 ha). La añada 2022 fue la mejor del siglo según Wine Spectator.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🏗️ Combarro — los hórreos del mar</h4>
+        <p>Los hórreos (graneros aéreos de granito y madera sobre patas de piedra llamadas pegollos) son el símbolo arquitectónico de Galicia. Los de Combarro son únicos porque se asoman directamente al mar de la ría, con la marea alta lamiendo sus cimientos. El pueblo fue declarado Conjunto Histórico Artístico en 1972 y está considerado uno de los pueblos más bonitos de España.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Combarro — hórreos sobre el mar (gratis)</div><div class="day-subtitle">15 min desde Cambados · Conjunto Histórico Artístico</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏗️ El barrio de los hórreos</div>
+            <div class="stop-desc">El barrio de los hórreos de Combarro (15 min desde Cambados) está declarado Conjunto Histórico. Pasea por el malecón con los hórreos a tu derecha y la ría a tu izquierda. Los cruceiros (cruces de granito) son otro símbolo del pueblo. Mariscos en los bares del muelle a precio de ría.</div>
+            <div class="stop-price">Acceso libre · Gratuito</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Cambados — casco histórico y Pazo de Fefiñanes</div><div class="day-subtitle">S. XVII · Primera bodega de Albariño embotellado</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏰 Pazo de Fefiñanes</div>
+            <div class="stop-desc">El pazo-bodega del s. XVII que da nombre al primer Albariño embotellado (1928). Su Plaza del mismo nombre, con la iglesia y el pazo enfrentados, es una de las más bellas de Galicia. Visitable el interior de la bodega con cata de 2 vinos.</div>
+            <div class="stop-price">Visita bodega: €8/persona · Incluye cata de 2 vinos</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Bodega Martín Códax (€8/pers)</div><div class="day-subtitle">La cooperativa más famosa de la DO Rías Baixas</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🍾 Visita guiada con cata</div>
+            <div class="stop-desc">La bodega cooperativa más famosa de la DO Rías Baixas. Visita guiada de 45 min con explicación de la elaboración del Albariño y cata de 3 vinos. Reserva online imprescindible. La tienda vende Burgáns (el Albariño más vendido de España) a precio de bodega (€8.50/botella).</div>
+            <div class="stop-price">Entrada: €8/persona · Reserva previa online</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Mariscos en O Grove (20 km)</div><div class="day-subtitle">La capital del marisco de las Rías Baixas</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🦪 Puerto y lonja de O Grove</div>
+            <div class="stop-desc">O Grove es la capital del marisco de las Rías Baixas. La lonja subasta percebes, almejas, zamburiñas y nécoras. En los restaurantes del puerto, el menú de marisco a €18 incluye mejillones, berberechos, zamburiñas y un plato principal. La Semana del Marisco (primer fin de semana de octubre) es el festival gastronómico más grande de Galicia.</div>
+            <div class="stop-price">Menú de marisco: ~€18/persona</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">⑤</div><div><div class="day-title">Isla de la Toja (puente gratuito)</div><div class="day-subtitle">Casino histórico · Capilla de las conchas de vieira</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛪ Capilla de la Virgen de la Toja</div>
+            <div class="stop-desc">Conectada a O Grove por un puente, la Isla de la Toja tiene el Casino histórico, las termas (hotel exclusivo, no accesibles) y la famosa Capilla de la Virgen de la Toja, cubierta de conchas de vieira de suelo a techo. Paseo por el pinar con vistas a la ría.</div>
+            <div class="stop-price">Acceso libre · Puente gratuito</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (110 km ida y vuelta)</span><span>€11</span></div>
+        <div class="budget-row"><span>🎫 Bodega Martín Códax (1 persona)</span><span>€8</span></div>
+        <div class="budget-row"><span>🍽️ Menú del día x2</span><span>€24</span></div>
+        <div class="budget-row"><span>☕ Café</span><span>€4</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span style="color:#6aa84f;">~€46</span></div>
+      </div>
+      <div class="budget-note">Cambados es una de las escapadas más completas desde Santiago de Compostela: vino, marisco, arquitectura y costa atlántica a menos de 1 hora. Si añades la cata de bodega para ambos, suma €8 al total.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Fiesta del Albariño:</strong> Primer fin de semana de agosto en Cambados; degustaciones de 30+ bodegas a €1-2/copa en la plaza; la más bonita feria de vinos de España.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Zamburiñas:</strong> El bivalvo que debes comer en las Rías Baixas (a mitad de precio de las vieiras); a la plancha en los bares del puerto de Cambados a €6-8 la ración.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Bodega Zárate:</strong> Bodega familiar en Vilanova de Arousa con Albariño de garaje excepcional; visita con cita previa gratuita, precio de catálogo.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Mejillón de la ría:</strong> El mejillón de las Rías Baixas (DO Mejillón de Galicia) es el más grande y carnoso del mundo; cómpralo en los bateles del puerto a €1.50/kg.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Combarro a primera hora:</strong> El pueblo de hórreos es muy visitado en verano; llega antes de las 10:00 o después de las 19:00 para verlo tranquilo. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Santiago+de+Compostela" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Santiago de Compostela en DiscoverCars" style="display:inline;margin-top:0;">Comparar coches en Santiago en DiscoverCars</a></div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas desde Santiago de Compostela?</h3>
+      <p>Rutas de menos de 2 horas y menos de 100€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([42.52,-8.82],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[42.880,-8.544],label:'Santiago de Compostela',color:'#5ecb8a',r:9},{coords:[42.462,-8.711],label:'Combarro',color:'#6aa84f',r:10},{coords:[42.513,-8.819],label:'Cambados',color:'#6aa84f',r:12},{coords:[42.497,-8.837],label:'Bodega Martín Códax',color:'#6aa84f',r:10}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[42.880,-8.544],[42.462,-8.711],[42.513,-8.819],[42.497,-8.837]],{color:'#6aa84f',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

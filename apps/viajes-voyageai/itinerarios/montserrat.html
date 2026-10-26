@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Montserrat — Excursión de 1 día | Routlo</title>
+  <meta name="description" content="Guía completa para visitar Montserrat en 1 día desde Barcelona: el monasterio benedictino, La Moreneta, el tren rack y las mejores rutas de senderismo con vistas a los Pirineos."/>
+  <meta property="og:title" content="Montserrat — Excursión de 1 día | Routlo"/>
+  <meta property="og:description" content="Montserrat en 1 día desde Barcelona: monasterio benedictino del s.IX, La Moreneta, cremallera y senderismo con vistas a los Pirineos."/>
+  <meta property="og:type" content="article"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+
+    /* Aurora — warm browns for Montserrat */
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#2a1a00 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0e00 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.45;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#221200 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none !important; } }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg, #100800 0%, #2a1500 35%, #5a3000 65%, rgba(201,169,110,0.2) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-badge.warm { border-color:rgba(180,120,60,0.3);color:#c9906e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent;font-size:0.82rem; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2;border-left-color:rgba(201,169,110,0.4); }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box.green { background:rgba(94,203,138,0.06);border:1px solid rgba(94,203,138,0.2); }
+    .alert-box.gold { background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.2); }
+    .alert-box strong { color:#edeef2; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* Responsive */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+    }
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.9rem !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(180,120,60,0.1);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e" aria-current="page">Montserrat</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Montserrat</h1>
+  <p class="dest-country">España · Catalunya · Montaña sagrada · Monasterio benedictino s.IX</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">⛰️ 1 día</span>
+    <span class="dest-badge" role="listitem">🚂 1h desde Barcelona</span>
+    <span class="dest-badge gold" role="listitem">💶 €31–120/persona</span>
+    <span class="dest-badge" role="listitem">🙏 Monasterio s.IX</span>
+    <span class="dest-badge warm" role="listitem">🏔️ 1.236 m altitud</span>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">1 día</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Desde Barcelona</div><div class="dest-sum-val">1h FGC</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Altitud</div><div class="dest-sum-val">1.236 m</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Monasterio</div><div class="dest-sum-val">s.IX d.C.</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">La Moreneta</div><div class="dest-sum-val" style="font-size:0.78rem">Virgen s.XII</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#sobre" class="active">Sobre el lugar</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#como-llegar">Cómo llegar</a></li>
+        <li><a href="#ruta">Ruta del día</a></li>
+        <li><a href="#que-ver">Qué ver</a></li>
+        <li><a href="#mejor-epoca">Mejor época</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── SOBRE EL LUGAR ── -->
+    <section id="sobre" class="itin-section">
+      <h2 class="section-heading">⛰️ Sobre el lugar</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Montserrat ("montaña aserrada" en catalán) es la montaña sagrada de Cataluña, a 50 km al noroeste de Barcelona. Sus <strong style="color:#c9a96e">1.236 metros de altura</strong> y las formas redondeadas y extrañas de sus 25 picos de conglomerado (formados hace 25 millones de años por erosión fluvial y glacial) crean uno de los paisajes más únicos de la Península Ibérica. Goethe la comparó con el Paraíso. Wagner se inspiró en Montserrat para Parsifal y el castillo del Santo Grial.
+      </p>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        El <strong style="color:#c9a96e">Monestir de Montserrat</strong> tiene documentación desde el s.IX. En el s.XI se encontró la imagen de La Moreneta (Virgen Negra de color oscuro por oxidación y hollín de siglos de velas), y desde entonces el monasterio se convirtió en uno de los centros de peregrinación más importantes de la Iglesia Católica. Alberga actualmente a <strong style="color:#c9a96e">80 monjes benedictinos</strong> y recibe 3 millones de visitas anuales.
+      </p>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        La <strong style="color:#c9a96e">Escolania de Montserrat</strong>, fundada en el s.XIV, es el coro de niños más antiguo de Europa (anterior a la Capilla Sixtina). Sus 50 niños internos cantan el Virolai cada día a las 13h en la Basílica — 10–15 minutos de música que la mayoría de visitantes recuerda como el mejor momento de la visita.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🙏</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">La Moreneta</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Imagen románica s.XII</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🎵</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">La Escolania</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Coro más antiguo de Europa</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🚂</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">1h desde Barcelona</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">FGC R5 desde Pl. Espanya</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza tu visita a Montserrat con IA</h3>
+        <p>Ajusta horarios, intereses y nivel de senderismo. Routlo te diseña el día perfecto en la montaña sagrada de Cataluña.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Diseñar mi día en Montserrat
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Económico</th><th>Estándar</th><th>Premium</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>🚂 Tren FGC A/R desde Barcelona</td><td>Tren+cremallera €21</td><td>Tren+aeri €25</td><td>Taxi privado directo €55</td></tr>
+            <tr><td>⛰️ Actividades opcionales</td><td>€0 (solo monasterio)</td><td>Funicular Sant Joan €10</td><td>Con guía privado €20</td></tr>
+            <tr><td>🍽️ Comida del día</td><td>€10 bocadillo propio</td><td>€20 restaurante montaña</td><td>€45 picnic gourmet en las rocas</td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€31</strong></td><td><strong>~€55</strong></td><td><strong>~€120</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo:</strong> El abono Tot Montserrat (€42) incluye tren + cremallera o aeri + funicular Sant Joan + museo + buffet. Vale la pena si haces todo. Para una visita básica con tren y monasterio, los billetes sueltos salen más baratos.
+      </div>
+    </section>
+
+    <!-- ── CÓMO LLEGAR ── -->
+    <section id="como-llegar" class="itin-section">
+      <h2 class="section-heading">🚂 Cómo llegar</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">🚂 Desde Barcelona (FGC R5)</div>
+          <div class="transport-content">
+            Línea <strong>R5 desde Plaça Espanya</strong> hasta Monistrol de Montserrat (1h, ~€10 A/R con transbordador). Desde Monistrol: <strong>cremallera</strong> (rack railway, 15 min, €13 A/R) o <strong>aeri</strong> (teleférico, 5 min, €10 A/R). La cremallera es más espectacular — el ascenso entre los picos de conglomerado desde el vagón ya justifica el viaje.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 En coche desde Barcelona</div>
+          <div class="transport-content">
+            <strong>AP-2 dirección Lleida</strong>, desvío C-55 hacia Manresa. Parking en la montaña €5–10. La carretera de montaña (BV-1121) tiene curvas pronunciadas pero está perfectamente asfaltada. Parking a 5 min a pie del monasterio. En temporada alta puede haber cola en la carretera de acceso.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">📱 Abono Tot Montserrat</div>
+          <div class="transport-content">
+            <strong>€42</strong> incluye tren + cremallera o aeri + funicular Sant Joan + museo + buffet. Vale si haces todo en un día completo. Para una visita de medio día sin extras, los billetes sueltos salen más baratos. Disponible en las taquillas de Plaça Espanya y en la app FGC.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Desde Manresa (30 min)</div>
+          <div class="transport-content">
+            Opción para quienes viajan desde el interior de Cataluña o Zaragoza. <strong>Aparcamiento gratuito en Monistrol</strong> y cremallera desde allí. Desde Manresa la carretera C-55 es directa y sencilla. Manresa también tiene conexión con el AVE Barcelona-Madrid en la estación de Manresa-Viladordis.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RUTA DEL DÍA ── -->
+    <section id="ruta" class="itin-section">
+      <h2 class="section-heading">🗓️ Ruta del día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Montserrat: monasterio, Moreneta y vistas a los Pirineos</div>
+            <div class="day-subtitle">Cremallera · Basílica · Escolania · Funicular Sant Joan · Museu</div>
+          </div>
+          <div class="day-meta"><span>⛰️ Montserrat</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+
+          <div class="alert-box gold" style="margin-bottom:18px">
+            <strong>💡 Consejo clave:</strong> Coger el primer tren de la mañana desde Plaça Espanya (9:00h). Llegar antes del mediodía permite visitar la Basílica tranquilamente antes de la Escolania (13h) y antes de que los grupos de tour organizado llenen el monasterio.
+          </div>
+
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida en FGC desde Plaça Espanya</div>
+              <div class="act-desc">Primer tren de la mañana para llegar antes de la multitud. Reservar online en fgc.cat es recomendable en temporada alta. El vagón del tren ya ofrece vistas al macizo de Montserrat desde la llanura del Llobregat. Los picos de conglomerado surgen de golpe sobre la llanura agrícola como una visión de otro mundo.</div>
+              <div class="act-tags"><span class="act-tag">Plaça Espanya</span><span class="act-tag info">Línea R5</span><span class="act-tag">~€10 A/R</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada en cremallera desde Monistrol</div>
+              <div class="act-desc">El ascenso de 15 minutos en cremallera (rack railway) entre los picos de conglomerado ya justifica la visita. Las formas bulbosas y redondeadas de la roca desde el vagón son surrealistas — parecen cabezas gigantes amontonadas. La cremallera de Montserrat lleva funcionando desde 1892. En temporada alta hay colas: llega 20 min antes de la salida.</div>
+              <div class="act-tags"><span class="act-tag">€13 A/R</span><span class="act-tag info">15 min de ascenso</span><span class="act-tag">Desde 1892</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Basílica de Montserrat y La Moreneta</div>
+              <div class="act-desc">Visitar la basílica gótica-renacentista (s.XVI). Para venerar La Moreneta (imagen románica del s.XII, con el brazo derecho extendido sosteniendo el globo terráqueo) hay una fila específica lateral que dura 30–60 min en temporada alta. También puedes verla perfectamente desde el pasillo de la Basílica sin cola. La mayoría de visitantes con tiempo limitado usa esta segunda opción.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag warn">Cola 30-60 min en temporada alta</span><span class="act-tag">Imagen románica s.XII</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Preparación para la Escolania — llegar 20 min antes</div>
+              <div class="act-desc">A las 13h entre semana los 50 niños de La Escolania cantan el Virolai en la Basílica. Son solo 10–15 minutos pero son extraordinarios — el sonido del coro de niños más antiguo de Europa llenando la basílica es uno de esos momentos que se recuerdan. Llegar 20 min antes para conseguir sitio en la Basílica, especialmente en verano y Semana Santa.</div>
+              <div class="act-tags"><span class="act-tag warn">Llegar 20 min antes</span><span class="act-tag info">Solo entre semana</span><span class="act-tag green">Gratis</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">La Escolania canta el Virolai</div>
+              <div class="act-desc">Los 50 niños internos de La Escolania — la más antigua de Europa, fundada en el s.XIV — cantan el Virolai, el himno a la Virgen de Montserrat, en latín y catalán. El coro tiene una acústica extraordinaria en la Basílica románica. Un momento de silencio absoluto en la montaña, difícil de olvidar independientemente de las creencias religiosas.</div>
+              <div class="act-tags"><span class="act-tag gold">Imprescindible</span><span class="act-tag">Coro fundado en s.XIV</span><span class="act-tag info">10-15 minutos</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo — restaurante de la Abadía o picnic en las rocas</div>
+              <div class="act-desc">El restaurante de la Abadía sirve buffet con cocina catalana (€20–25/persona). Alternativa más económica y recomendada: bocadillo en las zonas habilitadas de picnic entre los picos de conglomerado — comer rodeado de esas formas geológicas únicas es una experiencia en sí misma.</div>
+              <div class="act-tags"><span class="act-tag">Buffet ~€22</span><span class="act-tag green">Picnic entre los picos</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Funicular de Sant Joan (€10 A/R) — vistas a los Pirineos</div>
+              <div class="act-desc">El funicular sube a 1.057m en 5 minutos. Desde la estación superior: ruta a la Ermita de Sant Joan (20 min, perfectamente señalizada). Desde la ermita las vistas son extraordinarias: los Pirineos nevados al norte, el Mediterráneo al sur, la llanura catalana y Barcelona en días claros. Es el mejor punto de vista de todo el macizo.</div>
+              <div class="act-tags"><span class="act-tag">€10 A/R</span><span class="act-tag info">1.057m altitud</span><span class="act-tag">Pirineos + Mediterráneo</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Opcional — Ruta Sant Joan a Sant Jeroni (la cima, 1.236m)</div>
+              <div class="act-desc">Desde la ermita de Sant Joan se puede subir a la cima del macizo (45 min adicionales, +200m). Las vistas desde Sant Jeroni son las mejores de todo Montserrat: los Pirineos nevados en invierno, las islas Baleares en días claros, la costa catalana y la llanura del Llobregat con Barcelona al fondo. Solo para quienes tienen energía y buen calzado.</div>
+              <div class="act-tags"><span class="act-tag warn">Solo con energía</span><span class="act-tag">+45 min · +200m</span><span class="act-tag">1.236m — cima del macizo</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Museu de Montserrat — arte cuando los turistas se van</div>
+              <div class="act-desc">El Museu de Montserrat alberga una colección desde el Antiguo Egipto hasta el s.XX donada al monasterio a lo largo de los siglos. Destacan obras de El Greco, Caravaggio, Monet, Picasso y Dalí. La tarde es el mejor momento para visitarlo — cuando la mayoría de turistas ya han bajado, las salas quedan tranquilas.</div>
+              <div class="act-tags"><span class="act-tag">€8 entrada</span><span class="act-tag info">Picasso · Dalí · Monet</span><span class="act-tag green">Tarde = menos gente</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último tren cremallera y regreso a Barcelona</div>
+              <div class="act-desc">El último tren cremallera a Monistrol y el último enlace con FGC hacia Barcelona. Confirma los horarios del último tren al subir — varían según temporada. La llegada a Plaça Espanya a las 20:30–21:00h permite cenar tranquilamente en Barcelona.</div>
+              <div class="act-tags"><span class="act-tag warn">Confirmar último horario al subir</span><span class="act-tag info">Llegada a Barcelona ~21h</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── QUÉ VER ── -->
+    <section id="que-ver" class="itin-section">
+      <h2 class="section-heading">🔍 Qué ver en Montserrat</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Imagen religiosa · s.XII</div>
+          <div class="gastro-title">La Moreneta (Virgen Negra)</div>
+          <div class="gastro-desc">Imagen románica del s.XII. El color oscuro se debe a la oxidación de la madera y el hollín de siglos de velas. El brazo derecho extendido sostiene el globo terráqueo — un símbolo de poder sobre el universo. Felipe II, Carlos V y casi todos los reyes de España vinieron en peregrinación. Es la patrona de Cataluña desde el s.XIII.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Coro · s.XIV</div>
+          <div class="gastro-title">La Escolania de Montserrat</div>
+          <div class="gastro-desc">El coro de niños benedictinos más antiguo de Europa, fundado en el s.XIV. 50 niños internos de 9 a 14 años estudian música (solfeo, piano, órgano, canto coral) y materias regulares en el monasterio. Cantan el Virolai los días lectivos a las 13h. En Navidad y Semana Santa los conciertos son extraordinarios.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Geología · 25 millones de años</div>
+          <div class="gastro-title">Los 25 Picos de conglomerado</div>
+          <div class="gastro-desc">Formados por acumulación de cantos rodados en el delta del Llobregat hace 25 millones de años. La erosión fluvial y glacial modeló las formas redondeadas únicas en el mundo. Wagner los describió como "el castillo del Santo Grial". Cada pico tiene nombre propio. Los más icónicos: El Cap de Mort, Les Agulles, La Mòmia.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Museu · Arte s.I–s.XX</div>
+          <div class="gastro-title">Museu de Montserrat</div>
+          <div class="gastro-desc">Colección desde el Antiguo Egipto hasta el s.XX. El Greco, Caravaggio, Monet y obras de Picasso y Dalí donadas o adquiridas por la Abadía. Destaca especialmente la colección de arte catalán modernista y un sarcófago egipcio de 3.000 años. Entrada €8. Las salas de tarde son las mejores para disfrutarlo.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Camino · Historia</div>
+          <div class="gastro-title">La Santa Cova</div>
+          <div class="gastro-desc">La cueva donde según la tradición se encontró La Moreneta en el s.IX. Un camino empedrado desciende desde el monasterio hasta la cueva. El camino fue construido en el s.XVII y está jalonado de capillas votivas con escenas de la vida de Jesús. La bajada tarda 20 min a pie. Acceso libre y gratuito.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Mirador · Pirineos</div>
+          <div class="gastro-title">Ermita de Sant Joan (1.057m)</div>
+          <div class="gastro-desc">La mejor panorámica del macizo. Accesible por funicular (€10 A/R) más 20 min a pie. Vistas a los Pirineos, el Mediterráneo, la llanura catalana y Barcelona en días claros. En invierno con los Pirineos nevados de fondo es una de las vistas más fotogénicas de Cataluña. La ermita data del s.XV.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── MEJOR ÉPOCA ── -->
+    <section id="mejor-epoca" class="itin-section">
+      <h2 class="section-heading">📅 Mejor época para visitar</h2>
+      <div class="alert-box green" style="margin-bottom:12px">
+        <strong>✅ Todo el año:</strong> Montserrat está al resguardo del viento. En invierno puede haber niebla por la mañana pero raramente nieve en el monasterio. En verano el calor se siente menos que en Barcelona — la montaña tiene su propio microclima.
+      </div>
+      <div class="alert-box warn" style="margin-bottom:12px">
+        <strong>⚠️ Semana Santa:</strong> El centro de peregrinación más importante de Cataluña. Colas para La Moreneta de 2–3 horas. La Escolania canta conciertos especiales. Si vas en Semana Santa, llega antes de las 10h.
+      </div>
+      <div class="alert-box info" style="margin-bottom:12px">
+        <strong>🎉 27 de abril (Diada de la Mare de Déu):</strong> La fiesta nacional de la montaña. Ambiente único con música tradicional catalana, sardanas y la misa solemne. Una experiencia cultural distinta a la visita turística habitual.
+      </div>
+      <div class="alert-box gold" style="margin-bottom:12px">
+        <strong>📸 Noviembre–febrero entre semana:</strong> El monasterio casi solo para ti. Las luces bajas de invierno sobre los picos de conglomerado son las más fotogénicas. La niebla entre los picos en otoño/invierno es un espectáculo fotográfico en sí mismo.
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>La Moreneta — la imagen sagrada más venerada de Cataluña</h4><p>La Virgen Negra románica del s.XII en su camarín dorado. Reyes, presidentes y millones de peregrinos han venido específicamente para tocar su orbe. Una imagen religiosa de poder irresistible independientemente de las creencias.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>El ascenso en cremallera entre los picos de conglomerado</h4><p>Las formas bulbosas e imposibles de la roca vista desde el vagón de la cremallera que sube por la pared del macizo. Un ascenso que prepara psicológicamente para la grandiosidad de lo que viene.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>La Escolania cantando el Virolai a las 13h en la Basílica</h4><p>10–15 minutos del coro de niños más antiguo de Europa. El sonido de 50 voces de niño llenando la Basílica de Montserrat es uno de esos momentos únicos que muy pocos lugares del mundo pueden ofrecer.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>La vista desde Sant Jeroni (1.236m): Pirineos, Mediterráneo y llanura catalana</h4><p>La cima del macizo con las mejores vistas de toda Cataluña. En días claros se ven las Baleares y en invierno los Pirineos nevados. La recompensa de 45 min de camino desde la ermita de Sant Joan.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Los picos de conglomerado al amanecer desde la Ermita de Sant Joan</h4><p>La luz de primera hora del día sobre las formas redondeadas de conglomerado crea sombras y texturas que la luz del mediodía borra. Para los que pernoctan o llegan muy temprano.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>El Museu de Montserrat: Picasso y Dalí en un monasterio de montaña</h4><p>Una colección de arte donada a lo largo de siglos que incluye El Greco, Caravaggio y obras de Picasso y Dalí en un edificio monástico a 700m de altura. El contraste es parte de la experiencia.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>La niebla entre los picos en otoño e invierno</h4><p>Cuando la niebla rodea los picos de conglomerado dejando al monasterio por encima de las nubes, Montserrat parece flotar en el aire. Una imagen que Wagner no exageró al comparar con el Grial.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>La Santa Cova por el camino empedrado del s.XVII</h4><p>El camino jalonado de capillas votivas que desciende hasta la cueva donde se encontró La Moreneta. 20 min de bajada entre pinos y conglomerado, casi sin turistas fuera de Semana Santa.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>El picnic sobre las rocas con vistas a la llanura del Llobregat</h4><p>Comer entre los picos de conglomerado con la llanura catalana y Barcelona al fondo es una experiencia que los restaurantes del monasterio no pueden igualar. Bocadillo y vista inmejorable.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>El silencio del monasterio a primera hora de la mañana</h4><p>Antes de las 10h el monasterio pertenece a los monjes y a los pocos visitantes madrugadores. El sonido de las campanas en el silencio de la montaña y el olor a incienso de la Basílica vacía son únicos.</p></div></div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section id="consejos" class="itin-section">
+      <h2 class="section-heading">💡 Consejos de Routlo</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>La cremallera sale desde Monistrol de Montserrat</strong> (no de Monistrol-Vila — hay dos estaciones con nombres similares). En el FGC R5 coger solo los trenes marcados "Montserrat Cremallera" — los trenes R5 normales requieren transbordo. Confirma en la app FGC antes de salir.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>La cola para venerar La Moreneta</strong> puede durar 1–2 horas en temporada alta. También puedes verla perfectamente desde el pasillo de la Basílica sin esperar (solo ver, no tocar el orbe). La mayoría de visitantes con poco tiempo usa esta opción — la imagen sigue siendo impresionante.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>El Museu de Montserrat es mejor visitarlo al final de la tarde</strong> cuando los turistas ya han bajado. Las salas quedan tranquilas y la colección de arte — con obras de Caravaggio, El Greco y Dalí — merece atención pausada. A las 16h suele estar casi vacío.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Para senderistas:</strong> la Guia de Senderos de Montserrat tiene 12 rutas señalizadas de diferente dificultad. El Camí de l'Arrel (travesía completa del macizo, 2 días) es el mejor trekking de larga distancia de Cataluña. Para 1 día, Sant Joan → Sant Jeroni es la opción perfecta.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>La niebla:</strong> en otoño e invierno Montserrat a veces está cubierto de niebla por la mañana pero despeja hacia el mediodía. Si hay niebla al subir, espera — la niebla entre los picos de conglomerado es un espectáculo fotográfico en sí mismo y suele disiparse antes de las 11h.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">6</div>
+        <div class="tip-text"><strong>Lleva efectivo para la cremallera y el funicular.</strong> Las máquinas a veces tienen problemas con tarjetas extranjeras, especialmente con Visa y Mastercard de bancos no europeos. Los cajeros en la montaña tienen comisiones altas — saca efectivo en Barcelona antes de subir.</div>
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🆘 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos y ambulancia (24h)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Centro de asistencia Monasterio</div><div class="emerg-value">+34 938 777 766</div><div class="emerg-note">Información y asistencia en la montaña</div></div>
+        <div class="emerg-card"><div class="emerg-label">GRM (rescate montaña)</div><div class="emerg-value">112</div><div class="emerg-note">Activar desde el 112 pidiendo rescate en montaña</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital de Manresa</div><div class="emerg-value">+34 938 759 300</div><div class="emerg-note">Hospital más cercano al macizo</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil</div><div class="emerg-value">062</div><div class="emerg-note">Incidentes en montaña y zona rural</div></div>
+        <div class="emerg-card"><div class="emerg-label">FGC (trenes)</div><div class="emerg-value">+34 932 051 515</div><div class="emerg-note">Incidencias en el tren o la cremallera</div></div>
+      </div>
+      <div class="alert-box green" style="margin-top:14px">
+        <strong>✅ Sanidad:</strong> Montserrat es Cataluña — la tarjeta sanitaria española o la EHIC cubre asistencia de urgencias en todos los centros de salud. El hospital más cercano es el de Manresa (30 min en coche). Para emergencias leves, el monasterio tiene botiquín y personal de asistencia durante el horario de visitas.
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres planificar tu visita a Montserrat?</h3>
+      <p>Dinos tu nivel físico, intereses y desde dónde partes. Routlo IA diseña tu día perfecto en la montaña sagrada.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi visita
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los precios indicados son orientativos (2026) y pueden variar. Los horarios de FGC, la cremallera y el funicular cambian según temporada — confirma siempre en fgc.cat antes de salir. La Escolania canta solo los días lectivos (no festivos ni vacaciones escolares) — confirma el calendario en montserratvisita.com.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:64px 24px 40px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px">
+    <div>
+      <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px">
+        <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+      </a>
+      <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.7;max-width:280px">Itinerarios de viaje generados por inteligencia artificial. Personalizados para cada viajero.</p>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">España</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="donana.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Doñana</a></li>
+        <li><a href="ordesa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Ordesa</a></li>
+        <li><a href="montserrat.html" style="font-size:0.875rem;color:#c9a96e;text-decoration:none">Montserrat</a></li>
+        <li><a href="tenerife.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Tenerife</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Europa</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="budapest.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Budapest</a></li>
+        <li><a href="roma.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Roma</a></li>
+        <li><a href="paris.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">París</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Más</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Ver todos →</a></li>
+        <li><a href="../chatbot.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Chatbot IA</a></li>
+        <li><a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Mapa</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.8rem;color:rgba(237,238,242,0.55)">
+    <span>© 2026 Routlo · Todos los derechos reservados</span>
+    <span>Generado con IA para viajeros del mundo</span>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

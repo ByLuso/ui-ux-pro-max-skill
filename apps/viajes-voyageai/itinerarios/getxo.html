@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Getxo — El puente que cruzó la historia | Routlo</title>
+  <meta name="description" content="14 km desde Bilbao, 20 minutos en coche: el Puente Bizkaia (Patrimonio UNESCO 2006), el Puerto Viejo de Algorta y la playa de Ereaga. Una escapada prácticamente gratis: ~24€ para dos personas, o solo gasolina si llevas picnic."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #5cb8d4; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #5cb8d4; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(92,184,212,0.15); border: 1px solid rgba(92,184,212,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #5cb8d4; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(92,184,212,0.12); border: 1px solid rgba(92,184,212,0.3); font-size: 0.75rem; font-weight: 600; color: #5cb8d4; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(92,184,212,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(92,184,212,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #5cb8d4, #3a8aa6); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #5cb8d4; border-left-color: #5cb8d4; background: rgba(92,184,212,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(92,184,212,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(92,184,212,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #5cb8d4; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(92,184,212,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #5cb8d4; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #5cb8d4; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(92,184,212,0.3); }
+    .hotel-link:hover { border-color: #5cb8d4; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #5cb8d4; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#5cb8d4'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#5cb8d4'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">🌉 Patrimonio UNESCO</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">14 km de Bilbao</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🕐 20 min en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~24€ / 2 personas</span>
+      <span style="font-size:0.78rem;font-weight:600;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;padding:4px 12px;border-radius:100px;">🆓 Entrada gratuita</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Getxo<br><span style="color:#5cb8d4;">El puente que cruzó la historia</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A solo 20 minutos de Bilbao, el Puente Bizkaia —el puente transbordador más antiguo del mundo y Patrimonio de la Humanidad desde 2006— une las dos orillas de la ría sobre tu cabeza. Después, las callejuelas en cuesta del Puerto Viejo de Algorta y la playa de Ereaga completan un día entero casi sin gastar un euro.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">Historia y patrimonio</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Getxo</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🌉 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">14 km</div><div class="route-info-unit">desde Bilbao</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">20 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~24€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Patrimonio</div><div class="route-info-value">UNESCO</div><div class="route-info-unit">2006</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Todo el año</div><div class="route-info-unit">también en metro</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">🌉 Historia y patrimonio</h2>
+      <div class="highlight-box">
+        <h4>🌉 El Puente Bizkaia: el primer transbordador del mundo</h4>
+        <p>Inaugurado en 1893 y diseñado por el ingeniero vasco Alberto Palacio —discípulo de Gustave Eiffel—, el Puente Bizkaia (también conocido como Puente Colgante o Puente de Vizcaya) fue el primer puente transbordador construido en el mundo. Une Getxo (barrio de Las Arenas) con Portugalete sobre la ría del Nervión, y desde 2006 es Patrimonio de la Humanidad por la UNESCO. Su "barquilla" o gondola cuelga de la estructura metálica a 45 metros de altura y cruza la ría en apenas un minuto y medio. Verlo y fotografiarlo desde cualquiera de las dos orillas es totalmente gratis, y cruzar en la propia barquilla cuesta solo ~0,45€ por persona —prácticamente regalado para una experiencia única en el mundo.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🎨 El Puerto Viejo de Algorta</h4>
+        <p>A pocos minutos del puente, el Puerto Viejo de Algorta es el antiguo barrio marinero de Getxo: calles empedradas y en cuesta, casas de colores con balcones de madera, y bares de pintxos escondidos entre las esquinas. Es uno de los rincones más fotogénicos de toda Bizkaia y, como casi todo en esta escapada, pasear por él no cuesta nada.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Bilbao → Getxo · 20 min</div><div class="day-subtitle">En coche por la BI-637, o en metro (línea 1) hasta Areeta/Algorta</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 La carretera de la ría</div>
+            <div class="stop-desc">Desde el centro de Bilbao, la BI-637 sigue la margen de la ría del Nervión hasta Las Arenas, el barrio de Getxo donde se levanta el Puente Bizkaia. Apenas 20 minutos de trayecto con vistas al estuario.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚇 Alternativa en metro</div>
+            <div class="stop-desc">Si prefieres no usar el coche, el Metro Bilbao (línea 1) conecta el centro de la villa con Areeta y Algorta en unos 25-30 minutos, con salidas muy cerca tanto del puente como del Puerto Viejo. Una opción cómoda y barata para dejar el coche aparcado.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento gratuito en Las Arenas</div>
+            <div class="stop-desc">En las calles cercanas a la base del Puente Bizkaia, en el barrio de Las Arenas, hay aparcamiento gratuito en superficie (zona azul limitada en horario laboral, pero libre en fin de semana). Llega temprano si vas un sábado soleado.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Puente Bizkaia</div><div class="day-subtitle">Patrimonio UNESCO 2006 · Paseo y fotos gratis · Barquilla ~0,45€/persona</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">📸 Paseo por la orilla y fotos del puente</div>
+            <div class="stop-desc">Camina por el paseo de Las Arenas o cruza al lado de Portugalete para ver de cerca la estructura metálica de 1893. La perspectiva desde abajo, con los grandes pilares y los cables tensados, es impresionante —y completamente gratis.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚡 Cruzar en la barquilla colgante</div>
+            <div class="stop-desc">La "barquilla" original sigue funcionando como transbordador: cuelga a 45 metros de altura y traslada personas, bicicletas y coches de una orilla a otra en poco más de un minuto. Es una experiencia curiosa y casi simbólica por lo barata que es.</div>
+            <div class="stop-price">Cruce en barquilla: ~0,45€/persona · Funciona prácticamente todo el día, todos los días</div>
+            <a href="https://www.getyourguide.com/s/?q=Puente+Bizkaia+Getxo&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener" aria-label="Reservar visita guiada al Puente Bizkaia en GetYourGuide">🎫 Reservar pasarela superior en GetYourGuide</a>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🪜 La pasarela superior (opcional)</div>
+            <div class="stop-desc">Para quienes quieran algo más, existe la opción de subir en ascensor hasta la pasarela peatonal situada en lo alto de la torre, a 50 metros sobre la ría, con vistas panorámicas de Bilbao, el Abra y la costa de Getxo. Es una actividad de pago opcional —el plan base de esta escapada sigue siendo gratis.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Puerto Viejo de Algorta</div><div class="day-subtitle">Paseo a pie · 45 min - 1h · Gratis (pintxos opcionales)</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🎨 Calles empedradas y casas de colores</div>
+            <div class="stop-desc">El Puerto Viejo de Algorta conserva la trama de un antiguo barrio de pescadores: calles estrechas y en cuesta, casas de fachadas pintadas en colores vivos y balcones de madera. Es uno de los rincones más fotografiados de Bizkaia y se recorre entero en menos de una hora.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍢 Pintxos por el barrio</div>
+            <div class="stop-desc">En las plazas y calles del Puerto Viejo hay varios bares de pintxos tradicionales donde tomar algo con vistas al pequeño puerto. Un pintxo y una caña por persona es más que suficiente para hacer un alto en el paseo sin disparar el presupuesto.</div>
+            <div class="stop-price">Pintxo + bebida: ~3-4€/persona (opcional)</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Playa de Ereaga y regreso</div><div class="day-subtitle">Paseo marítimo · Gratis · Vuelta a Bilbao 20 min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏖️ Playa y Muelle de Ereaga</div>
+            <div class="stop-desc">A un paseo del Puerto Viejo, la playa de Ereaga es una de las más concurridas de Getxo, con un largo muelle ideal para caminar y ver el tráfico de barcos que entran y salen de la ría. En días claros se ve perfectamente la entrada al Abra y el Puerto de Bilbao.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🗼 Vistas al Faro de Getxo y Punta Begoña</div>
+            <div class="stop-desc">Caminando por el paseo de Ereaga hacia el norte se llega a la zona del Faro de Getxo (Punta Galea) y a los emblemáticos Galeones de Punta Begoña, dos miradores naturales con vistas espectaculares al Cantábrico —ideales para cerrar el día con una puesta de sol, sin gastar nada.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Bilbao — 20 min</div>
+            <div class="stop-desc">Vuelta directa por la BI-637 o, si has ido en metro, simplemente toma la línea 1 de regreso al centro de Bilbao. Un día completo, mucha historia y prácticamente sin tocar la cartera.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, 28 km)</span><span>4€</span></div>
+        <div class="budget-row"><span>🌉 Puente Bizkaia — paseo y fotos</span><span>Gratis</span></div>
+        <div class="budget-row"><span>🚡 Cruce en barquilla (2 personas)</span><span>1€</span></div>
+        <div class="budget-row"><span>🎨 Puerto Viejo de Algorta — paseo</span><span>Gratis</span></div>
+        <div class="budget-row"><span>🍢 Pintxos y bebida (2 personas, opcional)</span><span>15€</span></div>
+        <div class="budget-row"><span>🏖️ Playa, muelle de Ereaga y miradores</span><span>Gratis</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~20-24€</span></div>
+      </div>
+      <div class="budget-note">Este es un plan 100% gratuito en cuanto a entradas y actividades —el Puente Bizkaia, el Puerto Viejo y la playa de Ereaga no cuestan nada—. El único gasto fijo real es la gasolina, y el de los pintxos es totalmente opcional: si llevas picnic desde Bilbao, el día completo puede salirte por apenas ~5€ de gasolina.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Aparcamiento gratuito:</strong> busca sitio en las calles de Las Arenas, junto a la base del Puente Bizkaia. En fin de semana es gratis; en días laborables ten en cuenta la zona azul.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Mejor hora para fotos del puente:</strong> a primera hora de la mañana o al atardecer, cuando la luz rasante resalta la estructura metálica de 1893 y hay menos gente en el paseo.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Combina con el metro:</strong> si no quieres preocuparte por aparcamiento, el Metro Bilbao (línea 1) te deja a pocos minutos a pie tanto del puente como del Puerto Viejo de Algorta.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Lleva monedas sueltas:</strong> el cruce en la barquilla del Puente Bizkaia se paga en efectivo y cuesta solo unos céntimos por persona —no te lo pierdas, es parte de la experiencia.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Bilbao y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Bilbao" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Bilbao en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (GetYourGuide, DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Bilbao?</h3>
+      <p>Rutas de menos de 1 hora y prácticamente sin coste para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([43.2933,-2.975],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[43.263,-2.935],label:'Bilbao',color:'#5ecb8a',r:10},{coords:[43.3235,-3.0140],label:'Getxo',color:'#5cb8d4',r:9},{coords:[43.3231,-3.0157],label:'Puente Bizkaia',color:'#e0b44a',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[43.263,-2.935],[43.3235,-3.0140]],{color:'#5cb8d4',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

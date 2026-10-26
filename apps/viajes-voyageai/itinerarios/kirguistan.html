@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kirguistán — 6 días: Bishkek, Issyk-Kul y las estepas nómadas del Tian Shan | Routlo</title>
+  <meta name="description" content="6 días en Kirguistán: Bishkek, el lago Issyk-Kul a 1.600m, campos de yurtas nómadas, el Cañón de Jeti-Ögüz y el Parque Natural Ala Archa en el Tian Shan. Bajo €950 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#080010 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#100820 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#0a0018 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#08001a 0%,#1a0840 40%,#2a1060 70%,rgba(201,169,110,0.15) 100%),url('https://images.unsplash.com/photo-1590548784585-643d2b9f2925?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Asia Central · Kirguistán</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Kirguistán</h1>
+  <p class="dest-country">Bishkek · Issyk-Kul · Tian Shan · Bajo €940 para dos</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Asia Central · Kirguistán</span>
+    <span class="dest-badge gold">6 días · Nómadas, yurtas y glaciares</span>
+    <span class="dest-badge gold">💶 ~890 € dos personas (vuelos incluidos)</span>
+    <span class="dest-badge">🏔️ Jun · Jul · Ago · Sep</span>
+    <span class="dest-badge">✈️ Vuelo vía Estambul o Moscú</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">6 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~890 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">1 escala</div></div>
+        <div class="route-info-item"><div class="route-info-label">Vuelo</div><div class="route-info-val">~8–11h total</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Jun · Jul · Ago</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Bishkek (inicio/fin)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Llegada a Bishkek — La capital de las montañas</div>
+            <div class="day-subtitle">Bazaar Osh · Plaza Ala-Too · Parque Panfilov · Primeras impresiones</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Bazaar Osh — El mercado más grande de Asia Central</div>
+              <div class="stop-desc">El bazar cubierto más vivo de Kirguistán: especias de colores apiladas en montañas, panes redondos de tandur recién horneados, queso kurut seco (bolitas de queso fermentado de yegua), shashlyk de cordero y tejidos ikat tradicionales. La sensación de estar en la Ruta de la Seda es inmediata e intensa.</div>
+              <div class="stop-price">Shashlyk + pan: ~€2-3</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Plaza Ala-Too y estatua de Manas</div>
+              <div class="stop-desc">La plaza central de Bishkek está dominada por la estatua de Manas, el héroe épico kirguís del poema oral más largo del mundo (20 veces mayor que la Ilíada y la Odisea juntas). El edificio del Gobierno soviético de los años 50 contrasta con las montañas del Tian Shan nevadas al fondo.</div>
+              <div class="stop-price">Acceso libre</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Parque Panfilov y cena kirguís</div>
+              <div class="stop-desc">Parque arbolado con veteranos jugando al ajedrez en las mesas de piedra, fuentes soviéticas y atracciones infantiles. Cena en Supara o Navat: beshbarmak (fideos con carne de cordero hervido en caldo, literalmente "cinco dedos"), shurpa (sopa de cordero), manti (dumplings al vapor).</div>
+              <div class="stop-price">Cena completa: ~€8-12/pax</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Parque Natural Ala Archa — Glaciares a 90 min de la capital</div>
+            <div class="day-subtitle">Cañón Ala Archa · Glaciar Ak-Say · Pico Uchitel · Trekking alpino</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Cañón del río Ala Archa</div>
+              <div class="stop-desc">A solo 40 km de Bishkek, el Parque Natural de Ala Archa es como una puerta de entrada al Tian Shan: glaciares colgantes a 4.000+ metros, ríos de deshielo de color turquesa puro, bosques de abeto Tian Shan (el árbol del escudo nacional kirguís). Entrada al parque y carretera hasta el aparcamiento principal.</div>
+              <div class="stop-price">Entrada parque: ~€2/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Trekking al refugio Ratsek (3.400m)</div>
+              <div class="stop-desc">La ruta más popular del parque: 9 km de ida (3-4 horas) siguiendo el río turquesa hasta el refugio alpinístico Ratsek a 3.400 metros. Las vistas del glaciar Ak-Say y el pico Uchitel (4.527m) son impresionantes. No requiere equipo técnico, solo buena forma física. Águilas del Tian Shan sobrevolando constantemente.</div>
+              <div class="stop-price">Senderismo gratuito (con entrada parque)</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Vuelta y cena en Bishkek</div>
+              <div class="stop-desc">Regreso al coche al atardecer. Las montañas del Tian Shan al fondo de Bishkek son visibles desde casi cualquier punto de la ciudad. Última noche en Bishkek antes de partir hacia Issyk-Kul mañana.</div>
+              <div class="stop-price">Taxi/Uber Bishkek–Ala Archa: ~€15 ida</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Viaje a Issyk-Kul — El lago que no se congela</div>
+            <div class="day-subtitle">Bokonbaevo · Demostraciones de cetrería · Costa sur del lago · Yurta camp</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Ruta Bishkek → Issyk-Kul (costa sur)</div>
+              <div class="stop-desc">El viaje en marshrutka (minibús compartido) o taxi privado desde Bishkek hasta la costa sur del lago Issyk-Kul tarda 4-5 horas cruzando el paso de Tosor (3.893m). La carretera serpentea entre praderas alpinas, aldeas de pastores y cumbres nevadas de más de 5.000 metros. Parada en el cañón de Skazka ("cuento de hadas").</div>
+              <div class="stop-price">Marshrutka: ~€5/pax · Taxi privado: €30-40</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Cañón Skazka (Cuento de Hadas)</div>
+              <div class="stop-desc">Formaciones rocosas de arcilla roja y ocre erosionadas durante millones de años que parecen castillos, dragones y figuras fantásticas. Es uno de los paisajes más fotografiados de Kirguistán: a 30 minutos de la carretera principal, completamente gratuito y sin apenas turistas.</div>
+              <div class="stop-price">Acceso libre</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Demostración de cetrería en Bokonbaevo</div>
+              <div class="stop-desc">Kirguistán es la cuna de la cetrería tradicional: los berkutchi (cetreros con águilas doradas entrenadas) practican una tradición milenaria declarada Patrimonio Inmaterial de la UNESCO. En Bokonbaevo se pueden contratar demostraciones privadas con águilas reales de más de 5 kg que aterrizan en tu brazo.</div>
+              <div class="stop-price">~€20-30 por demostración (grupo pequeño)</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Noche en yurta camp en la orilla de Issyk-Kul</div>
+              <div class="stop-desc">El lago Issyk-Kul tiene 1.606 metros de altitud, 6.236 km² de superficie y no se congela en invierno (su nombre significa "lago cálido" en kirguís). Dormir en una yurta tradicional equipada en la orilla, con las estrellas del Tian Shan y el sonido del agua es la experiencia central del viaje.</div>
+              <div class="stop-price">Yurta camp con cena: ~€30-40/noche/pax</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Jeti-Ögüz — Los siete toros de roca roja</div>
+            <div class="day-subtitle">Cañón de roca roja · Pradera de flores · Karakol · Lago Karakol</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Cañón Jeti-Ögüz (Siete Toros)</div>
+              <div class="stop-desc">Siete formaciones de piedra arenisca roja que emergen de la pradera verde como toros dormidos: la más emblemática imagen de Kirguistán después del lago. La leyenda kirguís cuenta que dos khanes rivales amaban a la misma mujer y la mataron antes de perderla, y su sangre tiñó de rojo las rocas. La pradera alpina de flores silvestres a los pies es perfecta para un picnic.</div>
+              <div class="stop-price">Acceso libre</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Karakol — La ciudad más interesante del lago</div>
+              <div class="stop-desc">Fundada en 1869 como avanzadilla rusa, Karakol tiene una mezquita china de madera (construida por Dunganes hui en 1910) y una catedral ortodoxa del mismo período a solo 200 metros de distancia. El bazar dominical de ganado de Karakol es uno de los más auténticos de Asia Central: camellos, yaks, caballos y ovejas.</div>
+              <div class="stop-price">Museo regional: €1 · Bazar libre</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Lago de montaña Karakol (3.040m)</div>
+              <div class="stop-desc">A 23 km de Karakol por carretera de tierra, el lago glaciar de color verde turquesa a 3.040 metros está rodeado de abetos y picos de más de 4.500m. En julio y agosto los pastores kirguís llevan sus rebaños aquí: yaks y caballos pastan libres alrededor del lago. Vista de postal sin turistas.</div>
+              <div class="stop-price">~€5 jeep local desde Karakol · Acceso libre</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Costa norte de Issyk-Kul y baños termales</div>
+            <div class="day-subtitle">Cholpon-Ata · Petroglifos · Balneario Ak-Suu · Playa del lago</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Cholpon-Ata y petroglifos de la Edad de Bronce</div>
+              <div class="stop-desc">El campo abierto de petroglifos de Cholpon-Ata tiene más de 2.000 grabados rupestres de la Edad de Bronce (2.000-1.000 a.C.): ciervos, caballos, ibices de cuernos curvados, escenas de caza. Se dispersan entre enormes rocas de granito a cielo abierto. Es uno de los sitios arqueológicos más importantes de Asia Central.</div>
+              <div class="stop-price">Entrada: ~€3/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Balneario natural Ak-Suu</div>
+              <div class="stop-desc">Las aguas termales radon a 37ºC en plena naturaleza junto al lago. Instalaciones básicas pero completamente naturales: piscinas al aire libre con vistas al Tian Shan. La combinación de agua caliente y aire frío de montaña es única.</div>
+              <div class="stop-price">€4-6/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Atardecer en la playa de Issyk-Kul</div>
+              <div class="stop-desc">El lago Issyk-Kul tiene agua suficientemente cálida para bañarse de junio a agosto (18-22ºC). Las playas de la costa norte son tranquilas, de arena fina, con vistas a los picos nevados del Tian Shan Kungey. El cielo kirguís a esta altitud tiene una luminosidad y un número de estrellas que es imposible ver en Europa.</div>
+              <div class="stop-price">Playas públicas gratuitas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">06</div>
+          <div>
+            <div class="day-title">Vuelta a Bishkek y partida</div>
+            <div class="day-subtitle">Mercado Osh · Últimas compras · Aeropuerto Manas</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Vuelta a Bishkek por la carretera norte</div>
+              <div class="stop-desc">La carretera norte desde Issyk-Kul hasta Bishkek (3-4 horas) pasa por el desfiladero del río Chu y el embalse de Toktogul, con vistas diferentes al camino de ida. Si el tiempo lo permite, parada en el Cañón de Konorchek, formaciones de roca arenisca a 90 minutos de Bishkek.</div>
+              <div class="stop-price">Marshrutka: ~€5/pax</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Última vuelta al Bazaar Osh</div>
+              <div class="stop-desc">Compra de souvenirs: shyrdak (alfombras de fieltro de lana de oveja hechas a mano por las mujeres de las yurtas), kalpak (sombrero blanco tradicional kirguís), kurut seco para llevar y té negro kazajo. Los precios son un tercio de lo que se puede encontrar en otras partes del mundo.</div>
+              <div class="stop-price">Alfombra shyrdak pequeña: €20-50</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Aeropuerto Internacional Manas</div>
+              <div class="stop-desc">El aeropuerto está a 30 km del centro de Bishkek (45 min en taxi, ~€10). Los vuelos de Turkish Airlines vía Estambul suelen ser los más económicos desde España. En verano hay también conexiones con FlyDubai, Air Arabia y FlyArystan con escala en Dubái o Almaty.</div>
+              <div class="stop-price">Taxi centro–aeropuerto: ~€10-12</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto detallado</h2>
+      <div class="highlight-box">
+        <strong>Precio estimado para 2 personas · 6 días · Vuelos incluidos</strong><br>
+        Kirguistán es uno de los países más baratos del mundo para el viajero europeo. La comida, el transporte interno y el alojamiento son increíblemente económicos. El gasto principal son los vuelos (con escala en Estambul o Dubái).
+      </div>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Detalle</th><th>2 personas</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida y vuelta</td><td>Madrid ↔ Bishkek vía Estambul · Turkish Airlines</td><td>€440–600</td></tr>
+          <tr><td>Alojamiento</td><td>3 noches guesthouse Bishkek + 2 noches yurta camp</td><td>€90–130</td></tr>
+          <tr><td>Transporte interno</td><td>Marshrutkas + 1 taxi privado Bishkek–Issyk-Kul</td><td>€60–90</td></tr>
+          <tr><td>Comidas (12 comidas)</td><td>Beshbarmak, shashlyk, bazar · Precio local</td><td>€50–75</td></tr>
+          <tr><td>Actividades</td><td>Cetrería, Ala Archa, Issyk-Kul, petroglifos</td><td>€60–85</td></tr>
+          <tr><td>Souvenirs y extras</td><td>Bazar Osh, shyrdak, kurut</td><td>€30–60</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado (2 pax, 6 días)</span>
+        <span class="budget-total-value">€730 – €1.040</span>
+      </div>
+      <p style="font-size:0.79rem;color:rgba(237,238,242,0.45);margin-top:10px;">Los vuelos representan el 60% del presupuesto total. Una vez en Kirguistán, el coste diario es de ~€25-35/pax.</p>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Dónde dormir</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Bishkek: Guesthouses del centro</strong> — Apple Hostel y Sakura Guesthouse son los más recomendados por viajeros internacionales. Habitación doble desde €15/noche, desayuno incluido, información local excelente.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Issyk-Kul: Yurta camp Kochkor</strong> — La organización CBT (Community Based Tourism) gestiona yurta camps gestionados por familias locales en toda la costa. Se duerme en yurtas auténticas, se come comida casera kirguís y el dinero va directamente a las familias. Reservar en advance (cbt.kg).</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Karakol: Turkestan Yurt Camp</strong> — En la orilla este del lago, con vistas directas al macizo del Tian Shan. Opción más económica: yurta camp familiar desde €20/noche con cena.</div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía kirguís</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato nacional</div>
+          <div class="gastro-title">Beshbarmak</div>
+          <div class="gastro-price">€3–5/pax en local</div>
+          <div class="gastro-desc">Fideos anchos hervidos con cordero o yak, cubiertos con caldo y cebolla. "Cinco dedos" en kirguís porque se come con las manos en las celebraciones. La máxima hospitalidad kirguís.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida tradicional</div>
+          <div class="gastro-title">Kumis</div>
+          <div class="gastro-price">€0.50–1 vaso</div>
+          <div class="gastro-desc">Leche de yegua fermentada con un toque de alcohol natural (~2%). Probiótico natural, sabor ácido y efervescente. Se ofrece a los huéspedes como signo de hospitalidad. Obligatorio probar.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Street food</div>
+          <div class="gastro-title">Shashlyk kirguís</div>
+          <div class="gastro-price">€1–2 por brocheta</div>
+          <div class="gastro-desc">Brochetas de cordero marinado con comino y coriandro, asadas al carbón. El adobo kirguís lleva más especias que el turco o el persa. Con pan de tandur recién hecho, es la comida perfecta de viaje.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Lácteos nómadas</div>
+          <div class="gastro-title">Kurut y Ayran</div>
+          <div class="gastro-price">€0.20–0.50 unidad</div>
+          <div class="gastro-desc">Kurut: bolitas de queso seco fermentado de oveja o yak, de sabor muy intenso y salado. Ayran: yogur líquido frío, refrescante en verano. Ambos son el snack de viaje kirguís por excelencia.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos imprescindibles</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Visado.</strong> Los ciudadanos españoles entran a Kirguistán sin visado por 30 días. Solo necesitas pasaporte válido. El registro en el OVIR (policía de extranjeros) es obligatorio si te quedas más de 5 días pero los guesthouses lo gestionan automáticamente.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Dinero.</strong> El som kirguís (KGS) no se puede comprar en Europa. Saca dinero en cajeros de Bishkek al llegar (los del aeropuerto tienen buen tipo). Muchos lugares no aceptan tarjeta. Lleva más efectivo del que crees que necesitas: €150-200 en soms es suficiente para toda la estancia.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>SIM local.</strong> Las operadoras Beeline y MegaCom venden SIMs locales en el aeropuerto por €2-3 con datos incluidos. Internet 4G funciona sorprendentemente bien en Bishkek e Issyk-Kul, pero no en las montañas.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Altitud.</strong> Ala Archa, el lago Karakol y los passes de montaña están por encima de 3.000m. Si eres sensible al mal de altura, aclimatarse los primeros dos días en Bishkek (760m) antes de subir es fundamental. Lleva ibuprofeno.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>CBT Kirguistán.</strong> La red Community Based Tourism conecta viajeros con familias locales para alojamiento, guías y experiencias. Es ética, económica y la mejor forma de interactuar auténticamente con la cultura nómada. Página: cbt.kg</div>
+      </div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-checklist">
+      <h2 class="section-heading" id="h-checklist">Qué llevar</h2>
+      <div class="check-item"><div class="check-box"></div><span>Ropa de abrigo incluso en verano (noches en yurtas a 1.600m son frías)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Crema solar factor 50+ y gafas de sol (radiación UV alta en altura)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Pastillas potabilizadoras de agua (ríos de deshielo son potables pero no en aldeas)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Euros o dólares en efectivo para cambiar al llegar (los soms no se compran fuera)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Saco de dormir de 3 estaciones (yurtas con estufas pero mañanas frías)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Adapatador tipo C/F (estándar europeo, igual que Rusia)</span></div>
+      <div class="check-item"><div class="check-box"></div><span>Botiquín básico con ibuprofeno, antidiarreicos y vendas</span></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias y datos útiles</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias</div><div class="emerg-value">112</div><div class="emerg-note">Policía · Bomberos · Ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital</div><div class="emerg-value">+996 312 664 422</div><div class="emerg-note">Hospital Nº 1, Bishkek · Para emergencias graves</div></div>
+        <div class="emerg-card"><div class="emerg-label">Moneda</div><div class="emerg-value">Som kirguís</div><div class="emerg-note">KGS · ~€1 = ~97 KGS (2025)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Idioma</div><div class="emerg-value">Kirguís · Ruso</div><div class="emerg-note">Inglés básico en turismo de Bishkek</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Te animas a explorar Asia Central?</h3>
+      <p>Planifica tu aventura nómada en Kirguistán con inteligencia artificial: rutas, yurtas, cetrería y todo lo que necesitas.</p>
+      <a href="../chatbot.html" class="cta-btn">Planificar con Routlo IA →</a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios indicados son estimaciones orientativas en temporada alta (junio–agosto 2025-2026). Vuelos con Turkish Airlines vía Estambul desde Madrid. Alojamiento en guesthouses locales y yurta camps CBT. Este contenido es informativo y no constituye una oferta comercial. Las condiciones pueden variar.
+    </div>
+
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;background:rgba(4,8,16,0.95);border-top:1px solid rgba(255,255,255,0.08);padding:40px 24px;text-align:center;">
+  <a href="../index.html" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:20px;">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:32px;border-radius:6px;background:#fff;padding:2px 8px;">
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;color:#edeef2;font-weight:700;">Routlo</span>
+  </a>
+  <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-bottom:16px;">Itinerarios de viaje con inteligencia artificial · Kirguistán y más de 100 destinos</p>
+  <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;font-size:0.8rem;">
+    <a href="../itinerarios.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Itinerarios</a>
+    <a href="../mapa.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Mapa</a>
+    <a href="../chatbot.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Chatbot IA</a>
+  </div>
+  <p style="font-size:0.72rem;color:rgba(237,238,242,0.25);margin-top:20px;">© 2025 Routlo · Todos los derechos reservados</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../assets/shared.js"></script>
+<script>
+(function(){
+  const isEs = navigator.language.startsWith('es');
+  const tileUrl = isEs
+    ? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+  const tileAttr = isEs
+    ? '© OpenStreetMap contributors'
+    : '© OpenStreetMap © CARTO';
+
+  const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false }).setView([42.5, 75.0], 7);
+  const tileLayer = L.tileLayer(tileUrl, { attribution: tileAttr, maxZoom: 18 }).addTo(map);
+
+  if (isEs) {
+    tileLayer.getContainer && tileLayer.once('load', function() {
+      const c = tileLayer.getContainer();
+      if (c) c.style.cssText += 'filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';
+    });
+  }
+
+  const waypoints = [
+    { latlng: [42.870, 74.590], label: 'Bishkek', color: '#5ecb8a', start: true },
+    { latlng: [42.638, 74.497], label: 'Ala Archa', color: '#c9a96e' },
+    { latlng: [42.050, 77.390], label: 'Bokonbaevo', color: '#c9a96e' },
+    { latlng: [42.199, 78.391], label: 'Jeti-Ögüz', color: '#c9a96e' },
+    { latlng: [42.494, 78.393], label: 'Karakol', color: '#c9a96e' },
+    { latlng: [42.649, 77.082], label: 'Cholpon-Ata', color: '#c9a96e' }
+  ];
+
+  const line = L.polyline(waypoints.map(w => w.latlng), { color: '#c9a96e', weight: 3, opacity: 0.75 }).addTo(map);
+
+  waypoints.forEach(function(wp) {
+    const icon = L.divIcon({
+      className: '',
+      html: '<div style="width:12px;height:12px;border-radius:50%;background:' + wp.color + ';border:2px solid #fff;box-shadow:0 0 6px rgba(0,0,0,0.5);"></div>',
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
+    });
+    L.marker(wp.latlng, { icon: icon }).addTo(map).bindPopup('<strong>' + wp.label + '</strong>');
+  });
+})();
+
+window.addEventListener('scroll', function() {
+  const nav = document.querySelector('nav[role="navigation"]');
+  if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+(function() {
+  const links = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('active'); });
+        const id = e.target.getAttribute('id');
+        const a = document.querySelector('.toc-list a[href="#' + id + '"]');
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  document.querySelectorAll('.itin-section[id]').forEach(function(s) { observer.observe(s); });
+})();
+</script>
+</body>
+</html>

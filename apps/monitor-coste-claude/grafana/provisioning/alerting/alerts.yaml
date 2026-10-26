@@ -1,0 +1,99 @@
+# Alertas de Grafana con umbrales por variable de entorno.
+# grafana/entrypoint.sh sustituye __ALERT_*__ por los valores de .env
+# (ALERT_BURN_RATE_USD_HR, ALERT_DAILY_COST_USD, ALERT_CLAUDE_AI_WEEKLY_PCT) al arrancar.
+# No hay contact point provisionado: configura uno en Alerting -> Contact points.
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: claude-cost
+    folder: Claude
+    interval: 1m
+    rules:
+      - uid: claude-burn-rate
+        title: Claude Code burn rate alto
+        condition: C
+        for: 2m
+        noDataState: OK
+        execErrState: Error
+        labels:
+          team: claude
+        annotations:
+          summary: Burn rate de Claude Code por encima del umbral (USD/h)
+          description: 'Valor actual {{ humanize $values.A.Value }} (umbral __ALERT_BURN_RATE_USD_HR__)'
+        data:
+          - refId: A
+            relativeTimeRange: {from: 900, to: 0}
+            datasourceUid: prometheus
+            model:
+              refId: A
+              instant: true
+              expr: '(sum((max_over_time(claude_code_cost_usage_USD_total[15m]) - (claude_code_cost_usage_USD_total offset 15m or max_over_time(claude_code_cost_usage_USD_total[15m]) * 0))) or vector(0)) * 4'
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: gt
+                    params: [__ALERT_BURN_RATE_USD_HR__]
+      - uid: claude-daily-cost
+        title: Gasto diario de Claude Code alto
+        condition: C
+        for: 2m
+        noDataState: OK
+        execErrState: Error
+        labels:
+          team: claude
+        annotations:
+          summary: Gasto de Claude Code en 24 h por encima del umbral (USD)
+          description: 'Valor actual {{ humanize $values.A.Value }} (umbral __ALERT_DAILY_COST_USD__)'
+        data:
+          - refId: A
+            relativeTimeRange: {from: 900, to: 0}
+            datasourceUid: prometheus
+            model:
+              refId: A
+              instant: true
+              expr: '(sum((max_over_time(claude_code_cost_usage_USD_total[24h]) - (claude_code_cost_usage_USD_total offset 24h or max_over_time(claude_code_cost_usage_USD_total[24h]) * 0))) or vector(0))'
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: gt
+                    params: [__ALERT_DAILY_COST_USD__]
+      - uid: claude-ai-weekly
+        title: claude.ai cerca del límite semanal
+        condition: C
+        for: 0s
+        noDataState: OK
+        execErrState: Error
+        labels:
+          team: claude
+        annotations:
+          summary: Uso semanal de claude.ai (manual) por encima del umbral (%)
+          description: 'Valor actual {{ humanize $values.A.Value }} (umbral __ALERT_CLAUDE_AI_WEEKLY_PCT__)'
+        data:
+          - refId: A
+            relativeTimeRange: {from: 900, to: 0}
+            datasourceUid: prometheus
+            model:
+              refId: A
+              instant: true
+              expr: 'max(claude_ai_usage_percent{window="weekly"}) or vector(0)'
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: gt
+                    params: [__ALERT_CLAUDE_AI_WEEKLY_PCT__]
