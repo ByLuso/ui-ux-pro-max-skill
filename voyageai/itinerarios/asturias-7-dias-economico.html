@@ -225,6 +225,69 @@
     @media (prefers-reduced-motion: reduce) {
       .aurora::before, .aurora::after, .aurora-span { animation: none; }
     }
+
+    /* ── Food section ── */
+    .food-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .food-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; transition: border-color 0.2s; }
+    .food-card:hover { border-color: rgba(201,169,110,0.3); }
+    .food-type { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #c9a96e; margin-bottom: 6px; }
+    .food-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .food-location { font-size: 0.74rem; color: rgba(237,238,242,0.38); margin-bottom: 12px; }
+    .food-dish { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.65; padding-left: 13px; position: relative; margin-bottom: 4px; }
+    .food-dish::before { content: '→'; position: absolute; left: 0; color: #c9a96e; font-size: 0.65rem; top: 3px; }
+    .food-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; margin-top: 10px; }
+    .food-note { font-size: 0.72rem; color: rgba(237,238,242,0.3); margin-top: 5px; font-style: italic; }
+
+    /* ── POI section ── */
+    .poi-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .poi-chip { padding: 5px 13px; border-radius: 100px; font-size: 0.76rem; font-weight: 600; cursor: pointer; transition: all 0.2s; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: rgba(237,238,242,0.55); }
+    .poi-chip.active, .poi-chip:hover { background: rgba(201,169,110,0.15); border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .poi-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+    .poi-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; transition: all 0.2s; }
+    .poi-card:hover { border-color: rgba(201,169,110,0.25); transform: translateY(-2px); }
+    .poi-card.hidden { display: none; }
+    .poi-cat { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.38); margin-bottom: 6px; }
+    .poi-name { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 5px; }
+    .poi-desc { font-size: 0.81rem; color: rgba(237,238,242,0.55); line-height: 1.6; margin-bottom: 10px; }
+    .poi-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .poi-tag { font-size: 0.64rem; padding: 2px 7px; border-radius: 100px; background: rgba(74,127,165,0.1); border: 1px solid rgba(74,127,165,0.2); color: #4a7fa5; }
+    .poi-tag.free { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.2); color: #5ecb8a; }
+    .poi-tag.dist { background: rgba(201,169,110,0.1); border-color: rgba(201,169,110,0.2); color: #c9a96e; }
+
+    /* ── Urbex (easter egg) ── */
+    .urbex-section { display: none; }
+    body.urbex-reveal .urbex-section { display: block; animation: urbexIn 0.7s ease forwards; }
+    @keyframes urbexIn { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    .urbex-banner { background: linear-gradient(135deg, rgba(200,50,0,0.1) 0%, rgba(80,10,0,0.1) 100%); border: 1px solid rgba(220,80,20,0.2); border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
+    .urbex-banner-icon { font-size: 2rem; flex-shrink: 0; }
+    .urbex-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.05rem; font-weight: 700; color: #ff7040; margin-bottom: 4px; }
+    .urbex-banner p { font-size: 0.78rem; color: rgba(237,238,242,0.4); line-height: 1.5; }
+    .urbex-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .urbex-card { background: rgba(8,3,0,0.7); border: 1px solid rgba(220,80,20,0.15); border-radius: 14px; padding: 16px; transition: border-color 0.2s; }
+    .urbex-card:hover { border-color: rgba(220,80,20,0.4); }
+    .urbex-status { font-size: 0.63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 7px; }
+    .urbex-status.danger { color: #ff4020; }
+    .urbex-status.moderate { color: #ff8c00; }
+    .urbex-status.ok { color: #80c060; }
+    .urbex-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.95rem; font-weight: 700; color: #ff9060; margin-bottom: 3px; }
+    .urbex-loc { font-size: 0.71rem; color: rgba(237,238,242,0.3); margin-bottom: 8px; }
+    .urbex-desc { font-size: 0.79rem; color: rgba(237,238,242,0.48); line-height: 1.6; margin-bottom: 10px; }
+    .urbex-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+    .urbex-tag { font-size: 0.62rem; padding: 2px 7px; border-radius: 100px; background: rgba(220,80,20,0.1); border: 1px solid rgba(220,80,20,0.2); color: #ff7040; }
+    .urbex-disclaim { background: rgba(220,80,20,0.06); border: 1px solid rgba(220,80,20,0.15); border-radius: 10px; padding: 12px 16px; margin-top: 20px; font-size: 0.74rem; color: rgba(237,238,242,0.38); line-height: 1.65; }
+
+    /* Easter egg hint + toast */
+    .egg-hint { text-align: center; padding: 32px 24px 8px; }
+    .egg-hint-txt { font-size: 0.68rem; color: rgba(237,238,242,0.08); letter-spacing: 0.18em; font-family: monospace; cursor: default; transition: color 0.5s; user-select: none; }
+    .egg-hint-txt:hover { color: rgba(237,238,242,0.18); }
+    .urbex-toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(120px); background: rgba(200,50,0,0.92); backdrop-filter: blur(12px); color: #fff; padding: 11px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; z-index: 9999; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); pointer-events: none; white-space: nowrap; }
+    .urbex-toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 1024px) {
+      .food-grid { grid-template-columns: 1fr; }
+      .poi-grid { grid-template-columns: 1fr; }
+      .urbex-grid { grid-template-columns: 1fr; }
+    }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
   <script>
@@ -334,6 +397,8 @@
           <li><a href="#gastronomia">Gastronomía</a></li>
           <li><a href="#consejos">Consejos</a></li>
           <li><a href="#checklist">Checklist</a></li>
+          <li><a href="#restaurantes">Dónde comer</a></li>
+          <li><a href="#lugares">Lugares de interés</a></li>
         </ul>
       </nav>
     </aside>
@@ -1016,6 +1081,308 @@
         </div>
       </section>
 
+      <!-- DÓNDE COMER Y CENAR -->
+      <section id="restaurantes" class="itin-section" aria-labelledby="h-rest">
+        <h2 class="section-heading" id="h-rest">Dónde comer y cenar</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:20px">
+          Asturias tiene gastronomía de nivel nacional con precios de pueblo. Estos son los sitios reales donde merece la pena sentarse, con lo que hay que pedir en cada uno.
+        </p>
+        <div class="food-grid">
+
+          <div class="food-card">
+            <div class="food-type">🍺 Sidrería · Llanes centro</div>
+            <div class="food-name">El Llar de Llanes</div>
+            <div class="food-location">📍 Calle Manuel Cué, Llanes</div>
+            <div class="food-dish">Cachopo de ternera — el clásico de Asturias. Enorme.</div>
+            <div class="food-dish">Fabada con pan de maíz y sidra natural</div>
+            <div class="food-dish">Queso Cabrales con nueces y miel (~€6)</div>
+            <div class="food-price">Menú del día ~€11pp · A la carta ~€18-22pp</div>
+            <div class="food-note">Llena antes de las 14h — ven con reserva o llega pronto</div>
+          </div>
+
+          <div class="food-card">
+            <div class="food-type">🐟 Marisquería · Puerto de Llanes</div>
+            <div class="food-name">La Farola del Puerto</div>
+            <div class="food-location">📍 Paseo del Puerto, Llanes</div>
+            <div class="food-dish">Mejillones al vapor con sidra (~€5 la ración)</div>
+            <div class="food-dish">Merluza a la sidra con almejas — el plato de la casa</div>
+            <div class="food-dish">Nécora cocida (precio de mercado, pregunta antes)</div>
+            <div class="food-price">~€15-20pp comiendo pescado fresco</div>
+            <div class="food-note">Compra también directamente en la cofradía de pescadores al lado</div>
+          </div>
+
+          <div class="food-card">
+            <div class="food-type">⭐ Referencia regional · Lastres (20 km)</div>
+            <div class="food-name">Casa Eutimio</div>
+            <div class="food-location">📍 Subida al Puerto, Lastres (Colunga)</div>
+            <div class="food-dish">Oricios (erizos de mar) al vapor — temporada oct-mayo</div>
+            <div class="food-dish">Pixín (rape) a la asturiana con berberechos</div>
+            <div class="food-dish">Arroz con leche requemado — el mejor de Asturias</div>
+            <div class="food-price">~€25-35pp · Reserva obligatoria en fin de semana</div>
+            <div class="food-note">Vale la excursión aunque solo sea para el arroz con leche</div>
+          </div>
+
+          <div class="food-card">
+            <div class="food-type">🏘️ Legendario · Tazones</div>
+            <div class="food-name">Bar Marcos</div>
+            <div class="food-location">📍 Calle del Puerto, Tazones (Villaviciosa)</div>
+            <div class="food-dish">Merluza a la sidra — plato de culto, solo este</div>
+            <div class="food-dish">Bocadillo de bonito con tomate (desayuno)</div>
+            <div class="food-dish">Sidra natural directa del barril</div>
+            <div class="food-price">~€10-13pp · Sin carta, menú único o bocadillos</div>
+            <div class="food-note">70 personas en un pueblo de 70. Ve en día laborable si puedes</div>
+          </div>
+
+          <div class="food-card">
+            <div class="food-type">🍎 Capital sidrera · Villaviciosa</div>
+            <div class="food-name">Sidrería La Faya</div>
+            <div class="food-location">📍 Ruta de la Sidra, Villaviciosa</div>
+            <div class="food-dish">Chuletón de vaca asturiana madurado 30 días</div>
+            <div class="food-dish">Morcilla con patatas asadas al horno de leña</div>
+            <div class="food-dish">Sidra natural de producción propia (~€3/botella)</div>
+            <div class="food-price">~€14-18pp · Los fines de semana hay txakolí también</div>
+            <div class="food-note">Pide ver el lagar (pipa de sidra enorme) mientras esperas</div>
+          </div>
+
+          <div class="food-card">
+            <div class="food-type">☕ Desayunos y meriendas · Llanes</div>
+            <div class="food-name">Panaderías del mercado</div>
+            <div class="food-location">📍 Mercado de Abastos, Plaza del Ayuntamiento</div>
+            <div class="food-dish">Empanada de atún o bacalao (~€1.80/trozo)</div>
+            <div class="food-dish">Casadielles (pasta rellena de nuez y anís, €1.20)</div>
+            <div class="food-dish">Carbayones — pastel de almendra típico de Oviedo</div>
+            <div class="food-price">Desayuno completo ~€3-4pp</div>
+            <div class="food-note">Lunes y viernes hay mercado semanal con más productores</div>
+          </div>
+
+        </div>
+
+        <div style="background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.15);border-radius:12px;padding:16px 20px;margin-top:20px">
+          <p style="font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.7;margin:0"><strong style="color:#c9a96e">Qué pedir sí o sí en Asturias:</strong> cachopo (es enorme, uno para dos está bien), fabada (evítala en verano — es muy pesada), oricios si es temporada (erizos de mar, €8-14 la docena), arroz con leche requemado, casadielles de postre. Para beber: siempre <em>sidra natural</em>, nunca la espumosa.</p>
+        </div>
+      </section>
+
+      <!-- SITIOS DE INTERÉS -->
+      <section id="lugares" class="itin-section" aria-labelledby="h-lugares">
+        <h2 class="section-heading" id="h-lugares">Sitios de interés y lugares bonitos</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:20px">
+          Lista libre de lugares para explorar alrededor de Llanes y la costa oriental asturiana — independiente del itinerario, para quien quiera diseñar su propio recorrido o añadir paradas.
+        </p>
+        <div class="poi-chips" role="group" aria-label="Filtrar lugares por categoría">
+          <button class="poi-chip active" onclick="filterPOI('all',this)">Todos</button>
+          <button class="poi-chip" onclick="filterPOI('playa',this)">🌊 Playas</button>
+          <button class="poi-chip" onclick="filterPOI('mirador',this)">🔭 Miradores</button>
+          <button class="poi-chip" onclick="filterPOI('pueblo',this)">🏘️ Pueblos</button>
+          <button class="poi-chip" onclick="filterPOI('naturaleza',this)">🌿 Naturaleza</button>
+          <button class="poi-chip" onclick="filterPOI('cultura',this)">🏛️ Arte e historia</button>
+        </div>
+        <div class="poi-grid" id="poiGrid">
+
+          <div class="poi-card" data-cat="playa">
+            <div class="poi-cat">🌊 Playa</div>
+            <div class="poi-name">Playa de Gulpiyuri</div>
+            <div class="poi-desc">La playa interior más famosa de España: una laguna de agua salada completamente rodeada de prado verde. El mar llega por grietas subterráneas. Patrimonio Natural.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">12 km de Llanes</span><span class="poi-tag">Único en el mundo</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="playa">
+            <div class="poi-cat">🌊 Playa</div>
+            <div class="poi-name">Playa de Torimbia</div>
+            <div class="poi-desc">Media luna perfecta de arena blanca entre colinas verdes. Playa nudista oficial aunque apta para todos. Sin chiringuitos ni servicios — solo naturaleza. El camino de bajada desde el aparcamiento da vistas de infarto.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">8 km de Llanes</span><span class="poi-tag">Nudista · Virgen</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="playa">
+            <div class="poi-cat">🌊 Playa</div>
+            <div class="poi-name">Playa de Ballota</div>
+            <div class="poi-desc">Acantilados de más de 100m a ambos lados, sin ningún servicio ni acceso motorizado cerca. Una de las playas más vírgenes y aisladas de la costa cantábrica. Arena gruesa y agua muy limpia.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">6 km de Llanes</span><span class="poi-tag">Salvaje</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="playa">
+            <div class="poi-cat">🌊 Playa</div>
+            <div class="poi-name">Playa de Poo</div>
+            <div class="poi-desc">Una de las mejores playas familiares de Asturias: agua calma en la ensenada, fondo de arena y roca, muy poco oleaje. Detrás hay una laguna de agua dulce. El nombre causa gracia, el sitio es espectacular.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">4 km de Llanes</span><span class="poi-tag">Familiar</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="mirador">
+            <div class="poi-cat">🔭 Mirador</div>
+            <div class="poi-name">Mirador del Fitu</div>
+            <div class="poi-desc">El mejor mirador de Asturias: a 1.100m de altitud, con vistas panorámicas de los Picos de Europa nevados al sur y el mar Cantábrico al norte al mismo tiempo. En día despejado es uno de los paisajes más impresionantes de España.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">35 km de Llanes</span><span class="poi-tag">Imprescindible</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="mirador">
+            <div class="poi-cat">🔭 Mirador</div>
+            <div class="poi-name">Acantilados de Torimbia</div>
+            <div class="poi-desc">El camino hasta la playa de Torimbia bordea acantilados de 80m sobre el Cantábrico. Es tan bueno como la propia playa. Llega al atardecer para ver la luz dorada sobre el mar.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">8 km de Llanes</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="pueblo">
+            <div class="poi-cat">🏘️ Pueblo</div>
+            <div class="poi-name">Lastres</div>
+            <div class="poi-desc">Considerado uno de los pueblos más bonitos de España. Casas de pescadores en terrazas sobre el mar, bajando por una colina escarpada. Escenario de la serie Doctor Mateo. El puerto activo y Casa Eutimio lo convierten en parada obligatoria.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">30 km de Llanes</span><span class="poi-tag">📺 Dr. Mateo</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="pueblo">
+            <div class="poi-cat">🏘️ Pueblo</div>
+            <div class="poi-name">Tazones</div>
+            <div class="poi-desc">70 casas, 70 habitantes, un bar legendario. Aquí desembarcó Carlos I en 1517 procedente de Flandes. Puerto de pescadores auténtico, sin turismo masificado, con la mejor merluza a la sidra del Cantábrico.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">75 km de Llanes</span><span class="poi-tag">Historia · Gastronomía</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="pueblo">
+            <div class="poi-cat">🏘️ Pueblo</div>
+            <div class="poi-name">Poo de Llanes</div>
+            <div class="poi-desc">Pequeña aldea a 4 km de Llanes con arquitectura indiana (casas construidas por emigrantes que volvieron ricos de América). La iglesia y las casonas señoriales del s. XIX son el contraste perfecto con el entorno rural.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">4 km de Llanes</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="naturaleza">
+            <div class="poi-cat">🌿 Naturaleza</div>
+            <div class="poi-name">Bufones de Pría</div>
+            <div class="poi-desc">Géiseres naturales de agua salada: el mar entra por grietas en los acantilados calizos y sale disparado hacia arriba en columnas de agua y espuma de hasta 20m. Espectacular con oleaje fuerte. Paseo fácil por la costa.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">10 km de Llanes</span><span class="poi-tag">Fenómeno único</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="naturaleza">
+            <div class="poi-cat">🌿 Naturaleza</div>
+            <div class="poi-name">Lagos de Covadonga</div>
+            <div class="poi-desc">Enol y Ercina, dos lagos glaciares a 1.100m entre los Picos de Europa. El paisaje cambia completamente según la estación: verde intenso en verano, niebla mística en otoño, nieve en invierno. Acceso restringido en temporada alta.</div>
+            <div class="poi-tags"><span class="poi-tag free">Prácticamente gratis</span><span class="poi-tag dist">65 km de Llanes</span><span class="poi-tag">Picos de Europa</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="naturaleza">
+            <div class="poi-cat">🌿 Naturaleza</div>
+            <div class="poi-name">Ruta del Cares</div>
+            <div class="poi-desc">22 km entre Poncebos y Caín a través del desfiladero más impresionante de la Cordillera Cantábrica. El camino está excavado en la roca a 500m sobre el río Cares. No tiene dificultad técnica pero sí vértigo garantizado.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">85 km de Llanes</span><span class="poi-tag">Dificultad baja</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="cultura">
+            <div class="poi-cat">🏛️ Arte e historia</div>
+            <div class="poi-name">Cubos de la Memoria · Llanes</div>
+            <div class="poi-desc">Serie de cubos de hormigón del puerto pintados por el artista vasco Agustín Ibarrola. Arte urbano de gran formato sobre el patrimonio industrial pesquero. Incluidos en varias guías de arte público español.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">En Llanes</span><span class="poi-tag">Arte urbano</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="cultura">
+            <div class="poi-cat">🏛️ Arte e historia</div>
+            <div class="poi-name">Cueva de Tito Bustillo</div>
+            <div class="poi-desc">25.000 años de historia en las paredes de una cueva: bisontes, ciervos y caballos pintados en el Paleolítico Superior. Patrimonio Mundial UNESCO. Una de las cuevas con arte rupestre más importantes del mundo.</div>
+            <div class="poi-tags"><span class="poi-tag dist">€7pp</span><span class="poi-tag dist">24 km de Llanes</span><span class="poi-tag">UNESCO</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="cultura">
+            <div class="poi-cat">🏛️ Arte e historia</div>
+            <div class="poi-name">Basílica y Cueva de Covadonga</div>
+            <div class="poi-desc">El lugar más simbólico de Asturias: la basílica neorrománica de 1901 y la cueva donde la tradición sitúa el inicio de la Reconquista. La fuente de los 7 caños y la estatua de Don Pelayo son el corazón histórico del norte de España.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">65 km de Llanes</span><span class="poi-tag">Historia · Simbólico</span></div>
+          </div>
+
+          <div class="poi-card" data-cat="cultura">
+            <div class="poi-cat">🏛️ Arte e historia</div>
+            <div class="poi-name">Puente Romano de Cangas de Onís</div>
+            <div class="poi-desc">El puente medieval del s. XIV sobre el río Sella, con la Cruz de la Victoria colgada en el arco central, es uno de los iconos más reconocibles de Asturias. Alrededor del puente hay hórreos y paneras, arquitectura rural asturiana imprescindible.</div>
+            <div class="poi-tags"><span class="poi-tag free">Gratis</span><span class="poi-tag dist">55 km de Llanes</span></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- URBEX (EASTER EGG — oculto por defecto) -->
+      <section id="urbex" class="itin-section urbex-section" aria-labelledby="h-urbex">
+        <h2 class="section-heading" id="h-urbex" style="color:#ff7040">
+          <span>Exploración urbana · Asturias oculta</span>
+          <span style="font-size:0.65rem;padding:3px 10px;background:rgba(220,80,20,0.15);border:1px solid rgba(220,80,20,0.25);border-radius:6px;color:#ff7040;font-family:'Jost',sans-serif;font-weight:600;margin-left:8px;">DESBLOQUEADO</span>
+        </h2>
+        <div class="urbex-banner">
+          <div class="urbex-banner-icon">🔓</div>
+          <div>
+            <h3>Contenido para exploradores</h3>
+            <p>Lugares abandonados, ruinas industriales y sitios misteriosos de Asturias. Visita siempre con respeto, sin dañar ni llevarte nada. Muchos de estos lugares son accesibles públicamente desde el exterior. Consulta siempre la legalidad local antes de entrar en propiedades privadas.</p>
+          </div>
+        </div>
+        <div class="urbex-grid">
+
+          <div class="urbex-card">
+            <div class="urbex-status ok">● Acceso exterior · Legal</div>
+            <div class="urbex-name">Pueblo Minero de Bustiello</div>
+            <div class="urbex-loc">📍 Mieres (40 km de Llanes)</div>
+            <div class="urbex-desc">Poblado obrero construido en 1890 por la empresa Duro Felguera para sus mineros. Calles simétricas, casino del patronato, iglesia y casas idénticas perfectamente conservadas — y casi deshabitadas. Lista tentativa UNESCO. El paisaje postindustrial más completo de Asturias.</div>
+            <div class="urbex-meta"><span class="urbex-tag">Exterior accesible</span><span class="urbex-tag">Semi-abandonado</span><span class="urbex-tag">Fotografía</span></div>
+          </div>
+
+          <div class="urbex-card">
+            <div class="urbex-status moderate">● Zona industrial · Precaución</div>
+            <div class="urbex-name">Mina de La Camocha</div>
+            <div class="urbex-loc">📍 Gijón (95 km de Llanes)</div>
+            <div class="urbex-desc">La última mina de carbón activa de Asturias, cerrada definitivamente en 2012. Los castilletes (torres de extracción), las naves industriales y las escombreras están intactos. Punto de peregrinación para fotógrafos de arquitectura industrial. El patrimonio minero asturiano más icónico aún en pie.</div>
+            <div class="urbex-meta"><span class="urbex-tag">Desde 1893</span><span class="urbex-tag">Industrial</span><span class="urbex-tag">Exterior</span></div>
+          </div>
+
+          <div class="urbex-card">
+            <div class="urbex-status danger">● Ruinas · No entrar</div>
+            <div class="urbex-name">Palacio de Meres</div>
+            <div class="urbex-loc">📍 Siero, Oviedo (85 km de Llanes)</div>
+            <div class="urbex-desc">Casona indiana del s. XIX en avanzado estado de abandono. Jardines con palmeras invadidos por vegetación, escalera de piedra derrumbándose, frescos interiores desapareciendo con la humedad. El tipo de patrimonio arquitectónico que Asturias no sabe conservar. Fotografía desde la verja exterior.</div>
+            <div class="urbex-meta"><span class="urbex-tag">Propiedad privada</span><span class="urbex-tag">S. XIX</span><span class="urbex-tag">Solo exterior</span></div>
+          </div>
+
+          <div class="urbex-card">
+            <div class="urbex-status ok">● Ruinas medievales · Libre</div>
+            <div class="urbex-name">Castillo de Alba (Ruinas)</div>
+            <div class="urbex-loc">📍 Tineo (120 km de Llanes)</div>
+            <div class="urbex-desc">Los restos del Castillo de Alba del s. XI en lo alto de un monte, con vistas extraordinarias del valle de Tineo. Acceso libre por senda peatonal. Las murallas medio derruidas y la torre del homenaje crean un ambiente de otra era. Poco conocido y casi nunca visitado.</div>
+            <div class="urbex-meta"><span class="urbex-tag">S. XI</span><span class="urbex-tag">Acceso libre</span><span class="urbex-tag">Vistas 360°</span></div>
+          </div>
+
+          <div class="urbex-card">
+            <div class="urbex-status ok">● Estación · Semiabandonada</div>
+            <div class="urbex-name">Estación de Montaña de Pajares</div>
+            <div class="urbex-loc">📍 Puerto de Pajares (100 km de Llanes)</div>
+            <div class="urbex-desc">La antigua estación del Ferrocarril del Norte en el Puerto de Pajares, construida a finales del s. XIX para atravesar la Cordillera Cantábrica. Desde 2024 casi sin actividad tras la apertura del nuevo túnel de alta velocidad. Arquitectura ferroviaria histórica en un paraje de montaña espectacular.</div>
+            <div class="urbex-meta"><span class="urbex-tag">S. XIX</span><span class="urbex-tag">Ferroviario</span><span class="urbex-tag">Alta montaña</span></div>
+          </div>
+
+          <div class="urbex-card">
+            <div class="urbex-status moderate">● Cueva · Acceso restringido</div>
+            <div class="urbex-name">Las Cuevas del Sidón</div>
+            <div class="urbex-loc">📍 Miño (Tineo, 110 km de Llanes)</div>
+            <div class="urbex-desc">Sistema de cuevas kársticas con leyendas locales de xanas (hadas asturianas) y moros encantados. Las formaciones calcáreas son impresionantes. Parte del sistema es visitable con guía local — pregunta en el Ayuntamiento de Tineo. El paisaje de entrada, entre hayedos, ya merece el viaje.</div>
+            <div class="urbex-meta"><span class="urbex-tag">Mitología asturiana</span><span class="urbex-tag">Kárstico</span><span class="urbex-tag">Guía recomendada</span></div>
+          </div>
+
+          <div class="urbex-card">
+            <div class="urbex-status ok">● Pueblo casi fantasma · Libre</div>
+            <div class="urbex-name">Aldeas abandonadas del Navia</div>
+            <div class="urbex-loc">📍 Valle del Navia, occidente asturiano</div>
+            <div class="urbex-desc">En el occidente asturiano quedan decenas de aldeas con 0-3 habitantes, con molinos de agua abandonados, hórreos centenarios derruidos y capillas cerradas. No hay GPS que las señale — búscalas siguiendo pistas de tierra en el valle del Navia. La Asturias que se vació en los 60-80.</div>
+            <div class="urbex-meta"><span class="urbex-tag">Éxodo rural</span><span class="urbex-tag">S. XX</span><span class="urbex-tag">Sin señalizar</span></div>
+          </div>
+
+          <div class="urbex-card">
+            <div class="urbex-status ok">● Faros · Semiabandonados</div>
+            <div class="urbex-name">Faro de Peñas y alrededores</div>
+            <div class="urbex-loc">📍 Cabo Peñas, Gozón (110 km de Llanes)</div>
+            <div class="urbex-desc">El Cabo Peñas es el punto más septentrional de España peninsular. El faro (1852, en funcionamiento) está rodeado de ruinas de estructuras auxiliares abandonadas. Los acantilados sobre el Atlántico y la vista hacia el mar abierto sin tierra hasta el Polo Norte son únicos.</div>
+            <div class="urbex-meta"><span class="urbex-tag">Desde 1852</span><span class="urbex-tag">Punto extremo</span><span class="urbex-tag">Acceso libre</span></div>
+          </div>
+
+        </div>
+        <div class="urbex-disclaim">
+          ⚠️ <strong style="color:rgba(237,238,242,0.6)">Aviso legal:</strong> Este contenido es informativo. Entrar en propiedades privadas o edificios en ruinas puede ser ilegal y peligroso. Algunas de estas localizaciones son de acceso público (exteriores, espacios naturales); otras son propiedad privada. Infórmate siempre antes de visitar, respeta la señalización, no dañes nada y no te lleves recuerdos. El principio del urbex: «toma solo fotografías, deja solo huellas de tus pasos».
+        </div>
+      </section>
+
+      <!-- Easter egg hint (texto casi invisible al pie) -->
+      <div class="egg-hint" aria-hidden="true">
+        <div class="egg-hint-txt">↑ ↑ ↓ ↓ ← → ← → · · ·</div>
+      </div>
+
       <div class="cta-banner">
         <h3>¿Buscas más itinerarios por España?</h3>
         <p>Descubre todos los itinerarios de Routlo — rutas, presupuestos y consejos reales para viajeros reales.</p>
@@ -1044,6 +1411,8 @@
     <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
   </div>
 </footer>
+
+<div class="urbex-toast" id="urbexToast" aria-live="polite">🔓 Contenido secreto desbloqueado</div>
 
 <script>
 function toggleMenu() {
@@ -1108,6 +1477,64 @@ function toggleMenu() {
       observer.observe(el);
     });
   }
+  // ── POI filter ──
+  window.filterPOI = function(cat, btn) {
+    document.querySelectorAll('.poi-chip').forEach(function(c) { c.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelectorAll('.poi-card').forEach(function(card) {
+      card.classList.toggle('hidden', cat !== 'all' && card.dataset.cat !== cat);
+    });
+  };
+
+  // ── Konami code easter egg ──
+  var konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  var konamiIdx = 0;
+  document.addEventListener('keydown', function(e) {
+    if (e.key === konami[konamiIdx]) {
+      konamiIdx++;
+      if (konamiIdx === konami.length) {
+        konamiIdx = 0;
+        if (!document.body.classList.contains('urbex-reveal')) {
+          document.body.classList.add('urbex-reveal');
+          var toast = document.getElementById('urbexToast');
+          if (toast) {
+            toast.classList.add('show');
+            setTimeout(function() { toast.classList.remove('show'); }, 3500);
+          }
+          setTimeout(function() {
+            var el = document.getElementById('urbex');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 500);
+        }
+      }
+    } else {
+      konamiIdx = (e.key === konami[0]) ? 1 : 0;
+    }
+  });
+
+  // ── Egg hint: tap 7x on mobile ──
+  var eggTaps = 0, eggTimer;
+  var hint = document.querySelector('.egg-hint-txt');
+  if (hint) {
+    hint.addEventListener('click', function() {
+      eggTaps++;
+      clearTimeout(eggTimer);
+      eggTimer = setTimeout(function() { eggTaps = 0; }, 2000);
+      if (eggTaps >= 7) {
+        eggTaps = 0;
+        if (!document.body.classList.contains('urbex-reveal')) {
+          document.body.classList.add('urbex-reveal');
+          var toast = document.getElementById('urbexToast');
+          if (toast) { toast.classList.add('show'); setTimeout(function() { toast.classList.remove('show'); }, 3500); }
+          setTimeout(function() {
+            var el = document.getElementById('urbex');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 500);
+        }
+      }
+    });
+  }
+
 })();
 </script>
 </body>
