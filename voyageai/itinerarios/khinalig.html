@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Khinalig (Azerbaiyán) — 3 días en el pueblo más alto del Gran Cáucaso: lengua aislada, yaks y el fin del mundo | Routlo</title>
+  <meta name="description" content="3 días en Khinalig, la aldea más alta del Gran Cáucaso a 2.350 m en Azerbaiyán. El único idioma aislado del Cáucaso, hospitalidad extrema y senderos entre nubes."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#162a50 70%,rgba(201,169,110,0.12) 100%),url('https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Aldeas · Azerbaiyán</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Khinalig</h1>
+  <p class="dest-country">El techo del Gran Cáucaso · Lengua aislada · Fin del mundo habitable</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Quba District · Azerbaiyán</span>
+    <span class="dest-badge gold">3 días · Aldea de alta montaña</span>
+    <span class="dest-badge gold">💶 ~490 € dos personas (vuelos incluidos)</span>
+    <span class="dest-badge">🏔️ Altitud 2.350 m</span>
+    <span class="dest-badge">☀️ Jun · Jul · Ago · Sep</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">3 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~490 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo a Bakú</div></div>
+        <div class="route-info-item"><div class="route-info-label">Altitud</div><div class="route-info-val">2.350 m</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Jun · Sep</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Khinalig (aldea)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Bakú → Quba → Khinalig</div>
+            <div class="day-subtitle">Ciudad de petróleo y llamas · Carretera de montaña · Primera noche en las nubes</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Bakú — la ciudad que arde desde siempre</div>
+              <div class="stop-desc">El vuelo a Bakú desde Madrid o Barcelona tarda unas 5 horas (conexión habitual en Turquía o conexión directa según temporada). Bakú Heydar Aliyev es un aeropuerto moderno y fácil. Toma el primer bus o marshrutka hacia Quba (3h, ~3 AZN ≈ €1,60) desde la Estación Central de Autobuses. Si llegas tarde, pasa la primera noche en Bakú Old City: los edificios medievales de la Ciudad Amurallada (UNESCO 2000) forman uno de los cascos históricos más intactos del Cáucaso. El contraste entre torres de petróleo del siglo XXI y muros del siglo XII es el primer impacto de Azerbaiyán.</div>
+              <div class="stop-price">Vuelo Madrid/Barcelona → Bakú (ida y vuelta): €150–250/persona · Bus a Quba: €1,60/persona</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Quba — la ciudad roja y el punto de salida</div>
+              <div class="stop-desc">Quba (también escrito Guba) es conocida por sus alfombras tejidas a mano con patrones geométricos únicos y por el barrio judío de Krasnaya Sloboda —el único lugar del mundo con una población mayoritaria de judíos de montaña (Juhuro) fuera de Israel—. Toma aquí un taxi compartido a Khinalig (40 km, 2h por una pista de tierra sin asfaltar que sube 1.800 metros de altitud; en verano solo apta para 4WD). Si no hay taxi compartido, la negociación para uno privado ronda €15–25 ida. Algunos viajeros contratan el taxi completo (ida y vuelta) por €40–50 para que les espere.</div>
+              <div class="stop-price">Bakú → Quba (bus/marshrutka): €1,60 · Quba → Khinalig (taxi compartido/privado): €8–25</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Primera llegada a Khinalig — el pueblo más alto del Gran Cáucaso</div>
+              <div class="stop-desc">A 2.350 metros de altitud, Khinalig aparece de repente tras un último giro de la pista: casas de piedra gris apiladas en la ladera como escalones, sin árboles —demasiado alto para que crezcan—, con el pico Shahdagh (4.243 m) al fondo. Unos 2.000 habitantes viven aquí durante siglos en casas construidas literalmente unas encima de otras, usando el techo del vecino de abajo como porche. La densidad es preindustrial. La vista, infinita. Llega antes de que caiga el sol para ver el valle completamente iluminado. Alojamiento en familia: te asignan habitación y cena en casa.</div>
+              <div class="stop-price">Homestay (habitación + cena + desayuno): €12–18/persona</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>El Khinalug — la lengua sin parientes:</strong> Los ~2.000 habitantes de Khinalig hablan el khinalug (xinalıq dili), una lengua que no pertenece a ninguna familia conocida. No es turca, no es indoeuropea, no es georgiana, no es armenia, no es norcaucásica. Es un aislado lingüístico: hablado únicamente por este pueblo desde tiempos preislámicos. La mayoría de habitantes habla también azerbaiyano para comerciar con el exterior, pero entre ellos usan exclusivamente el khinalug. Hay menos de 2.000 hablantes nativos de una lengua sin escritura propia documentada hasta el siglo XX.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Día completo en Khinalig — pastos del Shahdagh y vida medieval</div>
+            <div class="day-subtitle">Sendero a los pastores · Arquitectura de piedra del s. X · Los yaks del Cáucaso</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Amanecer sobre el Gran Cáucaso</div>
+              <div class="stop-desc">A las 5:30 AM el cielo empieza a teñirse de naranja sobre el pico Shahdagh. Desde cualquier punto del pueblo —que es pequeño, 400 casas en media ladera— se ve directamente la cresta de la cordillera principal. No hay contaminación lumínica. No hay tráfico. El único sonido matutino es el de los animales: vacas, ovejas, perros de pastor caucásicos (el Kavkaz Owtcharka, el perro más grande del mundo por peso, usado aquí desde la antigüedad para proteger el rebaño de lobos). El desayuno en la homestay incluye lavash casero, queso de oveja curado y té de hierbas alpinas.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Sendero a los pastores — pastos de verano a 3.000 m</div>
+              <div class="stop-desc">El sendero principal desde el pueblo sube 650 metros hasta los yaylaq (pastos de verano), donde los pastores de Khinalig llevan sus rebaños entre junio y septiembre. El camino dura 3-4 horas ida y vuelta (8 km, dificultad media-alta por la altitud). Arriba encuentras tiendas nómadas, vacas de alta montaña y si tienes suerte algún ejemplar de tur caucásico (Capra cylindricornis), la cabra montés endémica del Cáucaso Oriental. Llevar mucha agua: no hay fuentes en la parte superior del sendero.</div>
+              <div class="stop-price">Sendero gratuito · Sin necesidad de guía (el camino es visible todo el recorrido)</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">La mezquita de Khinalig — el edificio más antiguo del pueblo</div>
+              <div class="stop-desc">La mezquita principal del pueblo data del siglo X-XI según las inscripciones en árabe de sus muros. En el interior, las alfombras artesanales del suelo son trabajadas por las mujeres del pueblo con lana de sus propios rebaños, con patrones geométricos que no se venden en ningún bazar: son para uso interno. Los ancianos del pueblo se reúnen aquí por las tardes. Puedes sentarte fuera y con un poco de paciencia y sonrisas, la comunicación fluye aunque sea a través de gestos.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">La arquitectura del pueblo — casas apiladas sin urbanismo previo</div>
+              <div class="stop-desc">Khinalig no fue diseñado: fue creciendo orgánicamente durante siglos sobre una ladera pronunciada. El resultado es una arquitectura única: cada casa usa el techo de la de abajo como patio o terraza. Los callejones son tan estrechos que dos personas apenas se cruzan. Los muros son de piedra local gris sin mortero aparente. Las ventanas son pequeñas para conservar el calor. En invierno, la nieve bloquea la carretera de acceso durante semanas y el pueblo queda completamente aislado del mundo exterior.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Khinalig → Quba → Bakú</div>
+            <div class="day-subtitle">Última mañana en las nubes · Cascada de Afurja · Vuelo de regreso</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Última mañana en Khinalig</div>
+              <div class="stop-desc">El taxi suele salir a las 9-10 AM hacia Quba. Aprovecha la última hora del amanecer para dar un último paseo por el borde del pueblo donde los callejones terminan en vacío absoluto: 200 metros de precipicio con el río Qudiyalçay abajo. Despedida de la familia anfitriona: es costumbre dejar algo a los niños de la casa (lápices, cuadernos, fruta). No es esperado pero sí apreciado. La familia que te ha alojado no tiene ningún otro ingreso que el homestay.</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Cascada de Afurja (desvío en ruta)</div>
+              <div class="stop-desc">A 18 km de Quba, en el camino de vuelta, la cascada de Afurja (75 m de caída) es una parada obligatoria si tienes margen de tiempo. El acceso desde la carretera es un sendero de 1,5 km entre bosque de hayas. El cañón del río Afurjachay tiene paredes de basalto de 200 metros. En verano, la zona está llena de familias azerbaiyanas de picnic —una costumbre fuertemente arraigada— y la atmósfera es festiva y acogedora.</div>
+              <div class="stop-price">Entrada cascada de Afurja: gratuita</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Quba → Bakú y vuelo de regreso</div>
+              <div class="stop-desc">De Quba a Bakú hay buses regulares cada hora (3h, ~3 AZN ≈ €1,60). Desde Bakú hay suficiente tiempo para dar otra vuelta por el Old City o visitar el Museo de Historia de Azerbaiyán si el vuelo es nocturno. El aeropuerto está a 20 km del centro (taxi oficial: €15–20). Vuelo de vuelta a España o Europa Occidental desde Bakú: normalmente por la noche.</div>
+              <div class="stop-price">Bus Quba → Bakú: €1,60 · Taxi al aeropuerto: €15–20</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto detallado</h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Detalle</th><th>2 personas</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida y vuelta</td><td>Madrid/BCN → Bakú (con escala)</td><td>€220–380</td></tr>
+          <tr><td>Alojamiento Bakú (1 noche)</td><td>Hostal / guesthouse Old City</td><td>€30–55</td></tr>
+          <tr><td>Alojamiento Khinalig (2 noches)</td><td>Homestay local con pensión completa</td><td>€48–72</td></tr>
+          <tr><td>Transporte tierra</td><td>Bus Bakú-Quba x2 + taxi a Khinalig x2</td><td>€23–56</td></tr>
+          <tr><td>Comidas fuera</td><td>Restaurantes en Quba y Bakú</td><td>€25–45</td></tr>
+          <tr><td>Entradas / actividades</td><td>Cascada Afurja + museos opcionales</td><td>€0–12</td></tr>
+          <tr><td>Imprevistos</td><td>Taxis, souvenirs, agua</td><td>€15–30</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <div class="budget-total-label">Total estimado (2 personas, 3 días)</div>
+        <div class="budget-total-value">€361–650</div>
+      </div>
+      <div class="highlight-box" style="margin-top:16px;">
+        <strong>¿Por qué tan barato?</strong> Azerbaiyán es uno de los países más infravalorados del Cáucaso para el viajero europeo. La moneda (manat, AZN) está fijada al dólar: 1 AZN ≈ €0,55. Un menú completo en Quba cuesta 5–8 AZN (€2,80–4,40). El homestay de Khinalig incluye cena, desayuno y uso de la cocina por €12–18 por persona. El precio total puede bajar de €400 para dos personas si se buscan vuelos con antelación.
+      </div>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+      <h2 class="section-heading" id="h-alojamiento">Dónde dormir</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Homestay en Khinalig (recomendado):</strong> No hay hoteles en Khinalig. Las familias del pueblo alquilan habitaciones en sus casas de piedra —normalmente colchonetas en el suelo o camas básicas en una habitación separada—. El precio incluye cena y desayuno, normalmente lavash, queso de oveja, sopa y arroz. Pregunta al taxista que te lleve: él te conectará directamente con una familia fiable.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Bakú — Old City Guesthouses:</strong> El barrio histórico amurallado de Bakú (Içəri Şəhər) tiene varias guesthouses dentro de las murallas medievales. Busca en Booking o Hostelworld: "Old City Baku guesthouse". Precios: €15–30/persona en dorm, €25–45 habitación doble.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Alternativa Quba:</strong> Si quieres dividir el viaje, Quba tiene hoteles locales por €20–35 la habitación doble (sin desayuno). Útil si llegas tarde y no quieres subir a Khinalig de noche.</div>
+      </div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Khinalig / Cáucaso</div>
+          <div class="gastro-title">Piti — el plato de la montaña</div>
+          <div class="gastro-price">~3 AZN (€1,65) en Quba</div>
+          <div class="gastro-desc">Estofado de cordero y garbanzos cocinado lentamente en una olla de barro individual sellada con grasa de cola de oveja. Se come en dos tiempos: primero el caldo (vertido sobre lavash) y después la carne. Es el plato definitivo del norte de Azerbaiyán.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Desayuno de aldea</div>
+          <div class="gastro-title">Lavash + queso de oveja + miel</div>
+          <div class="gastro-price">Incluido en el homestay</div>
+          <div class="gastro-desc">El desayuno en la homestay de Khinalig: pan lavash horneado en el tándir (horno de barro) de la casa, queso de oveja curado localmente, miel silvestre de colmenas propias y té negro servido en un armudu (vaso en forma de pera). Sencillo, perfecto.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bakú</div>
+          <div class="gastro-title">Qutab — crepe salado del Cáucaso</div>
+          <div class="gastro-price">1–2 AZN (€0,55–1,10)</div>
+          <div class="gastro-desc">Masa fina rellena de carne picada especiada o de hierbas silvestres (greens), doblada en media luna y tostada en plancha de hierro. Street food omnipresente en Bakú. Cómelo en el mercado cubierto de Içəri Şəhər antes de tomar el bus a Quba.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida</div>
+          <div class="gastro-title">Çay en armudu — el ritual social azerbaiyano</div>
+          <div class="gastro-price">Gratuito en casas · 0,5 AZN en cafés</div>
+          <div class="gastro-desc">El té negro fuerte servido en el vaso armudu (con talla en forma de silueta femenina, símbolo de hospitalidad azerbaiyana). Se acompaña siempre de terrones de azúcar, frutos secos y mermelada casera. Rechazar el çay es rechazar la hospitalidad: imposible.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos prácticos</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Acceso estacional:</strong> La carretera a Khinalig solo es transitable de <strong>junio a octubre</strong>. En invierno el pueblo queda bloqueado por nieve. En primavera y otoño temprano puede haber barro que hace la ruta impracticable para vehículos normales. Julio y agosto son los meses más seguros.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>Visado:</strong> Los ciudadanos de la Unión Europea necesitan visado para Azerbaiyán, pero el proceso es sencillo y completamente online: <strong>evisa.gov.az</strong>. Coste: $23, aprobación en 3 días hábiles normalmente. Lleva impresa la aprobación.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Altitud:</strong> A 2.350 metros no hay problema de mal de altura severo para la mayoría de personas, pero el primer día puede aparecer leve dolor de cabeza. Hidrátate mucho, come ligero la primera noche y evita el alcohol. El sendero a los pastores sube hasta 3.000 m: si sientes mareo, da media vuelta.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Comunicación:</strong> En Khinalig no habrá nadie que hable español. El azerbaiyano o el ruso básico ayudan, pero con el inglés elemental y mucho lenguaje gestual llegas lejos. Descarga Google Translate offline con el par azerbaiyano-español antes de salir. Los jóvenes del pueblo hablan inglés mejor que los mayores.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Cobertura móvil:</strong> En Khinalig hay cobertura Azercell 3G/4G (la operadora con mejor red en zonas rurales). Compra una SIM local en el aeropuerto de Bakú: €3–5 con 10 GB. Azercell funciona bien en toda la ruta.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">6</div>
+        <div class="tip-text"><strong>Respeto cultural:</strong> Khinalig es una comunidad musulmana conservadora. Las mujeres deben llevar los hombros y rodillas cubiertos en el pueblo (no en los senderos). Pide permiso antes de fotografiar a personas, especialmente mujeres. El pueblo no es un zoo: la discreción es la diferencia entre ser recibido como huésped o como turista.</div>
+      </div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-checklist">
+      <h2 class="section-heading" id="h-checklist">Qué llevar</h2>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Botas de senderismo con tobillera (la pista del pueblo es empedrado irregular)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Chaqueta de abrigo y forro polar (temperatura nocturna 5–10°C incluso en verano)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Protector solar SPF50 (a 2.350 m la radiación UV es muy alta)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Botella de agua reutilizable de 1,5L (agua potable disponible en el pueblo)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Efectivo en manats (AZN) — no hay cajero en Khinalig ni en la ruta desde Quba</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Visado e-visa impreso o en el móvil</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Medicación para el mal de altura (ibuprofeno / paracetamol)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Linterna frontal (el alumbrado del pueblo es escaso por la noche)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Botiquín básico (el centro médico más cercano está en Quba)</span></div>
+      <div class="check-item"><span class="check-box" aria-hidden="true"></span><span>Pequeños regalos para la familia anfitriona (cuadernos, bolígrafos, fruta)</span></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">112</div><div class="emerg-note">Servicio de emergencias Azerbaiyán</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía</div><div class="emerg-value">102</div><div class="emerg-note">Policía Nacional Azerbaiyán</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Quba</div><div class="emerg-value">+994 163 44-20-85</div><div class="emerg-note">Hospital Central de Quba (40 km)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España en Bakú</div><div class="emerg-value">+994 12 497 68 03</div><div class="emerg-note">Consulado de España · Bakú</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Planeas un viaje al Gran Cáucaso?</h3>
+      <p>Usa el chatbot de Routlo para crear un itinerario personalizado combinando Azerbaiyán, Georgia y Armenia.</p>
+      <a href="../chatbot.html" class="cta-btn">Planificar mi viaje →</a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios indicados son estimaciones basadas en datos de viajeros independientes (2024–2025) y pueden variar según temporada, tipo de cambio y disponibilidad. Los vuelos fluctúan: se recomienda reservar con 4–8 semanas de antelación para los mejores precios. Routlo no recibe comisiones por alojamientos ni transportes mencionados en esta guía.
+    </div>
+
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;background:#040810;border-top:1px solid rgba(255,255,255,0.06);padding:48px 24px 32px;text-align:center;">
+  <a href="../index.html" style="display:inline-block;margin-bottom:20px;">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:36px;border-radius:8px;background:#fff;padding:3px 10px;opacity:0.7;">
+  </a>
+  <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;font-size:0.85rem;">
+    <a href="../itinerarios.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Itinerarios</a>
+    <a href="../mapa.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Mapa</a>
+    <a href="../chatbot.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">Chatbot IA</a>
+    <a href="../itinerarios-espana.html" style="color:rgba(237,238,242,0.45);text-decoration:none;">España</a>
+  </div>
+  <p style="font-size:0.78rem;color:rgba(237,238,242,0.25);margin:0;">© 2025 Routlo · Guías de viaje independientes · Todos los derechos reservados</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../assets/shared.js"></script>
+<script>
+(function(){
+  const isEs = navigator.language.startsWith('es');
+  const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false }).setView([41.2, 48.7], 9);
+  if (isEs) {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      className: 'tile-osm-es'
+    }).addTo(map);
+    const style = document.createElement('style');
+    style.textContent = '.tile-osm-es { filter: grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg); }';
+    document.head.appendChild(style);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB'
+    }).addTo(map);
+  }
+
+  const gold = { radius: 7, fillColor: '#c9a96e', color: '#a07840', weight: 2, opacity: 1, fillOpacity: 0.9 };
+  const green = { radius: 9, fillColor: '#5ecb8a', color: '#3aaa66', weight: 2, opacity: 1, fillOpacity: 0.95 };
+
+  const waypoints = [
+    [40.407, 49.867],
+    [41.360, 48.515],
+    [41.174, 48.135]
+  ];
+
+  L.polyline(waypoints, { color: '#c9a96e', weight: 3, opacity: 0.7, dashArray: '6,5' }).addTo(map);
+
+  const stops = [
+    { coords: [40.407, 49.867], label: 'Bakú', opts: gold },
+    { coords: [41.360, 48.515], label: 'Quba', opts: gold },
+    { coords: [41.174, 48.135], label: 'Khinalig (2.350 m)', opts: green }
+  ];
+
+  stops.forEach(s => {
+    L.circleMarker(s.coords, s.opts).addTo(map)
+      .bindPopup(`<strong style="color:#c9a96e">${s.label}</strong>`);
+  });
+})();
+</script>
+</body>
+</html>

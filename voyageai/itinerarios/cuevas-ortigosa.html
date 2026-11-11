@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cuevas de Ortigosa — Cavernas y murciélagos en Sierra Cebollera | Routlo</title>
+  <meta name="description" content="40 km desde Logroño, 40 minutos: las Cuevas de Ortigosa, dos cavernas cársticas con estalactitas, columnas de hasta 65 metros y una de las mayores colonias de murciélagos de herradura de Europa, en el Parque Natural de la Sierra Cebollera. Menos de 65€ para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.3); font-size: 0.75rem; font-weight: 600; color: #c9a96e; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(201,169,110,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(201,169,110,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #c9a96e; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(201,169,110,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #6ea8c4; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #6ea8c4; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(110,168,196,0.3); }
+    .hotel-link:hover { border-color: #6ea8c4; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c9a96e; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,10,16,0.3) 0%,rgba(0,16,24,0.58) 50%,rgba(0,6,10,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;color:#6ea8c4;background:rgba(110,168,196,0.12);border:1px solid rgba(110,168,196,0.3);">🦇 Cuevas cársticas</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">40 km de Logroño</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🕐 40 min en coche</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~63€ / 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Cuevas de Ortigosa<br><span style="color:#6ea8c4;">Un mundo subterráneo bajo la Sierra Cebollera</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A 40 minutos de Logroño, en pleno Parque Natural de la Sierra Cebollera, dos cuevas cársticas esconden galerías de estalactitas, estalagmitas y columnas que alcanzan los 65 metros, además de una de las mayores colonias de murciélagos de herradura de Europa, protegida y monitorizada. Un día bajo tierra y entre bosques de hayas y robles, por menos de 65€ para dos.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#cuevas">Las cuevas</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Cuevas de Ortigosa</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🦇 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">40 km</div><div class="route-info-unit">desde Logroño</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">40 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~63€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Formaciones</div><div class="route-info-value">hasta 65m</div><div class="route-info-unit">columnas y estalactitas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Murciélagos</div><div class="route-info-value">Gran colonia</div><div class="route-info-unit">de herradura, protegida</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="cuevas">
+      <h2 class="section-heading">🦇 Las cuevas</h2>
+      <div class="highlight-box" style="border-color:rgba(110,168,196,0.18);">
+        <h4 style="color:#6ea8c4;">🦇 Dos cuevas, un mundo bajo tierra</h4>
+        <p>En el Parque Natural de la Sierra Cebollera, junto al pueblo de Ortigosa de Cameros, dos cuevas cársticas están abiertas al público: la Cueva de la Paz y la Cueva de la Viña. Sus galerías, formadas a lo largo de millones de años por la erosión del agua sobre la roca caliza, albergan estalactitas, estalagmitas y columnas que en algunos puntos alcanzan los 65 metros, entre las formaciones cársticas más espectaculares de La Rioja. Las visitas son guiadas, duran aproximadamente una hora, y la temperatura en el interior se mantiene constante en torno a los 10°C durante todo el año, así que conviene llevar una capa de abrigo incluso en verano.</p>
+      </div>
+      <div class="highlight-box" style="border-color:rgba(110,168,196,0.18);">
+        <h4 style="color:#6ea8c4;">🦇 Una de las mayores colonias de murciélagos de herradura de Europa</h4>
+        <p>Una de las dos cuevas alberga una importante colonia de murciélagos de herradura, protegida y monitorizada. Las visitas están diseñadas para no perturbar a la colonia —en ocasiones, cámaras de infrarrojos permiten a los visitantes observar a los murciélagos sin necesidad de iluminar las zonas donde descansan. Una oportunidad única para conocer de cerca a estos animales, tan poco conocidos como importantes para el ecosistema.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Logroño → Ortigosa de Cameros · 40 min</div><div class="day-subtitle">Por la LR-250, entrando en el Parque Natural de la Sierra Cebollera</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 De los viñedos al bosque</div>
+            <div class="stop-desc">La ruta sale de Logroño por la LR-250 en dirección a Villanueva de Cameros, y desde ahí toma el desvío hacia Ortigosa, entrando en el Parque Natural de la Sierra Cebollera. El paisaje cambia por completo durante el trayecto: los viñedos de la llanura del Ebro dan paso a bosques de robles y hayas a medida que se gana altitud.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento</div>
+            <div class="stop-desc">Junto al centro de visitantes y el acceso a las cuevas hay aparcamiento gratuito, habitualmente sin problemas salvo en fines de semana de mucha afluencia.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Visita guiada a las cuevas · ~1h</div><div class="day-subtitle">Cueva de la Paz o Cueva de la Viña · Reserva recomendada</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🦇 Recorrido guiado por el interior</div>
+            <div class="stop-desc">La visita guiada a la Cueva de la Paz o a la Cueva de la Viña (conviene comprobar disponibilidad antes de ir) recorre las galerías de la cueva acompañados de un guía especializado, que explica la formación geológica del karst y la fauna que habita en su interior, incluida la colonia de murciélagos.</div>
+            <div class="stop-price">Entrada con visita guiada: ~8,50€/persona · Reservas en el centro de visitantes de Ortigosa</div>
+            <a href="https://www.getyourguide.com/s/?q=Cuevas+de+Ortigosa+Sierra+Cebollera&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener" aria-label="Reservar visita a las Cuevas de Ortigosa en GetYourGuide">🎫 Reservar entrada en GetYourGuide</a>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">📅 Reserva recomendada</div>
+            <div class="stop-desc">La reserva con antelación es muy recomendable, especialmente los fines de semana y puentes, ya que las visitas guiadas tienen un aforo limitado por grupo.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Pueblo de Ortigosa y entorno natural</div><div class="day-subtitle">Paseo a pie · Senderos del parque natural</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏘️ Paseo por Ortigosa de Cameros</div>
+            <div class="stop-desc">Un paseo tranquilo por las calles del pequeño pueblo de Ortigosa de Cameros, con su arquitectura serrana de piedra y sus calles estrechas, antes o después de la visita a las cuevas.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌲 Senderos entre hayas y robles</div>
+            <div class="stop-desc">Si el tiempo lo permite, los senderos señalizados del Parque Natural de la Sierra Cebollera ofrecen paseos cortos por bosques de hayas y robles, con buenas oportunidades para ver fauna y disfrutar del entorno natural que rodea las cuevas.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Comida y regreso</div><div class="day-subtitle">Cocina de montaña · Vuelta directa 40 min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🍽️ Restaurantes de Ortigosa o Villanueva de Cameros</div>
+            <div class="stop-desc">Los restaurantes sencillos de Ortigosa o de la cercana Villanueva de Cameros sirven cocina de montaña: setas de temporada, embutidos curados de la zona y carnes a la brasa. Un buen cierre para un día entre cuevas y bosques.</div>
+            <div class="stop-price">Menú del día: ~17-20€/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Logroño — 40 min</div>
+            <div class="stop-desc">Vuelta directa por la LR-250. Si te ha gustado el entorno de la Sierra Cebollera, otro itinerario completo de Routlo propone una ruta de senderismo más larga por el parque natural para un día dedicado por completo a caminar.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, 80 km)</span><span>8€</span></div>
+        <div class="budget-row"><span>🎫 Entrada cuevas con guía (2 personas)</span><span>17€</span></div>
+        <div class="budget-row"><span>🍽️ Comida (2 personas)</span><span>38€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~63€</span></div>
+      </div>
+      <div class="budget-note">Queda margen de sobra para visitar ambas cuevas (Paz y Viña) si el tiempo lo permite, sumando solo unos 17€ más para los dos.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Reserva con antelación,</strong> especialmente fines de semana y puentes: las visitas guiadas tienen aforo limitado.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Lleva una chaqueta o jersey:</strong> dentro de la cueva la temperatura es de unos 10°C todo el año, incluso en pleno verano.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Calzado cerrado y cómodo:</strong> el suelo de las cuevas puede estar húmedo y resbaladizo durante la visita.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Combina con la Sierra de Cebollera</strong> —otro itinerario de Routlo, ruta de senderismo más larga— para un fin de semana completo en la zona.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Logroño y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Logro%C3%B1o" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Logroño en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (GetYourGuide, DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas de un día desde Logroño?</h3>
+      <p>Rutas de menos de 1 hora y menos de 100€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([42.236,-2.650],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[42.466,-2.445],label:'Logroño',color:'#5ecb8a',r:10},{coords:[42.236,-2.642],label:'Ortigosa de Cameros',color:'#c9a96e',r:9},{coords:[42.241,-2.660],label:'Cuevas de Ortigosa',color:'#6ea8c4',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[42.466,-2.445],[42.236,-2.642],[42.241,-2.660]],{color:'#6ea8c4',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

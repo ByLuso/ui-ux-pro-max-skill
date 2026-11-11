@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nong Khiaw (Laos) — 3 días entre picos de caliza: la cueva donde 2.000 personas sobrevivieron los B-52 | Routlo</title>
+  <meta name="description" content="3 días en Nong Khiaw: los picos de caliza sobre el río Nam Ou, la cueva Tham Pha Tok donde sobrevivieron los bombardeos americanos y el kayak más bonito del norte de Laos."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#162a50 70%,rgba(201,169,110,0.12) 100%),url('https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Aldeas · Laos</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Nong Khiaw</h1>
+  <p class="dest-country">Picos de caliza · Río Nam Ou · Norte de Laos</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Provincia de Luang Prabang · Laos</span>
+    <span class="dest-badge gold">3 días · Aldea & río</span>
+    <span class="dest-badge gold">💶 230 € dos personas</span>
+    <span class="dest-badge">🛶 Kayak en el Nam Ou</span>
+    <span class="dest-badge">🌿 Nov · Feb · Mar · Abr</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos de la ruta</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Qué llevar</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos de la ruta</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">3 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~230 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Bus desde Luang Prabang</div></div>
+        <div class="route-info-item"><div class="route-info-label">Destaque</div><div class="route-info-val">Cueva WWII · Kayak</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Nov · Abr</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Nong Khiaw</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Luang Prabang → Nong Khiaw — el cambio de escenario</div>
+            <div class="day-subtitle">3 horas de bus · Primer atardecer sobre el Nam Ou · Baguette francesa en el mercado</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Bus Luang Prabang → Nong Khiaw — 3 horas de carretera de montaña</div>
+              <div class="stop-desc">El bus desde la Northern Bus Terminal de Luang Prabang (salidas 9h y 13h, €4/persona) tarda 3 horas por la Ruta 13 Norte: una carretera de montaña que sube y baja por pasos de 900m antes de bajar al valle del Nam Ou. El trayecto en sí es espectacular — los picos de caliza empiezan a aparecer a mitad del recorrido como telones de teatro, uno detrás del otro, cada vez más verticales. A la llegada, el puente colgante de Nong Khiaw sobre el Nam Ou ofrece la vista del pueblo: 40 bungalows de madera a ambas orillas del río con los picos de 500m saliendo directamente del agua.</div>
+              <div class="stop-price">Bus Luang Prabang → Nong Khiaw: €4/persona</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Atardecer desde el puente colgante — los mejores 10 minutos del viaje</div>
+              <div class="stop-desc">El puente colgante de Nong Khiaw (construido por una ONG japonesa en 2009, €0,50 el peaje) ofrece la vista perfecta del atardecer: el Nam Ou de color turquesa en el centro, los picos de caliza naranja por el sol poniente a ambos lados, y los patos laosinos nadando justo debajo del puente. Los locales se sientan en el puente con las piernas colgando sobre el agua a las 17:30h — el mejor lugar para sentarse con una cerveza Beer Lao (€1 en el kiosco del extremo norte) y no hacer nada durante una hora.</div>
+              <div class="stop-price">Peaje puente: €0,50 · Beer Lao: €1</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>La baguette laosiana — legado francés:</strong> La Indochina francesa (1893-1954) dejó en Laos una tradición panadera única en el Sudeste Asiático. El mercado matinal de Nong Khiaw tiene puestos de baguettes recién horneadas a las 6h — crujientes por fuera, blandas por dentro, rellenas de paté, huevo frito y hierba fresca. Desayuno completo por €0,80. Es literalmente mejor que muchas panaderías europeas.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Pha Daeng Peak + kayak + cueva Tham Pha Tok</div>
+            <div class="day-subtitle">Amanecer sobre los picos · Kayak turquesa · La cueva que escondió 2.000 personas</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Pha Daeng Peak — amanecer sobre los picos de caliza</div>
+              <div class="stop-desc">El sendero al Pha Daeng Peak (480m sobre el pueblo) sale del bungalow a las 5:30h: 1,5 horas de subida por escalones tallados en la roca caliza, a través de selva densa que gotea de rocío. El mirador en la cima —una roca plana sobre el vacío— tiene la vista de 270° sobre el río Nam Ou serpenteando entre los picos de caliza. La niebla matinal llena el valle a las 6:30h: el sol naciente la tiñe de naranja mientras los picos emergen por encima. Es una de las escenas más fotogénicas del norte de Laos, completamente gratuita y sin turistas en fila.</desc>
+              <div class="stop-price">Gratis · Linterna imprescindible para subir de noche</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Kayak por el Nam Ou — el río más azul del Sudeste Asiático</div>
+              <div class="stop-desc">El Nam Ou en temporada seca (noviembre-abril) tiene el agua de un azul-turquesa que no corresponde con ningún río de Europa. Los guesthouses alquilan kayaks individuales (€5/día) o dobles (€8/día) con chaleco salvavidas. El recorrido más recomendado: 8 km río abajo desde Nong Khiaw hasta la aldea de Muang Ngoi Neua (el pueblo sin carretera), navegar entre los picos de caliza y usar el barco de vuelta (€3). En las playas de arena blanca del recorrido podéis nadar con los picos de 400m de fondo.</desc>
+              <div class="stop-price">Kayak doble: €8/día · Barco de vuelta desde Muang Ngoi: €3/persona</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Cueva Tham Pha Tok — la historia que nadie enseña</div>
+              <div class="stop-desc">A 2 km de Nong Khiaw en la orilla del río (15 min en bicicleta), la cueva Tham Pha Tok (€1 entrada) fue el refugio durante 2 años de 2.000 civiles y combatientes del Pathet Lao durante los bombardeos americanos de la Guerra de Vietnam (1964-1973). Estados Unidos lanzó más bombas sobre Laos —un país que nunca estuvo oficialmente en guerra— que sobre Alemania y Japón juntos durante la II Guerra Mundial. El 30% de esas bombas no explotaron y siguen en el suelo hoy. La cueva tiene tres salas: una para el hospital, otra para el gobierno en exilio y otra para las familias. El guía de la cueva —hijo de uno de los que sobrevivieron aquí— cuenta la historia con la calma de quien la vivió.</desc>
+              <div class="stop-price">Entrada: €1 · Bicicleta de alquiler: €2/día</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Ciclismo a Ban Sop Jam + puesta de sol · Regreso a Luang Prabang</div>
+            <div class="day-subtitle">Aldea de tejedores · El atardecer más largo del norte de Laos · Bus nocturno</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Ban Sop Jam — la aldea de tela índigo</div>
+              <div class="stop-desc">A 8 km de Nong Khiaw por pista de tierra (30 min en bici, llana y sin desnivel), Ban Sop Jam es una aldea de 60 familias donde las mujeres producen tela tejida a mano con patrones geométricos Hmong en hilo de algodón teñido con índigo natural (añil extraído de la planta Indigofera tinctoria que crece en los jardines). El proceso de teñido con índigo es ancestral: el hilo se sumerge en la tina de índigo, se seca al sol, se vuelve a sumergir — entre 15 y 20 veces para conseguir el azul profundo. Los rollos de tela se venden directamente a €6-10 el metro.</desc>
+              <div class="stop-price">Bicicleta: €2/día · Tela tejida índigo: €6-10/metro</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Puesta de sol desde el puente · Bus de vuelta</div>
+              <div class="stop-desc">El bus de vuelta a Luang Prabang sale a las 9h y a las 14h. Si cogéis el de las 14h, tenéis toda la mañana para el ciclismo y la tarde para la puesta de sol desde el puente (17:30h) antes de cenar en el restaurante Nong Khiaw Riverside —el mejor sitio del pueblo para lap laosiano y sopa de lemongrass con vista al Nam Ou— y llegar a Luang Prabang a las 17h. El bus de las 9h da más tiempo en Luang Prabang para conectar con otros destinos.</desc>
+              <div class="stop-price">Bus Nong Khiaw → Luang Prabang: €4/persona</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto desglosado</h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Mínimo (2 pax)</th><th>Cómodo (2 pax)</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida+vuelta a Luang Prabang (×2)</td><td>€400</td><td>€650</td></tr>
+          <tr><td>Bus Luang Prabang ↔ Nong Khiaw (×2, ida+vuelta)</td><td>€16</td><td>€16</td></tr>
+          <tr><td>Alojamiento 2 noches bungalow Nam Ou</td><td>€16</td><td>€36</td></tr>
+          <tr><td>Kayak doble (1 día) + bicicleta (1 día)</td><td>€10</td><td>€18</td></tr>
+          <tr><td>Comidas 3 días (restaurantes locales)</td><td>€30</td><td>€55</td></tr>
+          <tr><td>Cueva Tham Pha Tok + entradas</td><td>€4</td><td>€8</td></tr>
+          <tr><td>Peaje puente + Beer Lao + compras tela</td><td>€15</td><td>€30</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado para 2 personas · 3 días (sin vuelos)</span>
+        <span class="budget-total-value">€91 – €163</span>
+      </div>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-aloj">
+      <h2 class="section-heading" id="h-aloj">Dónde dormir</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">Bungalow en la orilla del Nam Ou (€8-18/noche doble)</div>
+            <div class="stop-desc">Los mejores bungalows de Nong Khiaw están literalmente sobre el río — los pilotes de madera entran en el agua y las terrazas cuelgan 50 cm sobre el Nam Ou. El Mandala Ou Resort (€15-25/noche) tiene los bungalows más bonitos con terraza privada sobre el río. Nong Khiaw Riverside (€8-14) es el más popular entre mochileros. Reservad en Booking.com — en temporada alta (diciembre-enero) hay que reservar con 2-3 semanas.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">Hotel con Wi-Fi y ducha caliente (€18-35/noche doble)</div>
+            <div class="stop-desc">Para un nivel de confort algo mayor: el Sunset Guesthouse y el Phou Iu Guesthouse tienen duchas calientes, Wi-Fi y camas con colchones de verdad. Ambos en la orilla norte del río, con vistas a los picos. El desayuno típico incluye baguette, café lao y tortilla de hierbas — el mejor de la zona.</div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía del norte de Laos</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Sopa</div>
+          <div class="gastro-title">Pho Lao (sopa de fideos)</div>
+          <div class="gastro-price">€1,50-2</div>
+          <div class="gastro-desc">La versión laosiana del pho vietnamita: caldo de pollo o cerdo con anís estrellado, fideos de arroz, hierbas frescas (menta, cilantro, albahaca) y lima. Menos intenso que el pho del norte de Vietnam, más dulce. En Nong Khiaw lo sirven en los restaurantes desde las 6h. La señora del puesto a la derecha del mercado tiene el mejor caldo del pueblo desde hace 20 años.</desc>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Ensalada</div>
+          <div class="gastro-title">Lap Laosiano</div>
+          <div class="gastro-price">€2-3</div>
+          <div class="gastro-desc">El plato nacional de Laos: carne picada (pollo, cerdo o pescado) con menta, lemongrass, chalota, chile y arroz tostado molido. El arroz tostado (khao khua) es el ingrediente que lo cambia todo — aportan textura crujiente y sabor a nuez imposible de replicar. Más fresco y menos ácido que el lap tailandés. Con arroz glutinoso y khao niao: la comida perfecta.</desc>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Parrilla</div>
+          <div class="gastro-title">Ping Pa (pescado a la brasa)</div>
+          <div class="gastro-price">€2-3</div>
+          <div class="gastro-desc">Pescado del Nam Ou — bagre local (pa beuk) o pez gato (pa duk) — asado entero sobre carbón con lemongrass dentro y hoja de banana alrededor. La piel queda crujiente y la carne blanca y jugosa. Los puestos de ping pa en la orilla del río se montan al atardecer — el humo del carbón y el olor del lemongrass son el anuncio de la cena.</desc>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Baguette</div>
+          <div class="gastro-title">Khao ji (baguette laosiana)</div>
+          <div class="gastro-price">€0,60-1</div>
+          <div class="gastro-desc">El legado panadera de la Indochina francesa (1893-1954): baguette horneada en horno de leña, crujiente, con paté de cerdo, huevo frito, pepino encurtido y hierbas frescas. El desayuno más barato y más bueno del viaje. Los puestos del mercado matinal las hacen desde las 5:30h — llegad antes de las 7h o no quedan.</desc>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida</div>
+          <div class="gastro-title">Beer Lao</div>
+          <div class="gastro-price">€0,80-1,20</div>
+          <div class="gastro-desc">La cerveza nacional de Laos, elegida varias veces como "mejor cerveza del Sudeste Asiático" en guías de viajeros. Lager suave (5% vol.), muy bien elaborada para el precio. En el bungalow sobre el río al atardecer, con vista a los picos de caliza y el Nam Ou de fondo: el ritual diario que todo viajero en Nong Khiaw repite sin que nadie lo sugiera.</desc>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Dulce</div>
+          <div class="gastro-title">Khao Tom (arroz en hoja de banana)</div>
+          <div class="gastro-price">€0,30-0,50</div>
+          <div class="gastro-desc">Arroz glutinoso cocinado con leche de coco y azúcar de palma, envuelto en hoja de banana y hervido o al vapor. Se vende en los mercados matinales y es el snack de camino a los miradores. La hoja de banana impregna el arroz con un sabor vegetal limpio. Comerlo caliente, recién salido del vapor, es uno de los momentos simples más placenteros del viaje.</desc>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>El Pha Daeng Peak requiere linterna:</strong> la subida empieza a las 5:30h en completa oscuridad. Los escalones de piedra caliza son irregulares — sin linterna frontal, el riesgo de tropezar es alto. La cima se alcanza justo antes del amanecer (6:15h en enero) si empezáis puntual. Podéis alquilar una linterna en el guesthouse por €0,50.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>La cueva Tham Pha Tok: contexto histórico antes de entrar:</strong> los bombardeos de Laos (1964-1973) son uno de los episodios menos conocidos de la Guerra de Vietnam. EE.UU. lanzó 2,1 millones de toneladas de bombas sobre Laos en 9 años —equivalente a una bomba de avión cada 8 minutos durante 9 años. El 30% no explotó. El UXO (Unexploded Ordnance) sigue matando a 50 personas al año en Laos. La visita a la cueva es también un acto de memoria.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Kayak solo en temporada seca (noviembre-abril):</strong> en el monzón el Nam Ou sube 4-5 metros, la corriente es peligrosa y el agua marrón. De noviembre a abril el río es turquesa y tranquilo. Fuera de esa ventana: no hacer kayak sin guía. El servicio de barco cubre el mismo recorrido si preferís no remar.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Efectivo en kip antes de llegar:</strong> el único cajero de Nong Khiaw está junto al mercado y solo acepta Visa (no siempre funciona). Sacad kip en el Bcel Bank de Luang Prabang antes del bus. Con 400.000 kip (~€20) por persona tenéis suficiente para 3 días completos.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Nong Khiaw como base para Muang Ngoi:</strong> el barco a Muang Ngoi Neua (el pueblo sin carretera, 2h río arriba) sale a las 11h y 14h desde el embarcadero de Nong Khiaw. Si queréis combinar ambos destinos: 1 noche en Nong Khiaw + 2 noches en Muang Ngoi + vuelta en barco a Nong Khiaw para el bus a Luang Prabang.</div></div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-check">
+      <h2 class="section-heading" id="h-check">Qué llevar</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="check-item"><div class="check-box"></div>Linterna frontal (subida al Pha Daeng a las 5:30h en oscuridad)</div>
+        <div class="check-item"><div class="check-box"></div>Repelente DEET 30%+ (mosquitos junto al río al atardecer)</div>
+        <div class="check-item"><div class="check-box"></div>Ropa de baño y toalla seca rápida (kayak y piscinas naturales)</div>
+        <div class="check-item"><div class="check-box"></div>Bolsa impermeable para el kayak</div>
+        <div class="check-item"><div class="check-box"></div>Efectivo en kip lao (€40-60 en efectivo por persona)</div>
+        <div class="check-item"><div class="check-box"></div>Pastillas potabilizadoras (no beber agua del grifo)</div>
+        <div class="check-item"><div class="check-box"></div>Calzado para mojar (kayak y cruce de arroyos en bicicleta)</div>
+        <div class="check-item"><div class="check-box"></div>Visado de Laos (visa on arrival en aeropuerto, $30)</div>
+      </div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Emergencias</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias Laos</div><div class="emerg-value">1623</div><div class="emerg-note">Policía · Solo laosiano</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">1195</div><div class="emerg-note">Cobertura muy limitada en rural</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Luang Prabang</div><div class="emerg-value">+856 71 254 025</div><div class="emerg-note">Provincial Hospital · 3h de Nong Khiaw</div></div>
+        <div class="emerg-card"><div class="emerg-label">UXO Lao (minas)</div><div class="emerg-value">+856 21 312 564</div><div class="emerg-note">No abandonéis los senderos marcados — UXO activo</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada España · Hanói</div><div class="emerg-value">+84 24 3771 5207</div><div class="emerg-note">España sin embajada en Laos</div></div>
+        <div class="emerg-card"><div class="emerg-label">Evacuación médica</div><div class="emerg-value">Imprescindible</div><div class="emerg-note">Seguro con cobertura de helicóptero</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar esta ruta?</h3>
+      <p>Nuestro chatbot IA puede ayudarte a combinar Nong Khiaw con Muang Ngoi Neua (barco río arriba), el slow boat del Mekong desde Huay Xai o el loop de Vang Vieng.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> No abandonéis los senderos marcados en Nong Khiaw y alrededores — la provincia de Luang Prabang tiene munición sin explotar (UXO) de los bombardeos 1964-1973 fuera de los caminos principales. El visado de Laos (visa on arrival, $30) se obtiene en el aeropuerto de Luang Prabang. Routlo no se responsabiliza de cambios en los horarios de bus o servicio de barco.
+    </div>
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Aldeas de Asia</div>
+      <nav aria-label="Aldeas de Asia"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="muang-ngoi.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Muang Ngoi</a></li>
+        <li><a href="mai-chau.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Mai Chau</a></li>
+        <li><a href="shirakawa.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Shirakawa-go</a></li>
+      </ul></nav>
+    </div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Itinerarios España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  const routeCoords = [
+    [19.888, 102.135], [20.562, 102.609], [20.571, 102.621],
+    [20.589, 102.634], [20.598, 102.567]
+  ];
+  const waypoints = [
+    { latlng: [19.888, 102.135], label: 'Luang Prabang — punto de salida' },
+    { latlng: [20.562, 102.609], label: 'Nong Khiaw — puente colgante' },
+    { latlng: [20.571, 102.621], label: 'Pha Daeng Peak — amanecer' },
+    { latlng: [20.589, 102.634], label: 'Cueva Tham Pha Tok' },
+    { latlng: [20.598, 102.567], label: 'Ban Sop Jam — tela índigo' }
+  ];
+
+  const map = L.map('route-map', { zoomControl: true, attributionControl: false })
+    .setView([20.20, 102.45], 10);
+
+  const _lang = (navigator.language || 'en').toLowerCase();
+  if (_lang.startsWith('es')) {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, className: 'tile-osm-es'
+    }).addTo(map);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+  }
+
+  const bounds = L.latLngBounds(routeCoords).pad(0.15);
+  map.fitBounds(bounds);
+  L.polyline(routeCoords, { color: '#c9a96e', weight: 4, opacity: 0.85, lineJoin: 'round', dashArray: '8,6' }).addTo(map);
+
+  L.circleMarker(routeCoords[1], { radius: 9, fillColor: '#5ecb8a', color: '#fff', weight: 2.5, fillOpacity: 1 })
+    .bindTooltip('Nong Khiaw', { permanent: false }).addTo(map);
+  [waypoints[0], waypoints[2], waypoints[3], waypoints[4]].forEach(wp => {
+    L.circleMarker(wp.latlng, { radius: 7, fillColor: '#c9a96e', color: '#fff', weight: 2, fillOpacity: 1 })
+      .bindTooltip(wp.label, { permanent: false, direction: 'top' }).addTo(map);
+  });
+
+  L.control.attribution({ prefix: false }).addAttribution('© <a href="https://openstreetmap.org">OpenStreetMap</a>').addTo(map);
+  setTimeout(() => map.invalidateSize(), 100);
+})();
+</script>
+<style>.tile-osm-es{filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)}</style>
+</body>
+</html>

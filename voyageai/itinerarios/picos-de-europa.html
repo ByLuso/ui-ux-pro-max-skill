@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Picos de Europa — Ruta del Cares | Solo gasolina y comida | Routlo</title>
+  <meta name="description" content="4 días en los Picos de Europa: Ruta del Cares (12 km gratis), Lagos de Covadonga, Potes medieval y Fuente Dé. El único gasto: gasolina y comida."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--gold:#c9a96e;--green:#7ecb7e;--bg:#040810;--surface:#0a1020;--text:#edeef2}
+    body{background:var(--bg);color:var(--text);font-family:'Jost',sans-serif;font-weight:300;line-height:1.7;min-height:100vh}
+
+    /* NAV */
+    nav[role="navigation"]{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06)}
+    .nav-brand{font-family:'Bodoni Moda',serif;font-size:1.3rem;color:var(--gold);text-decoration:none;letter-spacing:0.03em}
+    .nav-links{display:flex;gap:28px;list-style:none}
+    .nav-links a{color:rgba(237,238,242,0.65);text-decoration:none;font-size:0.82rem;font-weight:400;letter-spacing:0.06em;text-transform:uppercase;transition:color .2s}
+    .nav-links a:hover{color:var(--text)}
+
+    /* HERO */
+    .hero{position:relative;height:88vh;min-height:520px;display:flex;align-items:flex-end;overflow:hidden;padding-bottom:64px}
+    .hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#040810 0%,#071510 35%,#040d10 65%,#040810 100%)}
+    .hero-blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.28}
+    .blob1{width:600px;height:600px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(80,200,120,.3) 0%,transparent 70%)}
+    .blob2{width:400px;height:400px;bottom:50px;left:100px;background:radial-gradient(circle,rgba(126,203,126,.2) 0%,transparent 70%)}
+    .blob3{width:300px;height:300px;top:200px;right:300px;background:radial-gradient(circle,rgba(60,180,100,.15) 0%,transparent 70%)}
+    .hero-content{position:relative;z-index:2;max-width:1100px;margin:0 auto;width:100%;padding:0 32px}
+    .dest-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(201,169,110,.3);border-radius:20px;padding:6px 16px;font-size:0.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+    .dest-badge.free{border-color:rgba(100,200,100,.3);color:var(--green)}
+    .hero h1{font-family:'Bodoni Moda',serif;font-size:clamp(2.4rem,5vw,4rem);font-weight:600;line-height:1.1;margin-bottom:16px;max-width:700px}
+    .hero h1 em{font-style:italic;color:var(--green)}
+    .hero-sub{font-size:1.05rem;color:rgba(237,238,242,.7);max-width:520px;margin-bottom:32px}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:12px}
+    .meta-chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 16px;font-size:0.78rem;color:rgba(237,238,242,.8)}
+    .meta-chip.free-chip{background:rgba(100,200,100,.08);border-color:rgba(100,200,100,.25);color:var(--green)}
+
+    /* SUMMARY BAR */
+    .summary-bar{background:rgba(10,16,32,.9);border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);padding:20px 32px;display:flex;flex-wrap:wrap;gap:32px;justify-content:center}
+    .summary-item{text-align:center}
+    .summary-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(237,238,242,.4);margin-bottom:4px}
+    .summary-value{font-size:.95rem;font-weight:500;color:var(--text)}
+    .summary-value.free{color:var(--green)}
+
+    /* LAYOUT */
+    .itin-layout{max-width:1100px;margin:0 auto;padding:60px 32px;display:grid;grid-template-columns:240px 1fr;gap:48px;align-items:start}
+    .toc-sidebar{position:sticky;top:84px}
+    .toc-title{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(237,238,242,.4);margin-bottom:16px}
+    .toc-list{list-style:none}
+    .toc-list li{margin-bottom:4px}
+    .toc-list a{font-size:.82rem;color:rgba(237,238,242,.55);text-decoration:none;padding:6px 12px;border-radius:8px;display:block;border-left:2px solid transparent;transition:all .2s}
+    .toc-list a:hover,.toc-list a.active{color:var(--green);border-left-color:var(--green);background:rgba(100,200,100,.06)}
+
+    /* FREE BANNER */
+    .free-banner{background:rgba(100,200,100,.07);border:1px solid rgba(100,200,100,.2);border-radius:16px;padding:18px 22px;margin-bottom:32px;display:flex;align-items:center;gap:14px;font-size:.88rem;color:var(--green);line-height:1.5}
+    .free-banner-icon{font-size:1.4rem;flex-shrink:0}
+
+    /* SECTION TITLES */
+    .section-label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(237,238,242,.4);margin-bottom:8px}
+    .section-title{font-family:'Bodoni Moda',serif;font-size:1.9rem;font-weight:600;margin-bottom:32px;line-height:1.2}
+    .section-title em{font-style:italic;color:var(--green)}
+
+    /* DAY CARDS */
+    .day-card{background:rgba(13,22,40,.6);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:32px;margin-bottom:24px;backdrop-filter:blur(10px)}
+    .day-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+    .day-number{font-family:'Bodoni Moda',serif;font-size:2rem;font-weight:600;color:var(--green);opacity:.5;line-height:1}
+    .day-meta{flex:1}
+    .day-meta h3{font-size:1.1rem;font-weight:500;margin-bottom:6px}
+    .day-meta .badges{display:flex;gap:8px;flex-wrap:wrap}
+    .day-meta .badge{font-size:.7rem;padding:3px 10px;border-radius:10px;background:rgba(100,200,100,.1);color:var(--green);border:1px solid rgba(100,200,100,.2)}
+    .stop{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .stop:last-child{border-bottom:none;padding-bottom:0}
+    .stop-name{font-weight:500;font-size:.95rem;margin-bottom:4px}
+    .stop-desc{font-size:.82rem;color:rgba(237,238,242,.6);line-height:1.6}
+    .stop-price{font-size:.75rem;color:var(--green);margin-top:4px;font-weight:600}
+
+    /* BUDGET */
+    .budget-table{width:100%;border-collapse:collapse;margin-top:16px}
+    .budget-table th{text-align:left;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(237,238,242,.4);padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+    .budget-table td{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.88rem}
+    .budget-table tr:last-child td{border-bottom:none}
+    .budget-table td:last-child{text-align:right;color:var(--gold)}
+    .budget-table .free{color:var(--green);font-weight:600}
+    .budget-total{background:rgba(100,200,100,.06);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:16px;border:1px solid rgba(100,200,100,.15)}
+    .budget-total-label{font-size:.85rem;font-weight:500}
+    .budget-total-value{font-family:'Bodoni Moda',serif;font-size:1.4rem;color:var(--green)}
+
+    /* INFO BOXES */
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+    .info-box{background:#0d1628;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:20px}
+    .info-box h4{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:10px}
+    .info-box p,.info-box li{font-size:.82rem;color:rgba(237,238,242,.65);line-height:1.7}
+    .info-box ul{padding-left:16px}
+    .hotel-price,.food-price{color:var(--green);font-size:.82rem;margin-bottom:6px;font-weight:500}
+
+    /* VOCAB */
+    .vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+    .vocab-card{background:#0d1628;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px}
+    .vocab-term{font-size:.92rem;font-weight:600;color:var(--gold);margin-bottom:4px}
+    .vocab-def{font-size:.78rem;color:rgba(237,238,242,.6);line-height:1.5}
+
+    /* TIPS */
+    .tips-list{list-style:none;margin-top:16px}
+    .tips-list li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.85rem;color:rgba(237,238,242,.7)}
+    .tips-list li:last-child{border-bottom:none}
+    .tip-icon{color:var(--green);flex-shrink:0;font-size:1rem}
+
+    /* EMERGENCY */
+    .emergency-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px}
+    .emergency-card{background:#0d1628;border:1px solid rgba(255,100,100,.15);border-radius:12px;padding:16px;text-align:center}
+    .emergency-num{font-family:'Bodoni Moda',serif;font-size:1.3rem;color:#f87171;margin-bottom:4px}
+    .emergency-label{font-size:.72rem;color:rgba(237,238,242,.5)}
+
+    /* CHECKLIST */
+    .checklist{list-style:none;margin-top:16px;columns:2;gap:24px}
+    .checklist li{font-size:.83rem;color:rgba(237,238,242,.65);padding:5px 0;padding-left:22px;position:relative;break-inside:avoid}
+    .checklist li::before{content:'☐';position:absolute;left:0;color:var(--green)}
+
+    /* DISCLOSURE */
+    .disclosure{max-width:1100px;margin:0 auto 60px;padding:0 32px}
+    .disclosure p{font-size:.72rem;color:rgba(237,238,242,.3);line-height:1.8;border-top:1px solid rgba(255,255,255,.06);padding-top:24px}
+
+    /* FOOTER */
+    footer{background:#020508;border-top:1px solid rgba(255,255,255,.06);padding:40px 32px;text-align:center}
+    footer p{font-size:.78rem;color:rgba(237,238,242,.3);margin-bottom:8px}
+    footer a{color:var(--gold);text-decoration:none}
+
+    @media(max-width:768px){
+      .itin-layout{grid-template-columns:1fr}
+      .toc-sidebar{display:none}
+      nav[role="navigation"]{padding:0 16px}
+      .hero-content{padding:0 20px}
+      .checklist{columns:1}
+    }
+  </style>
+</head>
+<body>
+
+<nav role="navigation">
+  <a class="nav-brand" href="../index.html">Routlo</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../index.html#asistente">Asistente</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-blob blob1"></div>
+    <div class="hero-blob blob2"></div>
+    <div class="hero-blob blob3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="dest-badge free">&#9670; España · Solo gasolina y comida</div>
+    <h1>Picos de Europa<br><em>Ruta del Cares</em></h1>
+    <p class="hero-sub">Gargantas verticales de 1.000 metros, osos pardos en libertad y la cuna del Reino de Asturias. Doce kilómetros de sendero que no cuestan nada.</p>
+    <div class="hero-meta">
+      <span class="meta-chip">4 días</span>
+      <span class="meta-chip">Asturias / Cantabria / León</span>
+      <span class="meta-chip free-chip">Actividades: €0</span>
+      <span class="meta-chip">Parque Nacional</span>
+      <span class="meta-chip">Sep · Oct</span>
+    </div>
+  </div>
+</section>
+
+<!-- SUMMARY BAR -->
+<div class="summary-bar">
+  <div class="summary-item"><div class="summary-label">Coste actividades</div><div class="summary-value free">€0</div></div>
+  <div class="summary-item"><div class="summary-label">Duración</div><div class="summary-value">4 días</div></div>
+  <div class="summary-item"><div class="summary-label">Región</div><div class="summary-value">Picos de Europa</div></div>
+  <div class="summary-item"><div class="summary-label">Acceso</div><div class="summary-value">Coche desde Madrid</div></div>
+  <div class="summary-item"><div class="summary-label">Desde Madrid</div><div class="summary-value">420 km</div></div>
+  <div class="summary-item"><div class="summary-label">Mejor época</div><div class="summary-value">Sep · Oct</div></div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="itin-layout">
+  <!-- TOC -->
+  <aside class="toc-sidebar">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#dias">Días del viaje</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#transporte">Cómo llegar</a></li>
+      <li><a href="#alojamiento">Alojamiento</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#vocabulario">Vocabulario</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+      <li><a href="#checklist">Checklist</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENT -->
+  <main>
+    <div class="free-banner">
+      <span class="free-banner-icon">🏔️</span>
+      <span>Itinerario <strong>gratuito en actividades</strong>. Los Picos de Europa son Parque Nacional de acceso libre. La Ruta del Cares, los Lagos de Covadonga y la Basílica son gratuitos. Solo pagas la gasolina y la comida.</span>
+    </div>
+
+    <!-- DÍAS -->
+    <section id="dias">
+      <div class="section-label">El itinerario</div>
+      <h2 class="section-title">4 días en los <em>Picos</em></h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-number">01</div>
+          <div class="day-meta">
+            <h3>Covadonga — Cuna del Reino de Asturias</h3>
+            <div class="badges"><span class="badge">Historia</span><span class="badge">Gratis</span><span class="badge">Lagos</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Basílica de Covadonga</div>
+          <div class="stop-desc">Donde Don Pelayo derrotó a los moros en el año 722, dando inicio a la Reconquista. La Cueva-Santuario con la Virgen de Covadonga (patrona de Asturias) está tallada en la roca viva sobre una cascada. Entrada completamente libre. El conjunto neogótico de la Basílica de finales del siglo XIX domina el valle.</div>
+          <div class="stop-price">Gratis</div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Lagos de Covadonga — Enol y Ercina</div>
+          <div class="stop-desc">A 12 km por carretera de montaña (en temporada alta, bus obligatorio desde Covadonga, €4 ida y vuelta). Dos lagos glaciares a 1.100 m de altitud. El sendero que los conecta (3 km, fácil) tiene vistas a los macizos central y occidental de los Picos. En octubre, los rebecos bajan a beber sin miedo al turista.</div>
+          <div class="stop-price">Bus temporal (jul-ago): €4 · Resto del año coche: gratis</div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Cangas de Onís — Puente Romano</div>
+          <div class="stop-desc">El Puente de Cangas sobre el Sella es un icono asturiano: arco medieval con la Cruz de la Victoria colgando. La villa tiene sidrerías y queserías en cantidad. Alojamiento base recomendado para los 4 días.</div>
+          <div class="stop-price">Gratis · Sidra local: €1.50-2.50/botella</div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-number">02</div>
+          <div class="day-meta">
+            <h3>Ruta del Cares — Los 12 km de Asturias</h3>
+            <div class="badges"><span class="badge">Senderismo</span><span class="badge">Gratis</span><span class="badge">Épico</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Ruta del Cares (Caín → Poncebos)</div>
+          <div class="stop-desc">El sendero más famoso de España. 12 km lineales excavados en la roca caliza de la Garganta del Cares, con paredes verticales de hasta 1.000 m. El canal de agua que lo bordea fue construido en los años 40 para llevar electricidad a la central de Camarmeña. Dificultad baja-media: sin desnivel significativo pero con exposición. Duración 3,5-4 h en cada sentido. Madruga: el pueblo de Caín (punto de inicio en León) se alcanza desde Posada de Valdeón (carretera estrecha, 40 min).</div>
+          <div class="stop-price">Gratis</div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Poncebos y vuelta</div>
+          <div class="stop-desc">En Poncebos (lado asturiano) hay un bar donde la caña tras la ruta tiene un sabor especial. Vuelve por el mismo camino o coordina transporte entre Poncebos y Caín (taxi colectivo ~€8/persona, bajo demanda). La luz de la tarde en la garganta es completamente diferente a la de la mañana.</div>
+          <div class="stop-price">Taxi colectivo (opcional): ~€8</div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-number">03</div>
+          <div class="day-meta">
+            <h3>Potes y Fuente Dé — El corazón de Cantabria</h3>
+            <div class="badges"><span class="badge">Medieval</span><span class="badge">Teleférico</span><span class="badge">Gratis</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Potes — Villa Medieval</div>
+          <div class="stop-desc">El pueblo más bonito de la comarca cántabra de Liébana. La Torre del Infantado (siglo XV) domina el confluente de cuatro ríos. Calles empedradas con tiendas de orujo, miel y queso picón. El Monasterio de Santo Toribio (1 km) guarda el Lignum Crucis más grande del mundo (un fragmento de la Cruz de Cristo). Acceso libre.</div>
+          <div class="stop-price">Gratis · Orujo local: €5-8 (botella)</div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Fuente Dé — Teleférico de los Picos</div>
+          <div class="stop-desc">El teleférico asciende 800 m en 4 minutos hasta el macizo central a 1.823 m. Arriba: vistas absolutas al macizo y, con suerte, rebecos y alimoches a metros. Abajo: el circo glaciar de Fuente Dé con la fuente que da nombre al lugar. Precio del teleférico necesario para subir; la zona alta es gratis para caminar.</div>
+          <div class="stop-price">Teleférico: €17 adulto (el único gasto grande del viaje)</div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Desfiladero de La Hermida</div>
+          <div class="stop-desc">De vuelta a Cangas, el desfiladero del Deva es 20 km de carretera encajonada entre paredes de caliza. Una de las gargantas más espectaculares de España que se recorre en coche, gratis, como simple trayecto de vuelta.</div>
+          <div class="stop-price">Gratis (paso obligado)</div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-number">04</div>
+          <div class="day-meta">
+            <h3>Mirador del Fito y Regreso</h3>
+            <div class="badges"><span class="badge">Panorámica</span><span class="badge">Sidra</span><span class="badge">Gratis</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Mirador del Fito</div>
+          <div class="stop-desc">A 600 m de altitud sobre el mar Cantábrico. Vista simultánea de los Picos de Europa al sur y el mar al norte. En días claros se divisa la costa desde Gijón hasta San Vicente de la Barquera. El mirador tiene un restaurante (opcional) pero la vista es completamente gratuita. 30 minutos de desvío desde la carretera nacional.</div>
+          <div class="stop-price">Gratis</div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Última sidra en Ribadesella o Llanes</div>
+          <div class="stop-desc">Los pueblos costeros asturianos son el cierre perfecto. Ribadesella: pinturas rupestres de Tito Bustillo (€8, opcional). Llanes: los Cubos de la Memoria (esculturas de hormigón pintadas por Agustín Ibarrola, gratis). Sidra natural escanciada de metro de altura.</div>
+          <div class="stop-price">Sidra: €1.80-2.50/chiquitín · Cubos de la Memoria: gratis</div>
+        </div>
+        <div class="stop">
+          <div class="stop-name">Regreso a Madrid</div>
+          <div class="stop-desc">A-8 hasta Oviedo, luego A-66 (Autovía de la Plata) hacia el sur. Alternativa por Burgos más directa: AP-68 / N-I. Total 420 km, 4 h. Si pasas por Gijón, el Mercado del Sur tiene quesos y conservas asturianas para llevar.</div>
+          <div class="stop-price">Gasolina según vehículo</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRESUPUESTO -->
+    <section id="presupuesto" style="margin-top:60px">
+      <div class="section-label">Dinero</div>
+      <h2 class="section-title">Presupuesto <em>real</em></h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Económico</th><th>Cómodo</th></tr></thead>
+        <tbody>
+          <tr><td>Ruta del Cares (sendero)</td><td class="free">€0</td><td class="free">€0</td></tr>
+          <tr><td>Lagos de Covadonga</td><td class="free">€0 (fuera temp.)</td><td class="free">€0 (fuera temp.)</td></tr>
+          <tr><td>Basílica y Cueva Covadonga</td><td class="free">€0</td><td class="free">€0</td></tr>
+          <tr><td>Potes y desfiladeros</td><td class="free">€0</td><td class="free">€0</td></tr>
+          <tr><td>Teleférico Fuente Dé (opt.)</td><td>€0 (no subir)</td><td>€17</td></tr>
+          <tr><td>Gasolina ida y vuelta (Madrid)</td><td>€45-65</td><td>€60-80</td></tr>
+          <tr><td>Alojamiento (3 noches)</td><td>€45-75</td><td>€120-200</td></tr>
+          <tr><td>Comidas (4 días × 3)</td><td>€65-100</td><td>€120-180</td></tr>
+          <tr><td>Souvenirs (orujo/queso)</td><td>€0-10</td><td>€15-30</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado 4 días</span>
+        <span class="budget-total-value">€155–250 / €332–507</span>
+      </div>
+    </section>
+
+    <!-- TRANSPORTE -->
+    <section id="transporte" style="margin-top:60px">
+      <div class="section-label">Movilidad</div>
+      <h2 class="section-title">Cómo <em>llegar</em></h2>
+      <div class="info-grid">
+        <div class="info-box">
+          <h4>Coche (Imprescindible)</h4>
+          <p>Madrid → Cangas de Onís: A-1 / A-66, 420 km, 4 h. El coche es obligatorio para acceder a Caín (inicio Ruta del Cares), Fuente Dé y el Valle de Liébana. Sin coche, el 60% del itinerario no es posible.</p>
+        </div>
+        <div class="info-box">
+          <h4>Bus hacia Picos</h4>
+          <p>ALSA: Madrid → Cangas de Onís desde €22 (4 h). Desde Cangas hay buses locales a Covadonga. Para la Ruta del Cares necesitarás taxi o coche de alquiler desde €25/día.</p>
+        </div>
+        <div class="info-box">
+          <h4>En los Picos</h4>
+          <p>Carreteras estrechas y en ocasiones de un solo carril. Imprescindible conducir despacio. El acceso a Caín en temporada alta puede requerir madrugar antes de que corten el acceso por saturación.</p>
+        </div>
+        <div class="info-box">
+          <h4>Bus Lagos (temp. alta)</h4>
+          <p>Jul–ago–Semana Santa: acceso en coche cortado a los Lagos de Covadonga. Bus desde la Basílica (€4 ida/vuelta). Fuera de temporada: acceso libre en coche hasta los lagos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALOJAMIENTO -->
+    <section id="alojamiento" style="margin-top:60px">
+      <div class="section-label">Dónde dormir</div>
+      <h2 class="section-title">Alojamiento <em>entre valles</em></h2>
+      <div class="info-grid">
+        <div class="info-box">
+          <h4>Albergue Cangas de Onís</h4>
+          <div class="hotel-price">€15-22/noche</div>
+          <p>Albergues juveniles y de peregrinos en Cangas, base perfecta para los 4 días. La villa tiene buena oferta de bares y sidrerías para la noche.</p>
+        </div>
+        <div class="info-box">
+          <h4>Casa Rural Liébana</h4>
+          <div class="hotel-price">€35-60/habitación</div>
+          <p>Casas rurales en Potes o el Valle de Liébana. Desayuno incluido en muchas. Opción tranquila para quienes prefieren la vertiente cántabra de los Picos.</p>
+        </div>
+        <div class="info-box">
+          <h4>Camping Covadonga</h4>
+          <div class="hotel-price">€8-15/persona</div>
+          <p>Camping junto al santuario. Amanece con las campanas de la Basílica. Entorno mágico, instalaciones funcionales. Reserva en temporada alta.</p>
+        </div>
+        <div class="info-box">
+          <h4>Refugio de montaña</h4>
+          <div class="hotel-price">€12-20/cama</div>
+          <p>El Refugio de Áliva (macizo central) y el Collado Jermoso ofrecen camas de montaña básicas con cenas calientes. Ideal si quieres amanecer en altura.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GASTRONOMÍA -->
+    <section id="gastronomia" style="margin-top:60px">
+      <div class="section-label">Qué comer</div>
+      <h2 class="section-title">La cocina <em>de montaña y mar</em></h2>
+      <div class="info-grid">
+        <div class="info-box">
+          <h4>Queso Cabrales DOP</h4>
+          <div class="food-price">€5-12 (cuña)</div>
+          <p>El queso azul más potente de España, madurado en cuevas kársticas a 1.000 m. El olor ofende, el sabor convierte. Las queserías de Arenas de Cabrales lo venden directamente del productor.</p>
+        </div>
+        <div class="info-box">
+          <h4>Sidra Natural Asturiana</h4>
+          <div class="food-price">€1.80-3 (chiquitín)</div>
+          <p>La sidra de manzana asturiana se escancia de metro de altura para oxigenarla. Nunca se llena la copa: solo dos dedos que se beben de un trago. Ritual social obligatorio.</p>
+        </div>
+        <div class="info-box">
+          <h4>Fabada Asturiana</h4>
+          <div class="food-price">€10-16 (ración)</div>
+          <p>Fabes grandes con chorizo, morcilla asturiana, tocino y lacón. El plato más contundente de la cocina asturiana. Menús del día en la zona incluyen fabada como primer plato habitual.</p>
+        </div>
+        <div class="info-box">
+          <h4>Orujo de Liébana</h4>
+          <div class="food-price">€5-10 (botella)</div>
+          <p>Aguardiente destilado del orujo de uva en la comarca lebaniega. En Potes hay destilerías con degustación gratuita si compras. Variante: crema de orujo para el café.</p>
+        </div>
+        <div class="info-box">
+          <h4>Cocido Lebaniego</h4>
+          <div class="food-price">€12-18 (menú)</div>
+          <p>El cocido de Liébana usa garbanzo pequeño de montaña, berza, cecina y chorizo. Diferente al castellano; más húmedo y especiado. Plato de montañeros y pastores.</p>
+        </div>
+        <div class="info-box">
+          <h4>Merluza a la Sidra</h4>
+          <div class="food-price">€14-22 (ración)</div>
+          <p>Los puertos de Ribadesella y Llanes descargan merluza fresca diariamente. Cocinada con sidra natural y almejas: el mejor plato asturiano de mar. Para el último día.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONSEJOS -->
+    <section id="consejos" style="margin-top:60px">
+      <div class="section-label">Información práctica</div>
+      <h2 class="section-title">Consejos <em>de montaña</em></h2>
+      <ul class="tips-list">
+        <li><span class="tip-icon">🌤️</span>El tiempo en los Picos cambia en minutos. Niebla espesa por la mañana puede convertirse en sol radiante a las 11h. No canceles una ruta por el parte meteorológico si no hay lluvia activa.</li>
+        <li><span class="tip-icon">⏰</span>La Ruta del Cares: sale desde Caín lo antes posible (7-8h). Las primeras horas son mágicas y estarás solo. A partir de las 10h empieza el tráfico de grupos.</li>
+        <li><span class="tip-icon">🥾</span>Botas con tobillera para la Ruta del Cares. El camino tiene tramos estrechos con el canal de agua al lado y la roca puede estar húmeda. Las zapatillas de running no son suficientes.</li>
+        <li><span class="tip-icon">🦌</span>Sep-oct es la época del berrea del ciervo y la bajada de rebecos. Lleva prismáticos si puedes. Los rebecos de los Lagos de Covadonga están habituados a las personas.</li>
+        <li><span class="tip-icon">📱</span>Sin cobertura en Caín y el tramo inicial de la garganta. Descarga los mapas offline y comparte tu ubicación con alguien antes de entrar.</li>
+        <li><span class="tip-icon">🧊</span>El Fuente Dé teleférico puede cerrar por viento (Tramontana fuerte). Si tu plan depende de él, llama antes: +34 942 736 610.</li>
+        <li><span class="tip-icon">🚗</span>Acceso a Caín: carretera de Posada de Valdeón, 12 km de pista de montaña angosta pero asfaltada. Apta para vehículos normales. En horario pico, el paso se regula.</li>
+        <li><span class="tip-icon">🏕️</span>Camping en los Picos: consulta siempre la normativa del Parque Nacional. Acampar fuera de las zonas designadas puede acarrear multa.</li>
+      </ul>
+    </section>
+
+    <!-- VOCABULARIO -->
+    <section id="vocabulario" style="margin-top:60px">
+      <div class="section-label">Cultura local</div>
+      <h2 class="section-title">Vocabulario <em>piquegu</em></h2>
+      <div class="vocab-grid">
+        <div class="vocab-card"><div class="vocab-term">Picu</div><div class="vocab-def">Pico de montaña en asturiano. El "Picu Urriellu" (Naranjo de Bulnes) es el más mítico de los Picos: 2.519 m de caliza vertical.</div></div>
+        <div class="vocab-card"><div class="vocab-term">Rebeco</div><div class="vocab-def">Rupicapra rupicapra pyrenaica. Cabra montesa ágil que habita las zonas rocosas. Los Picos tienen la mayor densidad de España.</div></div>
+        <div class="vocab-card"><div class="vocab-term">Escanciador</div><div class="vocab-def">Persona que sirve la sidra asturiana levantando la botella sobre la cabeza para que caiga en el vaso desde altura y se oxide.</div></div>
+        <div class="vocab-card"><div class="vocab-term">Majada</div><div class="vocab-def">Zona de pasto en altura donde los pastores llevaban el ganado en verano (trashumancia). Muchas tienen chozos de piedra.</div></div>
+        <div class="vocab-card"><div class="vocab-term">Pozo</div><div class="vocab-def">En asturiano, un lago o laguna de montaña. Los "Pozos de Lloroza" son ríos que desaparecen bajo tierra en el karst calizo.</div></div>
+        <div class="vocab-card"><div class="vocab-term">Berrea</div><div class="vocab-def">Período de celo del ciervo rojo (sept-oct). Los machos braman toda la noche para atraer hembras. Audible en los bosques de Covadonga.</div></div>
+        <div class="vocab-card"><div class="vocab-term">Casería</div><div class="vocab-def">Explotación agrícola-ganadera familiar tradicional asturiana. Muchas se han reconvertido en casas rurales manteniendo su arquitectura.</div></div>
+        <div class="vocab-card"><div class="vocab-term">Cuélebre</div><div class="vocab-def">Serpiente dragón de la mitología asturiana que guarda tesoros en las cuevas. Figura presente en las leyendas de la montaña cantábrica.</div></div>
+      </div>
+    </section>
+
+    <!-- EMERGENCIAS -->
+    <section id="emergencias" style="margin-top:60px">
+      <div class="section-label">Seguridad</div>
+      <h2 class="section-title">Teléfonos de <em>emergencia</em></h2>
+      <div class="emergency-grid">
+        <div class="emergency-card"><div class="emergency-num">112</div><div class="emergency-label">Emergencias generales</div></div>
+        <div class="emergency-card"><div class="emergency-num">062</div><div class="emergency-label">Guardia Civil (montaña)</div></div>
+        <div class="emergency-card"><div class="emergency-num">061</div><div class="emergency-label">Urgencias médicas</div></div>
+        <div class="emergency-card"><div class="emergency-num">085</div><div class="emergency-label">Bomberos forestales</div></div>
+        <div class="emergency-card"><div class="emergency-num">+34 985 840 614</div><div class="emergency-label">Parque Nacional Picos</div></div>
+        <div class="emergency-card"><div class="emergency-num">+34 942 736 610</div><div class="emergency-label">Teleférico Fuente Dé</div></div>
+      </div>
+    </section>
+
+    <!-- CHECKLIST -->
+    <section id="checklist" style="margin-top:60px;margin-bottom:60px">
+      <div class="section-label">Antes de salir</div>
+      <h2 class="section-title">Checklist <em>del viaje</em></h2>
+      <ul class="checklist">
+        <li>Botas de trekking con tobillera</li>
+        <li>Chubasquero compacto</li>
+        <li>Capas de ropa (micro-climas)</li>
+        <li>Mapas offline descargados</li>
+        <li>Prismáticos (berrea + rebecos)</li>
+        <li>Botella de agua 1L mínimo</li>
+        <li>Snacks para 4 h en la garganta</li>
+        <li>Tarjeta bancaria (efectivo mínimo)</li>
+        <li>Reserva alojamiento (sept llena)</li>
+        <li>Linterna de mano (por si acaso)</li>
+        <li>Crema solar alta montaña</li>
+        <li>Depósito lleno antes de salir</li>
+      </ul>
+    </section>
+  </main>
+</div>
+
+<!-- DISCLOSURE -->
+<div class="disclosure">
+  <p>Itinerario elaborado con fines informativos. Los accesos al Parque Nacional de los Picos de Europa pueden estar sujetos a restricciones temporales, cierre por nieve o regulación de aforo en temporada alta. Verifica siempre el estado de los accesos en la web del Parque Nacional antes de partir. El teleférico de Fuente Dé puede cerrar por condiciones meteorológicas sin previo aviso. Routlo no se responsabiliza de cambios en accesos, horarios o condiciones meteorológicas.</p>
+</div>
+
+<footer>
+  <p>© 2025 Routlo · Itinerarios de viaje con IA</p>
+  <p><a href="../itinerarios.html">← Todos los itinerarios</a></p>
+</footer>
+
+<script>
+  // TOC active state
+  const sections = document.querySelectorAll('section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if(active) active.classList.add('active');
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

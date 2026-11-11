@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sitges — La playa modernista a las puertas de Barcelona | Routlo</title>
+  <meta name="description" content="35 km desde Barcelona, 40 minutos en coche: playas urbanas, la silueta de la Iglesia de Sant Bartomeu sobre el mar y un casco antiguo que enamoró a los pintores modernistas. Gratis y desde unos 25€ para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #6ec6d9; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #6ec6d9; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(110,198,217,0.15); border: 1px solid rgba(110,198,217,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #6ec6d9; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(110,198,217,0.12); border: 1px solid rgba(110,198,217,0.3); font-size: 0.75rem; font-weight: 600; color: #6ec6d9; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(110,198,217,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(110,198,217,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #6ec6d9, #3f8fa3); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #6ec6d9; border-left-color: #6ec6d9; background: rgba(110,198,217,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(110,198,217,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(110,198,217,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #6ec6d9; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(110,198,217,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #6ec6d9; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #6ec6d9; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(110,198,217,0.3); }
+    .hotel-link:hover { border-color: #6ec6d9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #6ec6d9; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#6ec6d9'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#6ec6d9'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">🏖️ Escapada de un día</span>
+      <span style="background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;font-size:0.78rem;font-weight:600;padding:4px 12px;border-radius:100px;">🆓 Entrada gratuita</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">35 km · ~40 min en coche desde Barcelona</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~25€ / 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Sitges<br><span style="color:#6ec6d9;">La playa que enamoró a los modernistas</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A solo 40 minutos de Barcelona por la panorámica C-32, Sitges combina playas urbanas de arena fina, un casco antiguo de mansiones modernistas y la silueta inconfundible de la Iglesia de Sant Bartomeu i Santa Tecla recortada sobre el Mediterráneo. Un día de sol, arte y paseo, gratis y desde unos 25€ para dos.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#modernistas">La playa modernista</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Sitges</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🏖️ Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">35 km</div><div class="route-info-unit">desde Barcelona</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~40 min</div><div class="route-info-unit">en coche por la C-32</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~25€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Playas urbanas</div><div class="route-info-value">17</div><div class="route-info-unit">a lo largo del paseo</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Mayo-oct</div><div class="route-info-unit">fuera de fiestas</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="modernistas">
+      <h2 class="section-heading">🎨 La playa que conquistó a los modernistas</h2>
+      <div class="highlight-box">
+        <h4>🖌️ Rusiñol, Casas y el "Cau Ferrat"</h4>
+        <p>A finales del siglo XIX, el pintor Santiago Rusiñol descubrió en Sitges la luz mediterránea perfecta y compró una antigua casa de pescadores junto al mar, a la que llamó "Cau Ferrat" (la cueva del hierro) por su colección de forja artística. Allí organizó las célebres "Fiestas Modernistas" entre 1892 y 1899, donde se dieron a conocer obras de Rusiñol, Ramon Casas, Pablo Picasso y otros artistas que cambiarían el arte catalán para siempre. Sitges se convirtió de la noche a la mañana en el epicentro del modernismo catalán, mucho antes de que Barcelona terminara sus grandes edificios modernistas.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🏛️ Un casco antiguo de mansiones de "indianos"</h4>
+        <p>Esa fiebre artística coincidió con el regreso de los "americanos" o "indianos" —emigrantes que hicieron fortuna en Cuba y Puerto Rico y volvieron a construir grandes casas modernistas en su pueblo natal. El resultado es un casco histórico salpicado de fachadas con cerámica vidriada, balcones de forja y miradores, que hoy convive sin complejos con las sombrillas de las playas urbanas que empiezan justo al pie de sus calles.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Barcelona → Sitges · ~40 min</div><div class="day-subtitle">Por la C-32, la autopista panorámica del Garraf, bordeando acantilados sobre el mar</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 La ruta panorámica de los acantilados del Garraf</div>
+            <div class="stop-desc">La C-32 sale de Barcelona pegada a la costa y atraviesa el macizo del Garraf por una sucesión de túneles y viaductos colgados sobre el Mediterráneo. Los tramos entre túneles ofrecen vistas vertiginosas de acantilados blancos cayendo al mar —uno de los trayectos de autopista más espectaculares de Cataluña. Sale algo más cara que la C-31 por el interior, pero el paisaje merece el peaje.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento al llegar</div>
+            <div class="stop-desc">El centro de Sitges se llena rápido, sobre todo en fin de semana y verano. Las zonas más alejadas del Passeig Marítim y de la estación de tren suelen tener aparcamiento gratuito en calle (con disco horario en algunas zonas); los párkings subterráneos del centro son de pago pero garantizan plaza.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Playas urbanas: Platja de la Ribera y Platja d'Or</div><div class="day-subtitle">Tiempo libre de playa · Gratis · 1h30 - 2h</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏖️ Platja de la Ribera</div>
+            <div class="stop-desc">La playa más céntrica, justo bajo el Passeig Marítim, con arena fina y aguas tranquilas gracias a los espigones. Tiene todos los servicios (duchas, socorrismo en temporada, chiringuitos) y es perfecta para un primer baño nada más llegar.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌊 Platja d'Or y playas menos concurridas</div>
+            <div class="stop-desc">Si buscas algo más tranquilo, camina unos minutos hacia el oeste por el paseo: las playas de Platja d'Or, Aiguadolç o Els Balmins (la zona naturista, junto al cementerio) suelen tener mucha menos gente que el tramo central, sobre todo entre semana o fuera de las horas centrales del día.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚿 Todo gratis</div>
+            <div class="stop-desc">El acceso a todas las playas de Sitges es libre y gratuito, con duchas y servicios públicos en los accesos principales del Passeig Marítim. No necesitas reservar ni pagar nada para disfrutar de la mañana de playa.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Església de Sant Bartomeu, Passeig Marítim y casco antiguo modernista</div><div class="day-subtitle">Paseo a pie · Gratis · 1h - 1h30</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛪ Església de Sant Bartomeu i Santa Tecla</div>
+            <div class="stop-desc">La gran iglesia barroca del s. XVII se alza sobre un pequeño promontorio (la "Punta") entre dos playas, con el mar como telón de fondo. Es la imagen más fotografiada de Sitges y el mirador desde su explanada ofrece vistas de 180° sobre el Passeig Marítim y el Mediterráneo. La entrada al recinto exterior y las vistas son completamente gratuitas.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚶 Passeig Marítim</div>
+            <div class="stop-desc">El paseo marítimo recorre toda la fachada litoral del pueblo, con palmeras, terrazas y vistas constantes al mar. Es el lugar perfecto para un paseo digestivo o simplemente para sentarse a tomar algo viendo el horizonte.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Casco antiguo y mansiones modernistas</div>
+            <div class="stop-desc">Las calles estrechas y blancas alrededor de la iglesia y el Ayuntamiento esconden fachadas modernistas de los antiguos "indianos", con cerámica de colores, forja y miradores acristalados. Pasear sin rumbo por este barrio —calle Fonollar, calle Davallada, calle del Pecat— es gratis y una de las mejores formas de entender por qué Rusiñol y Casas se enamoraron de este lugar.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Comida, Museu del Cau Ferrat (opcional) y vuelta</div><div class="day-subtitle">Paella o menú del día · Vuelta directa ~40 min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🥘 Paella o menú del día</div>
+            <div class="stop-desc">Las calles del casco antiguo y el Passeig de la Ribera están llenas de restaurantes con menú del día y arrocerías que sirven paella o fideuà para compartir. Para ahorrar, busca los menús del mediodía entre semana lejos de la primera línea de playa.</div>
+            <div class="stop-price">Menú del día o paella para 2: ~20-24€</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🖼️ Museu del Cau Ferrat (opcional, de pago)</div>
+            <div class="stop-desc">Si te queda tiempo y ganas de más arte, la antigua casa-taller de Santiago Rusiñol —el "Cau Ferrat"— es hoy un museo que conserva su colección de pintura, cerámica y forja, incluidas obras de El Greco y Picasso. Es una visita opcional de pago, ideal si quieres profundizar en la historia modernista del pueblo que ya has paseado durante el día.</div>
+            <div class="stop-price">Entrada: ~10€/persona (no incluida en el presupuesto base) · Horario variable según temporada</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Barcelona — ~40 min</div>
+            <div class="stop-desc">Vuelta por la misma C-32 panorámica, o por el interior (C-31/autovía) si prefieres evitar el peaje a última hora del día.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, ~70 km)</span><span>5€</span></div>
+        <div class="budget-row"><span>🏖️ Acceso a las playas</span><span>0€</span></div>
+        <div class="budget-row"><span>⛪ Iglesia de Sant Bartomeu y casco antiguo</span><span>0€</span></div>
+        <div class="budget-row"><span>🥘 Paella o menú del día (2 personas)</span><span>20€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~25€</span></div>
+      </div>
+      <div class="budget-note">El Museu del Cau Ferrat (~10€/persona) es totalmente opcional y no está incluido en este total. Si decides visitarlo, el presupuesto sube a unos 45€ para dos personas —sigue siendo una escapada muy económica para un día entero de playa y arte.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Evita las Festes de Sitges:</strong> el Carnaval (febrero/marzo) y la Festa Major (finales de agosto) llenan el pueblo hasta arriba y disparan los precios de aparcamiento. Para un día tranquilo de playa, ve entre semana en mayo, junio o septiembre.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Aparcamiento:</strong> busca calle más allá del Passeig Marítim, hacia el barrio de la estación o Terramar, donde es más fácil encontrar sitio gratuito. En el centro y en verano, los párkings de pago son casi obligatorios.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Playas menos turísticas:</strong> si el centro está abarrotado, camina 10-15 minutos hacia Aiguadolç o Els Balmins —mismo mar, mucha menos gente, especialmente fuera de julio y agosto.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Combina con la ruta del Garraf:</strong> si vas en coche, aprovecha la C-32 panorámica para parar en algún mirador del Parc Natural del Garraf antes o después de Sitges —los acantilados sobre el mar son un espectáculo en sí mismos.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Barcelona y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Barcelona" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Barcelona en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados"><strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.</div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Barcelona?</h3>
+      <p>Rutas de menos de 1 hora y presupuestos ajustados para dos personas, con mapas detallados y desglose de gastos.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([41.31,2.0],10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[41.3851,2.1734],label:'Barcelona',color:'#5ecb8a',r:10},{coords:[41.2379,1.8057],label:'Sitges',color:'#6ec6d9',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindPopup(wp.label).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[41.3851,2.1734],[41.2379,1.8057]],{color:'#6ec6d9',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

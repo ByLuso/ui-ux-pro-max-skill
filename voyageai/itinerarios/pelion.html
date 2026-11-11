@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pelion (Grecia) — 5 días en la montaña de los centauros: caletas turquesas y tren de vapor 1903 | Routlo</title>
+  <meta name="description" content="5 días en el Pelion: la caleta secreta de Damouchari (Mamma Mia), el tren de vapor de 1903, los pueblos colgantes de Makrinitsa y Tsangarada, y tsipouro con los pescadores. La montaña más bella de Grecia continental."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#162a50 70%,rgba(201,169,110,0.12) 100%),url('https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Europa · Grecia</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Pelion</h1>
+  <p class="dest-country">La montaña de los centauros</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Tesalia · Grecia continental</span>
+    <span class="dest-badge gold">5 días · En pareja</span>
+    <span class="dest-badge gold">💶 650 € dos personas</span>
+    <span class="dest-badge">🏛️ Mito · Caletas · Tren vapor 1903</span>
+    <span class="dest-badge">🌊 May · Jun · Sep · Oct</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Checklist</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">5 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~650 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo a Volos</div></div>
+        <div class="route-info-item"><div class="route-info-label">Transporte</div><div class="route-info-val">Coche de alquiler</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">May · Jun · Sep</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Inicio · Volos</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del viaje</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:24px;height:3px;background:#c9a96e;border-radius:2px;"></span>Recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Volos + Makrinitsa — el puerto de los Argonautas</div>
+            <div class="day-subtitle">Desde aquí zarpó Jasón en busca del Vellocino de Oro</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Volos — puerto y tsipouradika</div>
+              <div class="stop-desc">El puerto de Volos es el lugar mítico desde donde Jasón y los Argonautas zarparon hacia la Cólquide. El Museo Arqueológico tiene las estelas pintadas de Demetrias (s. III a.C.) — los únicos retratos funerarios griegos con color original conservado. El paseo marítimo concentra los tsipouradika: tascas donde por €1,5-2 sirven un vaso de tsipouro (aguardiente de uva sin anís, 42°) con un meze gratuito — costumbre único en Grecia.</div>
+              <div class="stop-price">Museo: €3 · Tsipouro con meze: €2/persona</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Makrinitsa — el balcón del Pelion</div>
+              <div class="stop-desc">A 17 km de Volos, a 700 m de altitud: pueblo colgado sobre el Golfo de Pagasético con casas de piedra y madera del s. XVIII en los que los arquitectos del Imperio Otomano diseñaron las mansiones más elaboradas de Grecia continental. La plateia con el plátano centenario y la fuente tiene vistas sobre Volos y las Espóradas. Sendero de 2 horas hasta el monasterio de Survia (s. XIII).</div>
+              <div class="stop-price">Gratis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Tsangarada — el plátano de 1.000 años y Mylopotamos</div>
+            <div class="day-subtitle">La caleta más espectacular del Egeo · Agua azul cobalto entre acantilados</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Tsangarada — el cuádruple plátano milenario</div>
+              <div class="stop-desc">En la plaza de Agia Kyriaki, el plátano más grande de Grecia tiene 1.000 años de edad y cuatro troncos que forman una sola copa de 50 m de diámetro. La sombra cubre toda la plateia. Tsangarada está dividida en cuatro barrios separados entre sí por bosque — se llega en 15 minutos a pie entre plataneros, higueras y fuentes. El pueblo más elevado del Pelion Este (550 m).</div>
+              <div class="stop-price">Gratis</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Mylopotamos — la caleta imposible</div>
+              <div class="stop-desc">La cala más bonita del Pelion: agua azul cobalto y turquesa entre acantilados de 100 m de caliza blanca cubiertos de pinos que caen hasta el mar. Se accede por 300 escalones desde Tsangarada. No hay carretera — eso la mantiene virgen. En julio-agosto hay barco desde Tsangarada. Temperatura del agua: 23-25°C en verano. A 15 minutos a pie: la cala Fakistra, completamente desierta incluso en agosto.</div>
+              <div class="stop-price">Gratis · Barco desde Tsangarada: €5-8</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>Consejo:</strong> Bajad a Mylopotamos antes de las 10 h o después de las 17 h. A mediodía el sol golpea directamente en los acantilados sin sombra. Los 300 escalones de subida con calor son duros.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Milies + tren de vapor 1903 — el Moutzouris</div>
+            <div class="day-subtitle">El tren de vapor más pintoresco de Grecia · Viaducto de 230 m de 1904</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Tren de vapor Milies–Ano Lechonia (Moutzouris)</div>
+              <div class="stop-desc">Construido en 1895-1903 por el ingeniero italiano Evaristo de Chirico (padre del pintor Giorgio de Chirico), el ferrocarril de vía métrica del Pelion es uno de los más pintorescos de Europa. El recorrido de 24 km cruza el viaducto de Papou (230 m de longitud, obra maestra de ingeniería del s. XIX) entre bosques de hayedos y olivares con vistas al Golfo de Pagasético. El tren sale solo los fines de semana y en verano: consultad horarios en trainose.gr.</div>
+              <div class="stop-price">€12/persona ida · Sale sábados y domingos</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Milies — la biblioteca de la Ilustración griega</div>
+              <div class="stop-desc">La biblioteca de Milies (1790) fue el primer lugar de Europa donde se imprimieron libros en griego moderno durante la Ilustración griega pre-revolucionaria. Sus 3.000 volúmenes originales están digitalizados pero el edificio es visitable. El pueblo tiene la mejor colección de mansiones de los armadores griegos del s. XVIII de toda Tesalia: fachadas pintadas de azul y granate con balcones de madera tallada.</div>
+              <div class="stop-price">Biblioteca: gratis · Mansiones: exterior gratis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title">Damouchari — la caleta de Mamma Mia</div>
+            <div class="day-subtitle">Aquí rodaron las escenas del puerto de la película de 2008</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Damouchari — el puerto medieval de Mamma Mia</div>
+              <div class="stop-desc">La caleta de Damouchari tiene una bahía cerrada con un castillo veneciano en ruinas en los acantilados. Es el pueblo más pequeño de la costa este del Pelion: 30 casas, un muelle de piedra y dos tabernas. En 2007 el equipo de Mamma Mia rodó aquí las escenas del "puerto de Kalokairi" por su autenticidad preservada. El agua tiene 27°C en agosto y visibilidad de 15 m — ideal para snorkel.</div>
+              <div class="stop-price">Gratis · Kayak en bahía: €10-15/h</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Zagora — manzanas y arquitectura otomana</div>
+              <div class="stop-desc">El pueblo más grande del Pelion Norte tiene el mejor mercado de productos locales: mermeladas de manzana, aceite de oliva y miel de tomillo del monte. La manzana de Zagora es la más apreciada de Grecia — los árboles llegan hasta los 800 m de altitud. La iglesia de Agioi Taxiarches (s. XVII) tiene frescos que los artistas del Monte Atos pintaron durante el invierno cuando el mar impedía el regreso a la isla.</div>
+              <div class="stop-price">Mercado: gratis · Miel 500g: €6-10</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div>
+            <div class="day-title">Pelion sur + cala Potistika + regreso a Volos</div>
+            <div class="day-subtitle">La costa más salvaje del Egeo y último tsipouro en el puerto</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Cala Potistika — la más virgen del sur</div>
+              <div class="stop-desc">La playa más salvaje y menos visitada del Pelion sur: guijarros blancos, pinos hasta el agua y acceso solo por camino de tierra de 4 km (practicable con cualquier coche). El acantilado de la derecha tiene una cueva marina que se puede explorar a nado — con agua transparente a 4 m de profundidad el fondo de roca con erizos y peces es perfectamente visible sin gafas.</div>
+              <div class="stop-price">Gratis</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Última tarde en Volos — los tsipouradika del puerto</div>
+              <div class="stop-desc">El ritual del tsipouro en Volos es la experiencia más griega que existe fuera de las islas turísticas: sentarse en un tsipouradiko del paseo marítimo, pedir una botella de tsipouro sin anís (€6-8 botella 200ml) y recibir gratis en sucesión: gavros marinados, pulpo a la plancha, tomate con feta, tzatziki y keftedakia. Sin carta — lo que el dueño decidió. Sin tiempo — bebéis hasta que cerráis.</div>
+              <div class="stop-price">Tsipouro + meze para dos: €12-18 total</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>Ritual tsipouro:</strong> Nunca pidáis el meze — es ofensa. Los platos llegan solos con cada ronda de tsipouro. No hay precio del meze porque es la hospitalidad del dueño. Pagáis solo el alcohol.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto desglosado</h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Mínimo (2 pax)</th><th>Cómodo (2 pax)</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida+vuelta a Volos/Salónica+bus (×2)</td><td>€120</td><td>€260</td></tr>
+          <tr><td>Coche de alquiler 4 días</td><td>€70</td><td>€120</td></tr>
+          <tr><td>Alojamiento 4 noches (guesthouse / villa rural)</td><td>€140</td><td>€260</td></tr>
+          <tr><td>Comidas 5 días × 2 personas</td><td>€120</td><td>€180</td></tr>
+          <tr><td>Tren vapor Moutzouris (2 personas)</td><td>€24</td><td>€24</td></tr>
+          <tr><td>Kayak y actividades de playa</td><td>€30</td><td>€60</td></tr>
+          <tr><td>Entradas museos y actividades</td><td>€12</td><td>€20</td></tr>
+          <tr><td>Compras (miel, aceite, mermelada)</td><td>€20</td><td>€50</td></tr>
+          <tr><td>Gasolina (Pelion interior, muchas curvas)</td><td>€25</td><td>€35</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado para 2 personas · 5 días</span>
+        <span class="budget-total-value">€561 – €1.009</span>
+      </div>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-aloj">
+      <h2 class="section-heading" id="h-aloj">Dónde dormir</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">Guesthouse en pueblo de montaña (€35-70/noche)</div>
+            <div class="stop-desc">Las casas de piedra con pizarra tradicional del Pelion tienen habitaciones con chimenea y desayuno con mermeladas caseras, miel de tomillo y tiropita (tarta de queso filo) recién hecha. Las mejores bases: Makrinitsa, Tsangarada y Vizitsa — equidistantes de las principales atracciones.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">Villa con vista al mar (€70-140/noche) — para una noche</div>
+            <div class="stop-desc">Los pueblos costeros del este (Zagora, Horefto) tienen villas con terraza directa al Egeo. El precio es un tercio de lo que costaría en una isla griega con la misma calidad y vistas. Reservad en Booking con filtro "vista al mar" en Pelion.</div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía del Pelion</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Aguardiente</div>
+          <div class="gastro-title">Tsipouro ακατέργαστο</div>
+          <div class="gastro-price">€6-8 (botella 200ml en tsipouradiko)</div>
+          <div class="gastro-desc">Sin anís — la versión pura de Tesalia. Destilado de uva (orujo) a 42°. El tsipouro sin anís es más sutil que la ouzo: notas de fruta seca y flores. Se sirve frío en vasito y siempre con meze gratuito.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Embutido</div>
+          <div class="gastro-title">Spetzofai</div>
+          <div class="gastro-price">€7-10 (ración)</div>
+          <div class="gastro-desc">Salchichas gruesas de cerdo con pimientos verdes y rojos picantes, cocinadas en cazuela con aceite de oliva. Plato emblema del Pelion y las Espóradas. Imposible encontrar la versión auténtica fuera de Tesalia.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Pastelería</div>
+          <div class="gastro-title">Spoon sweets de manzana</div>
+          <div class="gastro-price">€3-5 (tarro pequeño)</div>
+          <div class="gastro-desc">La manzana de Zagora cocida en sirope de su propio azúcar. La hospitalidad griega obliga a servirla en cucharita con un vaso de agua fría al recibir a un visitante. En los mercados de Zagora, precio de origen.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Pescado</div>
+          <div class="gastro-title">Barbounia (salmonetes)</div>
+          <div class="gastro-price">€14-20 (ración)</div>
+          <div class="gastro-desc">Salmonetes pequeños del Egeo, fritos en aceite de oliva con limón y orégano. En los puertos costeros del Pelion los pescadores traen la captura de madrugada — en las tabernas del muelle los servís con la garantía de que salieron del agua hace 4 horas.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Pita</div>
+          <div class="gastro-title">Hortopita del Pelion</div>
+          <div class="gastro-price">€3-5 (porción)</div>
+          <div class="gastro-desc">Tarta de filo rellena de mezcla de 7 hierbas silvestres del monte Pelion (amaranto, hinojo, espinaca, puerro, ortigas, endibias, cebolleta) con queso feta. Cada pueblo tiene su receta propia con variaciones estacionales.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Miel</div>
+          <div class="gastro-title">Meli thymari (miel de tomillo)</div>
+          <div class="gastro-price">€8-14/kg (en mercado)</div>
+          <div class="gastro-desc">La miel de tomillo del Pelion es la más apreciada de Grecia — el tomillo crece en las laderas rocosas del Egeo y las flores están en máxima densidad entre junio y agosto. Color ámbar oscuro, cristalización rápida y sabor herbáceo intenso.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Carreteras del Pelion:</strong> las carreteras de la montaña son de un carril con espacio de cruce. Los camiones de reparto ocupan toda la carretera en los pueblos de mercado (martes y sábados). Conducción lenta y con paciencia — no hay alternativa.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Tren Moutzouris:</strong> el ferrocarril de Pelion opera viernes-domingo en temporada. Los horarios y días de operación cambian cada año — comprobad en trainose.gr antes de planificar el viaje en torno a él.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Acceso a Volos:</strong> el aeropuerto de Volos (NEA) tiene vuelos domésticos desde Atenas. Alternativa: vuelo a Salónica (SKG) + 2,5 h en coche o bus, o a Atenas (ATH) + 3,5 h. En verano hay barco desde Skiathos a Volos (2,5 h).</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Tsipouro y conducción:</strong> no conduzcáis después del tsipouradiko. Dejad el coche en el puerto y volved andando al alojamiento. Los hoteles de Volos centro están a 10 minutos del paseo marítimo.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Caletas sin arena:</strong> las calas del Pelion Este tienen guijarros, no arena. Lleváis escarpines o zapatillas de agua — los guijarros bajo el sol se calientan a 50°C y las piedras del fondo son irregulares. El agua compensa con su visibilidad y temperatura.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Agosto masificado en Mylopotamos:</strong> los griegos de Atenas y Salónica se mueven en masa al Pelion en agosto. Mylopotamos y Damouchari están llenas de 11 a 17 h. Llegad antes o después — la diferencia es radical.</div></div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-check">
+      <h2 class="section-heading" id="h-check">Qué llevar</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea (válida en Grecia, UE)</div>
+        <div class="check-item"><div class="check-box"></div>Escarpines o zapatillas de agua (calas de guijarros)</div>
+        <div class="check-item"><div class="check-box"></div>Crema solar SPF 50+ (sol del Egeo en verano: UV extremo)</div>
+        <div class="check-item"><div class="check-box"></div>Gafas de snorkel (visibilidad excepcional en las calas)</div>
+        <div class="check-item"><div class="check-box"></div>Calzado de trekking (acceso a Mylopotamos: 300 escalones)</div>
+        <div class="check-item"><div class="check-box"></div>Horario del tren Moutzouris verificado antes de salir</div>
+        <div class="check-item"><div class="check-box"></div>Bolsa de frío para miel, aceite y mermeladas del mercado</div>
+        <div class="check-item"><div class="check-box"></div>Efectivo en euros (muchas tabernas pequeñas no tienen TPV)</div>
+      </div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias (EU)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, ambulancia, bomberos</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia (EKAB)</div><div class="emerg-value">166</div><div class="emerg-note">También funciona el 112</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Griega</div><div class="emerg-value">100</div><div class="emerg-note">También funciona el 112</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia costera</div><div class="emerg-value">108</div><div class="emerg-note">Limenarchio — rescate marítimo</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Volos</div><div class="emerg-value">+30 24210 94200</div><div class="emerg-note">Achilopouleio — el mayor del área</div></div>
+        <div class="emerg-card"><div class="emerg-label">Centro Salud Zagora</div><div class="emerg-value">+30 24260 22222</div><div class="emerg-note">Urgencias menores en el Pelion</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede ayudarte con alojamiento, rutas alternativas y presupuesto adaptado a tu situación.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos. El tren Moutzouris tiene operación limitada — verificad horarios en trainose.gr. La caleta de Mylopotamos puede estar cerrada en temporada baja por condiciones meteorológicas. Routlo no se responsabiliza de cambios en precios ni condiciones.
+    </div>
+
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Europa</div>
+      <nav aria-label="Itinerarios Europa"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="molise.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Molise</a></li>
+        <li><a href="maramures.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Maramureș</a></li>
+        <li><a href="istria.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Istria</a></li>
+        <li><a href="ardenas.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ardenas</a></li>
+      </ul></nav>
+    </div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Itinerarios España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  // Volos → Makrinitsa → Tsangarada → Milies → Damouchari → Zagora → Potistika
+  const routeCoords = [
+    [39.361, 22.943], [39.397, 23.006], [39.455, 23.218],
+    [39.342, 23.155], [39.497, 23.248], [39.461, 23.137], [39.208, 23.334]
+  ];
+  const waypoints = [
+    { latlng: [39.361, 22.943], label: 'Volos — Día 1' },
+    { latlng: [39.397, 23.006], label: 'Makrinitsa — Día 1' },
+    { latlng: [39.455, 23.218], label: 'Tsangarada + Mylopotamos — Día 2' },
+    { latlng: [39.342, 23.155], label: 'Milies + Moutzouris — Día 3' },
+    { latlng: [39.497, 23.248], label: 'Damouchari — Día 4' },
+    { latlng: [39.461, 23.137], label: 'Zagora — Día 4' },
+    { latlng: [39.208, 23.334], label: 'Cala Potistika — Día 5' }
+  ];
+
+  const map = L.map('route-map', { zoomControl: true, attributionControl: false })
+    .setView([39.38, 23.14], 10);
+
+  const _lang = (navigator.language || 'en').toLowerCase();
+  if (_lang.startsWith('es')) {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+      className: 'tile-osm-es'
+    }).addTo(map);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+  }
+
+  const bounds = L.latLngBounds(routeCoords).pad(0.12);
+  map.fitBounds(bounds);
+
+  L.polyline(routeCoords, { color: '#c9a96e', weight: 4, opacity: 0.85, lineJoin: 'round' }).addTo(map);
+
+  L.circleMarker(routeCoords[0], {
+    radius: 9, fillColor: '#5ecb8a', color: '#fff', weight: 2.5, fillOpacity: 1
+  }).bindTooltip('Volos — Inicio', { permanent: false, direction: 'right' }).addTo(map);
+
+  waypoints.slice(1).forEach(wp => {
+    L.circleMarker(wp.latlng, {
+      radius: 7, fillColor: '#c9a96e', color: '#fff', weight: 2, fillOpacity: 1
+    }).bindTooltip(wp.label, { permanent: false, direction: 'top' }).addTo(map);
+  });
+
+  L.control.attribution({ prefix: false }).addAttribution('© <a href="https://openstreetmap.org">OpenStreetMap</a>').addTo(map);
+  setTimeout(() => map.invalidateSize(), 100);
+})();
+</script>
+<style>.tile-osm-es{filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)}</style>
+</body>
+</html>

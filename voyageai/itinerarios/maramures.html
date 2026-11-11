@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maramureș (Rumanía) — 6 días en el último campo de Europa: iglesias de madera UNESCO y cementerios de colores | Routlo</title>
+  <meta name="description" content="6 días en Maramureș: el cementerio alegre de Săpânța, las iglesias de madera UNESCO del Valle del Iza, el tren de vapor forestal y los pueblos donde el tiempo no ha cambiado. El último campo medieval de Europa."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#162a50 70%,rgba(201,169,110,0.12) 100%),url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Europa · Rumanía</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Maramureș</h1>
+  <p class="dest-country">El último campo medieval de Europa</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Norte de los Cárpatos · Rumanía</span>
+    <span class="dest-badge gold">6 días · En pareja</span>
+    <span class="dest-badge gold">💶 450 € dos personas</span>
+    <span class="dest-badge">⛪ UNESCO · Tren vapor · Cementerio alegre</span>
+    <span class="dest-badge">🌸 May · Jun · Sep · Oct</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Checklist</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">6 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~450 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Acceso</div><div class="route-info-val">Vuelo a Cluj</div></div>
+        <div class="route-info-item"><div class="route-info-label">Transporte</div><div class="route-info-val">Coche de alquiler</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">May · Jun · Sep</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Inicio · Baia Mare</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del viaje</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:24px;height:3px;background:#c9a96e;border-radius:2px;"></span>Recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Cluj-Napoca → Baia Mare — entrada a los Cárpatos</div>
+            <div class="day-subtitle">3 horas de conducción por las montañas · Ciudad barroca húngara</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Cluj-Napoca — llegada y primera noche</div>
+              <div class="stop-desc">El aeropuerto internacional con mejor conexión a Maramureș. Recogida del coche de alquiler (€15-25/día, muy económico). Cluj tiene una de las mejores escenas de cafeterías y bares de Europa del Este: la Plaza Unirii con la Catedral de San Miguel (s. XIV gótico) y cervecerías con cervezas locales Ursus y Timișoreana desde €1,5. Noche en Cluj o salida directa a Baia Mare (3 h).</div>
+              <div class="stop-price">Vuelo BUD/VIE/BRU → CLJ: €50-120/pax · Alquiler coche: €15-25/día</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Baia Mare — la puerta de Maramureș</div>
+              <div class="stop-desc">Capital de la región: Torre Ștefan (s. XIV, 37 m, sube gratis), Piața Cetății con casas barrocas y el Museo del Condado con iconos sobre cristal únicos de la tradición ortodoxa de Maramureș. El mercado central vende queso artesanal, miel de montaña y palincă (aguardiente de ciruela) en botellas de plástico sin etiqueta — la versión real, no la de exportación.</div>
+              <div class="stop-price">Museo: €2 · Torre: gratis · Mercado: gratis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Sighetu Marmației + Săpânța — el cementerio más alegre del mundo</div>
+            <div class="day-subtitle">Memorial del Comunismo y tumbas pintadas de azul con poemas irónicos</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Memorial de las Víctimas del Comunismo — Sighetu Marmației</div>
+              <div class="stop-desc">La antigua prisión política donde el régimen comunista de Ceaușescu encarceló a la élite intelectual y política de Rumanía (1948-1964). Las celdas conservan los nombres de los prisioneros. Uno de los museos más escalofriantes y mejor documentados del Telón de Acero. El Consejo de Europa lo nombró "el memorial más importante de la resistencia anticomunista de Europa".</div>
+              <div class="stop-price">Entrada: €4</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Săpânța — Cimitirul Vesel (Cementerio Alegre)</div>
+              <div class="stop-desc">El escultor Stan Ioan Pătraș comenzó en 1935 a tallar y pintar cruces de madera azul con poemas satíricos y escenas en bajorrelieve que describen la vida y la muerte de cada difunto con humor negro. Hay cruces que dicen "Aquí yace mi suegra — si hubiera vivido más, yo estaría aquí". 800 cruces pintadas en azul cobalto. No existe nada igual en el mundo.</div>
+              <div class="stop-price">Entrada: €2</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>Frontera con Ucrania:</strong> Sighetu Marmației está en la frontera. El río Tisa separa Rumanía de Ucrania — desde el centro de la ciudad se ve el otro lado. No hay acceso turístico en la actualidad.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Valle del Iza — iglesias de madera UNESCO</div>
+            <div class="day-subtitle">8 iglesias medievales de madera · Vadu Izei · Bârsana</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Bârsana — Monasterio en el bosque</div>
+              <div class="stop-desc">El monasterio ortodoxa de Bârsana tiene la iglesia de madera más alta de Rumanía: 57 m de espadaña en roble negro sin un solo clavo metálico. Construido en 1993 replicando las técnicas del s. XVIII. Las monjas del convento venden iconos sobre cristal pintados a mano — la tradición pictórica única de Maramureș. Los jardines tienen flores en todas las estaciones.</div>
+              <div class="stop-price">Gratis (donativo voluntario)</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Iglesias de madera UNESCO del Valle del Iza</div>
+              <div class="stop-desc">Oito iglesias ortodoxas del s. XVII-XVIII en madera de roble, declaradas Patrimonio UNESCO en 1999. Las más impresionantes: Ieud Deal (la más antigua, s. XIV-XVII), Desești y Rogoz con frescos interiores de vírgenes en azul de lapislázuli importado desde Afganistán. Muchas siguen siendo la iglesia del pueblo y se abren solo con la llave del párroco — preguntad en casa del cura.</div>
+              <div class="stop-price">Donativo: €1-2 por iglesia</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Vadu Izei — vida rural sin actuar</div>
+              <div class="stop-desc">Pueblo a orillas del río Iza donde los campesinos conducen carros tirados por caballos sin que sea una atracción turística — es simplemente el único medio de transporte disponible. Las mujeres llevan ropa tradicional bordada en las tiendas y en el mercado. Los domingos la misa en la iglesia de madera reúne a todo el pueblo en traje de fiesta.</div>
+              <div class="stop-price">Gratis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title">Botiza + Coltău — la Maramureș más profunda</div>
+            <div class="day-subtitle">Casas con portones tallados del s. XVIII y noche en casa campesina</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Botiza — el pueblo de los portones</div>
+              <div class="stop-desc">Cada casa en Botiza tiene un portón de roble tallado a mano con motivos solares, sogas trenzadas y flores: la tarjeta de presentación de la familia. El tamaño y elaboración del portón indicaba la riqueza. Los talleres de Dumitru Iuga siguen fabricándolos con herramientas del s. XVIII. Podéis ver el proceso si llegáis por la mañana.</div>
+              <div class="stop-price">Visita taller: gratis</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Coltău — el poeta revolucionario y el castillo</div>
+              <div class="stop-desc">El poeta húngaro Sándor Petőfi escribió "Nemzeti dal" (Canción Nacional), himno de la Revolución de 1848, durante su luna de miel en Coltău. El castillo Teleki donde se alojó sigue en pie y la habitación está documentada. A 2 km: el pueblo de Moisei con el monumento a los 31 partisanos rumanos asesinados por las SS en 1944.</div>
+              <div class="stop-price">Castillo exterior: gratis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">05</div>
+          <div>
+            <div class="day-title">Tren de vapor forestal del Valle de Vișeu</div>
+            <div class="day-subtitle">El único tren forestal de vapor en servicio de Europa</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">CFF Vișeu de Sus — Mocănița</div>
+              <div class="stop-desc">El CFF (Căile Ferate Forestiere) opera el único tren forestal de vapor en funcionamiento de Europa. Construido en 1932 para transportar troncos desde los Cárpatos hasta el aserradero de Vișeu de Sus. El recorrido turístico cubre 43 km de vía estrecha (760 mm) a lo largo del río Vaser entre acantilados boscosos, cruzando 13 puentes y parando en aldeas sin carretera accesible. Duración: 8-10 horas.</div>
+              <div class="stop-price">€28-35/persona · Reserva previa obligatoria</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Paso de Prislop — la mejor vista de los Cárpatos</div>
+              <div class="stop-desc">A 1.416 m de altitud, el paso de Prislop conecta Maramureș con la región de Bucovina. La vista desde la cima sobre ambas vertientes de los Cárpatos en otoño (septiembre-octubre) es uno de los panoramas más dramáticos de Europa del Este. Monumento en recuerdo de la aviadora rumana Elena Farago.</div>
+              <div class="stop-price">Gratis</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>Mocănița:</strong> El tren sale a las 9:30 h desde Vișeu de Sus. Reservad con al menos 2 semanas en temporada alta (julio-agosto). Llevad comida y agua para el día completo.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">06</div>
+          <div>
+            <div class="day-title">Ocna Șugatag + regreso a Cluj</div>
+            <div class="day-subtitle">Lago de sal natural y último mercado de artesanía</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Ocna Șugatag — el lago salado que flota</div>
+              <div class="stop-desc">Lago formado sobre una mina de sal abandonada del s. XVIII: agua con 300 g/litro de sal, densidad comparable al Mar Muerto. Flotáis sin hacer esfuerzo. Sin turistas organizados, sin hotel internacional — solo familias locales y algunos pensionistas que vienen por las propiedades terapéuticas. Temperatura del agua: 24-26°C en verano.</div>
+              <div class="stop-price">Entrada: €2</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Mercado de Ocna Șugatag y regreso</div>
+              <div class="stop-desc">El mercado dominical tiene artesanía textil de Maramureș (camisas bordadas, alfombras de lana), queso de oveja curado en corteza de pino y palincă embotellada en casa. Retorno a Cluj: 3 horas por la ruta panorámica vía Dej o por Baia Mare y autovía. Vuelo de regreso desde Cluj.</div>
+              <div class="stop-price">Compras: €15-40</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto desglosado</h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Mínimo (2 pax)</th><th>Cómodo (2 pax)</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida+vuelta (por persona ×2)</td><td>€100</td><td>€240</td></tr>
+          <tr><td>Coche de alquiler 5 días (Rumanía muy barato)</td><td>€75</td><td>€125</td></tr>
+          <tr><td>Alojamiento 5 noches (pensión rural / B&B)</td><td>€80</td><td>€160</td></tr>
+          <tr><td>Comidas 6 días × 2 personas</td><td>€80</td><td>€140</td></tr>
+          <tr><td>Tren Mocănița (2 personas)</td><td>€56</td><td>€70</td></tr>
+          <tr><td>Entradas (Memorial, iglesias, museos)</td><td>€20</td><td>€30</td></tr>
+          <tr><td>Compras mercado (artesanía, queso, palincă)</td><td>€20</td><td>€50</td></tr>
+          <tr><td>Gasolina (cobertura toda Maramureș)</td><td>€20</td><td>€30</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado para 2 personas · 6 días</span>
+        <span class="budget-total-value">€451 – €845</span>
+      </div>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-aloj">
+      <h2 class="section-heading" id="h-aloj">Dónde dormir</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">Pensión rural con desayuno (€12-25/noche habitación doble)</div>
+            <div class="stop-desc">El alojamiento más auténtico y barato de Europa Occidental accesible. Las pensiones rurales de Vadu Izei, Breb y Botiza ofrecen habitaciones en casas campesinas con desayuno incluido (huevos, queso fresco, embutido casero, miel, pan de horno). Precios del tercer mundo para gastronomía artesanal de primer nivel.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">Casa Iurca de Calinesti — Breb (recomendada)</div>
+            <div class="stop-desc">Una de las casas rurales más auténticas de Maramureș: casa de madera del s. XVIII restaurada, cocina regional con productos propios, habitaciones con bordados tradicionales. €20-35/noche con desayuno. Reservad con un mes de antelación en temporada alta.</div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía de Maramureș</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Plato principal</div>
+          <div class="gastro-title">Sarmale cu mămăligă</div>
+          <div class="gastro-price">€3-5 (ración pensión)</div>
+          <div class="gastro-desc">Col fermentada rellena de cerdo picado, arroz y hierbas, cocida horas en olla de barro con nata agria. Servida con mămăligă (polenta) y smântână. El plato más común y reconfortante de Rumanía.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Aguardiente</div>
+          <div class="gastro-title">Palincă de prune</div>
+          <div class="gastro-price">€3-5 (botella 0.5L en casa)</div>
+          <div class="gastro-desc">Aguardiente de ciruela destilado dos veces en alambique de cobre en casa. 50-55° de alcohol. Cada familia produce la suya con variaciones de sabor. Prueba obligatoria en cada casa que visitéis — es un rito de hospitalidad rechazarla.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Queso</div>
+          <div class="gastro-title">Brânză de burduf</div>
+          <div class="gastro-price">€3-6/kg (en mercado)</div>
+          <div class="gastro-desc">Queso de oveja curado en corteza de pino o en estómago de cordero. Sabor intenso, ligeramente picante y con notas de resina de pino. Solo existe en los Cárpatos — imposible encontrarlo fuera de Rumanía.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Sopa</div>
+          <div class="gastro-title">Ciorbă de burtă</div>
+          <div class="gastro-price">€2-3 (ración restaurante)</div>
+          <div class="gastro-desc">Sopa de tripa de vaca con zanahoria, nata y ajo. Parecida al callos madrileño pero más líquida y con sabor avinagrado por el uso de borș (jugo fermentado de salvado). El desayuno más común en los mercados de madrugada.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Miel</div>
+          <div class="gastro-title">Miere de munte</div>
+          <div class="gastro-price">€4-8/kg (en mercado)</div>
+          <div class="gastro-desc">Miel polifloral de los prados de altitud del Cárpatos. Colores del ámbar al oscuro según la estación. Los apicultores de Maramureș llevan las colmenas en carro hasta las praderas de verano — la misma técnica de la trashumancia.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Embutido</div>
+          <div class="gastro-title">Cârnaț afumat</div>
+          <div class="gastro-price">€4-7/kg (en pensión rural)</div>
+          <div class="gastro-desc">Salchicha ahumada de cerdo con ajo, pimiento y mejorana, ahumada en hogar de leña de pino durante días. Conservada en grasa de cerdo durante el invierno — se come a temperatura ambiente con muștar (mostaza rumana) y cornichoni.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Carreteras:</strong> Maramureș tiene muy pocas autovías. Las carreteras rurales (DJ / DC) son estrechas, sin asfalto en muchos tramos y frecuentadas por carros de caballos. No fiéis el tiempo de Google Maps — duplicadlo.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Tren Mocănița:</strong> reservad con al menos 2-3 semanas en julio-agosto en www.cffviseu.ro. El tren tiene capacidad limitada y los grupos organizados lo reservan completo. En septiembre suele tener plazas sin reserva.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Moneda:</strong> Rumanía usa el leu (RON), no el euro. Los cajeros automáticos son frecuentes en Baia Mare y Sighetu, pero en los pueblos solo se paga en efectivo. Cambiáis €50 al llegar al aeropuerto de Cluj para los primeros días.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Palincă y hospitalidad:</strong> si entráis en casa de alguien (taller artesano, pensión familiar) os ofrecerán palincă. Rechazarla es una ofensa cultural grave. Si no bebéis alcohol, explicadlo con claridad antes de que la saquen.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Iglesias UNESCO:</strong> muchas están cerradas con llave entre semana. El párroco local las abre. Preguntad en la casa más cercana o en la tienda del pueblo — os acompañarán sin cobrar.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Fotografiar personas:</strong> pedid permiso siempre. Los mayores en traje tradicional lo agradecerán y posarán encantados. Los jóvenes en general prefieren no ser fotografiados como "exóticos".</div></div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-check">
+      <h2 class="section-heading" id="h-check">Qué llevar</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea (válida en Rumanía, UE)</div>
+        <div class="check-item"><div class="check-box"></div>Efectivo en lei rumanos (RON) — cambiad en el aeropuerto</div>
+        <div class="check-item"><div class="check-box"></div>Reserva Mocănița confirmada por email</div>
+        <div class="check-item"><div class="check-box"></div>Calzado de montaña (caminos rurales sin asfalto)</div>
+        <div class="check-item"><div class="check-box"></div>Chaqueta impermeable (los Cárpatos cambian rápido)</div>
+        <div class="check-item"><div class="check-box"></div>Ropa de capas para el tren de vapor (10 horas al exterior)</div>
+        <div class="check-item"><div class="check-box"></div>Adaptador de enchufe tipo F (igual que España — no hace falta)</div>
+        <div class="check-item"><div class="check-box"></div>Bolsa de frío para queso y embutidos del mercado</div>
+        <div class="check-item"><div class="check-box"></div>Repelente de insectos (bosques de los Cárpatos en verano)</div>
+      </div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias (EU)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, ambulancia, bomberos</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulanță (ambulancia)</div><div class="emerg-value">961</div><div class="emerg-note">También funciona el 112</div></div>
+        <div class="emerg-card"><div class="emerg-label">Poliție (policía)</div><div class="emerg-value">955</div><div class="emerg-note">También funciona el 112</div></div>
+        <div class="emerg-card"><div class="emerg-label">Pompieri (bomberos)</div><div class="emerg-value">981</div><div class="emerg-note">También funciona el 112</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Baia Mare</div><div class="emerg-value">+40 262 205 100</div><div class="emerg-note">Spitalul Județean de Urgență</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Sighetu</div><div class="emerg-value">+40 262 311 150</div><div class="emerg-note">Spitalul Municipal Sighetu Marmației</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede ayudarte con alojamiento, rutas alternativas y presupuesto adaptado a tu situación.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos. El tren Mocănița puede cancelarse por condiciones meteorológicas o mantenimiento. Las iglesias UNESCO pueden estar cerradas por restauración. La situación fronteriza con Ucrania puede afectar algunas zonas del norte de Maramureș. Routlo no se responsabiliza de cambios en precios ni condiciones.
+    </div>
+
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Europa</div>
+      <nav aria-label="Itinerarios Europa"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="molise.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Molise</a></li>
+        <li><a href="las-landas.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Las Landas</a></li>
+        <li><a href="budapest.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Budapest</a></li>
+      </ul></nav>
+    </div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Itinerarios España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  // Baia Mare → Sighetu → Săpânța → Vadu Izei → Bârsana → Botiza → Vișeu de Sus → Ocna Șugatag
+  const routeCoords = [
+    [47.657, 23.582], [47.932, 23.889], [47.969, 23.694],
+    [47.860, 24.008], [47.815, 24.100], [47.879, 24.216],
+    [47.718, 24.419], [47.758, 23.929]
+  ];
+  const waypoints = [
+    { latlng: [47.657, 23.582], label: 'Baia Mare — Día 1' },
+    { latlng: [47.932, 23.889], label: 'Sighetu Marmației — Día 2' },
+    { latlng: [47.969, 23.694], label: 'Săpânța — Día 2' },
+    { latlng: [47.860, 24.008], label: 'Vadu Izei — Día 3' },
+    { latlng: [47.815, 24.100], label: 'Bârsana — Día 3' },
+    { latlng: [47.879, 24.216], label: 'Botiza — Día 4' },
+    { latlng: [47.718, 24.419], label: 'Vișeu de Sus (Mocănița) — Día 5' },
+    { latlng: [47.758, 23.929], label: 'Ocna Șugatag — Día 6' }
+  ];
+
+  const map = L.map('route-map', { zoomControl: true, attributionControl: false })
+    .setView([47.8, 24.0], 9);
+
+  const _lang = (navigator.language || 'en').toLowerCase();
+  if (_lang.startsWith('es')) {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+      className: 'tile-osm-es'
+    }).addTo(map);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+  }
+
+  const bounds = L.latLngBounds(routeCoords).pad(0.12);
+  map.fitBounds(bounds);
+
+  L.polyline(routeCoords, { color: '#c9a96e', weight: 4, opacity: 0.85, lineJoin: 'round' }).addTo(map);
+
+  L.circleMarker(routeCoords[0], {
+    radius: 9, fillColor: '#5ecb8a', color: '#fff', weight: 2.5, fillOpacity: 1
+  }).bindTooltip('Baia Mare — Inicio', { permanent: false, direction: 'right' }).addTo(map);
+
+  waypoints.slice(1).forEach(wp => {
+    L.circleMarker(wp.latlng, {
+      radius: 7, fillColor: '#c9a96e', color: '#fff', weight: 2, fillOpacity: 1
+    }).bindTooltip(wp.label, { permanent: false, direction: 'top' }).addTo(map);
+  });
+
+  L.control.attribution({ prefix: false }).addAttribution('© <a href="https://openstreetmap.org">OpenStreetMap</a>').addTo(map);
+  setTimeout(() => map.invalidateSize(), 100);
+})();
+</script>
+<style>.tile-osm-es{filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)}</style>
+</body>
+</html>

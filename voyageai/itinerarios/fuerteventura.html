@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fuerteventura, España — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 5 días en Fuerteventura: Dunas de Corralejo, Playa de Cofete, Betancuria, El Cotillo y Jandía. Presupuesto, hoteles y consejos insider de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Base (fallback si shared.css no carga en file:// / content://) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#2a1a00 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a1000 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#3a2200 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg,#080600 0%,#1a1200 40%,#4a3400 70%,rgba(201,169,110,0.3) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .phrases-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .phrase-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px; }
+    .phrase-es { font-size:0.78rem;color:rgba(237,238,242,0.5);margin-bottom:4px; }
+    .phrase-local { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:3px; }
+    .phrase-pron { font-size:0.75rem;color:#c9a96e;font-style:italic; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* ── Tablet ── */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+    }
+    /* ── Mobile ── */
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    /* ── Small mobile ── */
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .alert-box { font-size: 0.8rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .act-desc { font-size: 0.82rem !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .phrase-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+      .disclosure { padding: 12px 14px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(201,169,110,0.1);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Fuerteventura</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Fuerteventura</h1>
+  <p class="dest-country">Corralejo · Cofete · Betancuria · El Cotillo · Jandía</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 5 días / 4 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Familia / Amigos</span>
+    <span class="dest-badge gold" role="listitem">💶 €650–1,050/persona</span>
+    <span class="dest-badge" role="listitem">🌍 Europa · España · Canarias</span>
+    <span class="dest-badge" role="listitem">🏖️ Playa + Naturaleza + Surf</span>
+    <a href="https://www.skyscanner.es/transport/flights/MAD/FUE/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">5 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Islas</div><div class="dest-sum-val">1 isla</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€650–1,050</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Todo el año</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Llegada y Ajuy</a></li>
+        <li><a href="#dia2">Día 2 · Dunas Corralejo</a></li>
+        <li><a href="#dia3">Día 3 · Jandía y Cofete</a></li>
+        <li><a href="#dia4">Día 4 · Betancuria</a></li>
+        <li><a href="#dia5">Día 5 · Sotavento</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#frases">Frases locales</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Fuerteventura es la isla más salvaje y genuina de las Canarias: 340 días de sol al año, 150 kilómetros de playas vírgenes y una ausencia casi total de masificación turística más allá de Corralejo. La segunda isla más grande del archipiélago tiene todo lo que el viajero inteligente busca sin pagar precios desorbitados: dunas blancas como el Sahara, una playa de arena virgen bajo montañas volcánicas (Cofete), la primera capital colonial española del Atlántico (Betancuria, fundada en 1402), queso majorero premiado como el mejor del mundo, atún rojo de almadraba del Atlántico y la laguna de kitesurf más famosa del planeta. Todo a 2h30min de cualquier aeropuerto español. Solo necesitas un coche y ganas de conducir — sin transporte privado, esta isla no existe.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏖️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Norte salvaje</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1 y 2</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🌋</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Cofete y Jandía</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 3</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏰</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Interior histórico</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 4 y 5</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Económico</th><th>Confort</th><th>Premium</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo A/R</td><td>€60–120</td><td>€120–200</td><td>€250+</td><td>Ryanair/Vueling desde Madrid. 2h30min</td></tr>
+            <tr><td>🏨 Alojamiento (4 noches)</td><td>€88</td><td>€320</td><td>€1,120</td><td></td></tr>
+            <tr><td>🍽️ Comidas (5 días)</td><td>€80</td><td>€180</td><td>€350</td><td>~€16/36/70 por día</td></tr>
+            <tr><td>🚗 Alquiler de coche (IMPRESCINDIBLE)</td><td>€100</td><td>€160</td><td>€220</td><td>Centauro, OK Mobility, Record Go</td></tr>
+            <tr><td>🎟️ Entradas (Oasis Park)</td><td>€25</td><td>€50</td><td>€80</td><td>Oasis Park €24 + ferry Lobos €20</td></tr>
+            <tr><td>🏄 Actividades (kitesurf, ferry Lobos)</td><td>€0</td><td>€80</td><td>€180</td><td>Clase kitesurf €60 · Ferry Lobos €20</td></tr>
+            <tr><td>🔄 Imprevistos (10%)</td><td>€35</td><td>€100</td><td>€225</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€388</strong></td><td><strong>~€1,010</strong></td><td><strong>~€2,425</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo coche:</strong> El alquiler de coche en Fuerteventura es imprescindible — no hay transporte público útil para llegar a Cofete, al norte o al interior. Reserva con antelación en Centauro, OK Mobility o Record Go (las más económicas). Un coche pequeño para 5 días sale por €100–160. Sin coche, este itinerario no es posible.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚗 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Vuelos</div>
+          <div class="transport-content">
+            Aeropuerto <strong>El Matorral (FUE)</strong>, a 5 km de Puerto del Rosario. Ryanair, Vueling e Iberia Express operan desde toda España con precios muy competitivos. Desde Madrid 2h30min. Desde Barcelona 2h45min. El aeropuerto es pequeño y los trámites son rápidos. Reserva con 4–8 semanas de antelación para las mejores tarifas.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 Alquiler de coche</div>
+          <div class="transport-content">
+            <strong>Imprescindible.</strong> Las tres empresas más económicas del aeropuerto son Centauro, OK Mobility y Record Go. Un coche de segmento A (FIAT 500, VW Polo) sale por <strong>€20–30/día</strong>. Reserva online antes de llegar — en el mostrador es más caro. El depósito puede bloquearte hasta €500 en la tarjeta. Necesitas carnet de conducir + tarjeta de crédito (no débito).
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">⛴️ Ferry a Isla de Lobos</div>
+          <div class="transport-content">
+            El ferry a la <strong>Isla de Lobos</strong> sale desde el Puerto de Corralejo varias veces al día. Precio <strong>€20 ida y vuelta</strong>. Trayecto 20 minutos. La isla es una Reserva Natural sin coches ni servicios — lleva agua y snorkel. En verano es recomendable reservar con antelación. También hay ferries a Lanzarote desde Corralejo.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Guaguas (autobús público)</div>
+          <div class="transport-content">
+            Fuerteventura tiene <strong>guaguas (autobuses) entre las capitales</strong> pero con frecuencias muy bajas (cada 2–4 horas) y sin cubrir los puntos más interesantes como Cofete o Ajuy. <strong>No recomendable</strong> para visitar la isla. El precio es bajo (€1.50–3.00) pero el tiempo perdido no compensa. Solo útil para ir entre Puerto del Rosario y Corralejo si no tienes coche.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Budget</div>
+          <div class="hotel-name">Corralejo Beach Hostel</div>
+          <div class="hotel-zone">Corralejo</div>
+          <div class="hotel-price">~€22/noche</div>
+          <ul class="hotel-features">
+            <li>Junto a las dunas, ambiente surfero</li>
+            <li>Cocina compartida y terraza</li>
+            <li>Comunidad de viajeros jóvenes</li>
+            <li>A pie de playa de Corralejo Grande</li>
+          </ul>
+          <a href="https://www.booking.com/searchresults.es.html?ss=Corralejo+hostel" target="_blank" rel="noopener" class="hotel-link">Buscar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐⭐ Confort</div>
+          <div class="hotel-name">Hotel Riu Oliva Beach</div>
+          <div class="hotel-zone">Corralejo</div>
+          <div class="hotel-price">~€80/noche</div>
+          <ul class="hotel-features">
+            <li>Todo incluido junto a las dunas</li>
+            <li>Piscina y acceso directo a la playa</li>
+            <li>Buffet de desayuno amplio</li>
+            <li>Ideal para familias con niños</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/riu-oliva-beach-resort.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Gran Hotel Atlantis Bahía Real</div>
+          <div class="hotel-zone">Corralejo</div>
+          <div class="hotel-price">~€280/noche</div>
+          <ul class="hotel-features">
+            <li>5 estrellas con talasoterapia marina</li>
+            <li>Vistas a las dunas y al océano</li>
+            <li>Spa y piscinas termales</li>
+            <li>El hotel más exclusivo de la isla</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/gran-hotel-atlantis-bahia-real.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS DEL ITINERARIO ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Llegada y Ajuy</div>
+            <div class="day-subtitle">Aeropuerto · Calas negras de Ajuy · Puerto del Rosario</div>
+          </div>
+          <div class="day-meta"><span>🏖️ Llegada</span><span>Tarde</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Lo primero al llegar:</strong> Recoge el coche antes de salir del aeropuerto. Sin coche no podrás ver la isla real. Los mostradores de Centauro, OK Mobility y Record Go están en el edificio del aeropuerto.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Recogida de coche — Imprescindible para explorar la isla</div>
+              <div class="act-desc">El primer paso al llegar a Fuerteventura es recoger el coche de alquiler. Sin él, este itinerario no funciona: Cofete, Ajuy, El Cotillo y el interior solo son accesibles en vehículo privado. El coste es de €25–40 al día según categoría. Lleva la confirmación de reserva y la tarjeta de crédito con margen suficiente para el depósito (hasta €500 bloqueados).</div>
+              <div class="act-tags"><span class="act-tag warn">€25–40/día</span><span class="act-tag">Imprescindible</span><span class="act-tag info">Tarjeta crédito obligatoria</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de los Muertos (Ajuy) — Calas de arena negra y cuevas marinas</div>
+              <div class="act-desc">A 45 minutos del aeropuerto, la Playa de los Muertos en Ajuy es uno de los secretos mejor guardados de Fuerteventura: una cala de arena negra volcánica entre acantilados con cuevas marinas formadas por la erosión del océano. El acceso es por una pista de tierra pero el coche llega sin problema. El contraste entre la arena negra, el agua turquesa y las paredes volcánicas es absolutamente cinematográfico.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">45 min desde aeropuerto</span><span class="act-tag">Cuevas marinas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Pueblo de Ajuy — El más auténtico de la isla</div>
+              <div class="act-desc">Ajuy es un pueblo de pescadores de apenas 200 habitantes que no ha cambiado en décadas. Casas blancas bajas, barcas pintadas de colores en la orilla y una calma total que contrasta con los resorts del norte. Pasea por la orilla, observa a los pescadores reparar sus redes y toma algo en la única terraza del pueblo mirando al Atlántico. La autenticidad que no encontrarás en Corralejo.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Pueblo de pescadores</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Puerto del Rosario — La capital. Paseo marítimo y cena</div>
+              <div class="act-desc">La capital de Fuerteventura no es un destino turístico pero tiene un paseo marítimo agradable y buenos restaurantes locales sin los precios inflados de Corralejo. Es también donde se aloja quien quiere estar en la zona central con acceso rápido al norte y al sur. El paseo junto al puerto al caer la noche, con los barcos y la calma del Atlántico, es el mejor final para el primer día.</div>
+              <div class="act-tags"><span class="act-tag info">Capital de la isla</span><span class="act-tag green">Paseo marítimo gratis</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>La Marisquería</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Puerto del Rosario</span></td><td>Papas arrugadas con mojo rojo y vieja frita. El menú del día del marino local.</td><td>~€18</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>El Patio</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Puerto del Rosario</span></td><td>Atún rojo de almadraba a la plancha. La mejor proteína del Atlántico.</td><td>~€30</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Altamar</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Puerto del Rosario</span></td><td>Mariscos del Atlántico y cocina de autor canaria. Vistas al puerto.</td><td>~€50</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Norte: Dunas de Corralejo</div>
+            <div class="day-subtitle">Parque Natural · Corralejo Grande · Isla de Lobos · Flag Beach</div>
+          </div>
+          <div class="day-meta"><span>🏜️ Norte</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Parque Natural Dunas de Corralejo — El Sahara en Canarias</div>
+              <div class="act-desc">El Parque Natural de las Dunas de Corralejo es uno de los paisajes más sorprendentes de España: 10 kilómetros de dunas blancas de arena fina que avanzan sobre la costa norte de la isla como un desierto sahariano junto al océano. Las dunas llegan hasta el borde mismo del agua turquesa, creando uno de los contrastes más fotogénicos del Atlántico. Llega pronto para ver el paisaje sin otros visitantes y con la luz dorada de la mañana.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">10km de dunas</span><span class="act-tag">Parque Natural protegido</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de Corralejo Grande — La mejor de Fuerteventura</div>
+              <div class="act-desc">Junto al parque de dunas, la Playa de Corralejo Grande tiene agua transparente de color turquesa con el fondo de arena blanca perfectamente visible hasta los 3 metros de profundidad. La corriente es moderada y el acceso cómodo. Es la playa más visitada del norte pero su tamaño la mantiene siempre habitable. El contraste con las dunas al fondo crea una escena que parece el Caribe pero está a 2 horas de España.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Agua transparente</span><span class="act-tag">La mejor del norte</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Corralejo — Tapas de atún rojo canario</div>
+              <div class="act-desc">El pueblo de Corralejo tiene la mayor concentración de restaurantes del norte de la isla. Los bares del casco histórico (no el paseo turístico) sirven tapas de atún rojo de almadraba — una de las mayores reservas del Atlántico pasa frente a Fuerteventura cada temporada. El bocadillo de atún encebollado por €6 en cualquier bar local es una de las mejores comidas de la isla.</div>
+              <div class="act-tags"><span class="act-tag">Bocata atún €6</span><span class="act-tag info">Bares del casco histórico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Isla de Lobos — Ferry €20. Reserva Natural y snorkel increíble</div>
+              <div class="act-desc">La Isla de Lobos es una Reserva Natural deshabitada a 2 kilómetros de Corralejo. El ferry tarda 20 minutos y va varias veces al día (reservar online). Sin coches, sin hoteles, sin tiendas — solo naturaleza volcánica, playas de arena blanca y un agua tan transparente que el snorkel aquí es de los mejores de Canarias. Lleva agua, protector solar y calzado de agua. En verano hay aforo limitado en la isla.</div>
+              <div class="act-tags"><span class="act-tag">Ferry €20 ida y vuelta</span><span class="act-tag warn">Reservar con antelación</span><span class="act-tag">Snorkel increíble</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Kitesurf en Flag Beach — La capital mundial del windsurf</div>
+              <div class="act-desc">Flag Beach es la playa de kitesurf y windsurf más famosa de Europa. El viento constante del norte (el Alisio) hace que Fuerteventura sea el destino de kitesurf número uno del mundo. Aunque no practiques el deporte, ver decenas de cometas de colores surcando el cielo al atardecer es un espectáculo visual único. Si quieres probar, las escuelas ofrecen clases introductorias de 3 horas por €60 que incluyen teoría, seguridad y primeras maniobras.</div>
+              <div class="act-tags"><span class="act-tag">Clase €60</span><span class="act-tag info">Capital mundial windsurf</span><span class="act-tag green">Espectáculo visual gratis</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en El Andaluz — Cocina española con ingredientes locales</div>
+              <div class="act-desc">El Andaluz es uno de los restaurantes más queridos de Corralejo: cocina española de producto con ingredientes locales de Fuerteventura — queso majorero, atún de almadraba y verduras de los pequeños huertos del interior. Un menú honesto, generoso y bien ejecutado que pone en valor lo mejor de la isla sin artificios turísticos.</div>
+              <div class="act-tags"><span class="act-tag">~€22</span><span class="act-tag info">Productos locales</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bodegón Canario</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Corralejo casco</span></td><td>Papas arrugadas con mojo y potaje de berros. El bodegón de toda la vida.</td><td>~€14</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>La Marquesina</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Puerto de Corralejo</span></td><td>Pescado del día en costra de sal. Vistas al embarcadero de Lobos.</td><td>~€28</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Tres Palmeras</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Corralejo</span></td><td>Langosta del Atlántico y atún de almadraba. El mejor pescado del norte.</td><td>~€45</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Sur: Jandía y Cofete</div>
+            <div class="day-subtitle">Morro Jable · Punta de Jandía · Playa de Cofete · Villa Winter</div>
+          </div>
+          <div class="day-meta"><span>🌊 Sur</span><span>Día largo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box warn">
+            <strong>⚠️ Imprescindible:</strong> La pista de tierra que lleva a Cofete es accesible con un coche normal (no se necesita 4x4) pero requiere ir despacio. Algunos seguros de alquiler no cubren daños en pistas sin asfaltar — consulta antes. El trayecto desde Morro Jable a Cofete son 20 minutos por pista de tierra.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ruta al sur — 1h en coche. Volcanes extintos y camellos</div>
+              <div class="act-desc">El trayecto desde el norte hasta el sur de Fuerteventura es en sí mismo una experiencia: la carretera atraviesa el paisaje volcánico central con montañas extintas, llanuras de lava y, en la zona de Tindaya, la posibilidad de ver dromedarios pastando libremente. La isla de norte a sur tiene una carretera directa (FV-2) sin peajes. Lleva gasolina — las gasolineras son escasas en el interior.</div>
+              <div class="act-tags"><span class="act-tag info">1h de conducción</span><span class="act-tag green">Paisaje volcánico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Morro Jable — El pueblo más bonito del sur. Paseo marítimo</div>
+              <div class="act-desc">Morro Jable es el pueblo principal del sur de Fuerteventura: un casco histórico de casas blancas con calles en pendiente que llegan hasta el puerto de pescadores. Muy diferente al turismo masivo de los complejos hoteleros que lo rodean. El paseo marítimo junto al puerto viejo, con los barcos de pesca y los cafés tranquilos, es el mejor de la isla. Toma el desayuno aquí antes de continuar.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Pueblo pesquero auténtico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Punta de Jandía — El punto más al sur. Faro histórico y agua turquesa</div>
+              <div class="act-desc">La Punta de Jandía es el extremo sur de Fuerteventura, donde el Atlántico se divide entre la costa de sotavento (calmada, aguas turquesas) y barlovento (bravia, olas de kitesurf). El faro histórico de Jandía data de 1864 y es el punto geodésico más meridional de la isla. El agua en la punta, protegida por la orografía, tiene un color turquesa irreal que contrasta con el cielo azul y las montañas volcánicas.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Faro histórico 1864</span><span class="act-tag">Agua turquesa</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de Cofete — 14km de arena virgen. Villa Winter y el misterio nazi</div>
+              <div class="act-desc">Cofete es la playa más cinematográfica de España: 14 kilómetros de arena salvaje bajo las montañas volcánicas de Jandía, sin servicios, sin sombrillas y sin acceso asfaltado. El agua aquí es brava (no apta para nadar) pero el paisaje es absolutamente único en Europa. En la playa está la misteriosa Villa Winter, construida en los años 40 por el ingeniero alemán Gustav Winter — las teorías dicen que sirvió de refugio para submarinos nazis o para el propio Hitler. La realidad sigue sin estar clara.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag">14km sin servicios</span><span class="act-tag warn">Pista de tierra</span><span class="act-tag info">Villa Winter (historia)</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de Barlovento — La más técnica para kitesurfers</div>
+              <div class="act-desc">La costa de barlovento (expuesta al viento) del sur de Jandía es el territorio de los kitesurfers más avanzados. Las olas aquí son grandes y el viento constante — no es una playa para bañarse sino para ver la acción. El espectáculo de los kitesurfers lanzados por las olas a 10 metros de altura con el fondo de las montañas volcánicas es uno de los deportes visuales más impresionantes que puedes presenciar en Europa.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag">Kitesurf avanzado</span><span class="act-tag info">No apto para bañarse</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mariscos del día en Morro Jable — Lo mejor del Atlántico a pie de puerto</div>
+              <div class="act-desc">Los restaurantes del puerto viejo de Morro Jable sirven el pescado y los mariscos más frescos de la isla: gambas rojas del Atlántico, langostinos de roca y el inevitable atún de almadraba. La cherne (mero canario) a la sal es la especialidad del sur. Precios muy por debajo de los resorts turísticos cercanos.</div>
+              <div class="act-tags"><span class="act-tag">~€25</span><span class="act-tag info">Puerto pesquero</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Tagoror</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Morro Jable centro</span></td><td>Potaje de berros y sama a la sal. Cocina canaria sin concesiones al turismo.</td><td>~€15</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Risco del Paso</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">La Pared</span></td><td>Cherne (mero canario) al horno con papas. Vista al Atlántico salvaje.</td><td>~€30</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Bahía La Pared</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">La Pared</span></td><td>Langosta canaria y corvina salvaje. Las mejores vistas del sur de la isla.</td><td>~€45</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Interior: Betancuria y molinos</div>
+            <div class="day-subtitle">Betancuria · Morro Velosa · Antigua · Oasis Park · El Cotillo</div>
+          </div>
+          <div class="day-meta"><span>🏰 Interior</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Betancuria — Primera capital de Canarias (1402). 800 habitantes</div>
+              <div class="act-desc">Betancuria fue la primera capital de las Islas Canarias y la primera ciudad fundada por los conquistadores europeos en el Atlántico, establecida en 1402 por el normando Jean de Béthencourt. Hoy tiene 800 habitantes y parece un pueblo medieval detenido en el tiempo: calles empedradas, casas coloniales blancas y una catedral del siglo XV construida sobre los restos de una mezquita guanche. El Museo de Arte Sacro tiene piezas coloniales únicas en las islas.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Primera capital atlántica</span><span class="act-tag">Catedral s.XV</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mirador de Morro Velosa — Las mejores vistas del interior volcánico</div>
+              <div class="act-desc">A pocos kilómetros de Betancuria, el Mirador de Morro Velosa a 659 metros de altitud ofrece la panorámica más completa del interior volcánico de Fuerteventura: montañas extintas de color ocre, valles sin vegetación y, en días claros, la costa este y oeste simultáneamente. Las estatuas de los reyes guanches Guize y Ayose custodian el mirador. Es el punto más alto accesible en coche de la isla.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">659m altitud</span><span class="act-tag">Mejores vistas del interior</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Antigua y molinos — Los más fotografiados de Canarias</div>
+              <div class="act-desc">El pueblo de Antigua tiene los molinos de viento más fotogénicos de Fuerteventura: estructuras de piedra volcánica con aspas blancas restauradas que han molido gofio (harina de trigo tostado) durante siglos. El Molino de Antigua es el más conocido, junto al Centro de Artesanía donde los artesanos locales trabajan el barro, el palmito y el queso majorero. Un parón perfecto entre Betancuria y la tarde.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis exterior</span><span class="act-tag info">Molinos históricos</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Papas arrugadas con mojo rojo auténtico — El plato canario</div>
+              <div class="act-desc">En cualquier restaurante del interior, las papas arrugadas son la experiencia gastronómica más honesta de Fuerteventura: patatas pequeñas cocidas en agua con sal gruesa hasta que la piel se arruga y cristaliza de sal. Con mojo rojo (ajo, aceite, vinagre, pimiento rojo y comino) o mojo verde (cilantro y perejil). Por €12 tienes una ración generosa que es un almuerzo completo. Un plato que se ha servido igual durante 500 años.</div>
+              <div class="act-tags"><span class="act-tag">~€12</span><span class="act-tag info">Plato canario esencial</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Oasis Park — Dromedarios, jirafas y leones en el desierto canario</div>
+              <div class="act-desc">El Oasis Park Fuerteventura es el parque zoológico y botánico más singular del archipiélago: dromedarios, jirafas, leones, tigres de bengala, loros guacamayos y cactus gigantescos conviven en un paisaje volcánico que hace que el zoo parezca parte del desierto africano. El espectáculo de los loros a las 16h y el paseo en dromedario (incluido) son los momentos más populares. Especialmente recomendado para familias con niños.</div>
+              <div class="act-tags"><span class="act-tag">€24</span><span class="act-tag info">3h visita completa</span><span class="act-tag green">Paseo dromedario incluido</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">El Cotillo al atardecer — Lagunas turquesas y puesta de sol espectacular</div>
+              <div class="act-desc">El Cotillo es el pueblo más auténtico del norte de Fuerteventura y tiene el atardecer más hermoso de la isla. Las lagunas naturales junto al pueblo (formadas por las rocas volcánicas que retienen el agua del océano) tienen un agua turquesa de color imposible que se vuelve dorada al ponerse el sol. La Torre del Tostón (castillo del siglo XVIII) cierra el horizonte. Es el lugar perfecto para terminar el penúltimo día de viaje.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Mejor atardecer de la isla</span><span class="act-tag">Lagunas naturales turquesas</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>La Macaronesia</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">El Cotillo</span></td><td>Caldo de pescado canario y gofio escaldado. Cocina guanche de hoy.</td><td>~€13</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>El Cotillo Surf Bar</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">El Cotillo</span></td><td>Hamburguesa de atún rojo + cerveza artesanal canaria. Ambiente surfero al atardecer.</td><td>~€22</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Mahoh</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Villaverde</span></td><td>Cocina canaria de autor con queso majorero y atún de almadraba. En una casa rural histórica.</td><td>~€38</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 5 -->
+      <div class="day-card" id="dia5">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Sotavento y salida</div>
+            <div class="day-subtitle">Playa de Sotavento · Costa Calma · Aeropuerto El Matorral</div>
+          </div>
+          <div class="day-meta"><span>✈️ Salida</span><span>Mañana + vuelo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de Sotavento — La laguna de kitesurf más famosa del mundo</div>
+              <div class="act-desc">La Playa de Sotavento, en el lado sur de la isla, alberga una laguna tidal que en bajamar crea un espejo de agua de 3 kilómetros con solo 30 centímetros de profundidad y el color del Caribe. Es el escenario del Campeonato del Mundo de Windsurf y Kitesurf que se celebra aquí cada verano. Aunque no practiques el deporte, caminar descalzo por la laguna con el agua templada hasta los tobillos y las cometas de colores en el cielo es una experiencia que no se olvida.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag">Campeonato Mundial Kitesurf</span><span class="act-tag info">Laguna poco profunda</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Costa Calma — Resort tranquilo. Agua cálida protegida</div>
+              <div class="act-desc">Costa Calma es el resort familiar más tranquilo del sur de Fuerteventura: playas de agua calmada y cálida (protegida por los arrecifes), sin olas y con entrada gradual al mar — perfecta para niños y nadadores que prefieren aguas tranquilas. En las últimas horas antes de volar, es el lugar ideal para un último baño relajado en el Atlántico sur de la isla, que está varios grados más cálido que el norte.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Agua calmada y cálida</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último almuerzo — Gofio escaldado y caldo de pescado canario</div>
+              <div class="act-desc">El gofio escaldado es el plato más auténtico de la gastronomía guanche: harina de trigo o mijo tostado al fuego que se amasa con caldo de pescado caliente hasta conseguir una textura entre polenta y puré. Fue el alimento básico de los maioreros (habitantes originales de Fuerteventura) durante 2.000 años. Hoy lo sirven como entrante en cualquier restaurante tradicional. Termina con un barraquito — el café canario de tres leches con licor 43.</div>
+              <div class="act-tags"><span class="act-tag">~€14</span><span class="act-tag info">Plato guanche milenario</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Aeropuerto El Matorral — 1h desde el sur. Devolver el coche</div>
+              <div class="act-desc">El aeropuerto de Fuerteventura (FUE) está a 1 hora en coche desde el sur de la isla y a solo 5 minutos desde el centro de Puerto del Rosario. Devuelve el coche en el parking de las empresas de alquiler (hay señalización desde la entrada del aeropuerto) y procede al check-in. El aeropuerto es pequeño y los controles son rápidos, pero añade siempre 2 horas de margen para vuelos internacionales.</div>
+              <div class="act-tags"><span class="act-tag info">1h desde el sur</span><span class="act-tag">Devolver coche</span><span class="act-tag warn">Añade 2h de margen</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>El Jable</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Costa Calma</span></td><td>Gofio escaldado con caldo de mero y papas arrugadas. El plato más guanche.</td><td>~€13</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Atlantis Bahía Real</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Corralejo</span></td><td>Menú de despedida en el restaurante del 5★. Cocina canaria de alto nivel.</td><td>~€40</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Timbazo</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Corralejo</span></td><td>El restaurante más premiado de Fuerteventura. Cocina de autor con producto local.</td><td>~€55</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Dunas de Corralejo al amanecer</h4><p>Diez kilómetros de dunas blancas con la primera luz del día, sin turistas, con el Atlántico al fondo turquesa y el silencio del desierto. El paisaje más improbable de España y el más bello del Atlántico.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Playa de Cofete — La más cinematográfica de España</h4><p>Catorce kilómetros de arena virgen bajo montañas volcánicas, sin servicios ni turistas. La Villa Winter y su misterio nazi en el horizonte. Una playa que parece inventada por una película de Werner Herzog.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Isla de Lobos — Snorkel en Reserva Natural</h4><p>La isla deshabitada a 2km de Corralejo con agua tan cristalina que el snorkel parece estar en el Índico. Sin coches, sin tiendas, sin hoteles — solo Atlántico puro y fauna marina protegida.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Betancuria — La primera capital del Atlántico</h4><p>El pueblo más antiguo de las Canarias y la primera ciudad fundada por europeos en el Atlántico (1402). Ochocientos habitantes, calles medievales y una catedral del siglo XV que sobrevivió a piratas berberiscos.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>El Cotillo al atardecer — El mejor de la isla</h4><p>Las lagunas naturales junto al pueblo de El Cotillo se vuelven doradas cuando el sol toca el horizonte atlántico. El mejor espectáculo cromático de Fuerteventura, completamente gratis y sin multitudes.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Kitesurf Flag Beach — La capital mundial</h4><p>Ver las cometas de colores surcando el cielo sobre el Atlántico en el lugar donde se inventó el kitesurf europeo. Aunque no practiques el deporte, el espectáculo visual es de los más impresionantes de las islas.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Oasis Park — Zoo en el desierto volcánico</h4><p>Jirafas, dromedarios y leones en un paisaje volcánico que hace que el zoo parezca el Sáhara. El paseo en dromedario con las montañas extintas de fondo es una postal que no olvidarás.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Playa de Sotavento — La laguna infinita</h4><p>La laguna tidal que en bajamar crea un espejo de agua poco profunda con el color del Caribe. El escenario del Campeonato Mundial de Kitesurf, accesible a pie y completamente gratuito.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Ajuy — Calas de arena negra y cuevas marinas</h4><p>El secreto mejor guardado de Fuerteventura: una cala de arena volcánica negra con cuevas marinas esculpidas por el Atlántico. El pueblo de pescadores más auténtico de la isla, sin turistas y sin poses.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Queso majorero en La Oliva — Premio al mejor del mundo</h4><p>Probar el queso majorero DOP en una quesería artesanal de La Oliva, hecho con leche de cabra autóctona. Un producto que ganó el premio al mejor queso curado del mundo y que solo existe aquí.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍽️ Gastronomía majorera</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Plato nacional · Canario</div><div class="gastro-title">Papas arrugadas con mojo</div><div class="gastro-desc">Patatas pequeñas cocidas con agua y sal gruesa hasta que la piel se arruga y cristaliza. Con mojo rojo (ajo, aceite, vinagre, pimiento rojo y comino) o mojo verde (cilantro y perejil). El plato canario por excelencia, igual que hace 500 años. Por €5–8 como entrante en cualquier restaurante de la isla.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Pesca · Atlántico</div><div class="gastro-title">Atún rojo de almadraba</div><div class="gastro-desc">Una de las mayores reservas de atún rojo del Atlántico pasa frente a Fuerteventura cada temporada. Los restaurantes del norte y sur sirven el atún recién desembarcado en sashimi, a la plancha o encebollado. Es notablemente más barato que en Cádiz o Tarifa y de la misma calidad. Entre €18 y €25 la ración generosa.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Queso DOP · Artesanal</div><div class="gastro-title">Queso majorero DOP</div><div class="gastro-desc">Elaborado con leche de cabra majorera, la única raza autóctona de Fuerteventura. Existe en tres versiones: fresco, semicurado y curado (el más premiado). El queso majorero curado ganó el premio al mejor queso curado del mundo en el World Cheese Awards. Cómpralo en las queserías de La Oliva o Betancuria.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Condimento · Canario</div><div class="gastro-title">Mojo picón</div><div class="gastro-desc">La salsa madre de la gastronomía canaria: ajo, aceite de oliva, vinagre, pimiento rojo y comino machacados en mortero. Existe en versión roja (mojo picón, con un toque de cayena) y verde (mojo verde, con cilantro y perejil). Va con todo: papas, pescado, carne y pan. En Fuerteventura cada familia tiene su receta secreta.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Plato histórico · Guanche</div><div class="gastro-title">Gofio escaldado</div><div class="gastro-desc">El alimento milenario de los guanches: harina de trigo o mijo tostado al fuego que se mezcla con caldo de pescado caliente hasta formar una masa espesa. Los maioreros (habitantes precoloniales de Fuerteventura) vivían de él durante siglos. Hoy es un plato de vanguardia en los mejores restaurantes canarios y una experiencia gastronómica que no existe en ningún otro lugar del mundo.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Café · Canario</div><div class="gastro-title">Barraquito</div><div class="gastro-desc">El café más elaborado del mundo: en un vaso largo de cristal, capas superpuestas de leche condensada, leche evaporada, café espresso, leche caliente espumada y finalmente un chupito de Licor 43 con una piel de limón. El desayuno local de Fuerteventura. Por €2.50 en cualquier bar. El Licor 43 lo diferencia del cortado normal y le da un sabor absolutamente único.</div></div>
+      </div>
+    </section>
+
+    <!-- ── FRASES LOCALES ── -->
+    <section id="frases" class="itin-section">
+      <h2 class="section-heading">🗣️ Español canario: frases locales</h2>
+      <div class="phrases-grid">
+        <div class="phrase-card"><div class="phrase-es">El autobús</div><div class="phrase-local">Guagua</div><div class="phrase-pron">Nadie dice "autobús" en Canarias</div></div>
+        <div class="phrase-card"><div class="phrase-es">Agua sin gas (pedir siempre)</div><div class="phrase-local">Sin gaz</div><div class="phrase-pron">Pronunciado "sin gas" — el agua normal</div></div>
+        <div class="phrase-card"><div class="phrase-es">Playa de roca (distinto de arena)</div><div class="phrase-local">Peñas</div><div class="phrase-pron">Importante saber la diferencia antes de ir</div></div>
+        <div class="phrase-card"><div class="phrase-es">El café con tres leches</div><div class="phrase-local">Barraquito</div><div class="phrase-pron">Café + leche condensada + evaporada + Licor 43</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Hay salsa canaria?</div><div class="phrase-local">¿Hay mojo?</div><div class="phrase-pron">La respuesta siempre es sí</div></div>
+        <div class="phrase-card"><div class="phrase-es">El snack de gofio</div><div class="phrase-local">Pella de gofio</div><div class="phrase-pron">Gofio amasado con miel y anís</div></div>
+        <div class="phrase-card"><div class="phrase-es">Besugo entero al horno</div><div class="phrase-local">Sama a la sal</div><div class="phrase-pron">Con sal gruesa — el plato del domingo</div></div>
+        <div class="phrase-card"><div class="phrase-es">El pescado más típico</div><div class="phrase-local">Vieja frita</div><div class="phrase-pron">Pez loro frito entero. €12. Imprescindible.</div></div>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Nota lingüística:</strong> El español canario tiene un acento muy diferente al peninsular: pronunciación más relajada, vocabulario con influencias del portugués, del inglés y de las lenguas guanches. No pasa nada si no entiendes algunas palabras — los canarios son de las personas más hospitalarias de España y siempre explican con una sonrisa.
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales (UE)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos, ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil</div><div class="emerg-value">062</div><div class="emerg-note">Seguridad en carreteras y zonas rurales</div></div>
+        <div class="emerg-card"><div class="emerg-label">Cruz Roja Marítima</div><div class="emerg-value">900 202 202</div><div class="emerg-note">Rescate en el mar — gratuito</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital General Fuerteventura</div><div class="emerg-value">+34 928 862 000</div><div class="emerg-note">Urgencias 24h · Puerto del Rosario</div></div>
+        <div class="emerg-card"><div class="emerg-label">Capitanía Marítima</div><div class="emerg-value">900 202 202</div><div class="emerg-note">Emergencias y rescate marítimo</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Nacional</div><div class="emerg-value">091</div><div class="emerg-note">Robos y denuncias turistas</div></div>
+      </div>
+      <div class="alert-box warn" style="margin-top:14px">
+        <strong>⚠️ Seguridad en playas remotas:</strong> Cofete, Ajuy y las playas de barlovento tienen corrientes fuertes y no cuentan con socorristas. No te bañes en estas playas aunque el agua parezca tranquila — el oleaje puede ser traicionero. La Tarjeta Sanitaria Europea cubre la asistencia médica en España sin coste adicional.
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor (España, no necesita pasaporte)</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea</div>
+            <div class="check-item"><div class="check-box"></div>Carnet de conducir en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta de crédito para el depósito del coche</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">✈️ Reservas confirmadas</div>
+            <div class="check-item"><div class="check-box"></div>Vuelos (Fuerteventura FUE)</div>
+            <div class="check-item"><div class="check-box"></div><strong>Coche de alquiler — reservar antes de llegar</strong></div>
+            <div class="check-item"><div class="check-box"></div>Alojamiento (4 noches)</div>
+            <div class="check-item"><div class="check-box"></div>Ferry Isla de Lobos — reservar online en verano</div>
+            <div class="check-item"><div class="check-box"></div>Oasis Park (optativo, entrada online más barata)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">🎒 Equipaje esencial</div>
+            <div class="check-item"><div class="check-box"></div><strong>Alquiler de coche imprescindible — sin coche no puedes ir a Cofete ni al norte</strong></div>
+            <div class="check-item"><div class="check-box"></div>Protector solar SPF 50+ (radiación muy intensa todo el año)</div>
+            <div class="check-item"><div class="check-box"></div>Calzado de playa (la arena es muy caliente en verano)</div>
+            <div class="check-item"><div class="check-box"></div>Ropa de abrigo para las noches (brisa atlántica)</div>
+            <div class="check-item"><div class="check-box"></div>Gafas de sol de calidad (reflejo del sol en las dunas)</div>
+            <div class="check-item"><div class="check-box"></div>Botella de agua reutilizable (el interior es seco y caluroso)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">📱 Apps esenciales</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps — descarga offline Fuerteventura</div>
+            <div class="check-item"><div class="check-box"></div>Booking.com — por si necesitas cambiar alojamiento</div>
+            <div class="check-item"><div class="check-box"></div>Windy — previsión de viento para kitesurf y playas</div>
+            <div class="check-item"><div class="check-box"></div>Revolut o N26 — tarjeta sin comisiones en España</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para Fuerteventura?</h3>
+      <p>Dinos tus fechas, presupuesto y estilo de viaje. Routlo IA te crea un plan a medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a Fuerteventura
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com, Skyscanner y operadores de actividades pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar. El alquiler de coche es imprescindible para seguir este itinerario — compara precios en varios portales antes de reservar.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.5);text-decoration:none;font-size:0.85rem;margin-bottom:16px">← Ver todos los itinerarios</a>
+    <div style="font-size:0.78rem;color:rgba(237,238,242,0.3)">© 2026 Routlo · Hecho con IA para viajeros del mundo</div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+    const sections = document.querySelectorAll('.itin-section[id], .day-card[id]');
+    const links = document.querySelectorAll('.toc-list a');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }, { passive: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sevilla — 4 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 4 días en Sevilla: Alcázar, Catedral, Triana, flamenco y tapas. Presupuesto desde mochilero hasta lujo con hoteles y restaurantes."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Base (fallback si shared.css no carga en file:// / content://) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#3d1200 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0800 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#2a0f00 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg,#100500 0%,#301500 35%,#803000 65%,rgba(230,120,20,0.2) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* ── Tablet ── */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+    /* ── Mobile ── */
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    /* ── Small mobile ── */
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .alert-box { font-size: 0.8rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .act-desc { font-size: 0.82rem !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+      .disclosure { padding: 12px 14px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(230,120,20,0.1);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Sevilla</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Sevilla</h1>
+  <p class="dest-country">España · Andalucía · Flamenco · Tapas · Azulejos</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 4 días / 3 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Amigos</span>
+    <span class="dest-badge gold" role="listitem">💶 €120–1,600/persona</span>
+    <span class="dest-badge" role="listitem">🌍 España · Andalucía</span>
+    <span class="dest-badge" role="listitem">💃 Flamenco + Tapas + Historia</span>
+    <a href="https://www.skyscanner.es/transport/flights/MAD/SVQ/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">4 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">1 destino</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€120–1,600</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Mar–May / Sep–Nov</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Catedral</a></li>
+        <li><a href="#dia2">Día 2 · Triana</a></li>
+        <li><a href="#dia3">Día 3 · Plaza España</a></li>
+        <li><a href="#dia4">Día 4 · Itálica</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#flamenco">Flamenco</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Sevilla es la ciudad más seductora de España: capital del flamenco, del azulejo, de la arquitectura mudéjar y de las tapas más baratas de Europa. En cuatro días descubrirás el Real Alcázar —el palacio más antiguo en uso de Europa y la joya más impresionante del arte nazarí fuera de Granada—, la Catedral gótica más grande del mundo, el barrio de Triana con su cerámica y sus bares centenarios, la Plaza de España que inspiró a George Lucas, y los tableros de flamenco más íntimos y auténticos que existen. Una ciudad completamente plana, perfecta para recorrer en bicicleta, donde el calor del verano solo añade un sabor más a la experiencia.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏰</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Alcázar y Catedral</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 1</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">💃</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Triana y Flamenco</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 2–3</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏛️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Itálica romana</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 4</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Mochilero</th><th>Estándar</th><th>Lujo</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo/AVE A/R</td><td>€35–70</td><td>€100–150</td><td>€200+</td><td>AVE desde Madrid 2.5h · AVE Larga Distancia</td></tr>
+            <tr><td>🏨 Alojamiento (3 noches)</td><td>€60</td><td>€330</td><td>€900</td><td>Hostal Santa Cruz / 4★ Centro / 5★ Alfonso XIII</td></tr>
+            <tr><td>🍽️ Comidas (4 días)</td><td>€60</td><td>€160</td><td>€420</td><td>Sevilla es una de las ciudades más baratas de España: tapas €1.50–3</td></tr>
+            <tr><td>🚶 Transporte</td><td>€10</td><td>€20</td><td>€50</td><td>Sevilla es peatonal en el centro. Bici pública SEVICI €1.50/día</td></tr>
+            <tr><td>🎟️ Entradas</td><td>€30</td><td>€55</td><td>€85</td><td>Alcázar €14, Catedral+Giralda €12, Archivo Indias gratis</td></tr>
+            <tr><td>🌙 Flamenco</td><td>€20</td><td>€40</td><td>€80</td><td>Espectáculo con bebida incluida</td></tr>
+            <tr><td>🔄 Imprevistos</td><td>€18</td><td>€60</td><td>€155</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€198</strong></td><td><strong>~€665</strong></td><td><strong>~€1,890</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Sevilla y el precio:</strong> Sevilla es una de las ciudades más baratas de España para comer y beber. Una caña cuesta €1.20–1.80 y las tapas van de €1.50 a €3. En el barrio de Triana y La Macarena, alejados del turismo, los precios son un 30–40% más bajos que en Santa Cruz. El AVE desde Madrid tarda solo 2h30min y puede comprarse con mucha antelación desde €19.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚇 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Aeropuerto SVQ</div>
+          <div class="transport-content">
+            <strong>Aeropuerto de Sevilla (SVQ)</strong>, a 10 km del centro. Autobús EA (€4, 35 min) hasta el Prado de San Sebastián. Taxi con precio fijo <strong>€22</strong>. El autobús EA sale cada 30 minutos y para también en la Puerta de Jerez, junto al casco histórico.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚆 AVE · Estación Santa Justa</div>
+          <div class="transport-content">
+            La estación Santa Justa está a <strong>15 min del centro</strong> en taxi o bus. Desde Madrid solo <strong>2h30min</strong>, desde Barcelona 5h30min. El AVE es la opción más cómoda y rápida desde Madrid — reserva con antelación para conseguir precios desde €19.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚲 SEVICI — Bicis eléctricas</div>
+          <div class="transport-content">
+            Sistema de préstamo de bicis eléctricas, <strong>€1.50/día</strong> de registro o €10/semana. <strong>260 estaciones</strong> por toda la ciudad. El mejor transporte en Sevilla — completamente plana, con 2.000 km de carril bici. El centro histórico se cruza en 20 minutos en bicicleta.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 TUSSAM · Buses urbanos</div>
+          <div class="transport-content">
+            <strong>€1.40</strong> el billete sencillo. La línea <strong>C1-C2 circular</strong> rodea todo el casco histórico. Para el aeropuerto, el bus EA sale desde Puerta de Jerez. El tranvía T1 conecta el centro con la Alameda de Hércules y el barrio de La Macarena.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Mochilero</div>
+          <div class="hotel-name">Oasis Backpackers Sevilla</div>
+          <div class="hotel-zone">Barrio Santa Cruz</div>
+          <div class="hotel-price">~€20/noche</div>
+          <ul class="hotel-features">
+            <li>El mejor hostel de Sevilla</li>
+            <li>Piscina en la azotea</li>
+            <li>Vista a la Giralda</li>
+            <li>Tapas y ambiente social</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/oasis-backpackers-hostel-sevilla.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐⭐ Estándar</div>
+          <div class="hotel-name">Hotel Mercer Sevilla</div>
+          <div class="hotel-zone">Centro histórico</div>
+          <div class="hotel-price">~€110/noche</div>
+          <ul class="hotel-features">
+            <li>Palacio del s.XVI restaurado</li>
+            <li>Patio interior andaluz con naranjos</li>
+            <li>Piscina y spa en azotea</li>
+            <li>A 5 min del Alcázar a pie</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/mercer-sevilla.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Hotel Alfonso XIII</div>
+          <div class="hotel-zone">Junto al Alcázar</div>
+          <div class="hotel-price">~€300/noche</div>
+          <ul class="hotel-features">
+            <li>El hotel más icónico de España</li>
+            <li>Inaugurado por Alfonso XIII en 1929</li>
+            <li>Arquitectura neomudéjar espectacular</li>
+            <li>Bar-terraza con flamenco los jueves</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/hotel-alfonso-xiii.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">La Catedral, la Giralda y el Alcázar</div>
+            <div class="day-subtitle">Catedral · Giralda · Real Alcázar · Archivo de Indias</div>
+          </div>
+          <div class="day-meta"><span>🏰 Centro histórico</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box warn">
+            <strong>⚠️ Reserva obligatoria:</strong> El Real Alcázar es el monumento con más demanda de España. Reserva online en <a href="https://www.alcazarsevilla.org" target="_blank" rel="noopener" style="color:#c9a96e">alcazarsevilla.org</a> con al menos 2 semanas de antelación en temporada alta. Las entradas se agotan semanas antes en Semana Santa y verano.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Catedral de Sevilla — la más grande del mundo gótico</div>
+              <div class="act-desc">La quinta catedral más grande del mundo y la más grande del gótico. La tumba de Cristóbal Colón está aquí —todavía se debate si son sus restos reales—, portada por cuatro reyes de piedra. El interior es de una escala aplastante: la Capilla Mayor con el retablo más grande del mundo (en madera y oro), la Sala del Tesoro y las naves laterales son un recorrido que dura 90 minutos sin prisa.</div>
+              <div class="act-tags"><span class="act-tag">€12 Catedral + Giralda</span><span class="act-tag info">1.5h</span><span class="act-tag warn">Entrada temprana</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">La Giralda — 105 metros de minarete almohade del s.XII</div>
+              <div class="act-desc">La antigua mezquita almohade, construida en el siglo XII, fue transformada en campanario tras la Reconquista añadiendo la linterna renacentista. Se sube por rampas, no escaleras —diseñadas para que los caballos pudieran ascender—, en 35 tramos de subida continua. Las vistas de toda Sevilla desde los 105 metros son la mejor orientación posible de la ciudad.</div>
+              <div class="act-tags"><span class="act-tag">Incluida con Catedral</span><span class="act-tag info">35 min subida</span><span class="act-tag green">Mejor vista de Sevilla</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Real Alcázar — el palacio más bello y antiguo en uso de Europa</div>
+              <div class="act-desc">Construido a partir del s.X sobre una fortaleza árabe, el Alcázar es una superposición de culturas: el Patio de las Doncellas con azulejos nazaríes, el Salón de Embajadores con cúpula de madera policromada y los jardines con fuentes de sonido hipnótico son de una belleza que lo diferencia de cualquier otro palacio de Europa. Todavía en uso por la Familia Real española cuando visita Sevilla.</div>
+              <div class="act-tags"><span class="act-tag">€14</span><span class="act-tag warn">Reservar online</span><span class="act-tag info">2h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en el Barrio de Santa Cruz</div>
+              <div class="act-desc">El laberinto de calles estrechas más pintoresco de España, el antiguo barrio judío de Sevilla. Calles de apenas un metro de ancho, naranjos que tocan los balcones y bares de tapas en cada esquina. Busca los bares de la Plaza de los Venerables o la Calle Mateos Gago para tapas auténticas.</div>
+              <div class="act-tags"><span class="act-tag">Tapas €1.50–3</span><span class="act-tag info">Barrio judío medieval</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Archivo General de Indias — GRATIS, toda la documentación del Imperio</div>
+              <div class="act-desc">Construido en 1598, alberga toda la documentación del Imperio español en América: contratos de Colón, cartas de Hernán Cortés, el trazado de los primeros mapas de América. El edificio es tan impresionante como el contenido —una arquitectura renacentista austera de Juan de Herrera. Entrada completamente gratuita y sin colas.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1h</span><span class="act-tag">Patrimonio UNESCO</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Aperitivo en Bar Eslava — la tapa más premiada de Sevilla</div>
+              <div class="act-desc">Bar Eslava ha ganado múltiples veces el Premio a la Mejor Tapa de Sevilla. La torrija de bacalao con ajoblanco y virutas de jamón ibérico o el "Eslava" (foie con cebolla caramelizada) son legendarios. Cola habitual a partir de las 20h —llega antes. Precio: €2.50–4 por tapa.</div>
+              <div class="act-tags"><span class="act-tag">Tapa €2.50–4</span><span class="act-tag warn">Llegar antes de las 20h</span><span class="act-tag info">Mejor tapa de Sevilla</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en el Barrio de Santa Cruz</div>
+              <div class="act-desc">El barrio de Santa Cruz tiene una concentración de restaurantes y bares que no tiene rival en Sevilla. Evita las terrazas más turísticas y busca las tabernas con azulejos: Casa Robles, Bar Modesto o Taberna del Alabardero para salmorejo, rabo de toro y vino de la Bodega del Pópulo.</div>
+              <div class="act-tags"><span class="act-tag">~€25–35</span><span class="act-tag info">Cena tardía sevillana</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Triana, la Macarena y las tapas</div>
+            <div class="day-subtitle">Barrio de Triana · Torre del Oro · Macarena · Las Setas · Tablao flamenco</div>
+          </div>
+          <div class="day-meta"><span>💃 Triana y Tapas</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Triana — toreros, cerámica y flamenco</div>
+              <div class="act-desc">Cruzar el Puente de Isabel II y entrar en el barrio de los toreros, el flamenco y la cerámica. El Mercado de Triana (con sus azulejos decorativos originales) y sus bares de tapas junto al río son únicos en Sevilla. El Callejón de la Inquisición y las tiendas de cerámica artesanal son imprescindibles para llevarse algo auténtico a casa.</div>
+              <div class="act-tags"><span class="act-tag info">2h</span><span class="act-tag">Cerámica artesanal</span><span class="act-tag green">Barrio auténtico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Torre del Oro y paseo por el Guadalquivir</div>
+              <div class="act-desc">La torre almohade del s.XIII que vigilaba la entrada de barcos al puerto de Sevilla. Hoy es un pequeño museo naval (€3) con maquetas de los galeones que traían oro de América. El paseo del Guadalquivir al mediodía, con las terrazas de la orilla y los barcos de recreo, es el mejor momento para orientarse en la ciudad.</div>
+              <div class="act-tags"><span class="act-tag">€3 museo</span><span class="act-tag green">Paseo gratis</span><span class="act-tag info">45 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Triana — Kiosko de las Flores junto al río</div>
+              <div class="act-desc">El Kiosko de las Flores es una institución sevillana con mesas frente al Guadalquivir y la catedral al fondo. Gambas, ortiguillas de mar, espinacas con garbanzos y el pescaíto frito son sus especialidades. La Taberna Miami en Triana es más íntima y frecuentada por vecinos del barrio para el almuerzo entre semana.</div>
+              <div class="act-tags"><span class="act-tag">~€20</span><span class="act-tag info">Vistas al Guadalquivir</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Basílica de la Macarena — la Virgen más amada de Sevilla</div>
+              <div class="act-desc">La Esperanza Macarena es la Virgen más venerada de Sevilla y la que protagoniza la madrugada del Viernes Santo. El barrio obrero de la Macarena es auténtico y completamente alejado del turismo: calles con ropa tendida, bares de bocadillos y la energía de un barrio que no ha cambiado en 50 años. El museo de la Virgen (€3) exhibe sus mantos bordados en oro.</div>
+              <div class="act-tags"><span class="act-tag">Basílica gratis</span><span class="act-tag">€3 museo</span><span class="act-tag green">Barrio auténtico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Las Setas de Sevilla (Metropol Parasol) al atardecer</div>
+              <div class="act-desc">Las setas de madera más grandes del mundo, diseñadas por Jürgen Mayer. Subir a la pasarela (€3) al atardecer para ver la puesta de sol sobre la catedral es uno de los mejores planos de Sevilla. En la base hay restos arqueológicos romanos visibles bajo el edificio. La zona de la Encarnación tiene los mejores bares de tapas del centro.</div>
+              <div class="act-tags"><span class="act-tag">€3 pasarela</span><span class="act-tag info">1h</span><span class="act-tag green">Mejor vista al atardecer</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ruta de tapas centenarias — El Rinconcillo 1670</div>
+              <div class="act-desc">El Rinconcillo (Calle Gerona 40) es el bar más antiguo de Sevilla, fundado en 1670 y con la barra de madera original. La Bodeguita Romero, en el centro, tiene las mejores tapas del barrio de Santa Cruz. Casa Morales (fundada en 1850) conserva las tinajas originales de vino. Una ruta por estos tres locales da la mejor visión del Sevilla tradicional.</div>
+              <div class="act-tags"><span class="act-tag">Tapa €1.80–3</span><span class="act-tag info">Bar más antiguo de España</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">22:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tablao flamenco — El Arenal o Los Gallos</div>
+              <div class="act-desc">El Tablao El Arenal y Los Gallos son los dos tablaos más respetados de Sevilla: 40–60 personas máximo, artistas gitanos de familias con tradición flamenca. La entrada con bebida incluida cuesta €25–45. Los Gallos en el barrio de Santa Cruz es el más íntimo. Reservar con antelación en temporada alta.</div>
+              <div class="act-tags"><span class="act-tag">€25–45</span><span class="act-tag warn">Reservar online</span><span class="act-tag info">Tablao íntimo</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Plaza de España y los alrededores</div>
+            <div class="day-subtitle">Parque María Luisa · Plaza de España · Museo Bellas Artes · El Salvador</div>
+          </div>
+          <div class="day-meta"><span>🌿 Parques y museos</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Parque María Luisa — el parque más romántico de Sevilla</div>
+              <div class="act-desc">Diseñado para la Exposición Iberoamericana de 1929 con pabellones de distintos países de América Latina, muchos de los cuales son hoy sedes de consulados o museos. El parque tiene fuentes, glorietas, estanques con patos y una arquitectura de jardines que combina lo árabe con lo barroco. A primera hora de la mañana, sin turistas, es absolutamente mágico.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Plaza de España — la obra más espectacular del s.XX en España</div>
+              <div class="act-desc">Construida en 1929 para la Exposición Iberoamericana, la Plaza de España es un semicírculo de 200 metros de diámetro con un canal veneciano cruzado por cuatro puentes. Los 52 azulejos provinciales con mapas y hechos históricos de cada provincia española son únicos. George Lucas rodó aquí las escenas de Naboo en Star Wars Episodio II. Alquilar una barca en el canal cuesta €6/45min.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag">Barca €6/45min</span><span class="act-tag info">Star Wars Episodio II</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en el Barrio de El Arenal — frente al Guadalquivir</div>
+              <div class="act-desc">El Arenal, el barrio entre la catedral y el río, tiene una concentración de bares tradicionales que no encuentras en Santa Cruz. La Bodega Pizarro, Casa Placido y La Azotea son locales con azulejos en las paredes y tapas de toda la vida. El pescaíto frito y los boquerones en vinagre son imprescindibles con la vista al Guadalquivir.</div>
+              <div class="act-tags"><span class="act-tag">~€15–20</span><span class="act-tag info">Barrio auténtico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Museo de Bellas Artes de Sevilla — el segundo museo de España</div>
+              <div class="act-desc">Instalado en el Convento de la Merced del s.XVII, es el segundo museo más importante de España tras el Prado. Murillo, Zurbarán y Valdés Leal tienen aquí sus mejores colecciones fuera de Madrid. La arquitectura del convento —claustros, capillas, escalera principal— es tan impresionante como las obras que contiene. Entrada gratuita para ciudadanos de la UE.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis UE</span><span class="act-tag">€1.50 resto</span><span class="act-tag info">1.5h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de El Salvador — el aperitivo más vivo de Sevilla</div>
+              <div class="act-desc">La Plaza del Salvador, con la Iglesia del Salvador de fondo, es el punto de encuentro más vivo de Sevilla a la hora del aperitivo (18h–21h). Los bares sacan mesas a la plaza, la gente se sienta en las escaleras de la iglesia con su cerveza, y el ambiente es el de una ciudad que vive en la calle. Las Tabernas de la Plaza del Salvador y el propio edificio de la iglesia (entrada €4) son imprescindibles.</div>
+              <div class="act-tags"><span class="act-tag">Caña €1.20</span><span class="act-tag green">Ambiente local puro</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Paseo nocturno por el Barrio de Santa Cruz iluminado</div>
+              <div class="act-desc">El laberinto de Santa Cruz de noche, con las farolas de hierro y los geranios en los balcones, es completamente diferente al de día. Sin el gentío del mediodía, las calles estrechas tienen una magia especial. El Patio de Banderas, junto al Alcázar, es el punto más silencioso y bello del barrio después de las 20h.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Paseo nocturno</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena de despedida — rabo de toro y salmorejo</div>
+              <div class="act-desc">El rabo de toro estofado es el plato más sevillano: cola de toro cocinada horas en vino tinto y especias hasta que la carne se deshace. El salmorejo cordobés (que en Sevilla también se come, más denso que el gazpacho) como entrante es la combinación perfecta. Restaurante Robles Laredo en Santa Cruz o Casa Cuesta en Triana son los mejores para esta cena.</div>
+              <div class="act-tags"><span class="act-tag">~€30</span><span class="act-tag info">Rabo de toro</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Excursión a Itálica o Carmona · Salida</div>
+            <div class="day-subtitle">Itálica romana · Última comida · AVE o vuelo</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Excursión</span><span>Media jornada + salida</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Itálica:</strong> La primera ciudad romana fundada fuera de Italia (206 a.C.) está a solo 9 km de Sevilla. Aquí nacieron el emperador Trajano y el emperador Adriano. El anfiteatro, las termas y el extraordinario mosaico del dios Océano son los mejor conservados de Hispania. Entrada solo €1.50.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Itálica — la primera ciudad romana fuera de Italia (206 a.C.)</div>
+              <div class="act-desc">Fundada por el general Escipión el Africano tras la batalla de Ilipa, Itálica es la ciudad romana más importante de España occidental. El anfiteatro (tercero más grande del Imperio, con capacidad para 25.000 espectadores), las termas, la Casa de los Pájaros con su mosaico de 34 especies de aves y el extraordinario mosaico del dios Océano son de una calidad arqueológica rarísima en España. A 9 km en bus (M172 desde Plaza de Armas).</div>
+              <div class="act-tags"><span class="act-tag">€1.50</span><span class="act-tag">Bus M172 desde Plaza de Armas</span><span class="act-tag info">2h visita</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Sevilla</div>
+              <div class="act-desc">El autobús M172 regresa a Sevilla en 20 minutos hasta la Plaza de Armas, junto al casco histórico. Alternativa a Itálica: la ciudad de Carmona (35 km, autobús €2.50) tiene una necrópolis romana, un castillo árabe y calles medievales perfectamente conservadas.</div>
+              <div class="act-tags"><span class="act-tag">Bus de vuelta €1.50</span><span class="act-tag info">20 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Última comida de tapas en Sevilla</div>
+              <div class="act-desc">El último almuerzo en la ciudad merece una ruta final. El Bar Las Teresas en Santa Cruz (fundado en 1870, azulejos y jamones colgados), la Bodeguita Romero o la Taberna El Timón son opciones perfectas. Pide salmorejo, gambas al ajillo y tortilla española antes de coger el AVE o el vuelo.</div>
+              <div class="act-tags"><span class="act-tag">~€15</span><span class="act-tag info">Últimas tapas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Visita al mercado de artesanía de cerámica (si queda tiempo)</div>
+              <div class="act-desc">El Mercado de Triana tiene los mejores azulejos sevillanos y la cerámica artesanal más auténtica. Para llevarse a casa: azulejos pintados a mano, castañuelas, abanicos y aceite de oliva virgen de la Sierra Sur. Evita las tiendas de souvenirs genéricos junto a la Catedral —los precios triplican los del Mercado de Triana.</div>
+              <div class="act-tags"><span class="act-tag">Cerámica €10–30</span><span class="act-tag info">Recuerdos auténticos</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">AVE o vuelo de regreso</div>
+              <div class="act-desc">Desde la Estación de Santa Justa (15 min del centro en taxi o bus C1) salen AVE a Madrid cada hora. El aeropuerto SVQ está a 10 km —autobús EA desde Puerta de Jerez (€4, 35 min) o taxi fijo €22. Añade 1h30min de margen para el aeropuerto y 45 min para la estación de AVE.</div>
+              <div class="act-tags"><span class="act-tag">AVE a Madrid 2h30min</span><span class="act-tag">Taxi aeropuerto €22</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Real Alcázar al amanecer — los jardines sin turistas son un milagro</h4><p>Con la entrada de apertura temprana, los jardines del Alcázar con sus naranjos, cipreses y el sonido de las fuentes nazaríes sin un solo turista son una experiencia que no existe en ningún otro monumento de España.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>La Giralda al atardecer — la silueta más reconocible de Andalucía</h4><p>Ver cómo el sol tiñe de naranja los muros de la Giralda y proyecta la sombra del campanario sobre el barrio de Santa Cruz es la imagen más sevillana que existe.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Plaza de España en día soleado — el escenario de Star Wars</h4><p>El semicírculo con el canal veneciano, los 52 azulejos provinciales y los puentes en un día de sol sevillano explica perfectamente por qué George Lucas eligió este lugar para rodar la ciudad de Naboo en Star Wars Episodio II.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Ruta de tapas en bares centenarios — El Rinconcillo 1670</h4><p>La experiencia gastronómica más auténtica de Sevilla: barra de madera original, el camarero anota la cuenta con tiza, y la torrija de bacalao y el jamón ibérico son los mismos que hace 350 años.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Barrio de Triana al mediodía — el sabor más auténtico de Sevilla</h4><p>Triana es lo que Santa Cruz ya no puede ser: un barrio vivo con vecinos reales, olores de cocina en los portales, cerámica artesanal y bares donde comen los sevillanos de toda la vida.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Tablao flamenco íntimo en el Barrio de Santa Cruz</h4><p>Un tablao de 40 personas con artistas gitanos de tercera generación es una de las experiencias culturales más auténticas que puede ofrecer España. El silencio entre el cante y el zapateado lo dice todo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Mercado de Triana y sus azulejos sevillanos</h4><p>El mercado del barrio de Triana, con sus puestos de cerámica pintada a mano y sus bares de tapas integrados, es la manera más directa de comprender qué es Sevilla por dentro.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Las Setas al atardecer con el sol tiñendo la catedral de naranja</h4><p>Desde la pasarela del Metropol Parasol, la vista de la Giralda y la Catedral bañadas en luz dorada al atardecer es la foto que define Sevilla en el siglo XXI.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Itálica — pisar el anfiteatro donde pelearon gladiadores hace 2.000 años</h4><p>El anfiteatro de Itálica es el tercero más grande del Imperio Romano y el mejor conservado de España. Por €1.50, caminar sobre la arena donde peleaban los gladiadores a 9 km de Sevilla no tiene precio.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Barrio de la Macarena — el Sevilla que no sale en Instagram</h4><p>La Macarena es el barrio más auténtico y vivo de Sevilla: vecinos de toda la vida, bares de bocadillos sin carta en inglés, y la Basílica con la Virgen más amada de la ciudad. El Sevilla real.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍽️ Gastronomía sevillana</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Tapa estrella · Fría</div><div class="gastro-title">Salmorejo</div><div class="gastro-desc">La sopa fría andaluza superior al gazpacho. Más densa, con más tomate y menos agua, coronada con jamón ibérico y huevo duro rallado. Se elabora solo con tomate, pan, ajo y AOVE —sin pepino ni cebolla. Pruébalo en Bar Eslava o El Rinconcillo. €2–3 la ración.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Tapa imprescindible · Premiada</div><div class="gastro-title">Torrija de bacalao con ajoblanco</div><div class="gastro-desc">La tapa ganadora de múltiples premios de Sevilla. Bar Eslava la ha perfeccionado hasta convertirla en arte: bacalao desalado rebozado como una torrija dulce, sobre crema de ajoblanco (ajo, almendras, aceite) con virutas de jamón ibérico. Una textura y sabor únicos en España.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Carne · Guiso</div><div class="gastro-title">Rabo de toro estofado</div><div class="gastro-desc">El guiso más sevillano. Cola de toro cocinada horas en vino tinto y especias hasta que la carne se deshace. La temporada taurina le da carácter gastronómico. Se sirve sobre puré de patata o con patatas fritas. Diferente al rabo de toro cordobés en las especias y el vino usado.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Pescaíto · Mariscos</div><div class="gastro-title">Gambas al ajillo y coquinas a la marinera</div><div class="gastro-desc">Los mariscos del Guadalquivir. Las coquinas son almejas pequeñas de agua dulce-salada únicas de la zona de Sanlúcar, salteadas con ajo, limón y vino fino. Las gambas al ajillo sevillanas llevan más aceite y menos mantequilla que en Madrid — la diferencia es notable.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Desayuno · Pan</div><div class="gastro-title">Tostada con tomate y aceite</div><div class="gastro-desc">El desayuno andaluz. Pan de panadería local (mollete o pan cateto) tostado, frotado con tomate natural rallado y regado con AOVE de primera calidad. Con café con leche cortado. €1.80 en cualquier bar del barrio de Santa Cruz o Triana. Una experiencia culinaria que no tiene equivalente en España.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Dulce · Conventual</div><div class="gastro-title">Tocino de cielo</div><div class="gastro-desc">Postre conventual de Jerez y Sevilla. Yema y azúcar en una textura entre flan y caramelo —mucho más denso y dulce que el flan convencional. Las monjas del convento de San Clemente en Sevilla los venden a través de un torno giratorio. Una tradición que lleva siglos igual.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Vermut · Vino fino</div><div class="gastro-title">Manzanilla de Sanlúcar</div><div class="gastro-desc">El vino fino más fino. Pálido, seco, con un toque salino del mar de Sanlúcar. Los venenciadores lo sirven desde la bota directamente en el vaso largo. Mejor con mariscos y gambas. La diferencia entre una manzanilla y un fino de Jerez está en esa brisa marina que se nota en el paladar.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Desayuno local · Domingo</div><div class="gastro-title">Churros con chocolate espeso</div><div class="gastro-desc">Los churros sevillanos son más gordos y crujientes que los madrileños. El chocolate espeso se sirve para mojar —una consistencia casi de natillas— en la Chocolatería La Española junto a la Catedral. El desayuno de domingo de los sevillanos desde generaciones.</div></div>
+      </div>
+    </section>
+
+    <!-- ── FLAMENCO ── -->
+    <section id="flamenco" class="itin-section">
+      <h2 class="section-heading">💃 Flamenco en Sevilla</h2>
+      <p style="font-size:0.875rem;color:rgba(237,238,242,0.6);line-height:1.7;margin-bottom:20px">El flamenco de calidad en Sevilla está en tamaño íntimo: tablaos con 40–60 personas, no en teatros. Los mejores se concentran en el barrio de Santa Cruz y El Arenal.</p>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">💃 Tablao El Arenal</div>
+          <div class="transport-content">El más clásico y conocido de Sevilla. Aforo de 80 personas con cena opcional. En la calle Rodo, junto al Guadalquivir. Artistas con mucho nivel técnico. <strong>€45 con bebida, €70 con cena.</strong> Dos pases nocturnos a las 20h y 22h30. Reservar online con 3–4 días de antelación en temporada alta.</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">💃 Los Gallos</div>
+          <div class="transport-content">El más íntimo de Sevilla, en pleno Barrio de Santa Cruz desde 1966. Aforo de solo 50 personas. Los artistas están a 2 metros del público. <strong>€40 con bebida incluida.</strong> Un solo pase por noche a las 21h. La opción más recomendada para ver flamenco auténtico sin distancia.</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🎭 Casa de la Memoria</div>
+          <div class="transport-content">El más cultural, con contexto histórico sobre el flamenco y sus palos. En un palacio del s.XVII del barrio de Santa Cruz. <strong>€18–20.</strong> Aforo máximo de 100 personas pero formato íntimo. Recomendado para quienes quieren entender el flamenco antes de verlo. Dos pases diarios a las 19h30 y 21h.</div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🎭 La Carbonería</div>
+          <div class="transport-content">El secreto mejor guardado de Sevilla. Bar en un antiguo almacén de carbón en el barrio de Santa Cruz con <strong>flamenco improvisado GRATIS</strong> casi todas las noches a partir de las 22h30. El flamenco no es espectáculo turístico: son artistas ensayando y tocando para los presentes. Llegar antes de las 22h para conseguir sitio.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section id="consejos" class="itin-section">
+      <h2 class="section-heading">💡 Consejos insider</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Sevilla en verano (julio–agosto)</strong> tiene temperaturas de hasta 45°C. Si tienes que ir, empieza las visitas a las 8h, descansa entre 13h y 18h y retoma por la tarde-noche. La vida social ocurre de noche —las cenas empiezan a las 22h y los bares no cierran hasta las 2h.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>El Real Alcázar es el monumento con más demanda de España</strong> en reserva anticipada. Reserva online en alcazarsevilla.org con al menos 2 semanas en Semana Santa y verano. Las entradas se agotan semanas antes. No hay venta en taquilla en temporada alta.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>La Semana Santa y la Feria de Abril son las dos experiencias más únicas de España.</strong> Si coincides, los precios de hotel se triplican — reserva con 6+ meses de antelación. La Feria de Abril es solo accesible con invitación a las casetas privadas, excepto la zona de casetas públicas del Ayuntamiento.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Sevilla es completamente plana y tiene 2.000 km de carril bici.</strong> SEVICI (sistema de préstamo de bicicletas) cuesta €1.50/día de registro. Es la forma más inteligente de moverse — el centro histórico se cruza en 20 min en bici. El tráfico de coches en el centro está muy restringido.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Para tapas auténticas evita las terrazas de la Catedral y la Plaza del Salvador.</strong> Ve a La Macarena, Triana y El Arenal donde comen los sevillanos: Bodeguita Romero, Casa Morales, La Cantina de Triana, Bar La Primera del Puente.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>El flamenco de calidad en Sevilla está en tamaño íntimo:</strong> tablaos con 40–60 personas, no en teatros. Los mejores: El Arenal (el más clásico), Los Gallos (el más íntimo), Casa de la Memoria (el más cultural), La Carbonería (flamenco gratis e improvisado).</div></div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales (UE)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos, ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Nacional</div><div class="emerg-value">091</div><div class="emerg-note">También atienden robos a turistas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Urgencias médicas</div><div class="emerg-value">061</div><div class="emerg-note">Servicio de urgencias de Andalucía</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía Local Sevilla</div><div class="emerg-value">092</div><div class="emerg-note">Incidencias locales y tráfico</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Virgen Macarena</div><div class="emerg-value">+34 955 008 000</div><div class="emerg-note">Urgencias 24h · Dr. Fedriani, s/n</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Virgen del Rocío</div><div class="emerg-value">+34 955 012 000</div><div class="emerg-note">Urgencias 24h · Manuel Siurot, s/n</div></div>
+      </div>
+      <div class="alert-box warn" style="margin-top:14px">
+        <strong>⚠️ Seguridad en Sevilla:</strong> El barrio de Santa Cruz y el entorno de la Catedral concentran la mayoría de carteristas. Lleva la bolsa cruzada al frente y evita sacar el móvil en zonas muy concurridas. En Semana Santa, la concentración de personas en los corredores de las procesiones es extrema — vigila tus pertenencias constantemente.
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje con cobertura médica</div>
+            <div class="check-item"><div class="check-box"></div>Descarga Google Maps offline Sevilla</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">✈️ Reservas confirmadas</div>
+            <div class="check-item"><div class="check-box"></div>Vuelo o AVE (Sevilla SVQ / Santa Justa)</div>
+            <div class="check-item"><div class="check-box"></div><strong>Real Alcázar — reservar online con 2+ semanas</strong></div>
+            <div class="check-item"><div class="check-box"></div>Alojamiento (3 noches)</div>
+            <div class="check-item"><div class="check-box"></div>Tablao flamenco (Los Gallos o El Arenal)</div>
+            <div class="check-item"><div class="check-box"></div>Catedral + Giralda — comprar online</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">🎒 Equipaje Sevilla</div>
+            <div class="check-item"><div class="check-box"></div>Calzado muy cómodo (adoquines en Santa Cruz)</div>
+            <div class="check-item"><div class="check-box"></div>Ropa ligera (verano: hasta 45°C)</div>
+            <div class="check-item"><div class="check-box"></div>Protector solar SPF50+</div>
+            <div class="check-item"><div class="check-box"></div>Botella de agua reutilizable</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta sin comisiones (Revolut, N26)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">📱 Apps esenciales Sevilla</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps — descarga offline Sevilla</div>
+            <div class="check-item"><div class="check-box"></div>App SEVICI — bicis públicas</div>
+            <div class="check-item"><div class="check-box"></div>TUSSAM — transporte urbano</div>
+            <div class="check-item"><div class="check-box"></div>Renfe app — billetes AVE</div>
+            <div class="check-item"><div class="check-box"></div>Booking / Airbnb para alojamiento</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para Sevilla?</h3>
+      <p>Dinos tus fechas, presupuesto y estilo de viaje. Routlo IA te crea un plan a medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a Sevilla
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com, Skyscanner y operadores de actividades pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar. Las entradas del Alcázar y la Catedral deben comprarse directamente en sus webs oficiales.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.5);text-decoration:none;font-size:0.85rem;margin-bottom:16px">← Ver todos los itinerarios</a>
+    <div style="font-size:0.78rem;color:rgba(237,238,242,0.3)">© 2026 Routlo · Hecho con IA para viajeros del mundo</div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+    const sections = document.querySelectorAll('.itin-section[id], .day-card[id]');
+    const links = document.querySelectorAll('.toc-list a');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }, { passive: true });
+</script>
+</body>
+</html>

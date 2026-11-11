@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mundaka — 1 día desde Bilbao | Routlo</title>
+  <meta name="description" content="Itinerario de 1 día en Mundaka desde Bilbao: el mejor puerto pesquero de Bizkaia, la ola mítica de surf y la Reserva de Biosfera de Urdaibai."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,700;1,400&family=Jost:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+
+    /* ── Aurora ── */
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #001428 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #001a0a 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.45;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #0a2d1a 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    /* ── Nav ── */
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(4,8,16,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { list-style: none; display: flex; align-items: center; gap: 28px; margin: 0; padding: 0; }
+    .nav-links a { font-size: 0.88rem; color: rgba(237,238,242,0.6); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #c9a96e; }
+    .nav-mobile-btn { display: none; background: none; border: none; color: #edeef2; cursor: pointer; padding: 8px; }
+
+    /* ── Hero ── */
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #000a14 0%, #001428 40%, #002040 70%, rgba(201,169,110,0.2) 100%);
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #040810 0%, rgba(4,8,16,0.5) 50%, rgba(4,8,16,0.2) 100%);
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(4,8,16,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 700px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #070d1a; padding: 16px; text-align: center; }
+    .dest-sum-label {
+      font-size: 0.7rem; color: rgba(237,238,242,0.55);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .dest-sum-val {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700; color: #c9a96e;
+    }
+
+    /* ── Layout ── */
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title {
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(237,238,242,0.55); margin-bottom: 12px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 0; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    /* ── Sections ── */
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+
+    /* ── Day Card ── */
+    .day-card {
+      background: #0d1628;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; overflow: hidden; margin-bottom: 28px;
+    }
+    .day-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .day-num {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 2.2rem; font-weight: 700; color: #c9a96e;
+      line-height: 1; min-width: 60px;
+    }
+    .day-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px;
+    }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    /* ── Activity ── */
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .activity:last-child { margin-bottom: 0; }
+    .act-time {
+      min-width: 55px; font-size: 0.78rem; color: #c9a96e;
+      font-weight: 600; padding-top: 3px; flex-shrink: 0;
+    }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #c9a96e; border: 2px solid #0d1628;
+      flex-shrink: 0; margin-top: 3px;
+    }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; padding-bottom: 4px; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+
+    /* ── Meals ── */
+    .meal-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 16px 0 8px; }
+    .meal-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px; transition: border-color 0.2s;
+    }
+    .meal-card:hover { border-color: rgba(201,169,110,0.3); }
+    .meal-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .meal-name { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 4px; }
+    .meal-info { font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.5; margin-bottom: 8px; }
+    .meal-price { font-size: 0.78rem; color: #c9a96e; font-weight: 600; }
+
+    /* ── Budget ── */
+    .budget-wrap { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th {
+      text-align: left; padding: 10px 14px; background: #0d1628;
+      color: #c9a96e; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(201,169,110,0.3);
+    }
+    .budget-table td {
+      padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: rgba(237,238,242,0.55); vertical-align: top;
+    }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+    /* ── Transport ── */
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 18px;
+    }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    /* ── Tips ── */
+    .tip-item {
+      display: flex; gap: 12px; padding: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .tip-num {
+      min-width: 28px; height: 28px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700;
+      color: #c9a96e; flex-shrink: 0;
+    }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    /* ── CTA Banner ── */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%);
+      border: 1px solid rgba(201,169,110,0.3); border-radius: 20px;
+      padding: 32px; text-align: center; margin-bottom: 28px;
+    }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px;
+      background: linear-gradient(135deg, #c9a96e, #a07840);
+      color: #0a0a0a; font-weight: 600; font-size: 0.9rem;
+      border-radius: 10px; text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* ── Reveal animation ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .meal-options { grid-template-columns: 1fr; }
+      .transport-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px; }
+      .nav-links { display: none; }
+      .nav-mobile-btn { display: flex; }
+      .dest-hero { padding: 100px 16px 40px; }
+      .dest-title { font-size: clamp(2rem, 10vw, 3.2rem); }
+      .dest-country { font-size: 1.1rem; }
+      .dest-summary-bar { flex-wrap: wrap; }
+      .dest-sum-item { min-width: 30%; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+      .day-num { font-size: 1.8rem; min-width: 44px; }
+      .day-body { padding: 14px 16px; }
+      .act-time { min-width: 44px; font-size: 0.72rem; }
+      .section-heading { font-size: 1.3rem; }
+      .budget-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Aurora background -->
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<!-- Navigation -->
+<nav role="navigation" aria-label="Navegación principal" id="main-nav">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title-mundaka">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Mundaka</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title-mundaka">Mundaka</h1>
+  <p class="dest-country">Reserva Biosfera · Bizkaia</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">📅 1 día · ida y vuelta</span>
+    <span class="dest-badge" role="listitem">👫 2 personas · pareja</span>
+    <span class="dest-badge" role="listitem">📍 Bizkaia · España</span>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">1 día</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Origen</div>
+      <div class="dest-sum-val">Bilbao</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Km</div>
+      <div class="dest-sum-val">35 km</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Transporte</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Coche/Bus</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Estilo</div>
+      <div class="dest-sum-val" style="font-size:0.85rem">Naturaleza</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main content -->
+<main id="main-content">
+  <div class="itin-layout">
+
+    <!-- TOC Sidebar -->
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#jornada">La Jornada</a></li>
+          <li><a href="#comer">Dónde comer</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <article>
+
+      <!-- Resumen -->
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          Mundaka es un secreto a voces entre surfistas de todo el mundo, pero más allá de la ola mítica, este pequeño pueblo pescador de Bizkaia ofrece una de las experiencias más auténticas del litoral vasco: puerto tradicional, txakoli frío, anchoas frescas y la Reserva de Biosfera de Urdaibai a su alrededor. A 35 km de Bilbao, es la escapada perfecta para un día.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../chatbot.html" class="cta-btn">Empezar gratis →</a>
+        </div>
+      </section>
+
+      <!-- Presupuesto -->
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para Mundaka">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Estimado (2 pers.)</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>🚗 Transporte (Bilbao–Mundaka ida/vuelta)</td>
+                <td>€12–18 (coche) o €10 (Euskotren)</td>
+                <td>Gasolina ~€8 + peaje ~€4</td>
+              </tr>
+              <tr>
+                <td>🍽️ Gastronomía (pintxos + almuerzo)</td>
+                <td>€40–60</td>
+                <td>Anchoas + txakoli + almuerzo en el puerto</td>
+              </tr>
+              <tr>
+                <td>⛵ Actividades (paseo en barco)</td>
+                <td>€20–30</td>
+                <td>Opcional, tour por la ría</td>
+              </tr>
+              <tr>
+                <td>☕ Extras / café / helado playa</td>
+                <td>€8–12</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><strong>TOTAL</strong></td>
+                <td><strong>~€80–120 (2 personas)</strong></td>
+                <td>Sin transporte: ~€42–60</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos para 2026. El Euskotren es la opción más económica y panorámica.</p>
+      </section>
+
+      <!-- Transporte -->
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo llegar</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              En Coche
+            </div>
+            <div class="transport-content">
+              Desde Bilbao por <strong>A-8</strong> hasta Amorebieta y luego <strong>BI-635</strong> hasta Gernika y <strong>BI-2238</strong> hasta Mundaka. <strong>35 km, ~40 min.</strong><br><br>
+              Parking en el pueblo (zona azul, ~€1/h) o gratuito en los alrededores a 5 min a pie.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 6V4M16 6V4M2 10h20"/></svg>
+              Transporte Público
+            </div>
+            <div class="transport-content">
+              <strong>Bizkaibus línea A-3513</strong> desde Bilbao (Termibus) con parada en Gernika y luego en Mundaka.<br><br>
+              También <strong>Euskotren</strong> desde Bilbao-Atxuri hasta Bermeo con parada en Mundaka <strong>(~55 min, ~€2.50)</strong>. Revisar horarios en <strong>bizkaia.eus</strong>.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- La Jornada -->
+      <section id="jornada" class="itin-section" aria-labelledby="h-jornada">
+        <h2 class="section-heading" id="h-jornada">La Jornada</h2>
+
+        <div class="day-card reveal">
+          <div class="day-header">
+            <div class="day-num">1</div>
+            <div>
+              <div class="day-title">Bilbao → Mundaka · Día completo</div>
+              <div class="day-subtitle">35 km · Puerto pesquero · Ola mítica · Urdaibai · Regreso a Bilbao</div>
+            </div>
+          </div>
+          <div class="day-body">
+
+            <div class="activity">
+              <div class="act-time">09:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada a Mundaka · Puerto pesquero tradicional</div>
+                <div class="act-desc">Paseo por el puerto pesquero tradicional: barcas de pesca, gaviotas, redes. El puerto da directamente a la ría de Urdaibai con vistas a la isla de Izaro. Ambiente marinero auténtico.</div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Isla de Izaro</div>
+                <div class="act-desc">Desde el puerto se ven claramente las ruinas del convento franciscano en la isla. Existe la posibilidad de contratar barcos de pesca locales para un tour por la ría (~€15–20 pp). Si no, las vistas desde el mirador del puerto son ya espléndidas.</div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">11:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">La Ola de Mundaka</div>
+                <div class="act-desc">Bajar hasta la playa de Laida (en la otra orilla, cruzando con barquito ~€1) o al punto de observación de la barra de arena donde rompe la ola. La ola izquierda de Mundaka es considerada la mejor ola de Europa y atrae campeonatos mundiales de surf. Verla en acción es impresionante.</div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">12:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Ermita de San Kristobal</div>
+                <div class="act-desc">Pequeña ermita en la colina sobre el pueblo con vistas panorámicas a la ría, la isla de Izaro y el Cantábrico. Subida a pie (~15 min). Espectacular con buena luz.</div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">13:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Pintxos y txakoli en el puerto</div>
+                <div class="act-desc">Los bares del paseo marítimo de Mundaka sirven los mejores bocadillos de anchoa y txakoli frío. La anchoa del Cantábrico fresca sobre pan con tomate: simplicidad absoluta.</div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Reserva de Biosfera de Urdaibai</div>
+                <div class="act-desc">Conducir o caminar hacia las marismas de Urdaibai. Zona Ramsar de importancia internacional para aves migratorias. En primavera y otoño, miles de patos, limícolas y garzas. El paisaje verde-azul es extraordinario.</div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">17:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Playa de Laida (Ibarrangelu)</div>
+                <div class="act-desc">La playa más salvaje y hermosa de la comarca, en plena reserva de biosfera. Arena fina, aguas limpias, dunas. Muy concurrida en verano, más tranquila en temporada baja.</div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">18:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso al pueblo · Último txakoli</div>
+                <div class="act-desc">Paseo de cierre por el puerto de Mundaka, copa de txakoli en la terraza al sol de la tarde. El momento perfecto para fotografiar la ría con la luz dorada.</div>
+              </div>
+            </div>
+
+            <div class="activity">
+              <div class="act-time">19:30</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Regreso a Bilbao</div>
+                <div class="act-desc">Vuelta por la misma ruta en coche o en Euskotren desde la estación de Mundaka. Llegas a Bilbao en unos 40–55 minutos según el medio elegido.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Dónde comer -->
+      <section id="comer" class="itin-section" aria-labelledby="h-comer">
+        <h2 class="section-heading" id="h-comer">Dónde comer</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:16px">La gastronomía de Mundaka gira en torno a la anchoa fresca del Cantábrico, el txakoli local y el pescado de lonja. Tres opciones para todos los presupuestos.</p>
+        <div class="meal-options">
+          <div class="meal-card">
+            <div class="meal-tier">Puerto · Pescado</div>
+            <div class="meal-name">Bodegón Portu</div>
+            <div class="meal-info">Portu kalea, 1. El clásico de Mundaka. Frente al puerto, especialidad en anchoa fresca, bacalao al pil-pil y merluza en salsa verde. Terraza con vistas al puerto pesquero.</div>
+            <div class="meal-price">~€20–30 pp</div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-tier">Pintxos · Txakoli</div>
+            <div class="meal-name">Bar Txotxolo</div>
+            <div class="meal-info">Centro de Mundaka. Bar de pueblo con los mejores pintxos de anchoa de Bizkaia. Txakoli local servido frío. Ambiente de terraza en verano.</div>
+            <div class="meal-price">~€15–20 pp con bebida</div>
+          </div>
+          <div class="meal-card">
+            <div class="meal-tier">Restaurante · Marisco</div>
+            <div class="meal-name">Restaurante Portuondo</div>
+            <div class="meal-info">Barrio Portuondo, Mundaka. Carta de pescado y marisco de la ría. Kokotxas de bacalao, chipirones en su tinta y percebes frescos. Para el almuerzo especial del día.</div>
+            <div class="meal-price">~€30–45 pp</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Consejos -->
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">Consejos prácticos</h2>
+        <div class="tip-item reveal">
+          <div class="tip-num" aria-hidden="true">1</div>
+          <div class="tip-text"><strong>La ola de Mundaka</strong> requiere swell del norte y marea entrante específica. Para verla en su máxima expresión consulta previsiones de surf (MagicSeaweed o Surfline) antes de ir. No siempre rompe.</div>
+        </div>
+        <div class="tip-item reveal">
+          <div class="tip-num" aria-hidden="true">2</div>
+          <div class="tip-text"><strong>La playa de Laida</strong> se llega cruzando la ría con el barquito desde Mundaka (~€1) o por carretera por Ibarrangelu (~10 min en coche más largo). El barquito solo funciona con marea alta.</div>
+        </div>
+        <div class="tip-item reveal">
+          <div class="tip-num" aria-hidden="true">3</div>
+          <div class="tip-text"><strong>Mundaka es un pueblo muy pequeño.</strong> Aparcar puede ser complicado en verano. Llegar antes de las 10h o ir en transporte público para evitar problemas.</div>
+        </div>
+        <div class="tip-item reveal">
+          <div class="tip-num" aria-hidden="true">4</div>
+          <div class="tip-text"><strong>La Reserva de Biosfera de Urdaibai</strong> tiene el Centro de Visitantes en Gautegiz Arteaga (10 min en coche). Vale la pena para entender el ecosistema antes de explorar.</div>
+        </div>
+        <div class="tip-item reveal">
+          <div class="tip-num" aria-hidden="true">5</div>
+          <div class="tip-text"><strong>El mercado de Gernika</strong> (lunes) está a 10 km. Si tu visita cae en lunes, combina ambos destinos fácilmente.</div>
+        </div>
+      </section>
+
+      <div class="cta-banner">
+        <h3>¿Más escapadas desde Bilbao?</h3>
+        <p>Rutas de un día por la costa vasca con mapas detallados, presupuesto desglosado y consejos de experto.</p>
+        <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html" style="text-decoration:none" aria-label="Routlo — Inicio">
+      <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+    </a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav[role="navigation"]');
+    nav.classList.toggle('menu-open');
+    const links = nav.querySelector('.nav-links');
+    if (links) {
+      links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+    }
+  }
+
+  (function() {
+    'use strict';
+
+    // ── Nav scroll effect ──
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 40) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    }, { passive: true });
+
+    // ── TOC active highlighting ──
+    const tocLinks = document.querySelectorAll('.toc-list a');
+    const sections = [];
+    tocLinks.forEach(function(link) {
+      const id = link.getAttribute('href').replace('#', '');
+      const el = document.getElementById(id);
+      if (el) sections.push({ id: id, el: el, link: link });
+    });
+
+    function updateTOC() {
+      const scrollY = window.scrollY;
+      const offset = 120;
+      let current = null;
+      sections.forEach(function(s) {
+        if (s.el.offsetTop - offset <= scrollY) {
+          current = s;
+        }
+      });
+      tocLinks.forEach(function(l) { l.classList.remove('active'); });
+      if (current) current.link.classList.add('active');
+    }
+
+    window.addEventListener('scroll', updateTOC, { passive: true });
+    updateTOC();
+
+    // ── Smooth scroll for TOC links ──
+    tocLinks.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const id = this.getAttribute('href').replace('#', '');
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY - 96;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // ── Scroll reveal ──
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      document.querySelectorAll('.day-card, .tip-item').forEach(function(el) {
+        el.classList.add('reveal');
+        observer.observe(el);
+      });
+    }
+
+  })();
+</script>
+</body>
+</html>

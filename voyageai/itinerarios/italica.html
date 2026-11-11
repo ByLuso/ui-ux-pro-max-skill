@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Itálica — La ciudad romana que vio nacer a dos emperadores | Routlo</title>
+  <meta name="description" content="A solo 9 km de Sevilla, Itálica fue la primera ciudad romana fundada fuera de Italia y la cuna de los emperadores Trajano y Adriano. Anfiteatro, mosaicos del Planetario y entrada gratuita para residentes UE: menos de 15€ para dos personas en medio día."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.3); font-size: 0.75rem; font-weight: 600; color: #c9a96e; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(201,169,110,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(201,169,110,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #c9a96e; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(201,169,110,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #c9a96e; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(201,169,110,0.3); }
+    .hotel-link:hover { border-color: #c9a96e; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c9a96e; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1543429776-2782fc8e1acd?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">🏛️ Cuna de emperadores</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🚗 9 km · 15 min desde Sevilla</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~15€ / 2 personas</span>
+      <span style="font-size:0.78rem;font-weight:600;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;padding:4px 12px;border-radius:100px;">🆓 Entrada gratuita</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🏟️ Anfiteatro romano</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Itálica<br><span style="color:#c9a96e;">La ciudad romana que vio nacer a dos emperadores</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A solo 9 km de Sevilla, en Santiponce, se encuentra la ciudad romana más antigua de Hispania: fundada en el 206 a.C., cuna de los emperadores Trajano y Adriano, y hogar de uno de los anfiteatros romanos más grandes que se conservan en el mundo. Mosaicos espectaculares, ruinas que han salido en "Juego de Tronos" y entrada gratuita para residentes UE —el plan perfecto para una mañana casi sin gastar nada.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#emperadores">La cuna de los emperadores</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Itálica</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🏛️ Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">9 km</div><div class="route-info-unit">desde Sevilla</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">15 min</div><div class="route-info-unit">en coche o bus</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~15€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Entrada</div><div class="route-info-value">Gratis</div><div class="route-info-unit">residentes UE</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Aforo histórico</div><div class="route-info-value">25.000</div><div class="route-info-unit">espectadores (anfiteatro)</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="emperadores">
+      <h2 class="section-heading">🏛️ La cuna de los emperadores</h2>
+      <div class="highlight-box">
+        <h4>👑 Trajano y Adriano, los dos emperadores hispanos</h4>
+        <p>Itálica fue fundada en el 206 a.C. por el general Publio Cornelio Escipión como asentamiento para los soldados romanos heridos tras la batalla de Ilipa, lo que la convierte en la primera ciudad romana creada fuera de suelo italiano. Con el tiempo se convirtió en una de las urbes más prósperas de la Bética, y de ella surgieron dos de los emperadores más importantes de la historia de Roma: Trajano (n. 53 d.C.), bajo cuyo mandato el Imperio alcanzó su máxima extensión territorial, y su sucesor y pariente Adriano (n. 76 d.C.), constructor de murallas, templos y del célebre Panteón de Roma. Ambos pertenecían a la familia Ulpia-Aelia, una dinastía de origen hispanorromano que llegó a gobernar el mundo conocido desde esta pequeña ciudad de la actual provincia de Sevilla.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🏛️ El "Nova Urbs": la gran expansión de Adriano</h4>
+        <p>Cuando Adriano llegó al poder, ordenó construir junto al núcleo original (la "Vetus Urbs") una ampliación monumental conocida como "Nova Urbs": un trazado urbano de calles porticadas, grandes mansiones con mosaicos, termas y, sobre todo, el imponente anfiteatro que hoy es el principal reclamo del yacimiento. Itálica nunca llegó a ser engullida por una ciudad moderna superpuesta —a diferencia de Mérida o Córdoba—, por lo que sus ruinas se extienden hoy en un entorno semi-rural que conserva una escala y una atmósfera difíciles de encontrar en otros yacimientos romanos de España.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Sevilla → Santiponce · 15 min</div><div class="day-subtitle">Por la A-66 o en autobús M-170A desde Plaza de Armas</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 Una escapada de proximidad casi sin coste</div>
+            <div class="stop-desc">Santiponce está a apenas 9 km del centro de Sevilla, al otro lado del río Guadalquivir. En coche se llega en 15 minutos por la A-66, y existe un servicio de autobús metropolitano (línea M-170A) que sale desde Plaza de Armas con una frecuencia de aproximadamente 30 minutos y cuesta poco más de un euro por trayecto.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento</div>
+            <div class="stop-desc">Junto al Conjunto Arqueológico hay una zona de aparcamiento gratuito en superficie, habitualmente con plazas disponibles salvo en fines de semana de primavera con buen tiempo. Llegar a primera hora de la mañana (apertura) es la mejor garantía de encontrar sitio y, además, de evitar el calor.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">El Anfiteatro romano</div><div class="day-subtitle">S. II d.C. · Visita libre · 45 min - 1h</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏟️ El tercer anfiteatro más grande del Imperio</div>
+            <div class="stop-desc">Construido en tiempos de Adriano, este anfiteatro tenía capacidad para unas 25.000 personas —más habitantes que la propia Itálica en su momento de mayor esplendor, lo que sugiere que también acogía visitantes de Hispalis (Sevilla) y otras ciudades cercanas. Solo el Coliseo de Roma y el anfiteatro de Capua lo superaban en tamaño. Pasear por sus gradas, hoy desnudas de mármol pero con la estructura perfectamente legible, da una idea real de la escala de los espectáculos de gladiadores y venationes (cacerías de fieras) que aquí se celebraban.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🕳️ La fosa bestiaria: los pasillos subterráneos</div>
+            <div class="stop-desc">Bajo la arena se conserva la fosa bestiaria, una red de corredores y jaulas subterráneas desde donde se liberaban los animales y se preparaban los combates. Es uno de los puntos más fotografiados del yacimiento y se puede recorrer parcialmente, dando una perspectiva muy distinta —y bastante evocadora— del espectáculo que se vivía desde abajo.</div>
+            <div class="stop-price">Entrada general: gratis para residentes UE (con DNI/pasaporte) · ~1,50€ resto · Cerrado los lunes</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🐉 El "Pozo de las Almas" de Juego de Tronos</div>
+            <div class="stop-desc">Si la silueta del anfiteatro te resulta familiar, no es casualidad: en la séptima temporada de "Juego de Tronos" estas ruinas representaron el Pozo de las Almas (Dragonpit) de Desembarco del Rey, escenario del histórico encuentro entre Cersei, Daenerys y Jon Nieve. El rodaje atrajo una oleada de visitantes que sigue notándose hoy, aunque el lugar conserva un ambiente tranquilo fuera de los meses de máxima afluencia.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Las "domus" y los mosaicos del Nova Urbs</div><div class="day-subtitle">Paseo arqueológico · 1h - 1h 15min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🎨 Casa del Planetario: los dioses de los días de la semana</div>
+            <div class="stop-desc">Esta mansión romana alberga uno de los mosaicos más célebres de toda Hispania: una composición circular que representa a las siete divinidades del panteón romano asociadas a los astros y a los días de la semana (Saturno, Sol, Luna, Marte, Mercurio, Júpiter y Venus), dispuestas alrededor de una figura central. La precisión del dibujo y la conservación del color son excepcionales para tratarse de una pieza de casi 2.000 años de antigüedad.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🦅 Casa de los Pájaros</div>
+            <div class="stop-desc">Recibe su nombre por los más de 30 medallones con representaciones de aves que decoran los suelos de sus distintas estancias, cada uno con una especie diferente. Es una de las viviendas privadas mejor conservadas del yacimiento y permite imaginar cómo vivía la élite itálica del siglo II, con patios porticados, estanques y suelos completamente cubiertos de mosaicos polícromos.</div>
+            <div class="stop-price">Tip Routlo: la luz de la media mañana incide de forma rasante sobre los mosaicos y resalta muchísimo los colores y el relieve para las fotos</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🛁 Termas mayores y trazado urbano</div>
+            <div class="stop-desc">El recorrido continúa junto a los restos de las grandes termas públicas y los ejes del cardo y el decumano —las calles principales que organizaban cualquier ciudad romana en un trazado en cuadrícula—. Aunque son ruinas más fragmentarias que las domus, ayudan a entender la escala urbana real de la Itálica de Adriano, mucho mayor que el área hoy visitable.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Santiponce: teatro romano y comida</div><div class="day-subtitle">Casco urbano actual · Entrada independiente y simbólica</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🎭 Teatro romano de Itálica</div>
+            <div class="stop-desc">A pocos minutos a pie del recinto principal, en pleno casco urbano de Santiponce, se encuentra el teatro romano original de la ciudad —con entrada independiente, también gratuita o de coste simbólico. Es un buen complemento de media hora para entender cómo la trama urbana moderna ha crecido literalmente sobre la antigua ciudad romana.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Monasterio de San Isidoro del Campo (opcional)</div>
+            <div class="stop-desc">Muy cerca, este monasterio gótico-mudéjar de los siglos XIV-XV guarda los sepulcros de Guzmán el Bueno y fue cuna de la primera traducción de la Biblia al castellano (la "Biblia del Oso"). La entrada tiene un coste reducido y es una opción interesante si quieres alargar la visita o si llueve.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍽️ Tapeo en Santiponce</div>
+            <div class="stop-desc">El pueblo tiene varios bares y freidurías sencillas donde tomar algo de tapeo o un menú económico antes de volver a Sevilla —ideal para cerrar la mañana sin disparar el presupuesto.</div>
+            <div class="stop-price">Tapeo / snack: ~6-8€ para 2 personas</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌧️ Alternativa si llueve</div>
+            <div class="stop-desc">Las domus con mosaicos (Casa de los Pájaros y Casa del Planetario) están protegidas por cubiertas, por lo que Itálica se puede visitar perfectamente con lluvia ligera. Si el tiempo empeora del todo, el Monasterio de San Isidoro del Campo, en interior, es el plan B perfecto a pocos minutos andando.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, 18 km) o bus M-170A</span><span>3€</span></div>
+        <div class="budget-row"><span>🎫 Entrada conjunto arqueológico (2 personas, no UE)</span><span>3€</span></div>
+        <div class="budget-row"><span>🍽️ Tapeo / snack en Santiponce (2 personas)</span><span>8€</span></div>
+        <div class="budget-row"><span>☕ Café o refresco</span><span>1€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~15€</span></div>
+      </div>
+      <div class="budget-note">Si sois residentes en la Unión Europea, la entrada al conjunto arqueológico es gratuita, así que el presupuesto puede bajar todavía más —el grueso del gasto sería solo el transporte y la comida. Es, sin duda, una de las escapadas más económicas posibles desde Sevilla.</div>
+      <p style="font-size:0.875rem;color:rgba(237,238,242,0.6);line-height:1.68;margin-bottom:8px;">Si prefieres ir sin preocuparte de horarios ni del trazado, también existe la opción de reservar una visita guiada con transporte incluido desde Sevilla, con un guía especializado en historia romana que te ayudará a entender mejor el contexto del anfiteatro y los mosaicos.</p>
+      <a href="https://www.getyourguide.com/s/?q=Italica+Roman+ruins+Seville&partner_id=ABC123" class="hotel-link" target="_blank" rel="noopener" aria-label="Reservar visita guiada a Itálica en GetYourGuide">👉 Reservar visita guiada a Itálica en GetYourGuide</a>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Lunes cerrado:</strong> el conjunto arqueológico no abre los lunes. Planifica la visita de martes a domingo, y consulta el horario actualizado antes de ir porque varía bastante entre temporada de invierno y verano.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Evita el mediodía en verano:</strong> el yacimiento apenas tiene sombra y el calor andaluz en julio y agosto puede ser extremo. La mejor opción es ir a primera hora de la apertura, cuando además la luz es mejor para las fotos de los mosaicos.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Qué llevar:</strong> sombrero o gorra, gafas de sol, agua en abundancia y calzado cómodo —el recorrido por el anfiteatro y las domus implica caminar sobre terreno irregular y sin apenas zonas cubiertas salvo en las casas con mosaicos.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>En autobús desde Sevilla:</strong> la línea M-170A sale de Plaza de Armas y te deja muy cerca de la entrada al conjunto arqueológico, una alternativa cómoda y barata si no quieres usar el coche para un trayecto tan corto.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Sevilla y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Sevilla" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Sevilla en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (GetYourGuide, DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Sevilla?</h3>
+      <p>Rutas de medio día y menos de 20€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([37.416,-6.011],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[37.3891,-5.9845],label:'Sevilla',color:'#5ecb8a',r:10},{coords:[37.4439,-6.0386],label:'Itálica (Santiponce)',color:'#c9a96e',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[37.3891,-5.9845],[37.4439,-6.0386]],{color:'#c9a96e',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

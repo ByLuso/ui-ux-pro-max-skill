@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Écija — La ciudad de las once torres | Routlo</title>
+  <meta name="description" content="53 km desde Sevilla, 50 minutos en coche: el conjunto barroco gratuito más espectacular de Andalucía, con once torres de azulejos, la Plaza Mayor porticada y el Palacio de Peñaflor. Unos 32€ para dos personas en un día."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #e0935c; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #e0935c; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(224,147,92,0.15); border: 1px solid rgba(224,147,92,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #e0935c; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(224,147,92,0.12); border: 1px solid rgba(224,147,92,0.3); font-size: 0.75rem; font-weight: 600; color: #e0935c; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(224,147,92,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(224,147,92,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #e0935c, #a05c2c); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #e0935c; border-left-color: #e0935c; background: rgba(224,147,92,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(224,147,92,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(224,147,92,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #e0935c; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(224,147,92,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #e0935c; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #e0935c; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(224,147,92,0.3); }
+    .hotel-link:hover { border-color: #e0935c; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #e0935c; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#e0935c'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#e0935c'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;">⛪🔔 Ciudad de las torres</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">🚗 53 km · 50 min desde Sevilla</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~32€ / 2 personas</span>
+      <span style="font-size:0.78rem;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;padding:4px 12px;border-radius:100px;">🆓 Entrada gratuita</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Écija<br><span style="color:#e0935c;">La ciudad de las once torres</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A 50 minutos de Sevilla, Écija reúne uno de los conjuntos de arquitectura barroca más deslumbrantes de España: once torres de iglesia cubiertas de azulejos polícromos, una Plaza Mayor porticada y el Palacio de Peñaflor con su fachada curva única. Casi todo se ve y se disfruta sin pagar entrada —por eso la llamamos "la ciudad de las once torres" y la escapada más barata de Andalucía.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#azulejos">Azulejos contra el sol</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Écija</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">⛪ Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">53 km</div><div class="route-info-unit">desde Sevilla</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">50 min</div><div class="route-info-unit">en coche</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~32€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Torres barrocas</div><div class="route-info-value">11</div><div class="route-info-unit">de acceso libre</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mejor época</div><div class="route-info-value">Prim. / Otoño</div><div class="route-info-unit">evita julio-agosto al mediodía</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="azulejos">
+      <h2 class="section-heading">🔔 Azulejos contra el sol</h2>
+      <div class="highlight-box">
+        <h4>🌍 1755: el terremoto que rehízo Écija</h4>
+        <p>El 1 de noviembre de 1755, el gigantesco terremoto de Lisboa —uno de los más devastadores de la historia de Europa— se sintió con fuerza en toda Andalucía y dañó gravemente buena parte del patrimonio religioso de Écija. En las décadas siguientes, la ciudad vivió una intensa reconstrucción en estilo barroco, con arquitectos y artesanos locales que rehicieron las torres de sus iglesias siguiendo la moda decorativa del momento: estructuras esbeltas, de varios cuerpos, recubiertas de azulejos polícromos —los mismos talleres cerámicos que abastecían a Sevilla y Triana—. El resultado son las célebres "once torres" que hoy dan nombre a la ciudad: las de Santa Cruz, San Juan Bautista, Santiago, San Gil, Santa Bárbara y otras tantas, cada una con su propio dibujo de azulejos en azules, verdes, blancos y amarillos que brillan bajo el sol andaluz.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🌡️ La "sartén de Andalucía"</h4>
+        <p>Écija ocupa una depresión natural en el valle del Genil, rodeada de colinas que atrapan el calor como si fuera una olla. El resultado: en julio y agosto, las temperaturas aquí rondan habitualmente los 40-46°C, entre las más altas registradas en España. De ahí su apodo popular, "la sartén de Andalucía". Pero hay una cara B de ese clima extremo: los mismos azulejos que decoran las torres barrocas reflejan la luz de un modo espectacular, y el casco histórico —con sus calles estrechas, soportales y patios con naranjos— se ha diseñado durante siglos pensando en dar sombra. La recomendación de Routlo es sencilla: visita Écija en primavera, otoño, o muy temprano por la mañana en verano, y deja el mediodía estival para la sombra de un bar con terraza.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🏛️ Astigi: cruce de caminos desde la Roma imperial</h4>
+        <p>Écija no nació en el barroco: su origen es la antigua Astigi romana, una de las ciudades más prósperas de la Bética gracias a su posición estratégica en el cruce de caminos entre Córdoba, Sevilla y la costa, y a la producción de aceite que se exportaba en ánforas por todo el Imperio. Esa vocación de encrucijada se mantuvo en época islámica y cristiana, y explica por qué una ciudad de tamaño medio acumuló tantas iglesias, conventos y palacios: durante siglos fue un nudo de poder económico y religioso en el corazón de Andalucía, mucho más relevante de lo que su tamaño actual sugiere.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Sevilla → Écija · 50 min</div><div class="day-subtitle">Por la A-4 (autovía de Andalucía), dirección Córdoba/Madrid</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 La A-4, la antigua vía romana</div>
+            <div class="stop-desc">La autovía A-4 entre Sevilla y Écija discurre, en buena parte, paralela al trazado de la antigua vía romana que unía Hispalis (Sevilla) con Corduba (Córdoba) y que pasaba por Astigi —el nombre romano de Écija—. El paisaje es campiña sevillana: olivares, campos de cereal y, en primavera, extensiones de girasoles que aún no han florecido pero ya apuntan el verde intenso típico de la zona.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento</div>
+            <div class="stop-desc">El centro histórico de Écija es peatonal o de tráfico muy restringido. Lo más práctico es aparcar gratis en las calles que rodean el casco antiguo (por ejemplo cerca de la Plaza de España o en las avenidas que la circundan) y moverse a pie —todo el recorrido cabe en un radio de 10-15 minutos andando.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Plaza de España y primeras torres</div><div class="day-subtitle">Paseo a pie · 45 min - 1h · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Plaza de España (Plaza Mayor)</div>
+            <div class="stop-desc">El corazón social de Écija: una plaza porticada y alargada, con el Ayuntamiento, soportales con bares de tapas y terrazas a la sombra. Es el punto de partida natural del recorrido y un buen sitio para tomar un café o un refresco antes de salir a caminar —y para volver al final del día. Acceso totalmente libre y gratuito, a cualquier hora.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesia de Santa Cruz</div>
+            <div class="stop-desc">Una de las iglesias más singulares de la ciudad, construida sobre los restos de la antigua mezquita mayor y con elementos visigóticos reaprovechados en su interior. Su torre, decorada con azulejos, es una de las "once" más fotografiadas. El exterior y la plaza que la rodea son de acceso libre; el interior, cuando está abierto, suele tener una pequeña aportación voluntaria.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesia de San Juan Bautista</div>
+            <div class="stop-desc">Su torre-campanario, una de las más altas y esbeltas de Écija, es un ejemplo perfecto del "barroco de azulejos" posterior a 1755: cuerpos superpuestos decrecientes, decorados con cerámica polícroma sevillana en motivos geométricos y florales. Se contempla desde la calle, completamente gratis.</div>
+            <div class="stop-price">💡 Tip Routlo: la luz de la mañana (9:00-11:00h) ilumina de frente las torres orientadas al este, ideal para fotografiar los azulejos sin contraluz.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Palacios barrocos y más torres</div><div class="day-subtitle">Paseo a pie · 1h - 1h 30min · Mayormente gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏰 Palacio de Peñaflor</div>
+            <div class="stop-desc">La gran joya del barroco civil andaluz. Su fachada curva —única en España— sigue la línea de la calle y está decorada con un balcón corrido pintado al fresco que recorre toda la planta noble, enmarcado por una portada de mármoles rojos y columnas salomónicas. El exterior, que es lo realmente espectacular, se contempla gratis desde la calle; en ocasiones el patio interior también es visitable sin coste o con aportación simbólica.</div>
+            <div class="stop-price">🅿️ Gratis (exterior) · Consulta horarios de visita al patio interior in situ</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Palacio de Benamejí (Museo Histórico Municipal)</div>
+            <div class="stop-desc">Antiguo palacio del siglo XVIII que hoy alberga el museo histórico municipal, con una interesante colección de mosaicos romanos procedentes de la antigua Astigi, además de piezas de las épocas islámica y barroca. La entrada suele ser gratuita o de precio muy simbólico (1-2€), y es una parada perfecta si aprieta el calor: salas frescas, climatizadas y con aire acondicionado.</div>
+            <div class="stop-price">🎫 Entrada gratuita o ~1,50€/persona según horario · Alternativa ideal en horas de calor</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesia de Santiago y Iglesia de San Gil</div>
+            <div class="stop-desc">Dos nuevas torres del conjunto de las "once", cada una con su propio diseño de azulejos: la de Santiago combina tonos verdes y blancos en un patrón de rombos, mientras que San Gil destaca por sus pináculos cerámicos. Ambas se ven y fotografían desde las plazas y calles adyacentes, sin coste alguno.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏘️ Calle de los conventos y casas-palacio</div>
+            <div class="stop-desc">Écija conserva un número sorprendente de casas-palacio con portadas barrocas blasonadas —escudos de armas, columnas, frontones curvos— testimonio de la pujanza de su nobleza local entre los siglos XVII y XVIII. Pasear por estas calles, casi siempre tranquilas y con sombra de los edificios altos, es gratis y es quizá la mejor forma de sentir el ambiente íntimo de la ciudad fuera de las plazas principales.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">⛪ Iglesia de Santa Bárbara y resto de torres</div>
+            <div class="stop-desc">Si el calor lo permite, completa el recorrido con la torre de Santa Bárbara y el resto de campanarios del conjunto de las "once torres" —cada una decorada con un patrón distinto de azulejos, casi como once obras de arte cerámico al aire libre repartidas por la ciudad. Todo gratuito, todo al aire libre.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Tapas a la sombra y regreso</div><div class="day-subtitle">Cocina sevillana tradicional · Vuelta directa 50 min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🍽️ Tapeo en los soportales de la Plaza de España</div>
+            <div class="stop-desc">Los bares con terraza bajo los soportales de la Plaza Mayor son el sitio perfecto para cerrar la visita: están a la sombra prácticamente todo el día y sirven tapas y raciones de cocina sevillana clásica —espinacas con garbanzos, salmorejo, flamenquín, croquetas—. Un par de cañas con tapas para dos personas es una forma estupenda (y económica) de hidratarse y recuperar fuerzas antes de la vuelta.</div>
+            <div class="stop-price">Tapeo: ~6-8€/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Sevilla — 50 min</div>
+            <div class="stop-desc">Vuelta directa por la A-4. Si te ha quedado tiempo y energía, Carmona —con su propio casco histórico y mirador sobre la campiña— está a mitad de camino y puede ser una parada exprés de 20-30 minutos para otro día.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, ~106 km)</span><span>11€</span></div>
+        <div class="budget-row"><span>🎫 Entrada Museo Histórico (Palacio de Benamejí, 2 personas)</span><span>3€</span></div>
+        <div class="budget-row"><span>☕ Café o refresco a la sombra en Plaza de España</span><span>5€</span></div>
+        <div class="budget-row"><span>🍽️ Tapeo de mediodía (2 personas)</span><span>13€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~32€</span></div>
+      </div>
+      <div class="budget-note">Una de las escapadas más económicas de toda Andalucía: casi todo el conjunto monumental de Écija —once torres, Plaza de España, exterior del Palacio de Peñaflor, calles con casas-palacio— es de acceso libre y gratuito. El único gasto "cultural" es opcional y simbólico (el museo histórico), así que con 30-35€ para dos personas, incluyendo gasolina y comida, te sobra margen para un helado o una segunda ronda de tapas.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Evita julio y agosto al mediodía a toda costa:</strong> Écija registra habitualmente las temperaturas más altas de España en verano, con máximas que pueden superar los 44-46°C. Si visitas en esa época, hazlo a primera hora de la mañana (antes de las 11h) o al atardecer, y reserva el mediodía para estar bajo techo o a la sombra.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Mejor época del año:</strong> primavera (marzo-mayo) y otoño (septiembre-octubre) son ideales, con temperaturas agradables para caminar y la luz perfecta para fotografiar los azulejos de las torres.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Qué llevar:</strong> agua en abundancia (más de la que creas necesaria), sombrero o gorra, ropa ligera de algodón o lino, gafas de sol y protección solar de factor alto —incluso en días nublados de primavera, la reverberación de las calles empedradas es intensa.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Aparcamiento y errores a evitar:</strong> no intentes entrar con el coche al casco histórico —muchas calles son peatonales o de acceso muy restringido para residentes—. Aparca gratis en las avenidas que rodean el centro y entra a pie; es más rápido y evitas multas por circular en zona restringida.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Sevilla y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Sevilla" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Sevilla en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados"><strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.</div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Sevilla?</h3>
+      <p>Rutas de menos de 1 hora y menos de 100€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([37.465,-5.533],9);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[37.3891,-5.9845],label:'Sevilla',color:'#5ecb8a',r:10},{coords:[37.5410,-5.0826],label:'Écija',color:'#e0935c',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[37.3891,-5.9845],[37.5410,-5.0826]],{color:'#e0935c',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

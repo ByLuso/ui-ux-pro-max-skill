@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ardenas (Bélgica) — 4 días de cervezas trapenses, castillos medievales y bosques infinitos | Routlo</title>
+  <meta name="description" content="4 días en las Ardenas belgas: el castillo de Godefroid de Bouillon, las cuevas de Han-sur-Lesse, la ciudad más pequeña del mundo en Durbuy, cerveza Trappist de Rochefort y el río Mosa. Joyas ocultas de Europa."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s cubic-bezier(0.16,1,0.3,1); }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #c9a96e; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #c9a96e; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #c9a96e; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-price { font-size: 0.75rem; color: #c9a96e; margin-bottom: 6px; font-weight: 600; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,100,100,0.12); border-radius: 10px; padding: 12px 14px; }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.45); }
+    .cta-banner { background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(201,169,110,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #c9a96e, #a07840); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 40px; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; will-change: transform; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .itin-layout { z-index: 2 !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-item { background: #070d1a; padding: 14px 12px; text-align: center; }
+    .route-info-label { font-size: 0.65rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .route-info-val { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; font-weight: 700; color: #c9a96e; }
+    .budget-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .budget-table th { text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,238,242,0.4); padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .budget-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; color: rgba(237,238,242,0.75); }
+    .budget-table td:last-child { text-align: right; color: #c9a96e; }
+    .budget-total { background: rgba(201,169,110,0.06); border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 16px; border: 1px solid rgba(201,169,110,0.15); }
+    .budget-total-label { font-size: 0.85rem; font-weight: 500; }
+    .budget-total-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.4rem; color: #c9a96e; }
+    .highlight-box { background: rgba(201,169,110,0.05); border: 1px solid rgba(201,169,110,0.18); border-radius: 14px; padding: 16px 20px; margin: 14px 0; font-size: 0.83rem; color: rgba(237,238,242,0.75); line-height: 1.65; }
+    .highlight-box strong { color: #c9a96e; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.86rem; color: rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom: none; }
+    .check-box { width: 16px; height: 16px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+    @keyframes blob { 0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(40px,-60px)scale(1.08)}66%{transform:translate(-30px,40px)scale(0.94)} }
+    .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .aurora-span{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);top:40%;left:50%;transform:translate(-50%,-50%);opacity:.35;animation:blob 14s ease-in-out infinite -3.5s}
+    @media(max-width:1024px){.itin-layout{grid-template-columns:1fr}.toc{display:none}.gastro-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){nav[role="navigation"]{padding:0 14px}nav[role="navigation"] ul{display:none}.emerg-grid{grid-template-columns:1fr}.route-info-bar{grid-template-columns:repeat(2,1fr)}}
+    @media(prefers-reduced-motion:reduce){.aurora::before,.aurora::after,.aurora-span{animation:none}}
+    .aurora::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#050d18 0%,transparent 70%);top:-200px;left:-150px;opacity:.5;animation:blob 14s ease-in-out infinite}
+    .aurora::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);bottom:-150px;right:-100px;opacity:.45;animation:blob 14s ease-in-out infinite -7s}
+    .aurora-span{background:radial-gradient(circle,#061020 0%,transparent 70%)!important}
+    .dest-hero{position:relative;z-index:1;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050d1a 0%,#0d1e3a 40%,#162a50 70%,rgba(201,169,110,0.12) 100%),url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1400&q=80') center/cover no-repeat}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.55) 50%,rgba(4,8,16,0.2) 100%)}
+    .dest-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1}
+    .dest-breadcrumb a{color:rgba(237,238,242,0.55);text-decoration:none;transition:color .2s}
+    .dest-breadcrumb a:hover{color:#c9a96e}
+    .dest-breadcrumb span{opacity:.4}
+    .dest-title{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2}
+    .dest-country{font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1}
+    .dest-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px}
+    .dest-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55)}
+    .dest-badge.gold{border-color:rgba(201,169,110,0.3);color:#c9a96e}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span><span>Europa · Bélgica</span>
+  </nav>
+  <h1 class="dest-title" id="dest-title">Ardenas</h1>
+  <p class="dest-country">El bosque eterno de Bélgica</p>
+  <div class="dest-meta">
+    <span class="dest-badge">📍 Valonia · Bélgica</span>
+    <span class="dest-badge gold">4 días · En pareja</span>
+    <span class="dest-badge gold">💶 620 € dos personas</span>
+    <span class="dest-badge">🍺 Trappist · Castillos · Cuevas</span>
+    <span class="dest-badge">🍂 Mar · Abr · Sep · Oct · Nov</span>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc" aria-label="Tabla de contenidos">
+    <div class="toc-title">En esta guía</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#mapa-ruta">Mapa del recorrido</a></li>
+      <li><a href="#dias">Día a día</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#alojamiento">Dónde dormir</a></li>
+      <li><a href="#gastronomia">Gastronomía</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+      <li><a href="#checklist">Checklist</a></li>
+      <li><a href="#emergencias">Emergencias</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <section id="datos" class="itin-section" aria-labelledby="h-datos">
+      <h2 class="section-heading" id="h-datos">Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-item"><div class="route-info-label">Duración</div><div class="route-info-val">4 días</div></div>
+        <div class="route-info-item"><div class="route-info-label">Presupuesto</div><div class="route-info-val">~620 € (2 pax)</div></div>
+        <div class="route-info-item"><div class="route-info-label">Desde Madrid</div><div class="route-info-val">Vuelo a Bruselas</div></div>
+        <div class="route-info-item"><div class="route-info-label">Transporte</div><div class="route-info-val">Coche de alquiler</div></div>
+        <div class="route-info-item"><div class="route-info-label">Mejor época</div><div class="route-info-val">Sep · Oct · Abr</div></div>
+      </div>
+    </section>
+
+    <section id="mapa-ruta" class="itin-section" aria-labelledby="h-mapa">
+      <h2 class="section-heading" id="h-mapa">Mapa del recorrido</h2>
+      <div id="route-map" style="height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.79rem;color:rgba(237,238,242,0.55);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#5ecb8a;"></span>Inicio · Durbuy</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#c9a96e;"></span>Paradas del viaje</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:24px;height:3px;background:#c9a96e;border-radius:2px;"></span>Recorrido</span>
+      </div>
+    </section>
+
+    <section id="dias" class="itin-section" aria-labelledby="h-dias">
+      <h2 class="section-heading" id="h-dias">Día a día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">01</div>
+          <div>
+            <div class="day-title">Durbuy — la ciudad más pequeña del mundo</div>
+            <div class="day-subtitle">Reconocida en el Guinness · 400 habitantes · Castillo s. XI</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Durbuy — ciudad oficial de 400 habitantes</div>
+              <div class="stop-desc">Durbuy recibió el título de "ciudad" (ville) en 1331 del Príncipe-Obispo de Liège — y lo mantiene aunque solo tenga 400 habitantes en el núcleo histórico. El castillo del Conde d'Ursel domina el meandro del río Ourthe. El casco histórico es un laberinto de calles adoquinadas del s. XIII con tiendas de artesanía, chocolatiers y el Parc des Topiaires (jardines de setos esculpidos en más de 250 formas: animales, personajes, figuras abstractas).</div>
+              <div class="stop-price">Parc des Topiaires: €6 · Castillo exterior: gratis</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Kayak por el río Ourthe</div>
+              <div class="stop-desc">El Ourthe pasa por el corazón de Durbuy entre acantilados de caliza y bosques de haya. El descenso de 12 km de Bomal à Durbuy en kayak dura 2-3 horas: aguas tranquilas con algunos rápidos moderados. En otoño el follaje amarillo-naranja sobre el río negro crea un paisaje que no olvidaréis. Las empresas de kayak de Durbuy recogen al final.</div>
+              <div class="stop-price">€15-20/kayak doble (incluye transporte de vuelta)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">02</div>
+          <div>
+            <div class="day-title">Han-sur-Lesse + Rochefort — cuevas y cervezas Trappist</div>
+            <div class="day-subtitle">El mayor sistema de cuevas de Bélgica y la cerveza más famosa del mundo</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Grotte de Han — el subsueño del Lesse</div>
+              <div class="stop-desc">El río Lesse desaparece bajo tierra y recorre 8 km de galerías antes de reaparecer. La visita guiada cubre las salas más grandes: la Salle d'Armes (200 m de longitud, 60 m de altura) con estalagmitas de 250.000 años y la Salle du Dôme donde el sonido et-lumière crea una tormenta artificial. La temperatura interior es constante 13°C todo el año. El acceso incluye un trenecito desde el pueblo hasta la entrada de la cueva.</div>
+              <div class="stop-price">Entrada: €19 (adulto) · Duración: 2 horas</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Abbaye Notre-Dame de Saint-Rémy — Rochefort Trappist</div>
+              <div class="stop-desc">La abadía trapense de Rochefort produce las cervezas Trappist más apreciadas del mundo (Rochefort 6, 8 y 10). La Rochefort 10 es consistentemente una de las 10 mejores cervezas del mundo según RateBeer. Los monjes la producen desde 1595. No hay visitas al interior, pero en la tienda de la abadía compráis directamente a precio de origen: €1,80-2,50 la botella de 33cl, vs €4-5 en tienda especializada.</div>
+              <div class="stop-price">Tienda: abierta lunes-sábado 9-11 h · Rochefort 10: €2,50/botella</div>
+            </div>
+          </div>
+          <div class="highlight-box">
+            <strong>Importante:</strong> La tienda de la abadía abre solo por las mañanas (9-11 h) y vende cantidades limitadas por persona. Llegad antes de las 9:30 h o la Rochefort 10 se acaba.
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">03</div>
+          <div>
+            <div class="day-title">Bouillon — el castillo de los Cruzados</div>
+            <div class="day-subtitle">Godefroid de Bouillon vendió este castillo para financiar la Primera Cruzada</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Château de Bouillon — s. XI, cruce de Europa</div>
+              <div class="stop-desc">Godefroid de Bouillon, señor de este castillo, lo vendió al Príncipe-Obispo de Liège en 1095 para financiar la Primera Cruzada — y se convirtió en el primer soberano del Reino de Jerusalén. El castillo (s. XI) está literalmente envuelto por el río Semois que hace un meandro de 270°. La vista desde los torreones sobre el río, el pueblo y el bosque de Ardenas es la más dramática de Bélgica. Espectáculo medieval en verano con aves rapaces.</div>
+              <div class="stop-price">Entrada: €9 · Espectáculo: €4 extra</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Caminata por las Ardenas belgo-luxemburguesas</div>
+              <div class="stop-desc">Los senderos GR desde Bouillon atraviesan bosques de haya, roble y abeto donde el silencio es absoluto incluso en julio. La ruta circular de Tombeau du Géant (7 km, 2,5 h) rodea el meandro del Semois con vistas sobre el castillo desde el otro lado del río. En otoño el bosque es de todos los colores del fuego.</div>
+              <div class="stop-price">Gratis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num" aria-hidden="true">04</div>
+          <div>
+            <div class="day-title">Dinant — la ciudad del saxofón y el río Mosa</div>
+            <div class="day-subtitle">Nacimiento de Adolphe Sax · Citadelle medieval · Couques de Dinant</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="stop-list">
+            <div class="stop-item">
+              <div class="stop-name">Dinant — Citadelle y saxófonos gigantes</div>
+              <div class="stop-desc">Adolphe Sax nació en Dinant en 1814 y inventó el saxofón — la calle principal tiene 28 saxofones de colores colgados de los faroles. La Citadelle (s. XI, reconstruida 1530) está sobre un acantilado de 100 m sobre el río Mosa, accesible en teleférico o escaleras. La Collégiale Notre-Dame (s. XIII) tiene el ábside clavado literalmente en la roca del acantilado — uno de los encuadres arquitectónicos más sorprendentes de Europa.</div>
+              <div class="stop-price">Citadelle: €9 · Teleférico: €3 extra</div>
+            </div>
+            <div class="stop-item">
+              <div class="stop-name">Kayak por el Mosa y Couques de Dinant</div>
+              <div class="stop-desc">El Mosa en Dinant es ancho y tranquilo: bajada de 8 km en kayak entre acantilados y pueblos medievales. Las Couques de Dinant son galletas durísimas (duras de verdad — hay que remojarlas) con formas de corazones, saxofones y figuras heráldicas, hechas de harina de centeno y miel de Ardenas. La receta data del s. XIV. Comprad en la Biscuiterie Collignon.</div>
+              <div class="stop-price">Kayak: €18-25/doble · Couques: €4-8 caja</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+      <h2 class="section-heading" id="h-presupuesto">Presupuesto desglosado</h2>
+      <table class="budget-table">
+        <thead><tr><th>Concepto</th><th>Mínimo (2 pax)</th><th>Cómodo (2 pax)</th></tr></thead>
+        <tbody>
+          <tr><td>Vuelos ida+vuelta a Bruselas (×2 personas)</td><td>€100</td><td>€200</td></tr>
+          <tr><td>Coche de alquiler 3 días</td><td>€70</td><td>€120</td></tr>
+          <tr><td>Alojamiento 3 noches (gîte rural / B&B)</td><td>€120</td><td>€220</td></tr>
+          <tr><td>Comidas 4 días × 2 personas</td><td>€140</td><td>€200</td></tr>
+          <tr><td>Grotte de Han (2 personas)</td><td>€38</td><td>€38</td></tr>
+          <tr><td>Château de Bouillon (2 personas)</td><td>€18</td><td>€26</td></tr>
+          <tr><td>Citadelle de Dinant (2 personas)</td><td>€18</td><td>€24</td></tr>
+          <tr><td>Kayak (Ourthe o Mosa)</td><td>€30</td><td>€50</td></tr>
+          <tr><td>Compras (cerveza Trappist, couques, chocolate)</td><td>€25</td><td>€60</td></tr>
+          <tr><td>Gasolina / peaje</td><td>€20</td><td>€35</td></tr>
+        </tbody>
+      </table>
+      <div class="budget-total">
+        <span class="budget-total-label">Total estimado para 2 personas · 4 días</span>
+        <span class="budget-total-value">€579 – €973</span>
+      </div>
+    </section>
+
+    <section id="alojamiento" class="itin-section" aria-labelledby="h-aloj">
+      <h2 class="section-heading" id="h-aloj">Dónde dormir</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">Gîte rural o B&B (€40-75/noche habitación doble)</div>
+            <div class="stop-desc">Las Ardenas tienen la mayor concentración de gîtes rurales de Bélgica. Los mejores están en las afueras de los pueblos medievales: casas de piedra caliza con chimenea, jardín y desayuno con productos de la granja. Valonia Tourism tiene una base de datos oficial con búsqueda por zona.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">Château-hôtel (€80-150/noche) — para una noche especial</div>
+            <div class="stop-desc">Las Ardenas tienen decenas de chateau reconvertidos en hoteles boutique. El Château de Hassonville (Marloie) o el Manoir de Lébioles (Spa) son los más recomendados para una noche de lujo accesible. Precio imbatible comparado con chateau del Loire.</div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+      <h2 class="section-heading" id="h-gastro">Gastronomía de las Ardenas</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Cerveza</div>
+          <div class="gastro-title">Rochefort Trappist 10</div>
+          <div class="gastro-price">€2,50 (en abadía) / €5 (tienda)</div>
+          <div class="gastro-desc">10° Plato. Cerveza de abadía de fermentación alta, dark ale con notas de ciruela, chocolate y especias. Fermentada por monjes desde 1595. Una de las 10 mejores cervezas del mundo según todos los rankings.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Caza</div>
+          <div class="gastro-title">Civet de sanglier</div>
+          <div class="gastro-price">€18-25 (plato principal)</div>
+          <div class="gastro-desc">Guiso lento de jabalí con cerveza Trappist, bayas de enebro, tomillo del bosque y patatas. Servido en olla de hierro colado. El plato más típico de las Ardenas — los jabalíes son abundantes en los bosques y la caza está regulada.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Queso</div>
+          <div class="gastro-title">Fromage de Herve</div>
+          <div class="gastro-price">€8-12/pieza (en mercado)</div>
+          <div class="gastro-desc">Queso de corteza lavada de Liège (DOP). Olor muy intenso, pasta suave y mantequillosa. Madurado en sótanos húmedos durante 3-4 meses. Producto más antiguo con denominación de origen de Bélgica.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Dulce</div>
+          <div class="gastro-title">Couques de Dinant</div>
+          <div class="gastro-price">€4-8 (caja)</div>
+          <div class="gastro-desc">Galletas medievales de harina de centeno y miel, prensadas en moldes de madera tallada del s. XIV con figuras heráldicas. Durísimas (para remojar en café o té) pero de sabor intenso a miel de bosque.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Cerveza</div>
+          <div class="gastro-title">Orval Trappist</div>
+          <div class="gastro-price">€2-3 (en abadía)</div>
+          <div class="gastro-desc">La única Trappist con adición de Brettanomyces (levadura salvaje) que crea un perfil de "cuero viejo y fruta seca" único en el mundo cervecero. La abadía de Orval está a 40 km de Bouillon.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Condimento</div>
+          <div class="gastro-title">Sirop de Liège</div>
+          <div class="gastro-price">€3-6 (tarro)</div>
+          <div class="gastro-desc">Melaza espesa de manzana y pera cocida durante horas hasta concentrarse al 80%. Usada sobre tartines (tostadas) o con queso de Herve. Sabor entre membrillo y caramelo de fruta. Producción artesanal en el valle del Mosa.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+      <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Grotte de Han — reservad online:</strong> en julio-agosto las entradas se agotan. Comprad en hansurlesse.be con 48 h de antelación. La visita comienza exactamente a la hora indicada.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Cerveza Trappist de Rochefort — llegad pronto:</strong> la tienda de la abadía abre de 9 a 11 h y vende máximo 12 botellas por persona. A las 10:30 h la Rochefort 10 suele estar agotada. En invierno solo abre sábados.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Otoño en las Ardenas:</strong> septiembre-noviembre es la mejor estación. El follaje es excepcional, el civet de sanglier está en temporada y los precios de alojamiento bajan un 30-40% frente a julio-agosto.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Conducción:</strong> las Ardenas tienen carreteras sinuosas y sin separador central. En niebla (frecuente en otoño y primavera) reducid la velocidad — los ciervos y jabalíes cruzan sin avisar.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Idioma:</strong> las Ardenas son Valonia francófona. El inglés es mucho menos frecuente que en Bruselas. El francés básico (bonjour, merci, une bière s'il vous plaît) es imprescindible en los pueblos del interior.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Abadía de Orval:</strong> a 40 km al sur de Bouillon, cerca de la frontera luxemburguesa. La tienda vende Orval más barato que en cualquier otro lugar y el claustro del s. XII es visitable. Añadid 3 horas al Día 3 si queréis incluirla.</div></div>
+    </section>
+
+    <section id="checklist" class="itin-section" aria-labelledby="h-check">
+      <h2 class="section-heading" id="h-check">Qué llevar</h2>
+      <div class="day-card"><div class="day-body">
+        <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea (válida en Bélgica, UE)</div>
+        <div class="check-item"><div class="check-box"></div>Impermeable ligero (las Ardenas tienen 130 días de lluvia al año)</div>
+        <div class="check-item"><div class="check-box"></div>Calzado de trekking (senderos sobre caliza mojada)</div>
+        <div class="check-item"><div class="check-box"></div>Capa extra (los bosques y cuevas son fríos: 13°C constantes)</div>
+        <div class="check-item"><div class="check-box"></div>Reservas Grotte de Han confirmadas</div>
+        <div class="check-item"><div class="check-box"></div>Bolsa para cervezas Trappist (el cristal pesa)</div>
+        <div class="check-item"><div class="check-box"></div>Euros en efectivo (algunas bodegas y mercados rurales)</div>
+        <div class="check-item"><div class="check-box"></div>Prismáticos (fauna del bosque: ciervos, jabalíes, rapaces)</div>
+      </div></div>
+    </section>
+
+    <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+      <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias (EU)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, ambulancia, bomberos</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulance (ambulancia)</div><div class="emerg-value">100</div><div class="emerg-note">También funciona el 112</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía</div><div class="emerg-value">101</div><div class="emerg-note">También funciona el 112</div></div>
+        <div class="emerg-card"><div class="emerg-label">Pompiers (bomberos)</div><div class="emerg-value">100</div><div class="emerg-note">También funciona el 112</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Liège (CHU)</div><div class="emerg-value">+32 4 366 7111</div><div class="emerg-note">CHU de Liège — el mayor del área</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Namur</div><div class="emerg-value">+32 81 72 6711</div><div class="emerg-note">CHR Namur — zona sur Ardenas</div></div>
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Quieres personalizar este viaje?</h3>
+      <p>Nuestro chatbot IA puede ayudarte con alojamiento, rutas alternativas y presupuesto adaptado a tu situación.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chatbot IA de Routlo
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso:</strong> Los precios son orientativos. La tienda de la abadía de Rochefort tiene horarios variables — comprobad antes de ir. La Grotte de Han puede cerrar por condiciones meteorológicas. La temporada de caza (sanglier) puede restringir algunos senderos de octubre a enero. Routlo no se responsabiliza de cambios en precios ni condiciones.
+    </div>
+
+  </main>
+</div>
+
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 32px 32px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;margin-bottom:40px;">
+    <div><div style="font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:12px;">Routlo</div><p style="font-size:0.82rem;color:rgba(237,238,242,0.45);line-height:1.65;">Itinerarios inteligentes para viajeros exigentes.</p></div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">Europa</div>
+      <nav aria-label="Itinerarios Europa"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><a href="molise.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Molise</a></li>
+        <li><a href="maramures.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Maramureș</a></li>
+        <li><a href="istria.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Istria</a></li>
+        <li><a href="las-landas.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Las Landas</a></li>
+      </ul></nav>
+    </div>
+    <div><div style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.4);margin-bottom:12px;">España</div>
+      <nav aria-label="Itinerarios España"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;"><li><a href="../itinerarios-espana.html" style="font-size:0.84rem;color:rgba(237,238,242,0.55);text-decoration:none;">Ver todos</a></li></ul></nav>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <span style="font-size:0.79rem;color:rgba(237,238,242,0.3);">© 2026 Routlo. Todos los derechos reservados.</span>
+    <a href="../itinerarios.html" style="font-size:0.79rem;color:rgba(237,238,242,0.4);text-decoration:none;">← Todos los itinerarios</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
+  function toggleMenu() { const ul = nav.querySelector('ul'); ul.style.display = ul.style.display === 'flex' ? 'none' : 'flex'; }
+  window.toggleMenu = toggleMenu;
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  // Durbuy → Han-sur-Lesse → Rochefort → Bouillon → Orval → Dinant → Namur
+  const routeCoords = [
+    [50.351, 5.455], [50.117, 5.180], [50.160, 5.222],
+    [49.793, 5.063], [49.645, 5.346], [50.261, 4.912], [50.466, 4.868]
+  ];
+  const waypoints = [
+    { latlng: [50.351, 5.455], label: 'Durbuy — Día 1' },
+    { latlng: [50.117, 5.180], label: 'Han-sur-Lesse — Día 2' },
+    { latlng: [50.160, 5.222], label: 'Rochefort (Trappist) — Día 2' },
+    { latlng: [49.793, 5.063], label: 'Bouillon — Día 3' },
+    { latlng: [49.645, 5.346], label: 'Abbaye d\'Orval (opcional)' },
+    { latlng: [50.261, 4.912], label: 'Dinant — Día 4' },
+    { latlng: [50.466, 4.868], label: 'Namur — Regreso' }
+  ];
+
+  const map = L.map('route-map', { zoomControl: true, attributionControl: false })
+    .setView([50.05, 5.15], 8);
+
+  const _lang = (navigator.language || 'en').toLowerCase();
+  if (_lang.startsWith('es')) {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+      className: 'tile-osm-es'
+    }).addTo(map);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+  }
+
+  const bounds = L.latLngBounds(routeCoords).pad(0.12);
+  map.fitBounds(bounds);
+
+  L.polyline(routeCoords, { color: '#c9a96e', weight: 4, opacity: 0.85, lineJoin: 'round' }).addTo(map);
+
+  L.circleMarker(routeCoords[0], {
+    radius: 9, fillColor: '#5ecb8a', color: '#fff', weight: 2.5, fillOpacity: 1
+  }).bindTooltip('Durbuy — Inicio', { permanent: false, direction: 'right' }).addTo(map);
+
+  waypoints.slice(1).forEach(wp => {
+    L.circleMarker(wp.latlng, {
+      radius: 7, fillColor: '#c9a96e', color: '#fff', weight: 2, fillOpacity: 1
+    }).bindTooltip(wp.label, { permanent: false, direction: 'top' }).addTo(map);
+  });
+
+  L.control.attribution({ prefix: false }).addAttribution('© <a href="https://openstreetmap.org">OpenStreetMap</a>').addTo(map);
+  setTimeout(() => map.invalidateSize(), 100);
+})();
+</script>
+<style>.tile-osm-es{filter:grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)}</style>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Galicia en 5 días — Ruta completa desde Santiago de Compostela | Routlo</title>
+  <meta name="description" content="Ruta circular de 5 días desde Santiago: catedral románica, Costa da Morte, Torre de Hércules romana, Rías Baixas y Pontevedra. ~€480 para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #1a6e8c; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #1a6e8c; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(26,110,140,0.15); border: 1px solid rgba(26,110,140,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #1a6e8c; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-roman { display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;background:rgba(26,110,140,0.12);border:1px solid rgba(26,110,140,0.3);font-size:0.75rem;font-weight:600;color:#1a6e8c;margin-bottom:12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(26,110,140,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(26,110,140,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #1a6e8c, #0f4a61); color: #edeef2; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #1a6e8c; border-left-color: #1a6e8c; background: rgba(26,110,140,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(26,110,140,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(26,110,140,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #1a6e8c; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(26,110,140,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #1a6e8c; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #1a6e8c; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(26,110,140,0.3); }
+    .hotel-link:hover { border-color: #1a6e8c; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #1a6e8c; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#1a6e8c,#0f4a61);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#edeef2;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#1a6e8c'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#1a6e8c'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,8,16,0.30) 0%,rgba(4,8,16,0.60) 50%,rgba(4,8,16,0.95) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-roman" style="margin-bottom:0;">🐚 Ruta completa · 5 días</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">0 km (partimos de aquí)</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">Circular desde Santiago</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~€480 · 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">Galicia en 5 días<br><span style="color:#1a6e8c;">De la catedral al fin del mundo y las Rías Baixas</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">Galicia concentra en poco espacio una diversidad paisajística única: catedral románica de Santiago, acantilados del fin del mundo, rías profundas con mariscos, murallas romanas y cañones fluviales. Esta ruta circular cubre los grandes iconos a precio razonable.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#historia">Historia de Galicia</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Galicia en 5 días</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🐚 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Días</div><div class="route-info-value">5</div><div class="route-info-unit">ruta circular</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Km totales</div><div class="route-info-value">~650</div><div class="route-info-unit">desde Santiago</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~€480</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Noches</div><div class="route-info-value">4</div><div class="route-info-unit">en la ruta</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mariscos</div><div class="route-info-value">imprescindibles</div><div class="route-info-unit">percebes, nécoras, vieiras</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="historia">
+      <h2 class="section-heading">🌊 Historia de Galicia</h2>
+      <div class="highlight-box">
+        <h4>🌊 Galicia: el extremo atlántico de Europa</h4>
+        <p>La comunidad más lluviosa de España es también la más verde y la que más kilómetros de costa tiene (1.498 km). Las rías (estuarios geológicos modelados por glaciares y el mar) albergan el 70% de la producción europea de mejillón. El Camino de Santiago ha convertido a Compostela en la tercera ciudad santa del mundo cristiano después de Jerusalén y Roma.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🐚 El Camino de Santiago — 1.200 años de peregrinación</h4>
+        <p>La tradición de peregrinación a la tumba del Apóstol Santiago data del siglo IX. Hoy 500.000 peregrinos completan el Camino al año. El símbolo de la vieira (concha de peregrino) es el icono gallego por excelencia.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">Día 1</div><div><div class="day-title">Santiago de Compostela</div><div class="day-subtitle">La Catedral, el Mercado de Abastos y el pulpo á feira</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛪ La Catedral — Pórtico de la Gloria</div>
+            <div class="stop-desc">El Pórtico de la Gloria de Mateo (1188) es el máximo logro del románico europeo. Las figuras del tímpano central y la columna del Árbol de Jesé concentran siglos de devoción. El Botafumeiro (incensario de 54 kg) vuela sobre los fieles en la Misa del Peregrino (12:00 diaria).</div>
+            <div class="stop-price">Pórtico de la Gloria: €10/pers (reserva previa recomendada)</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🦞 Mercado de Abastos</div>
+            <div class="stop-desc">El mejor mercado de mariscos de Galicia: percebes, nécoras, vieiras. Compra en el puesto de lonja y llévalo a una tasca del entorno para que lo cuezan (€2-4 por cocerlo). Así comes marisco de primera por la mitad de precio que en restaurante.</div>
+            <div class="stop-price">Mariscos a precio de lonja; cocido por ~€3 extra</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🐙 Pulpo á feira en O Filantropo o Taberna do Bispo</div>
+            <div class="stop-desc">El pulpo á feira gallego (pulpo cocido, pimentón, sal gorda y aceite de oliva sobre tabla de madera) es la tapa más representativa de Galicia. Tarde: callejeo por la Rúa do Franco, Pazo de Raxoi y la Colexiata de Santa María do Sar (románico s. XII).</div>
+            <div class="stop-price">Pulpo para dos: ~€16</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">Día 2</div><div><div class="day-title">Costa da Morte — Muxía y Cabo Fisterra</div><div class="day-subtitle">El fin del mundo geográfico y emocional del Camino</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛪ Muxía — Santuario da Barca</div>
+            <div class="stop-desc">El santuario da Barca se asienta sobre rocas atlánticas azotadas por el mar. Escena final del Camino para muchos peregrinos que continúan desde Santiago. Las Pedras de Abalar (rocas que se mecen con el viento según la tradición) y el Atlántico abierto son una experiencia única.</div>
+            <div class="stop-price">Acceso libre al santuario</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌊 Cabo Fisterra — el kilómetro 0</div>
+            <div class="stop-desc">El promontorio más occidental de Europa continental. El faro de 1853, la playa de Langosteira (2 km de arena virgen) y el mojón del kilómetro 0 del Camino de Santiago. Al atardecer, la puesta de sol en el Atlántico es de las más emotivas de España.</div>
+            <div class="stop-price">Acceso libre al cabo y al faro</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍽️ Almuerzo de caldeirada en Corcubión</div>
+            <div class="stop-desc">El pueblo pesquero a mitad de camino entre Santiago y Fisterra tiene la mejor relación calidad-precio de la Costa da Morte. La caldeirada de pescado (guiso de patatas con pescado de roca) es el plato estrella. Regreso a Santiago (1h30).</div>
+            <div class="stop-price">Caldeirada para dos: ~€22</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">Día 3</div><div><div class="day-title">A Coruña — Torre de Hércules y playas</div><div class="day-subtitle">El único faro romano en activo del mundo (UNESCO)</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🗼 Torre de Hércules (UNESCO)</div>
+            <div class="stop-desc">Construida en el siglo II d.C. bajo Trajano, la Torre de Hércules es el único faro romano en funcionamiento en el mundo. Patrimonio Mundial UNESCO desde 2009. Sube los 234 escalones hasta la linterna: vistas del Atlántico y los acantilados del noroeste.</div>
+            <div class="stop-price">Entrada: €3/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Ciudad Vieja y Barrio de la Pescadería</div>
+            <div class="stop-desc">Las galerías acristaladas del siglo XIX (sello visual de A Coruña) y la Ciudad Vieja medieval. La Iglesia de Santiago (románico s. XII) y el Paseo Marítimo de 13 km, el más largo de Europa.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍽️ Almuerzo en el Mercado de San Agustín</div>
+            <div class="stop-desc">El mercado cubierto más activo de A Coruña. Caldo gallego + lacón con grelos en el bar interior. El menú del día es el mejor de la ciudad a precio local.</div>
+            <div class="stop-price">Menú del día x2: ~€14 cada uno</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏖️ Playa de Riazor</div>
+            <div class="stop-desc">La playa urbana de 1 km de A Coruña, en el corazón de la ciudad. El paseo marítimo conecta Riazor con la playa del Orzán (0.8 km). Acceso libre.</div>
+            <div class="stop-price">Gratuito</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">Día 4</div><div><div class="day-title">Rías Baixas — Combarro, Cambados y O Grove</div><div class="day-subtitle">Hórreos sobre el mar, Albariño y mariscos a precio local</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏘️ Combarro — hórreos sobre el mar</div>
+            <div class="stop-desc">Combarro (conjunto histórico declarado) es el pueblo de hórreos más fotogénico de Galicia. Los graneros de piedra que se asoman al mar sobre el Ría de Pontevedra son únicos en el mundo. Paseo libre por el casco histórico.</div>
+            <div class="stop-price">Acceso libre</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍷 Cambados — capital del Albariño</div>
+            <div class="stop-desc">La capital del vino Albariño gallego. Visita a la bodega Martín Códax con cata de sus vinos blancos de las Rías Baixas. El Pazo de Fefiñáns (s. XVII) y la ruinas de Santa Mariña Dozo dan a la Plaza de Fefiñáns un ambiente medieval único.</div>
+            <div class="stop-price">Cata en Martín Códax: ~€8/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🐙 Almuerzo de pulpo en O Grove</div>
+            <div class="stop-desc">O Grove es la capital del marisco de las Rías Baixas. Los restaurantes del puerto sirven pulpo, nécoras y zamburiñas a precio de lonja. La Fiesta del Marisco (primer fin de semana de octubre) es una de las ferias gastronómicas más populares de Galicia.</div>
+            <div class="stop-price">Pulpo para dos: ~€20</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏝️ Isla de la Toja</div>
+            <div class="stop-desc">La isla de la Toja (conectada por puente a O Grove) concentra casino, termas y la famosa capilla cubierta de conchas de vieira. Paseo libre por los jardines del Gran Hotel La Toja.</div>
+            <div class="stop-price">Entrada isla: gratuita</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">Día 5</div><div><div class="day-title">Pontevedra y regreso a Santiago</div><div class="day-subtitle">La ciudad sin coches y el vermut con mariscos</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Casco histórico de Pontevedra</div>
+            <div class="stop-desc">Pontevedra fue la primera ciudad de España en eliminar los coches del centro histórico (1999). Sus calles de granito del s. XV-XVI se recorren a pie sin semáforos ni ruido de motores. Las ruinas de Santo Domingo (convento dominico del s. XIV con claustro y escudos heráldicos) son acceso libre.</div>
+            <div class="stop-price">Casco histórico y ruinas: gratuito</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🍸 Vermut con mariscos y regreso</div>
+            <div class="stop-desc">El mercado de abastos (Praza de Abastos) de Pontevedra vende zamburiñas y berberechos de la ría. Los bares del entorno sirven el vermut de las 12:00 con tapa de empanada incluida. Regreso a Santiago en 45 minutos por la AP-9.</div>
+            <div class="stop-price">Vermut y tapas para dos: ~€14</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🗿 Alameda y las estatuas de las Dos Marías</div>
+            <div class="stop-desc">La estatua de las Dos Marías (las hermanas García Ybarra, figuras excéntricas de la vida social pontevedresa en los años 40) preside la Alameda arbolada. El paseo fluvial sobre el Lérez cierra la ruta a la perfección.</div>
+            <div class="stop-price">Gratuito</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>🏨 4 noches hostal (~€40/noche)</span><span>€160</span></div>
+        <div class="budget-row"><span>⛽ Gasolina (650 km)</span><span>€65</span></div>
+        <div class="budget-row"><span>🍽️ Comidas (€22/día × 5 días)</span><span>€220</span></div>
+        <div class="budget-row"><span>🎫 Torre Hércules ×2 + cata Albariño</span><span>€28</span></div>
+        <div class="budget-row"><span>🚶 Actividades gratuitas</span><span>€0</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span style="color:#1a6e8c;">~€473</span></div>
+      </div>
+      <div class="budget-note">Galicia ofrece una calidad de experiencia excepcional a precio moderado. El marisco comprado en mercado y cocido en tascas puede rebajar el presupuesto de comidas en un 40% respecto al restaurante.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Marisco en el mercado:</strong> Compra en el Mercado de Abastos de Santiago a precio de lonja y llévalo a una de las tascas del entorno para que lo cuezan (cobran €2-4 por cocerlo). Así comes marisco por la mitad de precio que en restaurante.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Misa del Peregrino:</strong> La misa diaria a las 12:00 en la Catedral incluye el Botafumeiro (el incensario de 54 kg que vuela sobre los fieles) solo si hay donante. Los viernes y festivos es más frecuente.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Alojamiento en Santiago:</strong> Los albergues de peregrino (con carnet de federated) cuestan €10-14 la noche. Para pareja cómoda, una pensión de la Rúa Nueva sale a €38-45 la noche.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>O Grove y el marisco:</strong> La Fiesta del Marisco (primer fin de semana de octubre) ofrece percebes y nécoras a precios populares en los puestos de la plaza.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>Sin coche:</strong> Desde Santiago salen autobuses ALSA a A Coruña (cada 30 min, €7, 1h), Pontevedra (cada hora, €5, 45min) y Lugo (€8, 1h15). Para Fisterra y la Costa da Morte, Monbus opera varias salidas diarias (~€8). <a href="https://www.discovercars.com/?a_aid=routlo&pick_city=Santiago+de+Compostela" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Santiago de Compostela en DiscoverCars">Comparar coches en Santiago en DiscoverCars</a></div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados">
+        <strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.
+      </div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas desde Santiago de Compostela?</h3>
+      <p>Rutas de un día y fines de semana desde Santiago con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([42.88,-8.00],8);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[42.880,-8.544],label:'Santiago de Compostela',color:'#1a6e8c',r:12},{coords:[43.362,-8.412],label:'A Coruña',color:'#1a6e8c',r:10},{coords:[42.906,-9.266],label:'Cabo Fisterra',color:'#1a6e8c',r:10},{coords:[43.102,-9.218],label:'Muxía',color:'#1a6e8c',r:10},{coords:[42.513,-8.819],label:'Cambados',color:'#1a6e8c',r:10},{coords:[42.431,-8.648],label:'Pontevedra',color:'#1a6e8c',r:10}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}));
+  L.polyline([[42.880,-8.544],[43.362,-8.412],[42.906,-9.266],[43.102,-9.218],[42.513,-8.819],[42.431,-8.648],[42.880,-8.544]],{color:'#1a6e8c',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

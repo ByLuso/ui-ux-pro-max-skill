@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>San Sebastián — 3 días | Routlo</title>
+  <meta name="description" content="Itinerario completo 3 días en San Sebastián: pintxos, playa de la Concha, Monte Igueldo y la mayor densidad Michelin del mundo. Desde €225 a €1,700."/>
+  <meta property="og:title" content="San Sebastián — 3 días | Routlo"/>
+  <meta property="og:description" content="Itinerario completo 3 días en San Sebastián: pintxos, playa de la Concha, Monte Igueldo y la mayor densidad Michelin del mundo."/>
+  <meta property="og:type" content="article"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+    /* Aurora — deep Basque green tones for San Sebastián */
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d2018 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#061510 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1a12 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg, #030d08 0%, #082018 35%, #154535 65%, rgba(94,203,138,0.15) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(21,69,53,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(21,69,53,0.2);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">San Sebastián</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">San Sebastián</h1>
+  <p class="dest-country">España · País Vasco · Pintxos · La Concha · Gastronomía de élite</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 3 días / 2 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Gastrónomos</span>
+    <span class="dest-badge gold" role="listitem">💶 €225–1,700/persona</span>
+    <span class="dest-badge" role="listitem">🌍 España · País Vasco</span>
+    <span class="dest-badge" role="listitem">🦞 Pintxos + Michelin + Playa</span>
+    <a href="https://www.skyscanner.es/transport/flights/es/eas/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">3 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">1 ciudad</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€225–1,700</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Jun–Sep / Ene</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · La Concha</a></li>
+        <li><a href="#dia2">Día 2 · Igueldo</a></li>
+        <li><a href="#dia3">Día 3 · Getaria</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        San Sebastián (Donostia en euskera) es la ciudad más elegante del norte de España y la capital gastronómica de Europa: tiene más estrellas Michelin por habitante que ninguna otra ciudad del mundo, una playa urbana —La Concha— considerada la más bella de Europa en su bahía semicircular perfecta, y una Parte Vieja donde los pintxos vascos elevaron el aperitivo a categoría de arte. En tres días descubrirás el callejeo más delicioso posible entre bares de la Parte Vieja, subirás al Monte Igueldo con el funicular más antiguo de España y harás una excursión imprescindible a Getaria para comer el rodaballo más famoso del mundo y visitar el Museo Balenciaga. Donostia es, para el viajero que valora la gastronomía sobre todo lo demás, el destino perfecto de España.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🦞</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Pintxos y Michelin</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1 y 2</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏖️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">La Concha</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1 y 2</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🎨</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Getaria y Balenciaga</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 3</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Mochilero</th><th>Estándar</th><th>Lujo</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo/Bus A/R</td><td>Bus Bilbao 1h €6-12</td><td>Vuelo desde Madrid €60-120</td><td>AVE+taxi €180</td><td>Bilbao tiene más vuelos, 50km / 1h en bus</td></tr>
+            <tr><td>🏨 Alojamiento (2 noches)</td><td>€60</td><td>€280</td><td>€700</td><td>Pensión Parte Vieja / Hotel histórico / Palacete</td></tr>
+            <tr><td>🍽️ Comidas y pintxos (3 días)</td><td>€90</td><td>€240</td><td>€700</td><td>Pintxos €2-4 · menú €15 · Michelin €180-260</td></tr>
+            <tr><td>🚶 Transporte</td><td>€10</td><td>€20</td><td>€50</td><td>Dbus €1.85/viaje · Euskotren a Getaria €4.80</td></tr>
+            <tr><td>🎟️ Entradas</td><td>€15</td><td>€25</td><td>€40</td><td>Museo Balenciaga €10, San Telmo €6</td></tr>
+            <tr><td>🍺 Sidrería</td><td>€30</td><td>€35</td><td>€35</td><td>Menú completo sidrería ~€35/persona</td></tr>
+            <tr><td>🔄 Imprevistos (10%)</td><td>€20</td><td>€60</td><td>€162</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€225</strong></td><td><strong>~€660</strong></td><td><strong>~€1,687</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 El precio de los pintxos:</strong> En San Sebastián los pintxos cuestan €2-4 por pieza. Un "txikiteo" (ruta de pintxos) completa con 4-6 pintxos y 3 bebidas sale por €20-30/persona. Es la forma más económica y auténtica de comer. La regla de oro: los bares reponen la barra a las 12h y 20h con pintxos calientes — las mejores piezas en esos momentos.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚇 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Aeropuertos</div>
+          <div class="transport-content">
+            <strong>San Sebastián (EAS)</strong> es pequeño, a 7 km — autobús Lurraldebus €2.55 (20 min). <strong>Bilbao (BIO)</strong> tiene más vuelos internacionales (50 km, 1h en bus Bizkaibus €16). Para llegar desde Madrid: Renfe Alvia desde Madrid-Chamartin en 5h o Vueling/Iberia en 1h.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Bus urbano Dbus</div>
+          <div class="transport-content">
+            Billete sencillo <strong>€1.85</strong>. La red cubre toda la ciudad incluido Monte Igueldo (línea 16). Abono de 10 viajes <strong>€8.20</strong>. La app Dbus muestra horarios en tiempo real. Para la mayoría de desplazamientos dentro de San Sebastián, caminar es la mejor opción — el centro histórico es muy compacto.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚲 Bidegorri (carril bici)</div>
+          <div class="transport-content">
+            <strong>50+ km</strong> de carril bici bien señalizado. Alquiler en varias tiendas del centro (~€15/día). Perfecto para el paseo de La Concha y el Urumea. El carril bici del Paseo Nuevo (junto a los acantilados y el Cantábrico) es uno de los más espectaculares de España.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚂 Euskotren</div>
+          <div class="transport-content">
+            Conecta con <strong>Zarautz</strong> (€2.40, 30 min), <strong>Getaria</strong> (45 min, €4.80), Zumaia y Bilbao. Imprescindible para la excursión a Getaria del Día 3. Las estaciones de Zarautz y Getaria están a 10-15 min a pie de las playas y el pueblo. El tren costero es una de las rutas más hermosas del País Vasco.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Mochilero</div>
+          <div class="hotel-name">Pensión Donostia</div>
+          <div class="hotel-zone">Parte Vieja</div>
+          <div class="hotel-price">~€30/noche</div>
+          <ul class="hotel-features">
+            <li>Pensión familiar tradicional</li>
+            <li>En el corazón de los pintxos</li>
+            <li>La mejor ubicación posible</li>
+            <li>Ambiente auténticamente local</li>
+          </ul>
+          <a href="https://www.booking.com/searchresults.es.html?city=-390625" target="_blank" rel="noopener" class="hotel-link">Buscar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐⭐ Estándar</div>
+          <div class="hotel-name">Hotel de Londres y de Inglaterra</div>
+          <div class="hotel-zone">Playa de la Concha</div>
+          <div class="hotel-price">~€140/noche</div>
+          <ul class="hotel-features">
+            <li>El hotel más histórico de Donostia (1906)</li>
+            <li>Vistas directas a La Concha</li>
+            <li>Desayuno vasco incluido</li>
+            <li>Terraza legendaria sobre la playa</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/de-londres-y-de-inglaterra.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Lujo</div>
+          <div class="hotel-name">Villa Soro</div>
+          <div class="hotel-zone">Gros</div>
+          <div class="hotel-price">~€350/noche</div>
+          <ul class="hotel-features">
+            <li>Palacete modernista en jardines privados</li>
+            <li>Restaurante íntimo con cocina vasca</li>
+            <li>Spa y piscina exterior climatizada</li>
+            <li>El hotel más exclusivo de Donostia</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/es/villa-soro.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DÍAS DEL ITINERARIO ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">La Parte Vieja, La Concha y el Peine del Viento</div>
+            <div class="day-subtitle">Playa de La Concha · Monte Urgull · Pintxos · Peine del Viento · Parte Vieja nocturna</div>
+          </div>
+          <div class="day-meta"><span>🏖️ La Concha</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Playa de La Concha — la más bella de Europa</div>
+              <div class="act-desc">La playa urbana más elegante de Europa en su bahía semicircular perfecta, enmarcada por Monte Urgull a un lado y Monte Igueldo al otro. La corniche (paseo marítimo) con sus balaustradas blancas y la arquitectura de La Belle Époque de los hoteles circundantes crean el ambiente más refinado de todas las playas de España. La isla de Santa Clara al centro de la bahía puede visitarse en barca en verano.</div>
+              <div class="act-tags"><span class="act-tag green">Playa gratuita</span><span class="act-tag info">Isla Santa Clara en verano</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Monte Urgull — castillo y Cementerio de los Ingleses</div>
+              <div class="act-desc">El monte sobre la Parte Vieja con el Castillo de la Mota (s.XII) y el Cementerio de los Ingleses (soldados británicos de la Primera Guerra Carlista, 1836). Vista de la bahía de La Concha desde 123m de altitud. Acceso gratuito, 20 min a pie desde la Parte Vieja. El Cristo de 12m en lo alto del castillo es visible desde toda la bahía.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">20 min subida</span><span class="act-tag">Vista bahía</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Primer txikiteo de pintxos en la Parte Vieja</div>
+              <div class="act-desc">Bar La Cuchara de San Telmo (los pintxos más creativos de la Parte Vieja: tortilla de bacalao, carrillera, navajas), Bar Txepetxa (las mejores anchoas sobre pan, €2.50/pintxo), La Viña (la tarta de queso original que copió el mundo entero). Protocolo: acércate a la barra, pide bebida (txakoli o sidra), elige pintxos, come de pie, paga al terminar. Nunca sentarse a la mesa para pintxos.</div>
+              <div class="act-tags"><span class="act-tag">€2-4/pintxo</span><span class="act-tag info">Reponen a las 12h y 20h</span><span class="act-tag green">Comer de pie</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Museo San Telmo — el mejor museo del País Vasco</div>
+              <div class="act-desc">El mejor museo del País Vasco, en un convento dominico del s.XVI ampliado con un edificio contemporáneo de Nieto y Sobejano (2011). Arte vasco del XIX-XX con obras de Jorge de Oteiza (el escultor más importante del País Vasco del s.XX), Ignacio Zuloaga y Eduardo Chillida. Las murales de José María Sert en el claustro renacentista son de una escala monumental impresionante.</div>
+              <div class="act-tags"><span class="act-tag">€6</span><span class="act-tag info">Convent s.XVI + edificio 2011</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Peine del Viento de Chillida — arte sobre el Cantábrico</div>
+              <div class="act-desc">El Peine del Viento (1977) de Eduardo Chillida: tres esculturas de acero corten sobre los acantilados del extremo oeste del Paseo Nuevo. Las formas de hierro negro sobre el verde del Cantábrico al atardecer son una de las escenas más poéticas del arte vasco y una de las instalaciones artísticas más emocionantes de España. Cuando el temporal golpea los acantilados, el agua sale disparada por los surtidores del paseo creando un espectáculo natural único. Siempre gratuito.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Mejor al atardecer</span><span class="act-tag">Chillida 1977</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Ruta de pintxos nocturna — txakoli y pintxos calientes</div>
+              <div class="act-desc">La ruta de pintxos nocturna de la Parte Vieja es el plan más delicioso que existe en cualquier ciudad española. De bar en bar por la Calle 31 de Agosto, Fermín Calbetón y San Jerónimo: cada barra tiene sus especialidades, el txakoli se escancia desde altura para oxigenar el vino y los pintxos calientes (los que se piden al cocinero, no los de la barra fría) son los mejores. Llegar después de las 20h para los pintxos recién hechos.</div>
+              <div class="act-tags"><span class="act-tag">€20-30 con bebidas</span><span class="act-tag info">Pintxos calientes a las 20h</span><span class="act-tag green">El plan más auténtico</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bar Txepetxa</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Parte Vieja</span></td><td>Anchoas sobre pintxo variados. El especialista en anchoa del Cantábrico de la Parte Vieja.</td><td>~€12</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>La Cuchara de San Telmo</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Parte Vieja</span></td><td>Tortilla de bacalao y carrillera de vaca. Los más creativos de la Parte Vieja.</td><td>~€30</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Arzak ★★★</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Alto de Miracruz</span></td><td>Menú degustación de alta cocina vasca de vanguardia. Reservar 3 meses.</td><td>~€240</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Monte Igueldo y el barrio de Gros</div>
+            <div class="day-subtitle">Mercado de La Bretxa · Monte Igueldo · Gros · Palacio Miramar · Michelin</div>
+          </div>
+          <div class="day-meta"><span>⛰️ Igueldo y Gros</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado de La Bretxa — el espectáculo del Cantábrico</div>
+              <div class="act-desc">El mercado de abastos de La Bretxa, bajo la vieja estación del Ferrocarril del Norte reconvertida, tiene puestos de pescado con percebes (€80-150/kg en temporada), txangurro (centollo), besugo, kokotxas de bacalao y angulas que representan la despensa del Cantábrico en todo su esplendor. Un espectáculo gastronómico visual que vale la pena aunque no se compre nada. El nivel de calidad y la variedad del pescado fresco no tienen igual en ningún otro mercado español.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada gratis</span><span class="act-tag info">Cantábrico fresco</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Monte Igueldo — el funicular más antiguo de España</div>
+              <div class="act-desc">El funicular más antiguo de España (1912) sube en 3 minutos desde la playa de Ondarreta hasta los 181m de Monte Igueldo. El parque de atracciones retro (fundado en 1912, con atracciones mecánicas originales) es deliciosamente kitsch. Pero la razón principal de subir son las vistas de La Concha y La Zurriola juntas desde la terraza — la foto definitiva de San Sebastián desde arriba, con la ciudad semicircular entre los dos montes.</div>
+              <div class="act-tags"><span class="act-tag">Funicular €4.50 A/R</span><span class="act-tag info">Fundado 1912</span><span class="act-tag green">Mejor foto de Donostia</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Gros — el barrio más hipster de Donostia</div>
+              <div class="act-desc">Gros es el barrio más auténtico y animado de San Sebastián: sin turistas, con los mejores pintxos del barrio en el Bar Bergara (los más premiados fuera de la Parte Vieja), cafés de especialidad, restaurantes de cocina vasca contemporánea y La Playa de La Zurriola (la playa de los surfistas, con olas del Cantábrico). El ambiente es completamente local y los precios significativamente más bajos que la Parte Vieja.</div>
+              <div class="act-tags"><span class="act-tag green">Sin turistas</span><span class="act-tag info">Bar Bergara pintxos</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Palacio Miramar — jardines reales sobre el mar</div>
+              <div class="act-desc">Jardines del palacio veraniego de la Familia Real española (s.XIX), diseñados por el arquitecto londinense Selden Wornum. El palacio está situado entre La Concha y Ondarreta, sobre los acantilados, con vistas a las dos playas y a la isla de Santa Clara. Los jardines con sus magnolias, hortensias y palmeras son completamente gratuitos. El propio edificio es sede de cursos de verano de la UPV/EHU.</div>
+              <div class="act-tags"><span class="act-tag green">Jardines gratis</span><span class="act-tag info">Familia Real · s.XIX</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Aquarium de San Sebastián (opcional)</div>
+              <div class="act-desc">El Aquarium de San Sebastián (€13) en el Paseo del Muelle tiene el túnel submarino con tiburones más espectacular del norte de España. Fundado en 1928, el edificio art déco sobre el puerto combina colecciones históricas de navegación con el acuario moderno. La pasarela de cristal bajo los tiburones y las rayas es la experiencia más popular. Especialmente recomendable si viaja con niños o en día de lluvia.</div>
+              <div class="act-tags"><span class="act-tag">€13</span><span class="act-tag info">Túnel submarino</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena Michelin — la mayor densidad de estrellas por habitante</div>
+              <div class="act-desc">San Sebastián tiene la mayor densidad de estrellas Michelin por habitante del mundo. Arzak (3★, Juan Mari y Elena Arzak), Mugaritz (2★, Andoni Luis Aduriz, el más experimental), Akelarre (3★, Pedro Subijana, con vistas al Cantábrico) son los tres grandes. Para reservar: meses de antelación. Sin estrella pero igualmente excelentes: Kokotxa (cocina vasca clásica), Bodegón Alejandro (€45).</div>
+              <div class="act-tags"><span class="act-tag warn">Reservar 3-6 meses</span><span class="act-tag">€180-260/persona</span><span class="act-tag info">Mayor densidad Michelin/hab.</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bar Bergara</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Gros</span></td><td>Mejores pintxos del barrio de Gros. Kokotxas y bacalao al pil-pil miniatura.</td><td>~€20</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Bodegón Alejandro</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Parte Vieja</span></td><td>Kokotxas al pil-pil y txuletón madurado. Cocina vasca clásica impecable.</td><td>~€45</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Mugaritz ★★</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Errenteria</span></td><td>El más conceptual e inesperado de todos. 20 pases experimentales que desafían todo.</td><td>~€260</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Getaria: txakoli, rodaballo y Balenciaga</div>
+            <div class="day-subtitle">Getaria · Museo Balenciaga · Restaurante Elkano · Sidrería</div>
+          </div>
+          <div class="day-meta"><span>🐟 Excursión costera</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Getaria en Euskotren:</strong> El tren sale desde la estación de Amara (centro de San Sebastián) cada hora aproximadamente. Trayecto de 45 min, €4.80 A/R. Getaria está a 5 min a pie de la estación de Zarauz-Getaria. El pueblo medieval de pescadores tiene solo 2.700 habitantes pero concentra dos de las experiencias gastronómicas más extraordinarias de España.
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Getaria en Euskotren — la cuna de Elcano</div>
+              <div class="act-desc">Getaria es la cuna de Juan Sebastián Elcano, el primer navegante que dio la vuelta completa al mundo (1522), y del modisto Cristóbal Balenciaga (1895-1972), el diseñador más influyente del s.XX. El pueblo medieval conserva su casco histórico del s.XV casi intacto, con el arco que atraviesa la calle principal donde Juan Sebastián Elcano vivió. La iglesia de San Salvador del s.XIV tiene un suelo inclinado que acomoda la colina rocosa del pueblo.</div>
+              <div class="act-tags"><span class="act-tag">€4.80 A/R en Euskotren</span><span class="act-tag info">Cuna de Elcano y Balenciaga</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Museo Balenciaga — el hijo más famoso de Getaria</div>
+              <div class="act-desc">El único museo del mundo dedicado exclusivamente a Cristóbal Balenciaga. El edificio de Julien de Smedt (2011) junto a la casa natal del diseñador es extraordinario en sí mismo. La colección permanente con 1.200 piezas documenta la evolución del diseñador que Dior llamó "el maestro de todos nosotros". La reconstrucción del taller de costura y el análisis de las técnicas de construcción de sus trajes son únicos en el mundo de la moda.</div>
+              <div class="act-tags"><span class="act-tag">€10</span><span class="act-tag info">El único museo Balenciaga</span><span class="act-tag">1.200 piezas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Getaria — el rodaballo más famoso de España</div>
+              <div class="act-desc">Restaurante Elkano (Herrerieta 2) es el restaurante de parrilla más famoso de España y uno de los más conocidos del mundo. Su rodaballo entero a la brasa de carbón de encina —seleccionado entre los mejores ejemplares del Cantábrico y cocinado sobre parrilla de hierro con colágeno derretido— es el mejor pescado que se puede comer en España. También el Restaurante Iribar, más económico y igualmente auténtico, sirve el mismo rodaballo local con la misma calidad. Reservar con semanas.</div>
+              <div class="act-tags"><span class="act-tag warn">Reservar con antelación</span><span class="act-tag">~€60-80/persona</span><span class="act-tag info">Elkano — el mejor rodaballo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a San Sebastián en Euskotren</div>
+              <div class="act-desc">Regreso a San Sebastián tras el almuerzo. Parada opcional en Zarautz (la playa de surfistas más larga del País Vasco, 2.5 km de playa con olas perfectas) si el tiempo acompaña. Zarautz tiene también bodegas de txakoli visitables con cata incluida por €8-12 — el txakoli de Zarautz tiene denominación de origen propia.</div>
+              <div class="act-tags"><span class="act-tag">€4.80</span><span class="act-tag info">Parada en Zarautz opcional</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Sidrería vasca — menú completo con sidra ilimitada</div>
+              <div class="act-desc">La temporada real de sidrería es enero-abril (txotx: el momento de abrir los grandes barriles de madera y escanciar sidra directamente), pero hay sidrerías que mantienen el menú completo todo el año. El menú es siempre el mismo y perfecto: chorizo frito en sidra + tortilla de bacalao + bacalao con pimientos + chuletón a la parrilla + queso con membrillo y nueces = €35/persona con sidra ilimitada. Las mejores sidrerías están en Astigarraga, a 5 km de Donostia.</div>
+              <div class="act-tags"><span class="act-tag">~€35 menú completo</span><span class="act-tag info">Sidra ilimitada incluida</span><span class="act-tag">Astigarraga</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Última ruta de pintxos en la Parte Vieja</div>
+              <div class="act-desc">La despedida más auténtica de San Sebastián: una última ruta de pintxos por la Parte Vieja antes de volver. Los bares de las calles Fermín Calbetón y 31 de Agosto tienen sus mejores pintxos calientes servidos entre las 20h y las 22h. El txakoli escanciado desde alto, los pintxos de foie y trufa, las kokotxas rebozadas en miniatura. El callejeo más delicioso posible como cierre de tres días en Donostia.</div>
+              <div class="act-tags"><span class="act-tag">€15-20</span><span class="act-tag info">Mejor despedida</span><span class="act-tag green">Pintxos calientes 20-22h</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 de San Sebastián</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Pintxos en La Cuchara de San Telmo</h4><p>Los más creativos de la Parte Vieja: tortilla de bacalao líquida, carrillera de vaca braseada y navajas a la plancha en versión pintxo. Alta cocina vasca en miniatura.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Tarta de queso de La Viña</h4><p>La receta original que copió el mundo entero. Cremosa, quemada por arriba, sin base de galleta. Santiago Rivera la creó aquí hacia 1990 y es irrepetible.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Playa de La Concha al amanecer</h4><p>La bahía semicircular perfecta sin turistas, solo con corredores locales y pescadores. La imagen más hermosa y tranquila de San Sebastián.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Peine del Viento de Chillida al atardecer</h4><p>Arte y Cantábrico en la fusión más emocionante. El hierro negro sobre las olas verdes con el sol cayendo al oeste crea una imagen de una belleza extraña.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Txakoli frío con anchoas</h4><p>El aperitivo vasco quintaesencial: el vino más ácido y ligero de España servido escanciado desde alto, con las mejores anchoas del Cantábrico encima de un pintxo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Museo Balenciaga en Getaria</h4><p>El costurero más influyente del s.XX honrado en el único museo del mundo dedicado exclusivamente a su obra, junto a su casa natal en el pueblo de pescadores donde nació.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Monte Igueldo al mediodía</h4><p>Las dos bahías (La Concha y La Zurriola) desde 181m, con la ciudad semicircular entre los dos montes. La imagen más completa de Donostia.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Sidrería tradicional con menú completo</h4><p>Chorizo en sidra, tortilla de bacalao, chuletón y sidra ilimitada directa del barril. El ritual gastronómico más auténtico del País Vasco.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Restaurante Elkano en Getaria</h4><p>El rodaballo entero sobre parrilla de hierro más famoso del mundo. El mejor pescado que se puede comer en España servido en un pueblo de 2.700 habitantes.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Noche de pintxos en la Parte Vieja</h4><p>El callejeo más delicioso posible: de bar en bar entre las estrechas calles del casco antiguo, con txakoli, cava y pintxos calientes recién hechos.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍽️ Gastronomía vasca</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Aperitivo · Arte culinario</div>
+          <div class="gastro-title">Pintxos vascos</div>
+          <div class="gastro-desc">Diferente a la tapa andaluza. Sobre baguette, con ingredientes de alta calidad, a veces cocinados al momento. €2-4/pintxo. Los bares reponen la barra a las 12h y 20h con pintxos calientes recién hechos. La diversidad es enorme: desde anchoas hasta foie con manzana, desde bacalao al pil-pil hasta txangurro.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Pescado · Alta técnica</div>
+          <div class="gastro-title">Bacalao al pil-pil</div>
+          <div class="gastro-desc">La salsa más misteriosa de la cocina vasca. El colágeno del bacalao emulsiona con aceite de oliva y ajo por el movimiento circular de la cazuela — sin ningún espesante. La salsa gelificada y brillante que resulta es incomparable. Se aprende en 10 años o no sale. En San Telmo o Kokotxa lo hacen de manera impecable.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Carne · Norte de España</div>
+          <div class="gastro-title">Txuletón de buey a la brasa</div>
+          <div class="gastro-desc">El rey de las carnes del norte. Buey vasco viejo, madurado 30+ días en cámara, mínimo 1.2 kg para dos personas. Asado solo con sal gorda sobre parrilla de carbón de encina. Casa Julián de Tolosa es el templo más reconocido. Sin salsas, sin guarnición elaborada — la carne habla sola.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Marisco · Exclusivo</div>
+          <div class="gastro-title">Percebes</div>
+          <div class="gastro-desc">El producto del mar más caro y exclusivo del Cantábrico (€80-150/kg en temporada). Cocidos exactamente 1 minuto en agua de mar hirviendo. El sabor del océano concentrado en una uña. Solo en los mejores bares de pintxos durante las mareas bajas de invierno. El percebe del Cantábrico es más grueso y sabroso que el gallego.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Vino · DO Getariako Txakolina</div>
+          <div class="gastro-title">Txakoli DO</div>
+          <div class="gastro-desc">Vino blanco ligeramente efervescente, servido escanciado desde altura (txotx) para oxigenar y crear burbujas naturales. Acidez alta, graduación baja (10.5%). Verde y fresco, perfecto para mariscos y pintxos. Las tres DO del País Vasco (Getariako, Bizkaiko y Arabako) tienen perfiles diferentes — el de Getaria es el más mineral y atlántico.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Postre · Receta original</div>
+          <div class="gastro-title">Tarta de queso de La Viña</div>
+          <div class="gastro-desc">La tarta de queso más copiada del planeta. Cremosa, quemada por arriba, sin base de galleta. Santiago Rivera la creó en el Bar La Viña (Parte Vieja) hacia 1990 y desde entonces se ha replicado en miles de restaurantes de todo el mundo. La original en La Viña sigue siendo insuperable: servida tibia, a €4/porción.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section id="consejos" class="itin-section">
+      <h2 class="section-heading">💡 Consejos de Routlo</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Los pintxos se comen de pie en la barra:</strong> pides bebida, eliges pintxos, comes de pie, pagas al terminar. No hay servicio de mesa para pintxos. Los bares reponen la barra a las 12h y 20h — llega en esos momentos para los pintxos calientes recién hechos, que son mucho mejores que los fríos de la barra.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Para restaurante Michelin:</strong> reserva 3-6 meses antes. Arzak, Mugaritz, Akelarre o Martín Berasategui (en Lasarte-Oria, 3★), €180-260/persona. Sin estrella pero excelentes y más económicos: Kokotxa, Bodegón Alejandro (~€45), Casa Nicolasa.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Temporada de sidrería:</strong> enero-abril es el txotx real (sidra directa del tonel). Fuera de temporada sirven sidra embotellada. El menú es siempre chorizo + tortilla de bacalao + bacalao con pimientos + chuletón + queso con membrillo. ~€35/persona con sidra ilimitada. Las mejores están en Astigarraga, a 5 min en autobús.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Surf en La Zurriola:</strong> mejor septiembre-noviembre con el swell del Cantábrico. Clases de 2 horas por €40 con escuelas como Pukas Surf o Real Club de Tenis (enseña surf también). La Zurriola tiene olas de calidad con corrientes menos peligrosas que otras playas del norte.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>La Tamborrada del 20 enero:</strong> 10.000 personas con tambores durante 24 horas continuas por las calles de Donostia. El espectáculo más sonoro y participativo de España. Hoteles agotados con 1 año de antelación — si vas en enero, reserva con mucha anticipación o busca en Zarautz o Rentería.</div></div>
+      <div class="tip-item"><div class="tip-num">6</div><div class="tip-text"><strong>Menú del día económico en Gros</strong> (Calle San Francisco y alrededores): 3 platos + bebida + café por €12-15. Los pintxos de las 13h en la Parte Vieja son la alternativa más auténtica y económica al restaurante para el almuerzo. Nunca comas en las terrazas del paseo de La Concha — precios turísticos y calidad inferior.</div></div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos y ambulancia (24h)</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ertzaintza (policía vasca)</div><div class="emerg-value">092</div><div class="emerg-note">La policía autónoma del País Vasco</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Universitario</div><div class="emerg-value">+34 943 007 000</div><div class="emerg-note">Hospital Universitario Donostia · Urgencias 24h</div></div>
+        <div class="emerg-card"><div class="emerg-label">Urgencias médicas</div><div class="emerg-value">061</div><div class="emerg-note">Solo emergencias sanitarias graves</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil</div><div class="emerg-value">062</div><div class="emerg-note">Carreteras y zonas rurales</div></div>
+        <div class="emerg-card"><div class="emerg-label">Farmacia de guardia</div><div class="emerg-value">Cruz verde parpadeando</div><div class="emerg-note">App Farmacia de Guardia Euskadi</div></div>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>✅ Tarjeta sanitaria:</strong> Tu tarjeta sanitaria europea (EHIC) cubre asistencia médica de urgencias en el Hospital Universitario Donostia. San Sebastián es una de las ciudades más seguras de España — la tasa de criminalidad es muy baja. En caso de emergencia en el mar o en las playas, el teléfono del servicio de salvamento marítimo es el 900 202 202.
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea (EHIC)</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta de crédito sin comisiones</div>
+            <div class="check-item"><div class="check-box"></div>Reserva restaurante Michelin (si aplica)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">💻 Tecnología</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps offline de San Sebastián</div>
+            <div class="check-item"><div class="check-box"></div>App Dbus (transporte urbano)</div>
+            <div class="check-item"><div class="check-box"></div>Horarios Euskotren a Getaria</div>
+            <div class="check-item"><div class="check-box"></div>Reserva Restaurante Elkano (si aplica)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">👕 Ropa</div>
+            <div class="check-item"><div class="check-box"></div>Calzado cómodo (mucho adoquín)</div>
+            <div class="check-item"><div class="check-box"></div>Impermeable o chubasquero (llueve)</div>
+            <div class="check-item"><div class="check-box"></div>Bañador en verano (La Concha)</div>
+            <div class="check-item"><div class="check-box"></div>Ropa elegante para restaurante Michelin</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">🦞 Gastronomía</div>
+            <div class="check-item"><div class="check-box"></div>Tarta de queso en La Viña</div>
+            <div class="check-item"><div class="check-box"></div>Pintxos nocturnos en la Parte Vieja</div>
+            <div class="check-item"><div class="check-box"></div>Txakoli escanciado en cualquier bar</div>
+            <div class="check-item"><div class="check-box"></div>Rodaballo en Getaria (reservar antes)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">🎟️ Visitas</div>
+            <div class="check-item"><div class="check-box"></div>Museo Balenciaga en Getaria (€10)</div>
+            <div class="check-item"><div class="check-box"></div>Funicular Monte Igueldo (€4.50)</div>
+            <div class="check-item"><div class="check-box"></div>Peine del Viento de Chillida (gratis)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para San Sebastián?</h3>
+      <p>Dinos tus fechas, presupuesto y estilo de viaje. Routlo IA te crea un plan a medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a San Sebastián
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com y otras plataformas pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos (mayo 2026) y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px">
+    <div>
+      <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px">
+        <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+      </a>
+      <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.7;max-width:280px">Itinerarios de viaje generados por inteligencia artificial. Personalizados para cada viajero.</p>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">España</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="madrid.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Madrid</a></li>
+        <li><a href="barcelona.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Barcelona</a></li>
+        <li><a href="san-sebastian.html" style="font-size:0.875rem;color:#c9a96e;text-decoration:none">San Sebastián</a></li>
+        <li><a href="valencia.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Valencia</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Europa</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="budapest.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Budapest</a></li>
+        <li><a href="roma.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Roma</a></li>
+        <li><a href="paris.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">París</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Más</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="tokio.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Tokio</a></li>
+        <li><a href="marrakech.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Marrakech</a></li>
+        <li><a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Ver todos →</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.8rem;color:rgba(237,238,242,0.55)">
+    <span>© 2026 Routlo · Todos los derechos reservados</span>
+    <span>Generado con ❤️ e IA</span>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() { document.querySelector('nav').classList.toggle('menu-open'); }
+  window.addEventListener('scroll', function() { document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50); });
+  const sections = document.querySelectorAll('.itin-section');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    tocLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  });
+</script>
+</body>
+</html>

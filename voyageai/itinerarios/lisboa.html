@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lisboa — 4 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 4 días por Lisboa: Alfama, Belém, Sintra, Cascais y los mejores miradores. Presupuesto, hoteles y consejos insider de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Base (fallback si shared.css no carga en file:// / content://) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0a00 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#2e1a08 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a0d00 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg,#0d0a06 0%,#2e1a08 40%,#8b3a10 70%,rgba(201,169,110,0.25) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .phrases-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .phrase-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px; }
+    .phrase-es { font-size:0.78rem;color:rgba(237,238,242,0.5);margin-bottom:4px; }
+    .phrase-local { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:3px; }
+    .phrase-pron { font-size:0.75rem;color:#c9a96e;font-style:italic; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* ── Tablet ── */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+    }
+    /* ── Mobile ── */
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    /* ── Small mobile ── */
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .alert-box { font-size: 0.8rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .act-desc { font-size: 0.82rem !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .phrase-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+      .disclosure { padding: 12px 14px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(139,58,16,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Lisboa</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Lisboa</h1>
+  <p class="dest-country">Alfama · Belém · Sintra · Cascais · Mouraria</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 4 días / 3 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Amigos / Solo</span>
+    <span class="dest-badge gold" role="listitem">💶 €550–900/persona</span>
+    <span class="dest-badge" role="listitem">🌍 Europa · Portugal</span>
+    <span class="dest-badge" role="listitem">🚋 Histórica + Gastronomía</span>
+    <a href="https://www.skyscanner.es/transport/flights/MAD/LIS/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">4 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">1 destino</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€550–900</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val">Fácil</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">Mar–Nov</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Alfama</a></li>
+        <li><a href="#dia2">Día 2 · Belém</a></li>
+        <li><a href="#dia3">Día 3 · Sintra</a></li>
+        <li><a href="#dia4">Día 4 · Salida</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#frases">Frases útiles</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Lisboa es la capital más barata y más auténtica de Europa occidental: una ciudad de siete colinas con adoquines brillantes, azulejos de cerámica en cada fachada, el fado que emerge de cualquier tasca, y el Tejo que se abre al Atlántico como un mar interior. Cuatro días son suficientes para descubrir el barrio histórico de Alfama —el más antiguo de la ciudad—, los monumentos manuelinos de Belém, la fantasía romántica de Sintra y la vida de playa de Cascais. Lisboa tiene la rara capacidad de hacerte sentir que la has descubierto tú solo, aunque millones de viajeros la visiten cada año.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🚋</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Alfama + Belém</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1–2</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏰</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Sintra + Cascais</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 3</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🍷</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Mouraria + Bairro Alto</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 4</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Económico</th><th>Confort</th><th>Premium</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo A/R (desde Madrid)</td><td>€40–80</td><td>€100–160</td><td>€200+</td><td>Ryanair/Iberia. 1h20min.</td></tr>
+            <tr><td>🏨 Alojamiento (3 noches)</td><td>€105</td><td>€390</td><td>€960+</td><td>Hostel a hotel 5★</td></tr>
+            <tr><td>🍽️ Comidas (4 días)</td><td>€100</td><td>€200</td><td>€400</td><td>~25€ / 50€ / 100€ por día</td></tr>
+            <tr><td>🚇 Transporte local</td><td>€25</td><td>€40</td><td>€80</td><td>Metro+tranvía vs taxi/Uber</td></tr>
+            <tr><td>🎟️ Entradas (Pena, Jerónimos, etc.)</td><td>€35</td><td>€55</td><td>€80</td><td>Sintra imprescindible</td></tr>
+            <tr><td>🎭 Tours y experiencias</td><td>€0</td><td>€40</td><td>€100</td><td>Tour fado, visita guiada</td></tr>
+            <tr><td>🔄 Imprevistos (10%)</td><td>€30</td><td>€80</td><td>€180</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€335</strong></td><td><strong>~€965</strong></td><td><strong>~€2,000</strong></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo:</strong> Lisboa es notablemente más barata que otras capitales europeas. Las tasquinhas (tabernas locales) ofrecen menús del día por €8–12 con vino incluido. Comer donde comen los lisboetas —lejos de las zonas turísticas de Alfama— puede reducir el gasto en comida a la mitad.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚇 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Vuelos</div>
+          <div class="transport-content">
+            <strong>Ryanair y TAP</strong> desde Madrid, Barcelona y Bilbao. Precios desde €40. Aeropuerto <strong>Humberto Delgado (LIS)</strong>, a 7 km del centro. <strong>Metro Línea Vermelha</strong> conecta el aeropuerto con Baixa-Chiado en 20 minutos (€1.65). Evita los taxis del aeropuerto — pueden cobrar €25–35 por el mismo trayecto.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚇 Metro y tranvía</div>
+          <div class="transport-content">
+            <strong>Metro Lisboa:</strong> billete sencillo €1.65, tarjeta 24h €6.70, tarjeta 48h €10.85. Cubre bien el centro. <strong>Tranvía 28:</strong> €3 en taquilla (€1.65 con tarjeta Viva Viagem). Sube en <strong>Rua da Conceição</strong> para evitar la cola en Martim Moniz. <strong>Uber</strong> es muy económico en Lisboa — carrera media €5–8.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚂 Trenes a Sintra y Cascais</div>
+          <div class="transport-content">
+            <strong>Sintra:</strong> tren desde Rossio, €2.30 ida, sale cada 20 min, 40 min de trayecto. <strong>Cascais:</strong> desde Cais do Sodré, €2.30 ida, sale cada 20 min, 40 min. El abono combinado <strong>Lisboa+Sintra</strong> (€15) incluye metro + tren + autobús dentro de Sintra y vale mucho la pena.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚶 A pie</div>
+          <div class="transport-content">
+            El centro histórico de Lisboa se recorre mejor <strong>a pie</strong>, aunque las cuestas empedradas exigen calzado cómodo. Los miradores (Portas do Sol, Graça, Santa Catarina) están conectados por calles peatonales. <strong>Evita el coche en el centro</strong> — el tráfico y el aparcamiento son un suplicio. Los funiculares (€3.80) suben las cuestas más pronunciadas.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Budget</div>
+          <div class="hotel-name">Generator Lisboa</div>
+          <div class="hotel-zone">Bairro Alto</div>
+          <div class="hotel-price">~€35/noche</div>
+          <ul class="hotel-features">
+            <li>Rooftop bar con vistas panorámicas</li>
+            <li>Ubicación inmejorable en Bairro Alto</li>
+            <li>Desayuno incluido fines de semana</li>
+            <li>Ambiente joven e internacional</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/pt/generator-lisbon.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐ Confort</div>
+          <div class="hotel-name">Hotel do Chiado</div>
+          <div class="hotel-zone">Chiado</div>
+          <div class="hotel-price">~€130/noche</div>
+          <ul class="hotel-features">
+            <li>Terraza con vistas al Tajo y Alfama</li>
+            <li>Diseño moderno en edificio histórico</li>
+            <li>Habitaciones luminosas y elegantes</li>
+            <li>Desayuno incluido</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/pt/do-chiado.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Premium</div>
+          <div class="hotel-name">Bairro Alto Hotel</div>
+          <div class="hotel-zone">Bairro Alto</div>
+          <div class="hotel-price">~€320/noche</div>
+          <ul class="hotel-features">
+            <li>5 estrellas en el corazón de Lisboa</li>
+            <li>Rooftop bar con vistas panorámicas al Tajo</li>
+            <li>Spa y tratamientos de lujo</li>
+            <li>Restaurante de cocina portuguesa contemporánea</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/pt/bairro-alto.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+      <div class="alert-box info" style="margin-top:16px">
+        <strong>💡 Mejor zona:</strong> Bairro Alto y Chiado son las zonas más céntricas y bien comunicadas. Alfama es pintoresca pero ruidosa por las noches y difícil de acceder con maletas por los adoquines. Mouraria es auténtica y más económica.
+      </div>
+    </section>
+
+    <!-- ── DÍAS ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Llegada y Alfama</div>
+            <div class="day-subtitle">Portas do Sol · Sé · Tram 28 · Fado</div>
+          </div>
+          <div class="day-meta"><span>🚋 Lisboa</span><span>Llegada + barrio histórico</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mirador Portas do Sol — Las mejores vistas de Alfama</div>
+              <div class="act-desc">El mirador más espectacular del barrio histórico, con vistas a los tejados naranjas de Alfama, la cúpula del Panteão Nacional y el Tajo al fondo. Llega antes de las 10:30 para tener el lugar casi solo — los grupos turísticos llegan a partir de las 11h. El café del quiosco del mirador sirve el mejor galão de la zona.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">30 min</span><span class="act-tag warn">Llegar temprano</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Catedral Sé de Lisboa — la más antigua de la ciudad</div>
+              <div class="act-desc">Construida en el siglo XII sobre una mezquita árabe, la Sé es la catedral más antigua de Lisboa y uno de los edificios medievales mejor conservados de Portugal. La fachada romántica con sus dos torres tiene una austeridad que contrasta con el exuberante manuelino de Belém. El claustro gótico (€3) tiene excavaciones arqueológicas visibles desde pasarelas elevadas.</div>
+              <div class="act-tags"><span class="act-tag green">Catedral gratis</span><span class="act-tag">€3 claustro</span><span class="act-tag info">45 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Tasca do Chico — Fado al mediodía</div>
+              <div class="act-desc">Una de las pocas tascas de Lisboa donde el fado se canta al mediodía, no solo por la noche. Petiscos auténticos (acepipes, chouriço asado, pataniscas de bacalhau) y el bacalhau à Brás más honesto del barrio. El local cabe 20 personas — es imprescindible reservar con al menos 48 horas de antelación.</div>
+              <div class="act-tags"><span class="act-tag">~€18/persona</span><span class="act-tag warn">Reservar obligatorio</span><span class="act-tag info">Fado en vivo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Alfama — laberinto vivo</div>
+              <div class="act-desc">El barrio más antiguo de Lisboa es un laberinto de callejuelas empedradas donde la ropa tiende entre ventanas, los gatos duermen en los escalones y cada vuelta descubre un azulejo nuevo. Sin ruta fija: simplemente perderse. El Castelo de São Jorge (€15) domina el barrio desde lo alto — las vistas del río merecen la subida.</div>
+              <div class="act-tags"><span class="act-tag">€15 Castelo</span><span class="act-tag info">2h caminando</span><span class="act-tag green">Ambiente único</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tram 28 — el tranvía amarillo icónico</div>
+              <div class="act-desc">El Elétrico 28 es el transporte público más fotogénico de Europa. Sube en Rua da Conceição (Baixa) para evitar la cola de Martim Moniz y conseguir asiento. El trayecto atraviesa Alfama, Graça y Estrela — 45 minutos de Lisboa auténtica por €3 con tarjeta Viva Viagem.</div>
+              <div class="act-tags"><span class="act-tag">€3 con tarjeta / €1.65 Viva Viagem</span><span class="act-tag info">45 min trayecto</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Sunset en Mirador de Santa Catarina — Noobai Cafe</div>
+              <div class="act-desc">El Miradouro de Santa Catarina es el mirador más animado de Lisboa al atardecer: músicos en vivo, estudiantes con guitarras y locales que ven caer el sol sobre el Tajo con una cerveja en la mano. El Noobai Cafe tiene la mejor terraza del mirador — pide una Super Bock y una ración de queijo da serra mientras el cielo se tiñe de naranja.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis mirador</span><span class="act-tag">€5–8 bebida+tapa</span><span class="act-tag info">Atardecer espectacular</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Tasca do Jaime — Bacalhau à Brás auténtico</div>
+              <div class="act-desc">Una tasca sin pretensiones en Bairro Alto donde el bacalhau à Brás (bacalao desmenuzado con huevo, cebolla caramelizada y patatas fritas) se prepara como lo hacían las avós. Sin menú turístico, sin traducción al inglés, sin carta con fotos. Exactamente como tiene que ser. Precio: ~€20/persona con vinho verde.</div>
+              <div class="act-tags"><span class="act-tag">~€20/persona</span><span class="act-tag info">Sin reserva</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>A Cevicheria Petiscos</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Petiscos de mercado</span></td><td>Petiscos variados: pataniscas, rissóis, chouriço asado. Pica-pica perfecto.</td><td>~€15</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Taberna da Rua das Flores</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Chiado · Reservar</span></td><td>Cocina portuguesa de mercado. El menú cambia según la temporada. Siempre excelente.</td><td>~€30</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Alma</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">2 estrellas Michelin · Chiado</span></td><td>Cocina portuguesa de alta gama del chef Henrique Sá Pessoa. Reservar con semanas.</td><td>~€90</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Belém y arte contemporáneo</div>
+            <div class="day-subtitle">Pastéis · Torre de Belém · Jerónimos · MAAT</div>
+          </div>
+          <div class="day-meta"><span>🏛️ Belém</span><span>Día cultural</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Pastéis de Belém — la pastelería original desde 1837</div>
+              <div class="act-desc">La Fábrica de Pastéis de Belém lleva fabricando los famosos pastéis de nata desde 1837, con una receta secreta que solo conocen tres personas. La cola es obligatoria y avanza sorprendentemente rápido. Pide una mesa dentro para comerlos recién salidos del horno con canela y azúcar en polvo. €1.30 cada uno — los más baratos y buenos de Lisboa.</div>
+              <div class="act-tags"><span class="act-tag">€1.30/pastel</span><span class="act-tag info">Cola 15–30 min</span><span class="act-tag green">Imprescindible</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Torre de Belém — símbolo de Lisboa, siglo XVI</div>
+              <div class="act-desc">La Torre de Belém es el monumento más reconocible de Portugal: una fortaleza manuelina construida en 1515–1521 a orillas del Tajo como puerta de entrada a Lisboa desde el mar. Los navegantes que partían hacia las Indias la veían como última imagen de Europa. El interior tiene poco que ver —la arquitectura exterior desde el puente es el verdadero espectáculo.</div>
+              <div class="act-tags"><span class="act-tag">€6 entrada</span><span class="act-tag warn">Llegar antes de 10h</span><span class="act-tag info">1h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Monasterio de los Jerónimos — maravilla del manuelino</div>
+              <div class="act-desc">Declarado Patrimonio UNESCO en 1983, el Mosteiro dos Jerónimos es el ejemplo más extraordinario de la arquitectura manuelina: un estilo que combina el gótico tardío con motivos náuticos (cuerdas, corales, esfera armilar). Vasco de Gama y Luís de Camões están enterrados aquí. El claustro de dos pisos es uno de los espacios arquitectónicos más perfectos de Europa.</div>
+              <div class="act-tags"><span class="act-tag">€10 entrada</span><span class="act-tag info">1.5h</span><span class="act-tag green">UNESCO</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tiempo libre en Belém</div>
+              <div class="act-desc">LX Factory (activo especialmente los domingos con mercado, restaurantes y talleres de diseño), el Museu da Marinha para los apasionados de los descubrimientos, o simplemente pasear por el Jardim de Belém con vistas al Tejo. El Padrão dos Descobrimentos con sus esculturas de los exploradores portugueses merece una foto desde el muelle.</div>
+              <div class="act-tags"><span class="act-tag green">LX Factory gratis</span><span class="act-tag">€10 Museu da Marinha</span><span class="act-tag info">2h libres</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">MAAT Museo — arquitectura y arte contemporáneo</div>
+              <div class="act-desc">El Museu de Arte, Arquitetura e Tecnologia es la obra arquitectónica más sorprendente de la Lisboa moderna: un edificio cubierto de azulejos blancos con una azotea-paseo sobre el Tejo que es de acceso gratuito. Las exposiciones temporales son de nivel internacional. Los martes la entrada es gratuita — un regalo difícil de ignorar.</div>
+              <div class="act-tags"><span class="act-tag">€5 (gratis martes)</span><span class="act-tag info">1.5h</span><span class="act-tag green">Arquitectura excepcional</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso al centro en eléctrico o Uber</div>
+              <div class="act-desc">El tram 15E conecta Belém con Praça do Comércio en 40 minutos (€1.65 con tarjeta Viva Viagem). Alternativa: Uber €7 directo al hotel. La línea fluvial de Belém (ferry al otro lado del Tejo) ofrece una perspectiva única de Lisboa desde el agua.</div>
+              <div class="act-tags"><span class="act-tag">€1.65 tram</span><span class="act-tag">€7 Uber</span><span class="act-tag info">40 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Mercado da Ribeira (Time Out Market)</div>
+              <div class="act-desc">El Time Out Market reúne a 35 de los mejores chefs de Lisboa bajo el techo de hierro del mercado histórico de Ribeira. Una solución perfecta cuando el grupo no se pone de acuerdo: cada uno elige su plato de un cocinero diferente. Los puestos de Henrique Sá Pessoa y José Avillez son los más populares. Animado hasta medianoche.</div>
+              <div class="act-tags"><span class="act-tag">€15–25/persona</span><span class="act-tag info">35 chefs bajo un techo</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Tasca Zé da Mouraria</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Mouraria</span></td><td>Caldo verde, grilled sardines, prego no pão. Cocina popular auténtica.</td><td>~€12</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Palácio Chiado</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Chiado · Palacios histórico</span></td><td>Cocina portuguesa de mercado en un palacio del siglo XVIII. Experiencia inmersiva.</td><td>~€35</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Belcanto</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">2 Michelin · Chiado · Reservar</span></td><td>Menú degustación del chef José Avillez. La mejor mesa de Lisboa. Reservar con meses.</td><td>~€120</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Sintra y Cascais</div>
+            <div class="day-subtitle">Palácio da Pena · Quinta da Regaleira · Costa atlántica</div>
+          </div>
+          <div class="day-meta"><span>🏰 Sintra</span><span>Excursión de día</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box warn">
+            <strong>⚠️ Consejo importante:</strong> En julio y agosto, Sintra se satura completamente. El Palácio da Pena puede tener colas de 2 horas. Compra las entradas online con antelación en <a href="https://www.parquesdesintra.pt" target="_blank" rel="noopener" style="color:#c9a96e">parquesdesintra.pt</a> y llega en el primer tren (8:30 desde Rossio).
+          </div>
+          <div class="activity" style="margin-top:18px">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tren a Sintra desde Rossio</div>
+              <div class="act-desc">El tren de la Linha de Sintra sale de Rossio (y también de Oriente y Entrecampos) cada 20 minutos. 40 minutos de trayecto entre Lisboa y Sintra por €2.30. La villa de Sintra estará más tranquila cuanto antes llegues — los primeros trenes de la mañana casi no llevan turistas.</div>
+              <div class="act-tags"><span class="act-tag">€2.30 ida</span><span class="act-tag info">40 min</span><span class="act-tag green">Sale cada 20 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Palácio Nacional da Pena — el más fotogénico de Portugal</div>
+              <div class="act-desc">El Palácio da Pena es el palacio más surrealista e irreal de Europa: una mezcla ecléctica de torrecillas, arcos árabes, azulejos amarillos y rojos, cúpulas y estatuas que parece salida de un cuento de Disneyland. Construido en el siglo XIX para la reina María II sobre las ruinas de un convento del siglo XV. Las vistas desde la terraza abarcan Lisboa, el Atlántico y media Portugal.</div>
+              <div class="act-tags"><span class="act-tag">€14 palacio+parque</span><span class="act-tag warn">Cola enorme en verano</span><span class="act-tag info">1.5h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Quinta da Regaleira — jardines con iniciación masónica</div>
+              <div class="act-desc">La Quinta da Regaleira es el lugar más misterioso de Sintra: una villa neogótica con jardines que esconden símbolos masónicos, templarios y herméticos. El Poço Iniciático —un pozo invertido de 27 metros con escalera helicoidal que desciende hacia la tierra— es una de las arquitecturas más extrañas y fascinantes de Portugal. Explorar los túneles y cuevas del jardín lleva 2 horas fáciles.</div>
+              <div class="act-tags"><span class="act-tag">€10</span><span class="act-tag info">2h exploración</span><span class="act-tag green">Pozo iniciático único</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Sintra — Travesseiros en Piriquita</div>
+              <div class="act-desc">La Pastelaria Piriquita (Rua das Padarias) es el local más famoso de Sintra, abierto desde 1862. Sus travesseiros —hojaldre relleno de crema de almendra y huevo— y los queijadas de Sintra son los souvenirs gastronómicos perfectos. Un café da manhã completo cuesta €5 y vale cada céntimo.</div>
+              <div class="act-tags"><span class="act-tag">€5 café+pastelería</span><span class="act-tag green">Desde 1862</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cascais — villa atlántica con playa y mercado</div>
+              <div class="act-desc">40 minutos de tren desde la estación de Sintra (€2.30). Cascais es una pequeña villa pesquera que conserva su encanto a pesar del turismo: calles empedradas, jardines con pavones, el Museu do Mar y las playas de Rainha y Ribeira. El mercado de Cascais tiene buen marisco fresco para merendar al atardecer junto al puerto.</div>
+              <div class="act-tags"><span class="act-tag">€2.30 tren Sintra-Cascais</span><span class="act-tag info">2h en Cascais</span><span class="act-tag green">Menos masificada</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Lisboa en tren directo</div>
+              <div class="act-desc">El tren de Cascais llega directamente a Cais do Sodré (Lisboa) en 40 minutos por €2.30. Sin transbordo. Cais do Sodré está a 10 minutos andando de Bairro Alto y Chiado.</div>
+              <div class="act-tags"><span class="act-tag">€2.30</span><span class="act-tag info">40 min directo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Fado en Tasca do Chico o Mesa de Frades</div>
+              <div class="act-desc">El fado lisboeta es la música de la saudade —una nostalgia portuguesa sin equivalente en ninguna otra lengua. Mesa de Frades es quizá el local de fado más auténtico de Lisboa: una capilla del siglo XVII decorada con azulejos donde cantantes y guitarristas se turnan en sesiones íntimas de 20 personas. Reservar con semanas de antelación. Consumición mínima ~€25.</div>
+              <div class="act-tags"><span class="act-tag">~€25 consumición mínima</span><span class="act-tag warn">Reservar semanas antes</span><span class="act-tag info">Fado auténtico</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Tasca do Abel</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Sintra</span></td><td>Bifanas, caldo verde, postre casero. Menú del día imbatible.</td><td>~€14</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>The Mix</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Cascais · terraza</span></td><td>Marisco fresco, arroz de lingueirão, peixe grelhado. Buena relación calidad-precio.</td><td>~€28</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Lawrence's Hotel Restaurant</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Sintra</span></td><td>El hotel más antiguo de la Península Ibérica (1764). Cocina clásica europea en jardín.</td><td>~€60</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Barrios, Mouraria y salida</div>
+            <div class="day-subtitle">Bairro Alto · Mirador da Graça · Mouraria · Aeropuerto</div>
+          </div>
+          <div class="day-meta"><span>✈️ Salida</span><span>Mañana + vuelo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bairro Alto y Chiado — librerías y cafés históricos</div>
+              <div class="act-desc">El Bairro Alto es el barrio literario y bohemio de Lisboa. La Livraria Bertrand (Rua Garrett) es la librería en activo más antigua del mundo, abierta desde 1732. A Brasileira (Largo do Chiado) es el café más histórico de Lisboa, frecuentado por Fernando Pessoa desde 1905 — la estatua de bronce del poeta en la terraza es perfecta para la foto matinal antes de que lleguen los grupos.</div>
+              <div class="act-tags"><span class="act-tag green">Pasear gratis</span><span class="act-tag">€2–4 café en A Brasileira</span><span class="act-tag info">1.5h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mirador da Graça — el secreto menos turístico</div>
+              <div class="act-desc">El Miradouro da Graça es el menos concurrido de los grandes miradores de Lisboa y ofrece quizá la vista más completa de la ciudad: Alfama, el castillo, el Tajo y los puentes en el horizonte. El quiosco del mirador abre temprano y los locales del barrio de Graça se toman aquí su bica matutina antes de ir al trabajo. Lisboa auténtica, sin filtros.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">30 min</span><span class="act-tag green">Menos turístico</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mouraria — el barrio más antiguo y auténtico</div>
+              <div class="act-desc">Mouraria es el barrio donde los moros se refugiaron tras la Reconquista en el siglo XII —el barrio más antiguo de Lisboa, más auténtico que Alfama y mucho menos turístico. Los martes y sábados se celebra la Feira da Ladra, el mercado de pulgas más animado de Portugal, en el Campo de Santa Clara. Antigüedades, ropa vintage, libros viejos y objetos de todo tipo.</div>
+              <div class="act-tags"><span class="act-tag green">Barrio gratis</span><span class="act-tag info">Feira: martes y sábados</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo final — Caldo verde y ginjinha de despedida</div>
+              <div class="act-desc">Última comida lisboeta: un caldo verde (sopa de col gallega con chouriço) y un arroz de marisco en cualquier tasquinha sin carta en inglés. Terminar con una ginjinha —el licor de guindas servido en un vasito de chocolate comestible— en A Ginjinha de Alfama o en Ginjinha Sem Rival. €1.50 que resumen Lisboa en un sorbo.</div>
+              <div class="act-tags"><span class="act-tag">€10–14 almuerzo</span><span class="act-tag">€1.50 ginjinha</span><span class="act-tag info">Despedida perfecta</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado al aeropuerto</div>
+              <div class="act-desc">Metro Línea Vermelha desde Baixa-Chiado hasta el Aeroporto en 20 minutos (€1.65, incluye la tarjeta de cartón reutilizable). Añade al menos 2 horas de margen antes del vuelo. Los controles en el Aeroporto Humberto Delgado pueden ser lentos en temporada alta. Uber desde el centro cuesta €12–15 y tarda 15–25 minutos.</div>
+              <div class="act-tags"><span class="act-tag">€1.65 metro</span><span class="act-tag info">20 min metro directo</span><span class="act-tag warn">2h margen</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Zé da Mouraria</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Mouraria</span></td><td>Menú del día: sopa, plato, postre y vinho. El más barato y auténtico del barrio.</td><td>~€10</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>O Corvo</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Intendente</span></td><td>Cocina portuguesa moderna en un barrio en transformación. Vinos naturales excelentes.</td><td>~€25</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Ceia</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Reservar con días</span></td><td>Solo 12 comensales, menú único. Una experiencia gastronómica única en Lisboa.</td><td>~€75</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Fado en Mesa de Frades</h4><p>La música de la saudade en una capilla del siglo XVII decorada con azulejos, con 20 personas y cantaores que llenan el espacio de emoción. La experiencia musical más intensa de la Península Ibérica.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Palácio da Pena en Sintra</h4><p>El palacio más irreal de Europa: torrecillas de colores, azulejos, arcos árabes y vistas al Atlántico. La visión romántica más extraordinaria que jamás construyó la realeza portuguesa.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Claustro del Monasterio de los Jerónimos</h4><p>El manuelino en su máxima expresión: cuerdas de piedra, corales, esferas armilar y la tumba de Vasco de Gama. El espacio arquitectónico más perfecto de Portugal.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Sunset en el Mirador de Santa Catarina</h4><p>El Tajo brillando naranja al atardecer, músicos improvisados, estudiantes y locales con cerveja en mano. El ritual vespertino más auténtico de Lisboa.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Perderse por Alfama sin mapa</h4><p>El laberinto de callejuelas medievales más vivo de Europa: azulejos en cada pared, ropa tendida, gatos en los escalones y el fado saliendo de las ventanas abiertas.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Pastéis de Belém recién horneados</h4><p>La receta secreta de 1837, servida caliente con canela y azúcar glas. Solo en la Fábrica de Pastéis de Belém. Ninguna imitación de Lisboa o del mundo se acerca.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Quinta da Regaleira — el Poço Iniciático</h4><p>Descender por la escalera helicoidal del pozo invertido hacia las entrañas de la tierra, entre símbolos masónicos y templarios, en uno de los jardines más misteriosos de Europa.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Tram 28 por Alfama y Graça</h4><p>El tranvía amarillo más icónico de Europa, atravesando callejuelas tan estrechas que los pasajeros tienen que encoger los brazos. Un paseo urbano que no tiene equivalente en ninguna otra ciudad.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>MAAT — la azotea sobre el Tajo</h4><p>El tejado de azulejos blancos del MAAT es el mejor mirador sobre el río en Belém, accesible gratuitamente. La arquitectura del edificio es en sí misma una obra de arte contemporáneo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Ginjinha en vasito de chocolate</h4><p>El licor de guindas servido en un pequeño vaso de chocolate negro que se come al vaciar la bebida. €1.50 que encierran toda la esencia de Lisboa en un sorbo y un bocado.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍽️ Gastronomía lisboeta</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card"><div class="gastro-cat">Lisboa · Plato nacional</div><div class="gastro-title">Bacalhau à Brás</div><div class="gastro-desc">Bacalao desmenuzado salteado con cebolla caramelizada, huevos revueltos y patatas fritas en palillo, todo mezclado en la sartén hasta crear una textura cremosa y dorada. El plato más representativo de Lisboa, aunque el bacalao sea plato nacional de Portugal. Imprescindible en cualquier tasquinha auténtica. Precio: €12–18.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Belém · Pastelería</div><div class="gastro-title">Pastéis de Belém</div><div class="gastro-desc">Tartaletas de masa hojaldrada rellenas de crema custard de huevo y azúcar, horneadas a alta temperatura hasta que la superficie se quema en manchas caramelizadas características. La receta original data de 1837 y solo se fabrica en la Fábrica de Pastéis de Belém. Comerlos calientes con canela en polvo y azúcar glas es obligatorio. €1.30.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Portugal · Comfort food</div><div class="gastro-title">Caldo Verde</div><div class="gastro-desc">La sopa más popular de Portugal: un caldo de patata espesado con col gallega (couve-galega) cortada en tiritas finísimas, un chorizo de vino (chouriço) en rodajas y un chorro de aceite de oliva. De origen gallego-portugués, es el comfort food de las noches frías y el entrante de casi cualquier celebración familiar portuguesa.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Lisboa · Street food</div><div class="gastro-title">Bifanas</div><div class="gastro-desc">El bocadillo callejero más popular de Lisboa: filetes de cerdo marinados en vino blanco, ajo y pimentón, cocinados rápidamente en la plancha y servidos en un papo-seco (panecillo portugués). €3 en O Trevo o en cualquier cervejaria del Rossio. El olor recorre el mercado de Ribeira por las mañanas.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Lisboa · Bebida típica</div><div class="gastro-title">Ginjinha</div><div class="gastro-desc">Licor de guindas (cerezas ácidas) maceradas en aguardente, azúcar y canela durante meses. Se sirve en un pequeño vasito de chocolate negro comestible que se come al terminar la bebida. €1.50 en A Ginjinha de Alfama o Ginjinha Sem Rival (Largo de São Domingos). El ritual más barato y más lisboeta de toda la ciudad.</div></div>
+        <div class="gastro-card"><div class="gastro-cat">Costa atlántica · Especialidad</div><div class="gastro-title">Arroz de Lingueirão</div><div class="gastro-desc">Arroz meloso cocinado con lingueirões (navajas atlánticas), ajo, cilantro y vinho verde. Una especialidad costera que raramente aparece en los menús turísticos — hay que buscarla en restaurantes de pescadores. El arroz absorbe el yodo del mar y la dulzura del bivalvo en una combinación difícil de olvidar. Precio: €16–22.</div></div>
+      </div>
+    </section>
+
+    <!-- ── FRASES ── -->
+    <section id="frases" class="itin-section">
+      <h2 class="section-heading">🗣️ Frases útiles en portugués</h2>
+      <div class="phrases-grid">
+        <div class="phrase-card"><div class="phrase-es">Hola</div><div class="phrase-local">Olá</div><div class="phrase-pron">"oh-LAH"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Gracias</div><div class="phrase-local">Obrigado / Obrigada</div><div class="phrase-pron">"oh-bree-GAH-doo / oh-bree-GAH-da"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Cuánto cuesta?</div><div class="phrase-local">Quanto custa?</div><div class="phrase-pron">"KWAN-too KOOSH-ta"</div></div>
+        <div class="phrase-card"><div class="phrase-es">La cuenta, por favor</div><div class="phrase-local">A conta, por favor</div><div class="phrase-pron">"ah KON-ta, poor fa-VOR"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Dónde está?</div><div class="phrase-local">Onde fica?</div><div class="phrase-pron">"ON-deh FEE-ka"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Una cerveza</div><div class="phrase-local">Uma cerveja</div><div class="phrase-pron">"OO-ma ser-VAY-zha"</div></div>
+        <div class="phrase-card"><div class="phrase-es">No entiendo</div><div class="phrase-local">Não entendo</div><div class="phrase-pron">"now en-TEN-doo"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Ayuda</div><div class="phrase-local">Ajuda</div><div class="phrase-pron">"ah-ZHOO-da"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Buenos días</div><div class="phrase-local">Bom dia</div><div class="phrase-pron">"bom DEE-ah"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¡Salud! (al brindar)</div><div class="phrase-local">Saúde!</div><div class="phrase-pron">"sa-OO-deh"</div></div>
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales (UE)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos, ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía PSP Lisboa</div><div class="emerg-value">217 654 242</div><div class="emerg-note">Denuncias y asistencia turística</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Santa Maria</div><div class="emerg-value">+351 217 805 000</div><div class="emerg-note">Av. Prof. Egas Moniz — Urgencias 24h</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada de España en Lisboa</div><div class="emerg-value">+351 213 472 381</div><div class="emerg-note">Rua do Salitre 1 · Emergencias consulares</div></div>
+        <div class="emerg-card"><div class="emerg-label">Línea SNS 24 (salud)</div><div class="emerg-value">808 24 24 24</div><div class="emerg-note">Línea de orientación médica nacional</div></div>
+        <div class="emerg-card"><div class="emerg-label">Centro de Saúde (ambulatorio)</div><div class="emerg-value">217 929 500</div><div class="emerg-note">CS Lisboa Centro — consultas no urgentes</div></div>
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea (Portugal es UE)</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje con cobertura médica</div>
+            <div class="check-item"><div class="check-box"></div>Euros en efectivo (muchas tasquinhas no aceptan tarjeta)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">✈️ Reservas confirmadas</div>
+            <div class="check-item"><div class="check-box"></div>Vuelos ida y vuelta</div>
+            <div class="check-item"><div class="check-box"></div>Alojamiento las 3 noches</div>
+            <div class="check-item"><div class="check-box"></div>Entradas Palácio da Pena (online, especialmente en verano)</div>
+            <div class="check-item"><div class="check-box"></div>Reserva en Mesa de Frades o Tasca do Chico (fado)</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Viva Viagem para metro y tranvía</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">🎒 Equipaje</div>
+            <div class="check-item"><div class="check-box"></div>Calzado muy cómodo (Lisboa tiene muchas cuestas y adoquines)</div>
+            <div class="check-item"><div class="check-box"></div>Cargador de móvil (Portugal usa el mismo enchufe que España)</div>
+            <div class="check-item"><div class="check-box"></div>Ropa ligera + chaqueta para las noches</div>
+            <div class="check-item"><div class="check-box"></div>Protector solar (el sol atlantico engaña)</div>
+            <div class="check-item"><div class="check-box"></div>Bolsa de tela para el mercado y compras</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">📱 Apps esenciales</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps — descarga offline Lisboa y Sintra</div>
+            <div class="check-item"><div class="check-box"></div>Carris Metro — horarios y mapas del metro</div>
+            <div class="check-item"><div class="check-box"></div>CP Comboios — horarios trenes a Sintra y Cascais</div>
+            <div class="check-item"><div class="check-box"></div>Uber — muy económico en Lisboa</div>
+            <div class="check-item"><div class="check-box"></div>Revolut o N26 — tarjeta sin comisiones en el extranjero</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres un itinerario personalizado para Lisboa?</h3>
+      <p>Dinos tu presupuesto, fechas y ritmo de viaje. El planificador IA de Routlo adapta este itinerario a tu medida en segundos.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar mi viaje a Lisboa
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com, Skyscanner y otros servicios pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos y pueden variar según temporada, antelación y disponibilidad. Verifica siempre precios actuales antes de reservar.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.5);text-decoration:none;font-size:0.85rem;margin-bottom:16px">← Ver todos los itinerarios</a>
+    <div style="font-size:0.78rem;color:rgba(237,238,242,0.3)">© 2026 Routlo · Hecho con IA para viajeros del mundo</div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+    const sections = document.querySelectorAll('.itin-section[id], .day-card[id]');
+    const links = document.querySelectorAll('.toc-list a');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }, { passive: true });
+</script>
+</body>
+</html>

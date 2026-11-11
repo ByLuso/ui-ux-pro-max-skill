@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rumanía: Bucarest + Transilvania — 6 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 6 días por Rumanía: Bucarest, Sinaia, Brașov, Sighișoara y los castillos de Transilvania. Presupuesto, hoteles y consejos insider de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    /* ── Base (fallback si shared.css no carga en file:// / content://) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d1e3d 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#1a2a10 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d1a1a 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg,#050a05 0%,#0d1f0a 40%,#1a4010 70%,rgba(201,169,110,0.18) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.15rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2; }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .rest-table { width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:16px; }
+    .rest-table th { text-align:left;padding:9px 12px;background:rgba(201,169,110,0.08);color:#c9a96e;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.2); }
+    .rest-table td { padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(237,238,242,0.7);vertical-align:top; }
+    .rest-table td:first-child { font-size:0.8rem; }
+    .rest-table td:nth-child(2) { font-weight:600;color:#edeef2; }
+    .rest-table tr:last-child td { border-bottom:none; }
+    .rest-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;margin-top:16px; }
+
+    .hotel-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px; }
+    .hotel-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;transition:border-color 0.2s; }
+    .hotel-card:hover { border-color:rgba(201,169,110,0.3); }
+    .hotel-tier { font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-name { font-family:'Bodoni Moda',Georgia,serif;font-size:0.93rem;font-weight:700;color:#edeef2;margin-bottom:3px; }
+    .hotel-zone { font-size:0.75rem;color:rgba(237,238,242,0.55);margin-bottom:6px; }
+    .hotel-price { color:#c9a96e;font-weight:600;font-size:0.85rem;margin-bottom:10px; }
+    .hotel-features { list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:10px; }
+    .hotel-features li { font-size:0.74rem;color:rgba(237,238,242,0.55);padding-left:14px;position:relative; }
+    .hotel-features li::before { content:'✓';position:absolute;left:0;color:#5ecb8a; }
+    .hotel-link { display:inline-flex;align-items:center;gap:5px;color:#c9a96e;text-decoration:none;font-size:0.78rem;font-weight:600;border-bottom:1px solid rgba(201,169,110,0.3);padding-bottom:1px; }
+    .hotel-link:hover { border-color:#c9a96e; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .phrases-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .phrase-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px; }
+    .phrase-es { font-size:0.78rem;color:rgba(237,238,242,0.5);margin-bottom:4px; }
+    .phrase-local { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:3px; }
+    .phrase-pron { font-size:0.75rem;color:#c9a96e;font-style:italic; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .check-section { margin-bottom:20px; }
+    .check-section-title { font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:10px; }
+    .check-item { display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.86rem;color:rgba(237,238,242,0.55); }
+    .check-item:last-child { border-bottom:none; }
+    .check-box { width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;flex-shrink:0;margin-top:2px; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box strong { color:#edeef2; }
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* ── Tablet ── */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .hotel-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+    }
+    /* ── Mobile ── */
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+      .phrases-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+      .cta-banner { padding: 20px 16px !important; }
+      .hotel-grid { grid-template-columns: 1fr !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+    }
+    /* ── Small mobile ── */
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.95rem !important; }
+      .alert-box { font-size: 0.8rem !important; }
+      .rest-wrap { overflow-x: auto !important; }
+      .rest-table { min-width: 480px !important; }
+      .activity { gap: 10px !important; }
+      .act-desc { font-size: 0.82rem !important; }
+      .top10-item { gap: 10px !important; padding: 12px !important; }
+      .top10-num { font-size: 1.4rem !important; min-width: 28px !important; }
+      .gastro-card, .phrase-card, .hotel-card, .transport-card, .emerg-card { padding: 12px !important; }
+      .disclosure { padding: 12px 14px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(74,127,165,0.1);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">Rumanía</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Rumanía</h1>
+  <p class="dest-country">Bucarest · Sinaia · Brașov · Sighișoara</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">📅 6 días / 5 noches</span>
+    <span class="dest-badge" role="listitem">👥 Pareja / Solo / Amigos</span>
+    <span class="dest-badge gold" role="listitem">💶 €580–950/persona</span>
+    <span class="dest-badge" role="listitem">🌍 Europa · Rumanía</span>
+    <span class="dest-badge" role="listitem">🏰 Historia + Naturaleza + Castillos</span>
+    <a href="https://www.skyscanner.es/transport/flights/MAD/BUH/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">✈️ Buscar vuelos</a>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">6 días</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Ciudades</div><div class="dest-sum-val">4 destinos</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Presupuesto</div><div class="dest-sum-val">€580–950</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Dificultad</div><div class="dest-sum-val" style="font-size:0.85rem">Fácil/Mod.</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Época ideal</div><div class="dest-sum-val" style="font-size:0.85rem">May–Sep</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#resumen" class="active">Resumen</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#transporte">Transporte</a></li>
+        <li><a href="#alojamiento">Alojamiento</a></li>
+        <li><a href="#dia1">Día 1 · Bucarest</a></li>
+        <li><a href="#dia2">Día 2 · Bucarest</a></li>
+        <li><a href="#dia3">Día 3 · Sinaia</a></li>
+        <li><a href="#dia4">Día 4 · Brașov</a></li>
+        <li><a href="#dia5">Día 5 · Bran · Sighișoara</a></li>
+        <li><a href="#dia6">Día 6 · Regreso</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#gastronomia">Gastronomía</a></li>
+        <li><a href="#frases">Frases útiles</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── RESUMEN ── -->
+    <section id="resumen" class="itin-section">
+      <h2 class="section-heading">Resumen del viaje</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        Rumanía es el secreto mejor guardado de Europa del Este: una mezcla vertiginosa de palacios comunistas gigantescos y barrios art nouveau, castillos medievales entre bosques de los Cárpatos y ciudades amuralladas Patrimonio UNESCO. Bucarest, la "París del Este", sorprende con su elegancia decadente y vida nocturna salvajemente barata. Transilvania —el corazón histórico del país— ofrece Brașov, Sighișoara y los castillos que inspiraron la leyenda de Drácula. Todo esto a precios que hacen que Europa occidental parezca un atraco. Seis días que atraviesan dos mundos: la capital postcomunista y los Cárpatos medievales.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏙️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Bucarest</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 1–2</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏔️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Sinaia + Brașov</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Días 3–4</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏰</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Bran + Sighișoara</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Día 5</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza este itinerario con IA</h3>
+        <p>Ajusta fechas, presupuesto y ritmo de viaje. Routlo te genera un itinerario a tu medida en segundos.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi itinerario
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Económico</th><th>Confort</th><th>Premium</th><th>Notas</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✈️ Vuelo A/R (desde Madrid)</td><td>€60–120</td><td>€150–250</td><td>€350+</td><td>Ryanair/Wizz Air desde Madrid. 3h15min de vuelo</td></tr>
+            <tr><td>🏨 Alojamiento (5 noches)</td><td>€100</td><td>€350</td><td>€900</td><td>Mix: Bucarest 2–3n · Brașov/Sighișoara 2n</td></tr>
+            <tr><td>🍽️ Comidas (6 días)</td><td>€72</td><td>€180</td><td>€360</td><td>~€12/30/60 por día — Rumanía es muy económica</td></tr>
+            <tr><td>🚂 Transporte (trenes + buses)</td><td>€35</td><td>€55</td><td>€80</td><td>Tren Bucarest-Brașov muy económico (€7–10)</td></tr>
+            <tr><td>🎟️ Entradas (museos + castillos)</td><td>€50</td><td>€70</td><td>€90</td><td>Peleș + Bran + Sighișoara + museos Bucarest</td></tr>
+            <tr><td>🎭 Tours y experiencias</td><td>€0</td><td>€30</td><td>€80</td><td>Tours gratuitos a pie disponibles en Bucarest</td></tr>
+            <tr><td>🔄 Imprevistos (10%)</td><td>€32</td><td>€90</td><td>€180</td><td></td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€349</strong></td><td><strong>~€925</strong></td><td><strong>~€2,040</strong></td><td>Sin vuelo de primera clase</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo:</strong> Rumanía es uno de los destinos más económicos de la Unión Europea. Un almuerzo completo con bebida cuesta €5–8 en sitios locales. Los trenes CFR Călători son baratos pero lentos — reserva con antelación en <a href="https://www.cfrcalatori.ro" target="_blank" rel="noopener" style="color:#c9a96e">cfrcalatori.ro</a>. El alquiler de coche en Brașov ($30–50/día) abre un mundo de posibilidades en Transilvania.
+      </div>
+    </section>
+
+    <!-- ── TRANSPORTE ── -->
+    <section id="transporte" class="itin-section">
+      <h2 class="section-heading">🚗 Transporte</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">✈️ Vuelos</div>
+          <div class="transport-content">
+            Llegar a <strong>Aeropuerto Henri Coandă (OTP)</strong> de Bucarest. Ryanair y Wizz Air operan desde Madrid con precios desde €30 solo ida en oferta. El vuelo dura <strong>3h15min</strong>. Compara siempre en Skyscanner. Para vuelta, mismo aeropuerto.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🏙️ Aeropuerto al centro</div>
+          <div class="transport-content">
+            <strong>Metro M4 + autobús 783:</strong> €2 total, 45 min — la opción más barata. <strong>Taxi:</strong> ~€15, 30–40 min — pide solo taxis con taxímetro (Uber/Bolt también funcionan). Evita los taxis sin taxímetro del exterior del aeropuerto.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚂 Trenes CFR Călători</div>
+          <div class="transport-content">
+            <strong>Bucarest → Sinaia:</strong> €6, 1h30 desde Gara de Nord · <strong>Bucarest → Brașov:</strong> €7–10, 2h30 · <strong>Brașov → Sighișoara:</strong> €6, 2h. Reserva en <strong>cfrcalatori.ro</strong>. Trenes lentos pero económicos y con paisajes espectaculares.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 Alquiler de coche</div>
+          <div class="transport-content">
+            <strong>Muy recomendable para Transilvania.</strong> Desde Brașov (~€30–50/día). Permite explorar el Castillo de Bran, Sighișoara y carreteras secundarias entre campos y montañas. Las carreteras rumanas mejoraron mucho en los últimos años, aunque algunas secundarias son estrechas.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ALOJAMIENTO ── -->
+    <section id="alojamiento" class="itin-section">
+      <h2 class="section-heading">🏨 Alojamiento recomendado</h2>
+      <div class="hotel-grid">
+        <div class="hotel-card">
+          <div class="hotel-tier">💰 Budget</div>
+          <div class="hotel-name">Pura Vida Sky Bar & Hostel</div>
+          <div class="hotel-zone">Bucarest centro</div>
+          <div class="hotel-price">~€20/noche</div>
+          <ul class="hotel-features">
+            <li>Rooftop bar con vistas panorámicas</li>
+            <li>Desayuno incluido</li>
+            <li>Ambiente social y mochilero</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/ro/pura-vida-sky-bar-hostel.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">⭐⭐⭐ Confort</div>
+          <div class="hotel-name">Rembrandt Hotel</div>
+          <div class="hotel-zone">Bucarest centro</div>
+          <div class="hotel-price">~€70/noche</div>
+          <ul class="hotel-features">
+            <li>Boutique en mansión del s.XIX</li>
+            <li>Muy bien ubicado</li>
+            <li>Desayuno y parking disponibles</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/ro/rembrandt.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+        <div class="hotel-card">
+          <div class="hotel-tier">👑 Premium</div>
+          <div class="hotel-name">Intercontinental Athenee Palace</div>
+          <div class="hotel-zone">Calea Victoriei, Bucarest</div>
+          <div class="hotel-price">~€180/noche</div>
+          <ul class="hotel-features">
+            <li>Ícono histórico desde 1914</li>
+            <li>Frente al Ateneo Rumano</li>
+            <li>Spa, piscina y restaurante gourmet</li>
+          </ul>
+          <a href="https://www.booking.com/hotel/ro/intercontinental-bucharest.es.html" target="_blank" rel="noopener" class="hotel-link">Reservar en Booking.com ↗</a>
+        </div>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Estrategia:</strong> Pasa las 2 primeras noches en Bucarest, luego muévete a Brașov (base ideal para explorar Transilvania). En Sighișoara hay opciones encantadoras dentro de la ciudadela medieval para dormir rodeado de murallas del s.XIV.
+      </div>
+    </section>
+
+    <!-- ── DÍAS ── -->
+    <section id="dia1" class="itin-section">
+      <h2 class="section-heading">Días del itinerario</h2>
+
+      <!-- DÍA 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Bucarest — La "París del Este"</div>
+            <div class="day-subtitle">Palacio del Parlamento · Calea Victoriei · Floreasca</div>
+          </div>
+          <div class="day-meta"><span>🏙️ Bucarest</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Palacio del Parlamento — El 2º edificio más grande del mundo</div>
+              <div class="act-desc">Solo el Pentágono supera en metros cuadrados a este monstruo de mármol construido por Nicolae Ceaușescu con trabajo forzado entre 1984 y 1997. Con 1.100 habitaciones, 3.500 toneladas de cristal y kilómetros de pasillos, es la mayor edificación administrativa del mundo. El tour interior cuesta €20 y dura 45 min — merece cada céntimo. El exterior ya impresiona solo.</div>
+              <div class="act-tags"><span class="act-tag">€20 tour interior</span><span class="act-tag green">Exterior gratis</span><span class="act-tag info">1h30 con tour</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Calea Victoriei — El boulevard más elegante</div>
+              <div class="act-desc">El gran bulevar de Bucarest concentra museos, palacios belle époque, embajadas y cafés del siglo XIX. Recorre sus 4 km desde el Palacio del Parlamento hasta la Plaza Victoriei admirando la arquitectura que le valió a Bucarest el apodo de "París del Este" a principios del siglo XX.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1h30 paseo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Caru' cu Bere — La cervecería más bella de Europa del Este</div>
+              <div class="act-desc">Desde 1879, esta cervecería de arquitectura gótica impresionante es Patrimonio Arquitectónico de Bucarest. Sus vidrieras, columnas talladas y techos pintados la convierten en una catedral de la cerveza. Pide mici (salchichas de carne picada sin tripa a la brasa) y ciorbă de burtă (sopa de callos). El ambiente es inigualable.</div>
+              <div class="act-tags"><span class="act-tag">~€15/persona</span><span class="act-tag info">Reserva recomendada</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Floreasca — Los jardines del Rey Mihai</div>
+              <div class="act-desc">El parque Herăstrău (hoy Regele Mihai I) es el pulmón verde de Bucarest: 200 hectáreas bordeando el lago Herăstrău. Paseo en barca, mercado de pulgas los domingos, el Museo de la Villa Rumana al aire libre con casas tradicionales de todo el país. El barrio residencial de Floreasca circundante es el Beverly Hills de Bucarest, con mansiones art nouveau.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">2h paseo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Arcul de Triumf — La copia rumana del Arco del Triunfo</div>
+              <div class="act-desc">Construido en 1936 para conmemorar la entrada de Rumanía en la Primera Guerra Mundial, mide 27 metros de altura. Los fines de semana y festivos se puede subir a la cima de forma gratuita para obtener una vista panorámica del eje principal de Bucarest, diseñado para rivalizar con los Campos Elíseos.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis (fines de semana)</span><span class="act-tag info">30 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio Dorobanți — vida nocturna local</div>
+              <div class="act-desc">Los bares del barrio Dorobanți y Floreasca son donde los bucarestinos de verdad salen de noche. Cocktails a €5–7, terrazas en jardines de mansiones y ambiente sin turistas. El contraste con los precios de Madrid es chocante: una copa que en España cuesta €12 aquí son €5.</div>
+              <div class="act-tags"><span class="act-tag">Cócteles €5–7</span><span class="act-tag info">Ambiente local</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">21:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Lacrimi și Sfinți — Cocina rumana contemporánea</div>
+              <div class="act-desc">El restaurante más creativo de Bucarest reinterpreta la cocina campesina rumana con técnicas modernas. El nombre significa "Lágrimas y Santos". Ambiente bohemio, carta en rumano (piden que no se hable en voz alta), y platos como el cozonac salado o el pui de ţară reconvertido en obra de arte. Reserva imprescindible.</div>
+              <div class="act-tags"><span class="act-tag">~€20/persona</span><span class="act-tag warn">Reservar online</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Vatra</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Cocina de campo rumana</span></td><td>Sarmale (hojas de col rellenas de carne) y mămăligă (polenta rumana). El comfort food rumano clásico.</td><td>~€8</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Lacrimi și Sfinți</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Cocina contemporánea</span></td><td>Menú de temporada con ingredientes locales reinterpretados. El más interesante de Bucarest.</td><td>~€22</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Kane</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Fine dining</span></td><td>Cocina de autor con productos de temporada de los Cárpatos. Mejor menú degustación de Rumanía.</td><td>~€55</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 2 -->
+      <div class="day-card" id="dia2">
+        <div class="day-header">
+          <div class="day-num">02</div>
+          <div>
+            <div class="day-title">Bucarest — Barrios y arte</div>
+            <div class="day-subtitle">Cișmigiu · Obor · MNAC · Plaza Revoluției</div>
+          </div>
+          <div class="day-meta"><span>🏙️ Bucarest</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">09:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Barrio de Floreasca y Dorobanți — El Beverly Hills de Bucarest</div>
+              <div class="act-desc">Mansiones art nouveau y neoromanas de principios del s.XX conviven con embajadas y restaurantes de moda. Este barrio residencial del norte de Bucarest muestra la cara opulenta de la ciudad que existía antes del comunismo y que está recuperando su esplendor poco a poco.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1h paseo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">11:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Grădina Cișmigiu — El parque más antiguo de Bucarest (1845)</div>
+              <div class="act-desc">Diseñado en 1845 por el jardinero imperial austriaco Wilhelm Meyer, Cișmigiu es el Central Park de Bucarest. Sus estanques con barcas, sus cafés art déco al aire libre y sus rincones olvidados son el refugio de los bucarestinos desde hace 180 años. El Cercul Militar contiguo tiene una cafetería con uno de los interiores más bellos de la ciudad.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1h30</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Mercado Obor — El mercado más auténtico de Bucarest</div>
+              <div class="act-desc">El mayor mercado tradicional de Bucarest funciona desde el siglo XVIII. Productos locales, especias, quesos de oveja, encurtidos, sarmale caseras y el mejor brânză (queso de cabra) de la ciudad. Almuerza entre los puestos: un plato completo con bebida sale por €5 en los comedores del interior del mercado.</div>
+              <div class="act-tags"><span class="act-tag">Almuerzo €5</span><span class="act-tag info">1h30</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Street Art de Bucarest — Murales por toda la ciudad</div>
+              <div class="act-desc">Bucarest tiene uno de los escenas de arte urbano más interesantes de Europa del Este. Los barrios de Floreasca, Dacia y alrededores del centro histórico están cubiertos de murales. Existe incluso una ruta oficial de street art que puedes seguir con el mapa del Bucarest Street Art Festival.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1h30 ruta</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">MNAC — Museo Nacional de Arte Contemporáneo</div>
+              <div class="act-desc">Instalado dentro del mismísimo Palacio del Parlamento (irónicamente, el edificio símbolo del totalitarismo alberga hoy arte contemporáneo), el MNAC tiene una colección permanente de arte rumano e internacional del s.XX y XXI. La arquitectura del espacio es tan interesante como las obras expuestas.</div>
+              <div class="act-tags"><span class="act-tag">€5 entrada</span><span class="act-tag info">1h30</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Plaza Revoluției — Donde cayó Ceaușescu en 1989</div>
+              <div class="act-desc">La Plaza de la Revolución es donde el 21 de diciembre de 1989 el dictador Nicolae Ceaușescu dio su último discurso antes de huir en helicóptero. Las marcas de bala aún se ven en algunos edificios. El memorial a las víctimas de la Revolución —una espiral de mármol blanco apodada "el olivo impotente" por los bucarestinos— preside el centro.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">Historia viva</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Vatra — Cocina de campo rumana</div>
+              <div class="act-desc">Vatra ("el hogar" en rumano) es uno de los restaurantes más queridos de Bucarest para comer cocina tradicional a precios honestos. Pide los sarmale (hojas de parra rellenas de carne picada y arroz, cocinadas en caldo ácido con crema agria) — el plato de las fiestas rumanas que aquí está disponible todo el año.</div>
+              <div class="act-tags"><span class="act-tag">~€10/persona</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Bistro Atheneu</strong></td><td>Ciorbă de legume y ostropel de pui. Frente al Ateneo, precio muy contenido.</td><td>~€10</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Shift Pub</strong></td><td>Cocina moderna rumana en ambiente hipster. Burger de vită cu brânză de burduf.</td><td>~€18</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Beca's Kitchen</strong></td><td>Cocina rumana de mercado con productos ecológicos. Menú cambia según temporada.</td><td>~€40</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 3 -->
+      <div class="day-card" id="dia3">
+        <div class="day-header">
+          <div class="day-num">03</div>
+          <div>
+            <div class="day-title">Sinaia y el Castillo de Peleș</div>
+            <div class="day-subtitle">El castillo más bello de Europa del Este</div>
+          </div>
+          <div class="day-meta"><span>🏰 Sinaia</span><span>Excursión desde Bucarest</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">07:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tren a Sinaia — Gara de Nord</div>
+              <div class="act-desc">El tren CFR desde la Gara de Nord de Bucarest llega a Sinaia en 1h30. Precio €6 ida. El trayecto atraviesa la llanura valaca y empieza a remontar los Cárpatos con vistas cada vez más espectaculares. Sinaia es el balneario de montaña de la realeza rumana, a 800 metros de altitud.</div>
+              <div class="act-tags"><span class="act-tag">€6 ida</span><span class="act-tag info">1h30 de tren</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Castillo de Peleș — El neorrenacentista más bello de Europa del Este</div>
+              <div class="act-desc">Construido entre 1875 y 1914 como residencia de verano del rey Carol I, el Castillo de Peleș es un prodigio de arquitectura neorrenacentista alemana enclavado en los Cárpatos. Sus 160 habitaciones están decoradas con estilos de distintas épocas: salón morisco, sala de armas, biblioteca florentina. El entorno de bosque alpino lo convierte en algo de cuento.</div>
+              <div class="act-tags"><span class="act-tag">€15 entrada + tour</span><span class="act-tag info">2h visita</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Sinaia — Bulz de montaña</div>
+              <div class="act-desc">Baja al pueblo de Sinaia y come en alguno de los restaurantes de la calle principal. El bulz (polenta asada rellena de queso Brânză con huevo encima) es el plato típico de los Cárpatos — sencillo, reconfortante y diferente a todo lo que conoces. Una jarra de bere (cerveza rumana) cuesta €2.</div>
+              <div class="act-tags"><span class="act-tag">~€8/persona</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Monasterio de Sinaia — Joya ortodoxa del s.XVII</div>
+              <div class="act-desc">Fundado en 1695 por el príncipe Mihail Cantacuzino, el Monasterio de Sinaia dio nombre a la ciudad. Dos iglesias ortodoxas con frescos exteriores e interiores, una biblioteca con manuscritos medievales y un ambiente de paz absoluta rodeado de bosque de abetos. La entrada es gratuita.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Bucarest o continuar a Brașov</div>
+              <div class="act-desc">Si tienes vuelo tarde mañana, regresa a Bucarest (1h30 en tren). Si quieres avanzar el itinerario, Brașov está a solo 1h más de tren desde Sinaia (€4 extra) — llegando a Brașov temprano te permite aprovechar la tarde en la ciudad.</div>
+              <div class="act-tags"><span class="act-tag info">Bifurcación del itinerario</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Casa Vlahilor</strong></td><td>Bulz cu brânză de burduf y ciorbă de fasole. Cocina de montaña auténtica y muy económica.</td><td>~€9</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Taverna Sârbului</strong></td><td>Miel de pui pe grătar y papanași (donuts con crema agria y mermelada). Imprescindible.</td><td>~€20</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Hotel Caraiman</strong><br><span style="font-size:0.72rem;color:rgba(237,238,242,0.4)">Restaurante histórico</span></td><td>Filete de căprioară (venado de los Cárpatos) con hongos silvestres. Experiencia única.</td><td>~€35</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 4 -->
+      <div class="day-card" id="dia4">
+        <div class="day-header">
+          <div class="day-num">04</div>
+          <div>
+            <div class="day-title">Brașov — La perla de Transilvania</div>
+            <div class="day-subtitle">Piața Sfatului · Iglesia Negra · Tampa · Bastiones medievales</div>
+          </div>
+          <div class="day-meta"><span>🏰 Brașov</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tren o autobús a Brașov</div>
+              <div class="act-desc">Desde Bucarest: €7–10 en tren, 2h30. Desde Sinaia (si te quedaste allí): €4, 1h. Brașov es la segunda ciudad más visitada de Rumanía, enclavada entre las montañas de los Cárpatos a 600m de altitud. El centro histórico medieval es uno de los mejor conservados de Europa del Este.</div>
+              <div class="act-tags"><span class="act-tag">€7–10 desde Bucarest</span><span class="act-tag info">2h30</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Plaza del Consejo (Piața Sfatului) — Con la Torre Negra medieval</div>
+              <div class="act-desc">El corazón de Brașov es esta plaza porticada del s.XIV rodeada de casas de colores, la antigua Casa del Consejo (hoy museo) y la imponente Torre Negra al fondo. Los cafés con terraza son perfectos para desayunar con vistas a los tejados medievales. Todo el espacio es peatonal y libre de coches — una rareza preciosa en Rumanía.</div>
+              <div class="act-tags"><span class="act-tag green">Gratis</span><span class="act-tag info">1h30</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Iglesia Negra — La gótica más grande de Rumanía</div>
+              <div class="act-desc">Construida entre 1383 y 1477, la Iglesia Negra (Biserica Neagră) debe su nombre al incendio de 1689 que ennegureció sus muros. Es la mayor iglesia gótica del territorio rumano y alberga una colección de 119 alfombras otomanas donadas por comerciantes transilvanos del s.XVI–XVIII. El órgano del s.XIX tiene 4.000 tubos.</div>
+              <div class="act-tags"><span class="act-tag">€5 entrada</span><span class="act-tag info">1h</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Sergiana — La mejor cocina transilvana</div>
+              <div class="act-desc">Sergiana es el restaurante más conocido de Brașov para cocina transilvana auténtica. Los ciocanele de pui (muslos de pollo marinados en cerveza y especias, asados a la brasa) son el plato estrella. Mesas de madera, ambiente animado y precios que no dan crédito: un plato completo con guarnición y cerveza por €12.</div>
+              <div class="act-tags"><span class="act-tag">~€12/persona</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Bastiones medievales — Murallas del s.XIV</div>
+              <div class="act-desc">Brașov tenía 7 bastiones medievales de los que 6 se conservan en pie. El Bastión de los Tejedores (Bastion Tesătorilor) del s.XV alberga hoy un pequeño museo con maquetas de la ciudad medieval. Las murallas recorren las faldas de la montaña Tampa y son perfectamente visitables.</div>
+              <div class="act-tags"><span class="act-tag">€3 Bastión Tejedores</span><span class="act-tag info">1h30</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Teleférico a Tampa — Vistas panorámicas de los Cárpatos</div>
+              <div class="act-desc">El teleférico sube en 5 minutos a la cima del Monte Tampa (960m) donde unas vistas de 360° muestran Brașov encajada entre montañas como un cuadro medieval. Se ven los Cárpatos Meridionales en todo su esplendor. También se puede subir andando (45 min de senderismo señalizado). El letrero "BRAȘOV" en la ladera imita al de Hollywood.</div>
+              <div class="act-tags"><span class="act-tag">€8 ida teleférico</span><span class="act-tag green">Andando: gratis</span><span class="act-tag info">Vistas únicas</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">19:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Restaurantul Bella Muzica — Música en vivo</div>
+              <div class="act-desc">Este restaurante histórico en una bodega del s.XIV organiza conciertos de música folclórica transilvana mientras cenas. El ambiente de bóveda de piedra, velas y música en directo con músicos en traje regional es una experiencia que no se repite fuera de Transilvania. Especialidades: pulpă de porc y mămăligă cu brânză.</div>
+              <div class="act-tags"><span class="act-tag">~€15/persona</span><span class="act-tag info">Música en vivo</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Gustări la Stradă</strong></td><td>Sandvișuri și covrigi (bocadillos y pretzels). Comida de calle típica a precios ínfimos.</td><td>~€8</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Aro Palace</strong></td><td>Sarmale în foi de viță (sarmale en hoja de parra) y tort de mere (tarta de manzana).</td><td>~€28</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Vienetta</strong></td><td>Cocina transilvana de autor. El mejor bistec de carne de vaca de Brașov con reducción de Fetească Neagră.</td><td>~€40</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 5 -->
+      <div class="day-card" id="dia5">
+        <div class="day-header">
+          <div class="day-num">05</div>
+          <div>
+            <div class="day-title">Castillo de Bran y Sighișoara</div>
+            <div class="day-subtitle">El castillo de Drácula · Ciudad natal de Vlad el Empalador · Patrimonio UNESCO</div>
+          </div>
+          <div class="day-meta"><span>🧛 Transilvania</span><span>Día excursión</span></div>
+        </div>
+        <div class="day-body">
+          <div class="alert-box info">
+            <strong>💡 Contexto histórico:</strong> El "Castillo de Drácula" no fue exactamente el hogar de Vlad el Empalador (el castillo real de Vlad estaba en Poenari). Pero el Castillo de Bran sí tuvo conexión con él: Vlad estuvo encarcelado aquí. Y es, objetivamente, el castillo más fotogénico de Europa. La leyenda es un bonus.
+          </div>
+          <div class="activity" style="margin-top:16px">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Castillo de Bran — El más fotogénico de Europa</div>
+              <div class="act-desc">Enclavado sobre un acantilado de 60 metros entre los Cárpatos Meridionales y el paso de Bran, este castillo del s.XIV es la imagen más reproducida de Rumanía en el mundo. Llega antes de las 10:00 para evitar las avalanchas de autobuses turísticos. El interior tiene salas medievales, la cámara de Bram Stoker (reconstruida según la descripción de "Drácula") y vistas espectaculares.</div>
+              <div class="act-tags"><span class="act-tag">€15 entrada</span><span class="act-tag info">2h visita</span><span class="act-tag warn">Llegar temprano</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Autobús a Sighișoara</div>
+              <div class="act-desc">El autobús desde Bran o Brașov hasta Sighișoara cuesta €8 y dura aproximadamente 2h de carretera entre campos de girasoles, aldeas con casas de colores, pastores con rebaños y montañas al fondo. El paisaje transilvano es de una bucolicidad que parece del siglo pasado (en el buen sentido).</div>
+              <div class="act-tags"><span class="act-tag">€8</span><span class="act-tag info">2h en bus</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">14:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Sighișoara medieval — Patrimonio UNESCO</div>
+              <div class="act-desc">La ciudad natal de Vlad el Empalador (inspiración de Drácula) es uno de los centros históricos medievales habitados más completos de Europa. La ciudadela amurallada del s.XIV se conserva intacta con sus 9 torres gremiales, sus casas de colores y sus adoquines irregulares. Sube a la Torre del Reloj (€5) para las mejores vistas y para visitar el pequeño museo histórico en su interior.</div>
+              <div class="act-tags"><span class="act-tag">€5 Torre del Reloj</span><span class="act-tag info">Patrimonio UNESCO</span><span class="act-tag green">Centro habitado más antiguo de Europa del Este</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Iglesia en la Colina — s.XIV con escalera cubierta</div>
+              <div class="act-desc">Subir los 175 peldaños de la escalera cubierta de madera del s.XVII (construida para que los alumnos pudieran ir a la escuela también en invierno) lleva hasta la Iglesia en la Colina del s.XIV y su cementerio medieval con lápidas en alemán sajón. El cementerio, lleno de cruces de piedra cubiertas de musgo, tiene una belleza melancólica difícil de olvidar.</div>
+              <div class="act-tags"><span class="act-tag">€2 entrada</span><span class="act-tag info">45 min</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">18:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Casa Cu Cerb — En la casa donde nació Vlad</div>
+              <div class="act-desc">Casa Cu Cerb ("Casa del Ciervo") es un restaurante instalado en la casa natal de Vlad el Empalador en el s.XV. Cena tocando las mismas paredes de piedra donde creció el personaje que inspiró a Bram Stoker. El ambiente es medieval sin ser kitsch y la cocina es transilvana honesta. Un menú completo con vino local por €15.</div>
+              <div class="act-tags"><span class="act-tag">~€15/persona</span><span class="act-tag info">Casa natal de Vlad</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">20:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso a Brașov o noche en Sighișoara</div>
+              <div class="act-desc">Quedarse a dormir en Sighișoara dentro de la ciudadela medieval es una experiencia única: de noche, cuando los turistas se van, las calles empedradas están casi vacías y la iluminación de las torres crea una atmósfera de siglo XIV completamente real. Los precios de los pequeños hoteles en la ciudadela son sorprendentemente razonables.</div>
+              <div class="act-tags"><span class="act-tag info">Dormir en la ciudadela: experiencia única</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Perla Sighișoarei</strong></td><td>Ciorbă de perișoare (sopa de albóndigas) y tocăniță de porc. El restaurante más local de la ciudadela.</td><td>~€8</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Restaurant Joseph</strong></td><td>Papricaș de pui transilvănean (pollo en paprika con găluște). Típico de la región con influencia austro-húngara.</td><td>~€20</td></tr>
+                <tr><td>👑 Premium</td><td><strong>Casa Wagner</strong></td><td>Wiener Schnitzel transilvano y Kürtőskalács (pastel chimney) de postre. Fusión austro-rumana perfecta.</td><td>~€30</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DÍA 6 -->
+      <div class="day-card" id="dia6">
+        <div class="day-header">
+          <div class="day-num">06</div>
+          <div>
+            <div class="day-title">Regreso y salida</div>
+            <div class="day-subtitle">Bucarest · Compras · Aeropuerto Henri Coandă</div>
+          </div>
+          <div class="day-meta"><span>✈️ Salida</span><span>Vuelo de vuelta</span></div>
+        </div>
+        <div class="day-body">
+          <div class="activity">
+            <div class="act-time">08:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Tren/bus de regreso a Bucarest</div>
+              <div class="act-desc">Si hay vuelo tarde, el trayecto de vuelta desde Brașov o Sighișoara a Bucarest es una oportunidad de hacer una parada en Curtea de Argeș, con uno de los monasterios más bellos de Rumanía (el Mausoleo de los Reyes Rumanos), de paso entre los Cárpatos y la llanura valaca. Desvío de 1h que vale la pena.</div>
+              <div class="act-tags"><span class="act-tag info">Parada opcional: Curtea de Argeș</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">12:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Último almuerzo en Bucarest — Plăcinte de despedida</div>
+              <div class="act-desc">Las plăcinte (pasteles rellenos similares al börek turco, con queso, carne o manzana) son el street food más adictivo de Rumanía. Se venden en panaderías y puestos callejeros por €1–2 la pieza. Un almuerzo de despedida de €5 que resume perfectamente la cocina rumana de siempre.</div>
+              <div class="act-tags"><span class="act-tag">€5 almuerzo</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">15:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Compras: vino de Murfatlar, mermeladas y cerámicas</div>
+              <div class="act-desc">Los regalos más auténticos de Rumanía: vino Fetească Neagră o Merlot de la región de Murfatlar (€5–12 la botella), mermeladas de frutas silvestres de los Cárpatos, miel de tilo, cerámicas pintadas de Corund con motivos geométricos transilvanos y țuică (aguardiente de ciruelas) para los valientes. El mercado de Obor o cualquier supermarket tienen buena selección.</div>
+              <div class="act-tags"><span class="act-tag info">Recuerdos auténticos</span></div>
+            </div>
+          </div>
+          <div class="activity">
+            <div class="act-time">17:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Traslado al aeropuerto Henri Coandă</div>
+              <div class="act-desc">Metro M4 desde Piața Unirii hasta la parada Stație Basarab + autobús 783 hasta el aeropuerto: €2 total, 45–55 min. O un taxi/Bolt por €15, 30 min. Añade 2h30 de margen para vuelos internacionales. El aeropuerto es pequeño y los controles van rápido en temporada baja, pero puede haber colas en verano.</div>
+              <div class="act-tags"><span class="act-tag">€2 metro + bus</span><span class="act-tag">€15 taxi/Bolt</span><span class="act-tag info">45 min al aeropuerto</span></div>
+            </div>
+          </div>
+
+          <div class="rest-wrap">
+            <table class="rest-table">
+              <thead><tr><th>Nivel</th><th>Restaurante</th><th>Qué pedir</th><th>Precio/pers.</th></tr></thead>
+              <tbody>
+                <tr><td>💰 Económico</td><td><strong>Nusco</strong></td><td>Plăcinte și cozonac. La mejor panadería del centro para despedirse con algo dulce y económico.</td><td>~€9</td></tr>
+                <tr><td>⭐ Intermedio</td><td><strong>Lacrimi și Sfinți</strong></td><td>Menú del día de temporada. El mismo que el Día 1 — si fue tan bueno, merece repetir.</td><td>~€22</td></tr>
+                <tr><td>👑 Premium</td><td><strong>The Artist</strong></td><td>El mejor restaurante de Rumanía. Menú degustación con maridaje. Cocina rumana de haute cuisine.</td><td>~€55</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>Castillo de Peleș al amanecer</h4><p>El castillo neorrenacentista más bello de Europa del Este entre los abetos de los Cárpatos. Llegar al abrir las puertas, cuando la niebla de montaña aún rodea las torres, es una imagen que no se olvida.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Palacio del Parlamento — La megalomanía de Ceaușescu</h4><p>El segundo edificio más grande del mundo construido con trabajo forzado. Ver sus dimensiones en persona explica mejor que cualquier libro por qué el régimen rumano fue el más radical de Europa del Este.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Sighișoara medieval al anochecer</h4><p>La ciudadela Patrimonio UNESCO vacía de turistas de noche, con las torres iluminadas y los adoquines del s.XIV bajo los pies. Una de las pocas ciudades de Europa donde el tiempo parece detenido en la Edad Media.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>Cena en Caru' cu Bere</h4><p>La cervecería gótica de 1879 más impresionante de Europa del Este. Arquitectura de catedral, mici a la brasa y una jarra de bere por €4. La mejor relación calidad-ambiente del continente.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>Castillo de Bran al amanecer</h4><p>La silueta del castillo de Drácula sobre el acantilado antes de que lleguen los autobuses turísticos. Fotogénico de una manera que desafía la razón: parece sacado directamente de un cuento.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>Teleférico de Tampa sobre Brașov</h4><p>La ciudad medieval encajada entre montañas vista desde arriba, con el letrero BRAȘOV imitando Hollywood y los Cárpatos Meridionales extendiéndose hasta el horizonte. El mejor mirador de Transilvania.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>Plaza Revoluției — Historia viva</h4><p>Donde cayó el último régimen comunista de Europa en diciembre de 1989. Las marcas de bala en los edificios son testimonio de algo que ocurrió hace menos de 40 años. Europa tiene muy pocos sitios con tanta historia tan reciente.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>Monasterio de Sinaia en el bosque</h4><p>Frescos ortodoxos del s.XVII en un monasterio rodeado de abetos a 800 metros de altitud. La paz del lugar, la calidad del arte y la gratuidad de la entrada hacen de este uno de los secretos mejor guardados de los Cárpatos.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Mercado Obor — La vida real de Bucarest</h4><p>El mayor mercado tradicional de Bucarest, donde los rumanos de verdad compran sus quesos, encurtidos y embutidos desde hace siglos. Un almuerzo de €5 entre los puestos es la experiencia gastronómica más auténtica del viaje.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>Conducir por Transilvania</h4><p>Las carreteras entre Brașov y Sighișoara atraviesan un paisaje de colinas con aldeas sajones, iglesias fortaleza del s.XIV y Cárpatos al fondo que parece pintado. Una de las rutas de conducción más hermosas de toda Europa.</p></div></div>
+    </section>
+
+    <!-- ── GASTRONOMÍA ── -->
+    <section id="gastronomia" class="itin-section">
+      <h2 class="section-heading">🍽️ Gastronomía rumana</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Tradicional · Todo el país</div>
+          <div class="gastro-title">Sarmale</div>
+          <div class="gastro-desc">Hojas de col rellenas de carne picada de cerdo y arroz, cocinadas horas en caldo ácido con crema agria por encima. El plato de las fiestas y bodas rumanas que aquí se come en Navidad, Pascua y todos los domingos. Precio: €6–10 según restaurante.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Street food · Todo el país</div>
+          <div class="gastro-title">Mici (Mititei)</div>
+          <div class="gastro-desc">Salchichas de carne picada (mezcla de ternera, cerdo y cordero) a la brasa, sin tripa, con ajo y comino. Se comen con mostaza fuerte. €3 en cualquier carnicería o puesto de mercado. El fast food nacional más adictivo de Rumanía.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Sopa · Bucarest</div>
+          <div class="gastro-title">Ciorbă de burtă</div>
+          <div class="gastro-desc">Sopa de callos de ternera con crema agria, vinagre y ajo. Suena intimidante, sabe a gloria. Los rumanos la consideran la mejor cura para la resaca y el mejor reconfortante del invierno. Precio en restaurante: €5. Pruébala en Caru' cu Bere para la versión canónica.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Montaña · Cárpatos</div>
+          <div class="gastro-title">Bulz</div>
+          <div class="gastro-desc">Polenta (mămăligă) asada en el horno rellena de queso Brânză de burduf (queso de oveja curado en corteza de pino), con un huevo encima. El plato campesino por excelencia de los Cárpatos, sencillo y absolutamente reconfortante. Solo se encuentra en los Cárpatos, no en Bucarest.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Dulce · Navidad</div>
+          <div class="gastro-title">Cozonac</div>
+          <div class="gastro-desc">Brioche trenzado con relleno de nueces molidas, semillas de amapola o cacao. La rosca de Reyes rumana que aquí se vende todo el año en pastelerías. Su masa hojaldrada y aireada es diferente a cualquier otro brioche europeo. Precio: €3–5 la pieza en panadería.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Bebida · Todo el país</div>
+          <div class="gastro-title">Țuică</div>
+          <div class="gastro-desc">Aguardiente de ciruelas fermentadas y destiladas, entre 40°–65° de graduación. Se bebe antes de cada comida como aperitivo en toda Rumanía (el equivalente al pastis francés). Se produce en casa en los pueblos. En restaurante: €2/chupito. En mercado: €5 el medio litro artesanal.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FRASES ── -->
+    <section id="frases" class="itin-section">
+      <h2 class="section-heading">🗣️ Frases útiles en rumano</h2>
+      <div class="phrases-grid">
+        <div class="phrase-card"><div class="phrase-es">Hola / Buenos días</div><div class="phrase-local">Bună ziua</div><div class="phrase-pron">"BOO-nah ZEE-wah"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Gracias</div><div class="phrase-local">Mulțumesc</div><div class="phrase-pron">"mool-tsoo-MESK"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¿Cuánto cuesta?</div><div class="phrase-local">Cât costă?</div><div class="phrase-pron">"kuht KOS-tah?"</div></div>
+        <div class="phrase-card"><div class="phrase-es">La cuenta</div><div class="phrase-local">Nota de plată</div><div class="phrase-pron">"NO-tah deh PLAH-tah"</div></div>
+        <div class="phrase-card"><div class="phrase-es">Una cerveza</div><div class="phrase-local">O bere</div><div class="phrase-pron">"oh BEH-reh"</div></div>
+        <div class="phrase-card"><div class="phrase-es">No entiendo</div><div class="phrase-local">Nu înțeleg</div><div class="phrase-pron">"noo uhn-TSEH-leg"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¡Salud! (al brindar)</div><div class="phrase-local">Noroc!</div><div class="phrase-pron">"no-ROK"</div></div>
+        <div class="phrase-card"><div class="phrase-es">¡Ayuda!</div><div class="phrase-local">Ajutor!</div><div class="phrase-pron">"ah-zhoo-TOR"</div></div>
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🚨 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales (UE)</div><div class="emerg-value">112</div><div class="emerg-note">Policía, bomberos, ambulancia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Policía rumana</div><div class="emerg-value">955</div><div class="emerg-note">Denuncia de robos y asistencia</div></div>
+        <div class="emerg-card"><div class="emerg-label">Ambulancia</div><div class="emerg-value">961</div><div class="emerg-note">Servicio de urgencias médicas</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital Floreasca · Bucarest</div><div class="emerg-value">+40 21 599 2300</div><div class="emerg-note">Trauma y urgencias 24h. Mejor hospital de Bucarest.</div></div>
+        <div class="emerg-card"><div class="emerg-label">Embajada de España</div><div class="emerg-value">+40 21 317 5090</div><div class="emerg-note">Str. Titu Maiorescu 2, Bucarest</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital de Brașov</div><div class="emerg-value">+40 268 320 080</div><div class="emerg-note">Spital Județean de Urgență Brașov</div></div>
+      </div>
+    </section>
+
+    <!-- ── CHECKLIST ── -->
+    <section id="checklist" class="itin-section">
+      <h2 class="section-heading">✅ Checklist pre-viaje</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">📋 Documentos</div>
+            <div class="check-item"><div class="check-box"></div>DNI o Pasaporte en vigor (Rumanía es UE)</div>
+            <div class="check-item"><div class="check-box"></div>Tarjeta Sanitaria Europea</div>
+            <div class="check-item"><div class="check-box"></div>Seguro de viaje con cobertura médica</div>
+            <div class="check-item"><div class="check-box"></div>Carné de conducir (para alquiler de coche)</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">✈️ Reservas confirmadas</div>
+            <div class="check-item"><div class="check-box"></div>Vuelos Ryanair/Wizz Air (reservar con 2 meses)</div>
+            <div class="check-item"><div class="check-box"></div>Alojamiento todas las noches (Bucarest + Brașov)</div>
+            <div class="check-item"><div class="check-box"></div>Tour interior Palacio del Parlamento</div>
+            <div class="check-item"><div class="check-box"></div>Trenes CFR (cfrcalatori.ro — reservar online)</div>
+            <div class="check-item"><div class="check-box"></div>Coche de alquiler en Brașov si se quiere explorar</div>
+            <div class="check-item"><div class="check-box"></div>Reserva en Lacrimi și Sfinți (mesas limitadas)</div>
+          </div>
+        </div>
+        <div>
+          <div class="check-section">
+            <div class="check-section-title">🎒 Equipaje</div>
+            <div class="check-item"><div class="check-box"></div>Calzado cómodo para adoquines medievales</div>
+            <div class="check-item"><div class="check-box"></div>Ropa de abrigo (Brașov puede ser fresco incluso en verano)</div>
+            <div class="check-item"><div class="check-box"></div>Chubasquero ligero</div>
+            <div class="check-item"><div class="check-box"></div>Adaptador de enchufe (Rumanía usa el mismo que España)</div>
+            <div class="check-item"><div class="check-box"></div>Efectivo en lei (RON) — muchos sitios no aceptan tarjeta</div>
+            <div class="check-item"><div class="check-box"></div>Protector solar para excursiones de montaña</div>
+          </div>
+          <div class="check-section">
+            <div class="check-section-title">📱 Apps esenciales</div>
+            <div class="check-item"><div class="check-box"></div>Google Maps — descarga offline Rumanía</div>
+            <div class="check-item"><div class="check-box"></div>CFR Călători — billetes de tren rumanos</div>
+            <div class="check-item"><div class="check-box"></div>Bolt — taxis (más fiable que los taxis de calle)</div>
+            <div class="check-item"><div class="check-box"></div>Google Translate — rumano para señales y menús</div>
+            <div class="check-item"><div class="check-box"></div>Revolut o N26 — tarjeta sin comisiones en lei</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres ajustar este itinerario?</h3>
+      <p>Routlo te ayuda a personalizar fechas, presupuesto, añadir o quitar destinos y encontrar las mejores opciones de transporte en tiempo real.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Planificar con IA
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los enlaces a Booking.com, Skyscanner y plataformas de reserva pueden incluir comisiones de afiliado que ayudan a mantener Routlo gratuito. Los precios indicados son orientativos en temporada media 2025 y pueden variar según disponibilidad y antelación. Todos los precios en euros son conversiones aproximadas desde lei rumanos (RON).
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.07);padding:40px 24px;text-align:center">
+  <div style="max-width:600px;margin:0 auto">
+    <a href="../itinerarios.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(237,238,242,0.5);text-decoration:none;font-size:0.85rem;margin-bottom:16px">← Ver todos los itinerarios</a>
+    <div style="font-size:0.78rem;color:rgba(237,238,242,0.3)">© 2026 Routlo · Hecho con IA para viajeros del mundo</div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+    const sections = document.querySelectorAll('.itin-section[id], .day-card[id]');
+    const links = document.querySelectorAll('.toc-list a');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }, { passive: true });
+</script>
+</body>
+</html>

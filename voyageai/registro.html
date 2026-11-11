@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear cuenta — Routlo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #040810; color: #edeef2; font-family: 'Jost', system-ui, sans-serif; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; filter: blur(90px); background: radial-gradient(circle, #0d1a2e 0%, transparent 70%); top: -200px; right: -150px; opacity: 0.7; animation: blob 14s ease-in-out infinite; }
+    .aurora::after { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(90px); background: radial-gradient(circle, #1a0a20 0%, transparent 70%); bottom: -150px; left: -100px; opacity: 0.6; animation: blob 14s ease-in-out infinite -7s; }
+    .aurora-gold { position: absolute; width: 450px; height: 450px; border-radius: 50%; filter: blur(100px); background: radial-gradient(circle, rgba(201,169,110,0.07) 0%, transparent 70%); bottom: 20%; right: 20%; animation: blob 20s ease-in-out infinite -5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+
+    .page { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 16px; }
+
+    .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 10; padding: 0 28px; height: 64px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .topbar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .topbar-logo img { height: 34px; border-radius: 7px; background: #fff; padding: 3px 9px; }
+    .topbar-link { font-size: 0.83rem; color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .topbar-link:hover { color: #c9a96e; }
+
+    .auth-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 24px; padding: 44px 40px 40px; width: 100%; max-width: 460px; backdrop-filter: blur(24px); margin-top: 64px; }
+
+    .auth-logo { text-align: center; margin-bottom: 28px; }
+    .auth-logo img { height: 40px; border-radius: 9px; background: #fff; padding: 4px 12px; }
+    .auth-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.85rem; font-weight: 700; color: #edeef2; margin-bottom: 6px; text-align: center; }
+    .auth-sub { font-size: 0.875rem; color: rgba(237,238,242,0.5); text-align: center; margin-bottom: 32px; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 7px; }
+    .form-input { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #edeef2; font-family: 'Jost', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s, background 0.2s; -webkit-appearance: none; }
+    .form-input::placeholder { color: rgba(237,238,242,0.3); }
+    .form-input:focus { border-color: rgba(201,169,110,0.5); background: rgba(255,255,255,0.08); }
+    .form-input.error { border-color: rgba(220,80,80,0.5); }
+    .form-error { font-size: 0.78rem; color: #e07070; margin-top: 5px; display: none; }
+    .form-error.show { display: block; }
+
+    /* Password strength bar */
+    .pwd-strength { margin-top: 8px; }
+    .pwd-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.08); overflow: hidden; }
+    .pwd-fill { height: 100%; border-radius: 2px; width: 0%; transition: width 0.3s, background 0.3s; }
+    .pwd-text { font-size: 0.74rem; color: rgba(237,238,242,0.45); margin-top: 4px; }
+
+    .terms-label { display: flex; align-items: flex-start; gap: 10px; font-size: 0.83rem; color: rgba(237,238,242,0.55); cursor: pointer; margin-bottom: 24px; line-height: 1.5; }
+    .terms-label input[type="checkbox"] { width: 16px; height: 16px; accent-color: #c9a96e; cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+    .terms-label a { color: #c9a96e; text-decoration: none; }
+    .terms-label a:hover { text-decoration: underline; }
+
+    .btn-primary { width: 100%; padding: 13px; background: linear-gradient(135deg, #c9a96e, #a07840); border: none; border-radius: 12px; color: #0a0a0a; font-family: 'Jost', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.15s; letter-spacing: 0.02em; }
+    .btn-primary:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-primary .btn-spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(10,10,10,0.3); border-top-color: #0a0a0a; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto; }
+    .btn-primary.loading .btn-text { display: none; }
+    .btn-primary.loading .btn-spinner { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert { padding: 12px 16px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 18px; display: none; }
+    .alert.show { display: block; }
+    .alert-error { background: rgba(220,80,80,0.1); border: 1px solid rgba(220,80,80,0.25); color: #e07070; }
+    .alert-success { background: rgba(94,203,138,0.1); border: 1px solid rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    .benefits { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 28px; }
+    .benefit { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .benefit span { font-size: 1rem; }
+
+    .divider { display: flex; align-items: center; gap: 14px; margin: 22px 0 18px; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .divider span { font-size: 0.78rem; color: rgba(237,238,242,0.35); white-space: nowrap; }
+
+    .back-link { text-align: center; margin-top: 24px; font-size: 0.83rem; color: rgba(237,238,242,0.4); }
+    .back-link a { color: rgba(237,238,242,0.55); text-decoration: none; }
+    .back-link a:hover { color: #edeef2; }
+
+    @media (max-width: 480px) {
+      .auth-card { padding: 32px 22px 28px; border-radius: 18px; }
+      .auth-title { font-size: 1.55rem; }
+      .benefits { grid-template-columns: 1fr; gap: 6px; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"><div class="aurora-gold"></div></div>
+
+<header class="topbar">
+  <a href="index.html" class="topbar-logo">
+    <img src="assets/routlo-logo.png" alt="Routlo"/>
+  </a>
+  <a href="login.html" class="topbar-link">¿Ya tienes cuenta? Inicia sesión →</a>
+</header>
+
+<main class="page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <img src="assets/routlo-logo.png" alt="Routlo"/>
+    </div>
+    <h1 class="auth-title">Crea tu cuenta</h1>
+    <p class="auth-sub">Empieza a planificar viajes personalizados con IA</p>
+
+    <div class="benefits">
+      <div class="benefit"><span>✨</span> Itinerarios IA al instante</div>
+      <div class="benefit"><span>💾</span> Guarda tus conversaciones</div>
+      <div class="benefit"><span>🗺️</span> Destinos ilimitados</div>
+      <div class="benefit"><span>🔒</span> 100% gratuito</div>
+    </div>
+
+    <div class="alert alert-error" id="alert" role="alert"></div>
+
+    <form id="registerForm" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="name">Nombre completo</label>
+        <input class="form-input" type="text" id="name" name="name" placeholder="Tu nombre" autocomplete="name" required/>
+        <div class="form-error" id="nameError">Introduce tu nombre.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">Correo electrónico</label>
+        <input class="form-input" type="email" id="email" name="email" placeholder="tu@email.com" autocomplete="email" required/>
+        <div class="form-error" id="emailError">Introduce un email válido.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Contraseña</label>
+        <input class="form-input" type="password" id="password" name="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password" required/>
+        <div class="pwd-strength">
+          <div class="pwd-bar"><div class="pwd-fill" id="pwdFill"></div></div>
+          <div class="pwd-text" id="pwdText">Elige una contraseña segura</div>
+        </div>
+        <div class="form-error" id="passwordError">La contraseña debe tener al menos 8 caracteres.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="confirm">Confirmar contraseña</label>
+        <input class="form-input" type="password" id="confirm" name="confirm" placeholder="Repite tu contraseña" autocomplete="new-password" required/>
+        <div class="form-error" id="confirmError">Las contraseñas no coinciden.</div>
+      </div>
+
+      <label class="terms-label">
+        <input type="checkbox" id="terms" name="terms"/>
+        Acepto los <a href="#">Términos de servicio</a> y la <a href="#">Política de privacidad</a> de Routlo.
+      </label>
+
+      <button type="submit" class="btn-primary" id="submitBtn">
+        <span class="btn-text">Crear cuenta gratis</span>
+        <div class="btn-spinner"></div>
+      </button>
+    </form>
+
+    <div class="divider"><span>¿Ya tienes cuenta?</span></div>
+    <a href="login.html" style="display:block;width:100%;padding:12px;text-align:center;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#edeef2;text-decoration:none;font-size:0.9rem;font-weight:600;transition:background 0.2s,border-color 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.08)';this.style.borderColor='rgba(201,169,110,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.1)'">
+      Iniciar sesión
+    </a>
+  </div>
+
+  <div class="back-link"><a href="index.html">← Volver al inicio</a></div>
+</main>
+
+<script>
+  const API = '';
+
+  if (localStorage.getItem('routlo_token')) {
+    window.location.href = 'chatbot.html';
+  }
+
+  // Password strength
+  document.getElementById('password').addEventListener('input', function() {
+    const pwd = this.value;
+    const fill = document.getElementById('pwdFill');
+    const text = document.getElementById('pwdText');
+    let score = 0;
+    if (pwd.length >= 8) score++;
+    if (pwd.length >= 12) score++;
+    if (/[A-Z]/.test(pwd)) score++;
+    if (/[0-9]/.test(pwd)) score++;
+    if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+    const levels = [
+      { w: '0%', c: 'transparent', t: 'Elige una contraseña segura' },
+      { w: '25%', c: '#e07070', t: 'Muy débil' },
+      { w: '50%', c: '#e0a070', t: 'Débil' },
+      { w: '75%', c: '#c9a96e', t: 'Moderada' },
+      { w: '90%', c: '#7ecb8a', t: 'Fuerte' },
+      { w: '100%', c: '#5ecb8a', t: 'Muy fuerte ✓' }
+    ];
+    const lvl = levels[Math.min(score, 5)];
+    fill.style.width = lvl.w;
+    fill.style.background = lvl.c;
+    text.textContent = lvl.t;
+    text.style.color = lvl.c || 'rgba(237,238,242,0.45)';
+  });
+
+  const form = document.getElementById('registerForm');
+  const btn = document.getElementById('submitBtn');
+  const alertEl = document.getElementById('alert');
+
+  function showAlert(msg, type = 'error') {
+    alertEl.textContent = msg;
+    alertEl.className = `alert alert-${type} show`;
+    alertEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function setLoading(on) {
+    btn.classList.toggle('loading', on);
+    btn.disabled = on;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    alertEl.className = 'alert';
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm').value;
+    const terms = document.getElementById('terms').checked;
+    let valid = true;
+
+    const setFieldError = (id, errId, condition, msg) => {
+      const input = document.getElementById(id);
+      const err = document.getElementById(errId);
+      if (condition) {
+        input.classList.add('error');
+        err.textContent = msg;
+        err.classList.add('show');
+        valid = false;
+      } else {
+        input.classList.remove('error');
+        err.classList.remove('show');
+      }
+    };
+
+    setFieldError('name', 'nameError', !name, 'Introduce tu nombre.');
+    setFieldError('email', 'emailError', !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), 'Introduce un email válido.');
+    setFieldError('password', 'passwordError', password.length < 8, 'La contraseña debe tener al menos 8 caracteres.');
+    setFieldError('confirm', 'confirmError', password !== confirm, 'Las contraseñas no coinciden.');
+
+    if (!terms) {
+      showAlert('Debes aceptar los términos de servicio para continuar.');
+      valid = false;
+    }
+    if (!valid) return;
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/api/register.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        showAlert(data.error || 'Error al crear la cuenta.');
+        return;
+      }
+
+      localStorage.setItem('routlo_token', data.token);
+      localStorage.setItem('routlo_user', JSON.stringify(data.user));
+
+      showAlert('¡Cuenta creada! Entrando al planificador...', 'success');
+      setTimeout(() => { window.location.href = 'chatbot.html'; }, 900);
+    } catch {
+      showAlert('No se puede conectar con el servidor. Asegúrate de que el servidor está en marcha.');
+    } finally {
+      setLoading(false);
+    }
+  });
+</script>
+</body>
+</html>

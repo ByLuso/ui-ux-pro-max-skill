@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vic — Mercado, románico y el mejor embutido de Cataluña | Routlo</title>
+  <meta name="description" content="70 km desde Barcelona, una hora en coche: la Plaça Major medieval más grande de Cataluña, un puente románico sobre el río Mèder y la cuna de la longaniza de Vic. Casco histórico gratuito por unos 22€ para dos personas."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { background: #040810 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    nav[role="navigation"] { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(4,8,16,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); transition: background 0.3s; }
+    nav[role="navigation"].scrolled { background: rgba(4,8,16,0.95); }
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #edeef2; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .day-card { background: #0d1628; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; margin-bottom: 28px; }
+    .day-header { padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); display: flex; align-items: center; gap: 16px; }
+    .day-num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 2.2rem; font-weight: 700; color: #a8c97a; line-height: 1; min-width: 60px; }
+    .day-title { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px; }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+    .stop-list { display: flex; flex-direction: column; gap: 18px; }
+    .stop-item { padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stop-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stop-name { font-weight: 600; font-size: 0.95rem; color: #edeef2; margin-bottom: 5px; }
+    .stop-desc { font-size: 0.84rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .stop-price { font-size: 0.75rem; color: #a8c97a; margin-top: 5px; font-weight: 600; }
+    .tip-item { display: flex; gap: 12px; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; margin-bottom: 10px; }
+    .tip-num { min-width: 28px; height: 28px; background: rgba(168,201,122,0.15); border: 1px solid rgba(168,201,122,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700; color: #a8c97a; flex-shrink: 0; }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+    .badge-royal { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: rgba(168,201,122,0.12); border: 1px solid rgba(168,201,122,0.3); font-size: 0.75rem; font-weight: 600; color: #a8c97a; margin-bottom: 12px; }
+    .cta-banner { background: linear-gradient(135deg, rgba(168,201,122,0.12) 0%, rgba(74,127,165,0.08) 100%); border: 1px solid rgba(168,201,122,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 28px; }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; background: linear-gradient(135deg, #a8c97a, #6e9e4a); color: #0a0a0a; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .itin-layout { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 48px 24px 100px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    .toc { position: sticky; top: 96px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; font-size: 0.82rem; }
+    .toc-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.55); margin-bottom: 12px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 6px 10px; border-radius: 8px; color: rgba(237,238,242,0.55); text-decoration: none; transition: all 0.2s; border-left: 2px solid transparent; }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #a8c97a; border-left-color: #a8c97a; background: rgba(168,201,122,0.15); }
+    #route-map { position: relative !important; z-index: 50 !important; }
+    #route-map img, #route-map canvas { max-width: none !important; display: inline !important; }
+    .leaflet-container { background: #1a1e2a !important; }
+    .route-info-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; margin-bottom: 32px; }
+    .route-info-cell { padding: 18px 14px; background: #040810; text-align: center; }
+    .route-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(237,238,242,0.4); margin-bottom: 6px; }
+    .route-info-value { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: #edeef2; }
+    .route-info-unit { font-size: 0.75rem; color: rgba(237,238,242,0.5); margin-top: 2px; }
+    .highlight-box { background: linear-gradient(135deg, rgba(168,201,122,0.08) 0%, rgba(0,5,20,0.6) 100%); border: 1px solid rgba(168,201,122,0.18); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .highlight-box h4 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1rem; color: #a8c97a; margin-bottom: 8px; }
+    .highlight-box p { font-size: 0.875rem; color: rgba(237,238,242,0.6); line-height: 1.68; }
+    .budget-table { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 22px; margin-bottom: 20px; }
+    .budget-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: rgba(237,238,242,0.7); }
+    .budget-row:last-child { border-bottom: none; }
+    .budget-row span:last-child { font-weight: 600; color: #edeef2; font-family: 'Bodoni Moda', Georgia, serif; flex-shrink: 0; }
+    .budget-total { padding-top: 18px; margin-top: 4px; border-top: 2px solid rgba(168,201,122,0.3); font-size: 1.02rem; }
+    .budget-total span:first-child { color: #edeef2; font-weight: 600; }
+    .budget-total span:last-child { color: #a8c97a; font-size: 1.4rem; }
+    .budget-note { font-size: 0.82rem; color: rgba(237,238,242,0.5); margin-top: -8px; margin-bottom: 20px; line-height: 1.6; }
+    .hotel-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: #a8c97a; text-decoration: none; font-size: 0.78rem; font-weight: 600; border-bottom: 1px solid rgba(168,201,122,0.3); }
+    .hotel-link:hover { border-color: #a8c97a; }
+    .disclosure { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px; font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-top: 24px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(237,238,242,0.4); margin-bottom: 24px; flex-wrap: wrap; }
+    .breadcrumb a { color: rgba(237,238,242,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #a8c97a; }
+    .breadcrumb span { color: rgba(237,238,242,0.2); }
+    @media(max-width:768px){ .itin-layout { grid-template-columns: 1fr; } .toc { display: none; } .route-info-bar { grid-template-columns: repeat(3,1fr); } }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G5XGWQQZ3J');</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav role="navigation" id="main-nav">
+  <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#c9a96e,#a07840);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1rem;color:#040810;">R</div>
+    <span style="font-family:'Bodoni Moda',Georgia,serif;font-weight:700;font-size:1.1rem;color:#edeef2;">Routlo</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="../itinerarios.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#a8c97a'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Itinerarios</a>
+    <a href="../mapa.html" style="font-size:0.88rem;color:rgba(237,238,242,0.6);text-decoration:none;" onmouseover="this.style.color='#a8c97a'" onmouseout="this.style.color='rgba(237,238,242,0.6)'">Mapa</a>
+  </div>
+</nav>
+
+<section style="position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&h=800&fit=crop&q=80&auto=format') center/cover no-repeat;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,12,0,0.3) 0%,rgba(28,18,0,0.58) 50%,rgba(10,6,0,0.94) 100%);"></div>
+  <div style="position:relative;z-index:1;max-width:900px;padding:0 32px 56px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="badge-royal" style="margin-bottom:0;background:rgba(94,203,138,0.12);border:1px solid rgba(94,203,138,0.3);color:#5ecb8a;">🆓 Entrada gratuita</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">📍 Barcelona · Osona</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">70 km · ~60 min en coche desde Barcelona</span>
+      <span style="font-size:0.78rem;color:rgba(237,238,242,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:4px 12px;border-radius:100px;">💶 ~22€ / 2 personas</span>
+    </div>
+    <h1 style="font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;color:#edeef2;line-height:1.1;margin-bottom:18px;">🧀 Vic<br><span style="color:#a8c97a;">Mercado medieval, románico y la mejor longaniza de Cataluña</span></h1>
+    <p style="font-size:1.05rem;color:rgba(237,238,242,0.7);max-width:620px;line-height:1.7;">A solo una hora de Barcelona por la C-17, Vic guarda una de las plazas porticadas medievales más grandes de Cataluña, una catedral con murales modernistas, un pequeño templo romano del siglo II y la tradición centenaria de la llonganissa de Vic. Casco histórico gratuito, mercado los martes y sábados, y un picnic de embutidos por unos 22€ para dos.</p>
+  </div>
+</section>
+
+<div class="itin-layout">
+  <aside class="toc">
+    <div class="toc-title">Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#datos">Datos del viaje</a></li>
+      <li><a href="#piedra-y-embutido">Piedra románica y embutido</a></li>
+      <li><a href="#mapa-ruta">Mapa</a></li>
+      <li><a href="#ruta">El itinerario</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
+      <li><a href="#consejos">Consejos</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">Routlo</a><span>›</span>
+      <a href="../itinerarios-espana.html">España</a><span>›</span>
+      <span style="color:rgba(237,238,242,0.65);">Vic</span>
+    </div>
+
+    <section class="itin-section" id="datos">
+      <h2 class="section-heading">🧀 Datos del viaje</h2>
+      <div class="route-info-bar">
+        <div class="route-info-cell"><div class="route-info-label">Distancia</div><div class="route-info-value">70 km</div><div class="route-info-unit">desde Barcelona</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Tiempo</div><div class="route-info-value">~60 min</div><div class="route-info-unit">en coche por la C-17</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Presupuesto</div><div class="route-info-value">~22€</div><div class="route-info-unit">para 2 personas</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Plaça Major</div><div class="route-info-value">~4.500 m²</div><div class="route-info-unit">una de las más grandes de Cataluña</div></div>
+        <div class="route-info-cell"><div class="route-info-label">Mercado</div><div class="route-info-value">Mar. y Sáb.</div><div class="route-info-unit">desde la Edad Media</div></div>
+      </div>
+    </section>
+
+    <section class="itin-section" id="piedra-y-embutido">
+      <h2 class="section-heading">🧀 El pueblo donde el tiempo se mide en piedra románica y embutido</h2>
+      <div class="highlight-box">
+        <h4>🏛️ La Plaça Major: una de las plazas medievales más grandes de Cataluña</h4>
+        <p>Con sus más de 4.000 m² rodeados de soportales y fachadas porticadas de distintas épocas —desde el gótico hasta el modernismo—, la Plaça Major de Vic es un auténtico libro de historia abierto al cielo. Aquí se celebra mercado desde la Edad Media, y todavía hoy, los martes y sábados por la mañana, la plaza se llena de paradas de fruta, verdura, flores, ropa y, sobre todo, embutidos artesanos. Sentarte en una terraza con un café mientras observas el trasiego del mercado es, por sí solo, una experiencia que vale el viaje —y no cuesta nada.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🌭 La llonganissa de Vic: una denominación con siglos de historia</h4>
+        <p>La llonganissa de Vic es uno de los embutidos curados más prestigiosos de Cataluña, elaborada según una receta que se remonta varios siglos atrás: carne de cerdo magra, tocino, pimienta en grano y sal, embutida en tripa natural y curada lentamente al aire de la comarca de Osona. El microclima de Vic —seco, ventilado y con niebla matinal— es clave en su curación, y por eso muchas charcuterías de la ciudad siguen elaborándola de forma artesanal. Comprar unas lonchas para un picnic junto al río es casi un rito de paso.</p>
+      </div>
+      <div class="highlight-box">
+        <h4>🏟️ El Temple Romà: 1.800 años de historia junto al ayuntamiento</h4>
+        <p>Escondido detrás del ayuntamiento, en pleno casco antiguo, se alza el Temple Romà de Vic, un templo de estilo corintio construido en el siglo II d.C., probablemente dedicado al culto imperial. Quedó oculto durante siglos —integrado dentro de un castillo medieval y después de una casa— hasta que fue redescubierto y restaurado a principios del siglo XX. Hoy se puede visitar su interior de forma totalmente gratuita, y es uno de los templos romanos mejor conservados de Cataluña.</p>
+      </div>
+    </section>
+
+    <section class="itin-section" id="mapa-ruta">
+      <h2 class="section-heading">🗺️ Mapa</h2>
+      <div id="route-map" style="height:360px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);"></div>
+    </section>
+
+    <section class="itin-section" id="ruta">
+      <h2 class="section-heading">🗺️ El itinerario</h2>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">①</div><div><div class="day-title">Barcelona → Vic · ~60 min</div><div class="day-subtitle">Por la C-17, atravesando el Vallès y entrando en la comarca de Osona</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🚗 La ruta por la C-17</div>
+            <div class="stop-desc">Desde Barcelona, la autovía C-17 conecta directamente con Vic en aproximadamente una hora, sin peajes en este tramo. El paisaje cambia progresivamente: dejas atrás el área metropolitana, cruzas el Vallès Oriental y entras en la llanura de Osona, rodeada de colinas suaves y masías dispersas.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🅿️ Aparcamiento cerca del casco antiguo</div>
+            <div class="stop-desc">Vic tiene varias zonas de aparcamiento gratuito a 5-10 minutos a pie de la Plaça Major, especialmente en los alrededores de la Rambla del Passeig y junto al Pla de les Caces. En días de mercado (martes y sábado) conviene llegar pronto, ya que el centro se llena más rápido de lo habitual.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">②</div><div><div class="day-title">Plaça Major y mercado</div><div class="day-subtitle">Paseo libre · 45 min - 1h · Gratis</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🏛️ Una plaza porticada para perderse</div>
+            <div class="stop-desc">La Plaça Major es el corazón de Vic: un rectángulo enorme rodeado de soportales con fachadas de distintas épocas, desde casas medievales hasta edificios modernistas con esgrafiados decorativos. Pasear bajo los pórticos, mirando hacia arriba para descubrir balcones y relieves, es gratuito y puede llevarte todo el tiempo que quieras.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🥬 Mercado de los martes y sábados</div>
+            <div class="stop-desc">Si tu visita coincide con martes o sábado por la mañana, encontrarás la plaza llena de puestos de productos de la tierra: frutas y verduras de Osona, flores, queso, pan y, por supuesto, embutidos artesanos. Es el mejor momento para sentir el ambiente auténtico de la ciudad y, de paso, hacer la compra para el picnic de después.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">☕ Parada en una terraza</div>
+            <div class="stop-desc">Las terrazas bajo los soportales de la plaza son un buen sitio para tomar un café o un cruasán mientras observas el ir y venir de vecinos y turistas. No es imprescindible, pero si quieres incluirlo, calcula 2-4€ por persona.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">③</div><div><div class="day-title">Catedral de Sant Pere y Temple Romà</div><div class="day-subtitle">Visita a pie · 1h - 1h 15min · Exterior y Temple Romà gratis, interior de la catedral opcional</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">⛪ La Catedral de Sant Pere</div>
+            <div class="stop-desc">La catedral combina elementos románicos (la torre campanario, del siglo XI, es uno de los mejores ejemplos del románico lombardo en Cataluña), góticos y neoclásicos. El exterior, con su imponente torre y fachada, se puede admirar libremente sin coste alguno.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🎨 Los murales de Josep Maria Sert (opcional)</div>
+            <div class="stop-desc">El interior de la catedral esconde uno de los conjuntos pictóricos más espectaculares de Cataluña: los murales monumentales de Josep Maria Sert, pintados en tonos dorados y ocres, que cubren prácticamente todas las paredes y bóvedas de la nave. Sert los pintó dos veces —la primera versión se destruyó en un incendio durante la Guerra Civil— y el resultado actual es sobrecogedor.</div>
+            <div class="stop-price">Entrada al interior (murales de Sert): ~2€/persona</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🏟️ Temple Romà — gratis</div>
+            <div class="stop-desc">A pocos metros, integrado en el conjunto del antiguo castillo de los condes de Osona y junto al ayuntamiento, se encuentra el Temple Romà, un templo corintio del siglo II d.C. perfectamente conservado. La visita a su interior es gratuita y apenas lleva 10-15 minutos, pero es una de esas sorpresas que pocos esperan encontrar en una ciudad de interior tan pequeña.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header"><div class="day-num">④</div><div><div class="day-title">Pont Romànic, picnic de embutidos y vuelta</div><div class="day-subtitle">Paseo + compra + regreso · 1h - 1h 30min</div></div></div>
+        <div class="day-body"><div class="stop-list">
+          <div class="stop-item">
+            <div class="stop-name">🌉 Pont Romànic sobre el Mèder</div>
+            <div class="stop-desc">A poca distancia del centro histórico, el Pont Romànic —también llamado Pont Vell— cruza el río Mèder (afluente del Gurri) con sus características arcadas de piedra de origen medieval. El entorno, con vegetación y pequeñas zonas verdes junto al cauce, es perfecto para una pausa tranquila y unas fotos antes de volver.</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🌭 Comprar llonganissa de Vic para el picnic</div>
+            <div class="stop-desc">En las charcuterías del casco antiguo —muchas con varias generaciones de tradición— puedes comprar llonganissa de Vic, fuet, secallona o botifarra curada al peso, junto con pan y algo de queso. Con 10-12€ tienes de sobra para un picnic completo para dos personas, ideal para disfrutar junto al Pont Romànic o en cualquier rincón verde de la ciudad.</div>
+            <div class="stop-price">Embutidos + pan para picnic (2 personas): ~10-12€</div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-name">🚗 Regreso a Barcelona — ~60 min</div>
+            <div class="stop-desc">Vuelta directa por la C-17. Si te apetece alargar el día, los alrededores de Osona ofrecen rutas cortas por el campo entre masías y campos de cultivo, perfectas para estirar las piernas antes de volver a la ciudad.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section>
+
+    <section class="itin-section" id="presupuesto">
+      <h2 class="section-heading">💶 Presupuesto para 2 personas</h2>
+      <div class="budget-table">
+        <div class="budget-row"><span>⛽ Gasolina (ida y vuelta, ~140 km)</span><span>10€</span></div>
+        <div class="budget-row"><span>🎨 Entrada interior catedral, murales de Sert (2 personas)</span><span>4€</span></div>
+        <div class="budget-row"><span>🌭 Embutidos y pan para picnic (2 personas)</span><span>8€</span></div>
+        <div class="budget-row budget-total"><span>Total para 2 personas</span><span>~22€</span></div>
+      </div>
+      <div class="budget-note">El Temple Romà, el exterior de la catedral, el Pont Romànic y todo el paseo por la Plaça Major y el casco histórico son gratuitos. Con ~22€ ya tienes un día completo, incluyendo gasolina, una visita cultural opcional y comida para un picnic con producto local.</div>
+    </section>
+
+    <section class="itin-section" id="consejos">
+      <h2 class="section-heading">💡 Consejos prácticos</h2>
+      <div class="tip-item"><div class="tip-num">1</div><div class="tip-text"><strong>Ve en día de mercado:</strong> si puedes elegir, visita Vic un martes o un sábado por la mañana. La Plaça Major se transforma con decenas de paradas y el ambiente es mucho más auténtico que el resto de la semana.</div></div>
+      <div class="tip-item"><div class="tip-num">2</div><div class="tip-text"><strong>Aparca cerca del casco antiguo pero no dentro:</strong> el centro histórico tiene calles estrechas y zonas peatonales. Deja el coche en los aparcamientos gratuitos de los alrededores de la Rambla del Passeig o el Pla de les Caces y entra a pie en 5-10 minutos.</div></div>
+      <div class="tip-item"><div class="tip-num">3</div><div class="tip-text"><strong>Mejores charcuterías para la llonganissa de Vic:</strong> busca los establecimientos artesanos del casco antiguo, cerca de la Plaça Major y la Plaça dels Màrtirs —suelen tener cartel propio y son los preferidos por los vecinos.</div></div>
+      <div class="tip-item"><div class="tip-num">4</div><div class="tip-text"><strong>Combina con una ruta corta por el campo de Osona:</strong> si te sobra tiempo, los caminos rurales que rodean Vic, entre masías y campos de cereal, son perfectos para un paseo corto en coche o a pie antes de volver a Barcelona.</div></div>
+      <div class="tip-item"><div class="tip-num">5</div><div class="tip-text"><strong>¿Sin coche propio?</strong> Puedes alquilar uno por el día en Barcelona y devolverlo a la vuelta —imprescindible para llegar hasta aquí. <a href="https://www.discovercars.com/?a_aid=123456&pick_city=Barcelona" class="hotel-link" target="_blank" rel="noopener" aria-label="Alquilar coche en Barcelona en DiscoverCars" style="display:inline;margin-top:0;">Comparar precios en DiscoverCars</a>.</div></div>
+      <div class="disclosure" role="note" aria-label="Aviso de afiliados"><strong style="color:#edeef2">Aviso de transparencia:</strong> Algunos enlaces de esta página son de afiliado (DiscoverCars). Si reservas a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Solo recomendamos servicios que usaríamos nosotros mismos.</div>
+    </section>
+
+    <div class="cta-banner">
+      <h3>¿Más escapadas gratis desde Barcelona?</h3>
+      <p>Rutas de menos de 1 hora y 30 minutos y menos de 25€ para dos personas, con mapas detallados y presupuesto desglosado.</p>
+      <a href="../itinerarios-espana.html" class="cta-btn">Ver todas las escapadas →</a>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  const map=L.map('route-map',{zoomControl:true,scrollWheelZoom:false}).setView([41.66,2.21],9);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:17}).addTo(map);
+  setTimeout(()=>{const tp=document.querySelector('#route-map .leaflet-tile-pane');if(tp)tp.style.filter='grayscale(0.2) brightness(0.72) contrast(0.9) saturate(0.7) invert(1) hue-rotate(180deg)';},500);
+  [{coords:[41.3851,2.1734],label:'Barcelona',color:'#5ecb8a',r:10},{coords:[41.9301,2.2545],label:'Vic',color:'#a8c97a',r:9},{coords:[41.9301,2.2545],label:'Plaça Major de Vic',color:'#e0b44a',r:12}]
+    .forEach(wp=>L.circleMarker(wp.coords,{radius:wp.r,color:wp.color,fillColor:wp.color,fillOpacity:0.9,weight:2}).addTo(map).bindTooltip(wp.label,{permanent:false,direction:'top'}).bindPopup(wp.label));
+  L.polyline([[41.3851,2.1734],[41.9301,2.2545]],{color:'#a8c97a',weight:3,opacity:0.85,dashArray:'8,6'}).addTo(map);
+})();
+</script>
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);});
+document.querySelectorAll('.itin-section').forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.toc-list a').forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ordesa y Monte Perdido — 1 día | Routlo</title>
+  <meta name="description" content="Guía para la ruta Cola de Caballo en el P.N. de Ordesa y Monte Perdido en 1 día: el cañón más espectacular de los Pirineos y el quebrantahuesos en vuelo."/>
+  <meta property="og:title" content="Ordesa y Monte Perdido — 1 día | Routlo"/>
+  <meta property="og:description" content="La ruta Cola de Caballo en el P.N. de Ordesa y Monte Perdido: el cañón más espectacular de los Pirineos y el quebrantahuesos en vuelo."/>
+  <meta property="og:type" content="article"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-glow: rgba(201,169,110,0.25);
+      --fg: #edeef2; --fg-muted: rgba(237,238,242,0.55);
+      --bg-deep: #040810; --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08); --border-gold: rgba(201,169,110,0.3);
+      --font-head: 'Bodoni Moda', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #040810 !important;
+      color: #edeef2 !important;
+      font-family: 'Jost', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: #c9a96e; }
+    nav[role="navigation"] { position:fixed;top:0;left:0;right:0;z-index:100;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,8,16,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.3s; }
+    nav[role="navigation"].scrolled { background:rgba(4,8,16,0.95); }
+
+    /* Aurora — deep mountain blue for Ordesa */
+    .aurora { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
+    .aurora::before { content:'';position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0d2040 0%,transparent 70%);top:-200px;left:-150px;opacity:0.55;animation:blob 14s ease-in-out infinite; }
+    .aurora::after { content:'';position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#051020 0%,transparent 70%);bottom:-150px;right:-100px;opacity:0.4;animation:blob 14s ease-in-out infinite -7s; }
+    .aurora-span { position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,#0a1830 0%,transparent 70%);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.35;animation:blob 14s ease-in-out infinite -3.5s; }
+    @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-60px) scale(1.08)} 66%{transform:translate(-30px,40px) scale(0.94)} }
+    @media (prefers-reduced-motion: reduce) { .aurora::before, .aurora::after, .aurora-span { animation: none !important; } }
+
+    .dest-hero { position:relative;z-index:1;min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:140px 24px 60px;overflow:hidden; }
+    .dest-hero-bg { position:absolute;inset:0;background:linear-gradient(160deg, #030812 0%, #091828 35%, #142e55 65%, rgba(147,200,255,0.15) 100%); }
+    .dest-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,#040810 0%,rgba(4,8,16,0.45) 50%,rgba(4,8,16,0.15) 100%); }
+    .dest-breadcrumb { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(237,238,242,0.55);margin-bottom:20px;position:relative;z-index:1; }
+    .dest-breadcrumb a { color:rgba(237,238,242,0.55);text-decoration:none;transition:color 0.2s; }
+    .dest-breadcrumb a:hover { color:#c9a96e; }
+    .dest-breadcrumb span { opacity:0.4; }
+    .dest-title { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.05;margin-bottom:8px;position:relative;z-index:1;color:#edeef2; }
+    .dest-country { font-family:'Bodoni Moda',Georgia,serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:400;font-style:italic;color:#c9a96e;margin-bottom:24px;position:relative;z-index:1; }
+    .dest-meta { display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;margin-bottom:32px; }
+    .dest-badge { display:flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(4,8,16,0.7);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .dest-badge.gold { border-color:rgba(201,169,110,0.3);color:#c9a96e; }
+    .dest-badge.blue { border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .dest-summary-bar { display:flex;gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;width:100%;max-width:680px;position:relative;z-index:1; }
+    .dest-sum-item { flex:1;background:#070d1a;padding:16px;text-align:center; }
+    .dest-sum-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px; }
+    .dest-sum-val { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#c9a96e; }
+
+    .itin-layout { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start; }
+    .toc { position:sticky;top:96px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:18px;font-size:0.82rem; }
+    .toc-title { font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:12px; }
+    .toc-list { list-style:none;display:flex;flex-direction:column;gap:2px; }
+    .toc-list a { display:block;padding:6px 10px;border-radius:8px;color:rgba(237,238,242,0.55);text-decoration:none;transition:all 0.2s;border-left:2px solid transparent;font-size:0.82rem; }
+    .toc-list a:hover { background:rgba(255,255,255,0.08);color:#edeef2;border-left-color:rgba(201,169,110,0.4); }
+    .toc-list a.active { color:#c9a96e;border-left-color:#c9a96e;background:rgba(201,169,110,0.1); }
+
+    .itin-section { margin-bottom:56px;scroll-margin-top:96px; }
+    .section-heading { font-family:'Bodoni Moda',Georgia,serif;font-size:1.7rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;color:#edeef2; }
+    .section-heading::after { content:'';flex:1;height:1px;background:rgba(255,255,255,0.08); }
+
+    .day-card { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px; }
+    .day-header { padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);display:flex;align-items:center;gap:16px; }
+    .day-num { font-family:'Bodoni Moda',Georgia,serif;font-size:2.2rem;font-weight:700;color:#c9a96e;line-height:1;min-width:60px; }
+    .day-title { font-family:'Bodoni Moda',Georgia,serif;font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:4px; }
+    .day-subtitle { font-size:0.8rem;color:rgba(237,238,242,0.55); }
+    .day-meta { margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end; }
+    .day-meta span { font-size:0.75rem;color:rgba(237,238,242,0.55); }
+    .day-body { padding:22px; }
+
+    .activity { display:flex;gap:14px;margin-bottom:22px; }
+    .act-time { min-width:55px;font-size:0.78rem;color:#c9a96e;font-weight:600;padding-top:3px;flex-shrink:0; }
+    .act-connector { display:flex;flex-direction:column;align-items:center; }
+    .act-dot { width:11px;height:11px;border-radius:50%;background:#c9a96e;border:2px solid #0d1628;flex-shrink:0;margin-top:3px; }
+    .act-line { width:1px;flex:1;background:rgba(255,255,255,0.08);min-height:14px; }
+    .act-content { flex:1; }
+    .act-title { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .act-desc { font-size:0.84rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-bottom:6px; }
+    .act-tags { display:flex;gap:6px;flex-wrap:wrap; }
+    .act-tag { display:inline-block;padding:2px 8px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:100px;font-size:0.67rem;color:#c9a96e; }
+    .act-tag.info { background:rgba(74,127,165,0.15);border-color:rgba(74,127,165,0.3);color:#4a7fa5; }
+    .act-tag.green { background:rgba(94,203,138,0.1);border-color:rgba(94,203,138,0.25);color:#5ecb8a; }
+    .act-tag.warn { background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:#e87060; }
+
+    .budget-wrap { background:#0d1628;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden; }
+    .budget-table { width:100%;border-collapse:collapse;font-size:0.88rem; }
+    .budget-table th { text-align:left;padding:10px 14px;background:#0d1628;color:#c9a96e;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(201,169,110,0.3); }
+    .budget-table td { padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(237,238,242,0.55);vertical-align:top; }
+    .budget-table td:first-child { color:#edeef2;font-weight:500; }
+    .budget-table tr:last-child td { border-bottom:none;color:#c9a96e;font-weight:700;font-size:1rem; }
+    .budget-table tr:hover td { background:rgba(255,255,255,0.03); }
+
+    .transport-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .transport-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px;min-width:0;overflow:hidden; }
+    .transport-title { font-weight:700;font-size:0.9rem;color:#edeef2;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+    .transport-content { font-size:0.83rem;color:rgba(237,238,242,0.55);line-height:1.65;word-break:break-word;overflow-wrap:anywhere; }
+    .transport-content strong { color:#c9a96e; }
+
+    .tip-item { display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .tip-num { min-width:28px;height:28px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',Georgia,serif;font-size:0.85rem;font-weight:700;color:#c9a96e;flex-shrink:0; }
+    .tip-text { font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.65; }
+    .tip-text strong { color:#edeef2; }
+
+    .top10-item { display:flex;gap:16px;padding:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:10px; }
+    .top10-num { font-family:'Bodoni Moda',Georgia,serif;font-size:1.8rem;font-weight:700;color:#c9a96e;line-height:1;min-width:36px; }
+    .top10-content h4 { font-weight:600;font-size:0.93rem;color:#edeef2;margin-bottom:4px; }
+    .top10-content p { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.55; }
+
+    .gastro-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+    .gastro-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px; }
+    .gastro-cat { font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c9a96e;margin-bottom:6px; }
+    .gastro-title { font-weight:700;font-size:0.93rem;color:#edeef2;margin-bottom:6px; }
+    .gastro-desc { font-size:0.82rem;color:rgba(237,238,242,0.55);line-height:1.6; }
+
+    .emerg-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+    .emerg-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px; }
+    .emerg-label { font-size:0.7rem;color:rgba(237,238,242,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px; }
+    .emerg-value { font-size:1.1rem;font-weight:700;color:#edeef2;margin-bottom:2px; }
+    .emerg-note { font-size:0.72rem;color:rgba(237,238,242,0.55); }
+
+    .alert-box { font-size:0.82rem;color:rgba(237,238,242,0.55);padding:14px;border-radius:10px;margin-top:12px;line-height:1.65; }
+    .alert-box.warn { background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2); }
+    .alert-box.info { background:rgba(74,127,165,0.08);border:1px solid rgba(74,127,165,0.2); }
+    .alert-box.green { background:rgba(94,203,138,0.06);border:1px solid rgba(94,203,138,0.2); }
+    .alert-box strong { color:#edeef2; }
+
+    .cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.12) 0%,rgba(74,127,165,0.08) 100%);border:1px solid rgba(201,169,110,0.3);border-radius:20px;padding:32px;text-align:center;margin-bottom:28px; }
+    .cta-banner h3 { font-family:'Bodoni Moda',Georgia,serif;font-size:1.3rem;font-weight:700;color:#edeef2;margin-bottom:10px; }
+    .cta-banner p { font-size:0.875rem;color:rgba(237,238,242,0.55);margin-bottom:18px; }
+    .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;font-weight:600;font-size:0.9rem;border-radius:10px;text-decoration:none;transition:transform 0.2s,opacity 0.2s; }
+    .cta-btn:hover { transform:translateY(-2px);opacity:0.9; }
+
+    .disclosure { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;font-size:0.79rem;color:rgba(237,238,242,0.55);line-height:1.65;margin-top:40px; }
+
+    /* Responsive */
+    @media screen and (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr !important; }
+      .toc { display: none !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+    @media screen and (max-width: 768px) {
+      .itin-layout { padding: 24px 14px 60px !important; }
+      .transport-grid { grid-template-columns: 1fr !important; }
+      .emerg-grid { grid-template-columns: 1fr !important; }
+      .section-heading { font-size: 1.25rem !important; }
+      .day-card { border-radius: 14px !important; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px !important; }
+      .day-num { font-size: 1.8rem !important; min-width: 44px !important; }
+      .day-meta { margin-left: 0 !important; flex-direction: row !important; gap: 8px !important; width: 100%; }
+      .day-body { padding: 14px 16px !important; }
+      .act-time { min-width: 44px !important; font-size: 0.72rem !important; }
+    }
+    @media screen and (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px !important; }
+      nav[role="navigation"] ul { display: none !important; }
+      .dest-hero { padding: 90px 16px 36px !important; }
+      .dest-title { font-size: clamp(1.9rem, 9vw, 2.8rem) !important; }
+      .dest-country { font-size: 1rem !important; margin-bottom: 16px !important; }
+      .dest-meta { gap: 6px !important; }
+      .dest-badge { font-size: 0.72rem !important; padding: 5px 10px !important; }
+      .dest-summary-bar { flex-wrap: wrap !important; border-radius: 12px !important; }
+      .dest-sum-item { min-width: calc(33.33% - 1px) !important; padding: 10px 6px !important; }
+      .dest-sum-label { font-size: 0.6rem !important; }
+      .dest-sum-val { font-size: 0.9rem !important; }
+      .budget-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px !important; }
+      .gastro-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"><span class="aurora-span"></span></div>
+
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(147,200,255,0.09);border-radius:50%;animation:blob 22s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;left:8%;width:100px;height:100px;border:1px solid rgba(74,127,165,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite -5s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a><span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a><span aria-hidden="true">›</span>
+    <span style="color:#c9a96e" aria-current="page">Ordesa y Monte Perdido</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">Ordesa y Monte Perdido</h1>
+  <p class="dest-country">España · Aragón · Pirineos · Huesca · Patrimonio UNESCO</p>
+
+  <div class="dest-meta" role="list">
+    <span class="dest-badge gold" role="listitem">🏔️ 1 día</span>
+    <span class="dest-badge" role="listitem">🥾 Senderismo medio</span>
+    <span class="dest-badge gold" role="listitem">💶 €25–95/persona</span>
+    <span class="dest-badge" role="listitem">🌍 UNESCO 1997</span>
+    <span class="dest-badge blue" role="listitem">🦅 Quebrantahuesos + Sarrio</span>
+  </div>
+
+  <div class="dest-summary-bar" role="list">
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Duración</div><div class="dest-sum-val">1 día</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Nivel</div><div class="dest-sum-val" style="font-size:0.85rem">Medio 14km</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Desde Zaragoza</div><div class="dest-sum-val">2h</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Altitud máx.</div><div class="dest-sum-val">1.750 m</div></div>
+    <div class="dest-sum-item" role="listitem"><div class="dest-sum-label">Fauna</div><div class="dest-sum-val" style="font-size:0.78rem">Quebrantahuesos</div></div>
+  </div>
+</section>
+
+<main id="main-content">
+<div class="itin-layout">
+
+  <!-- TOC -->
+  <aside>
+    <nav class="toc" aria-label="Tabla de contenidos">
+      <p class="toc-title">Contenidos</p>
+      <ul class="toc-list" role="list">
+        <li><a href="#sobre" class="active">Sobre el lugar</a></li>
+        <li><a href="#presupuesto">Presupuesto</a></li>
+        <li><a href="#como-llegar">Cómo llegar</a></li>
+        <li><a href="#ruta">Ruta del día</a></li>
+        <li><a href="#fauna">Fauna</a></li>
+        <li><a href="#que-llevar">Qué llevar</a></li>
+        <li><a href="#mejor-epoca">Mejor época</a></li>
+        <li><a href="#top10">Top 10</a></li>
+        <li><a href="#consejos">Consejos</a></li>
+        <li><a href="#emergencias">Emergencias</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <article>
+
+    <!-- ── SOBRE EL LUGAR ── -->
+    <section id="sobre" class="itin-section">
+      <h2 class="section-heading">🏔️ Sobre el lugar</h2>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        El Parque Nacional de Ordesa y Monte Perdido (15.608 ha), declarado Patrimonio de la Humanidad UNESCO en 1997, es el parque más espectacular de España. Creado en 1918 (el segundo parque nacional de España después del Covadonga), el parque comprende cuatro valles glaciales: el <strong style="color:#c9a96e">Valle de Ordesa</strong> (el más visitado), el Cañón de Añisclo, la Garganta de Escuaín y el Valle de Pineta.
+      </p>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        El <strong style="color:#c9a96e">Monte Perdido</strong> (3.348 m) es el tercer pico más alto de los Pirineos y el mayor macizo de piedra caliza de Europa. Las paredes del Valle de Ordesa tienen hasta <strong style="color:#c9a96e">1.000 metros de caída vertical</strong> sobre el fondo del valle — una escala que hace sentirse diminuto.
+      </p>
+      <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+        La ruta clásica del Valle de Ordesa hasta la cascada Cola de Caballo es la excursión de 1 día más espectacular de España: 7 km de ida (14 km A/R), con desnivel suave de +430m, rodeado de paredes verticales de 1.000m de caliza por ambos lados y el ruido constante del río Arazas. La fauna incluye el quebrantahuesos (el buitre más grande de Europa, 2.8m de envergadura), el sarrio (rebeco pirenaico endémico) y el oso pardo pirenaico.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🦅</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Quebrantahuesos</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">2.8m envergadura</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">💧</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#c9a96e;margin-bottom:3px">Cola de Caballo</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">70m de cascada vertical</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:6px">🏔️</div>
+          <div style="font-size:0.8rem;font-weight:600;color:#edeef2;margin-bottom:3px">Paredes de 1.000m</div>
+          <div style="font-size:0.73rem;color:rgba(237,238,242,0.5)">Caliza vertical</div>
+        </div>
+      </div>
+      <div class="cta-banner">
+        <h3>Personaliza tu ruta por Ordesa con IA</h3>
+        <p>Ajusta nivel de dificultad, punto de partida y fauna de interés. Routlo planifica tu día perfecto.</p>
+        <a href="../chatbot.html" class="cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Crear mi ruta
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRESUPUESTO ── -->
+    <section id="presupuesto" class="itin-section">
+      <h2 class="section-heading">💶 Presupuesto estimado</h2>
+      <div class="budget-wrap">
+        <table class="budget-table">
+          <thead>
+            <tr><th>Concepto</th><th>Económico</th><th>Estándar</th><th>Premium</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>🚗 Transporte A/R</td><td>Gasolina desde Zaragoza €15</td><td>Coche propio €20</td><td>Traslado privado €80</td></tr>
+            <tr><td>🚌 Bus lanzadera (verano)</td><td>€0 (fuera temporada)</td><td>€5–8 julio-agosto</td><td>€0 (coche libre fuera temporada)</td></tr>
+            <tr><td>🍽️ Comida</td><td>Bocadillo propio €0</td><td>Restaurante Torla €20</td><td>Restaurante Broto €35</td></tr>
+            <tr><td><strong>TOTAL / persona</strong></td><td><strong>~€15</strong></td><td><strong>~€45</strong></td><td><strong>~€115</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box info" style="margin-top:14px">
+        <strong>💡 Consejo:</strong> El Parque Nacional es de acceso gratuito. En julio-agosto el parking de Pradera se llena antes de las 9h y el bus lanzadera desde Torla (€5 A/R) es obligatorio. Fuera de temporada el coche accede libremente al parking de la Pradera de Ordesa.
+      </div>
+    </section>
+
+    <!-- ── CÓMO LLEGAR ── -->
+    <section id="como-llegar" class="itin-section">
+      <h2 class="section-heading">🚗 Cómo llegar</h2>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <div class="transport-title">🚗 Desde Zaragoza (2h)</div>
+          <div class="transport-content">
+            <strong>A-23 hacia Huesca</strong>, luego N-260 hasta Broto, MA-1 hasta aparcamiento Pradera de Ordesa. La carretera es espectacular a partir de Broto — el desfiladero del río Ara ya anticipa la grandiosidad de lo que viene. Llega antes de las 8h en temporada alta para asegurar parking.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 Desde Barcelona (3h)</div>
+          <div class="transport-content">
+            <strong>C-16 (Túnel del Cadí)</strong>, C-28, N-260 hasta Broto. La ruta más panorámica por el sur del Pirineo catalán. El Túnel del Cadí tiene peaje (~€12 A/R). Alternativa por el norte: C-17 hasta Ripoll y cruce por la Bonaigua (más largo pero sin peaje).
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚗 Desde Pamplona (2h)</div>
+          <div class="transport-content">
+            <strong>N-240 a Jaca</strong>, A-1601 a Biescas, N-260 a Broto. La ruta por el valle del Aragón es espectacular y une dos Pirineos en un solo viaje. Jaca merece parada de media hora si se dispone de tiempo.
+          </div>
+        </div>
+        <div class="transport-card">
+          <div class="transport-title">🚌 Bus lanzadera (julio-agosto)</div>
+          <div class="transport-content">
+            El acceso en coche al parking de Pradera está <strong>restringido en verano</strong>. Bus lanzadera desde Torla (pueblo base, 8 km): <strong>€5 A/R</strong>. Sale cada 30 min desde las 7h. Fuera de temporada el coche accede libremente. En temporada alta el bus es la única opción y funciona bien.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RUTA DEL DÍA ── -->
+    <section id="ruta" class="itin-section">
+      <h2 class="section-heading">🗓️ Ruta del día</h2>
+
+      <div class="day-card">
+        <div class="day-header">
+          <div class="day-num">01</div>
+          <div>
+            <div class="day-title">Cola de Caballo: el corazón del Valle de Ordesa</div>
+            <div class="day-subtitle">14 km A/R · +430m desnivel · Gradas de Soaso · Cascada Cola de Caballo</div>
+          </div>
+          <div class="day-meta"><span>🥾 Nivel medio</span><span>Día completo</span></div>
+        </div>
+        <div class="day-body">
+
+          <div class="alert-box info" style="margin-bottom:18px">
+            <strong>🏔️ Nivel:</strong> La ruta Cola de Caballo es "fácil-media": 14 km totales, desnivel +430m, tiempo estimado 5–6h A/R. Requiere buenas zapatillas de montaña. No recomendada con mal tiempo o nieve sin equipamiento específico.
+          </div>
+
+          <div class="activity">
+            <div class="act-time">07:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Salida temprana desde Torla o Broto</div>
+              <div class="act-desc">En verano el parking de Pradera se llena antes de las 9h. Salida con tiempo suficiente para coger el primer bus lanzadera desde Torla (7:00h) o llegar al parking antes de las 8h. La carretera de Torla a Pradera ofrece ya las primeras vistas al macizo de Monte Perdido con las primeras luces.</div>
+              <div class="act-tags"><span class="act-tag warn">Salida temprana obligatoria en verano</span><span class="act-tag">Torla: pueblo base</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">08:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Inicio en el Parking de la Pradera (1.320 m)</div>
+              <div class="act-desc">Inicio de la ruta Cola de Caballo. Tomar el sendero del Fondo del Valle (señalizado en amarillo), el más fácil y espectacular. El restaurante de la Pradera sirve desayunos desde las 8h. El río Arazas empieza a ser audible desde el aparcamiento. Las primeras paredes de las Gradas de Soaso ya se ven al fondo del valle.</div>
+              <div class="act-tags"><span class="act-tag green">Entrada al P.N. gratuita</span><span class="act-tag info">1.320 m de altitud</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">09:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Primeros kilómetros — hayedos y el río Arazas</div>
+              <div class="act-desc">El camino sigue el río Arazas entre hayedos y pinares. Los hayedos crean un túnel verde con luz diagonal en las primeras horas de la mañana. Las paredes de las Gradas de Soaso (1.000m de caliza vertical) ya visibles a los pocos minutos. El camino es suave y bien marcado. Los primeros quebrantahuesos suelen volar sobre los cortados a primera hora.</div>
+              <div class="act-tags"><span class="act-tag info">Sendero fondo del valle</span><span class="act-tag">🦅 Quebrantahuesos a primera hora</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">10:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Las Gradas de Soaso — cascadas en travertino</div>
+              <div class="act-desc">Cascadas escalonadas en travertino (piedra calcárea depositada por el agua a lo largo de siglos). El sonido del agua y la luz filtrada entre los hayedos crean un ambiente casi irreal. Las Gradas forman una escalinata natural de cascadas que sube gradualmente hacia el circo de Soaso. Es uno de los tramos más fotografiados del parque.</div>
+              <div class="act-tags"><span class="act-tag">Travertino calcáreo</span><span class="act-tag info">La postal del valle</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">11:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cola de Caballo (1.750 m) — la meta</div>
+              <div class="act-desc">La cascada más fotogénica de los Pirineos. 70 metros de caída vertical con el circo glacial de Soaso de fondo y paredes de 1.000m por los lados. El chorro de agua llena el aire de gotas y arcoíris en días soleados. Parada para almorzar, descansar y fotografiar. La temperatura aquí es varios grados más fresca que en el parking.</div>
+              <div class="act-tags"><span class="act-tag gold">Meta de la ruta</span><span class="act-tag">70m de caída vertical</span><span class="act-tag info">1.750m altitud</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">12:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Opcional — Faja de Pelay (+2h, solo expertos)</div>
+              <div class="act-desc">Desde Cola de Caballo se puede subir a la Faja de Pelay (1.900m). La perspectiva del valle desde arriba es completamente diferente y espectacular — los hayedos se ven como un mapa topográfico desde altura. Añade 2h y +450m. Solo para caminantes experimentados con buen estado físico. Empezar solo si son las 12:00 como máximo.</div>
+              <div class="act-tags"><span class="act-tag warn">Solo expertos</span><span class="act-tag">+2h · +450m</span><span class="act-tag info">Vistas aéreas del valle</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">13:00</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Almuerzo en Cola de Caballo o en el Restaurante de la Pradera</div>
+              <div class="act-desc">Almuerzo junto a la cascada (bocadillo desde casa) o reserva mesa en el Restaurante de la Pradera al regreso. La vuelta puede hacerse por el sendero del Bosque de las Hayas — variante más sombría, fresca y con distinta perspectiva del valle.</div>
+              <div class="act-tags"><span class="act-tag">Bocadillo o restaurante</span><span class="act-tag info">Regreso por hayedo</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">14:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Regreso por el sendero del Bosque de las Hayas</div>
+              <div class="act-desc">La variante de vuelta por el hayedo es más fresca, más sombría y con distinta perspectiva del valle. El hayedo en octubre con el foliage rojo y amarillo es uno de los mejores espectáculos naturales de España. Los picos negros (carpinteros) son frecuentes en los hayedos muertos.</div>
+              <div class="act-tags"><span class="act-tag green">Más fresco</span><span class="act-tag">🌳 Hayedo en otoño</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">16:30</div>
+            <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+            <div class="act-content">
+              <div class="act-title">Llegada al parking de Pradera — Descanso</div>
+              <div class="act-desc">Fin de la ruta. Los pies agradecerán el descanso. El restaurante de la Pradera sirve bebidas frías y aperitivos. Si tienes energía, el Centro de Visitantes de Torla (8km) tiene una exposición sobre geología, fauna y el quebrantahuesos con imágenes espectaculares.</div>
+              <div class="act-tags"><span class="act-tag green">Fin de la ruta</span><span class="act-tag info">14 km completados</span></div>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="act-time">18:30</div>
+            <div class="act-connector"><div class="act-dot"></div></div>
+            <div class="act-content">
+              <div class="act-title">Cena en Torla o Broto — cocina aragonesa</div>
+              <div class="act-desc">Cocina aragonesa en los restaurantes de Torla o Broto: migas de pastor, conejo al ajillo, ternasco de Aragón IGP (el cordero lechal más valorado de España, asado con ajo y vino). Una cena contundente después de 14 km es lo mejor del mundo. Si pernoctas, los hoteles de Torla son económicos y excelentes.</div>
+              <div class="act-tags"><span class="act-tag">🥩 Ternasco de Aragón IGP</span><span class="act-tag info">Bien ganada</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAUNA ── -->
+    <section id="fauna" class="itin-section">
+      <h2 class="section-heading">🦅 Fauna del Parque Nacional</h2>
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <div class="gastro-cat">Ave · 2.8m envergadura</div>
+          <div class="gastro-title">Quebrantahuesos (Gypaetus barbatus)</div>
+          <div class="gastro-desc">El buitre más grande de Europa. Cabeza blanca, pecho naranja teñido con óxido de hierro que el propio pájaro se aplica. Come SOLO huesos, los deja caer desde 80m sobre rocas para romperlos. Extinguido en toda Europa excepto los Pirineos. Reintroducción exitosa en Picos de Europa, Maestrazgo y Alpes.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Mamífero · Endémico</div>
+          <div class="gastro-title">Sarrio (Rupicapra pyrenaica)</div>
+          <div class="gastro-desc">El rebeco pirenaico endémico. Grupos de 10–30 individuos en las paredes rocosas verticales. Agilidad extraordinaria en terreno imposible: saltan entre repisas de 30cm sin esfuerzo aparente. Se distingue del rebeco alpino por ser más oscuro y tener el cuello más largo. Muy frecuente en los cortados de Ordesa.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Mamífero · Muy elusivo</div>
+          <div class="gastro-title">Oso pardo pirenaico (Ursus arctos)</div>
+          <div class="gastro-desc">10–15 individuos en los Pirineos. Descendientes de los osos reintroducidos desde Eslovenia en los años 90. Extremadamente elusivos — el avistamiento directo es rarísimo. Rastros frecuentes: huellas en el barro, arañazos en la corteza de los árboles, deyecciones con restos de bayas.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Ave · Carpintero</div>
+          <div class="gastro-title">Pico negro (Dryocopus martius)</div>
+          <div class="gastro-desc">El pájaro carpintero más grande de Europa. Totalmente negro con la capucha roja. Su taladrado en los hayedos muertos es el sonido más característico del bosque de Ordesa — un toc-toc-toc rítmico que puede oírse a 400m. Los agujeros de nidificación que excava son luego usados por otras especies.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Ave · Amenazada</div>
+          <div class="gastro-title">Urogallo pirenaico (Tetrao urogallus)</div>
+          <div class="gastro-desc">El galliforme más amenazado de España. Se oculta en hayedos densos y es casi imposible de ver. Su canto de primavera (léken) — una serie de clics y pop que parece salido de otro siglo — es legendario. El macho puede alcanzar los 5 kg. Su silueta entre los hayedos en silencio invernal es un regalo rarísimo.</div>
+        </div>
+        <div class="gastro-card">
+          <div class="gastro-cat">Ave rapaz · Frecuente</div>
+          <div class="gastro-title">Buitre leonado (Gyps fulvus)</div>
+          <div class="gastro-desc">Las colonias de buitres leonados de los cortados de Ordesa son de las más grandes de España. Grupos de 20–50 buitres en las térmicas sobre las paredes de caliza son un espectáculo diario. A menudo confundidos con el quebrantahuesos — la diferencia clave está en la cola: cuñada en el quebrantahuesos, redondeada en el leonado.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── QUÉ LLEVAR ── -->
+    <section id="que-llevar" class="itin-section">
+      <h2 class="section-heading">🎒 Qué llevar</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>Botas de montaña con suela vibram:</strong> el sendero tiene raíces, piedras y zonas resbaladizas junto al río. Las zapatillas de deporte no son apropiadas. Botas de media caña mínimo.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>2–3 litros de agua:</strong> hay fuentes a lo largo del recorrido pero es mejor llevar suficiente. El ejercicio en altura deshidrata más de lo que parece. 2L mínimo por persona.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Ropa de abrigo:</strong> el valle puede estar fresco toda la mañana, incluso en verano. A 1.750m la temperatura es 8–10°C más baja que en el pueblo. Chaqueta ligera o forro polar indispensable.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Protección solar:</strong> en el circo de Soaso y cerca de la cascada hay alta exposición. La altitud aumenta la intensidad de la radiación UV. FPS50+ imprescindible.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Bastones de trekking:</strong> ayudan significativamente en el regreso cuesta abajo. Reducen el impacto en las rodillas en el descenso de 14 km. Si no los tienes, tomarás nota para la próxima vez.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">6</div>
+        <div class="tip-text"><strong>Prismáticos para el quebrantahuesos:</strong> el mejor punto de avistamiento es la zona del Circo de Cotatuero. Sin prismáticos el quebrantahuesos a 200m de altura es solo una silueta. Unos 8x42 son ideales.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">7</div>
+        <div class="tip-text"><strong>Mapa offline descargado:</strong> no hay cobertura de datos en el interior del parque. Descarga el mapa en Maps.me, Organic Maps o la app del IGN antes de salir. El track GPX está disponible en Wikiloc.</div>
+      </div>
+    </section>
+
+    <!-- ── MEJOR ÉPOCA ── -->
+    <section id="mejor-epoca" class="itin-section">
+      <h2 class="section-heading">📅 Mejor época para visitar</h2>
+      <div class="alert-box green" style="margin-bottom:12px">
+        <strong>🌸 Mayo–junio (la mejor época):</strong> Hayedos y prados florecidos, cascadas con máximo caudal de deshielo del invierno. Menos gente que en verano. Temperatura perfecta. El quebrantahuesos está más activo con los pollos en el nido.
+      </div>
+      <div class="alert-box info" style="margin-bottom:12px">
+        <strong>☀️ Julio–agosto:</strong> Temporada alta masificada. Bus lanzadera obligatorio. Tiempo prácticamente garantizado. El parque está en su máximo esplendor de verde, pero la gente es mucha.
+      </div>
+      <div class="alert-box green" style="margin-bottom:12px">
+        <strong>🍂 Septiembre–octubre:</strong> Foliage extraordinario. Los hayedos se tiñen de rojo y amarillo — uno de los mejores espectáculos naturales de España. Temperatura perfecta y menos gente que en verano. La segunda mejor época.
+      </div>
+      <div class="alert-box warn" style="margin-bottom:12px">
+        <strong>❄️ Noviembre–abril:</strong> El valle está cubierto de nieve. La ruta Cola de Caballo solo es segura con raquetas o crampones. Solo expertos en montaña invernal. Las nevadas son frecuentes de noviembre a mayo.
+      </div>
+    </section>
+
+    <!-- ── TOP 10 ── -->
+    <section id="top10" class="itin-section">
+      <h2 class="section-heading">🏆 Top 10 imprescindibles</h2>
+      <div class="top10-item"><div class="top10-num">1</div><div class="top10-content"><h4>La cascada Cola de Caballo con el circo glacial de fondo</h4><p>70 metros de caída vertical con las paredes de 1.000m de caliza por los lados. La meta de la ruta más espectacular de España — bien ganada tras los 7 km de camino.</p></div></div>
+      <div class="top10-item"><div class="top10-num">2</div><div class="top10-content"><h4>Ver un quebrantahuesos planeando en los cortados</h4><p>2.8m de envergadura planeando sin batir las alas sobre las paredes de 1.000m. El buitre más grande de Europa, extinguido en todo el mundo excepto los Pirineos. Una presencia prehistórica.</p></div></div>
+      <div class="top10-item"><div class="top10-num">3</div><div class="top10-content"><h4>Las Gradas de Soaso: cascadas en travertino entre hayedos</h4><p>La escalinata natural de cascadas de piedra calcárea con el hayedo de fondo crea uno de los tramos más fotogénicos del camino. Especialmente hermoso con el sol matutino.</p></div></div>
+      <div class="top10-item"><div class="top10-num">4</div><div class="top10-content"><h4>La perspectiva del Valle de Ordesa desde la Faja de Pelay</h4><p>Solo para caminantes experimentados. Desde la Faja el valle completo se ve como un mapa: los hayedos, el río Arazas, las paredes y el Monte Perdido al fondo. Una perspectiva que cambia la escala de todo.</p></div></div>
+      <div class="top10-item"><div class="top10-num">5</div><div class="top10-content"><h4>El bosque de hayas en octubre con el foliage rojo y amarillo</h4><p>El hayedo de Ordesa en pleno otoño es uno de los mejores espectáculos de color de España. El sendero del Bosque de las Hayas en la vuelta de la ruta está especialmente encendido en octubre.</p></div></div>
+      <div class="top10-item"><div class="top10-num">6</div><div class="top10-content"><h4>El sarrio (rebeco pirenaico) en las paredes rocosas verticales</h4><p>Grupos de 10–30 sarrios en las paredes imposibles, saltando entre repisas de 30cm. La agilidad del sarrio en terreno vertical es uno de los espectáculos naturales más impresionantes de los Pirineos.</p></div></div>
+      <div class="top10-item"><div class="top10-num">7</div><div class="top10-content"><h4>El sonido del pico negro en el hayedo</h4><p>El taladrado del carpintero más grande de Europa en los hayedos muertos — un sonido rítmico que se oye a 400m y que anuncia la presencia de uno de los pájaros más escurridizos del bosque pirenaico.</p></div></div>
+      <div class="top10-item"><div class="top10-num">8</div><div class="top10-content"><h4>La carretera de Broto a Torla al amanecer</h4><p>Las primeras luces sobre el macizo de Monte Perdido vistas desde la carretera de acceso. Un inicio de ruta que predispone para la grandiosidad del paisaje que viene.</p></div></div>
+      <div class="top10-item"><div class="top10-num">9</div><div class="top10-content"><h4>Cena de ternasco de Aragón en Torla después de la caminata</h4><p>El cordero lechal aragonés IGP, asado con ajo y vino en cazuela de barro. Después de 14 km de montaña es la cena perfecta y absolutamente merecida.</p></div></div>
+      <div class="top10-item"><div class="top10-num">10</div><div class="top10-content"><h4>La Faja de Pelay al atardecer con el Monte Perdido de fondo</h4><p>Si llegas a la Faja, la luz del atardecer sobre el Monte Perdido (3.348m) y los glaciares superiores es uno de los espectáculos de alta montaña más hermosos de España.</p></div></div>
+    </section>
+
+    <!-- ── CONSEJOS ── -->
+    <section id="consejos" class="itin-section">
+      <h2 class="section-heading">💡 Consejos de Routlo</h2>
+      <div class="tip-item">
+        <div class="tip-num">1</div>
+        <div class="tip-text"><strong>En julio-agosto el parking de Pradera se llena antes de las 9h.</strong> El bus lanzadera desde Torla (€5 A/R, cada 30 min desde las 7h) es la única opción. Sale puntual — no llegues tarde. Fuera de temporada el coche accede libremente al parking.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">2</div>
+        <div class="tip-text"><strong>La ruta Cola de Caballo es "fácil-media" pero 14 km totales son exigentes sin experiencia previa.</strong> Calzado adecuado es fundamental — las zapatillas de deporte no son apropiadas en el terreno rocoso junto al río. Botas de media caña con suela de vibram mínimo.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">3</div>
+        <div class="tip-text"><strong>Para ver el quebrantahuesos:</strong> el mejor punto es la zona del Circo de Cotatuero (desvío a la derecha antes de Cola de Caballo, añade 1h). Entre las 11h-13h las térmicas hacen subir a los quebrantahuesos sobre los cortados. Llevar prismáticos 8x42 mínimo.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">4</div>
+        <div class="tip-text"><strong>Acampar dentro del parque está muy restringido.</strong> No se puede hacer fuego bajo ningún concepto. El biouac sin autorización expresa está prohibido y multado. Solo se permite en las zonas de acampada oficial del refugio de Góriz.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-num">5</div>
+        <div class="tip-text"><strong>Descarga el mapa offline en Maps.me o Organic Maps antes de salir</strong> — no hay cobertura de datos en el interior del parque. El track GPX de la ruta Cola de Caballo está disponible gratis en Wikiloc. La señalización en el parque es buena pero el mapa da seguridad.</div>
+      </div>
+    </section>
+
+    <!-- ── EMERGENCIAS ── -->
+    <section id="emergencias" class="itin-section">
+      <h2 class="section-heading">🆘 Contactos de emergencia</h2>
+      <div class="emerg-grid">
+        <div class="emerg-card"><div class="emerg-label">Emergencias generales / Rescate montaña</div><div class="emerg-value">112</div><div class="emerg-note">SOS Pirineos — operativo 24h en Aragón</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil (rescate montaña)</div><div class="emerg-value">062</div><div class="emerg-note">GRM Grupo Rescate Montaña</div></div>
+        <div class="emerg-card"><div class="emerg-label">Hospital San Jorge Huesca</div><div class="emerg-value">+34 974 247 000</div><div class="emerg-note">Hospital de referencia de la comarca</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia de Parque Ordesa</div><div class="emerg-value">+34 974 486 472</div><div class="emerg-note">Casa del Parque en Torla</div></div>
+        <div class="emerg-card"><div class="emerg-label">Centro de Visitantes Torla</div><div class="emerg-value">+34 974 486 472</div><div class="emerg-note">Información y emergencias en el parque</div></div>
+        <div class="emerg-card"><div class="emerg-label">Guardia Civil Broto</div><div class="emerg-value">+34 974 486 002</div><div class="emerg-note">Puesto más cercano al parque</div></div>
+      </div>
+      <div class="alert-box warn" style="margin-top:14px">
+        <strong>⚠️ Seguridad en montaña:</strong> Avisa siempre a alguien de tu plan de ruta y hora de regreso prevista. Si no hay cobertura móvil en el valle, los guardas del parque en el aparcamiento de Pradera pueden tomar nota de tu itinerario. En caso de lesión, el 112 activa el helicóptero de rescate desde Huesca.
+      </div>
+    </section>
+
+    <div class="cta-banner" style="margin-top:0">
+      <h3>¿Quieres planificar tu aventura en los Pirineos?</h3>
+      <p>Dinos tu nivel físico, punto de partida y qué fauna quieres ver. Routlo IA diseña tu ruta perfecta.</p>
+      <a href="../chatbot.html" class="cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Diseñar mi ruta
+      </a>
+    </div>
+
+    <div class="disclosure">
+      <strong>Aviso de transparencia:</strong> Los precios indicados son orientativos (2026) y pueden variar. El bus lanzadera Torla-Pradera opera en temporada alta (julio-agosto) con posibles variaciones anuales — confirma horarios en la web del Parque Nacional. La tasa de avistamiento de quebrantahuesos depende de las condiciones meteorológicas y de la temporada.
+    </div>
+
+  </article>
+</div>
+</main>
+
+<footer role="contentinfo" style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:64px 24px 40px;background:#070d1a">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px">
+    <div>
+      <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px">
+        <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+      </a>
+      <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.7;max-width:280px">Itinerarios de viaje generados por inteligencia artificial. Personalizados para cada viajero.</p>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">España</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="donana.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Doñana</a></li>
+        <li><a href="ordesa.html" style="font-size:0.875rem;color:#c9a96e;text-decoration:none">Ordesa</a></li>
+        <li><a href="montserrat.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Montserrat</a></li>
+        <li><a href="tenerife.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Tenerife</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Europa</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="budapest.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Budapest</a></li>
+        <li><a href="roma.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Roma</a></li>
+        <li><a href="paris.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">París</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(237,238,242,0.55);margin-bottom:16px">Más</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li><a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Ver todos →</a></li>
+        <li><a href="../chatbot.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Chatbot IA</a></li>
+        <li><a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none" onmouseover="this.style.color='#c9a96e'" onmouseout="this.style.color='rgba(237,238,242,0.55)'">Mapa</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.8rem;color:rgba(237,238,242,0.55)">
+    <span>© 2026 Routlo · Todos los derechos reservados</span>
+    <span>Generado con IA para viajeros del mundo</span>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  const sections = document.querySelectorAll('.itin-section[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

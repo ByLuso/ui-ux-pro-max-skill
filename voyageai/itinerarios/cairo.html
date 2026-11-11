@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>El Cairo + Pirámides, Egipto — 5 días | Routlo</title>
+  <meta name="description" content="Itinerario completo de 5 días en El Cairo: Pirámides de Giza, Esfinge, Museo Egipcio, crucero por el Nilo y Alejandría. Presupuesto detallado y consejos exclusivos de Routlo."/>
+  <link rel="stylesheet" href="../assets/shared.css"/>
+  <style>
+    html, body { background: #1a0d00 !important; color: #edeef2 !important; font-family: 'Jost', system-ui, sans-serif; }
+    /* ── Nav override ── */
+    nav[role="navigation"] {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(26,13,0,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav[role="navigation"].scrolled { background: rgba(26,13,0,0.95); }
+
+    /* ── Aurora ── */
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora::before {
+      content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #4a2800 0%, transparent 70%);
+      top: -200px; left: -150px; opacity: 0.5;
+      animation: blob 14s ease-in-out infinite;
+    }
+    .aurora::after {
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #c9a96e 0%, transparent 70%);
+      bottom: -150px; right: -100px; opacity: 0.25;
+      animation: blob 14s ease-in-out infinite -7s;
+    }
+    .aurora-span {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(80px);
+      background: radial-gradient(circle, #3a1800 0%, transparent 70%);
+      top: 40%; left: 50%; transform: translate(-50%, -50%);
+      opacity: 0.35; animation: blob 14s ease-in-out infinite -3.5s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(40px,-60px) scale(1.08); }
+      66%       { transform: translate(-30px,40px) scale(0.94); }
+    }
+
+    /* ── Hero ── */
+    .dest-hero {
+      position: relative; z-index: 1;
+      min-height: 65vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; padding: 140px 24px 60px; overflow: hidden;
+    }
+    .dest-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #1a0d00 0%, #4a2800 40%, rgba(201,169,110,0.3) 100%);
+    }
+    .dest-hero-photo {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=1600&q=80');
+      background-size: cover; background-position: center;
+      opacity: 0.25;
+    }
+    .dest-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #1a0d00 0%, rgba(26,13,0,0.5) 50%, rgba(26,13,0,0.2) 100%);
+    }
+    .dest-hero-deco {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+      background: linear-gradient(to top, #1a0d00 0%, transparent 100%);
+      z-index: 0;
+    }
+    .dest-breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .dest-breadcrumb a { color: rgba(237,238,242,0.55); text-decoration: none; transition: color 0.2s; }
+    .dest-breadcrumb a:hover { color: #c9a96e; }
+    .dest-breadcrumb span { opacity: 0.4; }
+    .dest-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      margin-bottom: 8px; position: relative; z-index: 1; color: #edeef2;
+    }
+    .dest-country {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic;
+      color: #c9a96e; margin-bottom: 24px; position: relative; z-index: 1;
+    }
+    .dest-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .dest-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(26,13,0,0.7); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      font-size: 0.8rem; color: rgba(237,238,242,0.55);
+    }
+    .dest-badge.gold { border-color: rgba(201,169,110,0.3); color: #c9a96e; }
+    .dest-summary-bar {
+      display: flex; gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden;
+      width: 100%; max-width: 600px;
+      position: relative; z-index: 1;
+    }
+    .dest-sum-item { flex: 1; background: #1f1000; padding: 16px; text-align: center; }
+    .dest-sum-label {
+      font-size: 0.7rem; color: rgba(237,238,242,0.55);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .dest-sum-val {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.2rem; font-weight: 700; color: #c9a96e;
+    }
+
+    /* ── Layout ── */
+    .itin-layout {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px 24px 100px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      position: sticky; top: 96px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 18px; font-size: 0.82rem;
+    }
+    .toc-title {
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(237,238,242,0.55); margin-bottom: 12px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: rgba(237,238,242,0.55); text-decoration: none;
+      transition: all 0.2s; border-left: 2px solid transparent;
+    }
+    .toc-list a:hover { background: rgba(255,255,255,0.08); color: #edeef2; }
+    .toc-list a.active { color: #c9a96e; border-left-color: #c9a96e; background: rgba(201,169,110,0.15); }
+
+    /* ── Sections ── */
+    .itin-section { margin-bottom: 56px; scroll-margin-top: 96px; }
+    .section-heading {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.7rem; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px; color: #edeef2;
+    }
+    .section-heading::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    /* ── Day Card ── */
+    .day-card {
+      background: #1f1000;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; overflow: hidden; margin-bottom: 28px;
+    }
+    .day-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .day-num {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 2.2rem; font-weight: 700; color: #c9a96e;
+      line-height: 1; min-width: 60px;
+    }
+    .day-title {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 4px;
+    }
+    .day-subtitle { font-size: 0.8rem; color: rgba(237,238,242,0.55); }
+    .day-meta { margin-left: auto; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .day-meta span { font-size: 0.75rem; color: rgba(237,238,242,0.55); }
+    .day-body { padding: 22px; }
+
+    /* ── Activity ── */
+    .activity { display: flex; gap: 14px; margin-bottom: 22px; }
+    .act-time {
+      min-width: 55px; font-size: 0.78rem; color: #c9a96e;
+      font-weight: 600; padding-top: 3px; flex-shrink: 0;
+    }
+    .act-connector { display: flex; flex-direction: column; align-items: center; }
+    .act-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: #c9a96e; border: 2px solid #1f1000;
+      flex-shrink: 0; margin-top: 3px;
+    }
+    .act-line { width: 1px; flex: 1; background: rgba(255,255,255,0.08); min-height: 14px; }
+    .act-content { flex: 1; }
+    .act-title { font-weight: 600; font-size: 0.93rem; color: #edeef2; margin-bottom: 4px; }
+    .act-desc { font-size: 0.84rem; color: rgba(237,238,242,0.55); line-height: 1.65; margin-bottom: 6px; }
+    .act-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .act-tag {
+      display: inline-block; padding: 2px 8px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 100px; font-size: 0.67rem; color: #c9a96e;
+    }
+    .act-tag.info { background: rgba(74,127,165,0.15); border-color: rgba(74,127,165,0.3); color: #4a7fa5; }
+    .act-tag.green { background: rgba(94,203,138,0.1); border-color: rgba(94,203,138,0.25); color: #5ecb8a; }
+
+    /* ── Hotels ── */
+    .hotel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+    .hotel-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px; transition: border-color 0.2s;
+    }
+    .hotel-card:hover { border-color: rgba(201,169,110,0.3); }
+    .hotel-tier { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-name { font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.93rem; font-weight: 700; color: #edeef2; margin-bottom: 3px; }
+    .hotel-zone { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 6px; }
+    .hotel-price { color: #c9a96e; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+    .hotel-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+    .hotel-features li { font-size: 0.74rem; color: rgba(237,238,242,0.55); padding-left: 14px; position: relative; }
+    .hotel-features li::before { content: '✓'; position: absolute; left: 0; color: #5ecb8a; }
+    .hotel-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      color: #c9a96e; text-decoration: none; font-size: 0.78rem; font-weight: 600;
+      border-bottom: 1px solid rgba(201,169,110,0.3); padding-bottom: 1px;
+    }
+    .hotel-link:hover { border-color: #c9a96e; }
+
+    /* ── Budget table ── */
+    .budget-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .budget-table th {
+      text-align: left; padding: 10px 14px; background: #1f1000;
+      color: #c9a96e; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      border-bottom: 1px solid rgba(201,169,110,0.3);
+    }
+    .budget-table td {
+      padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: rgba(237,238,242,0.55); vertical-align: top;
+    }
+    .budget-table td:first-child { color: #edeef2; font-weight: 500; }
+    .budget-table tr:last-child td { border-bottom: none; color: #c9a96e; font-weight: 700; font-size: 1rem; }
+    .budget-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .budget-wrap { background: #1f1000; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+
+    /* ── Transport ── */
+    .transport-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .transport-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 18px;
+    }
+    .transport-title { font-weight: 700; font-size: 0.9rem; color: #edeef2; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-content { font-size: 0.83rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .transport-content strong { color: #c9a96e; }
+
+    /* ── Tips ── */
+    .tip-item {
+      display: flex; gap: 12px; padding: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; margin-bottom: 10px;
+    }
+    .tip-num {
+      min-width: 28px; height: 28px;
+      background: rgba(201,169,110,0.15); border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Bodoni Moda', Georgia, serif; font-size: 0.85rem; font-weight: 700;
+      color: #c9a96e; flex-shrink: 0;
+    }
+    .tip-text { font-size: 0.875rem; color: rgba(237,238,242,0.55); line-height: 1.65; }
+    .tip-text strong { color: #edeef2; }
+
+    /* ── Phrases ── */
+    .phrases-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .phrase-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .phrase-es { font-size: 0.75rem; color: rgba(237,238,242,0.55); margin-bottom: 4px; }
+    .phrase-local { font-size: 0.88rem; font-weight: 600; color: #edeef2; margin-bottom: 2px; }
+    .phrase-pron { font-size: 0.74rem; color: #c9a96e; font-style: italic; }
+
+    /* ── Emergency ── */
+    .emerg-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .emerg-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .emerg-label { font-size: 0.7rem; color: rgba(237,238,242,0.55); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .emerg-value { font-size: 1.1rem; font-weight: 700; color: #edeef2; margin-bottom: 2px; }
+    .emerg-note { font-size: 0.72rem; color: rgba(237,238,242,0.55); }
+
+    /* ── Gastronomy ── */
+    .gastro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+    .gastro-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 16px;
+    }
+    .gastro-cat { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #c9a96e; margin-bottom: 6px; }
+    .gastro-title { font-weight: 700; font-size: 0.93rem; color: #edeef2; margin-bottom: 6px; }
+    .gastro-desc { font-size: 0.82rem; color: rgba(237,238,242,0.55); line-height: 1.6; }
+
+    /* ── CTA banner ── */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(74,127,165,0.08) 100%);
+      border: 1px solid rgba(201,169,110,0.3); border-radius: 20px;
+      padding: 32px; text-align: center; margin-bottom: 28px;
+    }
+    .cta-banner h3 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #edeef2; margin-bottom: 10px; }
+    .cta-banner p { font-size: 0.875rem; color: rgba(237,238,242,0.55); margin-bottom: 18px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px;
+      background: linear-gradient(135deg, #c9a96e, #a07840);
+      color: #0a0a0a; font-weight: 600; font-size: 0.9rem;
+      border-radius: 10px; text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* ── Disclosure ── */
+    .disclosure {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 16px 18px;
+      font-size: 0.79rem; color: rgba(237,238,242,0.55); line-height: 1.65;
+      margin-top: 40px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .itin-layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .hotel-grid { grid-template-columns: repeat(2,1fr); }
+      .transport-grid { grid-template-columns: 1fr; }
+      .gastro-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav[role="navigation"] { padding: 0 14px; }
+      nav[role="navigation"] ul { display: none; }
+      .dest-hero { padding: 100px 16px 40px; }
+      .dest-title { font-size: clamp(2rem,10vw,3.2rem); }
+      .dest-country { font-size: 1.1rem; }
+      .dest-summary-bar { flex-direction: column; }
+      .day-header { flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+      .day-num { font-size: 1.8rem; min-width: 44px; }
+      .day-body { padding: 14px 16px; }
+      .hotel-grid { grid-template-columns: 1fr; }
+      .phrases-grid { grid-template-columns: 1fr; }
+      .emerg-grid { grid-template-columns: 1fr; }
+      .section-heading { font-size: 1.3rem; }
+      .budget-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .budget-table { min-width: 480px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora::before, .aurora::after, .aurora-span { animation: none; }
+    }
+  </style>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5XGWQQZ3J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G5XGWQQZ3J');
+  </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2113525603716577" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- Aurora background -->
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-span"></span>
+</div>
+
+<!-- Navigation -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="../index.html" class="nav-logo" aria-label="Routlo inicio">
+    <img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);">
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="../itinerarios.html" class="active">Itinerarios</a></li>
+    <li><a href="../mapa.html">Mapa</a></li>
+    <li><a href="../chatbot.html">Chatbot IA</a></li>
+    <li><a href="../itinerarios-espana.html">España</a></li>
+    <li class="nav-auth" id="navAuth"></li>
+  </ul>
+  <button class="nav-mobile-btn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="dest-hero" aria-labelledby="dest-title">
+  <div class="dest-hero-bg" aria-hidden="true"></div>
+  <div class="dest-hero-photo" aria-hidden="true"></div>
+  <div class="dest-hero-overlay" aria-hidden="true"></div>
+  <div aria-hidden="true" style="position:absolute;top:120px;right:10%;width:180px;height:180px;border:1px solid rgba(201,169,110,0.12);border-radius:50%;animation:blob 18s ease-in-out infinite"></div>
+  <div aria-hidden="true" style="position:absolute;top:160px;right:12%;width:90px;height:90px;border:1px solid rgba(201,169,110,0.08);border-radius:50%;animation:blob 14s ease-in-out infinite -4s"></div>
+
+  <nav class="dest-breadcrumb" aria-label="Ruta de navegación">
+    <a href="../index.html">Inicio</a>
+    <span aria-hidden="true">›</span>
+    <a href="../itinerarios.html">Itinerarios</a>
+    <span aria-hidden="true">›</span>
+    <span style="color:#c9a96e">El Cairo</span>
+  </nav>
+
+  <h1 class="dest-title" id="dest-title">El Cairo</h1>
+  <p class="dest-country">Egipto — Pirámides &amp; Nilo</p>
+
+  <div class="dest-meta" role="list" aria-label="Detalles del viaje">
+    <span class="dest-badge gold" role="listitem">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      5 días / 4 noches
+    </span>
+    <span class="dest-badge gold" role="listitem">~€1,100/persona</span>
+    <span class="dest-badge" role="listitem">África · Egipto</span>
+    <span class="dest-badge" role="listitem">Historia + Cultura + Maravillas</span>
+    <a href="https://www.skyscanner.net/transport/flights/MAD/CAI/" target="_blank" rel="noopener" class="dest-badge" style="border-color:rgba(201,169,110,0.3);color:#c9a96e;text-decoration:none">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      Buscar vuelos
+    </a>
+  </div>
+
+  <div class="dest-summary-bar" role="list" aria-label="Resumen del itinerario">
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Duración</div>
+      <div class="dest-sum-val">5 días</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Precio/persona</div>
+      <div class="dest-sum-val">~€1,100</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Mejor época</div>
+      <div class="dest-sum-val" style="font-size:0.9rem">Oct–Abr</div>
+    </div>
+    <div class="dest-sum-item" role="listitem">
+      <div class="dest-sum-label">Visado</div>
+      <div class="dest-sum-val" style="font-size:0.9rem">e-visa €25</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main content -->
+<main id="main-content">
+  <div class="itin-layout">
+
+    <!-- TOC Sidebar -->
+    <aside>
+      <nav class="toc" aria-label="Tabla de contenidos">
+        <p class="toc-title">Contenidos</p>
+        <ul class="toc-list" role="list">
+          <li><a href="#resumen" class="active">Resumen</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#transporte">Transporte</a></li>
+          <li><a href="#alojamiento">Alojamiento</a></li>
+          <li><a href="#dia1">Día 1</a></li>
+          <li><a href="#dia2">Día 2</a></li>
+          <li><a href="#dia3">Día 3</a></li>
+          <li><a href="#dia4">Día 4</a></li>
+          <li><a href="#dia5">Día 5</a></li>
+          <li><a href="#gastronomia">Gastronomía</a></li>
+          <li><a href="#consejos">Consejos</a></li>
+          <li><a href="#emergencias">Emergencias</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <article>
+
+      <!-- Resumen -->
+      <section id="resumen" class="itin-section" aria-labelledby="h-resumen">
+        <h2 class="section-heading" id="h-resumen">Resumen del viaje</h2>
+        <p style="font-size:0.95rem;color:rgba(237,238,242,0.7);line-height:1.75;margin-bottom:20px">
+          El Cairo es una de las ciudades más antiguas y complejas del mundo: 22 millones de personas, el tráfico más caótico de África, bazares laberínticos que llevan igual desde el siglo XIV, y a 20 minutos de la ciudad, las únicas maravillas del mundo antiguo que han sobrevivido intactas. Este itinerario de 5 días combina la historia milenaria de las pirámides y la Esfinge, el tesoro del Museo Egipcio, el Nilo eterno, y una excursión imprescindible a Alejandría en el Mediterráneo.
+        </p>
+        <div class="cta-banner">
+          <h3>Planifica este viaje con IA</h3>
+          <p>Routlo personaliza cada etapa según tus preferencias y presupuesto en segundos.</p>
+          <a href="../index.html#cta" class="cta-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Empezar gratis
+          </a>
+        </div>
+      </section>
+
+      <!-- Presupuesto -->
+      <section id="presupuesto" class="itin-section" aria-labelledby="h-presupuesto">
+        <h2 class="section-heading" id="h-presupuesto">Presupuesto estimado</h2>
+        <div class="budget-wrap">
+          <table class="budget-table" aria-label="Desglose de presupuesto para El Cairo">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Económico</th>
+                <th>Medio</th>
+                <th>Premium</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>✈️ Vuelos Madrid–El Cairo i/v</td>
+                <td>€200–300</td>
+                <td>€300–450</td>
+                <td>€600–900</td>
+              </tr>
+              <tr>
+                <td>🏨 Alojamiento (4 noches)</td>
+                <td>€80–120</td>
+                <td>€200–350</td>
+                <td>€600–1,000</td>
+              </tr>
+              <tr>
+                <td>🍽️ Alimentación (5 días)</td>
+                <td>€50–80</td>
+                <td>€100–160</td>
+                <td>€250–400</td>
+              </tr>
+              <tr>
+                <td>🚕 Transporte local</td>
+                <td>€30–50</td>
+                <td>€60–100</td>
+                <td>€120–200</td>
+              </tr>
+              <tr>
+                <td>🎫 Entradas y actividades</td>
+                <td>€60–80</td>
+                <td>€100–150</td>
+                <td>€200–300</td>
+              </tr>
+              <tr>
+                <td>🛡️ Seguro de viaje</td>
+                <td>€30–40</td>
+                <td>€40–60</td>
+                <td>€60–100</td>
+              </tr>
+              <tr>
+                <td>📋 Visado e-visa</td>
+                <td>€25</td>
+                <td>€25</td>
+                <td>€25</td>
+              </tr>
+              <tr>
+                <td><strong>TOTAL estimado</strong></td>
+                <td><strong>~€650</strong></td>
+                <td><strong>~€1,100</strong></td>
+                <td><strong>~€2,400</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:0.79rem;color:rgba(237,238,242,0.4);margin-top:12px">* Precios orientativos por persona. Evitar verano (jun–sep): temperaturas superan 40°C. Mejor época: octubre–abril.</p>
+      </section>
+
+      <!-- Transporte -->
+      <section id="transporte" class="itin-section" aria-labelledby="h-transporte">
+        <h2 class="section-heading" id="h-transporte">Cómo moverse</h2>
+        <div class="transport-grid">
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+              Desde el aeropuerto
+            </div>
+            <div class="transport-content">
+              <strong>Taxi oficial</strong> desde el Aeropuerto Internacional del Cairo — negociar siempre ANTES de subir. Precio justo: 200–300 EGP (~€5–8) al centro.<br><br>
+              <strong>Uber / Careem</strong> — funcionan bien en El Cairo, precio fijo y sin regateo. Recomendado para primirizos.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 6V4M16 6V4M2 10h20"/></svg>
+              Metro del Cairo
+            </div>
+            <div class="transport-content">
+              El metro es <strong>barato, puntual y seguro</strong>. 3 líneas cubren las principales zonas turísticas. El billete cuesta 8–12 EGP (~€0.20–0.30). Vagones separados para mujeres.<br><br>
+              Para las pirámides: metro Línea 2 hasta Giza, luego taxi o tuk-tuk.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+              Apps esenciales
+            </div>
+            <div class="transport-content">
+              <strong>Careem</strong> — el Uber local, imprescindible. <strong>Google Maps</strong> — funciona bien en El Cairo.<br><br>
+              <strong>Google Translate</strong> — con árabe offline para menús y carteles. El alfabeto árabe es completamente diferente.
+            </div>
+          </div>
+          <div class="transport-card">
+            <div class="transport-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Excursión a Alejandría
+            </div>
+            <div class="transport-content">
+              <strong>Tren desde Ramsis</strong> — 2.5–3h, desde €5. El más cómodo y barato.<br><br>
+              <strong>Bus intercity</strong> desde Tahrir — similar tiempo, algo más económico. <strong>Evitar el tráfico por carretera</strong> — puede duplicar el tiempo.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Alojamiento -->
+      <section id="alojamiento" class="itin-section" aria-labelledby="h-alojamiento">
+        <h2 class="section-heading" id="h-alojamiento">Dónde dormir</h2>
+        <div class="hotel-grid">
+          <div class="hotel-card">
+            <div class="hotel-tier">💎 Premium</div>
+            <div class="hotel-name">Marriott Mena House</div>
+            <div class="hotel-zone">Giza — Vistas directas a las Pirámides</div>
+            <div class="hotel-price">Desde €180/noche</div>
+            <ul class="hotel-features">
+              <li>Vistas a las Pirámides desde la piscina</li>
+              <li>Jardines históricos del siglo XIX</li>
+              <li>Restaurantes de lujo</li>
+              <li>A 5 min de Giza en coche</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Marriott+Mena+House+Cairo" class="hotel-link" target="_blank" rel="noopener">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver en Booking.com
+            </a>
+          </div>
+          <div class="hotel-card">
+            <div class="hotel-tier">⭐ Recomendado</div>
+            <div class="hotel-name">Cairo Marriott Hotel</div>
+            <div class="hotel-zone">Zamalek — Isla del Nilo</div>
+            <div class="hotel-price">Desde €80/noche</div>
+            <ul class="hotel-features">
+              <li>Palacio del siglo XIX renovado</li>
+              <li>Ubicación privilegiada en isla</li>
+              <li>Piscina y jardines</li>
+              <li>Excelente relación calidad-precio</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=Cairo+Marriott+Hotel" class="hotel-link" target="_blank" rel="noopener">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver en Booking.com
+            </a>
+          </div>
+          <div class="hotel-card">
+            <div class="hotel-tier">💵 Económico</div>
+            <div class="hotel-name">Cairo Capital Hotel</div>
+            <div class="hotel-zone">Downtown — Centro histórico</div>
+            <div class="hotel-price">Desde €20/noche</div>
+            <ul class="hotel-features">
+              <li>Ubicación central inmejorable</li>
+              <li>Desayuno incluido</li>
+              <li>A pie del Museo Egipcio</li>
+              <li>Personal hablante de inglés</li>
+            </ul>
+            <a href="https://www.booking.com/searchresults.html?aid=123456&ss=budget+hotel+Cairo+downtown" class="hotel-link" target="_blank" rel="noopener">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver en Booking.com
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 1 -->
+      <section id="dia1" class="itin-section" aria-labelledby="h-dia1">
+        <h2 class="section-heading" id="h-dia1">Día 1</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">01</div>
+            <div>
+              <div class="day-title">Llegada — El Cairo Milenario</div>
+              <div class="day-subtitle">Museo Egipcio, Khan el-Khalili y la Ciudadela</div>
+            </div>
+            <div class="day-meta">
+              <span>🏛️ Museo Egipcio</span>
+              <span>🕌 Mezquita Mohamed Ali</span>
+              <span>🛍️ Khan el-Khalili</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">10:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Llegada y check-in</div>
+                <div class="act-desc">Llegada al Aeropuerto Internacional del Cairo. Solicitar e-visa antes del viaje (online, €25). En el aeropuerto también se puede obtener visa a la llegada (misma tarifa). Tomar Uber/Careem al hotel — no coger taxis sin acordar precio primero.</div>
+                <div class="act-tags"><span class="act-tag info">E-visa obligatoria</span><span class="act-tag">Uber recomendado</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Museo Egipcio de El Cairo</div>
+                <div class="act-desc">El museo más importante de historia antigua del mundo: 120.000 piezas, desde estatuas colosales hasta la máscara funeraria de Tutankhamón en oro macizo. Contratar guía local (€15–25) vale cada euro — convierte las piedras en historias de 5.000 años. El museo del Gran Egipto (GEM) es la alternativa moderna en Giza.</div>
+                <div class="act-tags"><span class="act-tag">€15 entrada</span><span class="act-tag info">Cámara extra €5</span><span class="act-tag green">Imprescindible</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Khan el-Khalili — El Gran Bazar</div>
+                <div class="act-desc">El mercado más antiguo y auténtico de El Cairo, fundado en 1382. Laberinto de callejuelas con perfumistas, joyeros, especieros, calígrafos y vendedores de papiro. Regatear es obligatorio — empezar ofreciendo el 30% del precio inicial. La atmósfera del siglo XIV está intacta.</div>
+                <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag">Regateo obligatorio</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">17:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Ciudadela de Saladino y Mezquita Mohamed Ali</div>
+                <div class="act-desc">La fortaleza medieval que dominó El Cairo durante 700 años. La Mezquita de Mohamed Ali (estilo otomano, cúpulas alabastro) domina el horizonte de la ciudad. Las vistas desde la Ciudadela al atardecer — El Cairo extendido hasta el horizonte con las pirámides al fondo — son de las más impresionantes de África.</div>
+                <div class="act-tags"><span class="act-tag">€5 entrada</span><span class="act-tag info">Mejor hora: puesta de sol</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">20:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cena en el barrio islámico</div>
+                <div class="act-desc">Cenar en Al-Azhar Park o en uno de los restaurantes tradicionales del barrio islámico. Pedir koshary (mezcla de pasta, arroz, lentejas y salsa de tomate — el plato nacional egipcio, €1–2), ful medames y shawarma. Terminar con té con menta en una cafetería de la plaza.</div>
+                <div class="act-tags"><span class="act-tag">€5–15 cena completa</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 2 -->
+      <section id="dia2" class="itin-section" aria-labelledby="h-dia2">
+        <h2 class="section-heading" id="h-dia2">Día 2</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">02</div>
+            <div>
+              <div class="day-title">Las Pirámides — La Gran Maravilla</div>
+              <div class="day-subtitle">Giza al alba, Esfinge, Saqqara y Dahshur</div>
+            </div>
+            <div class="day-meta">
+              <span>🌅 Alba en Giza</span>
+              <span>🗿 Esfinge</span>
+              <span>🔺 Pirámide Roja</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">06:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Pirámides de Giza al amanecer</div>
+                <div class="act-desc">Llegar antes de que abran las taquillas (7:00h) para ver las pirámides sin multitudes. La madrugada revela una escala imposible: la Gran Pirámide de Keops tiene 138 metros de altura y fue la estructura más alta del mundo durante 3.800 años. El silencio del desierto al amanecer hace el momento completo.</div>
+                <div class="act-tags"><span class="act-tag">€15 entrada complejo</span><span class="act-tag green">Imprescindible madrugar</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">08:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">La Esfinge y el Templo del Valle</div>
+                <div class="act-desc">La Gran Esfinge tiene 73 metros de largo y 20 metros de alto — una de las esculturas más grandes del mundo antiguo tallada de una sola roca de caliza. El Templo del Valle al frente data de 2500 a.C. y conserva bloques de granito de 100 toneladas. Entrar a la pirámide de Keops (interior básico, vale por la experiencia).</div>
+                <div class="act-tags"><span class="act-tag">Interior pirámide: €15 extra</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Saqqara — La Pirámide Escalonada</div>
+                <div class="act-desc">La pirámide más antigua del mundo (2650 a.C.), diseñada por el arquitecto Imhotep: el primer edificio de piedra de la historia humana. El complejo funerario de Saqqara está menos masificado que Giza y conserva pinturas de 4.600 años intactas. Una experiencia completamente diferente a Giza.</div>
+                <div class="act-tags"><span class="act-tag">€10 entrada</span><span class="act-tag info">30 min desde Giza</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en Dahshur</div>
+                <div class="act-desc">Breve parada en un restaurante local de camino a Dahshur. El koshary y el ful medames en restaurante de pueblo cuestan €1–3 y son auténticos. El ambiente local es tan interesante como las atracciones.</div>
+                <div class="act-tags"><span class="act-tag">€2–5 almuerzo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Dahshur — La Pirámide Roja y la Acodada</div>
+                <div class="act-desc">Dos pirámides del faraón Seneferu casi sin turistas. La Pirámide Roja (la primera pirámide perfecta de la historia) permite bajar hasta la cámara funeraria. La Pirámide Acodada tiene un ángulo de inclinación que cambió a mitad de construcción — visible y fascinante. Libertad total, sin vendedores, sin colas.</div>
+                <div class="act-tags"><span class="act-tag">€8 entrada</span><span class="act-tag green">Casi sin turistas</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 3 -->
+      <section id="dia3" class="itin-section" aria-labelledby="h-dia3">
+        <h2 class="section-heading" id="h-dia3">Día 3</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">03</div>
+            <div>
+              <div class="day-title">El Nilo y el Cairo Copto</div>
+              <div class="day-subtitle">Crucero diurno, iglesias del siglo IV y barrio islámico</div>
+            </div>
+            <div class="day-meta">
+              <span>🚢 Crucero Nilo</span>
+              <span>⛪ Cairo Copto</span>
+              <span>🕌 Barrio islámico</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Cairo Copto — Las Iglesias del Siglo IV</div>
+                <div class="act-desc">El barrio más antiguo de El Cairo con iglesias que datan del siglo IV d.C. La Iglesia Colgante (Mu'allaqa) está construida sobre las Torres romanas de Babilonia. El Convento de San Jorge, la Iglesia de Abu Serga (donde se dice que la Sagrada Familia se refugió en la huida a Egipto) y la Sinagoga Ben Ezra forman un conjunto único en el mundo.</div>
+                <div class="act-tags"><span class="act-tag green">Entrada gratuita</span><span class="act-tag info">Ropa modesta obligatoria</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Crucero por el Nilo</div>
+                <div class="act-desc">Paseo en faluca (barca tradicional de vela) o crucero diurno por el Nilo. El Nilo de El Cairo es diferente al de Luxor: flanqueado de rascacielos modernos, mezquitas medievales y puentes coloniales. La perspectiva desde el agua revela otra ciudad. Precio negociable con los barqueros: €15–25 por hora.</div>
+                <div class="act-tags"><span class="act-tag">€15–25/hora en faluca</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo en Zamalek</div>
+                <div class="act-desc">El barrio más europeo de El Cairo, en la isla del Nilo. Cafeterías y restaurantes cosmopolitas con precios razonables. El barrio tiene una mezcla única de embajadas, galerías de arte y tiendas de lujo en edificios Art Déco del siglo pasado.</div>
+                <div class="act-tags"><span class="act-tag">€8–15 almuerzo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Barrio Islámico — Al-Azhar y las mezquitas</div>
+                <div class="act-desc">La Universidad de Al-Azhar (970 d.C.) es la institución educativa más antigua del mundo en funcionamiento continua. Las mezquitas del barrio islámico — Ibn Tulun, Sultan Hassan, Al-Rifa'i — son obras maestras del arte islámico medieval. Pasear sin rumbo fijo por las callejuelas medievales es la mejor actividad del día.</div>
+                <div class="act-tags"><span class="act-tag">€5–10 mezquitas</span><span class="act-tag info">Cubrirse los hombros</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 4 -->
+      <section id="dia4" class="itin-section" aria-labelledby="h-dia4">
+        <h2 class="section-heading" id="h-dia4">Día 4</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">04</div>
+            <div>
+              <div class="day-title">Alejandría — El Mediterráneo</div>
+              <div class="day-subtitle">Biblioteca, Anfiteatro Romano y el mar de Cleopatra</div>
+            </div>
+            <div class="day-meta">
+              <span>🚂 Tren desde El Cairo</span>
+              <span>📚 Biblioteca Alejandrina</span>
+              <span>🌊 Mediterráneo</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">07:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Tren a Alejandría</div>
+                <div class="act-desc">Tren desde la Estación de Ramsis — 2.5h, desde €5 en clase económica. La Alejandría moderna es una ciudad mediterránea larga y caótica, pero guarda en su interior una de las historias más fascinantes del mundo antiguo: la ciudad de Alejandro Magno, César, Cleopatra y la mayor biblioteca de la antigüedad.</div>
+                <div class="act-tags"><span class="act-tag">€5–10 tren ida</span><span class="act-tag info">Comprar billete en Ramsis Station</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">10:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Biblioteca Alejandrina</div>
+                <div class="act-desc">La reencarnación moderna de la mayor biblioteca de la antigüedad. El edificio actual (2002) diseñado por Snøhetta es espectacular: un disco inclinado de granito aswan hacia el Mediterráneo. Contiene 8 millones de volúmenes y varios museos: Antigüedades, Manuscritos, Historia de la Ciencia.</div>
+                <div class="act-tags"><span class="act-tag">€5 entrada</span><span class="act-tag info">Cerrado domingos</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">12:30</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Anfiteatro Romano de Kom el-Dikka</div>
+                <div class="act-desc">El único anfiteatro romano descubierto en Egipto, datado en el siglo IV d.C. con capacidad para 800 espectadores. Las gradas de mármol blanco están perfectamente conservadas. Junto al teatro, las termas romanas y las residencias del siglo IV forman el complejo arqueológico más interesante de Alejandría.</div>
+                <div class="act-tags"><span class="act-tag">€5 entrada</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">14:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Almuerzo de mariscos en el Mediterráneo</div>
+                <div class="act-desc">Alejandría es famosa por sus mariscos frescos. Los restaurantes del Corniche (paseo marítimo) sirven gambas, calamares y pescado recién capturado a precios inferiores a Europa. El Fish Market es el lugar más auténtico — ver la captura del día y elegir el pescado antes de que lo cocinen.</div>
+                <div class="act-tags"><span class="act-tag">€10–20 almuerzo mariscos</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">16:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Corniche y regreso a El Cairo</div>
+                <div class="act-desc">Paseo por el Corniche de Alejandría con vistas al Mediterráneo donde navegó Cleopatra. El Fuerte Qaitbay (siglo XV, construido sobre el lugar del mítico Faro de Alejandría, una de las 7 maravillas del mundo antiguo). Tren de regreso a Ramsis — llegar a El Cairo sobre las 21h.</div>
+                <div class="act-tags"><span class="act-tag">€5 fuerte</span><span class="act-tag">€5–10 tren vuelta</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Día 5 -->
+      <section id="dia5" class="itin-section" aria-labelledby="h-dia5">
+        <h2 class="section-heading" id="h-dia5">Día 5</h2>
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-num" aria-hidden="true">05</div>
+            <div>
+              <div class="day-title">Mercados y Despedida</div>
+              <div class="day-subtitle">Al-Ataba, compras finales y última noche en Khan el-Khalili</div>
+            </div>
+            <div class="day-meta">
+              <span>🛍️ Mercado Al-Ataba</span>
+              <span>☕ Ahwa egipcio</span>
+              <span>✈️ Salida</span>
+            </div>
+          </div>
+          <div class="day-body">
+            <div class="activity">
+              <div class="act-time">09:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Mercado de Al-Ataba</div>
+                <div class="act-desc">El mercado más auténtico y menos turístico de El Cairo: libros de segunda mano, especias, telas, electrónica de segunda mano, ropa local. Nada orientado al turista — todo para los cairenses. La experiencia de compras más real de la ciudad y los precios más bajos.</div>
+                <div class="act-tags"><span class="act-tag green">Sin precios turísticos</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">11:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Ahwa (café egipcio) tradicional</div>
+                <div class="act-desc">El ahwa es la institución social de Egipto: cafetería de barrio donde los hombres juegan al backgammon, fuman shisha y beben té con menta o café turco desde el amanecer hasta medianoche. Sentarse como un local, pedir ahwa (café turco, €0.50) y observar la vida cairense pasar.</div>
+                <div class="act-tags"><span class="act-tag">€0.50–1 café</span><span class="act-tag green">Experiencia local</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">13:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Último almuerzo — Om Ali y ta'amiya</div>
+                <div class="act-desc">Almuerzo final con los platos que quedan pendientes: ta'amiya (el falafel egipcio, diferente al libanés, más verde y con habas), ful medames con aceite de oliva y comino, Om Ali para el postre (el "pan con leche" egipcio caliente). El café El Fishawy en Khan el-Khalili lleva 240 años abierto sin cerrar ni un solo día.</div>
+                <div class="act-tags"><span class="act-tag">€5–10 almuerzo</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">15:00</div>
+              <div class="act-connector"><div class="act-dot"></div><div class="act-line"></div></div>
+              <div class="act-content">
+                <div class="act-title">Última visita a Khan el-Khalili</div>
+                <div class="act-desc">Últimas compras en el gran bazar: papiro, perfumes, especias, cartuchos de jeroglíficos, lanternas de cobre, telas. Negociar siempre. El perfumista del bazar puede crear mezclas personalizadas en el momento. Un frasco de aceite de rosa egipcio: €5–10, auténtico souvenir.</div>
+                <div class="act-tags"><span class="act-tag">Regateo siempre</span></div>
+              </div>
+            </div>
+            <div class="activity">
+              <div class="act-time">18:00</div>
+              <div class="act-connector"><div class="act-dot"></div></div>
+              <div class="act-content">
+                <div class="act-title">Traslado al aeropuerto</div>
+                <div class="act-desc">Uber/Careem al aeropuerto con al menos 3 horas de antelación — el tráfico cairense es impredecible. El Cairo no es una ciudad que se despide fácilmente: el caos, los claxons, el río de coches, los minaretes al fondo, las pirámides en el horizonte. Una ciudad que cambia para siempre la perspectiva del tiempo.</div>
+                <div class="act-tags"><span class="act-tag info">Salir 3h antes del vuelo</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gastronomía -->
+      <section id="gastronomia" class="itin-section" aria-labelledby="h-gastro">
+        <h2 class="section-heading" id="h-gastro">Gastronomía egipcia</h2>
+        <p style="font-size:0.875rem;color:rgba(237,238,242,0.55);line-height:1.75;margin-bottom:20px">La cocina egipcia es una de las más antiguas del mundo: humilde, especiada y generosa. Comer en Egipto puede costar €2 al día o €50 — la diferencia no siempre es la calidad sino la experiencia.</p>
+        <div class="gastro-grid">
+          <div class="gastro-card">
+            <div class="gastro-cat">Plato Nacional</div>
+            <div class="gastro-title">Koshary</div>
+            <div class="gastro-desc">Mezcla de pasta, arroz, lentejas negras, garbanzos, salsa de tomate picante y cebolla frita crujiente. El plato más popular de Egipto: nutritivo, contundente y delicioso por €1–2. Las koshary houses son restaurantes de un solo plato donde todo gira en torno a esta preparación.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Desayuno</div>
+            <div class="gastro-title">Ful Medames</div>
+            <div class="gastro-desc">Habas cocidas con aceite de oliva, comino, ajo y limón — el desayuno de Egipto durante 5.000 años. Se sirve con pan baladi (pita egipcia) y se puede acompañar con ta'amiya (falafel de habas verdes, diferente al libanés). Desayuno completo por €1–3.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Snack</div>
+            <div class="gastro-title">Ta'amiya (Falafel Egipcio)</div>
+            <div class="gastro-desc">A diferencia del falafel levantino (de garbanzos), el ta'amiya egipcio se hace con habas frescas verdes — más húmedo, verde intenso por dentro, crujiente por fuera. Servido en pan con tahini y tomate. El mejor snack de El Cairo: €0.50 la pieza.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Shawarma</div>
+            <div class="gastro-title">Shawarma Cairense</div>
+            <div class="gastro-desc">El shawarma de El Cairo tiene su propio estilo: pan más esponjoso, más especias, más tahini. Los mejores puestos de shawarma están en la calle — buscar el local donde más cola tienen los cairenses. Un shawarma completo: €2–4.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Postre</div>
+            <div class="gastro-title">Om Ali</div>
+            <div class="gastro-desc">El postre más famoso de Egipto: trozos de croissant o hojaldre horneados con leche, nata, azúcar, vainilla, coco rallado y frutos secos. Servido caliente en cazuela de barro. Reconfortante como ningún otro postre del mundo árabe. €2–5 en restaurante.</div>
+          </div>
+          <div class="gastro-card">
+            <div class="gastro-cat">Bebidas</div>
+            <div class="gastro-title">Té con Menta y Karkadé</div>
+            <div class="gastro-desc">El té con menta egipcio es más dulce y concentrado que el marroquí. El karkadé (infusión de flor de hibisco, servido frío o caliente) es la bebida más refrescante del país — en Egipto se toma desde el antiguo Egipto faraónico. €0.50–1 en cualquier café.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Consejos -->
+      <section id="consejos" class="itin-section" aria-labelledby="h-consejos">
+        <h2 class="section-heading" id="h-consejos">Consejos esenciales</h2>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">1</div>
+          <div class="tip-text"><strong>E-visa obligatoria:</strong> solicitar en línea (evisa.mfa.gov.eg) antes del viaje. Cuesta €25, se tramita en 3–5 días laborables. También se puede obtener a la llegada en el aeropuerto por el mismo precio.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">2</div>
+          <div class="tip-text"><strong>Regateo siempre en el bazar</strong> — nunca aceptar el primer precio. Empezar ofreciendo el 25–30% del precio inicial. El vendedor espera esta danza. Es parte del protocolo social, no una ofensa.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">3</div>
+          <div class="tip-text"><strong>Usar Uber/Careem</strong> para todos los desplazamientos — precio fijo sin regateo ni estafas. Los taxis de la calle pueden cobrar 10 veces el precio real a los turistas si no se acuerda antes.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">4</div>
+          <div class="tip-text"><strong>Ropa modesta:</strong> hombros y rodillas cubiertos para visitar mezquitas e iglesias. Las mujeres llevar pañuelo para la cabeza (se presta a la entrada). El respeto por las normas abre muchas puertas literalmente.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">5</div>
+          <div class="tip-text"><strong>Propinas (baksheesh):</strong> son parte de la cultura. Guías: €5–10/día. Guardas de monumentos: €1–2. Porteros de hotel: €1. Restaurantes: 10–15%. No propinar se considera una ofensa seria.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">6</div>
+          <div class="tip-text"><strong>Agua embotellada siempre</strong> — nunca beber agua del grifo. El calor (especialmente en verano) deshidrata muy rápido. Llevar siempre al menos 1.5L encima en las visitas a monumentos al aire libre.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">7</div>
+          <div class="tip-text"><strong>Madrugar para las pirámides</strong> — a las 7h ya hay muchos turistas. La mejor foto de tu vida es a las 6h cuando el sol rasante ilumina la piedra dorada y el desierto aún está en silencio.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">8</div>
+          <div class="tip-text"><strong>Moneda:</strong> la libra egipcia (EGP). Los cajeros dan buen tipo de cambio. Evitar cambiar en hoteles o aeropuerto. Muchos lugares turísticos aceptan euros o dólares directamente.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">9</div>
+          <div class="tip-text"><strong>Conectividad:</strong> SIM local de Vodafone Egipto o Orange — €5–10 con datos. Funciona en todo el país. El wifi de los hoteles suele ser lento — la SIM es mejor inversión.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num" aria-hidden="true">10</div>
+          <div class="tip-text"><strong>Seguridad:</strong> El Cairo es generalmente seguro para turistas. Evitar las manifestaciones (zonas de Tahrir en épocas de tensión). El barrio turístico histórico (Downtown, Khan el-Khalili, Giza) tiene vigilancia turística reforzada.</div>
+        </div>
+      </section>
+
+      <!-- Emergencias -->
+      <section id="emergencias" class="itin-section" aria-labelledby="h-emerg">
+        <h2 class="section-heading" id="h-emerg">Números de emergencia</h2>
+        <div class="emerg-grid">
+          <div class="emerg-card">
+            <div class="emerg-label">Policía</div>
+            <div class="emerg-value">122</div>
+            <div class="emerg-note">Emergencias policiales</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Ambulancia</div>
+            <div class="emerg-value">123</div>
+            <div class="emerg-note">Emergencias médicas</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Policía Turística</div>
+            <div class="emerg-value">126</div>
+            <div class="emerg-note">Atención a turistas</div>
+          </div>
+          <div class="emerg-card">
+            <div class="emerg-label">Anglo-American Hospital</div>
+            <div class="emerg-value" style="font-size:0.85rem">+20-2-2735-6162</div>
+            <div class="emerg-note">El Cairo — atención en inglés</div>
+          </div>
+          <div class="emerg-card" style="grid-column:1/-1">
+            <div class="emerg-label">Embajada de España en El Cairo</div>
+            <div class="emerg-value" style="font-size:0.85rem">+20-2-2735-5844</div>
+            <div class="emerg-note">41 Ismail Mohamed St., Zamalek, El Cairo — emergencias consulares</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Frases en árabe -->
+      <section id="frases" class="itin-section" aria-labelledby="h-frases">
+        <h2 class="section-heading" id="h-frases">Frases en árabe egipcio</h2>
+        <div class="phrases-grid">
+          <div class="phrase-card">
+            <div class="phrase-es">Hola</div>
+            <div class="phrase-local">Ahlan / Salam</div>
+            <div class="phrase-pron">[ah-lan / sa-lam]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">Gracias</div>
+            <div class="phrase-local">Shukran</div>
+            <div class="phrase-pron">[shu-kran]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">Por favor</div>
+            <div class="phrase-local">Min fadlak</div>
+            <div class="phrase-pron">[min fad-lak]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">¿Cuánto cuesta?</div>
+            <div class="phrase-local">Bikam da?</div>
+            <div class="phrase-pron">[bi-kam da]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">Muy caro</div>
+            <div class="phrase-local">Da ghali awi</div>
+            <div class="phrase-pron">[da gha-li a-wi]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">¡Delicioso!</div>
+            <div class="phrase-local">Laziz!</div>
+            <div class="phrase-pron">[la-zeez]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">No, gracias</div>
+            <div class="phrase-local">La, shukran</div>
+            <div class="phrase-pron">[la, shu-kran]</div>
+          </div>
+          <div class="phrase-card">
+            <div class="phrase-es">La cuenta</div>
+            <div class="phrase-local">El hisab</div>
+            <div class="phrase-pron">[el hi-sab]</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Disclosure -->
+      <div class="disclosure" role="note" aria-label="Aviso legal sobre enlaces de afiliados">
+        <strong style="color:#edeef2">Aviso sobre enlaces de afiliados:</strong> Algunos enlaces en esta página son de afiliados (Booking.com, GetYourGuide, Skyscanner, IATI Seguros). Si realizas una compra a través de ellos, Routlo recibe una pequeña comisión sin coste adicional para ti. Los precios y disponibilidad son indicativos y pueden variar. Siempre verifica en los sitios oficiales antes de reservar. Precios estimados para 2026 en euros (€).
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer style="position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.08);padding:48px 24px 32px;background:#1f1000">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
+    <a href="../index.html" style="font-family:'Bodoni Moda',serif;font-size:1.2rem;font-weight:700;color:#edeef2;text-decoration:none" aria-label="Routlo — Inicio"><img src="../assets/routlo-logo.png" alt="Routlo" style="height:38px;border-radius:8px;background:#fff;padding:3px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.28);"></a>
+    <nav style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Navegación de pie de página">
+      <a href="../itinerarios.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Todos los itinerarios</a>
+      <a href="../mapa.html" style="font-size:0.875rem;color:rgba(237,238,242,0.55);text-decoration:none">Mapa interactivo</a>
+    </nav>
+    <p style="font-size:0.8rem;color:rgba(237,238,242,0.55)">© 2026 Routlo</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('menu-open');
+  }
+
+(function() {
+  'use strict';
+
+  // ── Nav scroll effect ──
+  const nav = document.querySelector('nav[role="navigation"]');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // ── TOC active highlighting ──
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const sections = [];
+  tocLinks.forEach(function(link) {
+    const id = link.getAttribute('href').replace('#', '');
+    const el = document.getElementById(id);
+    if (el) sections.push({ id: id, el: el, link: link });
+  });
+
+  function updateTOC() {
+    const scrollY = window.scrollY;
+    const offset = 120;
+    let current = null;
+    sections.forEach(function(s) {
+      if (s.el.offsetTop - offset <= scrollY) current = s;
+    });
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateTOC, { passive: true });
+  updateTOC();
+
+  // ── Smooth scroll ──
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const id = this.getAttribute('href').replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 96;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ── Scroll reveal ──
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.day-card, .tip-item').forEach(function(el) {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }
+
+  // ── initNav ──
+  function initNav() {
+    const authEl = document.getElementById('navAuth');
+    if (!authEl) return;
+    const session = null;
+    if (session) {
+      authEl.innerHTML = '<a href="../chatbot.html" style="color:#c9a96e;text-decoration:none;font-weight:600">Chatbot IA</a>';
+    } else {
+      authEl.innerHTML = '<a href="../login.html" style="color:rgba(237,238,242,0.7);text-decoration:none;margin-right:12px">Entrar</a><a href="../registro.html" style="background:linear-gradient(135deg,#c9a96e,#a07840);color:#0a0a0a;padding:7px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem">Registrarse</a>';
+    }
+  }
+  initNav();
+})();
+</script>
+</body>
+</html>
