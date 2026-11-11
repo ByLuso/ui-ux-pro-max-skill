@@ -278,8 +278,8 @@
 
     /* Easter egg hint + toast */
     .egg-hint { text-align: center; padding: 32px 24px 8px; }
-    .egg-hint-txt { font-size: 0.68rem; color: rgba(237,238,242,0.08); letter-spacing: 0.18em; font-family: monospace; cursor: default; transition: color 0.5s; user-select: none; }
-    .egg-hint-txt:hover { color: rgba(237,238,242,0.18); }
+    .egg-hint-txt { font-size: 1rem; opacity: 0.07; cursor: pointer; transition: opacity 0.4s; user-select: none; display: inline-block; filter: grayscale(1); }
+    .egg-hint-txt:hover { opacity: 0.28; filter: grayscale(0); }
     .urbex-toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(120px); background: rgba(200,50,0,0.92); backdrop-filter: blur(12px); color: #fff; padding: 11px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; z-index: 9999; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); pointer-events: none; white-space: nowrap; }
     .urbex-toast.show { transform: translateX(-50%) translateY(0); }
 
@@ -1380,7 +1380,7 @@
 
       <!-- Easter egg hint (texto casi invisible al pie) -->
       <div class="egg-hint" aria-hidden="true">
-        <div class="egg-hint-txt">↑ ↑ ↓ ↓ ← → ← → · · ·</div>
+        <span class="egg-hint-txt" role="button" aria-label="">🔦</span>
       </div>
 
       <div class="cta-banner">
@@ -1512,16 +1512,10 @@ function toggleMenu() {
     }
   });
 
-  // ── Egg hint: tap 7x on mobile ──
-  var eggTaps = 0, eggTimer;
+  // ── Egg hint: single tap/click on hidden 🔦 emoji ──
   var hint = document.querySelector('.egg-hint-txt');
   if (hint) {
     hint.addEventListener('click', function() {
-      eggTaps++;
-      clearTimeout(eggTimer);
-      eggTimer = setTimeout(function() { eggTaps = 0; }, 2000);
-      if (eggTaps >= 7) {
-        eggTaps = 0;
         if (!document.body.classList.contains('urbex-reveal')) {
           document.body.classList.add('urbex-reveal');
           var toast = document.getElementById('urbexToast');
