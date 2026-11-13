@@ -113,6 +113,36 @@ def compute_score(region: Region, weights: dict) -> np.ndarray:
     return np.clip(combined, 0, 100)
 
 
+def pick_peaks(score: np.ndarray, min_score: float, separation_px: int, max_count: int) -> tuple[list[int], list[int]]:
+    """Máximos locales de `score` >= min_score, de mayor a menor, separados al menos
+    `separation_px` píxeles entre sí (supresión de no-máximos), como mucho `max_count`."""
+    footprint_size = 2 * separation_px + 1
+    local_max = maximum_filter(score, size=footprint_size, mode="nearest")
+    is_peak = (score == local_max) & (score >= min_score)
+    rows, cols = np.nonzero(is_peak)
+    if len(rows) == 0:
+        return [], []
+
+    order = np.argsort(-score[rows, cols])
+    rows, cols = rows[order], cols[order]
+
+    selected_rows: list[int] = []
+    selected_cols: list[int] = []
+    min_separation_sq = separation_px**2
+    for r, c in zip(rows, cols):
+        too_close = any(
+            (int(r) - sr) ** 2 + (int(c) - sc) ** 2 < min_separation_sq
+            for sr, sc in zip(selected_rows, selected_cols)
+        )
+        if too_close:
+            continue
+        selected_rows.append(int(r))
+        selected_cols.append(int(c))
+        if len(selected_rows) >= max_count:
+            break
+    return selected_rows, selected_cols
+
+
 def find_hotspots(region: Region, weights: dict) -> list[dict]:
     """Máximos locales del score combinado por encima de HOTSPOT_MIN_SCORE, para marcarlos con
     una chincheta en el mapa — en vez de que el usuario tenga que rastrear el heatmap a ojo.
@@ -125,32 +155,9 @@ def find_hotspots(region: Region, weights: dict) -> list[dict]:
     """
     layers = _get_layers(region)
     score = compute_score(region, weights)
-
-    footprint_size = 2 * HOTSPOT_MIN_SEPARATION_PX + 1
-    local_max = maximum_filter(score, size=footprint_size, mode="nearest")
-    is_peak = (score == local_max) & (score >= HOTSPOT_MIN_SCORE)
-    rows, cols = np.nonzero(is_peak)
-    if len(rows) == 0:
-        return []
-
-    order = np.argsort(-score[rows, cols])
-    rows, cols = rows[order], cols[order]
-
-    selected_rows: list[int] = []
-    selected_cols: list[int] = []
-    min_separation_sq = HOTSPOT_MIN_SEPARATION_PX**2
-    for r, c in zip(rows, cols):
-        too_close = any(
-            (int(r) - sr) ** 2 + (int(c) - sc) ** 2 < min_separation_sq
-            for sr, sc in zip(selected_rows, selected_cols)
-        )
-        if too_close:
-            continue
-        selected_rows.append(int(r))
-        selected_cols.append(int(c))
-        if len(selected_rows) >= HOTSPOT_MAX_COUNT:
-            break
-
+    selected_rows, selected_cols = pick_peaks(
+        score, HOTSPOT_MIN_SCORE, HOTSPOT_MIN_SEPARATION_PX, HOTSPOT_MAX_COUNT
+    )
     if not selected_rows:
         return []
 

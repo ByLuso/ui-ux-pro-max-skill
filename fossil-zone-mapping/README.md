@@ -35,6 +35,44 @@ propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli
 - Sin base de datos todavía; el procesamiento geoespacial usa caché en disco (`backend/data/cache/`),
   con archivos separados por región (`dem_bizkaia_200m.tif`, `dem_la-rioja_200m.tif`, etc.).
 
+### Modo "Setas": previsión de fructificación por especie
+
+Un selector **Fósiles / Setas** en la cabecera cambia de modo sobre el mismo mapa y las mismas
+regiones (también se puede abrir directamente con `#setas` o `#fosiles` en la URL). El modo setas
+añade un panel lateral (hoja inferior en móvil) con:
+
+- **Buscador de especies** (16, entre ellas níscalo, boletos, rebozuelo, perretxiko, colmenilla,
+  seta de cardo… y la oronja verde, marcada como MORTAL), con ficha de temporada, hábitat,
+  altitud, pH, lluvia y temperatura óptimas. El catálogo está en
+  `backend/app/services/mushroom_species.py` y se puede ajustar a mano.
+- **Mapa de probabilidad 0-100** por especie y día (hoy hasta +15), con chinchetas en las mejores
+  zonas y un desglose al tocar el mapa que incluye «¿qué más puede salir aquí?».
+- **Cuándo ir**: barras con la mejor puntuación de la región para cada uno de los 16 días.
+
+El cálculo (`backend/app/services/mushrooms.py`) cruza tres capas sobre la rejilla del MDT:
+
+| Capa | Fuente | API key |
+|------|--------|---------|
+| 01 · Clima | Open-Meteo: lluvia y temperatura diarias, 30 días pasados + 16 de previsión, rejilla 5×5 por región, corregida por altitud | No |
+| 02 · Arbolado | Corine Land Cover 2018 (EEA): coníferas, frondosas, mixto, encinar, pastizal, brezal, dehesa… | No |
+| 03 · Suelo | pH 0-5 cm de SoilGrids (ISRIC), altitud/pendiente del MDT del IGN, distancia a cauces | No |
+
+Si alguna fuente falla, el mapa sigue funcionando con un valor neutro para esa capa y el frontend
+avisa (p. ej. sin Open-Meteo se calcula solo con hábitat y temporada). La meteo se cachea por
+región y día en `data/cache/weather_<región>_<fecha>.json`.
+
+Endpoints: `/mushrooms/species?q=`, `/mushrooms/meta`, `/mushrooms/outlook`,
+`/mushrooms/heatmap.png`, `/mushrooms/hotspots`, `/mushrooms/breakdown`, `/mushrooms/forest(.png)`
+(todos con `?region=`, y `species=` / `day=` donde aplica).
+
+La previsión es orientativa: nunca consumas una seta sin identificación experta.
+
+### Estética
+
+Tema oscuro común a ambos modos (`frontend/css/style.css`): mapa base OSM oscurecido por CSS
+(sin API key), paneles translúcidos, acento ámbar en fósiles y musgo en setas, tipografías
+Fraunces + Inter (Google Fonts, con respaldo del sistema si no hay conexión).
+
 ### Capa de litología (fase 2)
 
 Se usa el servicio WMS público del IGME **`IGME_Litologias_1M`** (Mapa Litológico de España a

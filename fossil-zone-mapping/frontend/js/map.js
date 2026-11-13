@@ -1,6 +1,51 @@
 let activeMap = null;
 let currentGeneration = 0;
 
+// Modo de la app: "fossils" (prospección paleontológica) o "mushrooms" (previsión de setas).
+// Comparten mapa, regiones y capas base; cada modo añade sus propias capas y paneles.
+const MODES = {
+  fossils: { eyebrow: "Prospección paleontológica" },
+  mushrooms: { eyebrow: "Previsión de fructificación" },
+};
+let currentMode = readInitialMode();
+
+function readInitialMode() {
+  if (location.hash === "#setas") return "mushrooms";
+  if (location.hash === "#fosiles") return "fossils";
+  try {
+    const stored = localStorage.getItem("fzm-mode");
+    if (stored in MODES) return stored;
+  } catch (error) {
+    /* almacenamiento bloqueado: se usa el modo por defecto */
+  }
+  return "fossils";
+}
+
+function applyModeChrome() {
+  document.body.dataset.mode = currentMode;
+  document.getElementById("mode-eyebrow").textContent = MODES[currentMode].eyebrow;
+  document.querySelectorAll(".mode-switch button").forEach((button) => {
+    button.setAttribute("aria-selected", String(button.dataset.mode === currentMode));
+  });
+  document.getElementById("mushroom-panel").hidden = currentMode !== "mushrooms";
+}
+
+function setupModeSwitch(getRegion) {
+  document.querySelectorAll(".mode-switch button").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.dataset.mode === currentMode) return;
+      currentMode = button.dataset.mode;
+      try {
+        localStorage.setItem("fzm-mode", currentMode);
+      } catch (error) {
+        /* sin almacenamiento: el modo no se recuerda, sin más */
+      }
+      history.replaceState(null, "", currentMode === "mushrooms" ? "#setas" : "#fosiles");
+      initMap(getRegion());
+    });
+  });
+}
+
 async function bootstrap() {
   let regions;
   try {
@@ -15,6 +60,7 @@ async function bootstrap() {
   const select = document.getElementById("region-select");
   select.innerHTML = regions.map((r) => `<option value="${r.slug}">${r.name}</option>`).join("");
   select.addEventListener("change", () => initMap(select.value));
+  setupModeSwitch(() => select.value);
 
   initMap(select.value || regions[0].slug);
 }
@@ -45,20 +91,30 @@ async function initMap(regionSlug) {
     };
   }
 
-  document.getElementById("region-label").textContent =
-    `Región: ${regionConfig.region_name}`;
+  applyModeChrome();
 
-  const map = L.map("map").setView(regionConfig.region_center, regionConfig.region_default_zoom);
+  const map = L.map("map", { zoomControl: false }).setView(regionConfig.region_center, regionConfig.region_default_zoom);
   activeMap = map;
 
   // Tres capas base mutuamente excluyentes (Leaflet las agrupa como radio buttons en el
   // selector): OSM para orientarse, ortofoto PNOA para ver el terreno real, y el relieve
   // nacional del IGN como referencia de MDT en cualquier punto de España — a diferencia de la
   // capa LIDAR propia (más abajo), que solo existe en las zonas concretas ya procesadas.
+  L.control.zoom({ position: "bottomleft" }).addTo(map);
+
+  // Mapa base oscuro por defecto: las capas de análisis (heatmaps, arbolado) se leen mejor
+  // sobre fondo oscuro, y es el que define la estética de la app. Son las mismas teselas de OSM
+  // oscurecidas con un filtro CSS (clase .dark-tiles): sin API key ni proveedor extra.
+  const darkLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap contributors",
+    maxZoom: 19,
+    className: "dark-tiles",
+  }).addTo(map);
+
   const osmLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors",
     maxZoom: 19,
-  }).addTo(map);
+  });
 
   const ortofotoLayer = L.tileLayer.wms(IGN_ORTOFOTO_WMS_URL, {
     layers: IGN_ORTOFOTO_LAYER,
@@ -80,9 +136,11 @@ async function initMap(regionSlug) {
   const [minLon, minLat, maxLon, maxLat] = regionConfig.region_bbox;
   const bounds = L.latLngBounds([minLat, minLon], [maxLat, maxLon]);
   L.rectangle(bounds, {
-    color: "#f97316",
-    weight: 2,
-    fillOpacity: 0.05,
+    color: currentMode === "mushrooms" ? "#8fbf6a" : "#e8a33d",
+    weight: 1.5,
+    dashArray: "6 6",
+    fill: false,
+    interactive: false,
   }).addTo(map);
 
   const lithologyLayer = L.tileLayer.wms(IGME_WMS_URL, {
@@ -92,7 +150,8 @@ async function initMap(regionSlug) {
     version: "1.1.1",
     opacity: 0.65,
     attribution: "Litología: IGME (Mapa Litológico 1:1.000.000)",
-  }).addTo(map);
+  });
+  if (currentMode === "fossils") lithologyLayer.addTo(map);
 
   // El control de capas y la leyenda se crean YA, antes de pedir nada al
   // backend: así el mapa es interactivo desde el primer segundo aunque las
@@ -102,6 +161,7 @@ async function initMap(regionSlug) {
   const layersControl = L.control
     .layers(
       {
+        "Mapa oscuro (OSM)": darkLayer,
         "Mapa base (OSM)": osmLayer,
         "Ortofoto PNOA (IGN)": ortofotoLayer,
         "Relieve MDT (IGN, toda España)": relieveWmsLayer,
@@ -113,7 +173,7 @@ async function initMap(regionSlug) {
   const legend = createLegendControl(map);
   legend.addSection(
     "Litología (IGME)",
-    true,
+    currentMode === "fossils",
     `
       <strong>Litología (IGME)</strong>
       <img
@@ -133,6 +193,13 @@ async function initMap(regionSlug) {
   layersControl.addOverlay(hydrographyLayer, "Ríos y arroyos (IGN)");
 
   const isStale = () => generation !== currentGeneration;
+
+  if (currentMode === "mushrooms") {
+    addPmtilesLidarLayers(map, layersControl, isStale);
+    initMushroomMode({ map, layersControl, legend, isStale, regionSlug });
+    return;
+  }
+
   const loading = createLoadingTracker(6, isStale);
 
   addPmtilesLidarLayers(map, layersControl, isStale).finally(loading.done);
@@ -358,13 +425,13 @@ function addHillshadeTool(map) {
   return { isEnabled: () => enabled };
 }
 
-function createLoadingTracker(totalTasks, isStale) {
+function createLoadingTracker(totalTasks, isStale, label = "Calculando capas de análisis") {
   let remaining = totalTasks;
   const statusEl = document.getElementById("loading-status");
   const render = () => {
     if (!statusEl || isStale()) return;
     statusEl.textContent =
-      remaining > 0 ? `Calculando capas de análisis… (${remaining} pendientes, puede tardar unos minutos la primera vez)` : "";
+      remaining > 0 ? `${label}… (${remaining} pendientes, la primera vez puede tardar unos minutos)` : "";
   };
   render();
   return {
@@ -391,9 +458,9 @@ async function addKnownSitesLayer(map, layersControl, legend, isStale, regionSlu
     pointToLayer: (feature, latlng) =>
       L.circleMarker(latlng, {
         radius: 6,
-        color: "#1f2937",
-        weight: 1.5,
-        fillColor: "#ffffff",
+        color: "#0e1311",
+        weight: 2,
+        fillColor: "#ece6d8",
         fillOpacity: 1,
       }),
     onEachFeature: (feature, layer) => {
@@ -442,22 +509,35 @@ async function addScoringLayer(map, layersControl, legend, isStale, regionSlug) 
   return weights;
 }
 
-const HOTSPOT_ICON = L.icon({
-  iconUrl: "vendor/leaflet/images/marker-icon.png",
-  iconRetinaUrl: "vendor/leaflet/images/marker-icon-2x.png",
-  shadowUrl: "vendor/leaflet/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
+// Chincheta en forma de gota, coloreable, con la puntuación dentro: se lee sobre el mapa oscuro
+// mucho mejor que el marcador azul por defecto de Leaflet, y la comparten fósiles y setas.
+function makePinIcon(color, label = "") {
+  return L.divIcon({
+    className: "score-pin",
+    html: `<span class="score-pin-body" style="--pin:${color}"><span>${label}</span></span>`,
+    iconSize: [30, 38],
+    iconAnchor: [15, 37],
+    popupAnchor: [0, -32],
+  });
+}
+
+function showToast(message) {
+  const el = document.getElementById("loading-status");
+  if (!el) return;
+  el.textContent = message;
+  el.classList.add("is-toast");
+  setTimeout(() => {
+    if (el.textContent === message) el.textContent = "";
+    el.classList.remove("is-toast");
+  }, 7000);
+}
 
 // Chinchetas en las zonas de mayor interés (máximos locales del score combinado): así el
 // usuario no tiene que rastrear el heatmap a ojo para encontrar dónde merece la pena mirar.
 // Se recalculan junto con el heatmap cada vez que cambian los pesos (mismo onChange).
 async function addHotspotsLayer(map, layersControl, legend, isStale, regionSlug, getWeights) {
   const hotspotsGroup = L.layerGroup();
-  const popup = L.popup();
+  const popup = L.popup({ className: "dark-popup" });
 
   async function refresh() {
     let data;
@@ -474,7 +554,7 @@ async function addHotspotsLayer(map, layersControl, legend, isStale, regionSlug,
 
     hotspotsGroup.clearLayers();
     for (const point of data.hotspots) {
-      const marker = L.marker([point.lat, point.lon], { icon: HOTSPOT_ICON });
+      const marker = L.marker([point.lat, point.lon], { icon: makePinIcon("#e8a33d", Math.round(point.score)) });
       marker.on("click", () => showHotspotBreakdown(map, popup, point, regionSlug, getWeights()));
       hotspotsGroup.addLayer(marker);
     }
@@ -568,7 +648,7 @@ function addWeightsControl(map, weights, onChange) {
 }
 
 function addScoringClickHandler(map, getWeights, regionSlug, isHillshadeModeEnabled) {
-  const popup = L.popup();
+  const popup = L.popup({ className: "dark-popup" });
   map.on("click", async (event) => {
     if (isHillshadeModeEnabled()) return;
 
