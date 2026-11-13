@@ -63,7 +63,17 @@ def _get_layers(region: Region) -> dict:
 
     slope_deg, _, _ = dem.compute_slope_degrees(dem.fetch_dem_geotiff(region))
     distance_m, _, _ = hydrography.compute_distance_raster(region)
-    ndvi_arr = ndvi.get_ndvi_on_grid(region, transform, shape, crs)
+    try:
+        ndvi_arr = ndvi.get_ndvi_on_grid(region, transform, shape, crs)
+    except RuntimeError as error:
+        # Sentinel Hub (Copernicus) exige credenciales propias; sin ellas no hay NDVI, pero el
+        # resto de capas (litología, pendiente, agua, yacimientos) son datos públicos sin API key
+        # y no tiene sentido que una credencial que falta tire todo el score abajo. Se trata como
+        # "sin dato" (NaN) en vez de "sin vegetación": vegetation_score ya convierte NaN en 50
+        # (neutro) un par de líneas más abajo, y el componente queda excluido de hecho tanto como
+        # permite esa neutralidad, no como un 0 ni un 100 falsos.
+        print(f"AVISO: NDVI no disponible para '{region.slug}' ({error}); se usa un valor neutro.")
+        ndvi_arr = np.full(shape, np.nan)
     lithology_score = lithology.get_lithology_score_on_grid(region, transform, shape, crs)
     known_sites_distance_m, _, _ = known_sites.compute_proximity_raster(region)
 
