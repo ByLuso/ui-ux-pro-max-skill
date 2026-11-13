@@ -35,6 +35,13 @@ REGIONS: dict[str, Region] = {
         center=(43.4812, -5.6234),
         default_zoom=11,
     ),
+    "asturias-costa": Region(
+        slug="asturias-costa",
+        name="Asturias (Costa Jurásica)",
+        bbox=(-5.311236, 43.199646, -4.961236, 43.449646),
+        center=(43.324646, -5.136236),
+        default_zoom=11,
+    ),
 }
 DEFAULT_REGION = "la-rioja"
 
