@@ -363,7 +363,7 @@ async function initMushroomMode({ map, layersControl, legend, isStale, regionSlu
     if (!weather) {
       els.rainChart.innerHTML = "";
       els.weatherSummary.textContent =
-        "Sin datos meteorológicos ahora mismo (Open-Meteo no responde): el mapa usa solo hábitat y temporada.";
+        "Sin datos meteorológicos ahora mismo (Open-Meteo no responde): el mapa usa hábitat y temporada, con lluvia y temperatura neutras.";
       els.weatherSummary.classList.add("warning");
       return;
     }

@@ -16,7 +16,7 @@ Para un día objetivo t (0 = hoy, hasta +15):
                    gradiente estándar (-6,5 °C/km) entre la celda de Open-Meteo y el MDT real.
   - score 0-100  = 100 · hospedador · temporada · media geométrica(altitud, pH, lluvia, temp[, agua])
 
-Si Open-Meteo no responde, el score se calcula solo con hábitat y temporada, y la respuesta lo
+Si Open-Meteo no responde, lluvia y temperatura cuentan como neutras (0,5) y la respuesta lo
 indica con `weather_available: false` (así el frontend puede avisar en vez de mentir).
 """
 import json
@@ -29,7 +29,6 @@ import rasterio
 from rasterio.io import MemoryFile
 from rasterio.transform import from_bounds
 from rasterio.warp import Resampling, calculate_default_transform, reproject, transform as warp_transform
-from scipy.interpolate import RegularGridInterpolator
 
 from app.config import Region, settings
 from app.services import dem, hydrography
@@ -43,7 +42,11 @@ SOILGRIDS_WCS_URL = "https://maps.isric.org/mapserv"
 
 PAST_DAYS = 30
 FORECAST_DAYS = 16
-WEATHER_GRID_POINTS = 5  # rejilla de 5x5 puntos de Open-Meteo sobre la bbox de la región
+# Rejilla de puntos de Open-Meteo sobre la bbox: uno cada ~18 km, entre 5x5 y 8x8. En regiones
+# grandes (La Rioja + Soria) así se distinguen valles con lluvias distintas sin pedir cientos de
+# puntos a la API.
+WEATHER_POINT_SPACING_KM = 18
+WEATHER_GRID_MIN, WEATHER_GRID_MAX = 5, 8
 RAIN_WINDOW = (21, 4)  # días antes del día objetivo: desde t-21 hasta t-4
 TEMP_WINDOW_DAYS = 7
 LAPSE_RATE_C_PER_M = -0.0065
@@ -292,15 +295,20 @@ def _get_habitat(region: Region) -> dict:
 # CAPA 01 · Clima (Open-Meteo)
 # ---------------------------------------------------------------------------------------------
 
-def _weather_points(region: Region) -> tuple[np.ndarray, np.ndarray]:
+def _weather_points(region: Region, grid: tuple[int, int] | None = None) -> tuple[np.ndarray, np.ndarray]:
     min_lon, min_lat, max_lon, max_lat = region.bbox
-    lats = np.linspace(min_lat, max_lat, WEATHER_GRID_POINTS)
-    lons = np.linspace(min_lon, max_lon, WEATHER_GRID_POINTS)
-    return lats, lons
+    if grid is None:
+        height_km = (max_lat - min_lat) * 111
+        width_km = (max_lon - min_lon) * 111 * np.cos(np.radians((min_lat + max_lat) / 2))
+        grid = tuple(
+            int(np.clip(round(km / WEATHER_POINT_SPACING_KM) + 1, WEATHER_GRID_MIN, WEATHER_GRID_MAX))
+            for km in (height_km, width_km)
+        )
+    return np.linspace(min_lat, max_lat, grid[0]), np.linspace(min_lon, max_lon, grid[1])
 
 
 def get_weather(region: Region) -> dict | None:
-    """Serie diaria (30 días pasados + 16 de previsión) en una rejilla 5x5 sobre la región.
+    """Serie diaria (30 días pasados + 16 de previsión) en una rejilla de 5x5 a 8x8 puntos.
     Cacheada por región y día natural (en disco y en memoria). None si Open-Meteo falla."""
     today = date.today().isoformat()
     key = f"{region.slug}:{today}"
@@ -336,13 +344,12 @@ def get_weather(region: Region) -> dict | None:
         payload = response.json()
         if isinstance(payload, dict):
             payload = [payload]
-        n = WEATHER_GRID_POINTS
         data = {
             "dates": payload[0]["daily"]["time"],
             "rain": [[p if p is not None else 0.0 for p in loc["daily"]["precipitation_sum"]] for loc in payload],
             "temp": [[t if t is not None else np.nan for t in loc["daily"]["temperature_2m_mean"]] for loc in payload],
             "elevation": [loc.get("elevation", 0.0) for loc in payload],
-            "grid": [n, n],
+            "grid": [len(lats), len(lons)],
         }
         cache_file.write_text(json.dumps(data, allow_nan=True))
 
@@ -353,9 +360,37 @@ def get_weather(region: Region) -> dict | None:
         "temp": np.asarray(data["temp"], dtype="float64").reshape(n_lat, n_lon, -1),
         "elevation": np.asarray(data["elevation"], dtype="float64").reshape(n_lat, n_lon),
         "today_index": data["dates"].index(today) if today in data["dates"] else PAST_DAYS,
+        "grid": (n_lat, n_lon),
     }
     _weather_cache[key] = weather
     return weather
+
+
+def _bilinear_interpolator(region: Region, grid: tuple[int, int]):
+    """Interpolación bilineal de la rejilla meteo a cada celda del MDT con los índices y pesos
+    precalculados una sola vez por región: el mapa de "cuándo ir" interpola 16 días x 3 variables,
+    y en regiones grandes (cientos de miles de celdas) eso se nota en un móvil."""
+    habitat = _get_habitat(region)
+    cache_key = ("bilinear", grid)
+    if cache_key not in habitat:
+        lats, lons = _weather_points(region, grid)
+
+        def axis_weights(axis, values):
+            idx = np.clip(np.searchsorted(axis, values) - 1, 0, len(axis) - 2)
+            frac = np.clip((values - axis[idx]) / (axis[idx + 1] - axis[idx]), 0, 1)
+            return idx, frac
+
+        i, fy = axis_weights(lats, habitat["lats"])
+        j, fx = axis_weights(lons, habitat["lons"])
+        habitat[cache_key] = (i, j, fy, fx)
+    i, j, fy, fx = habitat[cache_key]
+
+    def interp(values):
+        top = values[i, j] * (1 - fx) + values[i, j + 1] * fx
+        bottom = values[i + 1, j] * (1 - fx) + values[i + 1, j + 1] * fx
+        return top * (1 - fy) + bottom * fy
+
+    return interp
 
 
 def _weather_on_grid(region: Region, day_offset: int) -> dict | None:
@@ -370,12 +405,7 @@ def _weather_on_grid(region: Region, day_offset: int) -> dict | None:
     rain_pts = weather["rain"][:, :, rain_start:rain_end].sum(axis=2)
     temp_pts = np.nanmean(weather["temp"][:, :, max(0, t - TEMP_WINDOW_DAYS) : t + 1], axis=2)
 
-    lats, lons = _weather_points(region)
-    points = np.column_stack([habitat["lats"].ravel(), habitat["lons"].ravel()])
-
-    def interp(values):
-        f = RegularGridInterpolator((lats, lons), values, bounds_error=False, fill_value=None)
-        return f(points).reshape(habitat["shape"])
+    interp = _bilinear_interpolator(region, weather["grid"])
 
     rain = np.clip(interp(rain_pts), 0, None)
     temp = interp(temp_pts)
@@ -427,6 +457,11 @@ def _factors(
         lo, opt = species["rain_mm"]
         factors["rain"] = trapezoid(rain_mm, lo * 0.4, opt, 1e9, 1e10, floor=0.05)
         factors["temp"] = trapezoid(np.nan_to_num(temp_c, nan=species["temp_c"][1]), *species["temp_c"], floor=0.05)
+    else:
+        # Sin meteo (Open-Meteo caído): lluvia y temperatura cuentan como "ni buenas ni malas".
+        # Quitarlas sin más dejaba el score en 100 en cualquier pinar a buena altitud.
+        factors["rain"] = 0.5
+        factors["temp"] = 0.5
     if species.get("water_affinity"):
         water = np.clip(1 - np.nan_to_num(water_distance_m, nan=WATER_SATURATION_M) / WATER_SATURATION_M, 0, 1)
         factors["water"] = 0.4 + 0.6 * water

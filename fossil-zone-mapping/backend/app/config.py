@@ -21,6 +21,16 @@ REGIONS: dict[str, Region] = {
         center=(42.28, -2.45),
         default_zoom=9,
     ),
+    # La Rioja ampliada hacia el sur: Cameros, la Demanda, Urbión y los pinares de Soria
+    # (Covaleda, Duruelo, Navaleno) hasta la capital. Región aparte (no se agranda "la-rioja")
+    # para no mezclar su caché en disco, que se guarda por slug y no por bbox.
+    "rioja-soria": Region(
+        slug="rioja-soria",
+        name="La Rioja + Soria (Cameros, Urbión)",
+        bbox=(-3.30, 41.55, -1.70, 42.65),
+        center=(42.10, -2.50),
+        default_zoom=9,
+    ),
     "bizkaia": Region(
         slug="bizkaia",
         name="Bizkaia (Pagasarri)",

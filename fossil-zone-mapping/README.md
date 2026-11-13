@@ -37,6 +37,12 @@ propia carpeta (`fossil-zone-mapping/`) y no comparte código con `src/` ni `cli
 
 ### Modo "Setas": previsión de fructificación por especie
 
+Hay una región ampliada, **La Rioja + Soria (Cameros, Urbión)** (`rioja-soria`), que cubre la
+Demanda, Cameros, Urbión y los pinares de Soria hasta la capital. Es una región aparte en vez de
+agrandar `la-rioja` porque la caché en disco va por slug: cambiar la bbox de una región existente
+reutilizaría mapas cacheados de la zona antigua. La primera carga tarda varios minutos (descarga el
+MDT, Corine, SoilGrids y los ríos de toda la zona); después va de la caché.
+
 Un selector **Fósiles / Setas** en la cabecera cambia de modo sobre el mismo mapa y las mismas
 regiones (también se puede abrir directamente con `#setas` o `#fosiles` en la URL). El modo setas
 añade un panel lateral (hoja inferior en móvil) con:
@@ -53,12 +59,12 @@ El cálculo (`backend/app/services/mushrooms.py`) cruza tres capas sobre la reji
 
 | Capa | Fuente | API key |
 |------|--------|---------|
-| 01 · Clima | Open-Meteo: lluvia y temperatura diarias, 30 días pasados + 16 de previsión, rejilla 5×5 por región, corregida por altitud | No |
+| 01 · Clima | Open-Meteo: lluvia y temperatura diarias, 30 días pasados + 16 de previsión, un punto cada ~18 km (de 5×5 a 8×8 por región), corregida por altitud | No |
 | 02 · Arbolado | Corine Land Cover 2018 (EEA): coníferas, frondosas, mixto, encinar, pastizal, brezal, dehesa… | No |
 | 03 · Suelo | pH 0-5 cm de SoilGrids (ISRIC), altitud/pendiente del MDT del IGN, distancia a cauces | No |
 
 Si alguna fuente falla, el mapa sigue funcionando con un valor neutro para esa capa y el frontend
-avisa (p. ej. sin Open-Meteo se calcula solo con hábitat y temporada). La meteo se cachea por
+avisa (p. ej. sin Open-Meteo, lluvia y temperatura cuentan como neutras). La meteo se cachea por
 región y día en `data/cache/weather_<región>_<fecha>.json`.
 
 Endpoints: `/mushrooms/species?q=`, `/mushrooms/meta`, `/mushrooms/outlook`,
