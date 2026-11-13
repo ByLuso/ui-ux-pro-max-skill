@@ -893,6 +893,208 @@ input[type="range"] {
   opacity: calc(0.45 + var(--w) * 0.55);
 }
 
+/* Fotos de especie */
+.species-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px var(--dot), 0 0 0 4px rgba(236, 230, 216, 0.06);
+  background: var(--surface-3);
+}
+
+.species-photo {
+  position: relative;
+  margin: 0 0 0.9rem;
+}
+
+.species-photo > a {
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface-3);
+}
+
+.species-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.species-photo > a:hover img {
+  transform: scale(1.03);
+}
+
+.species-photo.is-deadly > a {
+  outline: 2px solid var(--danger);
+  outline-offset: 2px;
+}
+
+.photo-flag {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #1a0d0a;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.species-photo figcaption {
+  margin-top: 0.35rem;
+  font-size: 0.66rem;
+  color: var(--muted);
+}
+
+.species-photo figcaption a {
+  color: var(--muted);
+}
+
+/* Mini guía de campo */
+.guide {
+  margin: 0.9rem 0 0.4rem;
+}
+
+.guide > .eyebrow {
+  margin-bottom: 0.45rem;
+}
+
+.guide-block {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+  margin-bottom: 0.4rem;
+}
+
+.guide-block summary {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 42px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.guide-block summary::-webkit-details-marker {
+  display: none;
+}
+
+.guide-block summary::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid var(--muted);
+  border-bottom: 1.5px solid var(--muted);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.2s ease;
+}
+
+.guide-block[open] summary::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+.guide-block > p,
+.guide-block > ul,
+.guide-block > ol {
+  margin: 0;
+  padding: 0 0.85rem 0.75rem;
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.guide-list {
+  padding-left: 1.9rem !important;
+}
+
+.guide-list li + li,
+.golden-rules li + li {
+  margin-top: 0.3rem;
+}
+
+.golden-rules {
+  margin-top: 1.1rem;
+}
+
+.golden-rules ol {
+  padding-left: 1.9rem !important;
+}
+
+.guide-block.is-alert {
+  border-color: rgba(239, 106, 82, 0.45);
+  background: rgba(239, 106, 82, 0.08);
+}
+
+.guide-block.is-alert summary {
+  color: var(--danger);
+}
+
+.lookalikes {
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.lookalike {
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  background: var(--surface-3);
+  border-left: 3px solid var(--muted);
+}
+
+.lookalike.danger-mortal,
+.lookalike.danger-toxica {
+  border-left-color: var(--danger);
+}
+
+.lookalike.danger-comestible {
+  border-left-color: var(--moss);
+}
+
+.lookalike-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lookalike-head strong {
+  font-size: 0.8rem;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.lookalike p {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.badge.danger-mortal,
+.badge.danger-toxica {
+  background: rgba(239, 106, 82, 0.18);
+  color: var(--danger);
+}
+
+.badge.danger-no-comestible {
+  background: rgba(232, 163, 61, 0.16);
+  color: var(--amber);
+}
+
+.badge.danger-comestible {
+  background: rgba(143, 191, 106, 0.16);
+  color: var(--moss);
+}
+
 /* Cuándo ir: barras por día */
 .outlook {
   display: grid;

@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from app.config import Region
 from app.dependencies import region_param
 from app.services import mushrooms
-from app.services.mushroom_species import SPECIES_BY_ID
+from app.services.mushroom_species import GOLDEN_RULES, SPECIES_BY_ID
 
 router = APIRouter(prefix="/mushrooms", tags=["mushrooms"])
 
@@ -33,7 +33,7 @@ def list_species(q: str | None = Query(default=None, description="Filtro por nom
             for s in catalog
             if needle in s["name"].lower() or needle in s["scientific"].lower() or needle in s["habitat"].lower()
         ]
-    return {"species": catalog}
+    return {"species": catalog, "golden_rules": GOLDEN_RULES}
 
 
 @router.get("/meta")

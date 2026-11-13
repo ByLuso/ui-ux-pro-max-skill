@@ -51,6 +51,13 @@ añade un panel lateral (hoja inferior en móvil) con:
   seta de cardo… y la oronja verde, marcada como MORTAL), con ficha de temporada, hábitat,
   altitud, pH, lluvia y temperatura óptimas. El catálogo está en
   `backend/app/services/mushroom_species.py` y se puede ajustar a mano.
+- **Foto y mini guía de campo de cada especie**: cómo reconocerla, con qué se confunde (marcando
+  las confusiones tóxicas o mortales), consejos de recolección y de cocina; para la oronja verde,
+  síntomas y qué hacer. Más unas «reglas de oro» al final del panel. Las fotos son de iNaturalist
+  con licencias que permiten cualquier uso (CC0, CC BY, CC BY-SA), están en
+  `frontend/img/setas/` (sin depender de internet) y cada una muestra su autor y licencia; los
+  créditos están en `frontend/img/setas/credits.json`. Para añadir o cambiar fotos:
+  `cd backend && python ../scripts/fetch_mushroom_photos.py` (ver el propio script).
 - **Mapa de probabilidad 0-100** por especie y día (hoy hasta +15), con chinchetas en las mejores
   zonas y un desglose al tocar el mapa que incluye «¿qué más puede salir aquí?».
 - **Cuándo ir**: barras con la mejor puntuación de la región para cada uno de los 16 días.

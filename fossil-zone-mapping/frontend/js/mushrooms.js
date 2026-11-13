@@ -14,8 +14,17 @@ const FACTOR_LABELS = {
   water: "Cercanía a cauces",
 };
 
+const DANGER_LABELS = {
+  mortal: "Mortal",
+  toxica: "Tóxica",
+  "no-comestible": "No comestible",
+  comestible: "Comestible",
+};
+
 const mushroomState = {
   catalog: null,
+  goldenRules: [],
+  photos: {},
   speciesId: readStored("fzm-species"),
   day: 0,
   query: "",
@@ -112,6 +121,11 @@ async function initMushroomMode({ map, layersControl, legend, isStale, regionSlu
         </article>
       </section>
 
+      <details class="guide-block golden-rules">
+        <summary>Reglas de oro del buen setero</summary>
+        <ol id="golden-rules"></ol>
+      </details>
+
       <p class="disclaimer">
         Previsión orientativa. <strong>Nunca consumas una seta sin identificación experta</strong>, y
         consulta la normativa de recolección de tu comunidad y del monte.
@@ -130,6 +144,7 @@ async function initMushroomMode({ map, layersControl, legend, isStale, regionSlu
     weatherSummary: panel.querySelector("#weather-summary"),
     forestButton: panel.querySelector("#toggle-forest"),
     handle: panel.querySelector(".panel-handle"),
+    goldenRules: panel.querySelector("#golden-rules"),
   };
 
   els.handle.addEventListener("click", () => {
@@ -144,11 +159,24 @@ async function initMushroomMode({ map, layersControl, legend, isStale, regionSlu
   let meta;
   try {
     const [catalog, metaResponse] = await Promise.all([
-      mushroomState.catalog ? Promise.resolve({ species: mushroomState.catalog }) : fetchJson(`${API_BASE_URL}/mushrooms/species`).finally(loading.done),
+      mushroomState.catalog
+        ? Promise.resolve({ species: mushroomState.catalog, golden_rules: mushroomState.goldenRules })
+        : Promise.all([
+            fetchJson(`${API_BASE_URL}/mushrooms/species`),
+            // Fotos (iNaturalist, licencias CC0/BY/BY-SA) con su crédito: si faltan, la ficha
+            // sigue funcionando con el punto de color de siempre.
+            fetchJson("img/setas/credits.json").catch(() => ({})),
+          ])
+            .then(([species, photos]) => {
+              mushroomState.photos = photos;
+              return species;
+            })
+            .finally(loading.done),
       fetchJson(`${API_BASE_URL}/mushrooms/meta?region=${regionSlug}`).finally(loading.done),
     ]);
     if (mushroomState.catalog) loading.done();
     mushroomState.catalog = catalog.species;
+    mushroomState.goldenRules = catalog.golden_rules ?? [];
     meta = metaResponse;
   } catch (error) {
     console.error("No se pudo preparar el modo setas:", error);
@@ -277,7 +305,7 @@ async function initMushroomMode({ map, layersControl, legend, isStale, regionSlu
         <li>
           <button type="button" class="species-item ${s.id === mushroomState.speciesId ? "is-selected" : ""}" data-id="${s.id}"
             aria-pressed="${s.id === mushroomState.speciesId}">
-            <span class="species-dot" style="--dot:${s.color}"></span>
+            ${speciesThumb(s)}
             <span class="species-names">
               <span class="species-name">${escapeHtml(s.name)}</span>
               <em class="species-sci">${escapeHtml(s.scientific)}</em>
@@ -294,12 +322,26 @@ async function initMushroomMode({ map, layersControl, legend, isStale, regionSlu
 
   function renderDetail() {
     const s = currentSpecies();
+    const photo = mushroomState.photos[s.id];
     const months = MONTH_INITIALS.map(
       (initial, index) => `<span class="${s.months.includes(index + 1) ? "on" : ""}" title="Mes ${index + 1}">${initial}</span>`
     ).join("");
+    const deadly = s.edibility.startsWith("mortal");
     els.detail.innerHTML = `
+      ${
+        photo
+          ? `<figure class="species-photo ${deadly ? "is-deadly" : ""}">
+              <a href="${photo.file}" target="_blank" rel="noopener" aria-label="Ver la foto de ${escapeHtml(s.name)} a tamaño completo">
+                <img src="${photo.file}" alt="${escapeHtml(s.name)} (${escapeHtml(s.scientific)})" loading="lazy" />
+              </a>
+              ${deadly ? `<span class="photo-flag">Mortal · para reconocerla</span>` : ""}
+              <figcaption>Foto: ${escapeHtml(photo.attribution.replace(/^\(c\)\s*/, "").replace(/, some rights reserved.*$/, ""))} ·
+                <a href="${photo.source}" target="_blank" rel="noopener">${escapeHtml(photo.license)}</a> · iNaturalist</figcaption>
+            </figure>`
+          : ""
+      }
       <div class="detail-head" style="--accent-species:${s.color}">
-        <span class="species-dot large" style="--dot:${s.color}"></span>
+        ${photo ? "" : `<span class="species-dot large" style="--dot:${s.color}"></span>`}
         <div>
           <p class="eyebrow ${edibilityClass(s.edibility)}">${escapeHtml(s.edibility)}</p>
           <h2>${escapeHtml(s.name)}</h2>
@@ -309,6 +351,7 @@ async function initMushroomMode({ map, layersControl, legend, isStale, regionSlu
       <div class="month-strip" aria-label="Meses de temporada">${months}</div>
       <p class="detail-text">${escapeHtml(s.habitat)}</p>
       <p class="detail-note">${escapeHtml(s.notes)}</p>
+      ${buildGuideHtml(s)}
       <dl class="detail-facts">
         <div><dt>Altitud óptima</dt><dd>${s.elevation[1]}–${s.elevation[2]} m</dd></div>
         <div><dt>pH óptimo</dt><dd>${s.ph[1]}–${s.ph[2]}</dd></div>
@@ -435,6 +478,7 @@ async function initMushroomMode({ map, layersControl, legend, isStale, regionSlu
     showToast("Open-Meteo no responde: el mapa de setas se calcula sin lluvia ni temperatura por ahora.");
   }
 
+  els.goldenRules.innerHTML = mushroomState.goldenRules.map((rule) => `<li>${escapeHtml(rule)}</li>`).join("");
   renderList();
   renderDetail();
   renderRainChart();
@@ -487,6 +531,57 @@ function buildMushroomBreakdownHtml(data, species) {
       ${factorRows}
       <p class="eyebrow ranking-title">¿Qué más puede salir aquí?</p>
       ${ranking}
+    </div>
+  `;
+}
+
+function speciesThumb(species) {
+  const photo = mushroomState.photos[species.id];
+  if (!photo) return `<span class="species-dot" style="--dot:${species.color}"></span>`;
+  return `<img class="species-thumb" src="${photo.file}" alt="" loading="lazy" style="--dot:${species.color}" />`;
+}
+
+// Mini guía de campo: secciones desplegables. "Cómo reconocerla" abierta por defecto; en la
+// especie mortal se abren también los síntomas, que es lo que importa de ella.
+function buildGuideHtml(species) {
+  const guide = species.guide;
+  if (!guide) return "";
+  const deadly = species.edibility.startsWith("mortal");
+  const lookalikes = guide.lookalikes
+    .map(
+      (l) => `
+      <li class="lookalike danger-${l.danger}">
+        <div class="lookalike-head"><strong>${escapeHtml(l.name)}</strong>
+          <span class="badge danger-${l.danger}">${DANGER_LABELS[l.danger] ?? l.danger}</span></div>
+        <p>${escapeHtml(l.how)}</p>
+      </li>`
+    )
+    .join("");
+  return `
+    <div class="guide">
+      <p class="eyebrow">Mini guía de campo</p>
+      <details class="guide-block" open>
+        <summary>Cómo reconocerla</summary>
+        <ul class="guide-list">${guide.identify.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+      </details>
+      <details class="guide-block">
+        <summary>Con qué se confunde</summary>
+        <ul class="lookalikes">${lookalikes}</ul>
+      </details>
+      <details class="guide-block">
+        <summary>Recolección</summary>
+        <p>${escapeHtml(guide.picking)}</p>
+      </details>
+      ${
+        guide.kitchen
+          ? `<details class="guide-block"><summary>En la cocina</summary><p>${escapeHtml(guide.kitchen)}</p></details>`
+          : ""
+      }
+      ${
+        guide.symptoms
+          ? `<details class="guide-block is-alert" ${deadly ? "open" : ""}><summary>Síntomas y qué hacer</summary><p>${escapeHtml(guide.symptoms)}</p></details>`
+          : ""
+      }
     </div>
   `;
 }
